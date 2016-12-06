@@ -27,24 +27,6 @@ download https://admin.typeform.com/form/2592751/analyze/csv|report.csv
 ```
 ./tagui flow_filename parameters
 ```
-# Language
-Word|Parameter(s)|Purpose
-----|----------|-------
-tap / click|element to click|click on an element
-hover / move|element to hover|move cursor to element
-type / enter|element to type, text to type|enter text in element
-read / fetch||element to read, variable name|read text into variable
-show / print||element to show|print text to screen and log file
-download||url to download, file to save to|download from url
-file||
-echo||
-save||
-dump||
-snap||
-wait||
-test||
-frame||
-js||
 
 # Pipeline
 Feature|Details
@@ -54,6 +36,28 @@ Chrome Extension|facilitates creation of automation flows
 Enhancements|configuration, keywords, object repository
 Active I/O|triggering and actioning from email/API
 Passive I/O|xls/csv datatables and web-based reports
+
+# Cheat Sheet
+Word|Parameter(s)|Purpose
+----|----------|-------
+tap / click|element to click|click on an element
+hover / move|element to hover|move cursor to element
+type / enter|element to type&#124;text to type|enter text in element
+read / fetch|element to read&#124;variable name|read text into variable
+show / print|element to show|print text to screen and logfile
+download|url to download&#124;filename to save to|download from url
+file|url keyword&#124;filename to save to|download when resource received
+echo|none|print text and variables to screen and logfile
+save|element to save&#124;optional filename to save to|save element text to file
+dump|variable name&#124;optional filename to save to|save variable to file
+snap|element to snapshot (page for whole screen)&#124;optional filename to save to|save screenshot to file
+wait|time in milliseconds|wait for some time
+test|condition to test&#124;text if true&#124;text if false|test a condition and print result to screen and logfile
+frame|frame name&#124;subframe name if any|specify that next step is within a HTML frame/subframe
+
+1. Above words are case-insensitive to let users write flexibly in the way they want
+2. Extra spaces between parameters are automatically trimmed; don't worry about them
+3. JavaScript can be used and executed within CasperJS's context, if/for/while applies to next step
 
 # License
 TA.Gui is open-source software released under the MIT license
