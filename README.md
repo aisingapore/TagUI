@@ -44,21 +44,21 @@ tap / click|element to click|click on an element
 hover / move|element to hover|move cursor to element
 type / enter|element to type in &#124; text to type|enter text in element
 read / fetch|element to read from &#124; variable name|fetch text into variable
-show / print|element to read from|print text to screen and logfile
-download|url to download &#124; filename to save to|download file from url
-file|url keyword to watch for &#124; filename to save to|download when resource received
+show / print|element to read from|print element text to screen and logfile
+download|url to download &#124; filename to save|download file from url
+file|url keyword to watch for &#124; filename to save|download when resource received
 echo|text and variables (text in quotes)|print text/variables to screen and logfile
-save|element to read from &#124; optional filename to save to|save element text to file
-dump|variable name &#124; optional filename to save to|save variable to file
-snap|element (page = screen) &#124; optional filename to save to|save screenshot to file
+save|element to read from &#124; optional filename to save|save element text to file
+dump|variable name &#124; optional filename to save|save variable to file
+snap|element (page = screen) &#124; optional filename to save|save screenshot to file
 wait|time in milliseconds|wait for some time
-test|condition to test &#124; text if true &#124; text if false|test a condition, print result to screen and logfile
+test|condition to test &#124; text if true &#124; text if false|test condition, print result to screen and logfile
 frame|frame name &#124; subframe name if any|specify that next step is within frame/subframe
 
 1. Above words are case-insensitive to let users write flexibly in the way they want
 2. Extra spaces between parameters and | are trimmed for flexible user formatting
 3. JavaScript code can be used (in CasperJS's context); if/for/while applies to next step
-4. XPath is most robust and used to check for a particular element on webpage
+4. XPath is robust for identification and used to check for a particular element on webpage
 5. XPath checked in following order of priority xpath, id, name, class, title, text()
 
 # License
