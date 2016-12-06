@@ -17,10 +17,16 @@ click section_results
 download https://admin.typeform.com/form/2592751/analyze/csv|report.csv
 
 # Set Up
-// placeholder for set up section
+1. install CasperJS (navigation/testing for PhantomJS) - http://casperjs.org
+2. install PhantomJS (headless scriptable web browser) - http://phantomjs.org
+3. unzip TA.Gui - https://github.com/tebelorg/TA.Gui/archive/master.zip
 
 # To Use
-./tagui flow_filename
+./tagui flow_filename parameters
+
+# Pipeline
+Mind, Chrome.Ext, config, keywords, objects
+AIO mail, url, script / PIO xls, csv, reports
 
 # License
 TA.Gui is open-source software released under the MIT license
