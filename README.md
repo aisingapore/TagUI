@@ -27,14 +27,33 @@ download https://admin.typeform.com/form/2592751/analyze/csv|report.csv
 ```
 ./tagui flow_filename parameters
 ```
+# Language
+Word|Parameter(s)|Purpose
+----|----------|-------
+tap / click|element to click|click on an element
+hover / move|element to hover|move cursor to element
+type / enter|element to type, text to type|enter text in element
+read / fetch||element to read, variable name|read text into variable
+show / print||element to show|print text to screen and log file
+download||url to download, file to save to|download from url
+file||
+echo||
+save||
+dump||
+snap||
+wait||
+test||
+frame||
+js||
 
 # Pipeline
-Feature|Description
-TA.Mind|
-Chrome Extension|
-Enhancements|config, keywords, objects
-Active I/O|AIO mail, url, script
-Passive I/O|PIO xls, csv, reports
+Feature|Details
+-------|-------
+Logic Engine|for supporting rule-based decision making
+Chrome Extension|facilitates creation of automation flows
+Enhancements|configuration, keywords, object repository
+Active I/O|triggering and actioning from email/API
+Passive I/O|xls/csv datatables and web-based reports
 
 # License
 TA.Gui is open-source software released under the MIT license
