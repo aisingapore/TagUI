@@ -48,18 +48,18 @@ show / print|element to read from|print element text to screen and logfile
 download|url to download &#124; filename to save|download file from url
 file|url keyword to watch for &#124; filename to save|download when resource received
 echo|text and variables (text in quotes)|print text/variables to screen and logfile
-save|element to read from &#124; optional filename to save|save element text to file
-dump|variable name &#124; optional filename to save|save variable to file
-snap|element (page = screen) &#124; optional filename to save|save screenshot to file
+save|element to read from &#124; optional filename|save element text to file
+dump|variable name &#124; optional filename|save variable to file
+snap|element (page = screen) &#124; optional filename|save screenshot to file
 wait|time in milliseconds|wait for some time
-test|condition to test &#124; text if true &#124; text if false|test condition, print result to screen and logfile
-frame|frame name &#124; subframe name if any|specify that next step is within frame/subframe
+test|condition to test &#124; text if true &#124; text if false|test condition and print result
+frame|frame name &#124; subframe name if any|specify next step is within frame/subframe
 
 1. Above words are case-insensitive to let users write flexibly in the way they want
 2. Extra spaces between parameters and | are trimmed for flexible user formatting
 3. JavaScript code can be used (in CasperJS's context); if/for/while applies to next step
-4. XPath is robust for identification and used to check for a particular element on webpage
-5. XPath checked in following order of priority xpath, id, name, class, title, text()
+4. XPath is robust for identification and used to check for a particular webpage element
+5. XPath is checked in following order of priority full-xpath, id, name, class, title, text()
 
 # License
 TA.Gui is open-source software released under the MIT license
