@@ -36,11 +36,6 @@ for (var sleep_count = 0; sleep_count < 1e7; sleep_count++)
 // finding best match for given locator
 function tx(locator) {
 if (casper.exists(x(locator))) return x(locator);
-if (casper.exists(x('//*[@id="'+locator+'"]'))) return x('//*[@id="'+locator+'"]');
-if (casper.exists(x('//*[@name="'+locator+'"]'))) return x('//*[@name="'+locator+'"]');
-if (casper.exists(x('//*[@class="'+locator+'"]'))) return x('//*[@class="'+locator+'"]');
-if (casper.exists(x('//*[@title="'+locator+'"]'))) return x('//*[@title="'+locator+'"]');
-if (casper.exists(x('//*[text()="'+locator+'"]'))) return x('//*[text()="'+locator+'"]');
 if (casper.exists(x('//*[contains(@id,"'+locator+'")]'))) return x('//*[contains(@id,"'+locator+'")]');
 if (casper.exists(x('//*[contains(@name,"'+locator+'")]'))) return x('//*[contains(@name,"'+locator+'")]');
 if (casper.exists(x('//*[contains(@class,"'+locator+'")]'))) return x('//*[contains(@class,"'+locator+'")]');
@@ -50,12 +45,7 @@ else return x('/html');}
 
 // checking if given locator is found
 function check_tx(locator) {
-if (casper.exists(x(locator))) return true; 
-if (casper.exists(x('//*[@id="'+locator+'"]'))) return true;
-if (casper.exists(x('//*[@name="'+locator+'"]'))) return true;
-if (casper.exists(x('//*[@class="'+locator+'"]'))) return true;
-if (casper.exists(x('//*[@title="'+locator+'"]'))) return true;
-if (casper.exists(x('//*[text()="'+locator+'"]'))) return true;
+if (casper.exists(x(locator))) return true;
 if (casper.exists(x('//*[contains(@id,"'+locator+'")]'))) return true;
 if (casper.exists(x('//*[contains(@name,"'+locator+'")]'))) return true;
 if (casper.exists(x('//*[contains(@class,"'+locator+'")]'))) return true;
