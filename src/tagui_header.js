@@ -45,7 +45,7 @@ else return x('/html');}
 
 // checking if given locator is found
 function check_tx(locator) {
-if (casper.exists(x(locator))) return true; 
+if (casper.exists(x(locator))) return true;
 if (casper.exists(x('//*[contains(@id,"'+locator+'")]'))) return true;
 if (casper.exists(x('//*[contains(@name,"'+locator+'")]'))) return true;
 if (casper.exists(x('//*[contains(@class,"'+locator+'")]'))) return true;
