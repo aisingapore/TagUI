@@ -91,7 +91,7 @@ if ((substr($raw_intent,0,4)=="for ") or (substr($raw_intent,0,6)=="while ")) re
 if ((substr($raw_intent,0,7)=="switch ") or (substr($raw_intent,0,5)=="case ")) return true;
 if ((substr($raw_intent,0,6)=="break;") or (substr($raw_intent,0,9)=="function ")) return true;
 if ((substr($raw_intent,0,7)=="casper.") or (substr($raw_intent,0,5)=="this.")) return true;
-if (substr($raw_intent,-1)==";") return true; return false;}
+if ((substr($raw_intent,0,2)=="//") or (substr($raw_intent,-1)==";")) return true; return false;}
 
 function beg_tx($locator) { // helper function to return beginning string for handling locators
 return "\ncasper.waitFor(function check() {return check_tx('".$locator."');},\nfunction then() {";}
