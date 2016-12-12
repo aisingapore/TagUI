@@ -36,6 +36,7 @@ Microsoft Friendly|reduce friction for running on Windows
 Logic Engine|for supporting rule-based decision making
 Chrome Extension|facilitate creation of automation flows
 Enhancements|configuration, keywords, object repository
+One Package|evaluate packaging in CasperJS/PhantomJS
 Active I/O|triggering and actioning from email/API
 Passive I/O|xls/csv datatables and web-based reports
 
