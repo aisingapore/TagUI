@@ -32,6 +32,7 @@ download https://admin.typeform.com/form/2592751/analyze/csv|report.csv
 Feature|Details
 :-----:|:------
 Real Browser|run automation in a visible web browser
+Microsoft Friendly|reduce friction for running on Windows
 Logic Engine|for supporting rule-based decision making
 Chrome Extension|facilitate creation of automation flows
 Enhancements|configuration, keywords, object repository
