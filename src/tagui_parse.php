@@ -2,8 +2,12 @@
 
 /* PARSER SCRIPT FOR TA.GUI FRAMEWORK ~ TEBEL.SG */
 
+// check flow filename for .gui or .txt or no extension
+$script = $argv[1]; if ($script=="") die("ERROR - specify flow filename as first parameter\n"); if (strpos($script, '.') !== false)
+if ((pathinfo($script, PATHINFO_EXTENSION)!="gui") and (pathinfo($script, PATHINFO_EXTENSION)!="txt"))
+die("ERROR - use .gui or .txt or no extension for flow filename\n");
+
 // make sure required files are available and can be opened
-$script = $argv[1]; if ($script=="") die("ERROR - flow file not specified" . "\n");
 if (!file_exists($script)) die("ERROR - cannot find " . $script . "\n");
 $input_file = fopen($script,'r') or die("ERROR - cannot open " . $script . "\n");
 $output_file = fopen($script . '.js','w') or die("ERROR - cannot open " . $script . '.js' . "\n");
@@ -18,7 +22,6 @@ while(!feof($footer_file)) {fwrite($output_file,fgets($footer_file));} fclose($f
 chmod ($script . '.js',0600); if (!$url_provided) echo "ERROR - [OTHERS] first line of " . $script . " not URL\n";
 
 function current_line() {return "[LINE " . $GLOBALS['line_number'] . "]";}
-
 function parse_intent($script_line) {$GLOBALS['line_number']++;
 $script_line = trim($script_line); if ($script_line=="") return "";
 
