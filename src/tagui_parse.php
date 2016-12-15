@@ -3,7 +3,7 @@
 /* PARSER SCRIPT FOR TA.GUI FRAMEWORK ~ TEBEL.SG */
 
 // make sure required files are available and can be opened
-$script = $argv[1]; if ($script=="") die("ERROR - script not specified" . "\n");
+$script = $argv[1]; if ($script=="") die("ERROR - flow file not specified" . "\n");
 if (!file_exists($script)) die("ERROR - cannot find " . $script . "\n");
 $input_file = fopen($script,'r') or die("ERROR - cannot open " . $script . "\n");
 $output_file = fopen($script . '.js','w') or die("ERROR - cannot open " . $script . '.js' . "\n");
@@ -15,7 +15,9 @@ $inside_frame = 0; $line_number = 0; $url_provided = false; // to detect if url 
 while(!feof($header_file)) {fwrite($output_file,fgets($header_file));} fclose($header_file);
 while(!feof($input_file)) {fwrite($output_file,parse_intent(fgets($input_file)));} fclose($input_file);
 while(!feof($footer_file)) {fwrite($output_file,fgets($footer_file));} fclose($footer_file); fclose($output_file);
-chmod ($script . '.js',0600); if (!$url_provided) echo "ERROR - URL must be first line in " . $script . "\n";
+chmod ($script . '.js',0600); if (!$url_provided) echo "ERROR - [OTHERS] first line of " . $script . " not URL\n";
+
+function current_line() {return "[LINE " . $GLOBALS['line_number'] . "]";}
 
 function parse_intent($script_line) {$GLOBALS['line_number']++;
 $script_line = trim($script_line); if ($script_line=="") return "";
@@ -39,7 +41,7 @@ case "test": return test_intent($script_line); break;
 case "frame": return frame_intent($script_line); break;
 case "js": return js_intent($script_line); break;
 case "code": return $script_line . "\n"; break;
-default: echo "ERROR - cannot understand step " . $script_line . "\n";}}
+default: echo "ERROR - " . current_line() . " cannot understand step " . $script_line . "\n";}}
 
 function get_intent($raw_intent) {
 if ((strtolower(substr($raw_intent,0,7))=="http://") or (strtolower(substr($raw_intent,0,8))=="https://")) return "url";
@@ -106,7 +108,8 @@ else if ($GLOBALS['inside_frame'] == 2) {$GLOBALS['inside_frame']=0; return " })
 
 // set of functions to interpret steps into corresponding casperjs code
 function url_intent($raw_intent) {
-if (filter_var($raw_intent, FILTER_VALIDATE_URL) == false) echo "ERROR - invalid URL " . $raw_intent . "\n"; else
+if (filter_var($raw_intent, FILTER_VALIDATE_URL) == false) 
+echo "ERROR - " . current_line() . " invalid URL " . $raw_intent . "\n"; else
 if ($GLOBALS['line_number'] == 1) {$GLOBALS['url_provided'] = true; return "casper.start('".$raw_intent.
 "', function() {\nthis.echo('".$raw_intent."' + ' - ' + this.getTitle() + '\\n');});\n\ncasper.then(function() {\n";}
 else return "});casper.thenOpen('".$raw_intent."', function() {\nthis.echo('".
@@ -114,55 +117,60 @@ $raw_intent."' + ' - ' + this.getTitle());});\n\ncasper.then(function() {\n";}
 
 function tap_intent($raw_intent) {
 $params = trim(substr($raw_intent." ",1+strpos($raw_intent." "," "))); 
-if ($params == "") echo "ERROR - target missing for " . $raw_intent . "\n"; else
+if ($params == "") echo "ERROR - " . current_line() . " target missing for " . $raw_intent . "\n"; else
 return "{this.echo('".$raw_intent."');".beg_tx($params)."this.click(tx('" . $params . "'));".end_tx($params);}
 
 function hover_intent($raw_intent) {
-$params = trim(substr($raw_intent." ",1+strpos($raw_intent." "," ")));
-if ($params == "") echo "ERROR - target missing for " . $raw_intent . "\n"; else
+$params = trim(substr($raw_intent." ",1+strpos($raw_intent." "," "))); 
+if ($params == "") echo "ERROR - " . current_line() . " target missing for " . $raw_intent . "\n"; else
 return "{this.echo('".$raw_intent."');".beg_tx($params)."this.mouse.move(tx('" . $params . "'));".end_tx($params);}
 
 function type_intent($raw_intent) {
 $params = trim(substr($raw_intent." ",1+strpos($raw_intent." "," ")));
 $param1 = trim(substr($params,0,strpos($params,"|"))); $param2 = trim(substr($params,1+strpos($params,"|")));
-if (($param1 == "") or ($param2 == "")) echo "ERROR - target/text missing for " . $raw_intent . "\n"; else 
+if (($param1 == "") or ($param2 == "")) 
+echo "ERROR - " . current_line() . " target/text missing for " . $raw_intent . "\n"; else 
 return "{this.echo('".$raw_intent."');".beg_tx($param1)."this.sendKeys(tx('".$param1."'),'".$param2."');".end_tx($param1);}
 
 function read_intent($raw_intent) {
 $params = trim(substr($raw_intent." ",1+strpos($raw_intent." "," ")));
 $param1 = trim(substr($params,0,strpos($params,"|"))); $param2 = trim(substr($params,1+strpos($params,"|")));
-if (($param1 == "") or ($param2 == "")) echo "ERROR - target/variable missing for " . $raw_intent . "\n"; else
+if (($param1 == "") or ($param2 == "")) 
+echo "ERROR - " . current_line() . " target/variable missing for " . $raw_intent . "\n"; else
 return "{this.echo('".$raw_intent."');".beg_tx($param1).$param2." = this.fetchText(tx('".$param1."'));".end_tx($param1);}
 
 function show_intent($raw_intent) {
 $params = trim(substr($raw_intent." ",1+strpos($raw_intent." "," ")));
-if ($params == "") echo "ERROR - target missing for " . $raw_intent . "\n"; else
+if ($params == "") echo "ERROR - " . current_line() . " target missing for " . $raw_intent . "\n"; else
 return "{// nothing to do on this line".beg_tx($params).
 "this.echo('".$raw_intent."' + ' ' + this.fetchText(tx('" . $params . "')));".end_tx($params);}
 
 function down_intent($raw_intent) {
 $params = trim(substr($raw_intent." ",1+strpos($raw_intent." "," ")));
 $param1 = trim(substr($params,0,strpos($params,"|"))); $param2 = trim(substr($params,1+strpos($params,"|")));
-if (($param1 == "") or ($param2 == "")) echo "ERROR - url/filename missing for " . $raw_intent . "\n"; else
+if (($param1 == "") or ($param2 == "")) 
+echo "ERROR - " . current_line() . " url/filename missing for " . $raw_intent . "\n"; else
 return "{this.echo('".$raw_intent."');\nthis.download('".$param1."','".$param2."');}".end_fi()."\n";}
 
 function file_intent($raw_intent) {
 $params = trim(substr($raw_intent." ",1+strpos($raw_intent." "," ")));
 $param1 = trim(substr($params,0,strpos($params,"|"))); $param2 = trim(substr($params,1+strpos($params,"|")));
-if (($param1 == "") or ($param2 == "")) echo "ERROR - source/target missing for " . $raw_intent . "\n"; else
+if (($param1 == "") or ($param2 == "")) 
+echo "ERROR - " . current_line() . " source/target missing for " . $raw_intent . "\n"; else
 return "{this.echo('".$raw_intent."');\n".
 "casper.on('resource.received', function(resource) {if (resource.stage !== 'end') return;\n".
 "if (resource.url.indexOf('".$param1."') > -1) this.download(resource.url, '".$param2."');});}".end_fi()."\n";}
 
 function echo_intent($raw_intent) {
 $params = trim(substr($raw_intent." ",1+strpos($raw_intent." "," ")));
-if ($params == "") echo "ERROR - text missing for " . $raw_intent . "\n";
-else return "this.echo(".$params.");".end_fi()."\n";}
+if ($params == "") echo "ERROR - " . current_line() . " text missing for " . $raw_intent . "\n"; else 
+return "this.echo(".$params.");".end_fi()."\n";}
 
 function save_intent($raw_intent) {
 $params = trim(substr($raw_intent." ",1+strpos($raw_intent." "," ")));
 $param1 = trim(substr($params,0,strpos($params,"|"))); $param2 = trim(substr($params,1+strpos($params,"|")));
-if ($params == "") echo "ERROR - target missing for " . $raw_intent . "\n"; else if (strpos($params,"|")!==false)
+if ($params == "") echo "ERROR - " . current_line() . " target missing for " . $raw_intent . "\n"; 
+else if (strpos($params,"|")!==false)
 return "{this.echo('".$raw_intent."');".beg_tx($param1).
 	"save_text('".$param2."',this.fetchText(tx('".$param1."')));".end_tx($param1); else
 return "{this.echo('".$raw_intent."');".beg_tx($params).
@@ -171,7 +179,8 @@ return "{this.echo('".$raw_intent."');".beg_tx($params).
 function dump_intent($raw_intent) {
 $params = trim(substr($raw_intent." ",1+strpos($raw_intent." "," ")));
 $param1 = trim(substr($params,0,strpos($params,"|"))); $param2 = trim(substr($params,1+strpos($params,"|")));
-if ($params == "") echo "ERROR - variable missing for " . $raw_intent . "\n"; else if (strpos($params,"|")!==false)
+if ($params == "") echo "ERROR - " . current_line() . " variable missing for " . $raw_intent . "\n"; 
+else if (strpos($params,"|")!==false)
 return "{this.echo('".$raw_intent."');\nsave_text('".$param2."',".$param1.");}".end_fi()."\n";
 else return "{this.echo('".$raw_intent."');\nsave_text(''," . $params . ");}".end_fi()."\n";}
 
@@ -181,7 +190,8 @@ $param1 = trim(substr($params,0,strpos($params,"|"))); $param2 = trim(substr($pa
 if ((strtolower($params) == "page") or (strtolower($param1) == "page")) {if (strpos($params,"|")!==false)
 return "{this.echo('".$raw_intent."');\nthis.capture('".$param2."');}".end_fi()."\n";
 else return "{this.echo('".$raw_intent."');\nthis.capture(snap_image());}".end_fi()."\n";}
-if ($params == "") echo "ERROR - target missing for " . $raw_intent . "\n"; else if (strpos($params,"|")!==false)
+if ($params == "") echo "ERROR - " . current_line() . " target missing for " . $raw_intent . "\n"; 
+else if (strpos($params,"|")!==false)
 return "{this.echo('".$raw_intent."');".beg_tx($param1).
 	"this.captureSelector('".$param2."',tx('".$param1."'));".end_tx($param1); else
 return "{this.echo('".$raw_intent."');".beg_tx($params).
@@ -189,7 +199,7 @@ return "{this.echo('".$raw_intent."');".beg_tx($params).
 
 function wait_intent($raw_intent) {
 $params = trim(substr($raw_intent." ",1+strpos($raw_intent." "," ")));
-if ($params == "") echo "ERROR - duration missing for " . $raw_intent . "\n"; else
+if ($params == "") echo "ERROR - " . current_line() . " duration missing for " . $raw_intent . "\n"; else 
 return "this.echo('".$raw_intent."');});\n\ncasper.wait(" . $params . ", function() {\n";}
 
 function test_intent($raw_intent) {
@@ -199,20 +209,24 @@ $param1 = trim(substr($params,0,strpos($params,"|"))); $param2 = trim(substr($pa
 $param3 = trim(substr($param2,1+strpos($param2,"|"))); $param2 = trim(substr($param2,0,strpos($param2,"|")));
 $param1 = str_replace(" JAVASCRIPT_OR ","||",$param1); // to restore back "||" that were replaced
 $param2 = str_replace(" JAVASCRIPT_OR ","||",$param2); $param3 = str_replace(" JAVASCRIPT_OR ","||",$param3);
-if (substr_count($params,"|")!=2) echo "ERROR - if/true/false missing for " . $raw_intent . "\n"; else
+if (substr_count($params,"|")!=2) 
+echo "ERROR - " . current_line() . " if/true/false missing for " . $raw_intent . "\n"; else
 return "{if (".$param1.")\nthis.echo(".$param2.");\nelse this.echo(".$param3.");}".end_fi()."\n";}
 
 function frame_intent($raw_intent) {
-if ($GLOBALS['inside_frame'] != 0) {echo "ERROR - frame called consecutively " . $raw_intent . "\n"; return;}
+if ($GLOBALS['inside_frame'] != 0) 
+{echo "ERROR - " . current_line() . " frame called consecutively " . $raw_intent . "\n"; return;}
 $params = trim(substr($raw_intent." ",1+strpos($raw_intent." "," ")));
 $param1 = trim(substr($params,0,strpos($params,"|"))); $param2 = trim(substr($params,1+strpos($params,"|")));
-if ($params == "") echo "ERROR - name missing for " . $raw_intent . "\n"; else if (strpos($params,"|")!==false) 
+if ($params == "") echo "ERROR - " . current_line() . " name missing for " . $raw_intent . "\n"; 
+else if (strpos($params,"|")!==false) 
 {$GLOBALS['inside_frame']=2; return "{this.echo('".$raw_intent."');\ncasper.withFrame('".
 $param1."', function() {casper.withFrame('".$param2."', function() {\n";} else
 {$GLOBALS['inside_frame']=1; return "{this.echo('".$raw_intent."');\ncasper.withFrame('".$params."', function() {\n";}}
 
 function js_intent($raw_intent) {
 $params = trim(substr($raw_intent." ",1+strpos($raw_intent." "," ")));
-if ($params == "") echo "ERROR - statement missing for " . $raw_intent . "\n"; else return $params.end_fi()."\n";}
+if ($params == "") echo "ERROR - " . current_line() . " statement missing for " . $raw_intent . "\n";
+else return $params.end_fi()."\n";}
 
 ?>
