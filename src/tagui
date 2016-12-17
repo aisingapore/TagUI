@@ -1,6 +1,10 @@
 #!/bin/bash
 # SCRIPT FOR RUNNING TA.GUI FRAMEWORK ~ TEBEL.SG #
 
+# check firefox parameter to run on visible firefox browser through slimerjs 
+if [ "$2" = "firefox" ]; then set -- "$1" "--engine=slimerjs" "${@:3}"; fi
+
+# parse automation flow file and check for error before calling casperjs
 php tagui_parse.php "$1" > "$1".log; chmod 600 "$1".log; cat "$1".log
 if [ -s "$1".log ]; then echo "ERROR - automation aborted due to above" | tee -a "$1".log
 else casperjs "$1".js "$2" "$3" "$4" "$5" "$6" "$7" "$8" "$9" "$10" | tee -a "$1".log; fi
