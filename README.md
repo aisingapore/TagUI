@@ -17,6 +17,7 @@ click action results tooltip
 click section_results
 download https://admin.typeform.com/form/2592751/analyze/csv|report.csv
 ```
+Running on a visible web browser is also supported using Firefox and SlimerJS, see firefox option under To Use
 
 # Set Up
 1. install CasperJS (navigation/testing for PhantomJS) - http://casperjs.org
@@ -25,14 +26,17 @@ download https://admin.typeform.com/form/2592751/analyze/csv|report.csv
 
 # To Use
 ```
-./tagui flow_filename parameter(s)
+./tagui flow_filename option(s)
 ```
 Extension of flow filename can be no extension, .gui or .txt
 
+Option|Purpose
+:----:|:------
+firefox|run on visible Firefox browser (need to install Firefox, and SlimerJS - https://slimerjs.org)
+
 # Pipeline
-Feature|Details
+Feature|Purpose
 :-----:|:------
-Real Browser|run automation in a visible web browser
 Microsoft Friendly|reduce friction for running on Windows
 Chrome Extension|facilitate creation of automation flows
 Logic Engine|for supporting rule-based decision making
