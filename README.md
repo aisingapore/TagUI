@@ -17,7 +17,7 @@ click action results tooltip
 click section_results
 download https://admin.typeform.com/form/2592751/analyze/csv|report.csv
 ```
-Running on a visible web browser is also supported using Firefox and SlimerJS, see firefox option under To Use
+Running on a visible web browser is possible using Firefox and SlimerJS (see firefox option under To Use section)
 
 # Set Up
 1. install CasperJS (navigation/testing for PhantomJS) - http://casperjs.org
