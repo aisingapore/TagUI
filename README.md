@@ -33,6 +33,7 @@ Extension of flow filename can be no extension, .gui or .txt
 Option|Purpose
 :----:|:------
 firefox|run on visible Firefox browser (need to install Firefox, and SlimerJS - https://slimerjs.org)
+debug|show run-time backend messages from PhantomJS for detailed tracing or logging
 
 # Pipeline
 Feature|Purpose
