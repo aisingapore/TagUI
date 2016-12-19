@@ -11,7 +11,7 @@ if [ "$7" = "firefox" ]; then set -- "${@:1:6}" "--engine=slimerjs" "${@:8}"; fi
 if [ "$8" = "firefox" ]; then set -- "${@:1:7}" "--engine=slimerjs" "${@:9}"; fi
 if [ "$9" = "firefox" ]; then set -- "${@:1:8}" "--engine=slimerjs" "${@:10}"; fi
 
-# check debug parameter to run on visible firefox browser through slimerjs 
+# check debug parameter to show run-time backend messages from phantomjs
 if [ "$2" = "debug" ]; then set -- "$1" "--verbose" "${@:3}"; fi
 if [ "$3" = "debug" ]; then set -- "${@:1:2}" "--verbose" "${@:4}"; fi
 if [ "$4" = "debug" ]; then set -- "${@:1:3}" "--verbose" "${@:5}"; fi
