@@ -70,11 +70,11 @@ wait|time in milliseconds|wait for some time
 test|condition to test &#124; text if true &#124; text if false|test condition and print result
 frame|frame name &#124; subframe name if any|specify next step is within frame/subframe
 
-1. Above words are case-insensitive to let users write flexibly in the way they want
-2. Extra spaces between parameters and | are optional, for flexible user formatting
-3. JavaScript code can be used (in CasperJS's context); if/for/while applies to next step
-4. XPath is robust for identification and used to check for a particular webpage element
-5. XPath is checked in following order of priority full-xpath, id, name, class, title, text()
+- Above words are case-insensitive to let users write flexibly in the way they want
+- Extra spaces between parameters and | are optional, for flexible user formatting
+- JavaScript code can be used (in CasperJS's context); if/for/while applies to next step
+- XPath is robust for identification and used to check for a particular webpage element
+- XPath is checked in following order of priority full-xpath, id, name, class, title, text()
 
 # License
 TA.Gui is open-source software released under the MIT license
