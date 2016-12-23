@@ -1,6 +1,8 @@
 # TA.Gui
 TA.Gui is a tool for non-developers and business users to automate web apps
 
+![Sample Automation](https://github.com/tebelorg/TA.Gui/raw/master/sample.png)
+
 # Why This
 Insanely easy. Lightning fast. Open-source.
 
