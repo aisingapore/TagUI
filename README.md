@@ -43,7 +43,8 @@ debug|show run-time backend messages from PhantomJS for detailed tracing or logg
 # Pipeline
 Feature|Purpose
 :-----:|:------
-Microsoft Friendly|reduce friction for running on Windows
+Active I/O|triggering and actioning from email/API
+Passive I/O|xls/csv datatables and web-based reports
 Chrome Extension|facilitate creation of automation flows
 Logic Engine|for supporting rule-based decision making
 Smart Locator|fuzzy logic for changes in locators
@@ -51,9 +52,8 @@ Parallel Run|develop concurrent automation runs
 Advance Testing|wrapper/helper for CasperJS assertions
 Enhancements|configuration, keywords, object repository
 One Package|evaluate packaging in CasperJS/PhantomJS
+Microsoft Friendly|reduce friction for running on Windows
 Health Check|self-test and self-healing of dependencies
-Active I/O|triggering and actioning from email/API
-Passive I/O|xls/csv datatables and web-based reports
 
 # Cheat Sheet
 Word|Parameter(s)|Purpose
