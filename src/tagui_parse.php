@@ -12,7 +12,7 @@ die("ERROR - use .gui or .txt or no extension for flow filename\n");
 if (!file_exists($script)) die("ERROR - cannot find " . $script . "\n");
 $input_file = fopen($script,'r') or die("ERROR - cannot open " . $script . "\n");
 $output_file = fopen($script . '.js','w') or die("ERROR - cannot open " . $script . '.js' . "\n");
-$config_file = fopen('tagui.cfg','r') or die("ERROR - cannot open tagui.cfg" . "\n");
+$config_file = fopen('tagui_config.txt','r') or die("ERROR - cannot open tagui_config.txt" . "\n");
 $header_file = fopen('tagui_header.js','r') or die("ERROR - cannot open tagui_header.js" . "\n");
 $footer_file = fopen('tagui_footer.js','r') or die("ERROR - cannot open tagui_footer.js" . "\n");
 $inside_frame = 0; $line_number = 0; $url_provided = false; // to detect if url is provided in user-script
