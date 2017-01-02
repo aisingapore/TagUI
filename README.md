@@ -31,7 +31,8 @@ download https://admin.typeform.com/form/2592751/analyze/csv|report.csv
 ```
 ./tagui flow_filename option(s)
 ```
-Extension of flow filename can be no extension, .gui or .txt
+- Extension of flow filename can be no extension, .gui or .txt
+- Browser settings can be configured in tagui_config.txt
 
 Option|Purpose
 :----:|:------
@@ -41,7 +42,7 @@ debug|show run-time backend messages from PhantomJS for detailed tracing or logg
 # Pipeline
 Feature|Purpose
 :-----:|:------
-Enhancements|configuration, keywords, object repository
+Enhancements|natural language, keywords, object repo
 Active I/O|triggering and actioning from email/API
 Passive I/O|xls/csv datatables and web-based results
 Chrome Extension|facilitate creation of automation flows
