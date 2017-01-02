@@ -1,13 +1,7 @@
-/* OUTPUT CASPERJS SCRIPT FOR TA.GUI FRAMEWORK ~ TEBEL.SG */
+});
 
-// casperjs (phantomjs) browser settings
+// xpath for object identification
 var x = require('casper').selectXPath;
-var casper = require('casper').create({
-verbose: false, logLevel: 'debug',
-tagui.cfg.waitTimeout: ,
-viewportSize: {tagui.cfg.width: , tagui.cfg.height: },
-pageSettings: {tagui.cfg.loadImages: , tagui.cfg.loadPlugins: ,
-tagui.cfg.localToRemoteUrlAccessEnabled: , tagui.cfg.webSecurityEnabled: , tagui.cfg.ignoreSslErrors: }});
 
 // assign parameters to p1-p9 variables
 var p1 = casper.cli.raw.get(0); var p2 = casper.cli.raw.get(1); var p3 = casper.cli.raw.get(2);

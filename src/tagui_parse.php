@@ -12,13 +12,23 @@ die("ERROR - use .gui or .txt or no extension for flow filename\n");
 if (!file_exists($script)) die("ERROR - cannot find " . $script . "\n");
 $input_file = fopen($script,'r') or die("ERROR - cannot open " . $script . "\n");
 $output_file = fopen($script . '.js','w') or die("ERROR - cannot open " . $script . '.js' . "\n");
+$config_file = fopen('tagui.cfg','r') or die("ERROR - cannot open tagui.cfg" . "\n");
 $header_file = fopen('tagui_header.js','r') or die("ERROR - cannot open tagui_header.js" . "\n");
 $footer_file = fopen('tagui_footer.js','r') or die("ERROR - cannot open tagui_footer.js" . "\n");
 $inside_frame = 0; $line_number = 0; $url_provided = false; // to detect if url is provided in user-script
 
-// loops to create casperjs script from header, user-script, footer files
+// loops to create casperjs script from header, user flow, footer files
+
+// create header of casperjs script using tagui config and header template
+fwrite($output_file,"/* OUTPUT CASPERJS SCRIPT FOR TA.GUI FRAMEWORK ~ TEBEL.SG */\n\n");
+fwrite($output_file,"var casper = require('casper').create({\n"); // opening lines
+while(!feof($config_file)) {fwrite($output_file,fgets($config_file));} fclose($config_file);
 while(!feof($header_file)) {fwrite($output_file,fgets($header_file));} fclose($header_file);
+
+// main loop to parse intents in flow file for conversion into javascript code
 while(!feof($input_file)) {fwrite($output_file,parse_intent(fgets($input_file)));} fclose($input_file);
+
+// create footer of casperjs script using footer template and do post-processing 
 while(!feof($footer_file)) {fwrite($output_file,fgets($footer_file));} fclose($footer_file); fclose($output_file);
 chmod ($script . '.js',0600); if (!$url_provided) echo "ERROR - [OTHERS] first line of " . $script . " not URL\n";
 
