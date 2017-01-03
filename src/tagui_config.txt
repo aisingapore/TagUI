@@ -11,6 +11,6 @@ height: 768 },
 pageSettings: {
 loadImages: true,
 loadPlugins: true,
-localToRemoteUrlAccessEnabled: false,
 webSecurityEnabled: true,
-ignoreSslErrors: false }
+ignoreSslErrors: false,
+localToRemoteUrlAccessEnabled: false }
