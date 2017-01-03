@@ -6,7 +6,7 @@ TA.Gui is a tool for non-developers and business users to automate web apps
 # Why This
 Automate repetitive parts of your work - use cases include data acquisition, process and test automations.
 
-TA.Gui converts automation flows in simple natural language into lines of JavaScript code for CasperJS & PhantomJS to perform their web automation magic. For example, TA.Gui will instantly convert the flow below into 100+ lines of working JavaScript code and perform the series of steps to download a Typeform report automatically.
+TA.Gui converts automation flows in simple natural language into lines of JavaScript code for CasperJS & PhantomJS to perform their web automation magic. For example, TA.Gui will instantly convert the flow below into 120+ lines of working JavaScript code and perform the series of steps to download a Typeform report automatically.
 
 The flow can be triggered from scheduling, command line, REST API, URL, email etc. Everything happens in the background without seeing any web browser, so that you can continue to use the computer or server uninterrupted. Running on a visible web browser is also supported, using Firefox and SlimerJS (see firefox option below).
 
@@ -63,14 +63,14 @@ type / enter|element to type ***as*** text to type|enter element as text
 read / fetch|element to read ***to*** variable name|fetch text to variable
 show / print|element to read |print element text to output
 download|url to download ***to*** filename to save|download url to file
-file|url keyword to watch ***to*** filename to save|download resource received
+receive|url keyword to watch ***to*** filename to save|receive resource to file
 echo|text and variables (text in quotes)|print text/variables to output
 save|element to read ***to*** optional filename|save text to file
 dump|variable name ***to*** optional filename|save variable to file
 snap|element (page = screen) ***to*** optional filename|save screenshot to file
 wait|time in milliseconds|wait for some time
 test|condition to test &#124; text if true &#124; text if false|test condition and print result
-frame|frame name &#124; subframe name if any|next step within frame/subframe
+frame|frame name &#124; subframe name if any|next step in frame/subframe
 
 - JavaScript code can be used (in CasperJS's context); if/for/while applies to next step
 - XPath is robust for identification and used to check for a particular webpage element
