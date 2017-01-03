@@ -45,7 +45,7 @@ case "type": return type_intent($script_line); break;
 case "read": return read_intent($script_line); break;
 case "show": return show_intent($script_line); break;
 case "down": return down_intent($script_line); break;
-case "file": return file_intent($script_line); break;
+case "receive": return receive_intent($script_line); break;
 case "echo": return echo_intent($script_line); break;
 case "save": return save_intent($script_line); break;
 case "dump": return dump_intent($script_line); break;
@@ -67,7 +67,7 @@ else if ((strtolower(substr($raw_intent,0,5))=="type ") or (strtolower(substr($r
 else if ((strtolower(substr($raw_intent,0,5))=="read ") or (strtolower(substr($raw_intent,0,6))=="fetch ")) return "read";
 else if ((strtolower(substr($raw_intent,0,5))=="show ") or (strtolower(substr($raw_intent,0,6))=="print ")) return "show";
 else if ((strtolower(substr($raw_intent,0,5))=="down ") or (strtolower(substr($raw_intent,4,5))=="load ")) return "down";
-else if (strtolower(substr($raw_intent,0,5))=="file ") return "file";
+else if (strtolower(substr($raw_intent,0,8))=="receive ") return "receive";
 else if (strtolower(substr($raw_intent,0,5))=="echo ") return "echo";
 else if (strtolower(substr($raw_intent,0,5))=="save ") return "save";
 else if (strtolower(substr($raw_intent,0,5))=="dump ") return "dump";
@@ -84,7 +84,7 @@ else if ((strtolower($raw_intent)=="type") or (strtolower($raw_intent)=="enter")
 else if ((strtolower($raw_intent)=="read") or (strtolower($raw_intent)=="fetch")) return "read";
 else if ((strtolower($raw_intent)=="show") or (strtolower($raw_intent)=="print")) return "show";
 else if ((strtolower($raw_intent)=="down") or (strtolower($raw_intent)=="download")) return "down";
-else if (strtolower($raw_intent)=="file") return "file";
+else if (strtolower($raw_intent)=="receive") return "receive";
 else if (strtolower($raw_intent)=="echo") return "echo";
 else if (strtolower($raw_intent)=="save") return "save";
 else if (strtolower($raw_intent)=="dump") return "dump";
@@ -166,11 +166,11 @@ if (($param1 == "") or ($param2 == ""))
 echo "ERROR - " . current_line() . " url/filename missing for " . $raw_intent . "\n"; else
 return "{this.echo('".$raw_intent."');\nthis.download('".$param1."','".$param2."');}".end_fi()."\n";}
 
-function file_intent($raw_intent) {
+function receive_intent($raw_intent) {
 $params = trim(substr($raw_intent." ",1+strpos($raw_intent." "," ")));
 $param1 = trim(substr($params,0,strpos($params," to "))); $param2 = trim(substr($params,4+strpos($params," to ")));
 if (($param1 == "") or ($param2 == "")) 
-echo "ERROR - " . current_line() . " source/target missing for " . $raw_intent . "\n"; else
+echo "ERROR - " . current_line() . " resource/filename missing for " . $raw_intent . "\n"; else
 return "{this.echo('".$raw_intent."');\n".
 "casper.on('resource.received', function(resource) {if (resource.stage !== 'end') return;\n".
 "if (resource.url.indexOf('".$param1."') > -1) this.download(resource.url, '".$param2."');});}".end_fi()."\n";}
