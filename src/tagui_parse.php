@@ -141,14 +141,14 @@ return "{this.echo('".$raw_intent."');".beg_tx($params)."this.mouse.move(tx('" .
 
 function type_intent($raw_intent) {
 $params = trim(substr($raw_intent." ",1+strpos($raw_intent." "," ")));
-$param1 = trim(substr($params,0,strpos($params,"|"))); $param2 = trim(substr($params,1+strpos($params,"|")));
+$param1 = trim(substr($params,0,strpos($params," as "))); $param2 = trim(substr($params,4+strpos($params," as ")));
 if (($param1 == "") or ($param2 == "")) 
 echo "ERROR - " . current_line() . " target/text missing for " . $raw_intent . "\n"; else 
 return "{this.echo('".$raw_intent."');".beg_tx($param1)."this.sendKeys(tx('".$param1."'),'".$param2."');".end_tx($param1);}
 
 function read_intent($raw_intent) {
 $params = trim(substr($raw_intent." ",1+strpos($raw_intent." "," ")));
-$param1 = trim(substr($params,0,strpos($params,"|"))); $param2 = trim(substr($params,1+strpos($params,"|")));
+$param1 = trim(substr($params,0,strpos($params," to "))); $param2 = trim(substr($params,4+strpos($params," to ")));
 if (($param1 == "") or ($param2 == "")) 
 echo "ERROR - " . current_line() . " target/variable missing for " . $raw_intent . "\n"; else
 return "{this.echo('".$raw_intent."');".beg_tx($param1).$param2." = this.fetchText(tx('".$param1."'));".end_tx($param1);}
@@ -161,14 +161,14 @@ return "{// nothing to do on this line".beg_tx($params).
 
 function down_intent($raw_intent) {
 $params = trim(substr($raw_intent." ",1+strpos($raw_intent." "," ")));
-$param1 = trim(substr($params,0,strpos($params,"|"))); $param2 = trim(substr($params,1+strpos($params,"|")));
+$param1 = trim(substr($params,0,strpos($params," to "))); $param2 = trim(substr($params,4+strpos($params," to ")));
 if (($param1 == "") or ($param2 == "")) 
 echo "ERROR - " . current_line() . " url/filename missing for " . $raw_intent . "\n"; else
 return "{this.echo('".$raw_intent."');\nthis.download('".$param1."','".$param2."');}".end_fi()."\n";}
 
 function file_intent($raw_intent) {
 $params = trim(substr($raw_intent." ",1+strpos($raw_intent." "," ")));
-$param1 = trim(substr($params,0,strpos($params,"|"))); $param2 = trim(substr($params,1+strpos($params,"|")));
+$param1 = trim(substr($params,0,strpos($params," to "))); $param2 = trim(substr($params,4+strpos($params," to ")));
 if (($param1 == "") or ($param2 == "")) 
 echo "ERROR - " . current_line() . " source/target missing for " . $raw_intent . "\n"; else
 return "{this.echo('".$raw_intent."');\n".
@@ -182,9 +182,9 @@ return "this.echo(".$params.");".end_fi()."\n";}
 
 function save_intent($raw_intent) {
 $params = trim(substr($raw_intent." ",1+strpos($raw_intent." "," ")));
-$param1 = trim(substr($params,0,strpos($params,"|"))); $param2 = trim(substr($params,1+strpos($params,"|")));
+$param1 = trim(substr($params,0,strpos($params," to "))); $param2 = trim(substr($params,4+strpos($params," to ")));
 if ($params == "") echo "ERROR - " . current_line() . " target missing for " . $raw_intent . "\n"; 
-else if (strpos($params,"|")!==false)
+else if (strpos($params," to ")!==false)
 return "{this.echo('".$raw_intent."');".beg_tx($param1).
 	"save_text('".$param2."',this.fetchText(tx('".$param1."')));".end_tx($param1); else
 return "{this.echo('".$raw_intent."');".beg_tx($params).
@@ -192,20 +192,20 @@ return "{this.echo('".$raw_intent."');".beg_tx($params).
 
 function dump_intent($raw_intent) {
 $params = trim(substr($raw_intent." ",1+strpos($raw_intent." "," ")));
-$param1 = trim(substr($params,0,strpos($params,"|"))); $param2 = trim(substr($params,1+strpos($params,"|")));
+$param1 = trim(substr($params,0,strpos($params," to "))); $param2 = trim(substr($params,4+strpos($params," to ")));
 if ($params == "") echo "ERROR - " . current_line() . " variable missing for " . $raw_intent . "\n"; 
-else if (strpos($params,"|")!==false)
+else if (strpos($params," to ")!==false)
 return "{this.echo('".$raw_intent."');\nsave_text('".$param2."',".$param1.");}".end_fi()."\n";
 else return "{this.echo('".$raw_intent."');\nsave_text(''," . $params . ");}".end_fi()."\n";}
 
 function snap_intent($raw_intent) {
 $params = trim(substr($raw_intent." ",1+strpos($raw_intent." "," ")));
-$param1 = trim(substr($params,0,strpos($params,"|"))); $param2 = trim(substr($params,1+strpos($params,"|")));
-if ((strtolower($params) == "page") or (strtolower($param1) == "page")) {if (strpos($params,"|")!==false)
+$param1 = trim(substr($params,0,strpos($params," to "))); $param2 = trim(substr($params,4+strpos($params," to ")));
+if ((strtolower($params) == "page") or (strtolower($param1) == "page")) {if (strpos($params," to ")!==false)
 return "{this.echo('".$raw_intent."');\nthis.capture('".$param2."');}".end_fi()."\n";
 else return "{this.echo('".$raw_intent."');\nthis.capture(snap_image());}".end_fi()."\n";}
 if ($params == "") echo "ERROR - " . current_line() . " target missing for " . $raw_intent . "\n"; 
-else if (strpos($params,"|")!==false)
+else if (strpos($params," to ")!==false)
 return "{this.echo('".$raw_intent."');".beg_tx($param1).
 	"this.captureSelector('".$param2."',tx('".$param1."'));".end_tx($param1); else
 return "{this.echo('".$raw_intent."');".beg_tx($params).
