@@ -54,7 +54,7 @@ Microsoft Friendly|reduce friction for running on Windows
 Health Check|self-test and self-healing of dependencies
 
 # Cheat Sheet
-Step|Parameter(s) and Separator|Purpose
+Step|Parameters (and separator in bold)|Purpose
 :---|:-----------|:------
 tap / click|element to click|click on an element
 hover / move|element to hover|move cursor to element
@@ -68,8 +68,8 @@ save|element to read ***to*** optional filename|save text to file
 dump|variable name ***to*** optional filename|save variable to file
 snap|element (page = screen) ***to*** optional filename|save screenshot to file
 wait|time in milliseconds|wait for some time
-test|condition to test &#124; text if true &#124; text if false|test condition and print result
-frame|frame name &#124; subframe name if any|next step in frame/subframe
+test|condition to test **&#124;** text if true **&#124;** text if false|test condition and print result
+frame|frame name **&#124;** subframe name if any|next step in frame/subframe
 
 - JavaScript code can be used (in CasperJS's context); if/for/while applies to next step
 - XPath is robust for identification and used to check for a particular webpage element
