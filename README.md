@@ -31,13 +31,12 @@ download https://admin.typeform.com/form/2592751/analyze/csv to report.csv
 ```
 ./tagui flow_filename option(s)
 ```
-- Extension of flow filename can be no extension, .gui or .txt
-- Browser settings can be configured in tagui_config.txt
-
 Option|Purpose
 :----:|:------
 firefox|run on visible Firefox browser (need to install Firefox, and SlimerJS - https://slimerjs.org)
 debug|show run-time backend messages from PhantomJS for detailed tracing or logging
+- Extension of flow filename can be no extension, .gui or .txt
+- Browser settings can be configured in tagui_config.txt
 
 # Pipeline
 Feature|Purpose
@@ -55,7 +54,7 @@ Microsoft Friendly|reduce friction for running on Windows
 Health Check|self-test and self-healing of dependencies
 
 # Cheat Sheet
-Step|Parameter(s)|Purpose
+Step|Parameter(s) and Separator|Purpose
 :---|:-----------|:------
 tap / click|element to click|click on an element
 hover / move|element to hover|move cursor to element
