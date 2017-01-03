@@ -42,7 +42,7 @@ debug|show run-time backend messages from PhantomJS for detailed tracing or logg
 # Pipeline
 Feature|Purpose
 :-----:|:------
-Enhancements|add keywords, object repository
+Enhancements|add keywords and object repository
 Active I/O|triggering and actioning from email/API
 Passive I/O|xls/csv datatables and web-based results
 Chrome Extension|facilitate creation of automation flows
@@ -61,20 +61,20 @@ tap / click|element to click|click on an element
 hover / move|element to hover|move cursor to element
 type / enter|element to type ***as*** text to type|enter element as text
 read / fetch|element to read ***to*** variable name|fetch text to variable
-show / print|element to read |print element text to screen and logfile
+show / print|element to read |print element text to output
 download|url to download ***to*** filename to save|download url to file
-file|url keyword to watch ***to*** filename to save|download when resource received
-echo|text and variables (text in quotes)|print text/variables to screen and logfile
+file|url keyword to watch ***to*** filename to save|download resource received
+echo|text and variables (text in quotes)|print text/variables to output
 save|element to read ***to*** optional filename|save text to file
 dump|variable name ***to*** optional filename|save variable to file
 snap|element (page = screen) ***to*** optional filename|save screenshot to file
 wait|time in milliseconds|wait for some time
 test|condition to test &#124; text if true &#124; text if false|test condition and print result
-frame|frame name &#124; subframe name if any|next step is within frame/subframe
+frame|frame name &#124; subframe name if any|next step within frame/subframe
 
 - JavaScript code can be used (in CasperJS's context); if/for/while applies to next step
 - XPath is robust for identification and used to check for a particular webpage element
-- XPath checked in following order of priority full-xpath, id, name, class, title, text()
+- XPath is checked in following order of priority full-xpath, id, name, class, title, text()
 
 # License
 TA.Gui is open-source software released under the MIT license
