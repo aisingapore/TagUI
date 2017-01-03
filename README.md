@@ -55,7 +55,7 @@ Microsoft Friendly|reduce friction for running on Windows
 Health Check|self-test and self-healing of dependencies
 
 # Cheat Sheet
-Word|Parameter(s)|Purpose
+Step|Parameter(s)|Purpose
 :---|:-----------|:------
 tap / click|element to click|click on an element
 hover / move|element to hover|move cursor to element
