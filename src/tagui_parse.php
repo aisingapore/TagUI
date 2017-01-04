@@ -245,7 +245,8 @@ else return $params.end_fi()."\n";}
 
 function code_intent($raw_intent) {
 $params = $raw_intent; // natural language handling for conditions 
-if ((strpos($params,"if")!==false) or (strpos($params,"for")!==false) or (strpos($params,"while")!==false)) {
+if ((substr($params,0,3)=="if ") or (substr($params,0,8)=="else if ")
+or (substr($params,0,4)=="for ") or (substr($params,0,6)=="while ")) {
 $params = str_replace(" more than or equal to "," >= ",$params);
 $params = str_replace(" greater than or equal to "," >= ",$params);
 $params = str_replace(" higher than or equal to "," >= ",$params);
@@ -256,7 +257,17 @@ $params = str_replace(" more than "," > ",$params); $params = str_replace(" grea
 $params = str_replace(" higher than "," > ",$params); $params = str_replace(" less than "," < ",$params);
 $params = str_replace(" lesser than "," < ",$params); $params = str_replace(" lower than "," < ",$params);
 $params = str_replace(" not equal to "," != ",$params); $params = str_replace(" equal to "," == ",$params);
-$params = str_replace(" and "," && ",$params); $params = str_replace(" or "," || ",$params);
-$params = str_replace(" not "," ! ",$params);} return $params.end_fi()."\n";}
+// $params = str_replace(" not "," ! ",$params); // leaving not out until better or meaningful to implement
+$params = str_replace(" and ",") && (",$params); $params = str_replace(" or ",") || (",$params);
+
+// add simple opening and closing brackets to the condition if not present
+if ((substr($params,0,3)=="if ") and (substr(trim(substr($params,3)),0,1) != "("))
+$params = "if (" . trim(substr($params,3)) . ")";
+if ((substr($params,0,8)=="else if ") and (substr(trim(substr($params,8)),0,1) != "("))
+$params = "else if (" . trim(substr($params,8)) . ")";
+if ((substr($params,0,4)=="for ") and (substr(trim(substr($params,4)),0,1) != "("))
+$params = "for (" . trim(substr($params,4)) . ")";
+if ((substr($params,0,6)=="while ") and (substr(trim(substr($params,6)),0,1) != "("))
+$params = "while (" . trim(substr($params,6)) . ")";} return $params.end_fi()."\n";}
 
 ?>
