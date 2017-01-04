@@ -43,7 +43,6 @@ Feature|Purpose
 :-----:|:------
 Chrome Extension|facilitate creation of automation flows
 Logic Engine|for supporting rule-based decision making
-Smart Locator|fuzzy logic for changes in locators
 Test Automation|wrapper/helper for CasperJS assertions
 Enhancements|add keywords and object repository
 Active I/O|triggering and actioning from email/API
