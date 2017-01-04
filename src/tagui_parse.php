@@ -54,7 +54,7 @@ case "wait": return wait_intent($script_line); break;
 case "test": return test_intent($script_line); break;
 case "frame": return frame_intent($script_line); break;
 case "js": return js_intent($script_line); break;
-case "code": return $script_line . "\n"; break;
+case "code": return code_intent($script_line); break;
 default: echo "ERROR - " . current_line() . " cannot understand step " . $script_line . "\n";}}
 
 function get_intent($raw_intent) {
@@ -211,7 +211,7 @@ return "{this.echo('".$raw_intent."');".beg_tx($param1).
 return "{this.echo('".$raw_intent."');".beg_tx($params).
 	"this.captureSelector(snap_image(),tx('".$params."'));".end_tx($params);}
 
-function wait_intent($raw_intent) {
+function wait_intent($raw_intent) { // nobody sets up frame just to wait, so skip end_fi()
 $params = trim(substr($raw_intent." ",1+strpos($raw_intent." "," ")));
 if ($params == "") echo "ERROR - " . current_line() . " duration missing for " . $raw_intent . "\n"; else 
 return "this.echo('".$raw_intent."');});\n\ncasper.wait(" . $params . ", function() {\n";}
@@ -242,5 +242,21 @@ function js_intent($raw_intent) {
 $params = trim(substr($raw_intent." ",1+strpos($raw_intent." "," ")));
 if ($params == "") echo "ERROR - " . current_line() . " statement missing for " . $raw_intent . "\n";
 else return $params.end_fi()."\n";}
+
+function code_intent($raw_intent) {
+$params = $raw_intent; // natural language handling for conditions 
+if ((strpos($params,"if")!==false) or (strpos($params,"for")!==false) or (strpos($params,"while")!==false)) {
+$params = str_replace(" more than or equal to "," >= ",$params);
+$params = str_replace(" greater than or equal to "," >= ",$params);
+$params = str_replace(" higher than or equal to "," >= ",$params);
+$params = str_replace(" less than or equal to "," <= ",$params);
+$params = str_replace(" lesser than or equal to "," <= ",$params);
+$params = str_replace(" lower than or equal to "," <= ",$params);
+$params = str_replace(" more than "," > ",$params); $params = str_replace(" greater than "," > ",$params);
+$params = str_replace(" higher than "," > ",$params); $params = str_replace(" less than "," < ",$params);
+$params = str_replace(" lesser than "," < ",$params); $params = str_replace(" lower than "," < ",$params);
+$params = str_replace(" not equal to "," != ",$params); $params = str_replace(" equal to "," == ",$params);
+$params = str_replace(" and "," && ",$params); $params = str_replace(" or "," || ",$params);
+$params = str_replace(" not "," ! ",$params);} return $params.end_fi()."\n";}
 
 ?>
