@@ -42,7 +42,6 @@ debug|show run-time backend messages from PhantomJS for detailed tracing or logg
 Feature|Purpose
 :-----:|:------
 Chrome Extension|facilitate creation of automation flows
-Logic Engine|for supporting rule-based decision making
 Test Automation|wrapper/helper for CasperJS assertions
 Enhancements|add keywords and object repository
 Active I/O|triggering and actioning from email/API
@@ -70,9 +69,21 @@ wait|time in milliseconds|wait for some time
 test|condition to test **&#124;** text if true **&#124;** text if false|test condition and print result
 frame|frame name **&#124;** subframe name if any|next step in frame/subframe
 
-- JavaScript code can be used (in CasperJS's context); if/for/while applies to next step
 - XPath is robust for identification and used to check for a particular webpage element
 - XPath is checked in following order of priority full-xpath, id, name, class, title, text()
+- JavaScript code can be used (in CasperJS's context); if/for/while applies to next step
+- conditions can be expressed using natural language or JavaScript; brackets optional
+
+Condition in natural language|JavaScript syntax
+:----------------------------|:----------------
+more than or equal to / greater than or equal to / higher than or equal to|>=
+less than or equal to / lesser than or equal to / lower than or equal to|<=
+more than / greater than / higher than|>
+less than / lesser than / lower than|<
+not equal to|!=
+equal to|==
+and|&&
+or|&#124;&#124;
 
 # License
 TA.Gui is open-source software released under the MIT license
