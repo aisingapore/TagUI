@@ -76,6 +76,8 @@ frame|frame name **&#124;** subframe name if any|next step in frame/subframe
 
 Condition in natural language|JavaScript syntax
 :----------------------------|:----------------
+for example, if A more than B and C not equal to D | if (A > B) && (C != D)
+for example, while trafficlight equal to green| while (trafficlight == green)
 more than or equal to / greater than or equal to / higher than or equal to|>=
 less than or equal to / lesser than or equal to / lower than or equal to|<=
 more than / greater than / higher than|>
