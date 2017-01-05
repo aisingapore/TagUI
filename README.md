@@ -35,7 +35,7 @@ Option|Purpose
 :----:|:------
 firefox|run on visible Firefox browser (need to install Firefox, and SlimerJS - https://slimerjs.org)
 debug|show run-time backend messages from PhantomJS for detailed tracing or logging
-- Extension of flow filename can be no extension, .gui or .txt
+- Flow filename extension can be no extension, .gui or .txt
 - Browser settings can be configured in tagui_config.txt
 
 # Pipeline
@@ -52,6 +52,9 @@ Microsoft Friendly|reduce friction for running on Windows
 Health Check|self-test and self-healing of dependencies
 
 # Cheat Sheet
+- XPath is robust for identification and used to check for a particular webpage element
+- XPath is checked in following order of priority full-xpath, id, name, class, title, text()
+
 Step|Parameters (and separator in bold)|Purpose
 :---|:-----------|:------
 tap / click|element to click|click on an element
@@ -68,9 +71,6 @@ snap|element (page = webpage) ***to*** optional filename|save screenshot to file
 wait|time in milliseconds|wait for some time
 check|condition to check **&#124;** text if true **&#124;** text if false|check condition and print result
 frame|frame name **&#124;** subframe name if any|next step in frame/subframe
-
-- XPath is robust for identification and used to check for a particular webpage element
-- XPath is checked in following order of priority full-xpath, id, name, class, title, text()
 
 <br>
 
