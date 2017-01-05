@@ -61,10 +61,10 @@ read / fetch|element to read ***to*** variable name|fetch text to variable
 show / print|element to read |print element text to output
 download|url to download ***to*** filename to save|download url to file
 receive|url keyword to watch ***to*** filename to save|receive resource to file
-echo|text and variables (text in quotes)|print text/variables to output
+echo|text (in quotation marks) and variables|print text/variables to output
 save|element to read ***to*** optional filename|save text to file
 dump|variable name ***to*** optional filename|save variable to file
-snap|element (page = screen) ***to*** optional filename|save screenshot to file
+snap|element (page = webpage) ***to*** optional filename|save screenshot to file
 wait|time in milliseconds|wait for some time
 check|condition to check **&#124;** text if true **&#124;** text if false|check condition and print result
 frame|frame name **&#124;** subframe name if any|next step in frame/subframe
@@ -72,10 +72,15 @@ frame|frame name **&#124;** subframe name if any|next step in frame/subframe
 - XPath is robust for identification and used to check for a particular webpage element
 - XPath is checked in following order of priority full-xpath, id, name, class, title, text()
 
-Condition in natural language|JavaScript syntax
-:----------------------------|:----------------
-for example, if A more than B and C not equal to D | if (A > B) && (C != D)
-for example, while cupcakes equal to 12| while (cupcakes == 12)
+<br>
+
+- JavaScript code can be used (in CasperJS's context); if/for/while applies to next step
+- conditions can be expressed using natural language or JavaScript; brackets optional
+
+Condition (in natural language)|JavaScript
+:------------------------------|:---------
+example 1 - if A more than B and C not equal to D | if (A > B) && (C != D)
+example 2 - while cupcakes equal to 12| while (cupcakes == 12)
 more than or equal to / greater than or equal to / higher than or equal to|>=
 less than or equal to / lesser than or equal to / lower than or equal to|<=
 more than / greater than / higher than|>
@@ -84,9 +89,6 @@ not equal to|!=
 equal to|==
 and|&&
 or|&#124;&#124;
-
-- JavaScript code can be used (in CasperJS's context); if/for/while applies to next step
-- conditions can be expressed using natural language or JavaScript; brackets optional
 
 # License
 TA.Gui is open-source software released under the MIT license
