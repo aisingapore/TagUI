@@ -21,7 +21,7 @@ click action results tooltip
 click section_results
 download https://admin.typeform.com/form/2592751/analyze/csv to report.csv
 ```
-If you already know JavaScript coding and want to be more expressive, you can even mix code directly in the flow.
+If you already know JavaScript coding and want to be more expressive, you can even code directly within the flow.
 
 # Set Up
 1. install CasperJS (navigation/testing for PhantomJS) - http://casperjs.org
@@ -53,8 +53,8 @@ Microsoft Friendly|reduce friction for running on Windows
 Health Check|self-test and self-healing of dependencies
 
 # Cheat Sheet
-Step|Parameters (and separator in bold)|Purpose
-:---|:-----------|:------
+Step|Parameters (separator in bold)|Purpose
+:---|:-----------------------------|:------
 tap / click|element to click|click on an element
 hover / move|element to hover|move cursor to element
 type / enter|element to type ***as*** text to type|enter element as text
@@ -88,8 +88,8 @@ equal to|==
 and|&&
 or|&#124;&#124;
 
-- JavaScript code can be used (in CasperJS's context); if/for/while applies to next step
 - conditions can be expressed using natural language or JavaScript; brackets optional
+- JavaScript code can be used (in CasperJS's context); if/for/while applies to next step
 
 # License
 TA.Gui is open-source software released under the MIT license
