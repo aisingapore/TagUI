@@ -69,7 +69,7 @@ save|element to read ***to*** optional filename|save text to file
 dump|variable name ***to*** optional filename|save variable to file
 snap|element (page = screen) ***to*** optional filename|save screenshot to file
 wait|time in milliseconds|wait for some time
-test|condition to test **&#124;** text if true **&#124;** text if false|test condition and print result
+check|condition to check **&#124;** text if true **&#124;** text if false|check condition and print result
 frame|frame name **&#124;** subframe name if any|next step in frame/subframe
 
 - JavaScript code can be used (in CasperJS's context); if/for/while applies to next step
