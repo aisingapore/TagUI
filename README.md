@@ -21,6 +21,7 @@ click action results tooltip
 click section_results
 download https://admin.typeform.com/form/2592751/analyze/csv to report.csv
 ```
+If you already know JavaScript coding and want to be more expressive, you can even mix code directly in the flow.
 
 # Set Up
 1. install CasperJS (navigation/testing for PhantomJS) - http://casperjs.org
@@ -52,9 +53,6 @@ Microsoft Friendly|reduce friction for running on Windows
 Health Check|self-test and self-healing of dependencies
 
 # Cheat Sheet
-- XPath is robust for identification and used to check for a particular webpage element
-- XPath is checked in following order of priority full-xpath, id, name, class, title, text()
-
 Step|Parameters (and separator in bold)|Purpose
 :---|:-----------|:------
 tap / click|element to click|click on an element
@@ -72,10 +70,10 @@ wait|time in milliseconds|wait for some time
 check|condition to check **&#124;** text if true **&#124;** text if false|check condition and print result
 frame|frame name **&#124;** subframe name if any|next step in frame/subframe
 
-<br>
+- XPath is robust for identification and used to check for a particular webpage element
+- XPath is checked in following order of priority full-xpath, id, name, class, title, text()
 
-- JavaScript code can be used (in CasperJS's context); if/for/while applies to next step
-- conditions can be expressed using natural language or JavaScript; brackets optional
+<br>
 
 Condition (in natural language)|JavaScript
 :------------------------------|:---------
@@ -89,6 +87,9 @@ not equal to|!=
 equal to|==
 and|&&
 or|&#124;&#124;
+
+- JavaScript code can be used (in CasperJS's context); if/for/while applies to next step
+- conditions can be expressed using natural language or JavaScript; brackets optional
 
 # License
 TA.Gui is open-source software released under the MIT license
