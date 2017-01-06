@@ -66,7 +66,7 @@ echo|text (in quotation marks) and variables|print text/variables to output
 save|element to read ***to*** optional filename|save text to file
 dump|variable name ***to*** optional filename|save variable to file
 snap|element (page = webpage) ***to*** optional filename|save screenshot to file
-wait|time in milliseconds|wait for some time
+wait|optional time in seconds (default 5)|wait for some time
 check|condition to check **&#124;** text if true **&#124;** text if false|check condition and print result
 frame|frame name **&#124;** subframe name if any|next step in frame/subframe
 
