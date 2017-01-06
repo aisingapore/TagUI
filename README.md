@@ -36,6 +36,7 @@ Option|Purpose
 :----:|:------
 firefox|run on visible Firefox browser (need to install Firefox, and SlimerJS - https://slimerjs.org)
 debug|show run-time backend messages from PhantomJS for detailed tracing or logging
+test|professional testing using CasperJS test [assertions](http://docs.casperjs.org/en/latest/modules/tester.html); support TA.Gui XPath tx('selector')
 - Flow filename extension can be no extension, .gui or .txt
 - Browser settings can be configured in tagui_config.txt
 
@@ -43,7 +44,6 @@ debug|show run-time backend messages from PhantomJS for detailed tracing or logg
 Feature|Purpose
 :-----:|:------
 Chrome Extension|facilitate creation of automation flows
-Test Automation|wrapper/helper for CasperJS assertions
 Enhancements|add keywords and object repository
 Active I/O|triggering and actioning from email/API
 Passive I/O|xls/csv datatables and web-based results
