@@ -15,7 +15,9 @@ $output_file = fopen($script . '.js','w') or die("ERROR - cannot open " . $scrip
 $config_file = fopen('tagui_config.txt','r') or die("ERROR - cannot open tagui_config.txt" . "\n");
 $header_file = fopen('tagui_header.js','r') or die("ERROR - cannot open tagui_header.js" . "\n");
 $footer_file = fopen('tagui_footer.js','r') or die("ERROR - cannot open tagui_footer.js" . "\n");
-$inside_frame = 0; $line_number = 0; $url_provided = false; // to detect if url is provided in user-script
+$inside_frame = 0; $line_number = 0; // track html frame, flow lines
+$test_automation = false; // to determine casperjs code structure
+$url_provided = false; // to detect if url is provided in user-script
 
 // loops to create casperjs script from header, user flow, footer files
 
@@ -51,6 +53,7 @@ case "save": return save_intent($script_line); break;
 case "dump": return dump_intent($script_line); break;
 case "snap": return snap_intent($script_line); break;
 case "wait": return wait_intent($script_line); break;
+case "check": return check_intent($script_line); break;
 case "test": return test_intent($script_line); break;
 case "frame": return frame_intent($script_line); break;
 case "js": return js_intent($script_line); break;
@@ -73,6 +76,7 @@ else if (strtolower(substr($raw_intent,0,5))=="save ") return "save";
 else if (strtolower(substr($raw_intent,0,5))=="dump ") return "dump";
 else if (strtolower(substr($raw_intent,0,5))=="snap ") return "snap";
 else if (strtolower(substr($raw_intent,0,5))=="wait ") return "wait";
+else if (strtolower(substr($raw_intent,0,6))=="check ") return "check";
 else if (strtolower(substr($raw_intent,0,5))=="test ") return "test";
 else if (strtolower(substr($raw_intent,0,6))=="frame ") return "frame";
 else if (strtolower(substr($raw_intent,0,3))=="js ") return "js";
@@ -90,6 +94,7 @@ else if (strtolower($raw_intent)=="save") return "save";
 else if (strtolower($raw_intent)=="dump") return "dump";
 else if (strtolower($raw_intent)=="snap") return "snap";
 else if (strtolower($raw_intent)=="wait") return "wait";
+else if (strtolower($raw_intent)=="check") return "check";
 else if (strtolower($raw_intent)=="test") return "test";
 else if (strtolower($raw_intent)=="frame") return "frame";
 else if (strtolower($raw_intent)=="js") return "js";
@@ -107,6 +112,7 @@ if ((substr($raw_intent,0,4)=="for ") or (substr($raw_intent,0,6)=="while ")) re
 if ((substr($raw_intent,0,7)=="switch ") or (substr($raw_intent,0,5)=="case ")) return true;
 if ((substr($raw_intent,0,6)=="break;") or (substr($raw_intent,0,9)=="function ")) return true;
 if ((substr($raw_intent,0,7)=="casper.") or (substr($raw_intent,0,5)=="this.")) return true;
+if (substr($raw_intent,0,5)=="test.") {$GLOBALS['test_automation']=true; return true;}
 if ((substr($raw_intent,0,2)=="//") or (substr($raw_intent,-1)==";")) return true; return false;}
 
 function beg_tx($locator) { // helper function to return beginning string for handling locators
@@ -211,12 +217,12 @@ return "{this.echo('".$raw_intent."');".beg_tx($param1).
 return "{this.echo('".$raw_intent."');".beg_tx($params).
 	"this.captureSelector(snap_image(),tx('".$params."'));".end_tx($params);}
 
-function wait_intent($raw_intent) { // nobody sets up frame just to wait, so skip end_fi()
-$params = trim(substr($raw_intent." ",1+strpos($raw_intent." "," ")));
-if ($params == "") echo "ERROR - " . current_line() . " duration missing for " . $raw_intent . "\n"; else 
-return "this.echo('".$raw_intent."');});\n\ncasper.wait(" . $params . ", function() {\n";}
+function wait_intent($raw_intent) { // wait is a new block, invalid to use after frame, thus skip end_fi()
+$params = trim(substr($raw_intent." ",1+strpos($raw_intent." "," "))); if ($params == "") $params = "5"; 
+if ($GLOBALS['inside_frame']!=0) echo "ERROR - " . current_line() . " invalid after frame - " . $raw_intent . "\n"; else
+return "this.echo('".$raw_intent."');});\n\ncasper.wait(" . (floatval($params)*1000) . ", function() {\n";}
 
-function test_intent($raw_intent) {
+function check_intent($raw_intent) {
 $params = trim(substr($raw_intent." ",1+strpos($raw_intent." "," ")));
 $params = str_replace("||"," JAVASCRIPT_OR ",$params); // to handle conflict with "|" delimiter 
 $param1 = trim(substr($params,0,strpos($params,"|"))); $param2 = trim(substr($params,1+strpos($params,"|")));
@@ -226,6 +232,11 @@ $param2 = str_replace(" JAVASCRIPT_OR ","||",$param2); $param3 = str_replace(" J
 if (substr_count($params,"|")!=2) 
 echo "ERROR - " . current_line() . " if/true/false missing for " . $raw_intent . "\n"; else
 return "{if (".$param1.")\nthis.echo(".$param2.");\nelse this.echo(".$param3.");}".end_fi()."\n";}
+
+function test_intent($raw_intent) {
+echo "ERROR - " . current_line() . " use CasperJS tester module to professionally " . $raw_intent . "\n";
+echo "ERROR - " . current_line() . " info at http://docs.casperjs.org/en/latest/modules/tester.html" . "\n";
+echo "ERROR - " . current_line() . " support CSS selector or tx('selector') for XPath algo by TA.Gui" . "\n";}
 
 function frame_intent($raw_intent) {
 if ($GLOBALS['inside_frame'] != 0) 
@@ -257,7 +268,7 @@ $params = str_replace(" more than "," > ",$params); $params = str_replace(" grea
 $params = str_replace(" higher than "," > ",$params); $params = str_replace(" less than "," < ",$params);
 $params = str_replace(" lesser than "," < ",$params); $params = str_replace(" lower than "," < ",$params);
 $params = str_replace(" not equal to "," != ",$params); $params = str_replace(" equal to "," == ",$params);
-// $params = str_replace(" not "," ! ",$params); // leaving not out until better or meaningful to implement
+// $params = str_replace(" not "," ! ",$params); // leaving not out until meaningful to implement
 $params = str_replace(" and ",") && (",$params); $params = str_replace(" or ",") || (",$params);
 
 // add simple opening and closing brackets to the condition if not present
