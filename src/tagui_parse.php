@@ -34,10 +34,11 @@ while(!feof($input_file)) {fwrite($output_file,parse_intent(fgets($input_file)))
 while(!feof($footer_file)) {fwrite($output_file,fgets($footer_file));} fclose($footer_file); fclose($output_file);
 chmod ($script . '.js',0600); if (!$url_provided) echo "ERROR - [OTHERS] first line of " . $script . " not URL\n";
 
-// convert casperjs script into test structure if lines for testing are detected
-if ($test_automation > 0) {$script_content = file_get_contents($script . '.js'); // read generated script
-$script_content = str_replace("this.echo(","dummy_echo(",$script_content); // silence automation output
-$script_content = str_replace("casper.echo(","dummy_echo(",$script_content); // to focus on test results
+// convert casperjs script into test script structure if test option is used 
+if (getenv('test_mode') == 'true') {$script_content = file_get_contents($script . '.js'); // read generated script
+$script_content = str_replace("casper.echo('\\nSTART - automation","casper.echo('\\nSTART - test",$script_content);
+$script_content = str_replace("this.echo('FINISH - automation","dummy_echo('FINISH - test",$script_content);// silent
+$script_content = str_replace("this.echo(","test.comment('   '+",$script_content); // change echo to test comment
 // casperjs test script does not allow creation of casper object as it is already created by test engine
 $script_content = str_replace("var casper = require(","/* var casper = require(",$script_content);
 $script_content = str_replace("// xpath for object id","*/ // xpath for object id",$script_content);
@@ -46,6 +47,10 @@ $script_content = str_replace("casper.start(","casper.test.begin('" . $script . 
 ", function(test) {\ncasper.start(",$script_content); // define required casperjs test script structure
 $script_content = str_replace("casper.run();","casper.run(function(){test.done();});});",$script_content);
 file_put_contents($script . '.js',$script_content);} // save script after restructuring for testing
+
+// otherwise prep for normal execution by commenting out test assertions as they will kill the script
+else if ($test_automation > 0) {$script_content = file_get_contents($script . '.js'); // read generated script
+$script_content = str_replace("test.","// test.",$script_content); file_put_contents($script . '.js',$script_content);}
 
 function current_line() {return "[LINE " . $GLOBALS['line_number'] . "]";}
 function parse_intent($script_line) {$GLOBALS['line_number']++;
