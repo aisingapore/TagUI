@@ -16,7 +16,7 @@ $config_file = fopen('tagui_config.txt','r') or die("ERROR - cannot open tagui_c
 $header_file = fopen('tagui_header.js','r') or die("ERROR - cannot open tagui_header.js" . "\n");
 $footer_file = fopen('tagui_footer.js','r') or die("ERROR - cannot open tagui_footer.js" . "\n");
 $inside_frame = 0; $line_number = 0; // track html frame, flow lines
-$test_automation = false; // to determine casperjs code structure
+$test_automation = 0; // to determine casperjs script structure
 $url_provided = false; // to detect if url is provided in user-script
 
 // loops to create casperjs script from header, user flow, footer files
@@ -33,6 +33,19 @@ while(!feof($input_file)) {fwrite($output_file,parse_intent(fgets($input_file)))
 // create footer of casperjs script using footer template and do post-processing 
 while(!feof($footer_file)) {fwrite($output_file,fgets($footer_file));} fclose($footer_file); fclose($output_file);
 chmod ($script . '.js',0600); if (!$url_provided) echo "ERROR - [OTHERS] first line of " . $script . " not URL\n";
+
+// convert casperjs script into test structure if lines for testing are detected
+if ($test_automation > 0) {$script_content = file_get_contents($script . '.js'); // read generated script
+$script_content = str_replace("this.echo(","dummy_echo(",$script_content); // silence automation output
+$script_content = str_replace("casper.echo(","dummy_echo(",$script_content); // to focus on test results
+// casperjs test script does not allow creation of casper object as it is already created by test engine
+$script_content = str_replace("var casper = require(","/* var casper = require(",$script_content);
+$script_content = str_replace("// xpath for object id","*/ // xpath for object id",$script_content);
+// following help to define the script structure required by casperjs for test automation purpose
+$script_content = str_replace("casper.start(","casper.test.begin('" . $script . "', " . $test_automation . 
+", function(test) {\ncasper.start(",$script_content); // define required casperjs test script structure
+$script_content = str_replace("casper.run();","casper.run(function(){test.done();});});",$script_content);
+file_put_contents($script . '.js',$script_content);} // save script after restructuring for testing
 
 function current_line() {return "[LINE " . $GLOBALS['line_number'] . "]";}
 function parse_intent($script_line) {$GLOBALS['line_number']++;
@@ -112,7 +125,7 @@ if ((substr($raw_intent,0,4)=="for ") or (substr($raw_intent,0,6)=="while ")) re
 if ((substr($raw_intent,0,7)=="switch ") or (substr($raw_intent,0,5)=="case ")) return true;
 if ((substr($raw_intent,0,6)=="break;") or (substr($raw_intent,0,9)=="function ")) return true;
 if ((substr($raw_intent,0,7)=="casper.") or (substr($raw_intent,0,5)=="this.")) return true;
-if (substr($raw_intent,0,5)=="test.") {$GLOBALS['test_automation']=true; return true;}
+if (substr($raw_intent,0,5)=="test.") {$GLOBALS['test_automation']++; return true;}
 if ((substr($raw_intent,0,2)=="//") or (substr($raw_intent,-1)==";")) return true; return false;}
 
 function beg_tx($locator) { // helper function to return beginning string for handling locators

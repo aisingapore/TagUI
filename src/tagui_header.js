@@ -15,6 +15,9 @@ var automation_start_time = Date.now(); casper.echo('\nSTART - automation starte
 // initialise other global variables
 var save_text_count = 0; var snap_image_count = 0;
 
+// to mute echo for test scripts
+function dummy_echo(muted_string) {return;}
+
 // for saving text information to file
 function save_text(file_name,info_text) {
 if (!file_name) {save_text_count++; file_name = 'text' + save_text_count.toString() + '.txt';}
