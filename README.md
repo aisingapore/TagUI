@@ -21,7 +21,7 @@ click action results tooltip
 click section_results
 download https://admin.typeform.com/form/2592751/analyze/csv to report.csv
 ```
-If you already know JavaScript coding and want to be more expressive, you can even use code directly in the flow.
+If you already know JavaScript coding and want to be more expressive, you can even code directly in the flow.
 
 # Set Up
 1. install CasperJS (navigation/testing for PhantomJS) - http://casperjs.org
@@ -36,7 +36,7 @@ Option|Purpose
 :----:|:------
 firefox|run on visible Firefox browser (need to install Firefox, and SlimerJS - https://slimerjs.org)
 debug|show run-time backend messages from PhantomJS for detailed tracing or logging
-test|professional testing using CasperJS test [assertions](http://docs.casperjs.org/en/latest/modules/tester.html); support TA.Gui XPath tx('selector')
+test|professional testing using CasperJS [assertions](http://docs.casperjs.org/en/latest/modules/tester.html); TA.Gui XPath tx('selector') supported
 - Flow filename extension can be no extension, .gui or .txt
 - Browser settings can be configured in tagui_config.txt
 
