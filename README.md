@@ -21,7 +21,7 @@ click action results tooltip
 click section_results
 download https://admin.typeform.com/form/2592751/analyze/csv to report.csv
 ```
-If you already know JavaScript coding and want to be more expressive, you can even code directly in the flow. If not, you will still enjoy features like custom repositories for your objects and keywords for reusability / readability, and a Chrome extension in the works which creates automation flows by learning from your actions.
+If you already know JavaScript coding and want to be more expressive, you can even use JavaScript code directly in the flow. If not, you will still enjoy features like custom repositories for your objects and keywords for reusability / readability, and a Chrome extension in the pipeline which generates automation flows by learning from your actions.
 
 # Set Up
 1. install CasperJS (navigation/testing for PhantomJS) - http://casperjs.org
