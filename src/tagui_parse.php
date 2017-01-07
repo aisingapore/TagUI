@@ -15,6 +15,14 @@ $output_file = fopen($script . '.js','w') or die("ERROR - cannot open " . $scrip
 $config_file = fopen('tagui_config.txt','r') or die("ERROR - cannot open tagui_config.txt" . "\n");
 $header_file = fopen('tagui_header.js','r') or die("ERROR - cannot open tagui_header.js" . "\n");
 $footer_file = fopen('tagui_footer.js','r') or die("ERROR - cannot open tagui_footer.js" . "\n");
+
+$repo_count = 0; if (file_exists($script . '.csv')) { // load repository file for objects and keywords
+$repo_file = fopen($script . '.csv','r') or die("ERROR - cannot open " . $script . '.csv' . "\n");
+while (!feof($repo_file)) {$repo_data[$repo_count] = fgetcsv($repo_file);
+if ((count($repo_data[$repo_count]) > 2) or (count($repo_data[$repo_count]) == 0))
+die("ERROR - should be only 2 columns for repository " . $script . '.csv' . "\n");
+$repo_count++;} fclose($repo_file); $repo_count-=2;} //-1 for header, -1 for EOF
+
 $inside_frame = 0; $line_number = 0; // track html frame, flow lines
 $test_automation = 0; // to determine casperjs script structure
 $url_provided = false; // to detect if url is provided in user-script
@@ -32,7 +40,7 @@ while(!feof($input_file)) {fwrite($output_file,parse_intent(fgets($input_file)))
 
 // create footer of casperjs script using footer template and do post-processing 
 while(!feof($footer_file)) {fwrite($output_file,fgets($footer_file));} fclose($footer_file); fclose($output_file);
-chmod ($script . '.js',0600); if (!$url_provided) echo "ERROR - [OTHERS] first line of " . $script . " not URL\n";
+chmod ($script . '.js',0600); if (!$url_provided) echo "ERROR - first line of " . $script . " not URL\n";
 
 // convert casperjs script into test script structure if test option is used 
 if (getenv('test_mode') == 'true') {$script_content = file_get_contents($script . '.js'); // read generated script
@@ -55,6 +63,14 @@ $script_content = str_replace("test.","// test.",$script_content); file_put_cont
 function current_line() {return "[LINE " . $GLOBALS['line_number'] . "]";}
 function parse_intent($script_line) {$GLOBALS['line_number']++;
 $script_line = trim($script_line); if ($script_line=="") return "";
+
+// check existence of objects or keywords and expand from repository
+if ((substr_count($script_line,'`') > 1) and (!(substr_count($script_line,'`') & 1))) { // check for even number of `
+if ($GLOBALS['repo_count'] == 0) echo "ERROR - ".current_line()." no repository data for ".$script_line."\n";
+// loop through repository data to search and replace definitions
+else {for ($repo_check = 1; $repo_check <= $GLOBALS['repo_count']; $repo_check++) $script_line = 
+str_replace("`".$GLOBALS['repo_data'][$repo_check][0]."`",$GLOBALS['repo_data'][$repo_check][1],$script_line);
+if (strpos($script_line,'`')!==false) echo "ERROR - ".current_line()." no repository data for ".$script_line."\n";}}
 
 // check intent of step for interpretation into casperjs code
 switch (get_intent($script_line)) {
