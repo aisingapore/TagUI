@@ -36,21 +36,12 @@ chmod ($script . '.js',0600); if (!$url_provided) echo "ERROR - [OTHERS] first l
 
 // convert casperjs script into test script structure if test option is used 
 if (getenv('test_mode') == 'true') {$script_content = file_get_contents($script . '.js'); // read generated script
-<<<<<<< Updated upstream
-$script_content = str_replace("casper.echo('\\nSTART - automation","casper.echo('\\nSTART - test",$script_content);
-$script_content = str_replace("this.echo('FINISH - automation","dummy_echo('FINISH - test",$script_content);// silent
-$script_content = str_replace("this.echo(","test.comment('   '+",$script_content); // change echo to test comment
-// casperjs test script does not allow creation of casper object as it is already created by test engine
-$script_content = str_replace("var casper = require(","/* var casper = require(",$script_content);
-$script_content = str_replace("// xpath for object id","*/ // xpath for object id",$script_content);
-=======
 $script_content = str_replace("casper.echo('\\nSTART - automation started - ","casper.echo('",$script_content); // date
 $script_content = str_replace("this.echo('FINISH - automation","dummy_echo('FINISH - test",$script_content); // silent
 $script_content = str_replace("this.echo(","test.comment(",$script_content); // change echo to test comment
 $script_content = str_replace("\\n'","'",str_replace("'\\n","'",$script_content)); // compact test output
 // casperjs testing does not allow creation of casper object as it is already created by test engine
 $script_content = str_replace("var casper = require(","// var casper = require(",$script_content);
->>>>>>> Stashed changes
 // following help to define the script structure required by casperjs for test automation purpose
 $script_content = str_replace("casper.start(","casper.test.begin('" . $script . "', " . $test_automation . 
 ", function(test) {\ncasper.start(",$script_content); // define required casperjs test script structure
