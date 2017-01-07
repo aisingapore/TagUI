@@ -39,18 +39,18 @@ debug|show run-time backend messages from PhantomJS for detailed tracing or logg
 test|professional testing using CasperJS [assertions](http://docs.casperjs.org/en/latest/modules/tester.html); TA.Gui XPath tx('selector') supported
 - Flow filename extension can be no extension, .gui or .txt
 - Browser settings can be configured in tagui_config.txt
+- Objects and keywords can be defined in flow_filename.csv
 
 # Pipeline
 Feature|Purpose
 :-----:|:------
 Chrome Extension|facilitate creation of automation flows
-Enhancements|add keywords and object repository
 Active I/O|triggering and actioning from email/API
 Passive I/O|xls/csv datatables and web-based results
 Parallel Run|develop concurrent automation runs
 One Package|evaluate packaging in CasperJS/PhantomJS
 Microsoft Friendly|reduce friction for running on Windows
-Health Check|self-test and self-healing of dependencies
+Enhancements|feel free to review and suggest new features
 
 # Cheat Sheet
 Step|Parameters (separator in bold)|Purpose
