@@ -1,5 +1,5 @@
 #!/bin/bash
-# SCRIPT FOR RUNNING TA.GUI FRAMEWORK ~ TEBEL.SG #
+# SCRIPT FOR RUNNING TA.GUI FRAMEWORK ~ TEBEL.ORG #
 
 # check firefox parameter to run on visible firefox browser through slimerjs 
 if [ "$2" = "firefox" ]; then set -- "$1" "--engine=slimerjs" "${@:3}"; fi
