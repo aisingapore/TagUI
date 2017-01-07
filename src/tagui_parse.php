@@ -27,7 +27,7 @@ $inside_frame = 0; $line_number = 0; // track html frame, flow lines
 $test_automation = 0; // to determine casperjs script structure
 $url_provided = false; // to detect if url is provided in user-script
 
-// loops to create casperjs script from header, user flow, footer files
+// series of loops to create casperjs script from header, user flow, footer files
 
 // create header of casperjs script using tagui config and header template
 fwrite($output_file,"/* OUTPUT CASPERJS SCRIPT FOR TA.GUI FRAMEWORK ~ TEBEL.SG */\n\n");
@@ -64,11 +64,13 @@ function current_line() {return "[LINE " . $GLOBALS['line_number'] . "]";}
 function parse_intent($script_line) {$GLOBALS['line_number']++;
 $script_line = trim($script_line); if ($script_line=="") return "";
 
-// check existence of objects or keywords and expand from repository
+// check existence of objects or keywords by searching for `object or keyword name`, then expand from repository
 if ((substr_count($script_line,'`') > 1) and (!(substr_count($script_line,'`') & 1))) { // check for even number of `
 if ($GLOBALS['repo_count'] == 0) echo "ERROR - ".current_line()." no repository data for ".$script_line."\n";
-// loop through repository data to search and replace definitions
+// loop through repository data to search and replace definitions, do it twice to handle objects within keywords
 else {for ($repo_check = 1; $repo_check <= $GLOBALS['repo_count']; $repo_check++) $script_line = 
+str_replace("`".$GLOBALS['repo_data'][$repo_check][0]."`",$GLOBALS['repo_data'][$repo_check][1],$script_line);
+for ($repo_check = 1; $repo_check <= $GLOBALS['repo_count']; $repo_check++) $script_line =
 str_replace("`".$GLOBALS['repo_data'][$repo_check][0]."`",$GLOBALS['repo_data'][$repo_check][1],$script_line);
 if (strpos($script_line,'`')!==false) echo "ERROR - ".current_line()." no repository data for ".$script_line."\n";}}
 
