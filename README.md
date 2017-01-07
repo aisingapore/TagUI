@@ -76,7 +76,8 @@ wait|optional time in seconds (default 5)|wait for some time
 check|condition to check **&#124;** text if true **&#124;** text if false|check condition and print result
 frame|frame name **&#124;** subframe name if any|next step in frame/subframe
 
-### REPOSITORY
+### REPOSITORIES
+- Repositories help to make steps or objects reusable and improve readability
 - You can define custom repositories to store objects and keywords definitions
 - Save repository file with same name as your flow filename and with .csv behind
 - Repository must have 2 columns, for example below (headers up to you to name)
