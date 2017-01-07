@@ -56,7 +56,7 @@ Enhancements|feel free to review and suggest new features
 
 # Cheat Sheet
 - [XPath method](http://www.w3schools.com/xml/xpath_intro.asp) is robust for identification and used to check for elements on webpage
-- XPath is checked in following order of priority full-xpath, id, name, class, title, text()
+- TA.Gui checks XPath automatically in following order full-xpath, id, name, class, title, text()
 
 Step|Parameters (separator in bold)|Purpose
 :---|:-----------------------------|:------
@@ -79,11 +79,20 @@ frame|frame name **&#124;** subframe name if any|next step in frame/subframe
 
 - You can define custom repositories to store objects and keywords definitions
 - Save repository file with same name as your flow filename and with .csv behind
+- Repository must have 2 columns, for example below (headers up to you to name)
+- Using \`object\` in your flow replaces it with its definition (which can contain objects)
+- For example, \`type email\` becomes type user-email-textbox as user@gmail.com
+
+OBJECT|DEFINITION
+:-----|:---------
+create account|btn btn--green btn-xl signup-btn
+email|user-email-textbox
+type email|type \`email\` as user@gmail.com
 
 <br>
 
 - Conditions can be expressed in natural language (brackets optional) or JavaScript
-- JavaScript can be used (in CasperJS's context); eg if/for/while applies to next step
+- JavaScript can be used (CasperJS's context); eg if/for/while applies to the next step
 
 Condition (in natural language)|JavaScript
 :------------------------------|:---------
