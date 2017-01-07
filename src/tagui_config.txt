@@ -1,16 +1,19 @@
 // browser settings for casperjs (phantomjs)
+// verbose style to support tester module
 
-waitTimeout: 10000,
-logLevel: 'debug',
-verbose: false,
+casper.options.waitTimeout = 10000;
+casper.options.logLevel = 'debug';
+casper.options.verbose = false;
 
-viewportSize: {
+casper.options.viewportSize = {
 width: 1366,
-height: 768 },
+height: 768
+};
 
-pageSettings: {
+casper.options.pageSettings = {
 loadImages: true,
 loadPlugins: true,
 webSecurityEnabled: true,
 ignoreSslErrors: false,
-localToRemoteUrlAccessEnabled: false }
+localToRemoteUrlAccessEnabled: false
+};

@@ -1,6 +1,4 @@
 
-});
-
 // xpath for object identification
 var x = require('casper').selectXPath;
 
