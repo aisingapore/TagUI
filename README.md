@@ -8,7 +8,7 @@ Automate repetitive parts of your work - use cases include data acquisition, pro
 
 TA.Gui converts automation flows in simple natural language into lines of JavaScript code for CasperJS & PhantomJS to perform their web automation magic. For example, TA.Gui will instantly convert the flow below into 120+ lines of working JavaScript code and perform the series of steps to download a Typeform report automatically.
 
-The flow can be triggered from scheduling, command line, REST API, URL, email etc. Everything happens in the background without seeing any web browser, so that you can continue to use the computer or server uninterrupted. Running on a visible web browser is also supported, using Firefox and SlimerJS (see firefox option below).
+The flow can be triggered from scheduling, command line, REST API, URL, email etc. Everything happens in the background without seeing any web browser, so you can continue to use the computer or server uninterrupted. Running on a visible web browser is also supported, using Firefox and SlimerJS (see firefox option below).
 
 ```
 https://www.typeform.com
@@ -32,19 +32,20 @@ If you already know JavaScript coding and want to be more expressive, you can ev
 ```
 ./tagui flow_filename option(s)
 ```
-Option|Purpose
-:----:|:------
-firefox|run on visible Firefox browser (need to install Firefox, and SlimerJS - https://slimerjs.org)
-debug|show run-time backend messages from PhantomJS for detailed tracing or logging
-test|professional testing using CasperJS [assertions](http://docs.casperjs.org/en/latest/modules/tester.html); TA.Gui XPath tx('selector') supported
 - Flow filename extension can be no extension, .gui or .txt
 - Objects and keywords can be defined in flow_filename.csv
 - Browser settings can be configured in tagui_config.txt
 
+Option|Purpose
+:----:|:------
+firefox|run on visible Firefox browser (need to install Firefox, and SlimerJS - https://slimerjs.org)
+debug|show run-time backend messages from PhantomJS for detailed tracing and logging
+test|professional testing using CasperJS [assertions](http://docs.casperjs.org/en/latest/modules/tester.html); TA.Gui XPath tx('selector') supported
+
 # Pipeline
 Feature|Purpose
 :-----:|:------
-Chrome Extension|facilitate creation of automation flows
+Chrome Extension|auto-generation of automation flows
 Active I/O|triggering and actioning from email/API
 Passive I/O|xls/csv datatables and web-based results
 Parallel Run|develop concurrent automation runs
@@ -53,6 +54,9 @@ Microsoft Friendly|reduce friction for running on Windows
 Enhancements|feel free to review and suggest new features
 
 # Cheat Sheet
+- XPath method is robust for identification and used to check for elements on webpage
+- XPath is checked in following order of priority full-xpath, id, name, class, title, text()
+
 Step|Parameters (separator in bold)|Purpose
 :---|:-----------------------------|:------
 tap / click|element to click|click on an element
@@ -70,10 +74,10 @@ wait|optional time in seconds (default 5)|wait for some time
 check|condition to check **&#124;** text if true **&#124;** text if false|check condition and print result
 frame|frame name **&#124;** subframe name if any|next step in frame/subframe
 
-- XPath is robust for identification and used to check for a particular webpage element
-- XPath is checked in following order of priority full-xpath, id, name, class, title, text()
-
 <br>
+
+- Conditions can be expressed in natural language (brackets optional) or JavaScript
+- JavaScript can be used (in CasperJS's context); eg if/for/while applies to next step
 
 Condition (in natural language)|JavaScript
 :------------------------------|:---------
@@ -87,9 +91,6 @@ not equal to|!=
 equal to|==
 and|&&
 or|&#124;&#124;
-
-- conditions can be expressed using natural language or JavaScript; brackets optional
-- JavaScript code can be used (in CasperJS's context); if/for/while applies to next step
 
 # License
 TA.Gui is open-source software released under the MIT license
