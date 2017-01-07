@@ -26,7 +26,9 @@ If you already know JavaScript coding and want to be more expressive, you can ev
 # Set Up
 1. install CasperJS (navigation/testing for PhantomJS) - http://casperjs.org
 2. install PhantomJS (headless scriptable web browser) - http://phantomjs.org
-3. install TA.Gui - https://github.com/tebelorg/TA.Gui/archive/master.zip
+3. install TA.Gui (insanely easy lightning fast automation tool) - https://git.io/vMCTZ
+
+Optional - configure browser settings in tagui_config.txt or leave as default
 
 # To Use
 ```
@@ -34,13 +36,12 @@ If you already know JavaScript coding and want to be more expressive, you can ev
 ```
 - Flow filename extension can be no extension, .gui or .txt
 - Objects and keywords can be defined in flow_filename.csv
-- Browser settings can be configured in tagui_config.txt
 
 Option|Purpose
 :----:|:------
 firefox|run on visible Firefox browser (need to install Firefox, and SlimerJS - https://slimerjs.org)
 debug|show run-time backend messages from PhantomJS for detailed tracing and logging
-test|professional testing using CasperJS [assertions](http://docs.casperjs.org/en/latest/modules/tester.html); TA.Gui XPath tx('selector') supported
+test|professional testing using CasperJS [assertions](http://docs.casperjs.org/en/latest/modules/tester.html); support TA.Gui XPath tx('selector')
 
 # Pipeline
 Feature|Purpose
@@ -54,7 +55,7 @@ Microsoft Friendly|reduce friction for running on Windows
 Enhancements|feel free to review and suggest new features
 
 # Cheat Sheet
-- XPath method is robust for identification and used to check for elements on webpage
+- [XPath method](http://www.w3schools.com/xml/xpath_intro.asp) is robust for identification and used to check for elements on webpage
 - XPath is checked in following order of priority full-xpath, id, name, class, title, text()
 
 Step|Parameters (separator in bold)|Purpose
@@ -76,13 +77,18 @@ frame|frame name **&#124;** subframe name if any|next step in frame/subframe
 
 <br>
 
+- You can define custom repositories to store objects and keywords definitions
+- Save repository file with same name as your flow filename and with .csv behind
+
+<br>
+
 - Conditions can be expressed in natural language (brackets optional) or JavaScript
 - JavaScript can be used (in CasperJS's context); eg if/for/while applies to next step
 
 Condition (in natural language)|JavaScript
 :------------------------------|:---------
-example 1 - if A more than B and C not equal to D | if (A > B) && (C != D)
-example 2 - while cupcakes equal to 12| while (cupcakes == 12)
+example - if A more than B and C not equal to D | if (A > B) && (C != D)
+example - while cupcakes equal to 12| while (cupcakes == 12)
 more than or equal to / greater than or equal to / higher than or equal to|>=
 less than or equal to / lesser than or equal to / lower than or equal to|<=
 more than / greater than / higher than|>
