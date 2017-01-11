@@ -46,8 +46,8 @@ test|professional testing using CasperJS [assertions](http://docs.casperjs.org/e
 # Pipeline
 Feature|Purpose
 :-----:|:------
-Passive I/O|xls/csv datatables and web-based results
-Active I/O|triggering and actioning from email/API
+Passive I/O|csv datatables and html run results
+Active I/O|triggering and actioning using API
 Chrome Extension|auto-generation of automation flows
 Parallel Run|develop concurrent automation runs
 One Package|evaluate packaging in CasperJS/PhantomJS
