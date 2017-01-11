@@ -46,9 +46,9 @@ test|professional testing using CasperJS [assertions](http://docs.casperjs.org/e
 # Pipeline
 Feature|Purpose
 :-----:|:------
-Chrome Extension|auto-generation of automation flows
-Active I/O|triggering and actioning from email/API
 Passive I/O|xls/csv datatables and web-based results
+Active I/O|triggering and actioning from email/API
+Chrome Extension|auto-generation of automation flows
 Parallel Run|develop concurrent automation runs
 One Package|evaluate packaging in CasperJS/PhantomJS
 Microsoft Friendly|reduce friction for running on Windows
