@@ -21,22 +21,23 @@ if [ "$7" = "debug" ]; then set -- "${@:1:6}" "--verbose" "${@:8}"; fi
 if [ "$8" = "debug" ]; then set -- "${@:1:7}" "--verbose" "${@:9}"; fi
 if [ "$9" = "debug" ]; then set -- "${@:1:8}" "--verbose"; fi
 
-test_mode=false; export test_mode=false
+tagui_test_mode=false; export tagui_test_mode=false
 # check test parameter to run flow as casperjs test automation script
-if [ "$2" = "test" ]; then set -- "$1" "${@:3}"; test_mode=true; fi
-if [ "$3" = "test" ]; then set -- "${@:1:2}" "${@:4}"; test_mode=true; fi
-if [ "$4" = "test" ]; then set -- "${@:1:3}" "${@:5}"; test_mode=true; fi
-if [ "$5" = "test" ]; then set -- "${@:1:4}" "${@:6}"; test_mode=true; fi
-if [ "$6" = "test" ]; then set -- "${@:1:5}" "${@:7}"; test_mode=true; fi
-if [ "$7" = "test" ]; then set -- "${@:1:6}" "${@:8}"; test_mode=true; fi
-if [ "$8" = "test" ]; then set -- "${@:1:7}" "${@:9}"; test_mode=true; fi
-if [ "$9" = "test" ]; then set -- "${@:1:8}"; test_mode=true; fi
+if [ "$2" = "test" ]; then set -- "$1" "${@:3}"; tagui_test_mode=true; fi
+if [ "$3" = "test" ]; then set -- "${@:1:2}" "${@:4}"; tagui_test_mode=true; fi
+if [ "$4" = "test" ]; then set -- "${@:1:3}" "${@:5}"; tagui_test_mode=true; fi
+if [ "$5" = "test" ]; then set -- "${@:1:4}" "${@:6}"; tagui_test_mode=true; fi
+if [ "$6" = "test" ]; then set -- "${@:1:5}" "${@:7}"; tagui_test_mode=true; fi
+if [ "$7" = "test" ]; then set -- "${@:1:6}" "${@:8}"; tagui_test_mode=true; fi
+if [ "$8" = "test" ]; then set -- "${@:1:7}" "${@:9}"; tagui_test_mode=true; fi
+if [ "$9" = "test" ]; then set -- "${@:1:8}"; tagui_test_mode=true; fi
 
 # concatenate all parameters to fix issue when calling casperjs test
 params="$1".js" ""$2"" ""$3"" ""$4"" ""$5"" ""$6"" ""$7"" ""$8"" ""$9";
 
+tagui_data_set=1; export tagui_data_set=1
 # parse automation flow file and check for error before calling casperjs
 php tagui_parse.php "$1" > "$1".log; chmod 600 "$1".log; cat "$1".log
 if [ -s "$1".log ]; then echo "ERROR - automation aborted due to above" | tee -a "$1".log
-elif [ "$test_mode" = false ]; then casperjs $params | tee -a "$1".log
-else export test_mode=true; casperjs test $params --xunit="$1".xml | tee -a "$1".log; fi
+elif [ "$tagui_test_mode" = false ]; then casperjs $params | tee -a "$1".log
+else export tagui_test_mode=true; casperjs test $params --xunit="$1".xml | tee -a "$1".log; fi
