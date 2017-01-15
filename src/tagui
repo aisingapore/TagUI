@@ -35,23 +35,25 @@ if [ "$9" = "test" ]; then set -- "${@:1:8}"; tagui_test_mode=true; fi
 # concatenate all parameters to fix issue when calling casperjs test
 params="$1".js" ""$2"" ""$3"" ""$4"" ""$5"" ""$6"" ""$7"" ""$8"" ""$9"
 
-# initialise log file and control permissions to protect data
+# initialise log file and set permissions to protect user data
 echo -n "" > "$1".log; chmod 600 "$1".log
 
 # check datatable csv file for batch automation
 tagui_data_set_size=1
+if [ -f "$1".csv ]; then
 min_column=`awk -F',' '{print NF}' "$1".csv | sort -nu | head -n 1`
 max_column=`awk -F',' '{print NF}' "$1".csv | sort -nu | tail -n 1`
-if [ -f "$1".csv ] && [ "$min_column" == "$max_column" ]; then tagui_data_set_size="$(($min_column-1))"
-elif [ -f "$1".csv ] && [ "$min_column" -lt 2 ]; then echo "ERROR - $1.csv has less than 2 columns" | tee -a "$1".log
-elif [ -f "$1".csv ]; then echo "ERROR - $1.csv has inconsistent # of columns" | tee -a "$1".log; fi
+if [ "$min_column" != "$max_column" ]; then echo "ERROR - $1.csv has inconsistent # of columns" | tee -a "$1".log
+elif [ "$min_column" -lt 2 ]; then echo "ERROR - $1.csv has lesser than 2 columns" | tee -a "$1".log
+else tagui_data_set_size="$(($min_column-1))"; fi; fi
 
 # loop for managing multiple data sets in datatable 
 for (( tagui_data_set=1; tagui_data_set<=$tagui_data_set_size; tagui_data_set++ ))
 do export tagui_data_set=$tagui_data_set
 
-# parse automation flow file and check for error before calling casperjs
+# parse automation flow file and check for initial parse error before calling casperjs
 php tagui_parse.php "$1" | tee -a "$1".log
-if [ -s "$1".log ]; then echo "ERROR - automation aborted due to above" | tee -a "$1".log; break
-elif [ "$tagui_test_mode" = false ]; then casperjs $params | tee -a "$1".log
+if [ -s "$1".log ] && [ "$tagui_data_set" -eq 1 ]
+then echo "ERROR - automation aborted due to above" | tee -a "$1".log; break
+elif [ "$tagui_test_mode" == false ]; then casperjs $params | tee -a "$1".log
 else export tagui_test_mode=true; casperjs test $params --xunit="$1".xml | tee -a "$1".log; fi; done

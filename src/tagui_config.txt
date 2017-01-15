@@ -3,7 +3,6 @@
 
 casper.options.waitTimeout = 10000;
 casper.options.logLevel = 'debug';
-casper.options.verbose = false;
 
 casper.options.viewportSize = {
 width: 1366,
