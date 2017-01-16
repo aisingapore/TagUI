@@ -8,7 +8,7 @@ Automate repetitive parts of your work - use cases include data acquisition, pro
 
 TA.Gui converts automation flows in simple natural language into lines of JavaScript code for CasperJS & PhantomJS to perform their web automation magic. For example, TA.Gui will instantly convert the flow below into 120+ lines of working JavaScript code and perform the series of steps to download a Typeform report automatically.
 
-The flow can be triggered from scheduling, command line, REST API, URL, email etc. Everything happens in the background without seeing any web browser, so you can continue to use the computer or server uninterrupted. Running on a visible web browser is also supported, using Firefox and SlimerJS (see firefox option below).
+The flow can be triggered from scheduling, command line, REST API, URL, email etc. Everything happens headlessly in the background without seeing any web browser, so you can continue to use the computer or server uninterrupted. Running on a visible web browser is also supported, using Firefox and SlimerJS (see firefox option below).
 
 ```
 https://www.typeform.com
@@ -95,7 +95,7 @@ type email|type \`email\` as user@gmail.com
 - Save datatable file with same name as your flow filename and with .csv behind
 - Datatable has 2 or more columns, for example below (headers up to you to name)
 - Data-centric approach with rows representing data fields (usually row = test case)
-- TA.Gui will loop through each column to automate using values from different datasets
+- TA.Gui loops through each column to automate using values from different datasets
 - Eg, echo "TESTCASE - \`testname\`" in your flow shows TESTCASE - Trade USDSGD
 
 TEST TRADES|TEST #1|TEST #2|TEST #3
