@@ -46,7 +46,6 @@ test|professional testing using CasperJS [assertions](http://docs.casperjs.org/e
 # Pipeline
 Feature|Purpose
 :-----:|:------
-Passive I/O|csv datatables and html run results
 Active I/O|triggering and actioning using API
 Chrome Extension|auto-generation of automation flows
 Parallel Run|develop concurrent automation runs
@@ -89,6 +88,24 @@ OBJECT|DEFINITION
 create account|btn btn--green btn-xl signup-btn
 email|user-email-textbox
 type email|type \`email\` as user@gmail.com
+
+### DATATABLES
+- Datatables extend the power of repositories to allow batch automation
+- You can define datatables to store different datasets for batch automation
+- Save datatable file with same name as your flow filename and with .csv behind
+- Datatable have 2 or more columns, for example below (headers up to you to name)
+- Data-centric approach with rows representing data fields instead of usual test case
+- TA.Gui will loop through each column to automate using different dataset values
+- For example, echo "TESTCASE - `testname`" in your flow shows TESTCASE - Trade USDSGD
+
+TEST TRADES|#1|#2|#3
+:----------|:-|:-|:-
+testname|Trade USDSGD|Trade USDJPY|Trade EURUSD
+username|test_account|test_account|test_account
+password|12345678|12345678|12345678
+currency-pair|USDSGD|USDJPY|EURUSD
+size|10000|1000|100000
+direction|BUY|SELL|BUY
 
 ### CONDITIONS
 - Conditions can be expressed in natural language (brackets optional) or JavaScript
