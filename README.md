@@ -21,7 +21,7 @@ click action results tooltip
 click section_results
 download https://admin.typeform.com/form/2592751/analyze/csv to report.csv
 ```
-If you already know JavaScript coding and want to be more expressive, you can even use JavaScript code directly in the flow. If not, you will still enjoy features like custom repositories for your objects and keywords for reusability / readability, and a Chrome extension in the pipeline which generates automation flows by learning from your actions.
+If you already know JavaScript coding and want to be more expressive, you can even use JavaScript code directly in the flow. If not, you will still enjoy features like custom repositories to store your reusable objects, datatables for batch automation, and a Chrome extension in the pipeline which generates automation flows by learning from your actions.
 
 # Set Up
 1. install CasperJS (navigation/testing for PhantomJS) - http://casperjs.org
@@ -93,9 +93,9 @@ type email|type \`email\` as user@gmail.com
 - Datatables extend the power of repositories to allow batch automation
 - You can define datatables to store different datasets for batch automation
 - Save datatable file with same name as your flow filename and with .csv behind
-- Datatable have 2 or more columns, for example below (headers up to you to name)
+- Datatable has 2 or more columns, for example below (headers up to you to name)
 - Data-centric approach with rows representing data fields (usually row = test case)
-- TA.Gui will loop through each column to automate using different dataset values
+- TA.Gui will loop through each column to automate using values from different datasets
 - Eg, echo "TESTCASE - \`testname\`" in your flow shows TESTCASE - Trade USDSGD
 
 TEST TRADES|TEST #1|TEST #2|TEST #3
