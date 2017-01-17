@@ -48,7 +48,6 @@ Feature|Purpose
 :-----:|:------
 Active I/O|triggering and actioning using API
 Chrome Extension|auto-generation of automation flows
-Parallel Run|develop concurrent automation runs
 One Package|evaluate packaging in CasperJS/PhantomJS
 Microsoft Friendly|reduce friction for running on Windows
 Enhancements|feel free to review and suggest new features
