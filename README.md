@@ -21,7 +21,7 @@ click action results tooltip
 click section_results
 download https://admin.typeform.com/form/2592751/analyze/csv to report.csv
 ```
-If you already know JavaScript coding and want to be more expressive, you can even use JavaScript code directly in the flow. If not, you will still enjoy features like custom repositories to store your reusable objects, datatables for batch automation, and a Chrome extension in the pipeline which generates automation flows by learning from your actions.
+If you already know JavaScript coding and want to be more expressive, you can even use JavaScript directly in the flow. If not, you will still enjoy features like custom repositories to store your reusable objects, datatables for batch automation, and a Chrome extension in the pipeline which generates automation flows by learning from your actions.
 
 # Set Up
 1. install CasperJS (navigation/testing for PhantomJS) - http://casperjs.org
@@ -35,7 +35,7 @@ Optional - configure browser settings in tagui_config.txt or leave as default
 ./tagui flow_filename option(s)
 ```
 - Flow filename extension can be no extension, .gui or .txt
-- Objects and keywords can be defined in flow_filename.csv
+- Objects, keywords, datatables can be defined in flow_filename.csv
 
 Option|Purpose
 :----:|:------
