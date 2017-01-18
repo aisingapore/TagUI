@@ -40,9 +40,9 @@ Optional - configure browser settings in tagui_config.txt or leave as default
 Option|Purpose
 :----:|:------
 firefox|run on visible Firefox browser (need to install Firefox, and SlimerJS - https://slimerjs.org)
+report|generate a web report for easy sharing of run results (default is only text log file)
 debug|show run-time backend messages from PhantomJS for detailed tracing and logging
 test|professional testing using CasperJS [assertions](http://docs.casperjs.org/en/latest/modules/tester.html); support TA.Gui XPath tx('selector')
-report|generate a web report for easy sharing of run results (default is a text log file)
 
 # Pipeline
 Feature|Purpose
