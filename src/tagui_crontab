@@ -1,0 +1,10 @@
+#!/bin/bash
+# SCRIPT TO MANAGE SERVICE API FOR TA.GUI FRAMEWORK ~ TEBEL.ORG #
+
+# if nothing running now, call runner script to generate service action script
+if ! [ -f tagui_service.run ]; then php tagui_runner.php | tee -a tagui_service.log; chmod 600 tagui_service.log; fi
+
+# if service action script exists, rename and run it, then rename it again
+# extension used to track status; act = ready, run = running, done = finished
+if [ -f tagui_service.act ]; then mv tagui_service.act tagui_service.run
+./tagui_service.run; mv tagui_service.run tagui_service.done; fi
