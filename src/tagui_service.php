@@ -47,4 +47,3 @@ if (($start_pos!==false) and ($end_pos!==false))
 return intval(substr($service_in_content,$start_pos+1,$end_pos-$start_pos-1))+1;else return 1;}
 
 ?>
-
