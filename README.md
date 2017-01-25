@@ -123,5 +123,17 @@ equal to|==
 and|&&
 or|&#124;&#124;
 
+### API
+Automation flows can be triggered via API. TA.Gui has an API service and runner for managing a queue of incoming requests via API. To setup, add a crontab entry on your server with the desired frequency to check and process incoming requests. For example, the following will check every hourly at the 30th minute.
+
+```
+30 * * * * cd /full_path_on_your_server && ./tagui_crontab
+```
+
+To call an automation flow via API, use the following syntax
+```
+your_website_url/tagui_service.php?SETTINGS="flow_filename option(s)"
+```
+
 # License
 TA.Gui is open-source software released under the MIT license
