@@ -124,7 +124,7 @@ and|&&
 or|&#124;&#124;
 
 ### REST API
-Automation flows can be triggered via REST API. TA.Gui has an API service and runner for managing a queue of incoming requests via API. To setup, add a crontab entry on your server with the desired frequency to check and process incoming requests. For example, the following job will check every hour and run flows in the queue which have not been executed yet.
+Automation flows can be triggered via REST API. TA.Gui has an API service and runner for managing a queue of incoming requests via API. To setup, add a crontab entry on your server with the desired frequency to check and process incoming requests. For example, the following job will check every hour and run pending flows in the queue.
 
 ```
 0 * * * * cd /full_path_on_your_server && ./tagui_crontab
@@ -139,10 +139,10 @@ Related Files |Purpose
 :-------------|:------
 tagui_service.php|receiving service requests into queue
 tagui_runner.php|retrieving service requests from queue
-tagui_crontab|for managing execution from crontab schedule
-tagui_service.in|tracking incoming API service requests
-tagui_service.out|tracking processed API service requests
-tagui_service.log|log file to track service requests
+tagui_crontab|managing execution from crontab schedule
+tagui_service.in|tracking incoming service requests
+tagui_service.out|tracking processed service requests
+tagui_service.log|log file to track all service requests
 tagui_service.act|service request batch ready to execute
 tagui_service.run|service request batch currently running
 tagui_service.done|service request batch completed
