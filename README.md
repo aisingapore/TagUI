@@ -74,6 +74,23 @@ wait|optional time in seconds (default 5)|wait for some time
 check|condition to check **&#124;** text if true **&#124;** text if false|check condition and print result
 frame|frame name **&#124;** subframe name if any|next step in frame/subframe
 
+### CONDITIONS
+- Conditions can be expressed in natural language (brackets optional) or JavaScript
+- JavaScript can be used (CasperJS's context); eg if/for/while applies to the next step
+
+Condition (in natural language)|JavaScript
+:------------------------------|:---------
+example - if A more than B and C not equal to D | if (A > B) && (C != D)
+example - while cupcakes equal to 12| while (cupcakes == 12)
+more than or equal to / greater than or equal to / higher than or equal to|>=
+less than or equal to / lesser than or equal to / lower than or equal to|<=
+more than / greater than / higher than|>
+less than / lesser than / lower than|<
+not equal to|!=
+equal to|==
+and|&&
+or|&#124;&#124;
+
 ### REPOSITORIES
 - Repositories help to make steps or objects reusable and improve readability
 - You can define custom repositories to store objects and keywords definitions
@@ -106,23 +123,6 @@ currency-pair|USDSGD|USDJPY|EURUSD
 size|10000|1000|100000
 direction|BUY|SELL|BUY
 
-### CONDITIONS
-- Conditions can be expressed in natural language (brackets optional) or JavaScript
-- JavaScript can be used (CasperJS's context); eg if/for/while applies to the next step
-
-Condition (in natural language)|JavaScript
-:------------------------------|:---------
-example - if A more than B and C not equal to D | if (A > B) && (C != D)
-example - while cupcakes equal to 12| while (cupcakes == 12)
-more than or equal to / greater than or equal to / higher than or equal to|>=
-less than or equal to / lesser than or equal to / lower than or equal to|<=
-more than / greater than / higher than|>
-less than / lesser than / lower than|<
-not equal to|!=
-equal to|==
-and|&&
-or|&#124;&#124;
-
 ### REST API
 Automation flows can be triggered via REST API. TA.Gui has an API service and runner for managing a queue of incoming requests via API. To setup, add a crontab entry on your server with the desired frequency to check and process incoming requests. For example, the following job will check every hour and run pending flows in the queue.
 
@@ -145,7 +145,7 @@ tagui_service.out|tracking processed service requests
 tagui_service.log|log file to track all service requests
 tagui_service.act|service request batch ready to execute
 tagui_service.run|service request batch currently running
-tagui_service.done|service request batch completed
+tagui_service.done|service request batch already finished
 
 # License
 TA.Gui is open-source software released under the MIT license
