@@ -1,6 +1,10 @@
 #!/bin/bash
 # SCRIPT FOR RUNNING TA.GUI FRAMEWORK ~ TEBEL.ORG #
 
+# set local path to casperjs and environment path to phantomjs
+CASPERJS_EXECUTABLE="/usr/local/bin/casperjs"
+export PHANTOMJS_EXECUTABLE="/usr/local/bin/phantomjs"
+
 # check firefox parameter to run on visible firefox browser through slimerjs 
 if [ "$2" = "firefox" ]; then set -- "$1" "--engine=slimerjs" "${@:3}"; fi
 if [ "$3" = "firefox" ]; then set -- "${@:1:2}" "--engine=slimerjs" "${@:4}"; fi
@@ -66,8 +70,8 @@ do export tagui_data_set=$tagui_data_set
 php -q tagui_parse.php "$1" | tee -a "$1".log
 if [ -s "$1".log ] && [ "$tagui_data_set" -eq 1 ]
 then echo "ERROR - automation aborted due to above" | tee -a "$1".log; break
-elif [ "$tagui_test_mode" == false ]; then casperjs $params | tee -a "$1".log
-else export tagui_test_mode=true; casperjs test $params --xunit="$1".xml | tee -a "$1".log; fi; done
+elif [ "$tagui_test_mode" == false ]; then $CASPERJS_EXECUTABLE $params | tee -a "$1".log
+else export tagui_test_mode=true; $CASPERJS_EXECUTABLE test $params --xunit="$1".xml | tee -a "$1".log; fi; done
 
 # check report option to generate html automation log
 if [ -s "$1".log ] && [ "$tagui_html_report" == true ]; then php -q tagui_report.php "$1"; fi
