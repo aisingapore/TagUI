@@ -130,7 +130,7 @@ Automation flows can be triggered via REST API. TA.Gui has an API service and ru
 0 * * * * cd /full_path_on_your_server && ./tagui_crontab
 ```
 
-To call an automation flow via API from your application or web browser, use below syntax. Automation flows can also be triggered from emails through the API. Install [TA.Mail](https://github.com/tebelorg/TA.Mail) (mailbot to act on incoming emails) to set up email integration.
+To call an automation flow from your application or web browser, use below API syntax. Automation flows can also be triggered from emails through the API. For email integration, install and set up [TA.Mail](https://github.com/tebelorg/TA.Mail) (mailbot to act on incoming emails).
 ```
 your_website_url/tagui_service.php?SETTINGS="flow_filename option(s)"
 ```
