@@ -48,8 +48,8 @@ test|professional testing using CasperJS [assertions](http://docs.casperjs.org/e
 Feature|Purpose
 :-----:|:------
 Chrome Extension|auto-generation of automation flows
-One Package|evaluate packaging in dependencies
-Microsoft Friendly|reduce friction for running on Windows
+One Package|auto-installing or packaging in dependencies
+Microsoft Friendly|support running on Windows platforms
 Enhancements|feel free to review and suggest new features
 
 # Cheat Sheet
@@ -80,8 +80,8 @@ frame|frame name **&#124;** subframe name if any|next step in frame/subframe
 
 Condition (in natural language)|JavaScript
 :------------------------------|:---------
-example - if A more than B and C not equal to D | if (A > B) && (C != D)
-example - while cupcakes equal to 12| while (cupcakes == 12)
+for example - if A more than B and C not equal to D | if (A > B) && (C != D)
+for example - while cupcakes equal to 12| while (cupcakes == 12)
 more than or equal to / greater than or equal to / higher than or equal to|>=
 less than or equal to / lesser than or equal to / lower than or equal to|<=
 more than / greater than / higher than|>
@@ -135,17 +135,17 @@ To call an automation flow via API from your application or web browser
 your_website_url/tagui_service.php?SETTINGS="flow_filename option(s)"
 ```
 
-Related Files |Purpose
+API Related Files |Purpose
 :-------------|:------
 tagui_service.php|receiving service requests into queue
 tagui_runner.php|retrieving service requests from queue
 tagui_crontab|managing execution from crontab schedule
-tagui_service.in|tracking incoming service requests
-tagui_service.out|tracking processed service requests
+tagui_service.in|log to track incoming service requests
+tagui_service.out|log to track processed service requests
 tagui_service.log|log to track service requests history
 tagui_service.act|service request batch ready to execute
 tagui_service.run|service request batch currently running
-tagui_service.done|service request batch already finished
+tagui_service.done|service request batch finished running
 
 # License
 TA.Gui is open-source software released under the MIT license
