@@ -1,6 +1,9 @@
 #!/bin/bash
 # SCRIPT FOR RUNNING TA.GUI FRAMEWORK ~ TEBEL.ORG #
 
+# change current directory to TA.GUI directory
+cd `dirname $0`
+
 # set local path to casperjs and environment path to phantomjs
 CASPERJS_EXECUTABLE="/usr/local/bin/casperjs"
 export PHANTOMJS_EXECUTABLE="/usr/local/bin/phantomjs"

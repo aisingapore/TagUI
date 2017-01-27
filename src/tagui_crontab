@@ -1,6 +1,9 @@
 #!/bin/bash
 # SCRIPT TO MANAGE SERVICE API FOR TA.GUI FRAMEWORK ~ TEBEL.ORG #
 
+# change current directory to TA.GUI directory
+cd `dirname $0`
+
 # if nothing running now, call runner script to generate service action script
 if ! [ -f tagui_service.run ]; then php -q tagui_runner.php | tee -a tagui_service.log; chmod 600 tagui_service.log; fi
 
