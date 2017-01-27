@@ -44,6 +44,11 @@ report|generate a web report for easy sharing of run results (default is only te
 debug|show run-time backend messages from PhantomJS for detailed tracing and logging
 test|professional testing using CasperJS [assertions](http://docs.casperjs.org/en/latest/modules/tester.html); support TA.Gui XPath tx('selector')
 
+To call an automation flow by scheduling it in crontab, for example at 8am daily
+```
+0 8 * * * cd /full_path_on_your_server && ./tagui flow_filename option(s)
+```
+
 # Pipeline
 Feature|Purpose
 :-----:|:------
@@ -132,11 +137,6 @@ Automation flows can be triggered via REST API. TA.Gui has an API service and ru
 To call an automation flow from your application or web browser, use below API syntax. Automation flows can also be triggered from emails using the API. For email integration, install and set up [TA.Mail](https://github.com/tebelorg/TA.Mail) (mailbot to act on incoming emails).
 ```
 your_website_url/tagui_service.php?SETTINGS="flow_filename option(s)"
-```
-
-To call an automation flow by scheduling it in crontab, for example at 8am everyday
-```
-0 8 * * * cd /full_path_on_your_server && ./tagui flow_filename option(s)
 ```
 
 API Related Files |Purpose
