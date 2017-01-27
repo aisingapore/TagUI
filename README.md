@@ -125,7 +125,6 @@ direction|BUY|SELL|BUY
 
 ### REST API
 Automation flows can be triggered via REST API. TA.Gui has an API service and runner for managing a queue of incoming requests via API. To setup, add a crontab entry on your server with the desired frequency to check and process incoming service requests. For example, the following job will check every hour and run pending flows in the queue.
-
 ```
 0 * * * * cd /full_path_on_your_server && ./tagui_crontab
 ```
@@ -133,6 +132,11 @@ Automation flows can be triggered via REST API. TA.Gui has an API service and ru
 To call an automation flow from your application or web browser, use below API syntax. Automation flows can also be triggered from emails using the API. For email integration, install and set up [TA.Mail](https://github.com/tebelorg/TA.Mail) (mailbot to act on incoming emails).
 ```
 your_website_url/tagui_service.php?SETTINGS="flow_filename option(s)"
+```
+
+To call an automation flow by scheduling it in crontab, for example at 8am everyday
+```
+0 8 * * * cd /full_path_on_your_server && ./tagui flow_filename option(s)
 ```
 
 API Related Files |Purpose
