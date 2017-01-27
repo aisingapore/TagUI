@@ -44,7 +44,7 @@ report|generate a web report for easy sharing of run results (default is only te
 debug|show run-time backend messages from PhantomJS for detailed tracing and logging
 test|professional testing using CasperJS [assertions](http://docs.casperjs.org/en/latest/modules/tester.html); support TA.Gui XPath tx('selector')
 
-To call an automation flow by scheduling it in crontab, for example at 8am daily
+To call an automation flow by scheduling in crontab, eg at 8am daily
 ```
 0 8 * * * cd /full_path_on_your_server && ./tagui flow_filename option(s)
 ```
