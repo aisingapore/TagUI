@@ -128,8 +128,8 @@ currency-pair|USDSGD|USDJPY|EURUSD
 size|10000|1000|100000
 direction|BUY|SELL|BUY
 
-### REST API
-This section is catered for developers. Automation flows can be triggered via REST API. TA.Gui has an API service and runner for managing a queue of incoming requests via API. To setup, add a crontab entry on your server with the desired frequency to check and process incoming service requests. For example, the following job will check every hour and run pending flows in the queue.
+### REST API (for developers)
+Automation flows can be triggered via REST API. TA.Gui has an API service and runner for managing a queue of incoming requests via API. To setup, add a crontab entry on your server with the desired frequency to check and process incoming service requests. For example, the following job will check every hour and run pending flows in the queue.
 ```
 0 * * * * /full_path_on_your_server/tagui_crontab
 ```
