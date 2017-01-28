@@ -49,3 +49,8 @@ if (casper.exists(x('//*[contains(@title,"'+locator+'")]'))) return true;
 if (casper.exists(x('//*[contains(text(),"'+locator+'")]'))) return true;
 else return false;}
 
+// calling rest api url synchronously
+function call_api(rest_url) {
+var xhttp = new XMLHttpRequest(); xhttp.open("GET", rest_url, false);
+xhttp.send(); return xhttp.statusText + ' - ' + xhttp.responseText;}
+
