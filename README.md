@@ -75,7 +75,7 @@ echo|text (in quotation marks) and variables|print text/variables to output
 save|element to read ***to*** optional filename|save text to file
 dump|variable name ***to*** optional filename|save variable to file
 snap|element (page = webpage) ***to*** optional filename|save screenshot to file
-wait|optional time in seconds (default 5)|wait for some time
+wait|optional time in seconds (default is 5)|wait for some time
 check|condition to check **&#124;** text if true **&#124;** text if false|check condition and print result
 frame|frame name **&#124;** subframe name if any|next step in frame/subframe
 
@@ -129,7 +129,7 @@ size|10000|1000|100000
 direction|BUY|SELL|BUY
 
 ### REST API
-Automation flows can be triggered via REST API. TA.Gui has an API service and runner for managing a queue of incoming requests via API. To setup, add a crontab entry on your server with the desired frequency to check and process incoming service requests. For example, the following job will check every hour and run pending flows in the queue.
+Automation flows can be triggered via REST API (for developers). TA.Gui has an API service and runner for managing a queue of incoming requests via API. To setup, add a crontab entry on your server with the desired frequency to check and process incoming service requests. For example, the following job will check every hour and run pending flows in the queue.
 ```
 0 * * * * /full_path_on_your_server/tagui_crontab
 ```
