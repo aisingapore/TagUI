@@ -4,7 +4,7 @@
 
 // verify that both service queue files are accessible
 $service_in_file = fopen('tagui_service.in','a') or die("ERROR - cannot open " . 'tagui_service.in' . "\n");
-fclose($service_in_file); // chmod ('tagui_service.in',0600); // not required, not updating this file here
+fclose($service_in_file);  chmod ('tagui_service.in',0600);
 $service_out_file = fopen('tagui_service.out','a') or die("ERROR - cannot open " . 'tagui_service.out' . "\n");
 fclose($service_out_file); chmod ('tagui_service.out',0600);
 
