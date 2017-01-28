@@ -42,7 +42,7 @@ Option|Purpose
 firefox|run on visible Firefox browser (need to install Firefox, and SlimerJS - https://slimerjs.org)
 report|generate a web report for easy sharing of run results (default is only text log file)
 debug|show run-time backend messages from PhantomJS for detailed tracing and logging
-test|professional testing using CasperJS [assertions](http://docs.casperjs.org/en/latest/modules/tester.html); support TA.Gui XPath tx('selector')
+test|professional testing using [CasperJS assertions](http://docs.casperjs.org/en/latest/modules/tester.html); support TA.Gui XPath tx('selector')
 
 To schedule an automation flow in crontab, eg at 8am daily
 ```
@@ -134,7 +134,7 @@ Automation flows can be triggered via REST API. TA.Gui has an API service and ru
 0 * * * * /full_path_on_your_server/tagui_crontab
 ```
 
-To call an automation flow from your application or web browser, use below API syntax. Automation flows can also be triggered from emails using the API. For email integration, install and set up [TA.Mail](https://github.com/tebelorg/TA.Mail) (mailbot to act on incoming emails).
+To call an automation flow from your application or web browser, use below API syntax. Automation flows can also be triggered from emails using the API. For email integration, [install TA.Mail](https://github.com/tebelorg/TA.Mail) (mailbot to act on incoming emails).
 ```
 your_website_url/tagui_service.php?SETTINGS="flow_filename option(s)"
 ```
