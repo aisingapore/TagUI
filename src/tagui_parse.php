@@ -92,6 +92,7 @@ case "wait": return wait_intent($script_line); break;
 case "check": return check_intent($script_line); break;
 case "test": return test_intent($script_line); break;
 case "frame": return frame_intent($script_line); break;
+case "api": return api_intent($script_line); break;
 case "js": return js_intent($script_line); break;
 case "code": return code_intent($script_line); break;
 default: echo "ERROR - " . current_line() . " cannot understand step " . $script_line . "\n";}}
@@ -115,6 +116,7 @@ else if (strtolower(substr($raw_intent,0,5))=="wait ") return "wait";
 else if (strtolower(substr($raw_intent,0,6))=="check ") return "check";
 else if (strtolower(substr($raw_intent,0,5))=="test ") return "test";
 else if (strtolower(substr($raw_intent,0,6))=="frame ") return "frame";
+else if (strtolower(substr($raw_intent,0,4))=="api ") return "api";
 else if (strtolower(substr($raw_intent,0,3))=="js ") return "js";
 
 // second set of conditions check for valid keywords with missing parameters
@@ -133,6 +135,7 @@ else if (strtolower($raw_intent)=="wait") return "wait";
 else if (strtolower($raw_intent)=="check") return "check";
 else if (strtolower($raw_intent)=="test") return "test";
 else if (strtolower($raw_intent)=="frame") return "frame";
+else if (strtolower($raw_intent)=="api") return "api";
 else if (strtolower($raw_intent)=="js") return "js";
 
 // final check for recognized code before returning error 
@@ -284,6 +287,11 @@ else if (strpos($params,"|")!==false)
 {$GLOBALS['inside_frame']=2; return "{this.echo('".$raw_intent."');\ncasper.withFrame('".
 $param1."', function() {casper.withFrame('".$param2."', function() {\n";} else
 {$GLOBALS['inside_frame']=1; return "{this.echo('".$raw_intent."');\ncasper.withFrame('".$params."', function() {\n";}}
+
+function api_intent($raw_intent) {
+$params = trim(substr($raw_intent." ",1+strpos($raw_intent." "," ")));
+if ($params == "") echo "ERROR - " . current_line() . " API URL missing for " . $raw_intent . "\n"; else
+return "{this.echo('".$raw_intent."');\nthis.echo(call_api('".$params."'));}".end_fi()."\n";}
 
 function js_intent($raw_intent) {
 $params = trim(substr($raw_intent." ",1+strpos($raw_intent." "," ")));
