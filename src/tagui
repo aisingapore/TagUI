@@ -56,6 +56,9 @@ params="$1".js" ""$2"" ""$3"" ""$4"" ""$5"" ""$6"" ""$7"" ""$8"" ""$9"
 # initialise log file and set permissions to protect user data
 echo -n "" > "$1".log; chmod 600 "$1".log
 
+# check if api call is made in automation flow to set appropriate setting for phantomjs to work
+api=""; if [ -f "$1" ]; then if grep -iq "api http" "$1"; then api=" --web-security=false"; fi; fi
+
 # check datatable csv file for batch automation
 tagui_data_set_size=1
 if [ -f "$1".csv ]; then
@@ -73,8 +76,8 @@ do export tagui_data_set=$tagui_data_set
 php -q tagui_parse.php "$1" | tee -a "$1".log
 if [ -s "$1".log ] && [ "$tagui_data_set" -eq 1 ]
 then echo "ERROR - automation aborted due to above" | tee -a "$1".log; break
-elif [ "$tagui_test_mode" == false ]; then $CASPERJS_EXECUTABLE $params | tee -a "$1".log
-else export tagui_test_mode=true; $CASPERJS_EXECUTABLE test $params --xunit="$1".xml | tee -a "$1".log; fi; done
+elif [ "$tagui_test_mode" == false ]; then $CASPERJS_EXECUTABLE $params$api | tee -a "$1".log
+else export tagui_test_mode=true; $CASPERJS_EXECUTABLE test $params$api --xunit="$1".xml | tee -a "$1".log; fi; done
 
 # check report option to generate html automation log
 if [ -s "$1".log ] && [ "$tagui_html_report" == true ]; then php -q tagui_report.php "$1"; fi
