@@ -140,7 +140,7 @@ To call an automation flow from your application or web browser, use below API s
 your_website_url/tagui_service.php?SETTINGS="flow_filename option(s)"
 ```
 
-For making outgoing API calls in your automation flow, for example sending emails or feeding data somewhere, use the api step followed by the full URL (including parameters) of the API call. Response from the API will be printed to output.
+For making outgoing API calls in your automation flow, for example sending emails or feeding data somewhere, use the api step followed by full URL (including parameters) of the API call. Response from the API will be printed to output.
 
 API Related Files |Purpose
 :-------------|:------
