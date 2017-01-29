@@ -78,6 +78,7 @@ snap|element (page = webpage) ***to*** optional filename|save screenshot to file
 wait|optional time in seconds (default is 5)|wait for some time
 check|condition to check **&#124;** text if true **&#124;** text if false|check condition and print result
 frame|frame name **&#124;** subframe name if any|next step in frame/subframe
+api|full url of 3rd-party api (including parameters)|make api call and print response
 
 ### CONDITIONS
 - Conditions can be expressed in natural language (brackets optional) or JavaScript
@@ -138,6 +139,8 @@ To call an automation flow from your application or web browser, use below API s
 ```
 your_website_url/tagui_service.php?SETTINGS="flow_filename option(s)"
 ```
+
+For making outgoing API calls in your automation flow, use the api step followed by the full url of the 3rd-party API to call (including parameters). Response from the API call will be printed to output.
 
 API Related Files |Purpose
 :-------------|:------
