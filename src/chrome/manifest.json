@@ -1,1 +1,34 @@
-
+{
+    "manifest_version": 2,
+    "name": "TA.Gui", "version": "0.6.0",
+    "description": "Generates TA.Gui automation flows by learning from your actions",
+    "homepage_url": "http://tebel.org",
+    "browser_action": {
+        "default_title": "TA.Gui automation flow recorder",
+        "default_popup": "control.html",
+        "default_icon": {
+            "19": "tebel_icon_19.png",
+            "38": "tebel_icon_38.png"
+        }
+    },
+    "icons": {
+        "16": "tebel_icon_16.png",
+        "48": "tebel_icon_48.png",
+        "128": "tebel_icon_128.png"
+    },
+    "permissions": [
+        "tabs",
+        "background",
+        "http://*/*",
+        "https://*/*"
+    ],
+    "background": {
+        "scripts": ["background.js"]
+    },
+    "content_scripts": [{
+        "matches": ["http://*/*", "https://*/*"],
+        "js": ["recorder.js"]
+    }],
+    "offline_enabled": true,
+    "content_security_policy": "script-src 'self' 'unsafe-eval'; object-src 'self'"
+}
