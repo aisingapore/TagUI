@@ -118,7 +118,7 @@ RecorderUI.prototype.hidecomment = function(bsave) {
 }
 
 RecorderUI.prototype.export = function(options) {
-  chrome.tabs.create({url: "./casper.html"});
+  chrome.tabs.create({url: "./tagui.html"});
 }
 
 var ui;
