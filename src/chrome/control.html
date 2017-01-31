@@ -1,0 +1,29 @@
+<html>
+<head>
+<title>TA.Gui Web Automation</title>
+<link rel="stylesheet" type="text/css" href="./style.css" />
+<script src="control.js"></script>
+</head>
+<body>
+<form name="control">
+<div>
+    <input type="text" size="80" name="url" /><p></p>
+    <input type="submit" id="bgo" name="submit" value="Start Recording" /> 
+    <input type="submit" id="bstop" name="bstop" value="Stop Recording" style="display:none;" /> 
+    <input type="submit" id="bcomment" name="bcomment" value="Add Comment" style="display: none;" />
+    <input type="submit" id="bexport" name="bexport" value="Export TA.Gui flow" style="display: none;" />
+</div> 
+<div id="comment" style="display:none">
+    <strong>Comment</strong> 
+    <textarea id="ctext" id="ctext" name="ctext"
+    rows="8" cols="80"></textarea> 
+    <br />
+    <input type="submit" id="bsavecomment" name="c1" value=" Save " /> 
+    <input type="submit" id="bcancelcomment" name="c2" value=" Cancel " />
+</div>
+</form>
+<p class="tagline">
+    <span id="tagline">Generates </span><a href="https://github.com/tebelorg/TA.Gui" target="_new">TA.Gui</a>
+    <span id="tagline"> automation flows by learning from your actions</span>
+</body>
+</html>
