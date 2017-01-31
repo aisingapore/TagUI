@@ -1,10 +1,10 @@
 {
     "manifest_version": 2,
-    "name": "TA.Gui", "version": "0.6.0",
+    "name": "TA.Gui Web Automation", "version": "0.6.0",
     "description": "Generates TA.Gui automation flows by learning from your actions",
-    "homepage_url": "http://tebel.org",
+    "homepage_url": "https://github.com/tebelorg/TA.Gui",
     "browser_action": {
-        "default_title": "TA.Gui automation flow recorder",
+        "default_title": "TA.Gui Web Automation",
         "default_popup": "control.html",
         "default_icon": {
             "19": "tebel_icon_19.png",
