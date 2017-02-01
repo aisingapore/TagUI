@@ -62,10 +62,10 @@ CasperRenderer.prototype.pyout = function(text) {
 
 CasperRenderer.prototype.pyrepr = function(text, escape) {
   // todo: handle non--strings & quoting
-  // There should a more eloquent way of doing this but by  doing the escaping before adding the string quotes prevents the string quotes from accidentally getting escaped creating a syntax error in the output code.
+  // There should a more eloquent way of doing this but by doing the escaping before adding the string quotes prevents the string quotes from accidentally getting escaped creating a syntax error in the output code.
 	var s = text;
 	if (escape) s = s.replace(/(['"])/g, "\\$1");
-	var s = "'" + s + "'"; 
+//	var s = "'" + s + "'"; 
   return s;
 }
 
@@ -144,7 +144,7 @@ CasperRenderer.prototype.render = function(with_xy) {
     
     if(i==0) {
         if(item.type!=etypes.OpenUrl) {
-            this.text("ERROR - the recorded steps do not start with an url opening");
+            this.text("ERROR - recorded steps do not start with opening an url");
         } else {
           this.startUrl(item);
           continue;
@@ -292,17 +292,17 @@ CasperRenderer.prototype.getControlXPath = function(item) {
 CasperRenderer.prototype.getLinkXPath = function(item) {
   var way;
   if (item.text)
-    way = 'normalize-space(text())=' + this.cleanStringForXpath(this.normalizeWhitespace(item.text), true);
-  // way = this.cleanStringForXpath(this.normalizeWhitespace(item.text), true);
+  // way = 'normalize-space(text())=' + this.cleanStringForXpath(this.normalizeWhitespace(item.text), true);
+    way = this.cleanStringForXpath(this.normalizeWhitespace(item.text), true);
   else if (item.info.id)
-    way = '@id=' + this.pyrepr(item.info.id);
-  //  way = this.pyrepr(item.info.id);
+  // way = '@id=' + this.pyrepr(item.info.id);
+    way = this.pyrepr(item.info.id);
   else if (item.info.href)
-    way = '@href=' + this.pyrepr(this.shortUrl(item.info.href));
-  //  way = this.pyrepr(this.shortUrl(item.info.href));
+  // way = '@href=' + this.pyrepr(this.shortUrl(item.info.href));
+    way = this.pyrepr(this.shortUrl(item.info.href));
   else if (item.info.title)
-    way = 'title='+this.pyrepr(this.normalizeWhitespace(item.info.title));
-  //  way = this.pyrepr(this.normalizeWhitespace(item.info.title));
+  // way = 'title='+this.pyrepr(this.normalizeWhitespace(item.info.title));
+    way = this.pyrepr(this.normalizeWhitespace(item.info.title));
 
   return way;
 }
@@ -329,7 +329,7 @@ CasperRenderer.prototype.click = function(item) {
       var xpath_selector = this.getLinkXPath(item);
       if(xpath_selector) {
 //        selector = 'x("//a['+xpath_selector+']")';
-        selector = '//a['+xpath_selector+']';
+        selector = xpath_selector;
       } else {
         selector = item.info.selector;
       }
@@ -513,7 +513,7 @@ CasperRenderer.prototype.postToCasperbox = function() {
       response = JSON.parse(this.responseText);
       window.open('http://play.tebel.org/api?' + response.id);  
     } else {
-      alert("Error "+this.status);
+      alert("ERROR - "+this.status);
     }
     
   };
