@@ -47,7 +47,8 @@ CasperRenderer.prototype.text = function(txt) {
 }
 
 CasperRenderer.prototype.stmt = function(text, indent) {
-  if(indent==undefined) indent = 1;
+//  if(indent==undefined) indent = 1;
+  if(indent==undefined) indent = 0;
   var output = (new Array(4*indent)).join(" ") + text;
   this.document.writeln(output);
 }
@@ -87,7 +88,8 @@ CasperRenderer.prototype.cleanStringForXpath = function(str, escape)  {
         if (part === '"') {
             return "'\"'"; // output '"'
         }
-        return "'" + part + "'";
+//        return "'" + part + "'";
+        return part;
     });
     var xpath = '';
     if(parts.length>1) {
@@ -102,7 +104,7 @@ CasperRenderer.prototype.cleanStringForXpath = function(str, escape)  {
 var d = {};
 d[EventTypes.OpenUrl] = "openUrl";
 d[EventTypes.Click] = "click";
-//d[EventTypes.Change] = "change";
+// d[EventTypes.Change] = "change";
 d[EventTypes.Comment] = "comment";
 d[EventTypes.Submit] = "submit";
 d[EventTypes.CheckPageTitle] = "checkPageTitle";
@@ -131,8 +133,9 @@ CasperRenderer.prototype.render = function(with_xy) {
   this.with_xy = with_xy;
   var etypes = EventTypes;
   this.document.open();
-  this.document.writeln('<button id="casperbox-button">Run it on Playbook</button>');
+//  this.document.writeln('<button id="casperbox-button">Run it on Playbook</button>');
   this.document.write("<" + "pre" + ">");
+  this.document.write("<span style=\"font-size: 18px\">");
   this.writeHeader();
   var last_down = null;
   var forget_click = false;
@@ -144,7 +147,7 @@ CasperRenderer.prototype.render = function(with_xy) {
     
     if(i==0) {
         if(item.type!=etypes.OpenUrl) {
-            this.text("ERROR - recorded steps do not start with opening an url");
+            this.text("ERROR - recorded steps did not start with opening an url");
         } else {
           this.startUrl(item);
           continue;
@@ -186,6 +189,7 @@ CasperRenderer.prototype.render = function(with_xy) {
       this.space();
   }
   this.writeFooter();
+  this.document.write("<" + "/" + "span" + ">");
   this.document.write("<" + "/" + "pre" + ">");
   this.document.close();
 }
@@ -349,6 +353,7 @@ CasperRenderer.prototype.click = function(item) {
 //    this.stmt('    function fail() {');
 //    this.stmt('        test.assertExists(' + selector + ');')
 //    this.stmt('});');
+    if (selector.charAt(0) == '#') {selector = selector.substring(1);}
     this.stmt('click ' + selector);
   }
 }
@@ -369,7 +374,9 @@ CasperRenderer.prototype.getFormSelector = function(item) {
 
 CasperRenderer.prototype.keypress = function(item) {
   var text = item.text.replace('\n','').replace('\r', '\\r');
-  this.stmt('enter ' + this.getControl(item) + ' as ' + text);
+  var selector = this.getControl(item);
+  if (selector.charAt(0) == '#') {selector = selector.substring(1);}
+  this.stmt('enter ' + selector + ' as ' + text);
 //  this.stmt('casper.waitForSelector("' + this.getControl(item) + '",');
 //  this.stmt('    function success() {');
 //  this.stmt('        this.sendKeys("' + this.getControl(item) + '", "' + text + '");');
