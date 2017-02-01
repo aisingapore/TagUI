@@ -49,7 +49,7 @@ To schedule an automation flow in crontab, eg at 8am daily
 0 8 * * * /full_path_on_your_server/tagui flow_filename option(s)
 ```
 
-Prior to the public release, to use TA.Gui Chrome extension for recording automation flows, type chrome://extensions in Google Chrome, then drag and drop TA.Gui chrome folder into the browser. TA.Gui Chrome extension is based on [Resurrectio tool](https://github.com/ebrehault/resurrectio) and records steps such as webpage navigation, clicking web elements and entering information.
+Prior to public release, to use TA.Gui Chrome extension for recording automation flows, type chrome://extensions in Google Chrome, then drag and drop TA.Gui chrome folder into the browser. TA.Gui Chrome extension is based on [Resurrectio tool](https://github.com/ebrehault/resurrectio) and records steps such as webpage navigation, clicking web elements and entering information.
 
 # Pipeline
 Feature|Purpose
@@ -108,8 +108,8 @@ or|&#124;&#124;
 
 OBJECT|DEFINITION
 :-----|:---------
-create account|btn btn--green btn-xl signup-btn
 email|user-email-textbox
+create account|btn btn--green btn-xl signup-btn
 type email|type \`email\` as user@gmail.com
 
 ### DATATABLES
