@@ -21,7 +21,7 @@ click action results tooltip
 click section_results
 download https://admin.typeform.com/form/2592751/analyze/csv to report.csv
 ```
-If you already know JavaScript coding and want to be more expressive, you can even use JavaScript directly in the flow. If not, you will still enjoy optional features like repositories to store your reusable objects, datatables for batch automation, and a Chrome extension in the pipeline which generates automation flows by learning from your actions.
+If you already know JavaScript coding and want to be more expressive, you can even use JavaScript directly in the flow. If not, you will still enjoy optional features like repositories to store your reusable objects, datatables for batch automation, and a Chrome extension which generates automation flows by learning from your actions.
 
 # Set Up
 1. install CasperJS (navigation/testing for PhantomJS) - http://casperjs.org
@@ -49,10 +49,11 @@ To schedule an automation flow in crontab, eg at 8am daily
 0 8 * * * /full_path_on_your_server/tagui flow_filename option(s)
 ```
 
+To use TA.Gui Chrome extension for recording automation flows, type chrome://extensions in Google Chrome, then drag and drop TA.Gui chrome folder into the browser. TA.Gui Chrome extension is based on [Resurrectio tool](https://github.com/ebrehault/resurrectio) and records steps such as navigation, clicking elements and entering information.
+
 # Pipeline
 Feature|Purpose
 :-----:|:------
-Chrome Extension|auto-generation of automation flows
 One Package|auto-installing or packaging in dependencies
 Microsoft Friendly|support running on Microsoft Windows
 Enhancements|feel free to review and suggest new features
