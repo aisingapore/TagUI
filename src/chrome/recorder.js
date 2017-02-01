@@ -519,59 +519,59 @@ TestRecorder.ContextMenu.prototype.build = function(t, x, y) {
 
     var selected = TestRecorder.Browser.getSelection(recorder.window).toString();
 
-    if (t.width && t.height) {
-        menu.appendChild(this.item("Check Image Src", this.checkImgSrc));
-    }
+//    if (t.width && t.height) {
+//        menu.appendChild(this.item("Check Image Src", this.checkImgSrc));
+//    }
+//
+//    else if (t.type == "text" || t.type == "textarea") {
+//        menu.appendChild(this.item("Check Text Value", this.checkValue));
+//        menu.appendChild(this.item("Check Enabled", this.checkEnabled));
+//        menu.appendChild(this.item("Check Disabled", this.checkDisabled));
+//    }
+//
+//    else if (selected && (selected != "")) {
+//        this.selected = recorder.strip(selected);
+//        menu.appendChild(this.item("Check Text Appears On Page", 
+//                this.checkTextPresent));
+//    }
+//
+//    else if (t.href) {
+//        menu.appendChild(this.item("Check Link Text", this.checkText));
+//        menu.appendChild(this.item("Check Link Href", this.checkHref));
+//    }
+//
+//    else if (t.selectedIndex || t.type == "option") {
+//        var name = "Check Selected Value";
+//        if (t.type != "select-one") {
+//            name = name + "s";
+//        }
+//        menu.appendChild(this.item(name, this.checkSelectValue));
+//        menu.appendChild(this.item("Check Select Options",
+//                this.checkSelectOptions));
+//        menu.appendChild(this.item("Check Enabled", this.checkEnabled));
+//        menu.appendChild(this.item("Check Disabled", this.checkDisabled));
+//    }
+//
+//    else if (t.type == "button" || t.type == "submit") {
+//        menu.appendChild(this.item("Check Button Text", this.checkText));
+//        menu.appendChild(this.item("Check Button Value", this.checkValue));
+//        menu.appendChild(this.item("Check Enabled", this.checkEnabled));
+//        menu.appendChild(this.item("Check Disabled", this.checkDisabled));
+//    }
+//
+//    else if (t.value) {
+//        menu.appendChild(this.item("Check Value", this.checkValue));
+//        menu.appendChild(this.item("Check Enabled", this.checkEnabled));
+//        menu.appendChild(this.item("Check Disabled", this.checkDisabled));
+//    }
+//
+//    else {
+//        menu.appendChild(this.item("Check Page Location", this.checkPageLocation));
+//        menu.appendChild(this.item("Check Page Title", this.checkPageTitle));
+//        menu.appendChild(this.item("Screenshot", this.doScreenShot));
+//    }
 
-    else if (t.type == "text" || t.type == "textarea") {
-        menu.appendChild(this.item("Check Text Value", this.checkValue));
-        menu.appendChild(this.item("Check Enabled", this.checkEnabled));
-        menu.appendChild(this.item("Check Disabled", this.checkDisabled));
-    }
-
-    else if (selected && (selected != "")) {
-        this.selected = recorder.strip(selected);
-        menu.appendChild(this.item("Check Text Appears On Page", 
-                this.checkTextPresent));
-    }
-
-    else if (t.href) {
-        menu.appendChild(this.item("Check Link Text", this.checkText));
-        menu.appendChild(this.item("Check Link Href", this.checkHref));
-    }
-
-    else if (t.selectedIndex || t.type == "option") {
-        var name = "Check Selected Value";
-        if (t.type != "select-one") {
-            name = name + "s";
-        }
-        menu.appendChild(this.item(name, this.checkSelectValue));
-        menu.appendChild(this.item("Check Select Options",
-                this.checkSelectOptions));
-        menu.appendChild(this.item("Check Enabled", this.checkEnabled));
-        menu.appendChild(this.item("Check Disabled", this.checkDisabled));
-    }
-
-    else if (t.type == "button" || t.type == "submit") {
-        menu.appendChild(this.item("Check Button Text", this.checkText));
-        menu.appendChild(this.item("Check Button Value", this.checkValue));
-        menu.appendChild(this.item("Check Enabled", this.checkEnabled));
-        menu.appendChild(this.item("Check Disabled", this.checkDisabled));
-    }
-
-    else if (t.value) {
-        menu.appendChild(this.item("Check Value", this.checkValue));
-        menu.appendChild(this.item("Check Enabled", this.checkEnabled));
-        menu.appendChild(this.item("Check Disabled", this.checkDisabled));
-    }
-
-    else {
-        menu.appendChild(this.item("Check Page Location", this.checkPageLocation));
-        menu.appendChild(this.item("Check Page Title", this.checkPageTitle));
-        menu.appendChild(this.item("Screenshot", this.doScreenShot));
-    }
-
-    menu.appendChild(this.item("Cancel", this.cancel));
+    menu.appendChild(this.item("TA.Gui Web Automation", this.cancel));
 
     b.insertBefore(menu, b.firstChild);
     return menu;
