@@ -65,11 +65,11 @@ RecorderUI.prototype.set_started = function() {
   var e = document.getElementById("bstop");
   e.style.display = '';
   e.onclick = ui.stop;
-  e.value = "Stop Recording";
+  e.value = "   STOP   ";
   e = document.getElementById("bgo");
   e.style.display = 'none';
-  e = document.getElementById("bcomment");
-  e.style.display = '';
+//  e = document.getElementById("bcomment");
+//  e.style.display = '';
   e = document.getElementById("bexport");
   e.style.display = 'none';
 }
@@ -84,16 +84,16 @@ RecorderUI.prototype.set_stopped = function() {
 	var e = document.getElementById("bstop");
 	e.style.display = 'none';
 	e = document.getElementById("bgo");
-  e.style.display = '';
-	e = document.getElementById("bcomment");
-	e.style.display = 'none';
+	e.style.display = '';
+//	e = document.getElementById("bcomment");
+//	e.style.display = 'none';
 	e = document.getElementById("bexport");
 	e.style.display = '';
 }
 
 RecorderUI.prototype.showcomment = function() {
-  var e = document.getElementById("bcomment");
-  e.style.display = 'none';
+//  var e = document.getElementById("bcomment");
+//  e.style.display = 'none';
   e = document.getElementById("comment");
   e.style.display = '';
   e = document.getElementById("ctext");
@@ -102,8 +102,8 @@ RecorderUI.prototype.showcomment = function() {
 }
 
 RecorderUI.prototype.hidecomment = function(bsave) {
-  var e = document.getElementById("bcomment");
-  e.style.display = '';
+//  var e = document.getElementById("bcomment");
+//  e.style.display = '';
   e = document.getElementById("comment");
   e.style.display = 'none';
   e = document.getElementById("ctext");
