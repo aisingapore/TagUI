@@ -59,8 +59,8 @@ Enhancements|feel free to review and suggest new features
 
 # Cheat Sheet
 ### STEPS
-- [XPath method](http://www.w3schools.com/xml/xpath_intro.asp) is robust for identification and used to check for elements on webpage
-- TA.Gui checks XPath automatically in following order full-xpath, id, name, class, title, text()
+- [XPath method](http://www.w3schools.com/xml/xpath_intro.asp) is used to check for elements on webpage (robust for identification)
+- TA.Gui checks XPath automatically in this order - full-xpath, id, name, class, title, text()
 
 Step|Parameters (separator in bold)|Purpose
 :---|:-----------------------------|:------
@@ -81,12 +81,12 @@ frame|frame name **&#124;** subframe name if any|next step in frame/subframe
 api|full url (including parameters) of api call|call api and print response
 
 ### CONDITIONS
-- Conditions can be expressed in natural language (brackets optional) or JavaScript
-- JavaScript can be used (CasperJS's context); eg if/for/while applies to the next step
+- Conditions can be expressed in natural language (optional brackets) or JavaScript
+- JavaScript can be used (CasperJS's context) - if/for/while applies to the next step
 
 Condition (in natural language)|JavaScript
 :------------------------------|:---------
-for example - if A more than B and C not equal to D | if (A > B) && (C != D)
+for example - if A more than B and C not equal to D | if (A > B && C != D)
 for example - while cupcakes equal to 12| while (cupcakes == 12)
 more than or equal to / greater than or equal to / higher than or equal to|>=
 less than or equal to / lesser than or equal to / lower than or equal to|<=
@@ -98,8 +98,7 @@ and|&&
 or|&#124;&#124;
 
 ### REPOSITORIES
-- Repositories help to make steps or objects reusable and improve readability
-- You can define custom repositories to store objects and keywords definitions
+- Repositories help to make objects or steps reusable and improve readability
 - Save repository file with same name as your flow filename and with .csv behind
 - Repository must have 2 columns, for example below (headers up to you to name)
 - Using \`object\` in your flow replaces it with its definition (which can contain objects)
@@ -110,10 +109,9 @@ OBJECT|DEFINITION
 email|user-email-textbox
 create account|btn btn--green btn-xl signup-btn
 type email|type \`email\` as user@gmail.com
-
+  
 ### DATATABLES
 - Datatables extend the power of repositories to allow batch automation
-- You can define datatables to store different datasets for batch automation
 - Save datatable file with same name as your flow filename and with .csv behind
 - Datatable has 2 or more columns, for example below (headers up to you to name)
 - Data-centric approach with rows representing data fields (usually row = test case)
@@ -135,14 +133,14 @@ Automation flows can be triggered via REST API. TA.Gui has an API service and ru
 0 * * * * /full_path_on_your_server/tagui_crontab
 ```
 
-To call an automation flow from your application or web browser, use below API syntax. Automation flows can also be triggered from emails using the API. For email integration, [install TA.Mail](https://github.com/tebelorg/TA.Mail) (mailbot to act on incoming emails).
+To call an automation flow from your application or web browser, use below API syntax. Automation flows can also be triggered from emails using the API. For email integration, [install TA.Mail](https://github.com/tebelorg/TA.Mail) (mailbot to act on incoming emails). Using this integration, emails can also be sent directly from your flow with a single line.
 ```
 your_website_url/tagui_service.php?SETTINGS="flow_filename option(s)"
 ```
 
 For making outgoing API calls in your automation flow, for example sending emails or feeding data somewhere, use the api step followed by full URL (including parameters) of the API call. Response from the API will be printed to output.
 
-API Related Files |Purpose
+API File Reference |Purpose
 :-------------|:------
 tagui_service.php|receiving service requests into queue
 tagui_runner.php|retrieving service requests from queue
