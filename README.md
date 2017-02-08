@@ -28,7 +28,7 @@ If you know JavaScript coding and want to be more expressive, you can even use J
 2. install PhantomJS (headless scriptable web browser) - http://phantomjs.org
 3. install TA.Gui (friendly lightning fast automation tool) - https://git.io/vMCTZ
 
-Optional - configure web browser settings in tagui_config.txt or leave as default
+Optional - configure web browser settings in tagui_config.txt (browser resolution, default timeout of 10s etc)
 
 # To Use
 ```
