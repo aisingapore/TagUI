@@ -77,10 +77,11 @@ echo|text (in quotation marks) and variables|print text/variables to output
 save|element to read ***to*** optional filename|save text to file
 dump|variable name ***to*** optional filename|save variable to file
 snap|element (page = webpage) ***to*** optional filename|save screenshot to file
-wait|optional time in seconds (default is 5)|wait for some time
+wait|optional time in seconds (default is 5 seconds)|wait for some time
 check|condition to check **&#124;** text if true **&#124;** text if false|check condition and print result
 frame|frame name **&#124;** subframe name if any|next step in frame/subframe
 api|full url (including parameters) of api call|call api and print response
+//|user comments (ignored during execution)|add user comments
 
 ### CONDITIONS
 - Conditions can be expressed in natural language (optional brackets) or JavaScript
