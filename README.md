@@ -4,11 +4,11 @@ TA.Gui is a tool for non-developers and business users to automate web apps
 ![Sample Automation](https://github.com/tebelorg/TA.Gui/raw/master/sample.png)
 
 # Why This
-Automate repetitive parts of your work - use cases include data acquisition, process and test automations.
+Automate repetitive parts of your work - use cases include data acquisition, process and test automations. TA.Gui is open-source software released under the MIT license, that means you can freely use, modify or share the software.
 
-TA.Gui converts automation flows in simple natural language into lines of JavaScript code for CasperJS & PhantomJS to perform their web automation magic. For example, TA.Gui will instantly convert the flow below into 120+ lines of working JavaScript code and perform the sequence of steps to download a Typeform report automatically.
+TA.Gui converts your intentions in simple natural language into lines of working JavaScript code for CasperJS & PhantomJS to cast their web automation magic. For example, TA.Gui will instantly convert the automation flow below into 120+ lines of JavaScript code and perform the sequence of steps to download a Typeform report automatically.
 
-The flow can be triggered from scheduling, command line, URL, REST API, email etc. Everything happens headlessly in the background without seeing any web browser, so you can continue using the computer or server uninterrupted. Running on a visible web browser is also supported, using Firefox and SlimerJS (see firefox option below).
+The automation flow can be triggered from scheduling, command line, URL, REST API, email etc. Everything happens headlessly in the background without seeing any web browser, so you can continue using the computer or server uninterrupted. Running on a visible web browser is supported, using Firefox and SlimerJS (see firefox option below).
 
 ```
 https://www.typeform.com
@@ -52,6 +52,8 @@ To schedule an automation flow in crontab, for example at 8am daily
 Prior to public release, to use TA.Gui Chrome extension for recording automation flows, type chrome://extensions in Google Chrome, then drag and drop TA.Gui chrome folder into the browser. TA.Gui Chrome extension is based on [Resurrectio tool](https://github.com/ebrehault/resurrectio) and records steps such as page navigation, clicking web elements and entering information.
 
 # Pipeline
+For bugs or suggestions, kindly email support@tebel.org
+
 Feature|Purpose
 :-----:|:------
 Microsoft Friendly|support running on Microsoft Windows
@@ -111,7 +113,7 @@ create account|btn btn--green btn-xl signup-btn
 type email|type \`email\` as user@gmail.com
   
 ### DATATABLES
-- Datatables extend the power of repositories to allow batch automation
+- Datatables extend the power of repositories to manage batch automation
 - Save datatable file with same name as your flow filename and with .csv behind
 - Datatable has 2 or more columns, for example below (headers up to you to name)
 - Data-centric approach with rows representing data fields (usually row = test case)
