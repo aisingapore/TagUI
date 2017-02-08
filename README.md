@@ -6,9 +6,9 @@ TA.Gui is a tool for non-developers and business users to automate web apps
 # Why This
 Automate repetitive parts of your work - use cases include data acquisition, process and test automations.
 
-TA.Gui converts automation flows in simple natural language into lines of JavaScript code for CasperJS & PhantomJS to perform their web automation magic. For example, TA.Gui will instantly convert the flow below into 120+ lines of working JavaScript code and perform the series of steps to download a Typeform report automatically.
+TA.Gui converts automation flows in simple natural language into lines of JavaScript code for CasperJS & PhantomJS to perform their web automation magic. For example, TA.Gui will instantly convert the flow below into 120+ lines of working JavaScript code and perform the sequence of steps to download a Typeform report automatically.
 
-The flow can be triggered from scheduling, command line, REST API, URL, email etc. Everything happens headlessly in the background without seeing any web browser, so you can continue to use the computer or server uninterrupted. Running on a visible web browser is also supported, using Firefox and SlimerJS (see firefox option below).
+The flow can be triggered from scheduling, command line, URL, REST API, email etc. Everything happens headlessly in the background without seeing any web browser, so you can continue using the computer or server uninterrupted. Running on a visible web browser is also supported, using Firefox and SlimerJS (see firefox option below).
 
 ```
 https://www.typeform.com
@@ -21,30 +21,30 @@ click action results tooltip
 click section_results
 download https://admin.typeform.com/form/2592751/analyze/csv to report.csv
 ```
-If you already know JavaScript coding and want to be more expressive, you can even use JavaScript directly in the flow. If not, you will still enjoy optional features like repositories to store your reusable objects, datatables for batch automation, and a Chrome extension which generates automation flows by learning from your actions.
+If you know JavaScript coding and want to be more expressive, you can even use JavaScript directly in the flow. If not, you will still enjoy powerful features like repositories to store your reusable objects, datatables for batch automation, and a Chrome extension which creates automation flows by learning from your actions.
 
 # Set Up
 1. install CasperJS (navigation/testing for PhantomJS) - http://casperjs.org
 2. install PhantomJS (headless scriptable web browser) - http://phantomjs.org
-3. install TA.Gui (insanely easy lightning fast automation tool) - https://git.io/vMCTZ
+3. install TA.Gui (friendly lightning fast automation tool) - https://git.io/vMCTZ
 
-Optional - configure browser settings in tagui_config.txt or leave as default
+Optional - configure web browser settings in tagui_config.txt or leave as default
 
 # To Use
 ```
 ./tagui flow_filename option(s)
 ```
-- Automation flow filename extension can be no extension, .gui or .txt
+- Automation flow filename can have no extension, .gui or .txt file extension
 - Objects, keywords, datatables can be defined in flow_filename.csv (optional)
 
 Option|Purpose
 :----:|:------
-firefox|run on visible Firefox browser (need to install Firefox, and SlimerJS - https://slimerjs.org)
-report|generate a web report for easy sharing of run results (default is only text log file)
+firefox|run on visible Firefox browser (first install Firefox, and SlimerJS - https://slimerjs.org)
+report|generate a web report for easy sharing of run results (default is only a text log file)
 debug|show run-time backend messages from PhantomJS for detailed tracing and logging
 test|professional testing using [CasperJS assertions](http://docs.casperjs.org/en/latest/modules/tester.html); support TA.Gui XPath tx('selector')
 
-To schedule an automation flow in crontab, eg at 8am daily
+To schedule an automation flow in crontab, for example at 8am daily
 ```
 0 8 * * * /full_path_on_your_server/tagui flow_filename option(s)
 ```
