@@ -131,17 +131,17 @@ size|10000|1000|100000
 direction|BUY|SELL|BUY
 
 ### REST API (for developers)
-Automation flows can be triggered via REST API. TA.Gui has an API service and runner for managing a queue of incoming requests via API. To setup, add a crontab entry on your server with the desired frequency to check and process incoming service requests. For example, the following job will check every hour and run pending flows in the queue.
+Automation flows can be triggered via REST API. TA.Gui has an API service and runner for managing a queue of incoming requests via API. To setup, add a crontab entry on your server with the desired frequency to check and process incoming service requests. For example, the following job will check every 15 minutes and run pending flows in the queue.
 ```
-0 * * * * /full_path_on_your_server/tagui_crontab
+0,15,30,45 * * * * /full_path_on_your_server/tagui_crontab
 ```
 
-To call an automation flow from your application or web browser, use below API syntax. Automation flows can also be triggered from emails using the API. For email integration, [install TA.Mail](https://github.com/tebelorg/TA.Mail) (mailbot to act on incoming emails). Using this integration, emails can also be sent directly from your flow with a single line.
+To call an automation flow from your application or web browser, use below API syntax. Automation flows can also be triggered from emails using the API. For email integration, [install TA.Mail](https://github.com/tebelorg/TA.Mail), an open-source mailbot to act on incoming emails or perform mass emailing.
 ```
 your_website_url/tagui_service.php?SETTINGS="flow_filename option(s)"
 ```
 
-For making outgoing API calls in your automation flow, for example sending emails or feeding data somewhere, use the api step followed by full URL (including parameters) of the API call. Response from the API will be printed to output.
+For making outgoing API calls in your automation flow, for example sending emails or feeding data somewhere, use the api step followed by full URL (including parameters) of the API call. Response from the API will be printed to output. For example with TA.Mail, emails can be sent directly from your flow with a single line.
 
 API File Reference |Purpose
 :-------------|:------
