@@ -74,6 +74,9 @@ for ($repo_check = 1; $repo_check <= $GLOBALS['repo_count']; $repo_check++) $scr
 str_replace("`".$GLOBALS['repo_data'][$repo_check][0]."`",$GLOBALS['repo_data'][$repo_check][$data_set],$script_line);
 if (strpos($script_line,'`')!==false) echo "ERROR - ".current_line()." no repository data for ".$script_line."\n";}}
 
+// trim and check again after replacing definitions from repository
+$script_line = trim($script_line); if ($script_line=="") return "";
+
 // check intent of step for interpretation into casperjs code
 switch (get_intent($script_line)) {
 case "url": return url_intent($script_line); break;
