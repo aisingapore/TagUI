@@ -13,6 +13,9 @@ $rep_file = fopen($script . '.html','w') or die("ERROR - cannot open " . $script
 // add html <br> tag to newline for proper line breaks
 $log_content = file_get_contents($script . '.log'); $log_content = str_replace("\n","<br>\n",$log_content);
 
+// remove ansi color codes (appear as garbage in html) using regex
+$log_content = preg_replace("/\x{001B}\\[[;\\d]*m/u","",$log_content);
+
 // change automation start message to accent color
 $start_pos = strpos($log_content,"START - automation started - "); $end_pos = strpos($log_content,"<br>",$start_pos);
 $log_content = substr($log_content,0,$start_pos) . "<span style=\"color: rgb(30,130,201);\">" . 
