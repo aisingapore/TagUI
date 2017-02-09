@@ -1,8 +1,17 @@
 #!/bin/bash
 # SCRIPT FOR RUNNING TA.GUI FRAMEWORK ~ TEBEL.ORG #
 
+# check whether specified automation flow file exists
+if ! [ -f "$1" ]; then echo "ERROR - cannot find $1"; exit; fi
+
+# get and set absolute filename of automation flow file
+set -- "$(cd "$(dirname "$1")"; pwd)/$(basename "$1")" "${@:2}"
+
+# save location of initial directory where tagui is called
+initial_dir=`pwd`
+
 # change current directory to TA.GUI directory
-cd `dirname $0`
+cd "`dirname "$0"`"
 
 # set local path to casperjs and environment path to phantomjs
 CASPERJS_EXECUTABLE="/usr/local/bin/casperjs"
@@ -50,13 +59,14 @@ if [ "$7" = "report" ]; then set -- "${@:1:6}" "${@:8}"; tagui_html_report=true;
 if [ "$8" = "report" ]; then set -- "${@:1:7}" "${@:9}"; tagui_html_report=true; fi
 if [ "$9" = "report" ]; then set -- "${@:1:8}"; tagui_html_report=true; fi
 
-# concatenate all parameters to fix issue when calling casperjs test
-params="$1".js" ""$2"" ""$3"" ""$4"" ""$5"" ""$6"" ""$7"" ""$8"" ""$9"
+# concatenate parameters in order to fix issue when calling casperjs test
+# $1 left out - filenames with spaces have issue when casperjs $params
+params="$2"" ""$3"" ""$4"" ""$5"" ""$6"" ""$7"" ""$8"" ""$9"
 
 # initialise log file and set permissions to protect user data
 echo -n "" > "$1".log; chmod 600 "$1".log
 
-# check if api call is made in automation flow to set appropriate setting for phantomjs to work
+# check if api call is made in automation flow file to set appropriate setting for phantomjs to work
 api=""; if [ -f "$1" ]; then if grep -iq "api http" "$1"; then api=" --web-security=false"; fi; fi
 
 # check datatable csv file for batch automation
@@ -75,9 +85,13 @@ do export tagui_data_set=$tagui_data_set
 # parse automation flow file and check for initial parse error before calling casperjs
 php -q tagui_parse.php "$1" | tee -a "$1".log
 if [ -s "$1".log ] && [ "$tagui_data_set" -eq 1 ]
-then echo "ERROR - automation aborted due to above" | tee -a "$1".log; break
-elif [ "$tagui_test_mode" == false ]; then $CASPERJS_EXECUTABLE $params$api | tee -a "$1".log
-else export tagui_test_mode=true; $CASPERJS_EXECUTABLE test $params$api --xunit="$1".xml | tee -a "$1".log; fi; done
+then echo "ERROR - automation aborted due to above" | tee -a "$1".log; cd "$initial_dir"; break
+elif [ "$tagui_test_mode" == false ]; then $CASPERJS_EXECUTABLE "$1".js $params$api | tee -a "$1".log
+else export tagui_test_mode=true; $CASPERJS_EXECUTABLE test "$1".js $params$api --xunit="$1".xml | tee -a "$1".log
+fi; done
 
 # check report option to generate html automation log
 if [ -s "$1".log ] && [ "$tagui_html_report" == true ]; then php -q tagui_report.php "$1"; fi
+
+# change back to initial directory where tagui is called
+cd "$initial_dir"
