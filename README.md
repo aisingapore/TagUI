@@ -130,7 +130,20 @@ currency-pair|USDSGD|USDJPY|EURUSD
 size|10000|1000|100000
 direction|BUY|SELL|BUY
 
-### REST API (for developers)
+### TESTING (for QA folks and test automation engineers)
+The step check allows simple testing of conditions. For professional test automation, CasperJS comes with a tester module for unit and functional testing purpose. To use it, run TA.Gui with the test option. CasperJS test scripts are inherently different in structure and syntax from normal automation scripts. With the test option, TA.Gui automatically converts your automation flow to work as a test script and output a XUnit XML file, which is compatible with continuous integration tools such as Jenkins.
+
+This allows you to reuse the same flow for testing or automation by running it with or without the test option. Below are examples of CasperJS test assertions written in JavaScript code that can be used directly in your automation flow (after navigating and taking certain actions using various flow steps etc).
+```
+test.assertTextExists('About Tebel.Automation','Check for About Tebel.Automation text');
+test.assertSelectorHasText(tx('header'), 'interface automation','Check for phrase in header element');
+```
+
+For the list of expressive test assertions built into CasperJS, [click here](http://docs.casperjs.org/en/latest/modules/tester.html). To know more about CasperJS testing framework, [click here](http://docs.casperjs.org/en/latest/testing.html). As TA.Gui allows you to write JavaScript code directly within the automation flow, advanced testing or coding techniques that can be implemented in CasperJS should be able to be work directly within your automation flow.
+
+TA.Gui recognizes most JavaScript code. In the rare event you get an error saying that it cannot understand the step for your JavaScript line, kindly raise an issue or feel free to modify the source code. Alternatively, you can use the undocumented step js to explicitly declare that whatever follows on that line is JavaScript code.
+
+### REST API (for developers and curious users amongst you)
 Automation flows can be triggered via REST API. TA.Gui has an API service and runner for managing a queue of incoming requests via API. To setup, add a crontab entry on your server with the desired frequency to check and process incoming service requests. For example, the following job will check every 15 minutes and run pending flows in the queue.
 ```
 0,15,30,45 * * * * /full_path_on_your_server/tagui_crontab
@@ -141,7 +154,7 @@ To call an automation flow from your application or web browser, use below API s
 your_website_url/tagui_service.php?SETTINGS="flow_filename option(s)"
 ```
 
-For making outgoing API calls in your automation flow, for example sending emails or feeding data somewhere, use the api step followed by full URL (including parameters) of the API call. Response from the API will be printed to output. For example with TA.Mail, emails can be sent directly from your flow with a single line.
+For making outgoing API calls in your automation flow, to send emails or feed data somewhere etc, use the api step followed by full URL (including parameters) of the API call. Response from the API will be printed to output. For example using TA.Mail, emails can be sent directly from your flow with a single line.
 
 API File Reference |Purpose
 :-------------|:------
