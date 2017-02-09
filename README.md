@@ -4,7 +4,7 @@ TA.Gui is a tool for non-developers and business users to automate web apps
 ![Sample Automation](https://github.com/tebelorg/TA.Gui/raw/master/sample.png)
 
 # Why This
-Automate repetitive parts of your work - use cases include data acquisition, process and test automations. TA.Gui is open-source software released under the MIT license, that means you can freely use, modify or share the software.
+Automate repetitive parts of your work - use cases include data acquisition, process and test automations of web apps. TA.Gui is open-source software released under the MIT license, that means you can freely use, modify or share it.
 
 TA.Gui converts your intentions in simple natural language into lines of working JavaScript code for CasperJS & PhantomJS to cast their web automation magic. For example, TA.Gui will instantly convert the automation flow below into 120+ lines of JavaScript code and perform the sequence of steps to download a Typeform report automatically.
 
