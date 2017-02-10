@@ -21,14 +21,14 @@ click action results tooltip
 click section_results
 download https://admin.typeform.com/form/2592751/analyze/csv to report.csv
 ```
-If you know JavaScript coding and want to be more expressive, you can even use JavaScript directly in the flow. If not, you will still enjoy friendly but powerful features like repositories to store your reusable objects, datatables for batch automation, and a Chrome extension which creates automation flows by learning from your actions.
+If you know JavaScript coding and want to be more expressive, you can even use JavaScript directly in the flow. If not, you will still enjoy friendly but powerful features such as repositories to store your reusable objects, datatables for batch automation, and a Chrome extension which creates automation flows by learning from your actions.
 
 # Set Up
 1. install CasperJS (navigation/testing for PhantomJS) - http://casperjs.org
 2. install PhantomJS (headless scriptable web browser) - http://phantomjs.org
 3. install TA.Gui (friendly lightning fast automation tool) - https://git.io/vMCTZ
 
-Optional - configure web browser settings in tagui_config.txt (browser resolution, default timeout of 10s etc)
+Optional - configure web browser settings in tagui_config.txt (browser resolution, step timeout of 10s etc)
 
 # To Use
 ```
@@ -114,8 +114,7 @@ create account|btn btn--green btn-xl signup-btn
 type email|type \`email\` as user@gmail.com
   
 ### DATATABLES
-- Datatables extend the power of repositories to manage batch automation
-- Save datatable file with same name as your flow filename and with .csv behind
+- Datatables extend the power of repositories files to manage batch automation
 - Datatable has 2 or more columns, for example below (headers up to you to name)
 - Data-centric approach with rows representing data fields (usually row = test case)
 - TA.Gui loops through each column to automate using values from different datasets
@@ -131,9 +130,9 @@ size|10000|1000|100000
 direction|BUY|SELL|BUY
 
 ### TESTING (for QA folks and test automation engineers)
-The step check allows simple testing of conditions. For professional test automation, CasperJS comes with a tester module for unit and functional testing purpose. To use it, run TA.Gui with the test option. CasperJS test scripts are inherently different in structure and syntax from normal automation scripts. With the test option, TA.Gui automatically converts your automation flow to work as a test script and output a XUnit XML file, which is compatible with continuous integration tools such as Jenkins.
+The step check allows simple testing of conditions. For professional test automation, CasperJS comes with a tester module for unit and functional testing purpose. To use it, run TA.Gui with the test option. CasperJS test scripts are inherently different in structure and syntax from its usual automation scripts. With the test option, TA.Gui automatically converts your automation flow to work as a test script and output a XUnit XML file, which is compatible with continuous integration tools such as Jenkins. (running together with the report option outputs a web report of the test execution for easy sharing of results)
 
-This allows you to reuse the same flow for testing or automation by running it with or without the test option. Below are examples of CasperJS test assertions written in JavaScript code that can be used directly in your automation flow (after navigating and taking certain actions using various flow steps etc).
+TA.Gui allows you to reuse the same flow for testing or automation by running it with or without the test option. Below are examples of CasperJS test assertions written in JavaScript code that can be used directly in your automation flow (after navigating and taking desired actions using usual flow steps etc).
 ```
 test.assertTextExists('About Tebel.Automation','Check for About Tebel.Automation text');
 test.assertSelectorHasText(tx('header'), 'interface automation','Check for phrase in header element');
@@ -141,9 +140,9 @@ test.assertSelectorHasText(tx('header'), 'interface automation','Check for phras
 
 For the list of expressive test assertions built into CasperJS, [click here](http://docs.casperjs.org/en/latest/modules/tester.html). To know more about CasperJS testing framework, [click here](http://docs.casperjs.org/en/latest/testing.html). As TA.Gui allows you to write JavaScript code directly within the automation flow, advanced testing or coding techniques that can be implemented in CasperJS should be able to be work directly within your automation flow.
 
-TA.Gui recognizes most JavaScript code. In the rare event you get an error saying that it cannot understand the step for your JavaScript line, kindly raise an issue or feel free to modify the source code. Alternatively, you can use the undocumented step js to explicitly declare that whatever follows on that line is JavaScript code.
+TA.Gui recognizes most JavaScript code. In the rare event you get an error saying that it cannot understand the step for your JavaScript line, kindly raise an issue or feel free to modify the source code (tagui_parse.php is where all the interpretation of natural language to CasperJS JavaScript code takes place). Alternatively, you can use the undocumented step js to explicitly declare that whatever follows on that line is JavaScript code.
 
-### REST API (for developers and curious users amongst you)
+### REST API (for developers and curious ones amongst you)
 Automation flows can be triggered via REST API. TA.Gui has an API service and runner for managing a queue of incoming requests via API. To setup, add a crontab entry on your server with the desired frequency to check and process incoming service requests. For example, the following job will check every 15 minutes and run pending flows in the queue.
 ```
 0,15,30,45 * * * * /full_path_on_your_server/tagui_crontab
