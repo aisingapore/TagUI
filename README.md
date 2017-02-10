@@ -8,7 +8,7 @@ Automate repetitive parts of your work - use cases include data acquisition, pro
 
 TA.Gui converts your intentions in simple natural language into lines of working JavaScript code for CasperJS & PhantomJS to cast their web automation magic. For example, TA.Gui will instantly convert the automation flow below into 120+ lines of JavaScript code and perform the sequence of steps to download a Typeform report automatically.
 
-The automation flow can be triggered from scheduling, command line, URL, REST API, email etc. Everything happens headlessly in the background without seeing any web browser, so you can continue using the computer or server uninterrupted. Running on a visible web browser is supported, using Firefox and SlimerJS (see firefox option below).
+The automation flow can be triggered from scheduling, command line, URL, REST API, email etc. Everything happens headlessly in the background without seeing any web browser, so you can continue using the computer or server uninterrupted. Running on a visible web browser is supported, using Firefox and SlimerJS (see firefox option below). Outgoing API calls can be made with a single line to integrate with other downstream applications.
 
 ```
 https://www.typeform.com
