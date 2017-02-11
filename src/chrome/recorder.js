@@ -571,7 +571,7 @@ TestRecorder.ContextMenu.prototype.build = function(t, x, y) {
 //        menu.appendChild(this.item("Screenshot", this.doScreenShot));
 //    }
 
-    menu.appendChild(this.item("TA.Gui Web Automation", this.cancel));
+    menu.appendChild(this.item("TA.Gui Automation", this.cancel));
 
     b.insertBefore(menu, b.firstChild);
     return menu;
