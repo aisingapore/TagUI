@@ -1,7 +1,7 @@
 {
     "manifest_version": 2,
     "name": "TA.Gui Web Automation", "version": "0.6.0",
-    "description": "Create TA.Gui automation flows by recording your actions",
+    "description": "Create automation flows by recording your actions",
     "homepage_url": "https://github.com/tebelorg/TA.Gui",
     "browser_action": {
         "default_title": "TA.Gui Web Automation",
