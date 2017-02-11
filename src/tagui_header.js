@@ -28,9 +28,15 @@ function snap_image() {snap_image_count++; return ('image' + snap_image_count.to
 function sleep(delay_in_ms) {var start_time = new Date().getTime();
 for (var sleep_count = 0; sleep_count < 1e7; sleep_count++)
 {if ((new Date().getTime() - start_time) > delay_in_ms) break;}}
+
+// for checking if selector is css selector
+function is_css_selector(selector) {
+return false;}
  
 // finding best match for given locator
 function tx(locator) {
+// check if locator is css selector before going to xpath check sequence
+if (is_css_selector(locator)) return locator;
 if (casper.exists(x(locator))) return x(locator);
 if (casper.exists(x('//*[contains(@id,"'+locator+'")]'))) return x('//*[contains(@id,"'+locator+'")]');
 if (casper.exists(x('//*[contains(@name,"'+locator+'")]'))) return x('//*[contains(@name,"'+locator+'")]');
@@ -41,6 +47,8 @@ else return x('/html');}
 
 // checking if given locator is found
 function check_tx(locator) {
+// check if locator is css selector before going to xpath check sequence
+if (is_css_selector(locator)) {if (casper.exists(locator)) return true; else return false;}
 if (casper.exists(x(locator))) return true;
 if (casper.exists(x('//*[contains(@id,"'+locator+'")]'))) return true;
 if (casper.exists(x('//*[contains(@name,"'+locator+'")]'))) return true;
