@@ -134,9 +134,9 @@ size|10000|1000|100000
 direction|BUY|SELL|BUY
 
 ### TESTING (for QA folks and test automation engineers)
-The step check allows simple testing of conditions. For professional test automation, CasperJS comes with a tester module for unit and functional testing purpose. To use advanced testing features, run TA.Gui with the test option.
+The step check allows simple testing of conditions. For professional test automation, CasperJS comes with a tester module for unit and functional testing purpose. To use the advanced testing features, run TA.Gui with the test option.
 
-CasperJS test scripts are inherently different in structure and syntax from its usual automation scripts. With the test option, TA.Gui automatically converts your automation flow to work as a test script and output a XUnit XML file, which is compatible with continuous integration tools such as Jenkins. Running together with the report option outputs a web report of the test execution.
+CasperJS test scripts are inherently different in structure and syntax from its usual automation scripts. With the test option, TA.Gui automatically converts your automation flow to work as a test script and output a XUnit XML file, which is compatible with continuous integration tools such as Jenkins. Running together with the report option outputs a web report of the test execution for easy sharing.
 
 TA.Gui allows you to reuse the same flow for testing or automation by running it with or without the test option. Below are examples of CasperJS test assertions written in JavaScript code that can be used directly in your automation flow (after navigating and taking desired actions using usual flow steps etc).
 ```javascript
@@ -148,8 +148,8 @@ For the list of expressive test assertions built into CasperJS, [click here](htt
 
 TA.Gui recognizes most JavaScript code. In the rare event you get an error saying that it cannot understand the step for your JavaScript line, kindly raise an issue or feel free to modify the source code (tagui_parse.php is where interpretation of natural language to CasperJS JavaScript code takes place). Alternatively, you can use the undocumented step js to explicitly declare that whatever follows on that line is JavaScript code.
 
-### REST API (for developers and curious ones amongst you)
-Besides integrating with other web applications, the API can be extended to integrate with hardware (for eg Arduino or Raspberry Pi) for physical world interactions and machine learning service providers for deep fuzzy thinking capacity. 
+### REST API (for developers and the curious ones)
+Besides integrating with web applications, TA.Gui API can be extended to integrate with hardware (Arduino or Raspberry Pi etc) for physical world interactions or machine learning service providers for fuzzy thinking capacity. 
 
 Automation flows can be triggered via REST API. TA.Gui has an API service and runner for managing a queue of incoming requests via API. To setup, add a crontab entry on your server with the desired frequency to check and process incoming service requests. For example, the following job will check every 15 minutes and run pending flows in the queue.
 ```
