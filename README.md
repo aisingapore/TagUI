@@ -149,7 +149,7 @@ For the list of expressive test assertions built into CasperJS, [click here](htt
 TA.Gui recognizes most JavaScript code. In the rare event you get an error saying that it cannot understand the step for your JavaScript line, kindly raise an issue or feel free to modify the source code (tagui_parse.php is where interpretation of natural language to CasperJS JavaScript code takes place). Alternatively, you can use the undocumented step js to explicitly declare that whatever follows on that line is JavaScript code.
 
 ### REST API (for developers and the curious ones)
-Besides integrating with web applications, TA.Gui API can be extended to integrate with hardware (Arduino or Raspberry Pi etc) for physical world interactions or machine learning service providers for fuzzy thinking capacity. 
+Besides integrating with web applications, TA.Gui API can be extended to integrate with hardware (for example Arduino or Raspberry Pi) for physical world interactions or machine learning service providers for fuzzy decision-making capacity. 
 
 Automation flows can be triggered via REST API. TA.Gui has an API service and runner for managing a queue of incoming requests via API. To setup, add a crontab entry on your server with the desired frequency to check and process incoming service requests. For example, the following job will check every 15 minutes and run pending flows in the queue.
 ```
