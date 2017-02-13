@@ -42,7 +42,7 @@ Option|Purpose
 firefox|run on visible Firefox browser (first install Firefox, and SlimerJS - https://slimerjs.org)
 report|generate a web report for easy sharing of run results (default is only a text log file)
 debug|show run-time backend messages from PhantomJS for detailed tracing and logging
-test|professional testing using [CasperJS assertions](http://docs.casperjs.org/en/latest/modules/tester.html); support TA.Gui XPath tx('selector')
+test|professional testing using [CasperJS assertions](http://docs.casperjs.org/en/latest/modules/tester.html); TA.Gui XPath tx('selector') usable
 
 To schedule an automation flow in crontab, for example at 8am daily
 ```
@@ -66,7 +66,7 @@ Enhancements|feel free to review and suggest new features
 # Cheat Sheet
 ### STEPS
 - [XPath method](http://www.w3schools.com/xml/xpath_intro.asp) is used to check for elements on webpage (robust for identification)
-- TA.Gui checks XPath automatically in this order - full-xpath, id, name, class, title, text()
+- TA.Gui auto-checks XPath in this order - full-xpath, full-css, id, name, class, title, text()
 
 Step|Parameters (separator in bold)|Purpose
 :---|:-----------------------------|:------
