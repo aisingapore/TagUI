@@ -8,8 +8,6 @@ Automate repetitive parts of your work - use cases include data acquisition, pro
 
 TA.Gui converts your intentions in simple natural language into lines of working JavaScript code for CasperJS & PhantomJS to cast their web automation magic. For example, TA.Gui will instantly convert the automation flow below into 120+ lines of JavaScript code and perform the sequence of steps to download a Typeform report automatically.
 
-The automation flow can be triggered from scheduling, command line, URL, REST API, email etc. Everything happens headlessly in the background without seeing any web browser, so you can continue using the computer or server uninterrupted. Running on a visible web browser is supported, using Firefox and SlimerJS (see firefox option below). Outgoing API calls can be made with a single line to integrate with other downstream applications.
-
 ```
 https://www.typeform.com
 click login
@@ -21,7 +19,12 @@ click action results tooltip
 click section_results
 download https://admin.typeform.com/form/2592751/analyze/csv to report.csv
 ```
+
+The automation flow can be triggered from scheduling, command line, URL, REST API, email etc. Everything happens headlessly in the background without seeing any web browser, so you can continue using the computer or server uninterrupted. Running on a visible web browser is supported, using Firefox and SlimerJS (see firefox option below). Outgoing API calls can be made with a single line to integrate with other downstream applications.
+
 If you know JavaScript coding and want to be more expressive, you can even use JavaScript directly in the flow. If not, you will still enjoy friendly but powerful features such as repositories to store your reusable objects, datatables for batch automation, and a Chrome extension which creates automation flows by recording your actions.
+
+Originally developed by a test automation engineer to avoid writing code to automate web-based interactions.
 
 # Set Up
 1. install CasperJS (navigation/testing for PhantomJS) - http://casperjs.org
@@ -51,7 +54,7 @@ To schedule an automation flow in crontab, for example at 8am daily
 
 Prior to public release, to use TA.Gui Chrome extension for recording automation flows, type chrome://extensions in Google Chrome, then drag and drop TA.Gui chrome folder into the browser. TA.Gui Chrome extension is based on [Resurrectio tool](https://github.com/ebrehault/resurrectio) and records steps such as page navigation, clicking web elements and entering information.
 
-Flowchart of what happens behind the scenes when TA.Gui runs an automation flow
+Flowchart of what happens behind the scenes when you run an automation flow
 
 ![TA.Gui Flowchart](https://raw.githubusercontent.com/tebelorg/TA.Gui/master/src/media/flowchart.png)
 
