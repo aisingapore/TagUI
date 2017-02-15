@@ -13,7 +13,7 @@ Automate repetitive parts of your work - use cases include data acquisition, pro
 - repositories for reusable objects
 - datatables for batch automation
 - auto-wait for element to interact
-- dynamic XPath/CSS element selectors
+- dynamic XPath/CSS element selector
 - run by schedule, command line, REST API
 - support outgoing API calls to webservices
 - cross-platform (macOS/Linux; Windows soon)
