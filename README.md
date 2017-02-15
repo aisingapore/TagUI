@@ -86,9 +86,10 @@ Microsoft Friendly|support running on Microsoft Windows
 Enhancements|feel free to review and suggest new features
 
 # Cheat Sheet
-### STEPS
-- [XPath method](http://www.w3schools.com/xml/xpath_intro.asp) is used to check for elements on webpage (robust for identification)
-- TA.Gui auto-checks XPath in this order - full-xpath, full-css, id, name, class, title, text()
+### STEPS DESCRIPTION
+- TA.Gui auto-waits for a webpage element to appear and interacts with it as soon as it appears
+- Element identifier can be auto-recorded using TA.Gui Chrome extension, or found from web browser
+- TA.Gui auto-checks [identifier XPath](http://www.w3schools.com/xml/xpath_intro.asp) in this order - full-xpath, full-css, id, name, class, title, text()
 
 Step|Parameters (separator in bold)|Purpose
 :---|:-----------------------------|:------
@@ -109,7 +110,7 @@ frame|frame name **&#124;** subframe name if any|next step in frame/subframe
 api|full url (including parameters) of api call|call api and print response
 //|user comments (ignored during execution)|add user comments
 
-### CONDITIONS
+### CONDITIONS EXAMPLES
 - Conditions can be expressed in natural language (optional brackets) or JavaScript
 - JavaScript can be used (CasperJS's context) - if/for/while applies to the next step
 
