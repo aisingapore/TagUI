@@ -1,7 +1,7 @@
 # TA.Gui
 TA.Gui is a tool for non-developers and business users to automate web apps
 
-![Sample Automation](https://raw.githubusercontent.com/tebelorg/TA.Gui/master/src/media/sample.png)
+![Sample Automation Flow](https://raw.githubusercontent.com/tebelorg/TA.Gui/master/src/media/sample.gif)
 
 # Why This
 Automate repetitive parts of your work - use cases include data acquisition, process and test automations of web apps. TA.Gui is open-source software released under the MIT license, that means you can freely use, modify or share it.
