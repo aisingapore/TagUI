@@ -49,6 +49,7 @@ TA.Gui is in beta version (v0.6.0) and runs on macOS/Linux (coming to Windows so
 Optional - configure web browser settings in tagui_config.txt (browser resolution, step timeout of 10s etc)
 
 # To Use
+### COMMAND LINE
 ```
 ./tagui flow_filename option(s)
 ```
@@ -62,14 +63,17 @@ report|generate a web report for easy sharing of run results (default is only a 
 debug|show run-time backend messages from PhantomJS for detailed tracing and logging
 test|professional testing using [CasperJS assertions](http://docs.casperjs.org/en/latest/modules/tester.html); TA.Gui XPath tx('selector') usable
 
+### BY SCHEDULING
 To schedule an automation flow in crontab, for example at 8am daily
 ```
 0 8 * * * /full_path_on_your_server/tagui flow_filename option(s)
 ```
 
+### CHROME EXTENSION
 Prior to public release, to use TA.Gui Chrome extension for recording automation flows, type chrome://extensions in Google Chrome, then drag and drop TA.Gui chrome folder into the browser. TA.Gui Chrome extension is based on [Resurrectio tool](https://github.com/ebrehault/resurrectio) and records steps such as page navigation, clicking web elements and entering information.
 
-Flowchart of what happens behind the scenes when you run an automation flow
+### FLOWCHART
+What happens behind the scenes when you run an automation flow
 
 ![TA.Gui Flowchart](https://raw.githubusercontent.com/tebelorg/TA.Gui/master/src/media/flowchart.png)
 
