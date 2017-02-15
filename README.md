@@ -18,7 +18,7 @@ Automate repetitive parts of your work - use cases include data acquisition, pro
 - support outgoing API calls to webservices
 - cross-platform (macOS/Linux; Windows soon)
 
-### OVERVIEW
+### HOW IT WORKS
 TA.Gui converts your intentions in simple natural language into lines of working JavaScript code for CasperJS & PhantomJS to cast their web automation magic. For example, TA.Gui will instantly convert the automation flow below into 120+ lines of JavaScript code and perform the sequence of steps to download a Typeform report automatically.
 
 ```
