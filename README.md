@@ -6,6 +6,19 @@ TA.Gui is a tool for non-developers and business users to automate web apps
 # Why This
 Automate repetitive parts of your work - use cases include data acquisition, process and test automations of web apps. TA.Gui is open-source software released under the MIT license, that means you can freely use, modify or share it.
 
+### FEATURES
+- natural language with JavaScript support
+- Chrome extension for recording steps
+- headless (invisible) and visible mode
+- repositories for reusable objects
+- datatables for batch automation
+- auto-wait for element to interact
+- dynamic XPath/CSS element selectors
+- run by schedule, command line, REST API
+- support outgoing API calls to webservices
+- cross-platform (macOS/Linux; Windows soon)
+
+### OVERVIEW
 TA.Gui converts your intentions in simple natural language into lines of working JavaScript code for CasperJS & PhantomJS to cast their web automation magic. For example, TA.Gui will instantly convert the automation flow below into 120+ lines of JavaScript code and perform the sequence of steps to download a Typeform report automatically.
 
 ```
@@ -27,7 +40,7 @@ If you know JavaScript coding and want to be more expressive, you can even use J
 Originally developed by a test automation engineer to avoid writing code to automate web-based interactions.
 
 # Set Up
-TA.Gui is in beta version (v0.6.0) and runs on macOS/Linux (to support Windows later)
+TA.Gui is in beta version (v0.6.0) and runs on macOS/Linux (coming to Windows soon)
 
 1. install CasperJS (navigation/testing for PhantomJS) - http://casperjs.org
 2. install PhantomJS (headless scriptable web browser) - http://phantomjs.org
