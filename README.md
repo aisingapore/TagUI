@@ -27,6 +27,8 @@ If you know JavaScript coding and want to be more expressive, you can even use J
 Originally developed by a test automation engineer to avoid writing code to automate web-based interactions.
 
 # Set Up
+TA.Gui is in beta version (v0.6.0) and runs on macOS/Linux (to support Windows later)
+
 1. install CasperJS (navigation/testing for PhantomJS) - http://casperjs.org
 2. install PhantomJS (headless scriptable web browser) - http://phantomjs.org
 3. install TA.Gui (friendly lightning fast automation tool) - https://git.io/vMCTZ
