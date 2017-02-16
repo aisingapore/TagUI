@@ -173,10 +173,12 @@ For the list of expressive test assertions built into CasperJS, [click here](htt
 
 TA.Gui recognizes most JavaScript code. In the rare event you get an error saying that it cannot understand the step for your JavaScript line, kindly raise an issue or feel free to modify the source code (tagui_parse.php is where interpretation of natural language to CasperJS JavaScript code takes place). Alternatively, you can use the undocumented step js to explicitly declare that whatever follows on that line is JavaScript code.
 
-### REST API (for developers and the curious ones)
-Besides integrating with web applications, TA.Gui API can be extended to integrate with hardware (for example Arduino or Raspberry Pi) for physical world interactions or machine learning service providers for fuzzy decision-making capacity. 
+### TA.GUI API (for developers and the curious ones)
+Besides integrating with web applications, TA.Gui can be extended to integrate with hardware (for example Arduino or Raspberry Pi) for physical world interactions or machine learning service providers for fuzzy decision-making capacity.
 
-Automation flows can be triggered via REST API. TA.Gui has an API service and runner for managing a queue of incoming requests via API. To setup, add a crontab entry on your server with the desired frequency to check and process incoming service requests. For example, the following job will check every 15 minutes and run pending flows in the queue.
+For making outgoing API calls in your automation flow, to send emails or feed data somewhere etc, use the api step followed by full URL (including parameters) of the API call. Response from the API will be printed to output. For example using TA.Mail, emails can be sent directly from your flow with a single line.
+
+Automation flows can also be triggered via REST API. TA.Gui has an API service and runner for managing a queue of incoming requests via API. To setup, add a crontab entry on your server with the desired frequency to check and process incoming service requests. For example, the following job will check every 15 minutes and run pending flows in the queue.
 ```
 0,15,30,45 * * * * /full_path_on_your_server/tagui_crontab
 ```
@@ -186,9 +188,7 @@ To call an automation flow from your application or web browser, use below API s
 your_website_url/tagui_service.php?SETTINGS="flow_filename option(s)"
 ```
 
-For making outgoing API calls in your automation flow, to send emails or feed data somewhere etc, use the api step followed by full URL (including parameters) of the API call. Response from the API will be printed to output. For example using TA.Mail, emails can be sent directly from your flow with a single line.
-
-API File Reference |Purpose
+File Reference |Purpose
 :-------------|:------
 tagui_service.php|receiving service requests into queue
 tagui_runner.php|retrieving service requests from queue
