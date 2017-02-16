@@ -190,9 +190,15 @@ For making outgoing API calls in your automation flow, to send emails or feed da
 
 File Reference |Purpose
 :--------------|:------
-tagui_service.php|receiving service requests into queue
+tagui|main runner for TA.Gui automation
+tagui_config.txt|web browser settings to be used
+tagui_crontab|executing service request batch from crontab
+tagui_footer.js|footer template for CasperJS JavaScript
+tagui_header.js|header template for CasperJS JavaScript
+tagui_parse.php|interpreting natural language to code
+tagui_report.php|to generate html report from text log
 tagui_runner.php|retrieving service requests from queue
-tagui_crontab|managing execution from crontab schedule
+tagui_service.php|receiving service requests into queue
 tagui_service.in|log to track incoming service requests
 tagui_service.out|log to track processed service requests
 tagui_service.log|log to track service requests history
