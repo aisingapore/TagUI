@@ -186,15 +186,15 @@ your_website_url/tagui_service.php?SETTINGS="flow_filename option(s)"
 
 Besides integrating with web applications, TA.Gui can be extended to integrate with hardware (for example Arduino or Raspberry Pi) for physical world interactions or machine learning service providers for fuzzy decision-making capacity.
 
-For making outgoing API calls in your automation flow, to send emails or feed data somewhere etc, use the api step followed by full URL (including parameters) of the API call. Response from the API will be printed to output. For example using TA.Mail, emails can be sent directly from your flow with a single line.
+For making outgoing API calls in your automation flow, to feed data somewhere or send emails etc, use the api step followed by full URL (including parameters) of the API call. Response from the API will be printed to output. For example using TA.Mail, emails can be sent directly from your flow with a single line.
 
 File Reference |Purpose
 :--------------|:------
 tagui|main runner for TA.Gui automation
-tagui_config.txt|web browser settings to be used
+tagui_config.txt|web browser settings used for automation
 tagui_crontab|executing service request batch from crontab
-tagui_footer.js|footer template for CasperJS JavaScript
-tagui_header.js|header template for CasperJS JavaScript
+tagui_footer.js|footer template for CasperJS code
+tagui_header.js|header template for CasperJS code
 tagui_parse.php|interpreting natural language to code
 tagui_report.php|to generate html report from text log
 tagui_runner.php|retrieving service requests from queue
