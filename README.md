@@ -192,7 +192,7 @@ File Reference |Purpose
 :--------------|:------
 tagui|main runner for TA.Gui automation
 tagui_config.txt|web browser settings used for automation
-tagui_crontab|executing service request batch from crontab
+tagui_crontab|running service request batch from crontab
 tagui_footer.js|footer template for CasperJS code
 tagui_header.js|header template for CasperJS code
 tagui_parse.php|interpreting natural language to code
