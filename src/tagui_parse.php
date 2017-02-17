@@ -34,6 +34,9 @@ fwrite($output_file,"var casper = require('casper').create();\n"); // opening li
 while(!feof($config_file)) {fwrite($output_file,fgets($config_file));} fclose($config_file);
 while(!feof($header_file)) {fwrite($output_file,fgets($header_file));} fclose($header_file);
 
+// save flow path in casperjs script to be used by save_text and snap_image
+fwrite($output_file,"var flow_path = '" . dirname($script) . "';\n\n");
+
 // main loop to parse intents in flow file for conversion into javascript code
 while(!feof($input_file)) {fwrite($output_file,parse_intent(fgets($input_file)));} fclose($input_file);
 

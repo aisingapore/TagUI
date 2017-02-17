@@ -18,11 +18,11 @@ function dummy_echo(muted_string) {return;}
 
 // saving text information to file
 function save_text(file_name,info_text) {
-if (!file_name) {save_text_count++; file_name = 'text' + save_text_count.toString() + '.txt';}
+if (!file_name) {save_text_count++; file_name = flow_path + '/' + 'text' + save_text_count.toString() + '.txt';}
 var fs = require('fs'); fs.write(file_name, info_text, 'w');}
 
 // saving snapshots of website to file
-function snap_image() {snap_image_count++; return ('image' + snap_image_count.toString() + '.png');}
+function snap_image() {snap_image_count++; return (flow_path + '/' + 'snap' + snap_image_count.toString() + '.png');}
 
 // adding synchronous suspend capability
 function sleep(delay_in_ms) {var start_time = new Date().getTime();
@@ -86,3 +86,4 @@ function call_api(rest_url) {
 var xhttp = new XMLHttpRequest(); xhttp.open("GET", rest_url, false);
 xhttp.send(); return xhttp.statusText + ' - ' + xhttp.responseText;}
 
+// flow path for save_text and snap_image
