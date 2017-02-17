@@ -240,7 +240,7 @@ $param1 = trim(substr($params,0,strpos($params," to "))); $param2 = trim(substr(
 if ($params == "") echo "ERROR - " . current_line() . " target missing for " . $raw_intent . "\n"; 
 else if (strpos($params," to ")!==false)
 return "{this.echo('".$raw_intent."');".beg_tx($param1).
-	"save_text('".$param2."',this.fetchText(tx('".$param1."')));".end_tx($param1); else
+	"save_text('".abs_file($param2)."',this.fetchText(tx('".$param1."')));".end_tx($param1); else
 return "{this.echo('".$raw_intent."');".beg_tx($params).
 	"save_text('',this.fetchText(tx('" . $params . "')));".end_tx($params);}
 
@@ -249,19 +249,19 @@ $params = trim(substr($raw_intent." ",1+strpos($raw_intent." "," ")));
 $param1 = trim(substr($params,0,strpos($params," to "))); $param2 = trim(substr($params,4+strpos($params," to ")));
 if ($params == "") echo "ERROR - " . current_line() . " variable missing for " . $raw_intent . "\n"; 
 else if (strpos($params," to ")!==false)
-return "{this.echo('".$raw_intent."');\nsave_text('".$param2."',".$param1.");}".end_fi()."\n";
+return "{this.echo('".$raw_intent."');\nsave_text('".abs_file($param2)."',".$param1.");}".end_fi()."\n";
 else return "{this.echo('".$raw_intent."');\nsave_text(''," . $params . ");}".end_fi()."\n";}
 
 function snap_intent($raw_intent) {
 $params = trim(substr($raw_intent." ",1+strpos($raw_intent." "," ")));
 $param1 = trim(substr($params,0,strpos($params," to "))); $param2 = trim(substr($params,4+strpos($params," to ")));
 if ((strtolower($params) == "page") or (strtolower($param1) == "page")) {if (strpos($params," to ")!==false)
-return "{this.echo('".$raw_intent."');\nthis.capture('".$param2."');}".end_fi()."\n";
+return "{this.echo('".$raw_intent."');\nthis.capture('".abs_file($param2)."');}".end_fi()."\n";
 else return "{this.echo('".$raw_intent."');\nthis.capture(snap_image());}".end_fi()."\n";}
 if ($params == "") echo "ERROR - " . current_line() . " target missing for " . $raw_intent . "\n"; 
 else if (strpos($params," to ")!==false)
 return "{this.echo('".$raw_intent."');".beg_tx($param1).
-	"this.captureSelector('".$param2."',tx('".$param1."'));".end_tx($param1); else
+	"this.captureSelector('".abs_file($param2)."',tx('".$param1."'));".end_tx($param1); else
 return "{this.echo('".$raw_intent."');".beg_tx($params).
 	"this.captureSelector(snap_image(),tx('".$params."'));".end_tx($params);}
 
