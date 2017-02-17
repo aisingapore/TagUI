@@ -157,6 +157,12 @@ if ((substr($raw_intent,0,7)=="casper.") or (substr($raw_intent,0,5)=="this.")) 
 if (substr($raw_intent,0,5)=="test.") {$GLOBALS['test_automation']++; return true;}
 if ((substr($raw_intent,0,2)=="//") or (substr($raw_intent,-1)==";")) return true; return false;}
 
+function abs_file($filename) { // helper function to return absolute filename
+if ($filename == "") return ""; $flow_script = $GLOBALS['script']; // get flow filename
+if (substr($filename,0,1)=="/") return $filename; // return absolute filename directly
+// otherwise get path of the flow script and use it to build absolute filename
+$flow_path = dirname($flow_script); return $flow_path . '/' . $filename;}
+
 function beg_tx($locator) { // helper function to return beginning string for handling locators
 return "\ncasper.waitFor(function check() {return check_tx('".$locator."');},\nfunction then() {";}
 
@@ -212,7 +218,7 @@ $params = trim(substr($raw_intent." ",1+strpos($raw_intent." "," ")));
 $param1 = trim(substr($params,0,strpos($params," to "))); $param2 = trim(substr($params,4+strpos($params," to ")));
 if (($param1 == "") or ($param2 == "")) 
 echo "ERROR - " . current_line() . " url/filename missing for " . $raw_intent . "\n"; else
-return "{this.echo('".$raw_intent."');\nthis.download('".$param1."','".$param2."');}".end_fi()."\n";}
+return "{this.echo('".$raw_intent."');\nthis.download('".$param1."','".abs_file($param2)."');}".end_fi()."\n";}
 
 function receive_intent($raw_intent) {
 $params = trim(substr($raw_intent." ",1+strpos($raw_intent." "," ")));
@@ -221,7 +227,7 @@ if (($param1 == "") or ($param2 == ""))
 echo "ERROR - " . current_line() . " resource/filename missing for " . $raw_intent . "\n"; else
 return "{this.echo('".$raw_intent."');\n".
 "casper.on('resource.received', function(resource) {if (resource.stage !== 'end') return;\n".
-"if (resource.url.indexOf('".$param1."') > -1) this.download(resource.url, '".$param2."');});}".end_fi()."\n";}
+"if (resource.url.indexOf('".$param1."') > -1) this.download(resource.url, '".abs_file($param2)."');});}".end_fi()."\n";}
 
 function echo_intent($raw_intent) {
 $params = trim(substr($raw_intent." ",1+strpos($raw_intent." "," ")));
