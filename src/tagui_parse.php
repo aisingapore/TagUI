@@ -214,7 +214,7 @@ function show_intent($raw_intent) {
 $params = trim(substr($raw_intent." ",1+strpos($raw_intent." "," ")));
 if ($params == "") echo "ERROR - " . current_line() . " target missing for " . $raw_intent . "\n"; else
 return "{// nothing to do on this line".beg_tx($params).
-"this.echo('".$raw_intent."' + ' ' + this.fetchText(tx('" . $params . "')));".end_tx($params);}
+"this.echo('".$raw_intent."' + ' - ' + this.fetchText(tx('" . $params . "')));".end_tx($params);}
 
 function down_intent($raw_intent) {
 $params = trim(substr($raw_intent." ",1+strpos($raw_intent." "," ")));
