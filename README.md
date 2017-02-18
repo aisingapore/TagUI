@@ -100,13 +100,13 @@ hover / move|element to hover|move cursor to element
 type / enter|element to type ***as*** text to type|enter element as text
 read / fetch|element to read ***to*** variable name|fetch text to variable
 show / print|element to read |print element text to output
+echo|text (in quotation marks) and variables|print text/variables to output
 download|url to download ***to*** filename to save|download url to file
 receive|url keyword to watch ***to*** filename to save|receive resource to file
-echo|text (in quotation marks) and variables|print text/variables to output
 save|element to read ***to*** optional filename|save text to file
 dump|variable name ***to*** optional filename|save variable to file
 snap|element (page = webpage) ***to*** optional filename|save screenshot to file
-wait|optional time in seconds (default is 5 seconds)|wait for some time
+wait|optional time in seconds (default is 5 seconds)|explicitly wait for some time
 check|condition to check **&#124;** text if true **&#124;** text if false|check condition and print result
 frame|frame name **&#124;** subframe name if any|next step in frame/subframe
 api|full url (including parameters) of api call|call api and print response
