@@ -65,6 +65,8 @@ report|generate a web report for easy sharing of run results (default is only a 
 debug|show run-time backend messages from PhantomJS for detailed tracing and logging
 test|professional testing using [CasperJS assertions](http://docs.casperjs.org/en/latest/modules/tester.html); TA.Gui XPath tx('selector') usable
 
+Tip - [check this](https://docs.slimerjs.org/current/installation.html#using-unstable-version-or-very-old-versions-of-firefox) if you have issue running visible automation using Firefox and SlimerJS
+
 ### BY SCHEDULING
 To schedule an automation flow in crontab, for example at 8am daily
 ```
