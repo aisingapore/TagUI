@@ -94,7 +94,7 @@ Enhancements|feel free to review and suggest new features
 ### STEPS DESCRIPTION
 - TA.Gui auto-waits for a webpage element to appear and interacts with it as soon as it appears
 - Element identifier can be auto-recorded using TA.Gui Chrome extension, or found from web browser
-- TA.Gui auto-selects the identifier provided in this order - full-xpath, full-css, id, name, class, title, text()
+- TA.Gui auto-selects the provided identifier in this order - full-xpath, full-css, id, name, class, title, text()
 
 Step|Parameters (separator in bold)|Purpose
 :---|:-----------------------------|:------
