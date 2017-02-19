@@ -86,6 +86,7 @@ To feedback bugs or suggestions, kindly email support@tebel.org
 
 Feature|Purpose
 :-----:|:------
+Chrome Extension|make it more expressive and powerful
 Microsoft Friendly|support running on Microsoft Windows
 Enhancements|feel free to review and suggest new features
 
