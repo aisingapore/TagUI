@@ -3,7 +3,7 @@ TA.Gui is a tool for non-developers and business users to automate web apps
 
 ![Sample Automation Flow](https://raw.githubusercontent.com/tebelorg/TA.Dump/master/tagui_flow.gif)
 
-Above video shows a sample automation flow to automate mass account registrations (record, edit, play)
+Above video shows a sample automation flow to automate mass account registrations - recording series of steps, editing to wait for a few seconds at the end, playing the automation flow (skip submit step in order not to spam)
 
 # Why This
 Automate repetitive parts of your work - use cases include data acquisition, process and test automations of web apps. TA.Gui is open-source software released under the MIT license, that means you can freely use, modify or share it.
