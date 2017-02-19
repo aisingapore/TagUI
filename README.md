@@ -94,7 +94,7 @@ Enhancements|feel free to review and suggest new features
 ### STEPS DESCRIPTION
 - TA.Gui auto-waits for a webpage element to appear and interacts with it as soon as it appears
 - Element identifier can be auto-recorded using TA.Gui Chrome extension, or found from web browser
-- TA.Gui auto-checks [identifier XPath](http://www.w3schools.com/xml/xpath_intro.asp) in this order - full-xpath, full-css, id, name, class, title, text()
+- TA.Gui auto-selects the identifier provided in this order - full-xpath, full-css, id, name, class, title, text()
 
 Step|Parameters (separator in bold)|Purpose
 :---|:-----------------------------|:------
@@ -182,7 +182,7 @@ Automation flows can also be triggered via REST API. TA.Gui has an API service a
 0,15,30,45 * * * * /full_path_on_your_server/tagui_crontab
 ```
 
-To call an automation flow from your application or web browser, use below API syntax. Automation flows can also be triggered from emails using the API. For email integration, [install TA.Mail](https://github.com/tebelorg/TA.Mail), an open-source mailbot to act on incoming emails or perform mass emailing.
+To call an automation flow from your application or web browser, use below API syntax. Automation flows can also be triggered from emails using the API. For email integration, [install TA.Mail](https://github.com/tebelorg/TA.Mail). Its main job is an open-source mailbot to act on incoming emails or perform mass emailing; it also delivers emails through API as a part-time job.
 ```
 your_website_url/tagui_service.php?SETTINGS="flow_filename option(s)"
 ```
@@ -193,7 +193,7 @@ For making outgoing API calls in your automation flow, to feed data somewhere or
 
 File Reference |Purpose
 :--------------|:------
-tagui|main runner for TA.Gui automation
+tagui|main runner for TA.Gui web automation
 tagui_config.txt|web browser settings used for automation
 tagui_crontab|to run service request batch from crontab
 tagui_footer.js|footer template for CasperJS code
