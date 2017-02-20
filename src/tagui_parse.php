@@ -282,7 +282,7 @@ $param1 = str_replace(" JAVASCRIPT_OR ","||",$param1); // to restore back "||" t
 $param2 = str_replace(" JAVASCRIPT_OR ","||",$param2); $param3 = str_replace(" JAVASCRIPT_OR ","||",$param3);
 if (substr_count($params,"|")!=2) 
 echo "ERROR - " . current_line() . " if/true/false missing for " . $raw_intent . "\n"; else
-return "{if (".$param1.")\nthis.echo(".$param2.");\nelse this.echo(".$param3.");}".end_fi()."\n";}
+return "{".parse_condition("if (".$param1.")")."\nthis.echo(".$param2.");\nelse this.echo(".$param3.");}".end_fi()."\n";}
 
 function test_intent($raw_intent) {
 echo "ERROR - " . current_line() . " use CasperJS tester module to professionally " . $raw_intent . "\n";
@@ -311,30 +311,33 @@ if ($params == "") echo "ERROR - " . current_line() . " statement missing for " 
 else return $params.end_fi()."\n";}
 
 function code_intent($raw_intent) {
-$params = $raw_intent; // natural language handling for conditions 
-if ((substr($params,0,3)=="if ") or (substr($params,0,8)=="else if ")
-or (substr($params,0,4)=="for ") or (substr($params,0,6)=="while ")) {
-$params = str_replace(" more than or equal to "," >= ",$params);
-$params = str_replace(" greater than or equal to "," >= ",$params);
-$params = str_replace(" higher than or equal to "," >= ",$params);
-$params = str_replace(" less than or equal to "," <= ",$params);
-$params = str_replace(" lesser than or equal to "," <= ",$params);
-$params = str_replace(" lower than or equal to "," <= ",$params);
-$params = str_replace(" more than "," > ",$params); $params = str_replace(" greater than "," > ",$params);
-$params = str_replace(" higher than "," > ",$params); $params = str_replace(" less than "," < ",$params);
-$params = str_replace(" lesser than "," < ",$params); $params = str_replace(" lower than "," < ",$params);
-$params = str_replace(" not equal to "," != ",$params); $params = str_replace(" equal to "," == ",$params);
-// $params = str_replace(" not "," ! ",$params); // leaving not out until meaningful to implement
-$params = str_replace(" and ",") && (",$params); $params = str_replace(" or ",") || (",$params);
+$params = parse_condition($raw_intent); return $params.end_fi()."\n";}
+
+function parse_condition($logic) { // natural language handling for conditions 
+if ((substr($logic,0,3)=="if ") or (substr($logic,0,8)=="else if ")
+or (substr($logic,0,4)=="for ") or (substr($logic,0,6)=="while ")) {
+$logic = str_replace(" more than or equal to "," >= ",$logic);
+$logic = str_replace(" greater than or equal to "," >= ",$logic);
+$logic = str_replace(" higher than or equal to "," >= ",$logic);
+$logic = str_replace(" less than or equal to "," <= ",$logic);
+$logic = str_replace(" lesser than or equal to "," <= ",$logic);
+$logic = str_replace(" lower than or equal to "," <= ",$logic);
+$logic = str_replace(" more than "," > ",$logic); $logic = str_replace(" greater than "," > ",$logic);
+$logic = str_replace(" higher than "," > ",$logic); $logic = str_replace(" less than "," < ",$logic);
+$logic = str_replace(" lesser than "," < ",$logic); $logic = str_replace(" lower than "," < ",$logic);
+$logic = str_replace(" not equal to "," != ",$logic); $logic = str_replace(" equal to "," == ",$logic);
+// $logic = str_replace(" not "," ! ",$logic); // leaving not out until meaningful to implement
+$logic = str_replace(" and ",") && (",$logic); $logic = str_replace(" or ",") || (",$logic);
 
 // add simple opening and closing brackets to the condition if not present
-if ((substr($params,0,3)=="if ") and (substr(trim(substr($params,3)),0,1) != "("))
-$params = "if (" . trim(substr($params,3)) . ")";
-if ((substr($params,0,8)=="else if ") and (substr(trim(substr($params,8)),0,1) != "("))
-$params = "else if (" . trim(substr($params,8)) . ")";
-if ((substr($params,0,4)=="for ") and (substr(trim(substr($params,4)),0,1) != "("))
-$params = "for (" . trim(substr($params,4)) . ")";
-if ((substr($params,0,6)=="while ") and (substr(trim(substr($params,6)),0,1) != "("))
-$params = "while (" . trim(substr($params,6)) . ")";} return $params.end_fi()."\n";}
+if ((substr($logic,0,3)=="if ") and (substr(trim(substr($logic,3)),0,1) != "("))
+$logic = "if (" . trim(substr($logic,3)) . ")";
+if ((substr($logic,0,8)=="else if ") and (substr(trim(substr($logic,8)),0,1) != "("))
+$logic = "else if (" . trim(substr($logic,8)) . ")";
+if ((substr($logic,0,4)=="for ") and (substr(trim(substr($logic,4)),0,1) != "("))
+$logic = "for (" . trim(substr($logic,4)) . ")";
+if ((substr($logic,0,6)=="while ") and (substr(trim(substr($logic,6)),0,1) != "("))
+$logic = "while (" . trim(substr($logic,6)) . ")";}
+return $logic;}
 
 ?>
