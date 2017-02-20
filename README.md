@@ -117,6 +117,7 @@ api|full url (including parameters) of api call|call api and print response
 
 ### CONDITIONS EXAMPLES
 - Conditions can be expressed in natural language (optional brackets) or JavaScript
+- Write text in quotation marks (either ' or " is ok), to differentiate from variable names
 - JavaScript can be used (CasperJS's context) - if/for/while applies to the next step
 
 Condition (in natural language)|JavaScript
