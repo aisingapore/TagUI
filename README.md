@@ -115,9 +115,11 @@ frame|frame name **&#124;** subframe name if any|next step in frame/subframe
 api|full url (including parameters) of api call|call api and print response
 //|user comments (ignored during execution)|add user comments
 
+Tip - if you are using full xpath, use " for text, for example `//*[@title="Login"]`
+
 ### CONDITIONS EXAMPLES
 - Conditions can be expressed in natural language (optional brackets) or JavaScript
-- Write text in quotation marks (either ' or " is ok), to differentiate from variable names
+- Write text in quotation marks (either ' or " is ok) to differentiate from variable names
 - JavaScript can be used (CasperJS's context) - if/for/while applies to the next step
 
 Condition (in natural language)|JavaScript
