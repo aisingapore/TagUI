@@ -56,8 +56,8 @@ if (selector.substring(0,3) == 'h6:') return true; if (selector.substring(0,3) =
 return false;}
 
 // checking if selector is xpath selector
-function is_xpath_selector(selector) {
-if (selector.length == 0) return false; if (selector.indexOf('/') >= 0) return true; return false;}
+function is_xpath_selector(selector) {if (selector.length == 0) return false;
+if ((selector.indexOf('/') >= 0) || (selector.indexOf('(') >= 0)) return true; return false;}
 
 // finding best match for given locator
 function tx(locator) {
