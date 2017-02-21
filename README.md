@@ -115,7 +115,7 @@ frame|frame name **&#124;** subframe name if any|next step in frame/subframe
 api|full url (including parameters) of api call|call api and print response
 //|user comments (ignored during execution)|add user comments
 
-Tip - if you are using full xpath, use " for text, for example `//*[@title="Login"]`
+Tip - if you are using full xpath, use double quotes for text, for example `//*[@title="Login"]`
 
 ### CONDITIONS EXAMPLES
 - Conditions can be expressed in natural language (optional brackets) or JavaScript
@@ -124,8 +124,8 @@ Tip - if you are using full xpath, use " for text, for example `//*[@title="Logi
 
 Condition (in natural language)|JavaScript
 :------------------------------|:---------
-for example - if A more than B and C not equal to D | if (A > B && C != D)
-for example - while cupcakes equal to 12| while (cupcakes == 12)
+example - if A more than B and C not equal to D | if (A > B && C != D)
+example - while cupcakes equal to 12| while (cupcakes == 12)
 more than or equal to / greater than or equal to / higher than or equal to|>=
 less than or equal to / lesser than or equal to / lower than or equal to|<=
 more than / greater than / higher than|>
@@ -194,7 +194,7 @@ your_website_url/tagui_service.php?SETTINGS="flow_filename option(s)"
 
 Besides integrating with web applications, TA.Gui can be extended to integrate with hardware (for example Arduino or Raspberry Pi) for physical world interactions or machine learning service providers for fuzzy decision-making capacity.
 
-For making outgoing API calls in your automation flow, to feed data somewhere or send emails etc, use the api step followed by full URL (including parameters) of the API call. Response from the API will be printed to output. For example using TA.Mail, emails can be sent directly from your flow with a single line.
+For making outgoing API calls in your automation flow, to feed data somewhere or send emails etc, use the api step followed by full URL (including parameters) of the API call. Response from the API will be printed to output. For example using TA.Mail, emails with run-time variables can be sent directly from your flow with a single line.
 
 File Reference |Purpose
 :--------------|:------
