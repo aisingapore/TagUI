@@ -135,7 +135,7 @@ equal to|==
 and|&&
 or|&#124;&#124;
 
-Tip - when describing equal conditions, you can use both equal or equals
+Tip - when describing equal conditions, you can use either equal or equals
 
 ### REPOSITORIES
 - Repositories help to make objects or steps reusable and improve readability
