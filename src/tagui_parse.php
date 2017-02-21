@@ -338,13 +338,19 @@ $logic = str_replace(" not equal to "," != ",$logic); $logic = str_replace(" equ
 // $logic = str_replace(" not "," ! ",$logic); // leaving not out until meaningful to implement
 $logic = str_replace(" and ",") && (",$logic); $logic = str_replace(" or ",") || (",$logic);
 
+// special handling to manage for loop in natural language 
+if ((substr($logic,0,4)=="for ") and (strpos($logic,";")==false)) { // no ; means in natural language
+$logic = str_replace("(","",$logic); $logic = str_replace(")","",$logic); // remove brackets if present
+$logic = str_replace("   "," ",$logic); $logic = str_replace("  "," ",$logic); // remove typo extra spaces
+$token = explode(" ",$logic); // split into tokens for loop in natural language, eg - for cupcake from 1 to 4
+if (count($token)!= 6) echo "ERROR - " . current_line() . " invalid for loop - " . $logic . "\n";
+else $logic = $token[0]." (".$token[1]."=".$token[3]."; ".$token[1]."<=".$token[5]."; ".$token[1]."++)";}
+
 // add simple opening and closing brackets to the condition if not present
 if ((substr($logic,0,3)=="if ") and (substr(trim(substr($logic,3)),0,1) != "("))
 $logic = "if (" . trim(substr($logic,3)) . ")";
 if ((substr($logic,0,8)=="else if ") and (substr(trim(substr($logic,8)),0,1) != "("))
 $logic = "else if (" . trim(substr($logic,8)) . ")";
-if ((substr($logic,0,4)=="for ") and (substr(trim(substr($logic,4)),0,1) != "("))
-$logic = "for (" . trim(substr($logic,4)) . ")";
 if ((substr($logic,0,6)=="while ") and (substr(trim(substr($logic,6)),0,1) != "("))
 $logic = "while (" . trim(substr($logic,6)) . ")";}
 return $logic;}
