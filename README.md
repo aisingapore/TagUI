@@ -135,6 +135,8 @@ equal to|==
 and|&&
 or|&#124;&#124;
 
+Tip - when describing equal conditions, you can use both equal or equals
+
 ### REPOSITORIES
 - Repositories help to make objects or steps reusable and improve readability
 - Save repository file with same name as your flow filename and with .csv behind
