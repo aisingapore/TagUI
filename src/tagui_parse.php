@@ -316,15 +316,24 @@ $params = parse_condition($raw_intent); return $params.end_fi()."\n";}
 function parse_condition($logic) { // natural language handling for conditions 
 if ((substr($logic,0,3)=="if ") or (substr($logic,0,8)=="else if ")
 or (substr($logic,0,4)=="for ") or (substr($logic,0,6)=="while ")) {
+
+$logic = str_replace(" more than or equals to "," >= ",$logic);
+$logic = str_replace(" greater than or equals to "," >= ",$logic);
+$logic = str_replace(" higher than or equals to "," >= ",$logic);
+$logic = str_replace(" less than or equals to "," <= ",$logic);
+$logic = str_replace(" lesser than or equals to "," <= ",$logic);
+$logic = str_replace(" lower than or equals to "," <= ",$logic);
 $logic = str_replace(" more than or equal to "," >= ",$logic);
 $logic = str_replace(" greater than or equal to "," >= ",$logic);
 $logic = str_replace(" higher than or equal to "," >= ",$logic);
 $logic = str_replace(" less than or equal to "," <= ",$logic);
 $logic = str_replace(" lesser than or equal to "," <= ",$logic);
 $logic = str_replace(" lower than or equal to "," <= ",$logic);
+
 $logic = str_replace(" more than "," > ",$logic); $logic = str_replace(" greater than "," > ",$logic);
 $logic = str_replace(" higher than "," > ",$logic); $logic = str_replace(" less than "," < ",$logic);
 $logic = str_replace(" lesser than "," < ",$logic); $logic = str_replace(" lower than "," < ",$logic);
+$logic = str_replace(" not equals to "," != ",$logic); $logic = str_replace(" equals to "," == ",$logic);
 $logic = str_replace(" not equal to "," != ",$logic); $logic = str_replace(" equal to "," == ",$logic);
 // $logic = str_replace(" not "," ! ",$logic); // leaving not out until meaningful to implement
 $logic = str_replace(" and ",") && (",$logic); $logic = str_replace(" or ",") || (",$logic);
