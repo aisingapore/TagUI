@@ -125,6 +125,7 @@ Tip - if you are using full xpath, use double quotes for text, for example //\*[
 Condition (in natural language)|JavaScript
 :------------------------------|:---------
 example - if A more than B and C not equal to D | if (A > B && C != D)
+example - for n from 1 to 4 | for (n=1; n<=4; n++)
 example - while cupcakes equal to 12| while (cupcakes == 12)
 more than or equal to / greater than or equal to / higher than or equal to|>=
 less than or equal to / lesser than or equal to / lower than or equal to|<=
