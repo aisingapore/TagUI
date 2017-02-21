@@ -208,13 +208,13 @@ $params = trim(substr($raw_intent." ",1+strpos($raw_intent." "," ")));
 $param1 = trim(substr($params,0,strpos($params," to "))); $param2 = trim(substr($params,4+strpos($params," to ")));
 if (($param1 == "") or ($param2 == "")) 
 echo "ERROR - " . current_line() . " target/variable missing for " . $raw_intent . "\n"; else
-return "{this.echo('".$raw_intent."');".beg_tx($param1).$param2." = this.fetchText(tx('".$param1."'));".end_tx($param1);}
+return "{this.echo('".$raw_intent."');".beg_tx($param1).$param2." = this.fetchText(tx('".$param1."')).trim();".end_tx($param1);}
 
 function show_intent($raw_intent) {
 $params = trim(substr($raw_intent." ",1+strpos($raw_intent." "," ")));
 if ($params == "") echo "ERROR - " . current_line() . " target missing for " . $raw_intent . "\n"; else
 return "{// nothing to do on this line".beg_tx($params).
-"this.echo('".$raw_intent."' + ' - ' + this.fetchText(tx('" . $params . "')));".end_tx($params);}
+"this.echo('".$raw_intent."' + ' - ' + this.fetchText(tx('" . $params . "')).trim());".end_tx($params);}
 
 function down_intent($raw_intent) {
 $params = trim(substr($raw_intent." ",1+strpos($raw_intent." "," ")));
@@ -243,9 +243,9 @@ $param1 = trim(substr($params,0,strpos($params," to "))); $param2 = trim(substr(
 if ($params == "") echo "ERROR - " . current_line() . " target missing for " . $raw_intent . "\n"; 
 else if (strpos($params," to ")!==false)
 return "{this.echo('".$raw_intent."');".beg_tx($param1).
-	"save_text('".abs_file($param2)."',this.fetchText(tx('".$param1."')));".end_tx($param1); else
+	"save_text('".abs_file($param2)."',this.fetchText(tx('".$param1."')).trim());".end_tx($param1); else
 return "{this.echo('".$raw_intent."');".beg_tx($params).
-	"save_text('',this.fetchText(tx('" . $params . "')));".end_tx($params);}
+	"save_text('',this.fetchText(tx('" . $params . "')).trim());".end_tx($params);}
 
 function dump_intent($raw_intent) {
 $params = trim(substr($raw_intent." ",1+strpos($raw_intent." "," ")));
