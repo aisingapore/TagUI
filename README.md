@@ -50,6 +50,8 @@ TA.Gui is in beta version (v0.6.0) and runs on macOS/Linux (coming to Windows so
 
 Optional - configure web browser settings in tagui_config.txt (browser resolution, step timeout of 10s etc)
 
+Tip - developers with Node.js might find it more convenient to npm install tagui
+
 # To Use
 ### COMMAND LINE
 ```
