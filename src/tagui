@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 # SCRIPT FOR RUNNING TA.GUI FRAMEWORK ~ TEBEL.ORG #
 
 # check whether specified automation flow file exists

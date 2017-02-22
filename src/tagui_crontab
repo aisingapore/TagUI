@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 # SCRIPT TO MANAGE SERVICE API FOR TA.GUI FRAMEWORK ~ TEBEL.ORG #
 
 # change current directory to TA.GUI directory

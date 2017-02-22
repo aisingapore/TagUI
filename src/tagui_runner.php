@@ -15,7 +15,7 @@ $service_out_count = get_last_service_count('tagui_service.out');
 // create empty service action script with header
 if ($service_out_count < $service_in_count) {
 $service_act_file = fopen('tagui_service.act','w') or die("ERROR - cannot open " . 'tagui_service.act' . "\n");
-fwrite($service_act_file,"#!/bin/bash"."\n"); fclose($service_act_file); chmod ('tagui_service.act',0700);}
+fwrite($service_act_file,"#!/usr/bin/env bash"."\n"); fclose($service_act_file); chmod ('tagui_service.act',0700);}
 
 // loop until service out count matches service in count
 while ($service_out_count < $service_in_count) {
