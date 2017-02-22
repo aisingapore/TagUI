@@ -115,7 +115,7 @@ frame|frame name **&#124;** subframe name if any|next step in frame/subframe
 api|full url (including parameters) of api call|call api and print response
 //|user comments (ignored during execution)|add user comments
 
-Tip - if you are using full xpath, use double quotes for text, for example //\*[@title="Login"]
+Tip - if you want to use full xpath, use " for text, for example //\*[@title="Login"]
 
 ### CONDITIONS EXAMPLES
 - Conditions can be expressed in natural language (optional brackets) or JavaScript
