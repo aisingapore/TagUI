@@ -346,13 +346,10 @@ $token = explode(" ",$logic); // split into tokens for loop in natural language,
 if (count($token)!= 6) echo "ERROR - " . current_line() . " invalid for loop - " . $logic . "\n";
 else $logic = $token[0]." (".$token[1]."=".$token[3]."; ".$token[1]."<=".$token[5]."; ".$token[1]."++)";}
 
-// add simple opening and closing brackets to the condition if not present
-if ((substr($logic,0,3)=="if ") and (substr(trim(substr($logic,3)),0,1) != "("))
-$logic = "if (" . trim(substr($logic,3)) . ")";
-if ((substr($logic,0,8)=="else if ") and (substr(trim(substr($logic,8)),0,1) != "("))
-$logic = "else if (" . trim(substr($logic,8)) . ")";
-if ((substr($logic,0,6)=="while ") and (substr(trim(substr($logic,6)),0,1) != "("))
-$logic = "while (" . trim(substr($logic,6)) . ")";}
+// add opening and closing brackets twice to handle no brackets, and, or cases
+if (substr($logic,0,3)=="if ") $logic = "if ((" . trim(substr($logic,3)) . "))";
+if (substr($logic,0,8)=="else if ") $logic = "else if ((" . trim(substr($logic,8)) . "))";
+if (substr($logic,0,6)=="while ") $logic = "while ((" . trim(substr($logic,6)) . "))";}
 return $logic;}
 
 ?>
