@@ -50,7 +50,7 @@ TA.Gui is in beta version (v0.6.0) and runs on macOS/Linux (coming to Windows so
 
 Optional - configure web browser settings in tagui_config.txt (browser resolution, step timeout of 10s etc)
 
-Tip - developers with Node.js might find it more convenient to npm install tagui
+Tip - developers with Node.js set up might find it more convenient to npm install tagui
 
 # To Use
 ### COMMAND LINE
@@ -185,7 +185,7 @@ For the list of expressive test assertions built into CasperJS, [click here](htt
 TA.Gui recognizes most JavaScript code. In the rare event you get an error saying that it cannot understand the step for your JavaScript line, kindly raise an issue or feel free to modify the source code (tagui_parse.php is where interpretation of natural language to CasperJS JavaScript code takes place). Alternatively, you can use the undocumented step js to explicitly declare that whatever follows on that line is JavaScript code.
 
 ### TA.GUI API (for developers and the curious ones)
-Automation flows can also be triggered via REST API. TA.Gui has an API service and runner for managing a queue of incoming requests via API. To setup, add a crontab entry on your server with the desired frequency to check and process incoming service requests. For example, the following job will check every 15 minutes and run pending flows in the queue.
+Automation flows can also be triggered via REST API. TA.Gui has an API service and runner for managing a queue of incoming requests via API. To set up, add a crontab entry on your server with the desired frequency to check and process incoming service requests. For example, the following job will check every 15 minutes and run pending flows in the queue.
 ```
 0,15,30,45 * * * * /full_path_on_your_server/tagui_crontab
 ```
