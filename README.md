@@ -129,16 +129,19 @@ Condition (in natural language)|JavaScript
 example - if A more than B and C not equal to D | if (A > B && C != D)
 example - for n from 1 to 4 | for (n=1; n<=4; n++)
 example - while cupcakes equal to 12| while (cupcakes == 12)
+example - if menu contains "fruits"| if (menu.indexOf("fruits")>-1)
 more than or equal to / greater than or equal to / higher than or equal to|>=
 less than or equal to / lesser than or equal to / lower than or equal to|<=
 more than / greater than / higher than|>
 less than / lesser than / lower than|<
 not equal to|!=
 equal to|==
+not contain|.indexOf("text")\<0
+contain|.indexOf("text")>-1
 and|&&
 or|&#124;&#124;
 
-Tip - when describing equal conditions, you can use either equal or equals
+Tip - when describing contain / equal conditions, you can use contain or contains / equal or equals
 
 ### REPOSITORIES
 - Repositories help to make objects or steps reusable and improve readability
