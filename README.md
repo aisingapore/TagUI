@@ -103,31 +103,31 @@ Step|Parameters (separator in bold)|Purpose
 tap / click|element to click|click on an element
 hover / move|element to hover|move cursor to element
 type / enter|element to type ***as*** text to type|enter element as text
-read / fetch|element to read ***to*** variable name|fetch text to variable
+read / fetch|element to read ***to*** variable name|fetch element text to variable
 show / print|element to read |print element text to output
+save|element to read ***to*** optional filename|save element text to file
 echo|text (in quotation marks) and variables|print text/variables to output
-download|url to download ***to*** filename to save|download url to file
-receive|url keyword to watch ***to*** filename to save|receive resource to file
-save|element to read ***to*** optional filename|save text to file
-dump|variable name ***to*** optional filename|save variable to file
+dump|text and variables ***to*** optional filename|save text/variables to file
 snap|element (page = webpage) ***to*** optional filename|save screenshot to file
+download|url to download ***to*** filename to save|download from url to file
+receive|url keyword to watch ***to*** filename to save|receive resource to file
 wait|optional time in seconds (default is 5 seconds)|explicitly wait for some time
 check|condition **&#124;** text if true **&#124;** text if false (text in quotes)|check condition and print result
 frame|frame name **&#124;** subframe name if any|next step in frame/subframe
 api|full url (including parameters) of api call|call api and print response
 //|user comments (ignored during execution)|add user comments
 
-Tip - if you want to write full xpath, use " for text, for example //\*[@title="Login"]
+Tip - if you want to write full xpath, use double quotes for text //\*[@title="Login"]
 
 ### CONDITIONS EXAMPLES
 - Conditions can be expressed in natural language (optional brackets) or JavaScript
-- Write text in quotation marks (either ' or " is ok) to differentiate from variable names
+- Write text in quotation marks (either " or ' works) to differentiate from variable names
 - JavaScript can be used (CasperJS's context) - if/for/while applies to the next step
 
 Condition (in natural language)|JavaScript
 :------------------------------|:---------
 example - if menu contains "fruits"| if (menu.indexOf("fruits")>-1)
-example - if A more than B and C not equal to D | if (A > B && C != D)
+example - if A more than B and C not equals to D | if ((A > B) && (C != D))
 example - for n from 1 to 4 | for (n=1; n<=4; n++)
 example - while cupcakes equal to 12| while (cupcakes == 12)
 contain|.indexOf("text")>-1
