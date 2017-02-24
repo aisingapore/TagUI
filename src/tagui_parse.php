@@ -248,6 +248,7 @@ return "{this.echo('".$raw_intent."');".beg_tx($params).
 	"save_text('',this.fetchText(tx('" . $params . "')).trim());".end_tx($params);}
 
 function dump_intent($raw_intent) {
+$raw_intent = str_replace("'","\"",$raw_intent); // avoid breaking echo below when single quote is used
 $params = trim(substr($raw_intent." ",1+strpos($raw_intent." "," ")));
 $param1 = trim(substr($params,0,strpos($params," to "))); $param2 = trim(substr($params,4+strpos($params," to ")));
 if ($params == "") echo "ERROR - " . current_line() . " variable missing for " . $raw_intent . "\n"; 
@@ -282,7 +283,7 @@ $param1 = str_replace(" JAVASCRIPT_OR ","||",$param1); // to restore back "||" t
 $param2 = str_replace(" JAVASCRIPT_OR ","||",$param2); $param3 = str_replace(" JAVASCRIPT_OR ","||",$param3);
 if (substr_count($params,"|")!=2) 
 echo "ERROR - " . current_line() . " if/true/false missing for " . $raw_intent . "\n"; else
-return "{".parse_condition("if (".$param1.")")."\nthis.echo(".$param2.");\nelse this.echo(".$param3.");}".end_fi()."\n";}
+return "{".parse_condition("if ".$param1)."\nthis.echo(".$param2.");\nelse this.echo(".$param3.");}".end_fi()."\n";}
 
 function test_intent($raw_intent) {
 echo "ERROR - " . current_line() . " use CasperJS tester module to professionally " . $raw_intent . "\n";
