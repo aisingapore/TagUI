@@ -48,7 +48,7 @@ TA.Gui is in beta version (v0.6.0) and runs on macOS/Linux (coming to Windows so
 2. install CasperJS (navigation/testing for PhantomJS) - http://casperjs.org
 3. install TA.Gui (friendly lightning fast automation tool) - https://git.io/vMCTZ
 
-Optional - configure web browser settings in tagui_config.txt (browser resolution, step timeout of 10s etc)
+Optional - configure web browser settings in tagui_config.txt, such as browser resolution, step timeout of 10s etc
 
 Tip - developers with Node.js set up might find it more convenient to npm install tagui
 
@@ -95,7 +95,7 @@ Enhancements|feel free to review and suggest new features
 # Cheat Sheet
 ### STEPS DESCRIPTION
 - TA.Gui auto-waits for a webpage element to appear and interacts with it as soon as it appears
-- Element identifier can be auto-recorded using TA.Gui Chrome extension, or found from web browser
+- Element identifier can be auto-recorded using TA.Gui Chrome extension, or found from [web browser](https://help.surveygizmo.com/help/how-to-find-element-ids-to-use-with-javascript)
 - TA.Gui auto-selects the provided identifier in this order - full-xpath, full-css, id, name, class, title, text()
 
 Step|Parameters (separator in bold)|Purpose
@@ -120,7 +120,7 @@ api|full url (including parameters) of api call|call api and print response
 Tip - if you want to write full xpath, use double quotes for text //\*[@title="Login"]
 
 ### CONDITIONS EXAMPLES
-- Conditions can be expressed in natural language (optional brackets) or JavaScript
+- Conditions can be expressed in natural language (optional brackets) or [JavaScript](https://www.w3schools.com/js/)
 - Write text in quotation marks (either " or ' works) to differentiate from variable names
 - JavaScript can be used (CasperJS's context) - if/for/while applies to the next step
 
