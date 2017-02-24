@@ -1,0 +1,221 @@
+http://www.dummytestsite.com
+// TEST CONDITIONS
+
+// test contain / not contain
+var variable = "test variable with some text";
+if variable contain "some text"
+echo "FOUND"
+if variable contains "some text"
+echo "FOUND"
+if variable not contain "some text"
+echo "NOT FOUND"
+if variable not contains "some text"
+echo "NOT FOUND"
+var variable ='test variable with some text';
+if variable contain 'some text'
+echo 'FOUND'
+if variable contains 'some text'
+echo 'FOUND'
+if variable not contain 'some text'
+echo 'NOT FOUND'
+if variable not contains 'some text'
+echo 'NOT FOUND'
+
+// test equal to / not equal to
+var variable = "lemon";
+if variable equal to "lemon"
+echo "LEMON"
+if variable equals to "lemon"
+echo "LEMON"
+if variable not equal to "lemon"
+echo "NOT LEMON"
+if variable not equals to "lemon"
+echo "NOT LEMON"
+if variable equal to 'lemon'
+echo 'LEMON'
+if variable equals to 'lemon'
+echo 'LEMON'
+if variable not equal to 'lemon'
+echo 'NOT LEMON'
+if variable not equals to 'lemon'
+echo 'NOT LEMON'
+var variable = 12345;
+if variable equal to 12345
+echo "12345"
+if variable equals to 12345
+echo "12345"
+if variable not equal to 12345
+echo "NOT 12345"
+if variable not equals to 12345
+echo "NOT 12345"
+
+// test more than / greater than / higher than
+var variable = 5;
+if variable more than 3
+echo "MORE THAN 3"
+if variable greater than 3
+echo "MORE THAN 3"
+if variable higher than 3
+echo "MORE THAN 3"
+
+// test more than or equal to / greater than or equal to / higher than or equal to
+var variable = 5;
+if variable more than or equal to 5
+echo "MORE THAN OR EQUAL TO 5"
+if variable greater than or equal to 5
+echo "MORE THAN OR EQUAL TO 5"
+if variable higher than or equal to 5
+echo "MORE THAN OR EQUAL TO 5"
+
+// test less than / lesser than / lower than
+var variable = 3;
+if variable less than 5
+echo "LESS THAN 5"
+if variable lesser than 5
+echo "LESS THAN 5"
+if variable lower than 5
+echo "LESS THAN 5"
+
+// test less than or equal to / lesser than or equal to / lower than or equal to
+var variable = 5;
+if variable less than or equal to 5
+echo "LESS THAN OR EQUAL TO 5"
+if variable lesser than or equal to 5
+echo "LESS THAN OR EQUAL TO 5"
+if variable lower than or equal to 5
+echo "LESS THAN OR EQUAL TO 5"
+
+// test and
+if "apple" equals to "apple" and "orange" equals to "orange"
+echo "TRUE"
+if 5 greater than 3 and 3 lesser than 4
+echo "TRUE"
+if 5 greater than 3 and 3 lesser than 4 and "kiwi" equals to "kiwi"
+echo "TRUE" 
+
+// test or
+if 'apple' equals to 'apple' or 'orange' equals to 'kiwi'
+echo "TRUE"
+if 5 lesser than 3 or 5 more than 4
+echo "TRUE"
+if 5 lesser than 3 or 3 lesser than 4 and "kiwi" equals to "kiwi"
+echo "TRUE"
+
+// test combinations of conditions
+var menu = "fruits and salads";
+if menu contains 'fruits' and menu not contains "potatoes"
+echo "FRUITS ONLY"
+
+// test for
+for n from 1 to 5
+echo "ITERATION " + n
+for n from 0 to 0
+echo "ITERATION " + n
+for (n=6; n<=10; n++)
+echo "ITERATION " + n
+
+// test while
+while 2 > 3 and 3 > 4
+echo "INVALID"
+while ((2 > 3) && (3 > 4))
+echo "INVALID"
+
+// test if in javascript
+if (2 < 3)
+echo "TRUE"
+
+// test test
+// test something and see what happens
+
+// test js
+js this.echo('THIS IS JAVASCRIPT');
+
+// TEST STEPS
+
+// test tap / click
+tap element
+click element
+
+// test hover / move
+hover element
+move element
+
+// test type / enter
+type element as some text
+enter element as some text
+
+// test read / fetch
+read element to variable
+fetch element to variable
+
+// test show / print
+show element
+print element
+
+// test save
+save element
+save element to filename.txt
+save element to /tmp/filename.txt
+
+// test echo
+echo "some text - " + variable
+echo 'some text - ' + variable
+
+// test dump
+dump "some text - " + variable
+dump 'some text - ' + variable
+dump "some text - " + variable to filename.txt
+dump 'some text - ' + variable to filename.txt
+dump "some text - " + variable to /tmp/filename.txt
+dump 'some text - ' + variable to /tmp/filename.txt
+
+// test snap
+snap element
+snap element to filename.png
+snap element to /tmp/filename.png
+snap page
+snap page to filename.png
+snap page to /tmp/filename.png
+
+// test download
+download http://www.dummytestsite.com/report/month.txt to filename.txt
+download http://www.dummytestsite.com/report/month.txt to /tmp/filename.txt
+
+// test receive
+receive report to filename.txt
+receive report to /tmp/filename.txt
+
+// test wait
+wait
+wait 2.5
+wait 10.0
+wait 10
+wait 10s
+wait 10sec
+wait 10secs
+wait 10seconds
+wait 10 s
+wait 10 sec
+wait 10 secs
+wait 10 seconds
+wait 7.5 seconds
+
+// test check
+check eggs lesser than 10 | "eggs lesser than 10" | "eggs not lesser than 10"
+check eggs lesser than 10|"eggs lesser than 10"|"eggs not lesser than 10"
+check eggs lesser than 10 | 'eggs lesser than 10' | 'eggs not lesser than 10'
+check eggs lesser than 10|'eggs lesser than 10'|'eggs not lesser than 10'
+
+// test frame
+frame mainframe
+echo "test mainframe"
+frame mainframe | subframe
+echo "test subframe"
+
+// test api
+api http://www.dummytestsite.com/api?COLOR1=red&COLOR2=green&COLOR3=blue
+
+// test comment
+// user comment
+//user comment
+//
