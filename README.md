@@ -122,7 +122,7 @@ Tip - if you want to write full xpath, use double quotes for text //\*[@title="L
 ### CONDITIONS EXAMPLES
 - Conditions can be expressed in natural language (optional brackets) or [JavaScript](https://www.w3schools.com/js/)
 - Write text in quotation marks (either " or ' works) to differentiate from variable names
-- JavaScript can be used (CasperJS's context) - if/for/while applies to the next step
+- Conditions if / for / while apply to the next step and async wait auto-disables in loops
 
 Condition (in natural language)|JavaScript
 :------------------------------|:---------
