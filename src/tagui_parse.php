@@ -22,6 +22,7 @@ while (!feof($repo_file)) {$repo_data[$repo_count] = fgetcsv($repo_file);
 if (count($repo_data[$repo_count]) == 0) die("ERROR - empty row found in " . $script . '.csv' . "\n");
 $repo_count++;} fclose($repo_file); $repo_count-=2;} //-1 for header, -1 for EOF
 
+$inside_loop = 0; // track if step is in loop and avoid async wait
 $inside_frame = 0; $line_number = 0; // track html frame, flow lines
 $test_automation = 0; // to determine casperjs script structure
 $url_provided = false; // to detect if url is provided in user-script
@@ -167,11 +168,14 @@ if (substr($filename,0,1)=="/") return $filename; // return absolute filename di
 $flow_path = dirname($flow_script); return $flow_path . '/' . $filename;}
 
 function beg_tx($locator) { // helper function to return beginning string for handling locators
-return "\ncasper.waitFor(function check() {return check_tx('".$locator."');},\nfunction then() {";}
+if ($GLOBALS['inside_loop'] == 0)
+return "\ncasper.waitFor(function check() {return check_tx('".$locator."');},\nfunction then() {"; else return "\n";}
 
 function end_tx($locator) { // helper function to return ending string for handling locators
+if ($GLOBALS['inside_loop'] == 0)
 return "},\nfunction timeout() {this.echo('ERROR - cannot find ".
-$locator."').exit();});}".end_fi()."});\n\ncasper.then(function() {\n";}
+$locator."').exit();});}".end_fi()."});\n\ncasper.then(function() {\n";
+else {$GLOBALS['inside_loop'] = 0; return "}});\n\ncasper.then(function() {\n";}}
 
 function end_fi() { // helper function to end frame_intent by closing parsed step block
 if ($GLOBALS['inside_frame'] == 1) {$GLOBALS['inside_frame']=0; return " });} ";}
@@ -421,6 +425,9 @@ else $logic = $token[0]." (".$token[1]."=".$token[3]."; ".$token[1]."<=".$token[
 if (substr($logic,0,3)=="if ") $logic = "if ((" . trim(substr($logic,3)) . "))";
 if (substr($logic,0,8)=="else if ") $logic = "else if ((" . trim(substr($logic,8)) . "))";
 if (substr($logic,0,6)=="while ") $logic = "while ((" . trim(substr($logic,6)) . "))";}
+
+// track if next statement is inside a loop, then avoid async wait (will hang casperjs/phantomjs)   
+if ((substr($logic,0,4)=="for ") or (substr($logic,0,6)=="while ")) $GLOBALS['inside_loop'] = 1; 
 return $logic;}
 
 ?>
