@@ -113,12 +113,22 @@ for n from 0 to 0
 echo "ITERATION " + n
 for (n=6; n<=10; n++)
 echo "ITERATION " + n
+for n from 1 to 5
+click element
+for n from 0 to 0
+click element
+for (n=6; n<=10; n++)
+click element
 
 // test while
 while 2 > 3 and 3 > 4
 echo "INVALID"
 while ((2 > 3) && (3 > 4))
 echo "INVALID"
+while 2 > 3 and 3 > 4
+click element
+while ((2 > 3) && (3 > 4))
+click element
 
 // test if in javascript
 if (2 < 3)

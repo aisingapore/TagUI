@@ -108,7 +108,7 @@ var xhttp = new XMLHttpRequest(); xhttp.open("GET", rest_url, false);
 xhttp.send(); return xhttp.statusText + ' - ' + xhttp.responseText;}
 
 // flow path for save_text and snap_image
-var flow_path = '/full_path';
+var flow_path = '/folder_path';
 
 casper.start('http://www.google.com', function() {
 this.echo('http://www.google.com' + ' - ' + this.getTitle() + '\n');});
@@ -218,11 +218,36 @@ for (n=0; n<=0; n++)
 this.echo("ITERATION "+n);
 for (n=6; n<=10; n++)
 this.echo("ITERATION "+n);
+for (n=1; n<=5; n++)
+{this.echo('click element');
+this.click(tx('element'));}});
+
+casper.then(function() {
+for (n=0; n<=0; n++)
+{this.echo('click element');
+this.click(tx('element'));}});
+
+casper.then(function() {
+for (n=6; n<=10; n++)
+{this.echo('click element');
+this.click(tx('element'));}});
+
+casper.then(function() {
 // test while
 while ((2 > 3) && (3 > 4))
 this.echo("INVALID");
 while ((((2 > 3) && (3 > 4))))
 this.echo("INVALID");
+while ((2 > 3) && (3 > 4))
+{this.echo('click element');
+this.click(tx('element'));}});
+
+casper.then(function() {
+while ((((2 > 3) && (3 > 4))))
+{this.echo('click element');
+this.click(tx('element'));}});
+
+casper.then(function() {
 // test if in javascript
 if (((2 < 3)))
 this.echo("TRUE");
@@ -305,7 +330,7 @@ function timeout() {this.echo('ERROR - cannot find element').exit();});}});
 casper.then(function() {
 {this.echo('save element to filename.txt');
 casper.waitFor(function check() {return check_tx('element');},
-function then() {save_text('/full_path/filename.txt',this.fetchText(tx('element')).trim());},
+function then() {save_text('/folder_path/filename.txt',this.fetchText(tx('element')).trim());},
 function timeout() {this.echo('ERROR - cannot find element').exit();});}});
 
 casper.then(function() {
@@ -329,9 +354,9 @@ save_text('',"some text - "+variable);}
 {this.echo('dump "some text - " + variable');
 save_text('',"some text - "+variable);}
 {this.echo('dump "some text - " + variable to filename.txt');
-save_text('/full_path/filename.txt',"some text - "+variable);}
+save_text('/folder_path/filename.txt',"some text - "+variable);}
 {this.echo('dump "some text - " + variable to filename.txt');
-save_text('/full_path/filename.txt',"some text - "+variable);}
+save_text('/folder_path/filename.txt',"some text - "+variable);}
 {this.echo('dump "some text - " + variable to /tmp/filename.txt');
 save_text('/tmp/filename.txt',"some text - "+variable);}
 {this.echo('dump "some text - " + variable to /tmp/filename.txt');
@@ -341,9 +366,9 @@ save_text('',"some text - "+variable);}
 {this.echo('dump "some text - " variable');
 save_text('',"some text - "+variable);}
 {this.echo('dump "some text - " variable to filename.txt');
-save_text('/full_path/filename.txt',"some text - "+variable);}
+save_text('/folder_path/filename.txt',"some text - "+variable);}
 {this.echo('dump "some text - " variable to filename.txt');
-save_text('/full_path/filename.txt',"some text - "+variable);}
+save_text('/folder_path/filename.txt',"some text - "+variable);}
 {this.echo('dump "some text - " variable to /tmp/filename.txt');
 save_text('/tmp/filename.txt',"some text - "+variable);}
 {this.echo('dump "some text - " variable to /tmp/filename.txt');
@@ -357,7 +382,7 @@ function timeout() {this.echo('ERROR - cannot find element').exit();});}});
 casper.then(function() {
 {this.echo('snap element to filename.png');
 casper.waitFor(function check() {return check_tx('element');},
-function then() {this.captureSelector('/full_path/filename.png',tx('element'));},
+function then() {this.captureSelector('/folder_path/filename.png',tx('element'));},
 function timeout() {this.echo('ERROR - cannot find element').exit();});}});
 
 casper.then(function() {
@@ -370,18 +395,18 @@ casper.then(function() {
 {this.echo('snap page');
 this.capture(snap_image());}
 {this.echo('snap page to filename.png');
-this.capture('/full_path/filename.png');}
+this.capture('/folder_path/filename.png');}
 {this.echo('snap page to /tmp/filename.png');
 this.capture('/tmp/filename.png');}
 // test download
 {this.echo('download http://www.dummytestsite.com/report/month.txt to filename.txt');
-this.download('http://www.dummytestsite.com/report/month.txt','/full_path/filename.txt');}
+this.download('http://www.dummytestsite.com/report/month.txt','/folder_path/filename.txt');}
 {this.echo('download http://www.dummytestsite.com/report/month.txt to /tmp/filename.txt');
 this.download('http://www.dummytestsite.com/report/month.txt','/tmp/filename.txt');}
 // test receive
 {this.echo('receive report to filename.txt');
 casper.on('resource.received', function(resource) {if (resource.stage !== 'end') return;
-if (resource.url.indexOf('report') > -1) this.download(resource.url, '/full_path/filename.txt');});}
+if (resource.url.indexOf('report') > -1) this.download(resource.url, '/folder_path/filename.txt');});}
 {this.echo('receive report to /tmp/filename.txt');
 casper.on('resource.received', function(resource) {if (resource.stage !== 'end') return;
 if (resource.url.indexOf('report') > -1) this.download(resource.url, '/tmp/filename.txt');});}
