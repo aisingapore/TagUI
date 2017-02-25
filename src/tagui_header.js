@@ -53,6 +53,7 @@ if (selector.substring(0,3) == 'h4:') return true; if (selector.substring(0,3) =
 if (selector.substring(0,3) == 'h5 ') return true; if (selector.substring(0,3) == 'h5:') return true;
 if (selector.substring(0,3) == 'h5[') return true; if (selector.substring(0,3) == 'h6 ') return true;
 if (selector.substring(0,3) == 'h6:') return true; if (selector.substring(0,3) == 'h6[') return true;
+if (selector.substring(0,7) == 'center ') return true;
 return false;}
 
 // checking if selector is xpath selector
