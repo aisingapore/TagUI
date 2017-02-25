@@ -30,7 +30,7 @@ for (var sleep_count = 0; sleep_count < 1e7; sleep_count++)
 {if ((new Date().getTime() - start_time) > delay_in_ms) break;}}
 
 // checking if selector is css selector
-function is_css_selector(selector) {
+function is_css_selector(selector) { // post-issue #12, function marked for potential deletion
 if (selector.length == 0) return false; if (selector.charAt(0) == '[') return true;
 if (selector.charAt(0) == '.') return true; if (selector.charAt(0) == '#') return true;
 if (selector.substring(0,4) == 'div ') return true; if (selector.substring(0,4) == 'div:') return true;
