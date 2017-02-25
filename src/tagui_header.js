@@ -63,7 +63,9 @@ if ((selector.indexOf('/') >= 0) || (selector.indexOf('(') >= 0)) return true; r
 // finding best match for given locator
 function tx(locator) {
 if (is_xpath_selector(locator)) return x(locator);
-if (is_css_selector(locator)) return locator;
+// experimental change for #12, skip css syntax checks totally
+// if (is_css_selector(locator)) return locator; //old logic
+if (casper.exists(locator)) return locator; // new logic
 if (casper.exists(x('//*[contains(@id,"'+locator+'")]'))) return x('//*[contains(@id,"'+locator+'")]');
 if (casper.exists(x('//*[contains(@name,"'+locator+'")]'))) return x('//*[contains(@name,"'+locator+'")]');
 if (casper.exists(x('//*[contains(@class,"'+locator+'")]'))) return x('//*[contains(@class,"'+locator+'")]');
@@ -74,7 +76,9 @@ return x('/html');}
 // checking if given locator is found
 function check_tx(locator) {
 if (is_xpath_selector(locator)) {if (casper.exists(x(locator))) return true; else return false;}
-if (is_css_selector(locator)) {if (casper.exists(locator)) return true; else return false;}
+// experimental change for #12, skip css syntax checks totally
+// if (is_css_selector(locator)) {if (casper.exists(locator)) return true; else return false;} // old logic
+if (casper.exists(locator)) return true; // new logic
 if (casper.exists(x('//*[contains(@id,"'+locator+'")]'))) return true;
 if (casper.exists(x('//*[contains(@name,"'+locator+'")]'))) return true;
 if (casper.exists(x('//*[contains(@class,"'+locator+'")]'))) return true;
