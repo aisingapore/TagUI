@@ -1,4 +1,4 @@
-http://www.dummytestsite.com
+http://www.google.com
 // TEST CONDITIONS
 
 // test contain / not contain
@@ -158,8 +158,13 @@ save element to filename.txt
 save element to /tmp/filename.txt
 
 // test echo
+echo variable
+echo 'some text' ' ' 'some text'
 echo "some text - " + variable
 echo 'some text - ' + variable
+echo "some text - " variable
+echo 'some text - ' variable
+echo variable " - some text - " variable  " - some text "   "some text - "  +  variable  
 
 // test dump
 dump "some text - " + variable
@@ -168,6 +173,12 @@ dump "some text - " + variable to filename.txt
 dump 'some text - ' + variable to filename.txt
 dump "some text - " + variable to /tmp/filename.txt
 dump 'some text - ' + variable to /tmp/filename.txt
+dump "some text - " variable
+dump 'some text - ' variable
+dump "some text - " variable to filename.txt
+dump 'some text - ' variable to filename.txt
+dump "some text - " variable to /tmp/filename.txt
+dump 'some text - ' variable to /tmp/filename.txt
 
 // test snap
 snap element

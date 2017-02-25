@@ -110,8 +110,8 @@ xhttp.send(); return xhttp.statusText + ' - ' + xhttp.responseText;}
 // flow path for save_text and snap_image
 var flow_path = '/full_path';
 
-casper.start('http://www.dummytestsite.com', function() {
-this.echo('http://www.dummytestsite.com' + ' - ' + this.getTitle() + '\n');});
+casper.start('http://www.google.com', function() {
+this.echo('http://www.google.com' + ' - ' + this.getTitle() + '\n');});
 
 casper.then(function() {
 // TEST CONDITIONS
@@ -213,11 +213,11 @@ if (((menu.indexOf('fruits')>-1)) && ((menu.indexOf("potatoes")<0)))
 this.echo("FRUITS ONLY");
 // test for
 for (n=1; n<=5; n++)
-this.echo("ITERATION " + n);
+this.echo("ITERATION "+n);
 for (n=0; n<=0; n++)
-this.echo("ITERATION " + n);
+this.echo("ITERATION "+n);
 for (n=6; n<=10; n++)
-this.echo("ITERATION " + n);
+this.echo("ITERATION "+n);
 // test while
 while ((2 > 3) && (3 > 4))
 this.echo("INVALID");
@@ -316,21 +316,38 @@ function timeout() {this.echo('ERROR - cannot find element').exit();});}});
 
 casper.then(function() {
 // test echo
-this.echo("some text - " + variable);
-this.echo('some text - ' + variable);
+this.echo(variable);
+this.echo('some text'+' '+'some text');
+this.echo("some text - "+variable);
+this.echo('some text - '+variable);
+this.echo("some text - "+variable);
+this.echo('some text - '+variable);
+this.echo(variable+" - some text - "+variable+" - some text "+"some text - "+variable);
 // test dump
 {this.echo('dump "some text - " + variable');
-save_text('',"some text - " + variable);}
+save_text('',"some text - "+variable);}
 {this.echo('dump "some text - " + variable');
-save_text('',"some text - " + variable);}
+save_text('',"some text - "+variable);}
 {this.echo('dump "some text - " + variable to filename.txt');
-save_text('/full_path/filename.txt',"some text - " + variable);}
+save_text('/full_path/filename.txt',"some text - "+variable);}
 {this.echo('dump "some text - " + variable to filename.txt');
-save_text('/full_path/filename.txt',"some text - " + variable);}
+save_text('/full_path/filename.txt',"some text - "+variable);}
 {this.echo('dump "some text - " + variable to /tmp/filename.txt');
-save_text('/tmp/filename.txt',"some text - " + variable);}
+save_text('/tmp/filename.txt',"some text - "+variable);}
 {this.echo('dump "some text - " + variable to /tmp/filename.txt');
-save_text('/tmp/filename.txt',"some text - " + variable);}
+save_text('/tmp/filename.txt',"some text - "+variable);}
+{this.echo('dump "some text - " variable');
+save_text('',"some text - "+variable);}
+{this.echo('dump "some text - " variable');
+save_text('',"some text - "+variable);}
+{this.echo('dump "some text - " variable to filename.txt');
+save_text('/full_path/filename.txt',"some text - "+variable);}
+{this.echo('dump "some text - " variable to filename.txt');
+save_text('/full_path/filename.txt',"some text - "+variable);}
+{this.echo('dump "some text - " variable to /tmp/filename.txt');
+save_text('/tmp/filename.txt',"some text - "+variable);}
+{this.echo('dump "some text - " variable to /tmp/filename.txt');
+save_text('/tmp/filename.txt',"some text - "+variable);}
 // test snap
 {this.echo('snap element');
 casper.waitFor(function check() {return check_tx('element');},

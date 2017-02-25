@@ -177,6 +177,19 @@ function end_fi() { // helper function to end frame_intent by closing parsed ste
 if ($GLOBALS['inside_frame'] == 1) {$GLOBALS['inside_frame']=0; return " });} ";}
 else if ($GLOBALS['inside_frame'] == 2) {$GLOBALS['inside_frame']=0; return " });});} ";}}
 
+function add_concat($source_string) { // parse string and add missing + concatenator 
+if ((strpos($source_string,"'")!==false) and (strpos($source_string,"\"")!==false))
+{echo "ERROR - " . current_line() . " inconsistent quotes in " . $source_string . "\n";}
+else if (strpos($source_string,"'")!==false) $quote_type = "'"; // derive quote type used
+else if (strpos($source_string,"\"")!==false) $quote_type = "\""; else $quote_type = "none";
+$within_quote = false; $source_string = trim($source_string); // trim for future proof
+for ($srcpos=0; $srcpos<strlen($source_string); $srcpos++){
+if ($source_string[$srcpos] == $quote_type) $within_quote = !$within_quote; 
+if (($within_quote == false) and ($source_string[$srcpos]==" ")) $source_string[$srcpos] = "+";}
+$source_string = str_replace("+++++","+",$source_string); $source_string = str_replace("++++","+",$source_string);
+$source_string = str_replace("+++","+",$source_string); $source_string = str_replace("++","+",$source_string);
+return $source_string;} // replacing multiple variations of + to handle user typos of double spaces etc 
+
 // set of functions to interpret steps into corresponding casperjs code
 function url_intent($raw_intent) {
 if (filter_var($raw_intent, FILTER_VALIDATE_URL) == false) 
@@ -235,7 +248,7 @@ return "{this.echo('".$raw_intent."');\n".
 function echo_intent($raw_intent) {
 $params = trim(substr($raw_intent." ",1+strpos($raw_intent." "," ")));
 if ($params == "") echo "ERROR - " . current_line() . " text missing for " . $raw_intent . "\n"; else 
-return "this.echo(".$params.");".end_fi()."\n";}
+return "this.echo(".add_concat($params).");".end_fi()."\n";}
 
 function save_intent($raw_intent) {
 $params = trim(substr($raw_intent." ",1+strpos($raw_intent." "," ")));
@@ -253,8 +266,8 @@ $params = trim(substr($raw_intent." ",1+strpos($raw_intent." "," ")));
 $param1 = trim(substr($params,0,strpos($params," to "))); $param2 = trim(substr($params,4+strpos($params," to ")));
 if ($params == "") echo "ERROR - " . current_line() . " variable missing for " . $raw_intent . "\n"; 
 else if (strpos($params," to ")!==false)
-return "{this.echo('".$raw_intent."');\nsave_text('".abs_file($param2)."',".$param1.");}".end_fi()."\n";
-else return "{this.echo('".$raw_intent."');\nsave_text(''," . $params . ");}".end_fi()."\n";}
+return "{this.echo('".$raw_intent."');\nsave_text('".abs_file($param2)."',".add_concat($param1).");}".end_fi()."\n";
+else return "{this.echo('".$raw_intent."');\nsave_text(''," . add_concat($params) . ");}".end_fi()."\n";}
 
 function snap_intent($raw_intent) {
 $params = trim(substr($raw_intent." ",1+strpos($raw_intent." "," ")));
