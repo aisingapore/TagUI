@@ -1,0 +1,30 @@
+https://github.com/tebelorg/TA.Mail
+// automation flow files start with an URL to tell TA.Gui where to go
+
+// this flow goes to a GitHub page and downloads the repo using 2 ways
+// for issues or questions, kindly feedback on GitHub or support@tebel.org
+// see cheatsheet for steps, conditions, finding element identifiers, etc
+// https://github.com/tebelorg/TA.Gui#cheat-sheet
+
+// use read (or fetch) step to fetch webpage element text to variable
+fetch (//*[@class="numbers-summary"]/li)[5] to license_type
+
+// use check step to check a condition and print result to output
+// text to put in quotation marks to differentiate from variables
+check license_type equals to "MIT" | "Yes, repo is under MIT license." | "No, repo is not under MIT license."  
+
+// use download step to proactively download a file directly from an URL
+download https://github.com/tebelorg/TA.Mail/archive/master.zip to download.zip
+
+// use receive step for event-based download when an URL accessed contains your keyword
+receive archive/master.zip to receive.zip
+
+// as it is event-based, you will need to interact with the webpage to trigger download
+click Clone or download
+click Download ZIP
+
+// use api step to call api and print response (bonus example for developers and tinkerers)
+// variables can be used (eg from fetch or read step, files or self-declared)
+// use '+variable_name+' to incorporate variables into your api call 
+var country = "SG";
+api http://services.groupkt.com/country/get/iso2code/'+country+'
