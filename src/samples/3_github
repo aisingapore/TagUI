@@ -13,7 +13,7 @@ fetch (//*[@class="numbers-summary"]/li)[5] to license_type
 // text to put in quotation marks to differentiate from variables
 check license_type equals to "MIT" | "Yes, repo is under MIT license." | "No, repo is not under MIT license."  
 
-// some websites including GitHub may detect as abuse and block automated downloads
+// note - some websites including GitHub may detect and block automated downloads
 // use download step to proactively download a file directly from an URL
 download https://github.com/tebelorg/TA.Mail/archive/master.zip to download.zip
 
