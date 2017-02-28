@@ -96,7 +96,7 @@ Enhancements|feel free to review and suggest new features
 ### STEPS DESCRIPTION
 - TA.Gui auto-waits for a webpage element to appear and interacts with it as soon as it appears
 - Element identifier can be auto-recorded using TA.Gui Chrome extension, or found from [web browser](https://help.surveygizmo.com/help/how-to-find-element-ids-to-use-with-javascript)
-- TA.Gui auto-selects the provided identifier in this order - full-xpath, full-css, id, name, class, title, text()
+- TA.Gui auto-selects provided identifier in this order - xpath, css, id, name, class, title, text(), aria-label
 
 Step|Parameters (separator in bold)|Purpose
 :---|:-----------------------------|:------
@@ -117,7 +117,7 @@ frame|frame name **&#124;** subframe name if any|next step in frame/subframe
 api|full url (including parameters) of api call|call api and print response
 //|user comments (ignored during execution)|add user comments
 
-Tip - if you want to write full xpath, use double quotes for text //\*[@title="Login"]
+Tip - if you want to write xpath, use double quotes for text //\*[@title="Login"]
 
 ### CONDITIONS EXAMPLES
 - Conditions can be expressed in natural language (optional brackets) or [JavaScript](https://www.w3schools.com/js/)
