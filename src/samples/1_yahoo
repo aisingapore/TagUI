@@ -13,7 +13,7 @@ enter search-box as github
 print search-box
 
 // use tap (or click) step to click on a webpage element
-// below step click the search button
+// below step clicks the search button
 click search-button
 
 // wait a few seconds before capturing whole screenshot
