@@ -31,3 +31,11 @@ snap logo
 // unless you provide a filename for the image snap
 snap page to results.png
 snap logo to logo.png
+
+// to go to another URL from your flow, simply provide the URL
+https://duckduckgo.com
+
+// and then continue the automation flow from there
+enter search_form_input_homepage as The search engine that doesn\'t track you.
+
+wait 4.4 seconds
