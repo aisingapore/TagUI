@@ -1,6 +1,8 @@
 https://www.yahoo.com
 // automation flow files start with an URL to tell TA.Gui where to go
-// this flow searches github on Yahoo and capture screenshot of results 
+
+// this flow searches github on Yahoo and capture screenshot of results
+// for issues or questions, kindly feedback on GitHub or support@tebel.org
 // see cheatsheet for steps, conditions, finding element identifiers, etc
 // https://github.com/tebelorg/TA.Gui#cheat-sheet
 
