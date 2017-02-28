@@ -71,6 +71,7 @@ if (casper.exists(x('//*[contains(@name,"'+locator+'")]'))) return x('//*[contai
 if (casper.exists(x('//*[contains(@class,"'+locator+'")]'))) return x('//*[contains(@class,"'+locator+'")]');
 if (casper.exists(x('//*[contains(@title,"'+locator+'")]'))) return x('//*[contains(@title,"'+locator+'")]');
 if (casper.exists(x('//*[contains(text(),"'+locator+'")]'))) return x('//*[contains(text(),"'+locator+'")]');
+if (casper.exists(x('//*[contains(@aria-label,"'+locator+'")]'))) return x('//*[contains(@aria-label,"'+locator+'")]');
 return x('/html');}
 
 // checking if given locator is found
@@ -84,6 +85,7 @@ if (casper.exists(x('//*[contains(@name,"'+locator+'")]'))) return true;
 if (casper.exists(x('//*[contains(@class,"'+locator+'")]'))) return true;
 if (casper.exists(x('//*[contains(@title,"'+locator+'")]'))) return true;
 if (casper.exists(x('//*[contains(text(),"'+locator+'")]'))) return true;
+if (casper.exists(x('//*[contains(@aria-label,"'+locator+'")]'))) return true;
 return false;}
 
 // calling rest api url synchronously
