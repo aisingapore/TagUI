@@ -51,7 +51,7 @@ for (var sleep_count = 0; sleep_count < 1e7; sleep_count++)
 {if ((new Date().getTime() - start_time) > delay_in_ms) break;}}
 
 // checking if selector is css selector
-function is_css_selector(selector) {
+function is_css_selector(selector) { // post-issue #12, function marked for potential deletion
 if (selector.length == 0) return false; if (selector.charAt(0) == '[') return true;
 if (selector.charAt(0) == '.') return true; if (selector.charAt(0) == '#') return true;
 if (selector.substring(0,4) == 'div ') return true; if (selector.substring(0,4) == 'div:') return true;
@@ -74,6 +74,7 @@ if (selector.substring(0,3) == 'h4:') return true; if (selector.substring(0,3) =
 if (selector.substring(0,3) == 'h5 ') return true; if (selector.substring(0,3) == 'h5:') return true;
 if (selector.substring(0,3) == 'h5[') return true; if (selector.substring(0,3) == 'h6 ') return true;
 if (selector.substring(0,3) == 'h6:') return true; if (selector.substring(0,3) == 'h6[') return true;
+if (selector.substring(0,7) == 'center ') return true;
 return false;}
 
 // checking if selector is xpath selector
@@ -83,23 +84,29 @@ if ((selector.indexOf('/') >= 0) || (selector.indexOf('(') >= 0)) return true; r
 // finding best match for given locator
 function tx(locator) {
 if (is_xpath_selector(locator)) return x(locator);
-if (is_css_selector(locator)) return locator;
+// experimental change for #12, skip css syntax checks totally
+// if (is_css_selector(locator)) return locator; //old logic
+if (casper.exists(locator)) return locator; // new logic
 if (casper.exists(x('//*[contains(@id,"'+locator+'")]'))) return x('//*[contains(@id,"'+locator+'")]');
 if (casper.exists(x('//*[contains(@name,"'+locator+'")]'))) return x('//*[contains(@name,"'+locator+'")]');
 if (casper.exists(x('//*[contains(@class,"'+locator+'")]'))) return x('//*[contains(@class,"'+locator+'")]');
 if (casper.exists(x('//*[contains(@title,"'+locator+'")]'))) return x('//*[contains(@title,"'+locator+'")]');
 if (casper.exists(x('//*[contains(text(),"'+locator+'")]'))) return x('//*[contains(text(),"'+locator+'")]');
+if (casper.exists(x('//*[contains(@aria-label,"'+locator+'")]'))) return x('//*[contains(@aria-label,"'+locator+'")]');
 return x('/html');}
 
 // checking if given locator is found
 function check_tx(locator) {
 if (is_xpath_selector(locator)) {if (casper.exists(x(locator))) return true; else return false;}
-if (is_css_selector(locator)) {if (casper.exists(locator)) return true; else return false;}
+// experimental change for #12, skip css syntax checks totally
+// if (is_css_selector(locator)) {if (casper.exists(locator)) return true; else return false;} // old logic
+if (casper.exists(locator)) return true; // new logic
 if (casper.exists(x('//*[contains(@id,"'+locator+'")]'))) return true;
 if (casper.exists(x('//*[contains(@name,"'+locator+'")]'))) return true;
 if (casper.exists(x('//*[contains(@class,"'+locator+'")]'))) return true;
 if (casper.exists(x('//*[contains(@title,"'+locator+'")]'))) return true;
 if (casper.exists(x('//*[contains(text(),"'+locator+'")]'))) return true;
+if (casper.exists(x('//*[contains(@aria-label,"'+locator+'")]'))) return true;
 return false;}
 
 // calling rest api url synchronously
@@ -108,7 +115,7 @@ var xhttp = new XMLHttpRequest(); xhttp.open("GET", rest_url, false);
 xhttp.send(); return xhttp.statusText + ' - ' + xhttp.responseText;}
 
 // flow path for save_text and snap_image
-var flow_path = '/folder_path';
+var flow_path = '/full_path';
 
 casper.start('http://www.google.com', function() {
 this.echo('http://www.google.com' + ' - ' + this.getTitle() + '\n');});
@@ -330,7 +337,7 @@ function timeout() {this.echo('ERROR - cannot find element').exit();});}});
 casper.then(function() {
 {this.echo('save element to filename.txt');
 casper.waitFor(function check() {return check_tx('element');},
-function then() {save_text('/folder_path/filename.txt',this.fetchText(tx('element')).trim());},
+function then() {save_text('/full_path/filename.txt',this.fetchText(tx('element')).trim());},
 function timeout() {this.echo('ERROR - cannot find element').exit();});}});
 
 casper.then(function() {
@@ -354,9 +361,9 @@ save_text('',"some text - "+variable);}
 {this.echo('dump "some text - " + variable');
 save_text('',"some text - "+variable);}
 {this.echo('dump "some text - " + variable to filename.txt');
-save_text('/folder_path/filename.txt',"some text - "+variable);}
+save_text('/full_path/filename.txt',"some text - "+variable);}
 {this.echo('dump "some text - " + variable to filename.txt');
-save_text('/folder_path/filename.txt',"some text - "+variable);}
+save_text('/full_path/filename.txt',"some text - "+variable);}
 {this.echo('dump "some text - " + variable to /tmp/filename.txt');
 save_text('/tmp/filename.txt',"some text - "+variable);}
 {this.echo('dump "some text - " + variable to /tmp/filename.txt');
@@ -366,9 +373,9 @@ save_text('',"some text - "+variable);}
 {this.echo('dump "some text - " variable');
 save_text('',"some text - "+variable);}
 {this.echo('dump "some text - " variable to filename.txt');
-save_text('/folder_path/filename.txt',"some text - "+variable);}
+save_text('/full_path/filename.txt',"some text - "+variable);}
 {this.echo('dump "some text - " variable to filename.txt');
-save_text('/folder_path/filename.txt',"some text - "+variable);}
+save_text('/full_path/filename.txt',"some text - "+variable);}
 {this.echo('dump "some text - " variable to /tmp/filename.txt');
 save_text('/tmp/filename.txt',"some text - "+variable);}
 {this.echo('dump "some text - " variable to /tmp/filename.txt');
@@ -382,7 +389,7 @@ function timeout() {this.echo('ERROR - cannot find element').exit();});}});
 casper.then(function() {
 {this.echo('snap element to filename.png');
 casper.waitFor(function check() {return check_tx('element');},
-function then() {this.captureSelector('/folder_path/filename.png',tx('element'));},
+function then() {this.captureSelector('/full_path/filename.png',tx('element'));},
 function timeout() {this.echo('ERROR - cannot find element').exit();});}});
 
 casper.then(function() {
@@ -395,18 +402,18 @@ casper.then(function() {
 {this.echo('snap page');
 this.capture(snap_image());}
 {this.echo('snap page to filename.png');
-this.capture('/folder_path/filename.png');}
+this.capture('/full_path/filename.png');}
 {this.echo('snap page to /tmp/filename.png');
 this.capture('/tmp/filename.png');}
 // test download
 {this.echo('download http://www.dummytestsite.com/report/month.txt to filename.txt');
-this.download('http://www.dummytestsite.com/report/month.txt','/folder_path/filename.txt');}
+this.download('http://www.dummytestsite.com/report/month.txt','/full_path/filename.txt');}
 {this.echo('download http://www.dummytestsite.com/report/month.txt to /tmp/filename.txt');
 this.download('http://www.dummytestsite.com/report/month.txt','/tmp/filename.txt');}
 // test receive
 {this.echo('receive report to filename.txt');
 casper.on('resource.received', function(resource) {if (resource.stage !== 'end') return;
-if (resource.url.indexOf('report') > -1) this.download(resource.url, '/folder_path/filename.txt');});}
+if (resource.url.indexOf('report') > -1) this.download(resource.url, '/full_path/filename.txt');});}
 {this.echo('receive report to /tmp/filename.txt');
 casper.on('resource.received', function(resource) {if (resource.stage !== 'end') return;
 if (resource.url.indexOf('report') > -1) this.download(resource.url, '/tmp/filename.txt');});}
