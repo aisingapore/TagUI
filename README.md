@@ -85,7 +85,7 @@ What happens behind the scenes when you run an automation flow
 
 ### FLOW SAMPLES
 
-Following automation flow samples are included as part of this repository (/src/samples folder). They demo different features of TA.Gui and are excellent reference material to use in addition to the cheatsheet. The samples can be browsed in sequence, starting from easy automation flows to more complex ones. They can also be browsed directly for a particular feature that you want to know more about. There are also plenty of notes to aid your understanding.
+Following automation flow samples are included as part of this repository (/src/samples folder). They demo different features of TA.Gui and are excellent reference material to use in addition to the cheatsheet. The samples can be browsed in sequence, starting from easy automation flows to more complex ones. They can also be browsed directly for a particular feature that you want to know more about. There are also plenty of notes inside them to aid your understanding.
 
 Flow Sample |Purpose
 :-----------|:------
@@ -95,7 +95,7 @@ Flow Sample |Purpose
 4_conditions|goes through examples of using conditions in natural language
 5_repositories|shows using repositories on Russian social media site VK.com
 6_datatables|set of flows uses datatables to reach out to GitHub Starrers
-7_testing|hows how to use check step and CasperJS test assertions
+7_testing|shows how to use check step and CasperJS test assertions
 
 # Pipeline
 To feedback bugs or suggestions, kindly email support@tebel.org
