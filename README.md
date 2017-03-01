@@ -85,7 +85,9 @@ What happens behind the scenes when you run an automation flow
 
 ### FLOW SAMPLES
 
-Following automation flow samples are included as part of this repository (/src/samples folder). They demo different features of TA.Gui and are excellent reference material to use in addition to the cheatsheet. The samples can be browsed in sequence, starting from easy automation flows to more complex ones. They can also be browsed directly for a particular feature that you want to know more about. There are also plenty of notes inside them to aid your understanding.
+Following automation flow samples (/src/samples folder) are included as part of this repository. They demo different features of TA.Gui and are excellent reference material to use in addition to the cheatsheet. The samples can be browsed in sequence, starting from easy automation flows to more complex ones. They can also be browsed directly for a particular feature that you want to know more about. They include plenty of notes to aid your understanding.
+
+If you run into any issue or have questions, kindly raise an issue or email support@tebel.org
 
 Flow Sample |Purpose
 :-----------|:------
@@ -98,7 +100,7 @@ Flow Sample |Purpose
 7_testing|shows how to use check step and CasperJS test assertions
 
 # Pipeline
-To feedback bugs or suggestions, kindly email support@tebel.org
+To feedback bugs or suggestions, kindly raise an issue or email support@tebel.org
 
 Feature|Purpose
 :-----:|:------
