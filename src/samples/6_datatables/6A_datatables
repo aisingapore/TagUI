@@ -1,7 +1,7 @@
 https://github.com/telegramdesktop/tdesktop/stargazers?page=`page_no`
 // automation flow files start with an URL to tell TA.Gui where to go
 
-// this set of flows shows use of datatables to reach out to GitHub Starrers
+// this set of flows uses datatables to reach out to GitHub Starrers
 // flows 6A - get URLs of Starrers, 6B - get contact info, 6C - email Starrers
 // for issues or questions, kindly feedback on GitHub or support@tebel.org
 // see cheatsheet for steps, conditions, finding element identifiers, etc
