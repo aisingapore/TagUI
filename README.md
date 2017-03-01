@@ -83,6 +83,20 @@ What happens behind the scenes when you run an automation flow
 
 ![TA.Gui Flowchart](https://raw.githubusercontent.com/tebelorg/TA.Gui/master/src/media/flowchart.png)
 
+### FLOW SAMPLES
+
+Following automation flow samples are included as part of this repository (/src/samples folder). They demo different features of TA.Gui and are excellent reference material to use in addition to the cheatsheet. The samples can be browsed in sequence, starting from easy automation flows to more complex ones. They can also be browsed directly for a particular feature that you want to know more about. There are also plenty of notes to aid your understanding.
+
+Flow Sample |Purpose
+:-----------|:------
+1_yahoo|searches github on Yahoo and captures screenshot of results
+2_twitter|goes to a Twitter page and saves some profile information
+3_github|goes to a GitHub page and downloads the repo using 2 ways
+4_conditions|goes through examples of using conditions in natural language
+5_repositories|shows using repositories on Russian social media site VK.com
+6_datatables|set of flows uses datatables to reach out to GitHub Starrers
+7_testing|hows how to use check step and CasperJS test assertions
+
 # Pipeline
 To feedback bugs or suggestions, kindly email support@tebel.org
 
