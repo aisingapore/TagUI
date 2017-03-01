@@ -1,0 +1,49 @@
+https://github.com/telegramdesktop/tdesktop/stargazers?page=`page_no`
+// automation flow files start with an URL to tell TA.Gui where to go
+
+// this set of flows uses datatables to reach out to GitHub Starrers
+// flows 6A - get URLs of Starrers, 6B - get contact info, 6C - email Starrers
+// for issues or questions, kindly feedback on GitHub or support@tebel.org
+// see cheatsheet for steps, conditions, finding element identifiers, etc
+// https://github.com/tebelorg/TA.Gui#cheat-sheet
+
+// CONTEXT - When TA.Gui beta was released, someone shared to Hacker News
+// and GitHub stars for this project jumped from 2 to 1.5k in about 1 week.
+// I wanted to send an one-time thank you email to all TA.Gui supporters,
+// so I created these automation flows to let my laptop do the job quickly.
+// Otherwise it requires copying out 1500 URLs, loading 1500 profile pages,
+// and using some 3rd-party newsletter service to send out the emails.
+
+// please note that in these comments, the symbol ` is replaced with '
+// otherwise TA.Gui will try to interpret it as datatable definition
+
+// datatables extend the power of repositories files to manage batch automation
+// datatable has 2 or more columns, for example below (headers up to you to name)
+// data-centric approach with rows representing data fields (usually row = test case)
+// TA.Gui loops through each column to automate using values from different datasets
+// for example, echo "PAGE NUMBER - `page_no`" in your flow shows PAGE NUMBER - 1
+
+// contents of 6A_datatables.csv
+// 6A_GETURL,#1,#2,#3
+// page_no,1,2,3
+
+// now here's the actual flow, it grabs URLs of first 3 pages of Telegram Starrers 
+
+// use JavaScript to define an array, TA.Gui supports JavaScript directly in the flow
+var ID = []; // JavaScript can be used as needed to create more complex automation flows
+
+// for loop in natural language
+for n from 1 to 76
+
+{ // opening brace to denote whole section belonging to loop
+
+// below grabs the URL, does some filtering of results, and outputs the URL to screen and log file
+ID[n]="https://github.com"+this.getElementAttribute(x('(//*[contains(@class,"follow-list-item")]//a)['+2*n+']'),"href");
+if ID[n] not contains "/login?return_to="
+echo ID[n]
+
+// you can also use JavaScript to do post-processing and append to a file, or to a format directly usable by flow 6B
+// if ID[n] not contains "/login?return_to="
+// {var fs = require('fs'); fs.write("/tmp/urls.csv", ID[n] + "\n", 'a');}
+
+} // closing brace to denote end of the section belonging to loop
