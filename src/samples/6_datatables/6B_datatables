@@ -1,0 +1,59 @@
+`user_url`
+// automation flow files start with an URL to tell TA.Gui where to go
+
+// this set of flows uses datatables to reach out to GitHub Starrers
+// flows 6A - get URLs of Starrers, 6B - get contact info, 6C - email Starrers
+// for issues or questions, kindly feedback on GitHub or support@tebel.org
+// see cheatsheet for steps, conditions, finding element identifiers, etc
+// https://github.com/tebelorg/TA.Gui#cheat-sheet
+
+// CONTEXT - When TA.Gui beta was released, someone shared to Hacker News
+// and GitHub stars for this project jumped from 2 to 1.5k in about 1 week.
+// I wanted to send an one-time thank you email to all TA.Gui supporters,
+// so I created these automation flows to let my laptop do the job quickly.
+// Otherwise it requires copying out 1500 URLs, loading 1500 profile pages,
+// and using some 3rd-party newsletter service to send out the emails.
+
+// datatables extend the power of repositories files to manage batch automation
+// datatable has 2 or more columns, for example below (headers up to you to name)
+// data-centric approach with rows representing data fields (usually row = test case)
+// TA.Gui loops through each column to automate using values from different datasets
+// for example, echo "URL - `user_url`" in your flow shows URL - https://github.com/s0b0lev
+
+// contents of 6B_datatables.csv // with 3 random Telegram GitHub userids as learning examples
+// file in this format can be from flow 6A using JavaScript, or using Excel transpose function
+// 6B_GETCONTACT,#1,#2,#3
+// user_url,https://github.com/s0b0lev,https://github.com/zongUMR,https://github.com/jkmartindale
+
+// now here's the actual flow, it goes to their profile URLs and grabs their contact information
+
+// JavaScript can be used as needed to create more complex automation flows
+
+// define blank variables so errors won't be thrown for profiles with missing info
+fullname = ""; username = ""; email = ""; url = ""; country = ""; bio = "";
+
+// read User Full Name and GitHub ID to variables
+read fullname to fullname
+read username to username
+
+// read User Email to variable if information exists
+if check_tx('//*[@itemprop="email"]')
+read //*[@itemprop="email"] to email
+
+// read User Website to variable if information exists
+if check_tx('//*[@itemprop="url"]')
+read //*[@itemprop="url"] to url
+
+// read User Location to variable if information exists
+if check_tx('//*[@itemprop="homeLocation"]')
+read //*[@itemprop="homeLocation"] to country
+
+// read User Biography to variable if information exists
+if check_tx('user-profile-bio')
+read user-profile-bio to bio
+
+// show the information retrieved to screen and log file
+echo fullname "," username "," email "," url "," country "," bio
+
+// write the information received into a csv spreadsheet file
+var fs = require('fs'); fs.write("/tmp/contacts.csv", "\""+fullname+"\",\""+username+"\",\""+email+"\",\""+url+"\",\""+country+"\",\""+bio+"\"\n", 'a');
