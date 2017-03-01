@@ -1,0 +1,50 @@
+https://vk.com/kensoh
+// automation flow files start with an URL to tell TA.Gui where to go
+
+// this flow shows using repositories on Russian social media site VK.com
+// for issues or questions, kindly feedback on GitHub or support@tebel.org
+// see cheatsheet for steps, conditions, finding element identifiers, etc
+// https://github.com/tebelorg/TA.Gui#cheat-sheet
+
+// please note that in these comments, the symbol ` is replaced with '
+// otherwise TA.Gui will try to interpret it as repository definition
+
+// repositories help to make objects or steps reusable and improve readability
+// save repository file with same name as your flow filename and with .csv behind
+// repository must have 2 columns, for example below (headers up to you to name)
+// using 'object' in your flow replaces it with its definition (which can contain objects)
+// for example during execution, 'click link' becomes click //*[@id="profile_full"]//a
+// if you have watched Inception movie, this is inception level 2 (capped at max 2 for now)
+// don't worry about mistakes, TA.Gui is usually able to tell you which line has what error
+
+// contents of 5_repositories.csv
+// OBJECT,DEFINITION
+// email,quick_email
+// password,quick_pass
+// user_email,mickey_mouse@disney.com
+// user_password,iloveminnie4eva
+// show info,Show full information
+// click link,click 'facebook_link'
+// facebook_link,//*[@id="profile_full"]//a
+
+// enough intro, let's go for it
+enter `email` as `user_email`
+enter `password` as `user_password`
+
+// but we are obviously not going to click Sign up and spam VK
+// so let's use some more repository features and go over to FB
+
+// hover and click on the show info link, adding wait to see effect of action
+hover `show info`
+wait 2.5
+click `show info`
+wait 2.5
+
+// hover and click on the facebook link, adding wait to see effect of action
+hover `facebook_link`
+wait 2.5
+`click link`
+wait
+
+// flow execution output is saved to 5_repositories.log for reference / processing
+// for developers and tinkerers, the generated JavaScript file is 5_repositories.js 
