@@ -41,6 +41,9 @@ If you know JavaScript coding and want to be more expressive, you can even use J
 
 Originally developed by a test automation engineer to avoid writing code to automate web-based interactions.
 
+### MEDIA AND GITHUB
+Mentioned in Codrops Collective, CSS Author, Hacker News. #1 GitHub repo for topics natural-language, casperjs, slimerjs, #2 for business, #3 for chrome-extension, and #4 for phantomjs. GitHub weekly trending repo #2.
+
 # Set Up
 TA.Gui is in beta version (v0.6.0) and runs on macOS/Linux (coming to Windows soon)
 
@@ -84,7 +87,6 @@ What happens behind the scenes when you run an automation flow
 ![TA.Gui Flowchart](https://raw.githubusercontent.com/tebelorg/TA.Gui/master/src/media/flowchart.png)
 
 ### FLOW SAMPLES
-
 Following automation flow samples (/src/samples folder) are included as part of this repository. They demo different features of TA.Gui and are excellent reference material to use in addition to the cheatsheet. The samples can be browsed in sequence, starting from easy automation flows to more complex ones. They can also be browsed directly for a particular feature that you want to know more about. They include plenty of notes to aid your understanding.
 
 If you run into any issue or have questions, kindly raise an issue or email support@tebel.org
