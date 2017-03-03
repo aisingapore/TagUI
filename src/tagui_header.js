@@ -11,7 +11,10 @@ var p7 = casper.cli.raw.get(6); var p8 = casper.cli.raw.get(7); var p9 = casper.
 var automation_start_time = Date.now(); casper.echo('\nSTART - automation started - ' + Date().toLocaleString());
 
 // initialise other global variables
-var save_text_count = 0; var snap_image_count = 0;
+var quiet_mode = false; var save_text_count = 0; var snap_image_count = 0
+
+// techo function to handle quiet mode
+function techo(echo_string) {if (!quiet_mode) casper.echo(echo_string); return;}
 
 // muting echo in test automation scripts
 function dummy_echo(muted_string) {return;}
