@@ -5,6 +5,28 @@ TA.Gui is a tool for non-developers and business users to automate web apps
 
 Above video shows a sample automation flow to automate mass account registrations - recording sequence of steps, editing to wait for a few seconds at the end, playing the automation flow (skip submission step in order not to spam)
 
+# Contents
+* [WHY THIS](#why-this)
+ * [features](#features)
+ * [how it works](#how-it-works)
+ * [media and GitHub](#media-and-github)
+* [SET UP](#set-up)
+* [TO USE](#to-use)
+ * [command line](#command-line)
+ * [by scheduling](#by-scheduling)
+ * [Chrome extension](#chrome-extension)
+ * [TA.Gui workflow](#tagui-workflow)
+ * [flow samples](#flow-samples)
+* [PIPELINE](#pipeline)
+* [CHEAT SHEET](#cheat-sheet)
+ * [steps description](#steps-description)
+ * [conditions examples](#conditions-examples)
+ * [repositories](#repositories)
+ * [datatables](#datatables)
+ * [testing](#testing-for-qa-folks-and-test-automation-engineers)
+ * [TA.Gui API](#tagui-api-for-developers-and-the-curious-ones)
+* [LICENSE](#license)
+
 # Why This
 Automate repetitive parts of your work - use cases include data acquisition, process and test automations of web apps. TA.Gui is open-source software released under the MIT license, that means you can freely use, modify or share it.
 
