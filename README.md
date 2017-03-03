@@ -90,7 +90,7 @@ What happens behind the scenes when you run an automation flow
 ### FLOW SAMPLES
 Following automation flow samples (/src/samples folder) are included as part of this repository. They demo different features of TA.Gui and are excellent reference material to use in addition to the cheatsheet. The samples can be browsed in sequence, starting from easy automation flows to more complex ones. They can also be browsed directly for a particular feature that you want to know more about. They include plenty of notes to aid your understanding.
 
-If you run into any issue or have questions, kindly raise an issue or [![Join the chat at https://gitter.im/tebelorg/TA.Gui](https://img.shields.io/gitter/room/nwjs/nw.js.svg)](https://gitter.im/tebelorg/TA.Gui)
+If you run into any issue or have questions, kindly raise an issue or [chat on Gitter](https://gitter.im/tebelorg/TA.Gui)
 
 Flow Sample |Purpose
 :-----------|:------
