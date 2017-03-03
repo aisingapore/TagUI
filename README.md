@@ -135,7 +135,7 @@ Enhancements|feel free to review and suggest new features
 # Cheat Sheet
 ### STEPS DESCRIPTION
 - TA.Gui auto-waits for a webpage element to appear and interacts with it as soon as it appears
-- Element identifier can be auto-recorded using TA.Gui Chrome extension, or found from [web browser](https://help.surveygizmo.com/help/how-to-find-element-ids-to-use-with-javascript)
+- Element identifier can be auto-recorded using TA.Gui Chrome extension, or [found from web browser](https://help.surveygizmo.com/help/how-to-find-element-ids-to-use-with-javascript)
 - TA.Gui auto-selects provided identifier in this order - xpath, css, id, name, class, title, text(), aria-label
 
 Step|Parameters (separator in bold)|Purpose
