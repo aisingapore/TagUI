@@ -3,29 +3,29 @@ TA.Gui is a tool for non-developers and business users to automate web apps
 
 ![Sample Automation Flow](https://raw.githubusercontent.com/tebelorg/TA.Dump/master/tagui_flow.gif)
 
-Above video shows a sample automation flow to automate mass account registrations - recording sequence of steps, editing to wait for a few seconds at the end, playing the automation flow (skip submission step in order not to spam)
+Above video shows a sample automation flow to automate mass account registrations - 1. recording sequence of steps, 2. editing to wait for a few seconds, 3. playing the automation flow (submission step is skipped in order not to spam)
 
 # Contents
-* [WHY THIS](#why-this)
+* [Why This](#why-this)
  * [features](#features)
  * [how it works](#how-it-works)
  * [media and GitHub](#media-and-github)
-* [SET UP](#set-up)
-* [TO USE](#to-use)
+* [Set Up](#set-up)
+* [To Use](#to-use)
  * [command line](#command-line)
  * [by scheduling](#by-scheduling)
  * [Chrome extension](#chrome-extension)
- * [TA.Gui workflow](#tagui-workflow)
+ * [automation workflow](#automation-workflow)
  * [flow samples](#flow-samples)
-* [PIPELINE](#pipeline)
-* [CHEAT SHEET](#cheat-sheet)
+* [Pipeline](#pipeline)
+* [Cheat Sheet](#cheat-sheet)
  * [steps description](#steps-description)
  * [conditions examples](#conditions-examples)
  * [repositories](#repositories)
  * [datatables](#datatables)
  * [testing](#testing-for-qa-folks-and-test-automation-engineers)
- * [TA.Gui API](#tagui-api-for-developers-and-the-curious-ones)
-* [LICENSE](#license)
+ * [API](#api-for-developers-and-the-curious-ones)
+* [License](#license)
 
 # Why This
 Automate repetitive parts of your work - use cases include data acquisition, process and test automations of web apps. TA.Gui is open-source software released under the MIT license, that means you can freely use, modify or share it.
@@ -103,7 +103,7 @@ To schedule an automation flow in crontab, for example at 8am daily
 ### CHROME EXTENSION
 Prior to public release, to use TA.Gui Chrome web browser extension for recording automation flows, type chrome://extensions in Google Chrome, then drag and drop TA.Gui chrome folder into the browser. TA.Gui Chrome extension is based on [Resurrectio tool](https://github.com/ebrehault/resurrectio) and records steps such as page navigation, clicking web elements and entering information. To start recording and exporting your automation flows, simply click TA.Gui icon on your Chrome toolbar.
 
-### TA.GUI WORKFLOW
+### AUTOMATION WORKFLOW
 What happens behind the scenes when you run an automation flow
 
 ![TA.Gui Flowchart](https://raw.githubusercontent.com/tebelorg/TA.Gui/master/src/media/flowchart.png)
@@ -227,7 +227,7 @@ For the list of expressive test assertions built into CasperJS, [click here](htt
 
 TA.Gui recognizes most JavaScript code. In the rare event you get an error saying that it cannot understand the step for your JavaScript line, kindly raise an issue or feel free to modify the source code (tagui_parse.php is where interpretation of natural language to CasperJS JavaScript code takes place). Alternatively, you can use the undocumented step js to explicitly declare that whatever follows on that line is JavaScript code.
 
-### TA.GUI API (for developers and the curious ones)
+### API (for developers and the curious ones)
 Automation flows can also be triggered via REST API. TA.Gui has an API service and runner for managing a queue of incoming requests via API. To set up, add a crontab entry on your server with the desired frequency to check and process incoming service requests. For example, the following job will check every 15 minutes and run pending flows in the queue.
 ```
 0,15,30,45 * * * * /full_path_on_your_server/tagui_crontab
