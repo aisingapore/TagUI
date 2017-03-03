@@ -1,12 +1,12 @@
 # TA.Gui
-
-TA.Gui is a tool for non-developers and business users to automate web apps &emsp;&emsp;&emsp;&emsp;&emsp;&emsp; [![Join the chat at https://gitter.im/tebelorg/TA.Gui](https://img.shields.io/gitter/room/nwjs/nw.js.svg)](https://gitter.im/tebelorg/TA.Gui)
+TA.Gui is a tool for non-developers and business users to automate web apps
 
 ![Sample Automation Flow](https://raw.githubusercontent.com/tebelorg/TA.Dump/master/tagui_flow.gif)
 
-Above video shows a sample automation flow to automate mass account registrations - 1. recording sequence of steps, 2. editing to wait for a few seconds, 3. playing the automation flow (submission step is skipped in order not to spam)
+Above video shows a sample automation flow to automate mass account registrations - 1. recording sequence of steps, 2. editing to wait for a few seconds, 3. playing the automation flow (skip submission step in order not to spam)
 
 # Contents
+[![Join the chat at https://gitter.im/tebelorg/TA.Gui](https://img.shields.io/gitter/room/nwjs/nw.js.svg)](https://gitter.im/tebelorg/TA.Gui)
 * [[ Why This ]](#why-this)
  * [features](#features)
  * [how it works](#how-it-works)
@@ -29,7 +29,7 @@ Above video shows a sample automation flow to automate mass account registration
 * [[ License ]](#license)
 
 # Why This
-Automate repetitive parts of your work - use cases include data acquisition, process and test automations of web apps. TA.Gui is open-source software released under the MIT license, that means you can freely use, modify or share it.
+Automate repetitive parts of your work - use cases include data acquisition, process and test automations of web apps. TA.Gui is open-source software released under MIT license, that means you can freely use, modify or share it.
 
 ### FEATURES
 - natural language with JavaScript support
@@ -44,7 +44,7 @@ Automate repetitive parts of your work - use cases include data acquisition, pro
 - cross-platform (macOS/Linux; Windows soon)
 
 ### HOW IT WORKS
-TA.Gui converts your intentions in simple natural language into lines of working JavaScript code for CasperJS & PhantomJS to cast their web automation magic. As an example, TA.Gui will instantly convert the automation flow below into 100+ lines of JavaScript code and perform the sequence of steps to download a Typeform report automatically.
+TA.Gui converts your intentions in simple natural language into lines of working JavaScript code for CasperJS & PhantomJS to cast their web automation magic. As an example, TA.Gui will instantly convert the automation flow below into 100+ lines of JavaScript code and perform the steps to download a Typeform report automatically.  
 
 ```
 https://www.typeform.com
@@ -102,7 +102,7 @@ To schedule an automation flow in crontab, for example at 8am daily
 ```
 
 ### CHROME EXTENSION
-Prior to public release, to use TA.Gui Chrome web browser extension for recording automation flows, type chrome://extensions in Google Chrome, then drag and drop TA.Gui chrome folder into the browser. TA.Gui Chrome extension is based on [Resurrectio tool](https://github.com/ebrehault/resurrectio) and records steps such as page navigation, clicking web elements and entering information. To start recording and exporting your automation flows, simply click TA.Gui icon on your Chrome toolbar.
+Prior to public release, to use TA.Gui Chrome web browser extension for recording automation flows, type chrome://extensions in Google Chrome, then drag and drop TA.Gui chrome folder into the browser. TA.Gui Chrome extension is based on [Resurrectio tool](https://github.com/ebrehault/resurrectio) and records steps such as page navigation, clicking web elements and entering information. To start recording your automation flows, simply click TA.Gui icon on your Chrome toolbar.
 
 ### AUTOMATION WORKFLOW
 What happens behind the scenes when you run an automation flow
@@ -224,12 +224,12 @@ test.assertTextExists('About Tebel.Automation','Check for About Tebel.Automation
 test.assertSelectorHasText(tx('header'), 'interface automation','Check for phrase in header element');
 ```
 
-For the list of expressive test assertions built into CasperJS, [click here](http://docs.casperjs.org/en/latest/modules/tester.html). To know more about CasperJS testing framework, [click here](http://docs.casperjs.org/en/latest/testing.html). As TA.Gui allows you to write JavaScript code directly within the automation flow, advanced testing or coding techniques that can be implemented in CasperJS should be able to be work directly within your automation flow.
+For the list of expressive test assertions built into CasperJS, [click here](http://docs.casperjs.org/en/latest/modules/tester.html). To know more about CasperJS testing framework, [click here](http://docs.casperjs.org/en/latest/testing.html). As TA.Gui allows you to write JavaScript code directly within the automation flow, advanced testing or coding techniques that can be implemented in CasperJS should work directly within your flow.
 
 TA.Gui recognizes most JavaScript code. In the rare event you get an error saying that it cannot understand the step for your JavaScript line, kindly raise an issue or feel free to modify the source code (tagui_parse.php is where interpretation of natural language to CasperJS JavaScript code takes place). Alternatively, you can use the undocumented step js to explicitly declare that whatever follows on that line is JavaScript code.
 
 ### API (for developers and the curious ones)
-Automation flows can also be triggered via REST API. TA.Gui has an API service and runner for managing a queue of incoming requests via API. To set up, add a crontab entry on your server with the desired frequency to check and process incoming service requests. For example, the following job will check every 15 minutes and run pending flows in the queue.
+Automation flows can also be triggered via REST API. TA.Gui has an API service and runner for managing a queue of incoming requests via API. To set up, add a crontab entry on your server with the desired frequency to check and process incoming service requests. Below example will check every 15 minutes and run pending flows in the queue.
 ```
 0,15,30,45 * * * * /full_path_on_your_server/tagui_crontab
 ```
@@ -239,7 +239,7 @@ To call an automation flow from your application or web browser, use below API s
 your_website_url/tagui_service.php?SETTINGS="flow_filename option(s)"
 ```
 
-Besides integrating with web applications, TA.Gui can be extended to integrate with hardware (for example Arduino or Raspberry Pi) for physical world interactions or machine learning service providers for fuzzy decision-making capacity.
+Besides integrating with web applications, TA.Gui can be extended to integrate with hardware (eg Arduino or Raspberry Pi) for physical world interactions or machine learning service providers for fuzzy decision-making capacity.
 
 For making outgoing API calls in your automation flow, to feed data somewhere or send emails etc, use the api step followed by full URL (including parameters) of the API call. Response from the API will be printed to output. For example using TA.Mail, emails with run-time variables can be sent directly from your flow with a single line.
 
