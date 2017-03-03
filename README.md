@@ -1,4 +1,6 @@
 # TA.Gui
+
+[![Join the chat at https://gitter.im/tebelorg/TA.Gui](https://badges.gitter.im/tebelorg/TA.Gui.svg)](https://gitter.im/tebelorg/TA.Gui?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 TA.Gui is a tool for non-developers and business users to automate web apps
 
 ![Sample Automation Flow](https://raw.githubusercontent.com/tebelorg/TA.Dump/master/tagui_flow.gif)
