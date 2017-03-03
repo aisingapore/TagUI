@@ -6,7 +6,6 @@ TA.Gui is a tool for non-developers and business users to automate web apps
 Above video shows a sample automation flow to automate mass account registrations - 1. recording sequence of steps, 2. editing to wait for a few seconds, 3. playing the automation flow (skip submission step in order not to spam)
 
 # Contents
-[![Join the chat at https://gitter.im/tebelorg/TA.Gui](https://img.shields.io/gitter/room/nwjs/nw.js.svg)](https://gitter.im/tebelorg/TA.Gui)
 * [[ Why This ]](#why-this)
  * [features](#features)
  * [how it works](#how-it-works)
@@ -112,7 +111,7 @@ What happens behind the scenes when you run an automation flow
 ### FLOW SAMPLES
 Following automation flow samples (/src/samples folder) are included as part of this repository. They demo different features of TA.Gui and are excellent reference material to use in addition to the cheatsheet. The samples can be browsed in sequence, starting from easy automation flows to more complex ones. They can also be browsed directly for a particular feature that you want to know more about. They include plenty of notes to aid your understanding.
 
-If you run into any issue or have questions, kindly raise an issue or email support@tebel.org
+If you run into any issue or have questions, kindly raise an issue or [![Join the chat at https://gitter.im/tebelorg/TA.Gui](https://img.shields.io/gitter/room/nwjs/nw.js.svg)](https://gitter.im/tebelorg/TA.Gui)
 
 Flow Sample |Purpose
 :-----------|:------
@@ -239,7 +238,7 @@ To call an automation flow from your application or web browser, use below API s
 your_website_url/tagui_service.php?SETTINGS="flow_filename option(s)"
 ```
 
-Besides integrating with web applications, TA.Gui can be extended to integrate with hardware (eg Arduino or Raspberry Pi) for physical world interactions or machine learning service providers for fuzzy decision-making capacity.
+Besides integrating with web applications, TA.Gui can be extended to integrate with hardware (eg Arduino or Raspberry Pi) for physical world interactions or machine learning service providers for AI decision-making capacity.
 
 For making outgoing API calls in your automation flow, to feed data somewhere or send emails etc, use the api step followed by full URL (including parameters) of the API call. Response from the API will be printed to output. For example using TA.Mail, emails with run-time variables can be sent directly from your flow with a single line.
 
