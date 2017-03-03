@@ -273,7 +273,7 @@ return "{techo('".$raw_intent."');".beg_tx($params).
 	"save_text('',this.fetchText(tx('" . $params . "')).trim());".end_tx($params);}
 
 function dump_intent($raw_intent) {
-$raw_intent = str_replace("'","\'",$raw_intent); // avoid breaking echo below when single quote is used
+$raw_intent = str_replace("'","\"",$raw_intent); // avoid breaking echo below when single quote is used
 $params = trim(substr($raw_intent." ",1+strpos($raw_intent." "," ")));
 $param1 = trim(substr($params,0,strpos($params," to "))); $param2 = trim(substr($params,4+strpos($params," to ")));
 if ($params == "") echo "ERROR - " . current_line() . " variable missing for " . $raw_intent . "\n"; 
