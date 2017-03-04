@@ -27,38 +27,6 @@ var fs = require('fs'); fs.write(file_name, info_text, 'w');}
 // saving snapshots of website to file
 function snap_image() {snap_image_count++; return (flow_path + '/' + 'snap' + snap_image_count.toString() + '.png');}
 
-// adding synchronous suspend capability
-function sleep(delay_in_ms) {var start_time = new Date().getTime();
-for (var sleep_count = 0; sleep_count < 1e7; sleep_count++)
-{if ((new Date().getTime() - start_time) > delay_in_ms) break;}}
-
-// checking if selector is css selector
-function is_css_selector(selector) { // post-issue #12, function marked for potential deletion
-if (selector.length == 0) return false; if (selector.charAt(0) == '[') return true;
-if (selector.charAt(0) == '.') return true; if (selector.charAt(0) == '#') return true;
-if (selector.substring(0,4) == 'div ') return true; if (selector.substring(0,4) == 'div:') return true;
-if (selector.substring(0,4) == 'div[') return true; if (selector.substring(0,2) == 'p ') return true;
-if (selector.substring(0,2) == 'p:') return true; if (selector.substring(0,2) == 'p[') return true;
-if (selector.substring(0,6) == 'input ') return true; if (selector.substring(0,6) == 'input:') return true;
-if (selector.substring(0,6) == 'input[') return true; if (selector.substring(0,7) == 'button ') return true;
-if (selector.substring(0,7) == 'button:') return true; if (selector.substring(0,7) == 'button[') return true;
-if (selector.substring(0,3) == 'li ') return true; if (selector.substring(0,3) == 'li:') return true;
-if (selector.substring(0,3) == 'li[') return true; if (selector.substring(0,3) == 'tr ') return true;
-if (selector.substring(0,3) == 'tr:') return true; if (selector.substring(0,3) == 'tr[') return true;
-if (selector.substring(0,5) == 'span ') return true; if (selector.substring(0,5) == 'span:') return true;
-if (selector.substring(0,5) == 'span[') return true;
-if (selector.substring(0,3) == 'h1 ') return true; if (selector.substring(0,3) == 'h1:') return true;
-if (selector.substring(0,3) == 'h1[') return true; if (selector.substring(0,3) == 'h2 ') return true;
-if (selector.substring(0,3) == 'h2:') return true; if (selector.substring(0,3) == 'h2[') return true;
-if (selector.substring(0,3) == 'h3 ') return true; if (selector.substring(0,3) == 'h3:') return true;
-if (selector.substring(0,3) == 'h3[') return true; if (selector.substring(0,3) == 'h4 ') return true;
-if (selector.substring(0,3) == 'h4:') return true; if (selector.substring(0,3) == 'h4[') return true;
-if (selector.substring(0,3) == 'h5 ') return true; if (selector.substring(0,3) == 'h5:') return true;
-if (selector.substring(0,3) == 'h5[') return true; if (selector.substring(0,3) == 'h6 ') return true;
-if (selector.substring(0,3) == 'h6:') return true; if (selector.substring(0,3) == 'h6[') return true;
-if (selector.substring(0,7) == 'center ') return true;
-return false;}
-
 // checking if selector is xpath selector
 function is_xpath_selector(selector) {if (selector.length == 0) return false;
 if ((selector.indexOf('/') >= 0) || (selector.indexOf('(') >= 0)) return true; return false;}
@@ -66,9 +34,7 @@ if ((selector.indexOf('/') >= 0) || (selector.indexOf('(') >= 0)) return true; r
 // finding best match for given locator
 function tx(locator) {
 if (is_xpath_selector(locator)) return x(locator);
-// experimental change for #12, skip css syntax checks totally
-// if (is_css_selector(locator)) return locator; //old logic
-if (casper.exists(locator)) return locator; // new logic
+if (casper.exists(locator)) return locator; // check for css locator
 if (casper.exists(x('//*[contains(@id,"'+locator+'")]'))) return x('//*[contains(@id,"'+locator+'")]');
 if (casper.exists(x('//*[contains(@name,"'+locator+'")]'))) return x('//*[contains(@name,"'+locator+'")]');
 if (casper.exists(x('//*[contains(@class,"'+locator+'")]'))) return x('//*[contains(@class,"'+locator+'")]');
@@ -80,9 +46,7 @@ return x('/html');}
 // checking if given locator is found
 function check_tx(locator) {
 if (is_xpath_selector(locator)) {if (casper.exists(x(locator))) return true; else return false;}
-// experimental change for #12, skip css syntax checks totally
-// if (is_css_selector(locator)) {if (casper.exists(locator)) return true; else return false;} // old logic
-if (casper.exists(locator)) return true; // new logic
+if (casper.exists(locator)) return true; // check for css locator
 if (casper.exists(x('//*[contains(@id,"'+locator+'")]'))) return true;
 if (casper.exists(x('//*[contains(@name,"'+locator+'")]'))) return true;
 if (casper.exists(x('//*[contains(@class,"'+locator+'")]'))) return true;
