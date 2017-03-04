@@ -103,7 +103,11 @@ Flow Sample |Purpose
 7_testing|shows how to use check step and CasperJS test assertions
 
 # Pipeline
-To feedback bugs or suggestions, kindly raise an issue or email support@tebel.org
+TA.Gui is a young project, about 3 months (since Dec 2016) into development and still in beta. Feedback from the community will have a huge impact in shaping its development pipeline. By reproducing cognitive interactions that represent our intentions, we can let computers work on repetitive or time-sensitive tasks that people need to get done.
+
+The overarching goal is to make automation accessible to more people and handle increasingly complex processes as cognitive abilities of computers continue to improve. This helps free up people's time for higher-value activities, or simply for more leisure. Suggestions or pull requests that support this goal are certainly welcome.
+
+To feedback bugs, suggestions or pull requests, kindly raise an issue or email support@tebel.org
 
 Feature|Purpose
 :-----:|:------
