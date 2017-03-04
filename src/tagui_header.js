@@ -29,7 +29,7 @@ function snap_image() {snap_image_count++; return (flow_path + '/' + 'snap' + sn
 
 // checking if selector is xpath selector
 function is_xpath_selector(selector) {if (selector.length == 0) return false;
-if ((selector.indexOf('/') >= 0) || (selector.indexOf('(') >= 0)) return true; return false;}
+if ((selector.indexOf('/') == 0) || (selector.indexOf('(') == 0)) return true; return false;}
 
 // finding best match for given locator
 function tx(locator) {
