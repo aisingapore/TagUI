@@ -11,8 +11,8 @@ https://github.com/telegramdesktop/tdesktop/stargazers?page=`page_no`
 // and GitHub stars for this project jumped from 2 to 1.5k in about 1 week.
 // I wanted to send an one-time thank you email to all TA.Gui supporters,
 // so I created these automation flows to let my laptop do the job quickly.
-// Otherwise it requires copying out 1500 URLs, loading 1500 profile pages,
-// and using some 3rd-party newsletter service to send out the emails.
+// I have since stopped using this as it might be borderline spam for some.
+// Check Gitter chat instead for updates - https://gitter.im/tebelorg/TA.Gui
 
 // datatables extend the power of repositories files to manage batch automation
 // datatable has 2 or more columns, for example below (headers up to you to name)
