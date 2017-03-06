@@ -90,7 +90,7 @@ What happens behind the scenes when you run an automation flow
 ### FLOW SAMPLES
 Following automation flow samples (/src/samples folder) are included as part of this repository. They demo different features of TA.Gui and are excellent reference material to use in addition to the cheatsheet. The samples can be browsed in sequence, starting from easy automation flows to more complex ones. They can also be browsed directly for a particular feature that you want to know more about. They include plenty of notes to aid your understanding.
 
-If you run into any issue or have questions, kindly raise an issue or start a [chat on Gitter](https://gitter.im/tebelorg/TA.Gui)
+If you run into any issue or questions, kindly post to [Gitter chat room](https://gitter.im/tebelorg/TA.Gui) or email support@tebel.org
 
 Flow Sample |Purpose
 :-----------|:------
@@ -103,11 +103,11 @@ Flow Sample |Purpose
 7_testing|shows how to use check step and CasperJS test assertions
 
 # Pipeline
-TA.Gui is a young project, into development since Dec 2016 and still in beta. Feedback from the community will have a huge impact in shaping its development pipeline. By reproducing cognitive interactions that represent our intentions, we can let computers work on repetitive or time-sensitive tasks that people need to get done.
+TA.Gui is a young project, in development since Dec 2016 and still in beta. Feedback from the community will have a huge impact in shaping its development pipeline. By reproducing cognitive interactions that represent our intentions, we can let computers work on repetitive or time-sensitive tasks that people need to get done.
 
 The overarching goal is to make automation accessible to more people and handle increasingly complex processes as cognitive abilities of computers continue to improve. This helps free up people's time for higher-value activities, or simply for more leisure. Suggestions or pull requests that support this goal are certainly welcome.
 
-To feedback bugs, suggestions or pull requests, kindly raise an issue or email support@tebel.org
+To feedback bugs, suggestions or pull requests, kindly [raise an issue](https://github.com/tebelorg/TA.Gui/issues) or email support@tebel.org
 
 Feature|Purpose
 :-----:|:------
