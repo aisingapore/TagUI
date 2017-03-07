@@ -1,4 +1,4 @@
-https://www.yahoo.com
+https://ca.yahoo.com
 // automation flow files start with an URL to tell TA.Gui where to go
 
 // this flow searches github on Yahoo and captures screenshot of results
