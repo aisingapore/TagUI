@@ -1,4 +1,4 @@
-http://finance.yahoo.com
+http://ca.finance.yahoo.com
 // automation flow files start with an URL to tell TA.Gui where to go
 
 // this flow shows how to use check step and CasperJS test assertions
