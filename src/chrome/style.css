@@ -18,10 +18,10 @@ input[type=submit], input[type=button] {
 	padding: 1em 1em;
 	background: #1E82C9;
 	font-size: 1em;
-	border-radius: 0.5em;
-	-webkit-border-radius: 0.5em;
-	-moz-border-radius: 0.5em;
-  	-ms-border-radius: 0.5em;
-	-o-border-radius: 0.5em;
+	border-radius: 0em;
+	-webkit-border-radius: 0em;
+	-moz-border-radius: 0em;
+  	-ms-border-radius: 0em;
+	-o-border-radius: 0em;
 	cursor: pointer;
 }

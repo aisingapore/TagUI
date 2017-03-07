@@ -403,16 +403,6 @@ CasperRenderer.prototype.screenShot = function(item) {
   this.screen_id = this.screen_id + 1;
 }
 
-CasperRenderer.prototype.comment = function(item) {
-  var lines = item.text.split('\n');
-//  this.stmt('casper.then(function() {');
-  for (var i=0; i < lines.length; i++) {
-//    this.stmt('    test.comment("'+lines[i]+'");');
-    this.stmt('// '+lines[i]);
-  }
-//  this.stmt('});');
-}
-
 CasperRenderer.prototype.checkPageTitle = function(item) {
 //  var title = this.pyrepr(item.title, true);
 //  this.stmt('casper.then(function() {');

@@ -24,7 +24,7 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
   	    testcase_items = new Array();
   	    tab_id = request.recorded_tab;
   	    chrome.tabs.update(tab_id, {url: request.start_url}, function(tab) {
-          alert("Click OK to begin recording automation flow");
+          alert("Click OK to begin recording your actions");
           chrome.tabs.sendMessage(tab_id, {action: "open", 'url': request.start_url});
           sendResponse({start: true});
   	    });

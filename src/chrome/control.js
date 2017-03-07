@@ -21,12 +21,6 @@ RecorderProxy.prototype.open = function(url, callback) {
     });
 }
 
-RecorderProxy.prototype.addComment = function(text, callback) {
-    chrome.tabs.getSelected(null, function(tab) {
-        chrome.tabs.sendMessage(tab.id, {action: "addComment", 'text': text}, callback);
-    });
-}
-
 //-----------------------------------------------
 // UI
 //----------------------------------------------
@@ -65,11 +59,8 @@ RecorderUI.prototype.set_started = function() {
   var e = document.getElementById("bstop");
   e.style.display = '';
   e.onclick = ui.stop;
-  e.value = "   STOP   ";
   e = document.getElementById("bgo");
   e.style.display = 'none';
-//  e = document.getElementById("bcomment");
-//  e.style.display = '';
   e = document.getElementById("bexport");
   e.style.display = 'none';
 }
@@ -85,36 +76,8 @@ RecorderUI.prototype.set_stopped = function() {
 	e.style.display = 'none';
 	e = document.getElementById("bgo");
 	e.style.display = '';
-//	e = document.getElementById("bcomment");
-//	e.style.display = 'none';
 	e = document.getElementById("bexport");
 	e.style.display = '';
-}
-
-RecorderUI.prototype.showcomment = function() {
-//  var e = document.getElementById("bcomment");
-//  e.style.display = 'none';
-  e = document.getElementById("comment");
-  e.style.display = '';
-  e = document.getElementById("ctext");
-  e.focus();
-  return false;
-}
-
-RecorderUI.prototype.hidecomment = function(bsave) {
-//  var e = document.getElementById("bcomment");
-//  e.style.display = '';
-  e = document.getElementById("comment");
-  e.style.display = 'none';
-  e = document.getElementById("ctext");
-  if (bsave) {
-    var txt = e.value;
-    if (txt && txt.length > 0) {
-      this.recorder.addComment(e.value, null);
-    }
-  }
-  e.value = "";
-  return false;
 }
 
 RecorderUI.prototype.export = function(options) {
@@ -127,9 +90,6 @@ var ui;
 window.onload = function(){
     document.querySelector('input#bgo').onclick=function() {ui.start(); return false;};
     document.querySelector('input#bstop').onclick=function() {ui.stop(); return false;};
-    document.querySelector('input#bcomment').onclick=function() {ui.showcomment(); return false;};
     document.querySelector('input#bexport').onclick=function() {ui.export(); return false;};
-    document.querySelector('input#bsavecomment').onclick=function() {ui.hidecomment(true); return false;};
-    document.querySelector('input#bcancelcomment').onclick=function() {ui.hidecomment(false); return false;};
     ui = new RecorderUI();
 }
