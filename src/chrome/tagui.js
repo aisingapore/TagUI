@@ -37,8 +37,6 @@ function CasperRenderer(document) {
   this.items = null;
   this.history = new Array();
   this.last_events = new Array();
-  this.screen_id = 1;
-  this.unamed_element_id = 1;
 }
 
 CasperRenderer.prototype.text = function(txt) {
@@ -136,7 +134,6 @@ CasperRenderer.prototype.render = function(with_xy) {
 //  this.document.writeln('<button id="casperbox-button">Run it on Playbook</button>');
   this.document.write("<" + "pre" + ">");
   this.document.write("<span style=\"font-size: 18px\">");
-  this.writeHeader();
   var last_down = null;
   var forget_click = false;
 
@@ -147,7 +144,7 @@ CasperRenderer.prototype.render = function(with_xy) {
     
     if(i==0) {
         if(item.type!=etypes.OpenUrl) {
-            this.text("ERROR - recorded steps did not start with opening an url");
+            this.text("ERROR - steps did not start with opening an url");
         } else {
           this.startUrl(item);
           continue;
@@ -188,25 +185,9 @@ CasperRenderer.prototype.render = function(with_xy) {
     if (item.type == etypes.Comment)
       this.space();
   }
-  this.writeFooter();
   this.document.write("<" + "/" + "span" + ">");
   this.document.write("<" + "/" + "pre" + ">");
   this.document.close();
-}
-
-CasperRenderer.prototype.writeHeader = function() {
-// var date = new Date();
-// this.text("/*==============================================================================*/", 0);
-// this.text("/* Casper generated " + date + " */", 0);
-// this.text("/*==============================================================================*/", 0);
-// this.space();
-// this.stmt("var x = require('casper').selectXPath;", 0);
-}
-
-CasperRenderer.prototype.writeFooter = function() {
-// this.space();
-// this.stmt("casper.run(function() {test.done();});");
-// this.stmt("});", 0);
 }
 
 CasperRenderer.prototype.rewriteUrl = function(url) {
@@ -219,32 +200,19 @@ CasperRenderer.prototype.shortUrl = function(url) {
 
 CasperRenderer.prototype.startUrl = function(item) {
   var url = this.pyrepr(this.rewriteUrl(item.url));
-//  this.stmt("casper.options.viewportSize = {width: "+item.width+", height: "+item.height+"};", 0);
-//  this.stmt("casper.on('page.error', function(msg, trace) {", 0);
-//  this.stmt("this.echo('Error: ' + msg, 'ERROR');", 1);
-//  this.stmt("for(var i=0; i&lt;trace.length; i++) {", 1);
-//  this.stmt("var step = trace[i];", 2);
-//  this.stmt("this.echo('   ' + step.file + ' (line ' + step.line + ')', 'ERROR');", 2);
-//  this.stmt("}", 1);
-//  this.stmt("});", 0);
-//  this.stmt("casper.test.begin('Resurrectio test', function(test) {", 0);
-//  this.stmt("casper.start(" + url + ");");
   this.stmt(url);
 }
 CasperRenderer.prototype.openUrl = function(item) {
   var url = this.pyrepr(this.rewriteUrl(item.url));
   var history = this.history;
-//  if the user apparently hit the back button, render the event as such
-//  if (url == history[history.length - 2]) {
-//    this.stmt('casper.then(function() {');
-//    this.stmt('    this.back();');
-//    this.stmt('});');
-//    history.pop();
-//    history.pop();
-//  } else {
-//    this.stmt("casper.thenOpen(" + url + ");");
-//  }
-  this.stmt(url);
+// if the user apparently hit the back button, render the event as such
+  if (url == history[history.length - 2]) {
+    this.stmt('this.back();');
+    history.pop();
+    history.pop();
+  } else {
+    this.stmt(url);
+  }
 }
 
 CasperRenderer.prototype.pageLoad = function(item) {
@@ -271,7 +239,6 @@ CasperRenderer.prototype.getControl = function(item) {
     selector = item.info.id;
   else
     selector = item.info.selector;
-
   return selector;
 }
   
@@ -296,63 +263,52 @@ CasperRenderer.prototype.getControlXPath = function(item) {
 CasperRenderer.prototype.getLinkXPath = function(item) {
   var way;
   if (item.text)
-  // way = 'normalize-space(text())=' + this.cleanStringForXpath(this.normalizeWhitespace(item.text), true);
+  //  way = 'normalize-space(text())=' + '"' + this.cleanStringForXpath(this.normalizeWhitespace(item.text), true) + '"';
     way = this.cleanStringForXpath(this.normalizeWhitespace(item.text), true);
   else if (item.info.id)
-  // way = '@id=' + this.pyrepr(item.info.id);
+  //  way = '@id=' + '"' + this.pyrepr(item.info.id) + '"';
     way = this.pyrepr(item.info.id);
   else if (item.info.href)
-  // way = '@href=' + this.pyrepr(this.shortUrl(item.info.href));
+  //  way = '@href=' + '"' + this.pyrepr(this.shortUrl(item.info.href)) + '"';
     way = this.pyrepr(this.shortUrl(item.info.href));
   else if (item.info.title)
-  // way = 'title='+this.pyrepr(this.normalizeWhitespace(item.info.title));
+  //  way = '@title=' + '"' + this.pyrepr(this.normalizeWhitespace(item.info.title)) + '"';
     way = this.pyrepr(this.normalizeWhitespace(item.info.title));
-
   return way;
 }
 
 CasperRenderer.prototype.mousedrag = function(item) {
-//  if(this.with_xy) {
-//    this.stmt('casper.then(function() {');
-//    this.stmt('    this.mouse.down('+ item.before.x + ', '+ item.before.y +');');
-//    this.stmt('    this.mouse.move('+ item.x + ', '+ item.y +');');
-//    this.stmt('    this.mouse.up('+ item.x + ', '+ item.y +');');
-//    this.stmt('});');
-//  }
+  if(this.with_xy) {
+    this.stmt('this.mouse.down('+ item.before.x + ', '+ item.before.y +');');
+    this.stmt('this.mouse.move('+ item.x + ', '+ item.y +');');
+    this.stmt('this.mouse.up('+ item.x + ', '+ item.y +');');
+  }
 }
 
 CasperRenderer.prototype.click = function(item) {
   var tag = item.info.tagName.toLowerCase();
   if(this.with_xy && !(tag == 'a' || tag == 'input' || tag == 'button')) {
-//    this.stmt('casper.then(function() {');
-//    this.stmt('    this.mouse.click('+ item.x + ', '+ item.y +');');
-//    this.stmt('});');
-  } else {
+    this.stmt('this.mouse.click('+ item.x + ', '+ item.y +');');
+  }
+  else {
     var selector;
     if (tag == 'a') {
       var xpath_selector = this.getLinkXPath(item);
       if(xpath_selector) {
-//        selector = 'x("//a['+xpath_selector+']")';
+      //  selector = '//a['+xpath_selector+']';
         selector = xpath_selector;
-      } else {
+      }
+      else {
         selector = item.info.selector;
       }
-    } else if (tag == 'input' || tag == 'button') {
-//      selector = this.getFormSelector(item) + this.getControl(item);
+    }
+    else if (tag == 'input' || tag == 'button') {
+      // selector = this.getFormSelector(item) + this.getControl(item);
       selector = this.getControl(item);
-//      selector = '"' + selector + '"';
-    } else {
-//      selector = '"' + item.info.selector + '"';
+    }
+    else {
       selector = item.info.selector;
     }
-//    this.stmt('casper.waitForSelector('+ selector + ',');
-//    this.stmt('    function success() {');
-//    this.stmt('        test.assertExists('+ selector + ');');
-//    this.stmt('        this.click('+ selector + ');');
-//    this.stmt('    },');
-//    this.stmt('    function fail() {');
-//    this.stmt('        test.assertExists(' + selector + ');')
-//    this.stmt('});');
     if (selector.charAt(0) == '#') {selector = selector.substring(1);}
     this.stmt('click ' + selector);
   }
@@ -365,9 +321,11 @@ CasperRenderer.prototype.getFormSelector = function(item) {
   }
   if(info.form.name) {
         return "form[name=" + info.form.name + "] ";
-    } else if(info.form.id) {
+  }
+  else if(info.form.id) {
     return "form#" + info.form.id + " ";
-  } else {
+  }
+  else {
     return "form ";
   }
 }
@@ -377,13 +335,6 @@ CasperRenderer.prototype.keypress = function(item) {
   var selector = this.getControl(item);
   if (selector.charAt(0) == '#') {selector = selector.substring(1);}
   this.stmt('enter ' + selector + ' as ' + text);
-//  this.stmt('casper.waitForSelector("' + this.getControl(item) + '",');
-//  this.stmt('    function success() {');
-//  this.stmt('        this.sendKeys("' + this.getControl(item) + '", "' + text + '");');
-//  this.stmt('    },');
-//  this.stmt('    function fail() {');
-//  this.stmt('        test.assertExists("' + this.getControl(item) + '");')
-//  this.stmt('});');
 }
 
 CasperRenderer.prototype.submit = function(item) {
@@ -393,14 +344,7 @@ CasperRenderer.prototype.submit = function(item) {
 }
 
 CasperRenderer.prototype.screenShot = function(item) {
-  // wait 1 second is not the ideal solution, but will be enough most
-  // part of time. For slow pages, an assert before capture will make
-  // sure evrything is properly loaded before screenshot.
-//  this.stmt('casper.wait(1000);');
-//  this.stmt('casper.then(function() {');
-//  this.stmt('    this.captureSelector("screenshot'+this.screen_id+'.png", "html");');
-//  this.stmt('});');
-  this.screen_id = this.screen_id + 1;
+  this.stmt('snap page');
 }
 
 CasperRenderer.prototype.checkPageTitle = function(item) {
@@ -502,21 +446,6 @@ CasperRenderer.prototype.waitAndTestSelector = function(selector) {
 //  this.stmt('});');
 }
 
-CasperRenderer.prototype.postToCasperbox = function() {
-  var xhr = new XMLHttpRequest();
-  xhr.open('POST', 'http://play.tebel.org/api', true); 
-  xhr.onload = function() {
-    if (this.status == 202) {
-      response = JSON.parse(this.responseText);
-      window.open('http://play.tebel.org/api?' + response.id);  
-    } else {
-      alert("ERROR - "+this.status);
-    }
-    
-  };
-  xhr.send(document.getElementsByTagName('pre')[0].innerText);
-}
-
 var dt = new CasperRenderer(document);
 window.onload = function onpageload() {
   var with_xy = false;
@@ -526,8 +455,5 @@ window.onload = function onpageload() {
   chrome.runtime.sendMessage({action: "get_items"}, function(response) {
       dt.items = response.items;
       dt.render(with_xy);
-      document.getElementById("casperbox-button").onclick = function() {
-        dt.postToCasperbox();
-      };
   });
 };
