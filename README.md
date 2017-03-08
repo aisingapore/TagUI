@@ -1,5 +1,5 @@
 # TA.Gui
-TA.Gui is a tool for non-developers and business users to automate web apps
+TA.Gui is a tool for non-developers and business users to automate web apps - http://tebel.org
 
 ![Sample Automation Flow](https://raw.githubusercontent.com/tebelorg/TA.Dump/master/tagui_flow.gif)
 
