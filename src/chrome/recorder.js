@@ -290,6 +290,13 @@ TestRecorder.EventTypes.CheckSelectOptions = 15;
 TestRecorder.EventTypes.CheckImageSrc = 16;
 TestRecorder.EventTypes.PageLoad = 17;
 TestRecorder.EventTypes.ScreenShot = 18;
+TestRecorder.EventTypes.ElementScreenShot = 24;
+TestRecorder.EventTypes.MoveCursorToElement = 25;
+TestRecorder.EventTypes.PrintElementText = 26;
+TestRecorder.EventTypes.SaveElementText = 27;
+TestRecorder.EventTypes.ExplicitWait = 28;
+TestRecorder.EventTypes.FetchElementText = 29;
+TestRecorder.EventTypes.Cancel = 99;
 TestRecorder.EventTypes.MouseDown = 19;
 TestRecorder.EventTypes.MouseUp = 20;
 TestRecorder.EventTypes.MouseDrag = 21;
@@ -463,6 +470,34 @@ TestRecorder.ScreenShotEvent = function() {
     this.type = TestRecorder.EventTypes.ScreenShot;
 }
 
+TestRecorder.ElementScreenShotEvent = function() {
+    this.type = TestRecorder.EventTypes.ElementScreenShot;
+}
+
+TestRecorder.MoveCursorToElementEvent = function() {
+    this.type = TestRecorder.EventTypes.MoveCursorToElement;
+}
+
+TestRecorder.FetchElementTextEvent = function() {
+    this.type = TestRecorder.EventTypes.FetchElementText;
+}
+
+TestRecorder.PrintElementTextEvent = function() {
+    this.type = TestRecorder.EventTypes.PrintElementText;
+}
+
+TestRecorder.SaveElementTextEvent = function() {
+    this.type = TestRecorder.EventTypes.SaveElementText;
+}
+
+TestRecorder.ExplicitWaitEvent = function() {
+    this.type = TestRecorder.EventTypes.ExplicitWait;
+}
+
+TestRecorder.CancelEvent = function() {
+    this.type = TestRecorder.EventTypes.Cancel;
+}
+
 TestRecorder.OpenURLEvent = function(url) {
     this.type = TestRecorder.EventTypes.OpenUrl;
     this.url = url;
@@ -570,8 +605,15 @@ TestRecorder.ContextMenu.prototype.build = function(t, x, y) {
 //        menu.appendChild(this.item("Check Page Title", this.checkPageTitle));
 //        menu.appendChild(this.item("Screenshot", this.doScreenShot));
 //    }
-
-    menu.appendChild(this.item("TA.Gui Web Automation", this.cancel));
+    
+    menu.appendChild(this.item("Fetch element text", this.doFetchElementText));
+    menu.appendChild(this.item("Print element text", this.doPrintElementText));
+    menu.appendChild(this.item("Save element text", this.doSaveElementText));
+    menu.appendChild(this.item("Save element screenshot", this.doElementScreenShot));
+    menu.appendChild(this.item("Save webpage screenshot", this.doScreenShot));
+    menu.appendChild(this.item("Move cursor to element", this.doMoveCursorToElement));
+    menu.appendChild(this.item("Wait for a few seconds", this.doExplicitWait));
+    menu.appendChild(this.item("Close shortcut menu", this.cancel));
 
     b.insertBefore(menu, b.firstChild);
     return menu;
@@ -679,6 +721,46 @@ TestRecorder.ContextMenu.prototype.doScreenShot = function() {
     contextmenu.record(e);
 }
 
+TestRecorder.ContextMenu.prototype.doElementScreenShot = function() {
+    var t = contextmenu.target;
+    var et = TestRecorder.EventTypes;
+    var e = new TestRecorder.ElementEvent(et.ElementScreenShot, t);
+    contextmenu.record(e);
+}
+
+TestRecorder.ContextMenu.prototype.doMoveCursorToElement = function() {
+    var t = contextmenu.target;
+    var et = TestRecorder.EventTypes;
+    var e = new TestRecorder.ElementEvent(et.MoveCursorToElement, t);
+    contextmenu.record(e);
+}
+
+TestRecorder.ContextMenu.prototype.doFetchElementText = function() {
+    var t = contextmenu.target;
+    var et = TestRecorder.EventTypes;
+    var e = new TestRecorder.ElementEvent(et.FetchElementText, t);
+    contextmenu.record(e);
+}
+
+TestRecorder.ContextMenu.prototype.doPrintElementText = function() {
+    var t = contextmenu.target;
+    var et = TestRecorder.EventTypes;
+    var e = new TestRecorder.ElementEvent(et.PrintElementText, t);
+    contextmenu.record(e);
+}
+
+TestRecorder.ContextMenu.prototype.doSaveElementText = function() {
+    var t = contextmenu.target;
+    var et = TestRecorder.EventTypes;
+    var e = new TestRecorder.ElementEvent(et.SaveElementText, t);
+    contextmenu.record(e);
+}
+
+TestRecorder.ContextMenu.prototype.doExplicitWait = function() {
+    var e = new TestRecorder.ExplicitWaitEvent();
+    contextmenu.record(e);
+}
+
 TestRecorder.ContextMenu.prototype.checkPageLocation = function() {
     var doc = recorder.window.document;
     var et = TestRecorder.EventTypes;
@@ -781,8 +863,9 @@ TestRecorder.ContextMenu.prototype.checkImgSrc = function() {
 
 TestRecorder.ContextMenu.prototype.cancel = function() {
     contextmenu.hide();
+    var e = new TestRecorder.CancelEvent();
+    contextmenu.record(e);
 }
-
 
 
 //---------------------------------------------------------------------------
@@ -1048,15 +1131,15 @@ TestRecorder.Recorder.prototype.oncontextmenu = function(e) {
 
 TestRecorder.Recorder.prototype.onkeypress = function(e) {
     var e = new TestRecorder.Event(e);
-    if (e.shiftkey() && (e.keychar() == 'C')) {
-        // TODO show comment box here
-    }
-    if (e.shiftkey() && (e.keychar() == 'S')) {
-        recorder.testcase.append(new TestRecorder.ScreenShotEvent());
-        e.stopPropagation();
-        e.preventDefault();
-        return false;
-    }
+//    if (e.shiftkey() && (e.keychar() == 'C')) {
+//        // TODO show comment box here
+//    }
+//    if (e.shiftkey() && (e.keychar() == 'S')) {
+//        recorder.testcase.append(new TestRecorder.ScreenShotEvent());
+//        e.stopPropagation();
+//        e.preventDefault();
+//        return false;
+//    }
     
     var last = recorder.testcase.peek();
     if(last.type == TestRecorder.EventTypes.KeyPress) {
