@@ -154,6 +154,10 @@ move element
 type element as some text
 enter element as some text
 
+// test select / enter
+select element as option
+choose element as option
+
 // test read / fetch
 read element to variable
 fetch element to variable
