@@ -80,7 +80,7 @@ To schedule an automation flow in crontab, for example at 8am daily
 ```
 
 ### CHROME EXTENSION
-Prior to public release, to use TA.Gui Chrome web browser extension for recording automation flows, type chrome://extensions in Google Chrome, then drag and drop TA.Gui chrome folder into the browser. TA.Gui Chrome extension is based on [Resurrectio tool](https://github.com/ebrehault/resurrectio) and records steps such as page navigation, clicking web elements and entering information. To start recording your automation flows, simply click TA.Gui icon on your Chrome toolbar.
+Prior to public release, to use TA.Gui Chrome web browser extension for recording automation flows, type chrome://extensions in Google Chrome, then drag and drop TA.Gui chrome folder into the browser. TA.Gui Chrome extension is based on [Resurrectio tool](https://github.com/ebrehault/resurrectio) and records steps such as page navigation, clicking web elements and entering information. To start recording your automation flows, simply click TA.Gui icon on your Chrome toolbar. Right-click for easy access to various TA.Gui steps, such as capturing webpage or element screenshot.
 
 ### AUTOMATION WORKFLOW
 What happens behind the scenes when you run an automation flow
