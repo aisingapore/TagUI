@@ -296,6 +296,7 @@ TestRecorder.EventTypes.PrintElementText = 26;
 TestRecorder.EventTypes.SaveElementText = 27;
 TestRecorder.EventTypes.ExplicitWait = 28;
 TestRecorder.EventTypes.FetchElementText = 29;
+TestRecorder.EventTypes.SelectElementOption = 30;
 TestRecorder.EventTypes.Cancel = 99;
 TestRecorder.EventTypes.MouseDown = 19;
 TestRecorder.EventTypes.MouseUp = 20;
@@ -320,6 +321,7 @@ TestRecorder.ElementInfo = function(element) {
     this.src = element.src;
     this.id = element.id;
     this.title = element.title;
+    this.selectedIndex = element.selectedIndex;
     this.options = [];
     if (element.selectedIndex) {
         for (var i=0; i < element.options.length; i++) {
@@ -480,6 +482,10 @@ TestRecorder.MoveCursorToElementEvent = function() {
 
 TestRecorder.FetchElementTextEvent = function() {
     this.type = TestRecorder.EventTypes.FetchElementText;
+}
+
+TestRecorder.SelectElementOptionEvent = function() {
+    this.type = TestRecorder.EventTypes.SelectElementOption;
 }
 
 TestRecorder.PrintElementTextEvent = function() {
@@ -742,6 +748,13 @@ TestRecorder.ContextMenu.prototype.doFetchElementText = function() {
     contextmenu.record(e);
 }
 
+TestRecorder.ContextMenu.prototype.doSelectElementOption = function() {
+    var t = contextmenu.target;
+    var et = TestRecorder.EventTypes;
+    var e = new TestRecorder.ElementEvent(et.SelectElementOption, t);
+    contextmenu.record(e);
+}
+
 TestRecorder.ContextMenu.prototype.doPrintElementText = function() {
     var t = contextmenu.target;
     var et = TestRecorder.EventTypes;
@@ -977,10 +990,15 @@ TestRecorder.Recorder.prototype.clickaction = function(e) {
     if (!contextmenu.visible) {
         var et = TestRecorder.EventTypes;
         var t = e.target();
-        if (t.href || (t.type && t.type == "submit") || 
-                (t.type && t.type == "submit")) {
+        if (t.href || (t.type && t.type == "submit"))
+        {
             this.testcase.append(new TestRecorder.ElementEvent(et.Click,e.target()));
-        } else {
+        }
+//        else if (t.selectedIndex || t.type == "option")
+//        {
+//            this.testcase.append(new TestRecorder.ElementEvent(et.SelectElementOption,e.target()));
+//        }
+        else {
             recorder.testcase.append(
                     new TestRecorder.MouseEvent(
                             TestRecorder.EventTypes.Click, e.target(), e.posX(), e.posY()
@@ -1039,14 +1057,23 @@ TestRecorder.Recorder.prototype.onpageload = function() {
 TestRecorder.Recorder.prototype.onchange = function(e) {
     var e = new TestRecorder.Event(e);
     var et = TestRecorder.EventTypes;
-    var v = new TestRecorder.ElementEvent(et.Change, e.target());
+    var t = e.target();
+if (t.selectedIndex || t.type == "option")
+{
+    var v = new TestRecorder.ElementEvent(et.SelectElementOption, e.target());
     recorder.testcase.append(v);
     recorder.log("value changed: " + e.target().value);
+}
 }
 
 TestRecorder.Recorder.prototype.onselect = function(e) {
     var e = new TestRecorder.Event(e);
     recorder.log("select: " + e.target());
+//    var e = new TestRecorder.Event(e);
+//    var et = TestRecorder.EventTypes;
+//    var v = new TestRecorder.ElementEvent(et.SelectElementOption, e.target());
+//    recorder.testcase.append(v);
+//    recorder.log("select: " + e.target().value);
 }
 
 TestRecorder.Recorder.prototype.onsubmit = function(e) {

@@ -31,6 +31,7 @@ EventTypes.PrintElementText = 26;
 EventTypes.SaveElementText = 27;
 EventTypes.ExplicitWait = 28;
 EventTypes.FetchElementText = 29;
+EventTypes.SelectElementOption = 30;
 EventTypes.Cancel = 99;
 EventTypes.MouseDown = 19;
 EventTypes.MouseUp = 20;
@@ -116,6 +117,7 @@ d[EventTypes.MoveCursorToElement] = "moveCursorToElement";
 d[EventTypes.PrintElementText] = "printElementText";
 d[EventTypes.SaveElementText] = "saveElementText";
 d[EventTypes.FetchElementText] = "fetchElementText";
+d[EventTypes.SelectElementOption] = "selectElementOption";
 d[EventTypes.ExplicitWait] = "explicitWait";
 d[EventTypes.Cancel] = "cancel";
 //d[EventTypes.MouseDown] = "mousedown";
@@ -149,6 +151,7 @@ CasperRenderer.prototype.render = function(with_xy) {
         }
     }
 
+    // remember last MouseDown to identify drag
     if(item.type==etypes.MouseDown) {
       last_down = this.items[i];
       continue;
@@ -323,6 +326,7 @@ CasperRenderer.prototype.click = function(item) {
     }
     
     if (selector.charAt(0) == '#') {selector = selector.substring(1);}
+    
     this.stmt('click ' + selector);
   }
 }
@@ -374,6 +378,12 @@ CasperRenderer.prototype.fetchElementText = function(item) {
   var selector; selector = this.getControl(item);
   if (selector.charAt(0) == '#') {selector = selector.substring(1);}
   this.stmt('fetch ' + selector + ' to variable');
+}
+
+CasperRenderer.prototype.selectElementOption = function(item) {
+  var selector; selector = this.getControl(item); var value = this.pyrepr(item.info.value);
+  if (selector.charAt(0) == '#') {selector = selector.substring(1);}
+  this.stmt('select ' + selector + ' as ' + value);
 }
 
 CasperRenderer.prototype.printElementText = function(item) {
