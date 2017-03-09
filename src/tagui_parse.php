@@ -95,6 +95,7 @@ case "url": return url_intent($script_line); break;
 case "tap": return tap_intent($script_line); break;
 case "hover": return hover_intent($script_line); break;
 case "type": return type_intent($script_line); break;
+case "select": return select_intent($script_line); break;
 case "read": return read_intent($script_line); break;
 case "show": return show_intent($script_line); break;
 case "down": return down_intent($script_line); break;
@@ -119,6 +120,7 @@ if ((strtolower(substr($raw_intent,0,7))=="http://") or (strtolower(substr($raw_
 else if ((strtolower(substr($raw_intent,0,4))=="tap ") or (strtolower(substr($raw_intent,0,6))=="click ")) return "tap"; 
 else if ((strtolower(substr($raw_intent,0,6))=="hover ")or(strtolower(substr($raw_intent,0,5))=="move ")) return "hover";
 else if ((strtolower(substr($raw_intent,0,5))=="type ") or (strtolower(substr($raw_intent,0,6))=="enter ")) return "type";
+else if ((strtolower(substr($raw_intent,0,7))=="select ") or (strtolower(substr($raw_intent,0,7))=="choose ")) return "select";
 else if ((strtolower(substr($raw_intent,0,5))=="read ") or (strtolower(substr($raw_intent,0,6))=="fetch ")) return "read";
 else if ((strtolower(substr($raw_intent,0,5))=="show ") or (strtolower(substr($raw_intent,0,6))=="print ")) return "show";
 else if ((strtolower(substr($raw_intent,0,5))=="down ") or (strtolower(substr($raw_intent,4,5))=="load ")) return "down";
@@ -138,6 +140,7 @@ else if (strtolower(substr($raw_intent,0,3))=="js ") return "js";
 else if ((strtolower($raw_intent)=="tap") or (strtolower($raw_intent)=="click")) return "tap";
 else if ((strtolower($raw_intent)=="hover") or (strtolower($raw_intent)=="move")) return "hover";
 else if ((strtolower($raw_intent)=="type") or (strtolower($raw_intent)=="enter")) return "type";
+else if ((strtolower($raw_intent)=="select") or (strtolower($raw_intent)=="choose")) return "select";
 else if ((strtolower($raw_intent)=="read") or (strtolower($raw_intent)=="fetch")) return "read";
 else if ((strtolower($raw_intent)=="show") or (strtolower($raw_intent)=="print")) return "show";
 else if ((strtolower($raw_intent)=="down") or (strtolower($raw_intent)=="download")) return "down";
@@ -227,6 +230,16 @@ $param1 = trim(substr($params,0,strpos($params," as "))); $param2 = trim(substr(
 if (($param1 == "") or ($param2 == "")) 
 echo "ERROR - " . current_line() . " target/text missing for " . $raw_intent . "\n"; else 
 return "{techo('".$raw_intent."');".beg_tx($param1)."this.sendKeys(tx('".$param1."'),'".$param2."');".end_tx($param1);}
+
+function select_intent($raw_intent) {
+$params = trim(substr($raw_intent." ",1+strpos($raw_intent." "," ")));
+$param1 = trim(substr($params,0,strpos($params," as "))); $param2 = trim(substr($params,4+strpos($params," as ")));
+if (($param1 == "") or ($param2 == ""))
+echo "ERROR - " . current_line() . " target/option missing for " . $raw_intent . "\n"; else
+return "{techo('".$raw_intent."');".beg_tx($param1)."var select_locator = tx('".$param1."');\n".
+"if (is_xpath_selector(select_locator.toString().replace('xpath selector: ','')))\n".
+"select_locator = select_locator.toString().substring(16);\n".
+"this.selectOptionByValue(select_locator,'".$param2."');".end_tx($param1);}
 
 function read_intent($raw_intent) {
 $params = trim(substr($raw_intent." ",1+strpos($raw_intent." "," ")));

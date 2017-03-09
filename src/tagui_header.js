@@ -60,4 +60,14 @@ function call_api(rest_url) {
 var xhttp = new XMLHttpRequest(); xhttp.open("GET", rest_url, false);
 xhttp.send(); return xhttp.statusText + ' - ' + xhttp.responseText;}
 
+// custom function to handle dropdown option
+casper.selectOptionByValue = function(selector, valueToMatch){ // solution posted in casperjs issue #1390
+this.evaluate(function(selector, valueToMatch) {var found = false;
+if ((selector.indexOf('/') == 0) || (selector.indexOf('(') == 0)) var select = __utils__.getElementByXPath(selector);
+else var select = document.querySelector(selector); // use above xpath or query css method to get element
+Array.prototype.forEach.call(select.children, function(opt, i){ // loop through list to select option
+if (!found && opt.value.indexOf(valueToMatch) !== -1) {select.selectedIndex = i; found = true;}});
+var evt = document.createEvent("UIEvents"); // dispatch change event in case there is validation
+evt.initUIEvent("change", true, true); select.dispatchEvent(evt);}, selector, valueToMatch);};
+
 // flow path for save_text and snap_image
