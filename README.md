@@ -126,6 +126,7 @@ Step|Parameters (separator in bold)|Purpose
 tap / click|element to click|click on an element
 hover / move|element to hover|move cursor to element
 type / enter|element to type ***as*** text to type|enter element as text
+select / choose|element to select ***as*** option to select|choose dropdown option
 read / fetch|element to read ***to*** variable name|fetch element text to variable
 show / print|element to read |print element text to output
 save|element to read ***to*** optional filename|save element text to file
