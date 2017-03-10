@@ -119,7 +119,7 @@ Enhancements|feel free to review and suggest new features
 ### STEPS DESCRIPTION
 - TA.Gui auto-waits for a webpage element to appear and interacts with it as soon as it appears
 - Element identifier can be auto-recorded using TA.Gui Chrome extension, or [found from web browser](https://help.surveygizmo.com/help/how-to-find-element-ids-to-use-with-javascript)
-- TA.Gui auto-selects provided identifier in this order - xpath, css, id, name, class, title, text(), aria-label
+- TA.Gui auto-selects provided identifier in this order - xpath, css, id, name, class, title, aria-label, text(), href
 
 Step|Parameters (separator in bold)|Purpose
 :---|:-----------------------------|:------
@@ -211,7 +211,7 @@ For the list of expressive test assertions built into CasperJS, [click here](htt
 
 TA.Gui recognizes most JavaScript code. In the rare event you get an error saying that it cannot understand the step for your JavaScript line, kindly raise an issue or feel free to modify the source code (tagui_parse.php is where interpretation of natural language to CasperJS JavaScript code takes place). Alternatively, you can use the undocumented step js to explicitly declare that whatever follows on that line is JavaScript code.
 
-### API (for developers and the curious ones)
+### API (for developers, tinkerers, and curious people)
 Automation flows can also be triggered via REST API. TA.Gui has an API service and runner for managing a queue of incoming requests via API. To set up, add a crontab entry on your server with the desired frequency to check and process incoming service requests. Below example will check every 15 minutes and run pending flows in the queue.
 ```
 0,15,30,45 * * * * /full_path_on_your_server/tagui_crontab
