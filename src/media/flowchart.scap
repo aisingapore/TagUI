@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ScappleDocument Version="1.1" ID="678FCC46-7C7E-49FB-9DC3-3C38BC6C43AB">
     <Notes>
-        <Note ID="21" FontSize="9.0" Position="185.5,185.0" Width="81.0">
+        <Note ID="21" FontSize="9.0" Position="189.5,185.0" Width="74.0">
             <Appearance>
                 <Alignment>Center</Alignment>
                 <TextColor>1.0 1.0 1.0</TextColor>
                 <Fill>0.314662 0.314653 0.314658</Fill>
             </Appearance>
-            <String>v0.6.0 flowchart  </String>
+            <String>v0.6 flowchart  </String>
             <Formatting>
-                <FormatRange Bold="Yes">0,18</FormatRange>
+                <FormatRange Bold="Yes">0,16</FormatRange>
             </Formatting>
         </Note>
         <Note ID="20" FontSize="9.0" Position="570.0,176.0" Width="107.0">
