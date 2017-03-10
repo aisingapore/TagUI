@@ -550,7 +550,7 @@ TestRecorder.ContextMenu.prototype.build = function(t, x, y) {
 
     // Needed to deal with various cross-browser insanities...
     menu.setAttribute("style", "backgroundColor:#ffffff;color:#000000;border:1px solid #000000;padding:2px;position:absolute;display:none;top:" + y + "px;left:" + x + "px;border:1px;z-index:10000;");
-
+  
     menu.style.backgroundColor="#ffffff";
     menu.style.color="#000000";
     menu.style.border = "1px solid #000000";
@@ -616,16 +616,16 @@ TestRecorder.ContextMenu.prototype.build = function(t, x, y) {
 //        menu.appendChild(this.item("Check Page Title", this.checkPageTitle));
 //        menu.appendChild(this.item("Screenshot", this.doScreenShot));
 //    }
-    
+
+    menu.appendChild(this.item("Save webpage screenshot", this.doScreenShot));
+    menu.appendChild(this.item("Save element screenshot", this.doElementScreenShot));
     menu.appendChild(this.item("Fetch element text", this.doFetchElementText));
     menu.appendChild(this.item("Print element text", this.doPrintElementText));
     menu.appendChild(this.item("Save element text", this.doSaveElementText));
-    menu.appendChild(this.item("Save element screenshot", this.doElementScreenShot));
-    menu.appendChild(this.item("Save webpage screenshot", this.doScreenShot));
     menu.appendChild(this.item("Move cursor to element", this.doMoveCursorToElement));
     menu.appendChild(this.item("Wait for a few seconds", this.doExplicitWait));
 //    menu.appendChild(this.item("Cancel the last step", this.doCancelLastStep));
-    menu.appendChild(this.item("Close shortcut menu", this.cancel));
+    menu.appendChild(this.item("Close shortcuts menu", this.cancel));
 
     b.insertBefore(menu, b.firstChild);
     return menu;

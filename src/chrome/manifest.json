@@ -1,6 +1,6 @@
 {
     "manifest_version": 2,
-    "name": "TA.Gui Web Automation", "version": "0.6.0",
+    "name": "TA.Gui Web Automation", "version": "0.6",
     "description": "Create automation flows from your actions",
     "homepage_url": "https://github.com/tebelorg/TA.Gui",
     "browser_action": {
