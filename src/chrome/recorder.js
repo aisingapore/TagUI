@@ -297,6 +297,7 @@ TestRecorder.EventTypes.SaveElementText = 27;
 TestRecorder.EventTypes.ExplicitWait = 28;
 TestRecorder.EventTypes.FetchElementText = 29;
 TestRecorder.EventTypes.SelectElementOption = 30;
+TestRecorder.EventTypes.CancelLastStep = 31;
 TestRecorder.EventTypes.Cancel = 99;
 TestRecorder.EventTypes.MouseDown = 19;
 TestRecorder.EventTypes.MouseUp = 20;
@@ -500,6 +501,10 @@ TestRecorder.ExplicitWaitEvent = function() {
     this.type = TestRecorder.EventTypes.ExplicitWait;
 }
 
+TestRecorder.CancelLastStepEvent = function() {
+    this.type = TestRecorder.EventTypes.CancelLastStep;
+}
+
 TestRecorder.CancelEvent = function() {
     this.type = TestRecorder.EventTypes.Cancel;
 }
@@ -619,6 +624,7 @@ TestRecorder.ContextMenu.prototype.build = function(t, x, y) {
     menu.appendChild(this.item("Save webpage screenshot", this.doScreenShot));
     menu.appendChild(this.item("Move cursor to element", this.doMoveCursorToElement));
     menu.appendChild(this.item("Wait for a few seconds", this.doExplicitWait));
+//    menu.appendChild(this.item("Cancel the last step", this.doCancelLastStep));
     menu.appendChild(this.item("Close shortcut menu", this.cancel));
 
     b.insertBefore(menu, b.firstChild);
@@ -774,6 +780,17 @@ TestRecorder.ContextMenu.prototype.doExplicitWait = function() {
     contextmenu.record(e);
 }
 
+TestRecorder.ContextMenu.prototype.doCancelLastStep = function() {
+    var e = new TestRecorder.CancelLastStepEvent();
+    contextmenu.record(e);
+}
+
+TestRecorder.ContextMenu.prototype.cancel = function() {
+    contextmenu.hide();
+    var e = new TestRecorder.CancelEvent();
+    contextmenu.record(e);
+}
+
 TestRecorder.ContextMenu.prototype.checkPageLocation = function() {
     var doc = recorder.window.document;
     var et = TestRecorder.EventTypes;
@@ -871,12 +888,6 @@ TestRecorder.ContextMenu.prototype.checkImgSrc = function() {
     var t = contextmenu.target;
     var et = TestRecorder.EventTypes;
     var e = new TestRecorder.ElementEvent(et.CheckImageSrc, t);
-    contextmenu.record(e);
-}
-
-TestRecorder.ContextMenu.prototype.cancel = function() {
-    contextmenu.hide();
-    var e = new TestRecorder.CancelEvent();
     contextmenu.record(e);
 }
 

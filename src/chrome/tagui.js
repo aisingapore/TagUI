@@ -32,6 +32,7 @@ EventTypes.SaveElementText = 27;
 EventTypes.ExplicitWait = 28;
 EventTypes.FetchElementText = 29;
 EventTypes.SelectElementOption = 30;
+EventTypes.CancelLastStep = 31;
 EventTypes.Cancel = 99;
 EventTypes.MouseDown = 19;
 EventTypes.MouseUp = 20;
@@ -119,6 +120,7 @@ d[EventTypes.SaveElementText] = "saveElementText";
 d[EventTypes.FetchElementText] = "fetchElementText";
 d[EventTypes.SelectElementOption] = "selectElementOption";
 d[EventTypes.ExplicitWait] = "explicitWait";
+d[EventTypes.CancelLastStep] = "cancelLastStep";
 d[EventTypes.Cancel] = "cancel";
 //d[EventTypes.MouseDown] = "mousedown";
 //d[EventTypes.MouseUp] = "mouseup";
@@ -173,8 +175,8 @@ CasperRenderer.prototype.render = function(with_xy) {
       forget_click = false;
       continue;
     }
-
-    // we do not want click due to user checking actions
+    
+    // ignore click due to clicking on right-click menu
     if(i>0 && item.type==etypes.Click && 
       ((this.items[i-1].type>=5 && this.items[i-1].type<=16) ||
       (this.items[i-1].type==18 || this.items[i-1].type>=24)))
@@ -185,11 +187,12 @@ CasperRenderer.prototype.render = function(with_xy) {
     if (this.dispatch[item.type]) {
       this[this.dispatch[item.type]](item);
     }
-    
+  
   }
   this.document.write("<" + "/" + "span" + ">");
   this.document.write("<" + "/" + "pre" + ">");
   this.document.close();
+  
 }
 
 CasperRenderer.prototype.rewriteUrl = function(url) {
@@ -384,6 +387,10 @@ CasperRenderer.prototype.selectElementOption = function(item) {
   var selector; selector = this.getControl(item); var value = this.pyrepr(item.info.value);
   if (selector.charAt(0) == '#') {selector = selector.substring(1);}
   this.stmt('select ' + selector + ' as ' + value);
+}
+
+CasperRenderer.prototype.cancelLastStep = function(item) {
+  this.stmt('cancel the last step');
 }
 
 CasperRenderer.prototype.printElementText = function(item) {
