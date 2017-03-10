@@ -45,7 +45,7 @@ Originally developed by a test automation engineer to avoid writing code to auto
 Mentioned in Hacker News, Codrops Collective, BlogDuWebdesign, CSS Author. #1 GitHub repo for topics natural-language, casperjs, slimerjs, #2 for business, #3 for chrome-extension, and #4 for phantomjs. Ex-trending repo #2.
 
 # Set Up
-TA.Gui is in beta version (v0.6.0) and runs on macOS/Linux (coming to Windows soon)
+TA.Gui is in beta version (v0.6) and runs on macOS/Linux (coming to Windows soon). Instead of packaging as a one-click installer, you are invited to visit and have a look at the respective amazing technologies that TA.Gui depends on.
 
 1. install PhantomJS (headless scriptable web browser) - http://phantomjs.org
 2. install CasperJS (navigation/testing for PhantomJS) - http://casperjs.org
@@ -195,7 +195,7 @@ currency-pair|USDSGD|USDJPY|EURUSD
 size|10000|1000|100000
 direction|BUY|SELL|BUY
 
-### TESTING (for QA folks and test automation engineers)
+### TESTING (for QA and test automation engineers)
 The step check allows simple testing of conditions. For professional test automation, CasperJS comes with a tester module for unit and functional testing purpose. To use the advanced testing features, run TA.Gui with the test option.
 
 CasperJS test scripts are inherently different in structure and syntax from its usual automation scripts. With the test option, TA.Gui automatically converts your automation flow to work as a test script and output a XUnit XML file, which is compatible with continuous integration tools such as Jenkins. Running together with the report option outputs a web report of the test execution for easy sharing.
