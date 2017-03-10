@@ -49,7 +49,7 @@ TA.Gui is in beta version (v0.6) and runs on macOS/Linux (coming to Windows soon
 
 1. install PhantomJS (headless scriptable web browser) - http://phantomjs.org
 2. install CasperJS (navigation/testing for PhantomJS) - http://casperjs.org
-3. install TA.Gui (friendly lightning fast automation tool) - https://git.io/vMCTZ
+3. install TA.Gui (general purpose web automation tool) - https://git.io/vMCTZ
 
 Optional - configure web browser settings in tagui_config.txt, such as browser resolution, step timeout of 10s etc
 
