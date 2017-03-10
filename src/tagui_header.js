@@ -34,12 +34,20 @@ if ((selector.indexOf('/') == 0) || (selector.indexOf('(') == 0)) return true; r
 // for finding best match for given locator
 function tx(locator) {if (is_xpath_selector(locator)) return x(locator);
 if (casper.exists(locator)) return locator; // check for css locator
+// first check for exact match then check for containing string
+if (casper.exists(x('//*[@id="'+locator+'"]'))) return x('//*[@id="'+locator+'"]');
 if (casper.exists(x('//*[contains(@id,"'+locator+'")]'))) return x('//*[contains(@id,"'+locator+'")]');
+if (casper.exists(x('//*[@name="'+locator+'"]'))) return x('//*[@name="'+locator+'"]');
 if (casper.exists(x('//*[contains(@name,"'+locator+'")]'))) return x('//*[contains(@name,"'+locator+'")]');
+if (casper.exists(x('//*[@class="'+locator+'"]'))) return x('//*[@class="'+locator+'"]');
 if (casper.exists(x('//*[contains(@class,"'+locator+'")]'))) return x('//*[contains(@class,"'+locator+'")]');
+if (casper.exists(x('//*[@title="'+locator+'"]'))) return x('//*[@title="'+locator+'"]');
 if (casper.exists(x('//*[contains(@title,"'+locator+'")]'))) return x('//*[contains(@title,"'+locator+'")]');
+if (casper.exists(x('//*[@aria-label="'+locator+'"]'))) return x('//*[@aria-label="'+locator+'"]');
 if (casper.exists(x('//*[contains(@aria-label,"'+locator+'")]'))) return x('//*[contains(@aria-label,"'+locator+'")]');
+if (casper.exists(x('//*[text()="'+locator+'"]'))) return x('//*[text()="'+locator+'"]');
 if (casper.exists(x('//*[contains(text(),"'+locator+'")]'))) return x('//*[contains(text(),"'+locator+'")]');
+if (casper.exists(x('//*[@href="'+locator+'"]'))) return x('//*[@href="'+locator+'"]');
 if (casper.exists(x('//*[contains(@href,"'+locator+'")]'))) return x('//*[contains(@href,"'+locator+'")]');
 return x('/html');}
 
@@ -47,12 +55,20 @@ return x('/html');}
 function check_tx(locator) {if (is_xpath_selector(locator))
 {if (casper.exists(x(locator))) return true; else return false;}
 if (casper.exists(locator)) return true; // check for css locator
+// first check for exact match then check for containing string
+if (casper.exists(x('//*[@id="'+locator+'"]'))) return true;
 if (casper.exists(x('//*[contains(@id,"'+locator+'")]'))) return true;
+if (casper.exists(x('//*[@name="'+locator+'"]'))) return true;
 if (casper.exists(x('//*[contains(@name,"'+locator+'")]'))) return true;
+if (casper.exists(x('//*[@class="'+locator+'"]'))) return true;
 if (casper.exists(x('//*[contains(@class,"'+locator+'")]'))) return true;
+if (casper.exists(x('//*[@title="'+locator+'"]'))) return true;
 if (casper.exists(x('//*[contains(@title,"'+locator+'")]'))) return true;
+if (casper.exists(x('//*[@aria-label="'+locator+'"]'))) return true;
 if (casper.exists(x('//*[contains(@aria-label,"'+locator+'")]'))) return true;
+if (casper.exists(x('//*[text()="'+locator+'"]'))) return true;
 if (casper.exists(x('//*[contains(text(),"'+locator+'")]'))) return true;
+if (casper.exists(x('//*[@href="'+locator+'"]'))) return true;
 if (casper.exists(x('//*[contains(@href,"'+locator+'")]'))) return true;
 return false;}
 
