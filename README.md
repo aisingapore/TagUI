@@ -42,10 +42,10 @@ If you know JavaScript coding and want to be more expressive, you can even use J
 Originally developed by a test automation engineer to avoid writing code to automate web-based interactions.
 
 ### MEDIA AND GITHUB
-Mentioned in Hacker News, Codrops Collective, BlogDuWebdesign, CSS Author. #2 GitHub open-source project for topics business, natural-language, casperjs, slimerjs and #3 for chrome-extension. Ex-trending repo #1.
+Mentioned in Hacker News, Codrops Collective, BlogDuWebdesign, CSS Author. #2 GitHub open-source project for topics business, natural-language, casperjs, slimerjs and #3 for chrome-extension. Ex-trending JavaScript repo #1.
 
 # Set Up
-TA.Gui is in beta version (v0.6) and runs on macOS/Linux (coming to Windows soon). Instead of packaging as a one-click installer, you are invited to visit and have a look at the respective amazing technologies that TA.Gui depends on.
+TA.Gui is in beta version (v0.6) and runs on macOS/Linux (coming to Windows soon). Instead of packaging as a one-click installer, you are warmly invited to have a look at the respective amazing technologies that TA.Gui depends on.
 
 1. install PhantomJS (headless scriptable web browser) - http://phantomjs.org
 2. install CasperJS (navigation/testing for PhantomJS) - http://casperjs.org
