@@ -519,7 +519,7 @@ TestRecorder.OpenURLEvent = function(url) {
 TestRecorder.PageLoadEvent = function(url) {
     this.type = TestRecorder.EventTypes.OpenUrl;
     this.url = url;
-    this.viaBack = back
+//    this.viaBack = back
 }
 
 
@@ -550,7 +550,7 @@ TestRecorder.ContextMenu.prototype.build = function(t, x, y) {
 
     // Needed to deal with various cross-browser insanities...
     menu.setAttribute("style", "backgroundColor:#ffffff;color:#000000;border:1px solid #000000;padding:2px;position:absolute;display:none;top:" + y + "px;left:" + x + "px;border:1px;z-index:10000;");
-  
+
     menu.style.backgroundColor="#ffffff";
     menu.style.color="#000000";
     menu.style.border = "1px solid #000000";

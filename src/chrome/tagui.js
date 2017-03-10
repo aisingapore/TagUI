@@ -228,6 +228,24 @@ CasperRenderer.prototype.pageLoad = function(item) {
 CasperRenderer.prototype.normalizeWhitespace = function(s) {
   return s.replace(/^\s*/, '').replace(/\s*$/, '').replace(/\s+/g, ' ');
 }
+  
+//CasperRenderer.prototype.getControlXPath = function(item) {
+//  var type = item.info.type;
+//  var way;
+//  if ((type == "submit" || type == "button") && item.info.value)
+//  //  way = '@value=' + this.pyrepr(this.normalizeWhitespace(item.info.value));
+//    way = this.pyrepr(this.normalizeWhitespace(item.info.value));
+//  else if (item.info.name)
+//  //  way = '@name=' + this.pyrepr(item.info.name);
+//    way = this.pyrepr(item.info.name);
+//  else if (item.info.id)
+//  //  way = '@id=' + this.pyrepr(item.info.id);
+//    way = this.pyrepr(item.info.id)
+////  else
+////  way = 'TODO';
+//
+//  return way;
+//}
 
 CasperRenderer.prototype.getControl = function(item) {
   return item.info.selector; // default identifiers to css for accuracy, to optimize later
@@ -237,70 +255,31 @@ CasperRenderer.prototype.getControl = function(item) {
   if ((type == "submit" || type == "button") && item.info.value)
   //  selector = tag+'[type='+type+'][value='+this.pyrepr(this.normalizeWhitespace(item.info.value))+']';
     selector = this.pyrepr(item.info.value);
-  else if (item.info.name)
-  //  selector = tag+'[name='+this.pyrepr(item.info.name)+']';
-    selector = this.pyrepr(item.info.name);
   else if (item.info.id)
   //  selector = tag+'#'+item.info.id;
     selector = this.pyrepr(item.info.id);
+  else if (item.info.name)
+  //  selector = tag+'[name='+this.pyrepr(item.info.name)+']';
+    selector = this.pyrepr(item.info.name);
 //  else if (item.info.className)
 //  //  selector = tag+'#'+item.info.className;
 //    selector = this.pyrepr(item.info.className);
-//  else if (item.info.title)
-//  //  selector = tag+'#'+item.info.title;
-//    selector = this.pyrepr(item.info.title);
-//  else if (item.text)
-//  //  selector = tag+'#'+item.text;
-//    selector = this.pyrepr(item.text);
-//  else if (item.info.href)
-//    selector = this.pyrepr(item.info.href);
-//  //  selector = tag+'#'+item.info.href;
   else
     selector = item.info.selector;
   return selector;
 }
-  
-CasperRenderer.prototype.getControlXPath = function(item) {
-  var type = item.info.type;
-  var way;
-  if ((type == "submit" || type == "button") && item.info.value)
-  //  way = '@value=' + this.pyrepr(this.normalizeWhitespace(item.info.value));
-    way = this.pyrepr(this.normalizeWhitespace(item.info.value));
-  else if (item.info.name)
-  //  way = '@name=' + this.pyrepr(item.info.name);
-    way = this.pyrepr(item.info.name);
-  else if (item.info.id)
-  //  way = '@id=' + this.pyrepr(item.info.id);
-    way = this.pyrepr(item.info.id)
-//  else
-//  way = 'TODO';
-
-  return way;
-}
 
 CasperRenderer.prototype.getLinkXPath = function(item) {
   var way;
-  if (item.text)
-    way = 'text()=' + '"' + this.cleanStringForXpath(item.text, true) + '"';
-  else if (item.info.id)
+  if (item.info.id)
     way = '@id=' + '"' + this.pyrepr(item.info.id) + '"';
+//  else if (item.info.title)
+//    way = '@title=' + '"' + this.pyrepr(item.info.title) + '"';
+  else if (item.text)
+    way = 'text()=' + '"' + this.cleanStringForXpath(item.text, true) + '"';
   else if (item.info.href)
     way = '@href=' + '"' + this.pyrepr(item.info.href) + '"';
-  else if (item.info.title)
-    way = '@title=' + '"' + this.pyrepr(item.info.title) + '"';
-//  else if (item.info.name)
-//    way = '@name=' + '"' + this.pyrepr(item.info.name) + '"';
-//  else if (item.info.className)
-//    way = '@class=' + '"' + this.pyrepr(item.info.className) + '"';
   return way;
-}
-
-CasperRenderer.prototype.mousedrag = function(item) {
-  if(this.with_xy) {
-    this.stmt('this.mouse.down('+ item.before.x + ', '+ item.before.y +');');
-    this.stmt('this.mouse.move('+ item.x + ', '+ item.y +');');
-    this.stmt('this.mouse.up('+ item.x + ', '+ item.y +');');
-  }
 }
 
 CasperRenderer.prototype.click = function(item) {
@@ -347,6 +326,14 @@ CasperRenderer.prototype.getFormSelector = function(item) {
   }
   else {
     return "form ";
+  }
+}
+
+CasperRenderer.prototype.mousedrag = function(item) {
+  if(this.with_xy) {
+    this.stmt('this.mouse.down('+ item.before.x + ', '+ item.before.y +');');
+    this.stmt('this.mouse.move('+ item.x + ', '+ item.y +');');
+    this.stmt('this.mouse.up('+ item.x + ', '+ item.y +');');
   }
 }
 
