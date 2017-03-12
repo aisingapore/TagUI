@@ -1,0 +1,41 @@
+https://ca.yahoo.com
+// automation flow files start with an URL to tell TA.Gui where to go
+
+// this flow searches github on Yahoo and captures screenshot of results
+// for issues or questions, kindly feedback on GitHub or support@tebel.org
+// see cheatsheet for steps, conditions, finding element identifiers, etc
+// https://github.com/tebelorg/TA.Gui#cheat-sheet
+
+// use type (or enter) step to enter some text into a webpage element
+// use show (or print) step to print text from webpage element to output
+// below steps enter text into the search box and print out the value
+enter search-box as github
+print search-box
+
+// use tap (or click) step to click on a webpage element
+// below step clicks the search button
+click search-button
+
+// wait a few seconds before capturing whole screenshot
+// default wait is 5 seconds and you can also use decimal
+// wait 7.5 seconds or 3s or 5sec or 10 secs will work 
+wait 6.6
+
+// use snap to save screenshot of webpage or elements
+// use snap page to save screen shot of entire page
+// use snap element to save screen shot of element
+snap page
+snap logo
+
+// image snaps are automatically named snapXXXX.png
+// unless you provide a filename for the image snap
+snap page to results.png
+snap logo to logo.png
+
+// to go to another URL from your flow, simply provide the URL
+https://duckduckgo.com
+
+// and then continue the automation flow from there
+enter search_form_input_homepage as The search engine that doesn\'t track you.
+
+wait 4.4 seconds
