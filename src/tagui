@@ -1,8 +1,23 @@
 #!/usr/bin/env bash
 # SCRIPT FOR RUNNING TA.GUI FRAMEWORK ~ TEBEL.ORG #
 
+if [ -z "$1" ]
+then
+echo "tagui: missing parameter(s) - use this syntax and below options to run ./tagui flow_filename option(s)"
+echo
+echo "firefox - run on visible Firefox browser (first install Firefox, and SlimerJS - https://slimerjs.org)"
+echo "report - generate a web report for easy sharing of run results (default is only a text log file)"
+echo "debug - show run-time backend messages from PhantomJS for detailed tracing and logging"
+echo "quiet - run without output except for explicit output (echo / show / check / api / errors etc)"
+echo "test - professional testing using CasperJS assertions (TA.Gui dynamic tx('selector') usable)"
+echo
+echo "TA.Gui is a tool for non-developers and business users to automate web apps - http://tebel.org"
+echo
+exit 1
+fi
+
 # check whether specified automation flow file exists
-if ! [ -f "$1" ]; then echo "ERROR - cannot find $1"; exit; fi
+if ! [ -f "$1" ]; then echo "ERROR - cannot find $1"; exit 1; fi
 
 # get and set absolute filename of automation flow file
 set -- "$(cd "$(dirname "$1")"; pwd)/$(basename "$1")" "${@:2}"
@@ -89,6 +104,9 @@ if [ "$min_column" != "$max_column" ]; then echo "ERROR - $1.csv has inconsisten
 elif [ "$min_column" -lt 2 ]; then echo "ERROR - $1.csv has lesser than 2 columns" | tee -a "$1".log
 else tagui_data_set_size="$(($min_column-1))"; fi; fi
 
+# default exit code 0 to mean no error parsing automation flow file
+tagui_error_code=0
+
 # loop for managing multiple data sets in datatable 
 for (( tagui_data_set=1; tagui_data_set<=$tagui_data_set_size; tagui_data_set++ ))
 do export tagui_data_set=$tagui_data_set
@@ -96,7 +114,7 @@ do export tagui_data_set=$tagui_data_set
 # parse automation flow file and check for initial parse error before calling casperjs
 php -q tagui_parse.php "$1" | tee -a "$1".log
 if [ -s "$1".log ] && [ "$tagui_data_set" -eq 1 ]
-then echo "ERROR - automation aborted due to above" | tee -a "$1".log; cd "$initial_dir"; break
+then echo "ERROR - automation aborted due to above" | tee -a "$1".log; tagui_error_code=1; break
 elif [ "$tagui_test_mode" == false ]; then $CASPERJS_EXECUTABLE "$1".js $params$api | tee -a "$1".log
 else export tagui_test_mode=true; $CASPERJS_EXECUTABLE test "$1".js $params$api --xunit="$1".xml | tee -a "$1".log
 fi; done
@@ -106,3 +124,6 @@ if [ -s "$1".log ] && [ "$tagui_html_report" == true ]; then php -q tagui_report
 
 # change back to initial directory where tagui is called
 cd "$initial_dir"
+
+# returns 0 if no error parsing flow file, otherwise return 1
+exit $tagui_error_code
