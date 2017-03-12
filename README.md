@@ -68,8 +68,8 @@ Option|Purpose
 firefox|run on visible Firefox browser (first install Firefox, and SlimerJS - https://slimerjs.org)
 report|generate a web report for easy sharing of run results (default is only a text log file)
 debug|show run-time backend messages from PhantomJS for detailed tracing and logging
-quiet|run without output except for explicit output echo / show / check / api / errors etc
-test|professional testing using [CasperJS assertions](http://docs.casperjs.org/en/latest/modules/tester.html); TA.Gui XPath tx('selector') usable
+quiet|run without output except for explicit output (echo / show / check / api / errors etc)
+test|professional testing using [CasperJS assertions](http://docs.casperjs.org/en/latest/modules/tester.html) (TA.Gui dynamic tx('selector') usable)
 
 Tip - if you have issue running visible automation using Firefox/SlimerJS [check this setting](https://docs.slimerjs.org/current/installation.html#using-unstable-version-or-very-old-versions-of-firefox)
 
