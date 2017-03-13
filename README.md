@@ -45,7 +45,7 @@ Originally developed by a test automation engineer to avoid writing code to auto
 Mentioned in Hacker News, Codrops Collective, BlogDuWebdesign, CSS Author. #1 automation stack on StackShare. #2 GitHub open-source project for topics business, natural-language, casperjs, slimerjs, #3 for chrome-extension.
 
 # Set Up
-TA.Gui is in beta version (v0.6) and runs on macOS/Linux (coming to Windows soon). Instead of packaging as a one-click installer, you are warmly invited to have a look at the respective amazing technologies that TA.Gui depends on.
+TA.Gui is in beta version (v0.6) and runs on macOS/Linux (coming to Windows soon)
 
 1. install PhantomJS (headless scriptable web browser) - http://phantomjs.org
 2. install CasperJS (navigation/testing for PhantomJS) - http://casperjs.org
