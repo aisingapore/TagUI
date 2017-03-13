@@ -35,7 +35,7 @@ click section_results
 download https://admin.typeform.com/form/2592751/analyze/csv to report.csv
 ```
 
-The automation flow can be triggered from scheduling, command line, URL, REST API, email etc. Everything happens headlessly in the background without seeing any web browser, so you can continue using the computer or server uninterrupted. Running on a visible web browser is supported, using Firefox and SlimerJS (see firefox option below). Outgoing API calls can be made with a single line to integrate with other downstream applications.
+The automation flow can be triggered from scheduling, command line, URL, REST API, email etc. Everything happens headlessly in the background without seeing any web browser, so you can continue using the computer or server uninterrupted. Running on a visible web browser is also supported, using Firefox and SlimerJS (see firefox option below). Outgoing API calls can be made with a single line to integrate with other downstream applications.
 
 If you know JavaScript coding and want to be more expressive, you can even use JavaScript directly in the flow. If not, you will still enjoy friendly but powerful features such as repositories to store your reusable objects, datatables for batch automation, and a Chrome extension which creates automation flows by recording your actions.
 
@@ -149,6 +149,7 @@ Tip - if you want to write xpath, use double quotes for text //\*[@title="Login"
 
 Condition (in natural language)|JavaScript
 :------------------------------|:---------
+example - if day equals to "Friday"| if (day == "Friday")
 example - if menu contains "fruits"| if (menu.indexOf("fruits")>-1)
 example - if A more than B and C not equals to D | if ((A > B) && (C != D))
 example - for n from 1 to 4 | for (n=1; n<=4; n++)
@@ -198,9 +199,9 @@ direction|BUY|SELL|BUY
 ### TESTING (for QA and test automation engineers)
 The step check allows simple testing of conditions. For professional test automation, CasperJS comes with a tester module for unit and functional testing purpose. To use the advanced testing features, run TA.Gui with the test option.
 
-CasperJS test scripts are inherently different in structure and syntax from its usual automation scripts. With the test option, TA.Gui automatically converts your automation flow to work as a test script and output a XUnit XML file, which is compatible with continuous integration tools such as Jenkins. Running together with the report option outputs a web report of the test execution for easy sharing.
+CasperJS test scripts are inherently different in structure and syntax from its usual automation scripts. With the test option, TA.Gui automatically converts your automation flow to work as a test script. CasperJS will output a XUnit XML file, which is compatible with continuous integration tools such as Jenkins. Running together with the report option outputs a web report of the test execution for easy sharing.
 
-TA.Gui allows you to reuse the same flow for testing or automation by running it with or without the test option. Below are examples of CasperJS test assertions written in JavaScript code that can be used directly in your automation flow (after navigating and taking desired actions using usual flow steps etc).
+TA.Gui allows you to reuse the same flow for testing or automation by running it with or without the test option. Below are examples of CasperJS test assertions written in JavaScript code that can be used directly in your automation flow (after navigating and taking desired actions using usual flow steps).
 ```javascript
 test.assertTextExists('About Tebel.Automation','Check for About Tebel.Automation text');
 test.assertSelectorHasText(tx('header'), 'interface automation','Check for phrase in header element');
@@ -216,12 +217,12 @@ Automation flows can also be triggered via REST API. TA.Gui has an API service a
 0,15,30,45 * * * * /full_path_on_your_server/tagui_crontab
 ```
 
-To call an automation flow from your application or web browser, use below API syntax. Automation flows can also be triggered from emails using the API. For email integration, [install TA.Mail](https://github.com/tebelorg/TA.Mail). Its main job is an open-source mailbot to act on incoming emails or perform mass emailing; it also delivers emails through API as a part-time job.
+To call an automation flow from your application or web browser, use below API syntax. Automation flows can also be triggered from emails using the API. For email integration, [install TA.Mail](https://github.com/tebelorg/TA.Mail). Its main job is an open-source mailbot to act on incoming emails or perform mass emailing; its part-time job is delivering emails through API.
 ```
 your_website_url/tagui_service.php?SETTINGS="flow_filename option(s)"
 ```
 
-Besides integrating with web applications, TA.Gui can be extended to integrate with hardware (eg Arduino or Raspberry Pi) for physical world interactions or machine learning service providers for AI decision-making capacity.
+Besides integrating with web applications, TA.Gui can be extended to integrate with hardware (eg Arduino or Raspberry Pi) for physical world interactions or machine learning service providers for AI decision-making ability.
 
 For making outgoing API calls in your automation flow, to feed data somewhere or send emails etc, use the api step followed by full URL (including parameters) of the API call. Response from the API will be printed to output. For example using TA.Mail, emails with run-time variables can be sent directly from your flow with a single line.
 
@@ -243,7 +244,7 @@ tagui_service.act|service request batch ready to execute
 tagui_service.run|service request batch currently running
 tagui_service.done|service request batch finished running
 
-That's all, you've just gone through the entire documentation for TA.Gui :robot:
+That's all, this is the entire documentation for TA.Gui :robot:
 
 # License
 TA.Gui is open-source software released under the MIT license
