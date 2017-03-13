@@ -1,6 +1,6 @@
 {
   "name": "tagui",
-  "version": "0.6.29",
+  "version": "0.6.30",
   "description": "Tool for non-developers and business users to automate web apps",
   "keywords": [
     "tagui"
@@ -18,6 +18,6 @@
   "dependencies": {
     "phantomjs-prebuilt": "^2.1.14",
     "casperjs": "^1.1.3",
-    "slimerjs": "^0.10.2"
+    "slimerjs": "^0.10.3"
   }
 }
