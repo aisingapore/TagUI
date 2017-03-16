@@ -2,8 +2,10 @@
 /archive/*
 /flows/*
 
-# exclude packages folder for packaged installation
-/packages/*
+# exclude folders for packaged installation
+/src/casperjs/*
+/src/phantomjs/*
+/src/slimerjs/*
 
 # exclude local log files from api service
 /src/tagui_service.in
