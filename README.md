@@ -48,12 +48,9 @@ Mentioned in Hacker News, Codrops Collective, BlogDuWebdesign, CSS Author. #1 au
 TA.Gui is in beta version (v0.6) and runs on macOS/Linux (coming to Windows soon)
 
 ### PACKAGED INSTALLATION
-Platform|Package Notes
-:------:|:------------
-macOS|unzip and run (WIP)
-Linux|unzip and run (WIP)
-Windows|unzip and run (WIP)
-Node.js|[npm install tagui](https://www.npmjs.com/package/tagui)
+Platform|macOS|Linux|Windows|Node.js
+:------:|:---:|:---:|:-----:|:-----:
+Package Notes|unzip and run (WIP)|unzip and run (WIP)|unzip and run (WIP)|[npm install tagui](https://www.npmjs.com/package/tagui)
 
 ### MANUAL INSTALLATION
 1. install PhantomJS (headless scriptable web browser) - http://phantomjs.org
