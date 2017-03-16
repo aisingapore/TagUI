@@ -2,6 +2,9 @@
 /archive/*
 /flows/*
 
+# exclude packages folder for packaged installation
+/packages/*
+
 # exclude local log files from api service
 /src/tagui_service.in
 /src/tagui_service.out
