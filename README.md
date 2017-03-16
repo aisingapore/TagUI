@@ -47,13 +47,21 @@ Mentioned in Hacker News, Codrops Collective, BlogDuWebdesign, CSS Author. #1 au
 # Set Up
 TA.Gui is in beta version (v0.6) and runs on macOS/Linux (coming to Windows soon)
 
+### PACKAGED INSTALLATION
+Platform|Package Notes
+:------:|:------------
+macOS|unzip and run (WIP)
+Linux|unzip and run (WIP)
+Windows|unzip and run (WIP)
+Node.js|[npm install tagui](https://www.npmjs.com/package/tagui)
+
+### MANUAL INSTALLATION
 1. install PhantomJS (headless scriptable web browser) - http://phantomjs.org
 2. install CasperJS (navigation/testing for PhantomJS) - http://casperjs.org
-3. install TA.Gui (general purpose web automation tool) - https://git.io/vMCTZ
+3. install SlimerJS (scriptable web browser for Firefox) - https://slimerjs.org
+4. install TA.Gui (general purpose web automation tool) - https://git.io/vMCTZ
 
 Optional - configure web browser settings in tagui_config.txt, such as browser resolution, step timeout of 10s etc
-
-Tip - developers with Node.js set up might find it more convenient to npm install tagui
 
 # To Use
 ### COMMAND LINE
@@ -65,7 +73,7 @@ Tip - developers with Node.js set up might find it more convenient to npm instal
 
 Option|Purpose
 :----:|:------
-firefox|run on visible Firefox browser (first install Firefox, and SlimerJS - https://slimerjs.org)
+firefox|run on visible Firefox browser instead of invisible browser (first install [Firefox](https://www.mozilla.org/en-US/firefox/new/))
 report|generate a web report for easy sharing of run results (default is only a text log file)
 debug|show run-time backend messages from PhantomJS for detailed tracing and logging
 quiet|run without output except for explicit output (echo / show / check / api / errors etc)
