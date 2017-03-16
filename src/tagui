@@ -28,9 +28,15 @@ initial_dir=`pwd`
 # change current directory to TA.GUI directory
 cd "`dirname "$0"`"
 
-# set local path to casperjs and environment path to phantomjs
+# first set dependencies to local symbolic links
 CASPERJS_EXECUTABLE="/usr/local/bin/casperjs"
 export PHANTOMJS_EXECUTABLE="/usr/local/bin/phantomjs"
+export SLIMERJS_EXECUTABLE="/usr/local/bin/slimerjs"
+
+# then set to packaged dependencies if they exist
+if [ -f "$(pwd)/casperjs/bin/casperjs" ]; then CASPERJS_EXECUTABLE="$(pwd)/casperjs/bin/casperjs"; fi
+if [ -f "$(pwd)/phantomjs/bin/phantomjs" ]; then export PHANTOMJS_EXECUTABLE="$(pwd)/phantomjs/bin/phantomjs"; fi
+if [ -f "$(pwd)/slimerjs/slimerjs" ]; then export SLIMERJS_EXECUTABLE="$(pwd)/slimerjs/slimerjs"; fi
 
 # check firefox parameter to run on visible firefox browser through slimerjs 
 if [ "$2" = "firefox" ]; then set -- "$1" "--engine=slimerjs" "${@:3}"; fi
@@ -115,8 +121,8 @@ do export tagui_data_set=$tagui_data_set
 php -q tagui_parse.php "$1" | tee -a "$1".log
 if [ -s "$1".log ] && [ "$tagui_data_set" -eq 1 ]
 then echo "ERROR - automation aborted due to above" | tee -a "$1".log; tagui_error_code=1; break
-elif [ "$tagui_test_mode" == false ]; then $CASPERJS_EXECUTABLE "$1".js $params$api | tee -a "$1".log
-else export tagui_test_mode=true; $CASPERJS_EXECUTABLE test "$1".js $params$api --xunit="$1".xml | tee -a "$1".log
+elif [ "$tagui_test_mode" == false ]; then "$CASPERJS_EXECUTABLE" "$1".js $params$api | tee -a "$1".log
+else export tagui_test_mode=true; "$CASPERJS_EXECUTABLE" test "$1".js $params$api --xunit="$1".xml | tee -a "$1".log
 fi; done
 
 # check report option to generate html automation log
