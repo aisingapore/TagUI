@@ -39,7 +39,7 @@ The automation flow can be triggered from scheduling, command line, URL, REST AP
 
 If you know JavaScript coding and want to be more expressive, you can even use JavaScript directly in the flow. If not, you will still enjoy friendly but powerful features such as repositories to store your reusable objects, datatables for batch automation, and a Chrome extension which creates automation flows by recording your actions.
 
-Originally developed by a test automation engineer to avoid writing code to automate web-based interactions.
+Originally developed by a test automation engineer to avoid writing code to automate web interactions.
 
 ### MEDIA AND GITHUB
 Mentioned in Hacker News, Codrops Collective, BlogDuWebdesign, CSS Author. #1 automation stack on StackShare. #2 GitHub open-source project for topics business, natural-language, casperjs, slimerjs, #3 for chrome-extension.
