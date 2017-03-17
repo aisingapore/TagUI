@@ -57,6 +57,7 @@ Package Notes|[unzip and run](https://raw.githubusercontent.com/tebelorg/TA.Dump
 2. CasperJS (navigation/testing for PhantomJS) - http://casperjs.org
 3. SlimerJS (scriptable web browser for Firefox) - https://slimerjs.org
 4. TA.Gui (general purpose web automation tool) - https://git.io/vMCTZ
+5. PHP (this step is only required for Windows) - http://windows.php.net
 
 Optional - configure web browser settings in tagui_config.txt, such as browser resolution, step timeout of 10s etc
 
