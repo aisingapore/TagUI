@@ -5,13 +5,13 @@ if [ -z "$1" ]
 then
 echo "tagui: missing parameter(s) - use this syntax and below options to run ./tagui flow_filename option(s)"
 echo
-echo "firefox - run on visible Firefox browser (first install Firefox, and SlimerJS - https://slimerjs.org)"
+echo "firefox - run on visible Firefox web browser instead of invisible browser (first install Firefox)"
 echo "report - generate a web report for easy sharing of run results (default is only a text log file)"
 echo "debug - show run-time backend messages from PhantomJS for detailed tracing and logging"
 echo "quiet - run without output except for explicit output (echo / show / check / api / errors etc)"
 echo "test - professional testing using CasperJS assertions (TA.Gui dynamic tx('selector') usable)"
 echo
-echo "TA.Gui is a tool for non-developers and business users to automate web apps - http://tebel.org"
+echo "TA.Gui is a tool for non-developers and business users to automate web apps ~ http://tebel.org"
 echo
 exit 1
 fi
