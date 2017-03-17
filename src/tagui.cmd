@@ -1,4 +1,4 @@
-@echo off	
+@echo off
 rem # SCRIPT FOR RUNNING TA.GUI FRAMEWORK ~ TEBEL.ORG #
 
 rem enable windows for loop advanced flow control
@@ -7,13 +7,13 @@ setlocal enableextensions enabledelayedexpansion
 if "%~1"=="" (
 echo tagui: missing parameter^(s^) - use this syntax and below options to run ./tagui flow_filename option^(s^)
 echo.
-echo firefox - run on visible Firefox browser ^(first install Firefox, and SlimerJS - https://slimerjs.org^)
+echo firefox - run on visible Firefox web browser instead of invisible browser ^(first install Firefox^)
 echo report - generate a web report for easy sharing of run results ^(default is only a text log file^)
 echo debug - show run-time backend messages from PhantomJS for detailed tracing and logging
 echo quiet - run without output except for explicit output ^(echo / show / check / api / errors etc^)
 echo test - professional testing using CasperJS assertions ^(TA.Gui dynamic tx^('selector'^) usable^)
 echo.
-echo TA.Gui is a tool for non-developers and business users to automate web apps - http://tebel.org
+echo TA.Gui is a tool for non-developers and business users to automate web ~ http://tebel.org
 echo.
 exit /b 1
 )
@@ -33,9 +33,25 @@ set "initial_dir=%cd%"
 rem change current directory to TA.GUI directory
 cd /d "%~dp0"
 
-rem set local path to casperjs and environment path to phantomjs
-set CASPERJS_EXECUTABLE="C:\TA.Gui\casperjs"
-set PHANTOMJS_EXECUTABLE="C:\TA.Gui\phantomjs"
+
+
+
+rem below 3 blocks dynamically set up dependencies paths for different setups
+rem first set dependencies to local symbolic links (for manual installation)
+
+rem symbolic links not applicable on windows, only done for macos and linux
+
+rem then set to node.js dependencies if they exist (for npm install tagui)
+
+if exist "%~dp0..\..\casperjs\bin\casperjs" set path=%~dp0..\..\casperjs\bin;%path%
+if exist "%~dp0..\..\phantomjs-prebuilt\bin\phantomjs" set path=%~dp0..\..\phantomjs-prebuilt\bin;%path%
+if exist "%~dp0..\..\slimerjs\src\slimerjs" set path=%~dp0..\..\slimerjs\src;%path%
+
+rem finally set to packaged dependencies if they exist (for packaged installation)
+
+if exist "%~dp0casperjs\bin\casperjs" set path=%~dp0casperjs\bin;%path%
+if exist "%~dp0phantomjs\bin\phantomjs" set path=%~dp0phantomjs\bin;%path%
+if exist "%~dp0slimerjs\slimerjs" set path=%~dp0slimerjs;%path%
 
 rem check firefox parameter to run on visible firefox browser through slimerjs
 
@@ -57,12 +73,15 @@ rem $1 left out - filenames with spaces have issue when casperjs $params
 
 
 rem initialise log file and set permissions to protect user data
-type nul > "%flow_file%.log"
+type nul > "%flow_file%".log
 
 rem check if api call is made in automation flow file to set appropriate setting for phantomjs to work
 
 
 rem check datatable csv file for batch automation
+
+
+
 
 
 rem loop for managing multiple data sets in datatable
@@ -73,6 +92,7 @@ set tagui_error_code=0
 
 rem parse automation flow file and check for initial parse error before calling casperjs
 php -q tagui_parse.php "%flow_file%"
+casperjs "%flow_file%".js
 
 rem check report option to generate html automation log
 
