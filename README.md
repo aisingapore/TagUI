@@ -104,7 +104,7 @@ Flow Sample |Purpose
 3_github|goes to a GitHub page and downloads the repo using 2 ways
 4_conditions|goes through examples of using conditions in natural language
 5_repositories|shows using repositories on Russian social media site VK.com
-6_datatables|set of flows uses datatables to reach out to GitHub Starrers
+6_datatables|set of flows uses datatables to retrieve/act on info from GitHub
 7_testing|shows how to use check step and CasperJS test assertions
 
 # Pipeline
