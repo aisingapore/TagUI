@@ -28,12 +28,18 @@ initial_dir=`pwd`
 # change current directory to TA.GUI directory
 cd "`dirname "$0"`"
 
-# first set dependencies to local symbolic links
+# below 3 blocks dynamically set up dependencies paths for different setups
+# first set dependencies to local symbolic links (for manual installation)
 CASPERJS_EXECUTABLE="/usr/local/bin/casperjs"
 export PHANTOMJS_EXECUTABLE="/usr/local/bin/phantomjs"
 export SLIMERJS_EXECUTABLE="/usr/local/bin/slimerjs"
 
-# then set to packaged dependencies if they exist
+# then set to node.js dependencies if they exist (for npm install tagui)
+if [ -f "$(pwd)/../../casperjs/bin/casperjs" ]; then CASPERJS_EXECUTABLE="$(pwd)/../../casperjs/bin/casperjs"; fi
+if [ -f "$(pwd)/../../phantomjs-prebuilt/bin/phantomjs" ]; then export PHANTOMJS_EXECUTABLE="$(pwd)/../../phantomjs-prebuilt/bin/phantomjs"; fi
+if [ -f "$(pwd)/../../slimerjs/src/slimerjs" ]; then export SLIMERJS_EXECUTABLE="$(pwd)/../../slimerjs/src/slimerjs"; fi
+
+# finally set to packaged dependencies if they exist (for packaged installation)
 if [ -f "$(pwd)/casperjs/bin/casperjs" ]; then CASPERJS_EXECUTABLE="$(pwd)/casperjs/bin/casperjs"; fi
 if [ -f "$(pwd)/phantomjs/bin/phantomjs" ]; then export PHANTOMJS_EXECUTABLE="$(pwd)/phantomjs/bin/phantomjs"; fi
 if [ -f "$(pwd)/slimerjs/slimerjs" ]; then export SLIMERJS_EXECUTABLE="$(pwd)/slimerjs/slimerjs"; fi
