@@ -71,7 +71,7 @@ Optional - configure web browser settings in tagui_config.txt, such as browser r
 
 Option|Purpose
 :----:|:------
-firefox|run on visible Firefox browser instead of invisible browser (first install [Firefox](https://www.mozilla.org/en-US/firefox/new/))
+firefox|run on visible Firefox web browser instead of invisible browser (first install [Firefox](https://www.mozilla.org/en-US/firefox/new/))
 report|generate a web report for easy sharing of run results (default is only a text log file)
 debug|show run-time backend messages from PhantomJS for detailed tracing and logging
 quiet|run without output except for explicit output (echo / show / check / api / errors etc)
