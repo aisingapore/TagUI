@@ -50,7 +50,7 @@ TA.Gui is in beta version (v0.6) and runs on macOS/Linux (coming to Windows soon
 ### PACKAGED INSTALLATION
 Platform|macOS|Linux|Windows|Node.js
 :------:|:---:|:---:|:-----:|:-----:
-Package Notes|unzip and run (WIP)|unzip and run (WIP)|unzip and run (WIP)|[npm install tagui](https://www.npmjs.com/package/tagui)
+Package Notes|[unzip and run](https://raw.githubusercontent.com/tebelorg/TA.Dump/master/TA.Gui_macOS.zip)|unzip and run (WIP)|unzip and run (WIP)|[npm install tagui](https://www.npmjs.com/package/tagui)
 
 ### MANUAL INSTALLATION
 1. install PhantomJS (headless scriptable web browser) - http://phantomjs.org
