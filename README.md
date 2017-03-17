@@ -53,10 +53,10 @@ Platform|macOS|Linux|Windows|Node.js
 Package Notes|[unzip and run](https://raw.githubusercontent.com/tebelorg/TA.Dump/master/TA.Gui_macOS.zip)|unzip and run (WIP)|unzip and run (WIP)|[npm install tagui](https://www.npmjs.com/package/tagui)
 
 ### MANUAL INSTALLATION
-1. install PhantomJS (headless scriptable web browser) - http://phantomjs.org
-2. install CasperJS (navigation/testing for PhantomJS) - http://casperjs.org
-3. install SlimerJS (scriptable web browser for Firefox) - https://slimerjs.org
-4. install TA.Gui (general purpose web automation tool) - https://git.io/vMCTZ
+1. PhantomJS (headless scriptable web browser) - http://phantomjs.org
+2. CasperJS (navigation/testing for PhantomJS) - http://casperjs.org
+3. SlimerJS (scriptable web browser for Firefox) - https://slimerjs.org
+4. TA.Gui (general purpose web automation tool) - https://git.io/vMCTZ
 
 Optional - configure web browser settings in tagui_config.txt, such as browser resolution, step timeout of 10s etc
 
