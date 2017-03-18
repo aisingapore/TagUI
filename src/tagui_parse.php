@@ -174,9 +174,10 @@ if ((substr($raw_intent,0,2)=="//") or (substr($raw_intent,-1)==";")) return tru
 
 function abs_file($filename) { // helper function to return absolute filename
 if ($filename == "") return ""; $flow_script = $GLOBALS['script']; // get flow filename
-if (substr($filename,0,1)=="/") return $filename; // return absolute filename directly
-// otherwise get path of the flow script and use it to build absolute filename
-$flow_path = dirname($flow_script); return $flow_path . '/' . $filename;}
+if (substr($filename,0,1)=="/") return $filename; // return absolute filename directly macos/linux
+if (substr($filename,1,1)==":") return $filename; // return absolute filename directly for windows
+$flow_path = dirname($flow_script); // otherwise get path of the flow script and use it to build absolute filename
+if (strpos($flow_path,"/")!==false) return $flow_path . '/' . $filename; else return $flow_path . '\\' . $filename;} 
 
 function beg_tx($locator) { // helper function to return beginning string for handling locators
 if ($GLOBALS['inside_loop'] == 0)
