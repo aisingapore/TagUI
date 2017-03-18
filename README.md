@@ -235,6 +235,7 @@ For making outgoing API calls in your automation flow, to feed data somewhere or
 File Reference |Purpose
 :--------------|:------
 tagui|main runner for TA.Gui web automation
+tagui.cmd|main runner for Windows platform
 tagui_config.txt|web browser settings used for automation
 tagui_crontab|to run service request batch from crontab
 tagui_footer.js|footer template for CasperJS code
