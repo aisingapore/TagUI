@@ -36,7 +36,8 @@ while(!feof($config_file)) {fwrite($output_file,fgets($config_file));} fclose($c
 while(!feof($header_file)) {fwrite($output_file,fgets($header_file));} fclose($header_file);
 
 // save flow path in casperjs script to be used by save_text and snap_image
-fwrite($output_file,"var flow_path = '" . dirname($script) . "';\n\n");
+// casperjs/phantomjs do not seem to support \ for windows paths, replace with / to work
+fwrite($output_file,"var flow_path = '" . str_replace("\\","/",dirname($script)) . "';\n\n");
 
 // main loop to parse intents in flow file for conversion into javascript code
 while(!feof($input_file)) {fwrite($output_file,parse_intent(fgets($input_file)));} fclose($input_file);
@@ -174,9 +175,10 @@ if ((substr($raw_intent,0,2)=="//") or (substr($raw_intent,-1)==";")) return tru
 
 function abs_file($filename) { // helper function to return absolute filename
 if ($filename == "") return ""; $flow_script = $GLOBALS['script']; // get flow filename
-if (substr($filename,0,1)=="/") return $filename; // return absolute filename directly macos/linux
-if (substr($filename,1,1)==":") return $filename; // return absolute filename directly for windows
-$flow_path = dirname($flow_script); // otherwise get path of the flow script and use it to build absolute filename
+if (substr($filename,0,1)=="/") return $filename; // return mac/linux absolute filename directly
+if (substr($filename,1,1)==":") return str_replace("\\","/",$filename); // return windows absolute filename directly
+$flow_path = str_replace("\\","/",dirname($flow_script)); // otherwise use flow script path to build absolute filename
+// above str_replace is because casperjs/phantomjs do not seem to support \ for windows paths, replace with / to work
 if (strpos($flow_path,"/")!==false) return $flow_path . '/' . $filename; else return $flow_path . '\\' . $filename;} 
 
 function beg_tx($locator) { // helper function to return beginning string for handling locators
