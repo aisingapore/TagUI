@@ -39,7 +39,7 @@ cd /d "%~dp0"
 rem below 3 blocks dynamically set up dependencies paths for different setups
 rem first set dependencies to local symbolic links (for manual installation)
 
-rem symbolic links not applicable on windows, only done for macos and linux
+rem symbolic links not standard setup on windows, only done for macos and linux
 
 rem then set to node.js dependencies if they exist (for npm install tagui)
 
@@ -50,8 +50,9 @@ if exist "%~dp0..\..\slimerjs\src\slimerjs" set path=%~dp0..\..\slimerjs\src;%pa
 rem finally set to packaged dependencies if they exist (for packaged installation)
 
 if exist "%~dp0casperjs\bin\casperjs" set path=%~dp0casperjs\bin;%path%
-if exist "%~dp0phantomjs\bin\phantomjs" set path=%~dp0phantomjs\bin;%path%
+if exist "%~dp0phantomjs\bin\phantomjs.exe" set path=%~dp0phantomjs\bin;%path%
 if exist "%~dp0slimerjs\slimerjs" set path=%~dp0slimerjs;%path%
+if exist "%~dp0php\php.exe" set path=%~dp0php;%path%
 
 rem check firefox parameter to run on visible firefox browser through slimerjs
 
@@ -73,6 +74,7 @@ rem $1 left out - filenames with spaces have issue when casperjs $params
 
 
 rem initialise log file and set permissions to protect user data
+rem skip permissions setting for windows, only done for macos and linux
 type nul > "%flow_file%".log
 
 rem check if api call is made in automation flow file to set appropriate setting for phantomjs to work
