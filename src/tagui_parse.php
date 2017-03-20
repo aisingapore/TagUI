@@ -63,8 +63,8 @@ $script_content = str_replace("\\n'","'",str_replace("'\\n","'",$script_content)
 // casperjs testing does not allow creation of casper object as it is already created by test engine
 $script_content = str_replace("var casper = require(","// var casper = require(",$script_content);
 // following help to define the script structure required by casperjs for test automation purpose
-$script_content = str_replace("casper.start(","casper.test.begin('" . $script . "', " . $test_automation . 
-", function(test) {\ncasper.start(",$script_content); // define required casperjs test script structure
+$script_content = str_replace("casper.start(","casper.test.begin('" . str_replace("\\","\\\\",$script) . "', " . 
+$test_automation.", function(test) {\ncasper.start(",$script_content); // define required casperjs test structure
 $script_content = str_replace("casper.run();","casper.run(function(){test.done();});});",$script_content);
 file_put_contents($script . '.js',$script_content);} // save script after restructuring for testing
 
