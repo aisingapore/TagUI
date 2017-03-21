@@ -45,30 +45,32 @@ Originally developed by a test automation engineer to avoid writing code to auto
 Mentioned in Hacker News, Codrops Collective, BlogDuWebdesign, CSS Author. #1 automation stack on StackShare. #2 GitHub open-source project for topics business, natural-language, casperjs, slimerjs, #3 for chrome-extension.
 
 # Set Up
-TA.Gui is in v1.0 and runs on macOS, Linux, Windows.
+TA.Gui is in v1.0 and runs on macOS, Linux, Windows
 
 ### PACKAGED INSTALLATION
-No setup is needed, just download for your platform, unzip and run
- 
+No setup is needed, all dependencies are packaged in
+
 Platform|macOS|Linux|Windows|Node.js
 :------:|:---:|:---:|:-----:|:-----:
-Package Notes|[unzip and run](https://raw.githubusercontent.com/tebelorg/TA.Dump/master/TA.Gui_macOS.zip)|[unzip and run](https://raw.githubusercontent.com/tebelorg/TA.Dump/master/TA.Gui_Linux.zip)|[unzip and run](https://raw.githubusercontent.com/tebelorg/TA.Dump/master/TA.Gui_Windows.zip)|[npm install tagui](https://www.npmjs.com/package/tagui)
+Package|[unzip and run](https://raw.githubusercontent.com/tebelorg/TA.Dump/master/TA.Gui_macOS.zip)|[unzip and run](https://raw.githubusercontent.com/tebelorg/TA.Dump/master/TA.Gui_Linux.zip)|[unzip and run](https://raw.githubusercontent.com/tebelorg/TA.Dump/master/TA.Gui_Windows.zip)|[npm install tagui](https://www.npmjs.com/package/tagui)
 
 Optional - configure web browser settings in tagui_config.txt, such as browser resolution, step timeout of 10s etc
 
 ### MANUAL INSTALLATION
+Set up dependencies manually from respective websites
+
 1. PhantomJS (headless scriptable web browser) - http://phantomjs.org
 2. CasperJS (navigation/testing for PhantomJS) - http://casperjs.org
 3. SlimerJS (scriptable web browser for Firefox) - https://slimerjs.org
 4. TA.Gui (general purpose web automation tool) - https://git.io/vMCTZ
-5. PHP (step required for manual Windows setup) - http://windows.php.net
+5. PHP (only required for manual Windows setup) - http://windows.php.net
 
 Tip - for manual Windows setup, set SLIMERJS_EXECUTABLE environment variable to point to slimerjs.bat
 
 # To Use
 ### COMMAND LINE
 ```
-./tagui flow_filename option(s)
+./tagui flow_filename option(s) for macOS/Linux OR tagui flow_filename option(s) for Windows
 ```
 - Automation flow filename can have no extension, .gui or .txt file extension
 - Objects, keywords, datatables can be defined in flow_filename.csv (optional)
@@ -90,7 +92,7 @@ To schedule an automation flow in crontab, for example at 8am daily
 ```
 
 ### CHROME EXTENSION
-Prior to public release, to use TA.Gui Chrome web browser extension for recording automation flows, type chrome://extensions in Google Chrome, then drag and drop TA.Gui chrome folder into the browser. TA.Gui Chrome extension is based on [Resurrectio tool](https://github.com/ebrehault/resurrectio) and records steps such as page navigation, clicking web elements and entering information. To start recording your automation flows, simply click TA.Gui icon on your Chrome toolbar. Right-click for shortcuts to various TA.Gui steps, such as capturing webpage or element screenshot.
+To use TA.Gui Chrome web browser extension for recording automation flows, download from Chrome Web Store directly or type chrome://extensions in Google Chrome, then drag and drop TA.Gui chrome folder into the browser. TA.Gui Chrome extension is based on [Resurrectio tool](https://github.com/ebrehault/resurrectio) and records steps such as page navigation, clicking web elements and entering information. To start recording your automation flows, simply click TA.Gui icon on your Chrome toolbar. Right-click for shortcuts to various TA.Gui steps, such as capturing webpage or element screenshot.
 
 ### AUTOMATION WORKFLOW
 What happens behind the scenes when you run an automation flow
@@ -113,7 +115,7 @@ Flow Sample |Purpose
 7_testing|shows how to use check step and CasperJS test assertions
 
 # Pipeline
-TA.Gui is a young project, in development since Dec 2016 and still in beta. Feedback from the community will have a huge impact in shaping its development pipeline. By reproducing cognitive interactions that represent our intentions, we can let computers work on repetitive or time-sensitive tasks that people need to get done.
+TA.Gui is a young project, in development since Dec 2016 and still in v1.0. Feedback from the community will have a huge impact in shaping its development pipeline. By reproducing cognitive interactions that represent our intentions, we can let computers work on repetitive or time-sensitive tasks that people need to get done.
 
 The overarching goal is to make automation accessible to more people and handle increasingly complex processes as cognitive abilities of computers continue to improve. This helps free up people's time for higher-value activities, or simply for more leisure. Suggestions or pull requests that support this goal are certainly welcome.
 
@@ -254,8 +256,6 @@ tagui_service.log|log to track service requests history
 tagui_service.act|service request batch ready to execute
 tagui_service.run|service request batch currently running
 tagui_service.done|service request batch finished running
-
-That's all, this is the entire documentation for TA.Gui :robot:
 
 # License
 TA.Gui is open-source software released under the MIT license
