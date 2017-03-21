@@ -40,12 +40,12 @@ rem symbolic links not standard setup on windows, only for macos and linux
 rem then set to node.js dependencies if they exist (for npm install tagui)
 if exist "%~dp0..\..\casperjs\bin\casperjs" set "path=%~dp0..\..\casperjs\bin;%path%"
 if exist "%~dp0..\..\phantomjs-prebuilt\bin\phantomjs" set "path=%~dp0..\..\phantomjs-prebuilt\bin;%path%"
-if exist "%~dp0..\..\slimerjs\src\slimerjs" set "path=%~dp0..\..\slimerjs\src;%path%"
+if exist "%~dp0..\..\slimerjs\src\slimerjs.bat" set "SLIMERJS_EXECUTABLE=%~dp0..\..\slimerjs\src\slimerjs.bat"
 
 rem finally set to packaged dependencies if they exist (for packaged installation)
 if exist "%~dp0casperjs\bin\casperjs" set "path=%~dp0casperjs\bin;%path%"
 if exist "%~dp0phantomjs\bin\phantomjs.exe" set "path=%~dp0phantomjs\bin;%path%"
-if exist "%~dp0slimerjs\slimerjs" set "path=%~dp0slimerjs;%path%"
+if exist "%~dp0slimerjs\slimerjs.bat" set "SLIMERJS_EXECUTABLE=%~dp0slimerjs\slimerjs.bat"
 if exist "%~dp0php\php.exe" set "path=%~dp0php;%path%"
 if exist "%~dp0unx\gawk.exe" set "path=%~dp0unx;%path%"
 
@@ -190,12 +190,12 @@ set params=%arg2% %arg3% %arg4% %arg5% %arg6% %arg7% %arg8% %arg9%
 
 rem initialise log file and set permissions to protect user data
 rem skip permissions setting for windows, only done for macos and linux
-type nul > "%flow_file%".log
+type nul > "%flow_file%.log"
 
 rem check if api call is made in automation flow file to set appropriate setting for phantomjs to work
 set api=
 if exist "%flow_file%" (
-find /c "api http" "%flow_file%" > nul
+find /i /c "api http" "%flow_file%" > nul
 if not errorlevel 1 set api= --web-security=false
 )
 
@@ -209,18 +209,22 @@ rem loop for managing multiple data sets in datatable
 
 
 rem parse automation flow file and check for initial parse error before calling casperjs
-php -q tagui_parse.php "%flow_file%" | tee -a "%flow_file%".log
-casperjs "%flow_file%".js %params%%api% | tee -a "%flow_file%".log
+php -q tagui_parse.php "%flow_file%" | tee -a "%flow_file%.log"
+if %tagui_test_mode%==false (
+casperjs "%flow_file%.js" %params%%api% | tee -a "%flow_file%.log"
+) else (
+casperjs test "%flow_file%.js" %params%%api% --xunit="%flow_file%.xml" | tee -a "%flow_file%.log"
+)
 
 rem additional windows section to convert unix to windows file format
-gawk "sub(\"$\", \"\")" "%flow_file%".js > "%flow_file%".js.tmp
-move "%flow_file%".js.tmp "%flow_file%".js > nul
-gawk "sub(\"$\", \"\")" "%flow_file%".log > "%flow_file%".log.tmp
-move "%flow_file%".log.tmp "%flow_file%".log > nul
+gawk "sub(\"$\", \"\")" "%flow_file%.js" > "%flow_file%.js.tmp"
+move "%flow_file%.js.tmp" "%flow_file%.js" > nul
+gawk "sub(\"$\", \"\")" "%flow_file%.log" > "%flow_file%.log.tmp"
+move "%flow_file%.log.tmp" "%flow_file%.log" > nul
 
 rem check report option to generate html automation log
-
-rem if %~z1 gtr 0 if %tagui_html_report%==true php -q tagui_report.php "%flow_file%"
+for /f "usebackq" %%a in ('%flow_file%.log') do set file_size=%%~za
+if %file_size% gtr 0 if %tagui_html_report%==true php -q tagui_report.php "%flow_file%"
 
 rem change back to initial directory where tagui is called
 cd /d "%initial_dir%"
