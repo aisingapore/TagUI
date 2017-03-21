@@ -18,7 +18,7 @@ Automate repetitive parts of your work - use cases include data acquisition, pro
 - dynamic XPath/CSS element selector
 - run by schedule, command line, REST API
 - support outgoing API calls to webservices
-- cross-platform (macOS/Linux; Windows soon)
+- cross-platform for macOS, Linux, Windows
 
 ### HOW IT WORKS
 TA.Gui converts your intentions in simple natural language into lines of working JavaScript code for CasperJS & PhantomJS to cast their web automation magic. As an example, TA.Gui will instantly convert the automation flow below into 100+ lines of JavaScript code and perform the steps to download a Typeform report automatically.  
@@ -45,21 +45,25 @@ Originally developed by a test automation engineer to avoid writing code to auto
 Mentioned in Hacker News, Codrops Collective, BlogDuWebdesign, CSS Author. #1 automation stack on StackShare. #2 GitHub open-source project for topics business, natural-language, casperjs, slimerjs, #3 for chrome-extension.
 
 # Set Up
-TA.Gui is in beta version (v0.6) and runs on macOS/Linux (coming to Windows soon)
+TA.Gui is in v1.0 and runs on macOS, Linux, Windows.
 
 ### PACKAGED INSTALLATION
+No setup is needed, just download for your platform, unzip and run
+ 
 Platform|macOS|Linux|Windows|Node.js
 :------:|:---:|:---:|:-----:|:-----:
-Package Notes|[unzip and run](https://raw.githubusercontent.com/tebelorg/TA.Dump/master/TA.Gui_macOS.zip)|[unzip and run](https://raw.githubusercontent.com/tebelorg/TA.Dump/master/TA.Gui_Linux.zip)|unzip and run (WIP)|[npm install tagui](https://www.npmjs.com/package/tagui)
+Package Notes|[unzip and run](https://raw.githubusercontent.com/tebelorg/TA.Dump/master/TA.Gui_macOS.zip)|[unzip and run](https://raw.githubusercontent.com/tebelorg/TA.Dump/master/TA.Gui_Linux.zip)|[unzip and run](https://raw.githubusercontent.com/tebelorg/TA.Dump/master/TA.Gui_Windows.zip)|[npm install tagui](https://www.npmjs.com/package/tagui)
+
+Optional - configure web browser settings in tagui_config.txt, such as browser resolution, step timeout of 10s etc
 
 ### MANUAL INSTALLATION
 1. PhantomJS (headless scriptable web browser) - http://phantomjs.org
 2. CasperJS (navigation/testing for PhantomJS) - http://casperjs.org
 3. SlimerJS (scriptable web browser for Firefox) - https://slimerjs.org
 4. TA.Gui (general purpose web automation tool) - https://git.io/vMCTZ
-5. PHP (this step is only required for Windows) - http://windows.php.net
+5. PHP (step required for manual Windows setup) - http://windows.php.net
 
-Optional - configure web browser settings in tagui_config.txt, such as browser resolution, step timeout of 10s etc
+Tip - for manual Windows setup, set SLIMERJS_EXECUTABLE environment variable to point to slimerjs.bat
 
 # To Use
 ### COMMAND LINE
