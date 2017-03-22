@@ -174,7 +174,7 @@ more than or equal to / greater than or equal to / higher than or equal to|>=
 less than / lesser than / lower than|<
 less than or equal to / lesser than or equal to / lower than or equal to|<=
 and|&&
-or|&#124;&#124;
+or|**&#124;&#124;**
 
 Tip - when using contain / equal conditions, you can write with or without s behind
 
