@@ -41,12 +41,13 @@ function techo(echo_string) {if (!quiet_mode) casper.echo(echo_string); return;}
 function dummy_echo(muted_string) {return;}
 
 // for saving text information to file
-function save_text(file_name,info_text) {
-if (!file_name) {save_text_count++; file_name = flow_path + '/' + 'text' + save_text_count.toString() + '.txt';}
+function save_text(file_name,info_text) {var ds; if (flow_path.indexOf('/') !== -1) ds = '/'; else ds = '\\';
+if (!file_name) {save_text_count++; file_name = flow_path + ds + 'text' + save_text_count.toString() + '.txt';}
 var fs = require('fs'); fs.write(file_name, info_text, 'w');}
 
 // for saving snapshots of website to file
-function snap_image() {snap_image_count++; return (flow_path + '/' + 'snap' + snap_image_count.toString() + '.png');}
+function snap_image() {var ds; if (flow_path.indexOf('/') !== -1) ds = '/'; else ds = '\\';
+snap_image_count++; return (flow_path + ds + 'snap' + snap_image_count.toString() + '.png');}
 
 // for checking if selector is xpath selector
 function is_xpath_selector(selector) {if (selector.length == 0) return false;
