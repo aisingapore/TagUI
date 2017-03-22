@@ -42,7 +42,7 @@ If you know JavaScript coding and want to be more expressive, you can even use J
 Originally developed by a test automation engineer to avoid writing code to automate web interactions.
 
 ### MEDIA AND GITHUB
-Mentioned in Hacker News, Codrops Collective, BlogDuWebdesign, CSS Author. #1 automation stack on StackShare. #2 GitHub open-source project for topics business, natural-language, casperjs, slimerjs, #3 for chrome-extension.
+Mentioned in Hacker News, Codrops Collective, BlogDuWebdesign, CSS Author. #1 automation stack on StackShare, a website listing technology stacks used by different companies. #2 GitHub open-source project for topics business, natural-language and #3 for chrome-extension. Starred by GitHubbers from over 50 countries.
 
 # Set Up
 TA.Gui is in v1.0 and runs on macOS, Linux, Windows
