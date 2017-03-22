@@ -70,7 +70,7 @@ Tip - for manual Windows setup, set SLIMERJS_EXECUTABLE environment variable to 
 # To Use
 ### COMMAND LINE
 ```
-./tagui flow_filename option(s) for macOS/Linux OR tagui flow_filename option(s) for Windows
+./tagui flow_filename option(s) for macOS/Linux, tagui flow_filename option(s) for Windows
 ```
 - Automation flow filename can have no extension, .gui or .txt file extension
 - Objects, keywords, datatables can be defined in flow_filename.csv (optional)
