@@ -123,7 +123,6 @@ To feedback bugs, suggestions or pull requests, kindly [raise an issue](https://
 
 Feature|Purpose
 :-----:|:------
-Microsoft Friendly|support running on Microsoft Windows
 Enhancements|feel free to review and suggest new features
 
 # Cheat Sheet
