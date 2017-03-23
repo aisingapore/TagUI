@@ -262,7 +262,7 @@ tagui_service.run|service request batch currently running
 tagui_service.done|service request batch finished running
 
 # Be a Force for Good
-Web automation is a tool. Like fire, it is neither kind nor evil but takes on the personality of its bearer. Be a force for good and use web automation wisely. TA.Gui code is intentionally made honest and not hiding identity as an automated user. Websites deserve the right to serve their target audience and block automated users if they wish to.
+Web automation is a tool. Like fire, it is neither kind nor evil but takes on the personality of its bearer. Be a force for good and use web automation wisely. TA.Gui code is intentionally made honest and not hiding identity as an automated user.
 
 # License
 TA.Gui is open-source software released under the MIT license
