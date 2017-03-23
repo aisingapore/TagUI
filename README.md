@@ -44,7 +44,7 @@ Originally developed by a test automation engineer to avoid writing code to auto
 ### MEDIA AND GITHUB
 Mentioned in Hacker News, Codrops Collective, BlogDuWebdesign, CSS Author. #1 automation stack on StackShare, a website listing technology stacks used by different companies. #2 GitHub open-source project for topics business, natural-language and #3 for chrome-extension. Starred by GitHubbers from over 50 countries.
 
-### PILOT AND CONTACT
+### PILOT AND UPDATES
 Tebel.Automation is now calling out globally to businesses and individuals to implement pilot web automation projects FREE OF CHARGE. [See this](http://tebel.org/gist/call_for_pilot_projects) if you have a repetitive or time-sensitive task / process that you think might be good to automate.
 
 Get updates on TA.Gui automation news by emailing hi@tebel.org. Unsubscribe anytime by emailing bye@tebel.org. Newsletter service managed by a homemade mailbot. More automation stuff @ tebelorg on Facebook, Twitter, YouTube, Medium.
