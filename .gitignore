@@ -6,6 +6,7 @@
 /src/casperjs/*
 /src/phantomjs/*
 /src/slimerjs/*
+/src/php/*
 /src/unx/*
 
 # exclude local log files from api service
