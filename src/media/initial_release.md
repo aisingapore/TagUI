@@ -45,9 +45,13 @@ Originally developed by a test automation engineer to avoid writing code to auto
 Mentioned in Hacker News, Codrops Collective, BlogDuWebdesign, CSS Author. #1 automation stack on StackShare, a website listing technology stacks used by different companies. #2 GitHub open-source project for topics business, natural-language and #3 for chrome-extension. Starred by GitHubbers from over 50 countries.
 
 ### PILOT AND UPDATES
-Tebel.Automation is now calling out globally to businesses and individuals to implement pilot web automation projects FREE OF CHARGE. [See this](http://tebel.org/gist/call_for_pilot_projects) if you have a repetitive or time-sensitive task / process that you think might be good to automate.
+Tebel.Automation, a solo-engineer startup that created TA.Gui, is now calling out globally to businesses and individuals to implement pilot web automation projects FREE OF CHARGE. [See this](https://medium.com/tebelorg/tebel-automation-is-calling-out-for-free-implementation-of-web-automation-2c0c4130d753) if you have a repetitive or time-sensitive task / process that you think might be good to automate.
 
-Get updates on TA.Gui automation news by emailing hi@tebel.org. Unsubscribe anytime by emailing bye@tebel.org. Newsletter service managed by a homemade mailbot. More automation stuff @ tebelorg on Facebook, Twitter, YouTube, Medium.
+The goal of making automation accessible to more people is somewhat met by TA.Gui v1.0. By recording and then editing in simple natural language, a streamline development workflow is now possible for rapid prototyping and deployment of automation. Whether someone knows programming or not.
+
+The goal for TA.Gui v2.0 is to push the boundaries of what is possible to be done by an automation tool. By gathering use cases from wide groups of people and implementing them, TA.Gui can rapidly iterate with new features that let it handle new and increasingly complex automation scenarios.
+
+To get updates on TA.Gui automation news, email hi@tebel.org. Unsubscribe anytime by emailing bye@tebel.org. Newsletter service managed by a homemade mailbot, modified from open-source mailbot TA.Mail. More automation stuff @ tebelorg on Facebook, Twitter, YouTube, Medium.
 
 # Set Up
 TA.Gui is in v1.0 and runs on macOS, Linux, Windows
@@ -262,7 +266,7 @@ tagui_service.run|service request batch currently running
 tagui_service.done|service request batch finished running
 
 # Be a Force for Good
-Web automation is a tool. Like fire, it is neither kind nor evil but takes on the personality of its bearer. Be a force for good and use web automation wisely. TA.Gui code is intentionally made honest and not hiding identity as an automated user. Websites deserve the right to serve their target audience and block automated users if they wish to.
+Web automation is a tool. Like fire, it is neither kind nor evil but takes on the personality of its bearer. Be a force for good and use web automation wisely. TA.Gui code is intentionally made honest and not hiding identity as an automated user.
 
 # License
 TA.Gui is open-source software released under the MIT license
