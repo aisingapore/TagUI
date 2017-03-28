@@ -21,7 +21,7 @@ Automate repetitive parts of your work - use cases include data acquisition, pro
 - cross-platform for macOS, Linux, Windows
 
 ### HOW IT WORKS
-TA.Gui converts your intentions in simple natural language into lines of working JavaScript code for CasperJS & PhantomJS to cast their web automation magic. For example, TA.Gui will instantly convert the automation flow below into 100+ lines of JavaScript code and perform the steps to download a Typeform report automatically.  
+TA.Gui converts your intentions in simple natural language into lines of working JavaScript code for CasperJS, PhantomJS & SlimerJS to cast their web automation magic. For example, TA.Gui will instantly convert the automation flow below into 100+ lines of JavaScript code and perform the steps to download a Typeform report automatically.  
 
 ```
 https://www.typeform.com
@@ -44,9 +44,7 @@ Originally developed by a test automation engineer to avoid writing code to auto
 ### PILOT AND UPDATES
 The goal of making automation accessible to more people is somewhat met by TA.Gui v1.0. By recording and then editing in simple natural language, a streamline development workflow is now possible for rapid prototyping and deployment of automation. Whether someone knows programming or not.
 
-The goal for TA.Gui v2.0 is to push the boundaries of what is possible to be done by an automation tool. By gathering use cases from wide groups of people and implementing them, TA.Gui can rapidly iterate with new features that let it handle new and increasingly complex automation scenarios.
-
-Tebel.Automation, the solo-engineer startup that created TA.Gui, is now calling out globally to businesses and individuals to implement pilot web automation projects FREE OF CHARGE. [Here's more info](https://medium.com/tebelorg/tebel-automation-is-calling-out-for-free-implementation-of-web-automation-2c0c4130d753) if you have a repetitive or time-sensitive task / process that you think might be good to automate.
+The goal for TA.Gui v2.0 is to push the boundaries of what is possible to be done by an automation tool. Tebel.Automation, the solo-engineer startup that created TA.Gui, is now calling out globally to businesses and individuals to implement pilot web automation projects FREE OF CHARGE. [Here's more info](https://medium.com/tebelorg/tebel-automation-is-calling-out-for-free-implementation-of-web-automation-2c0c4130d753) if you have a repetitive or time-sensitive task / process that you think might be good to automate. By gathering use cases from wide groups of people and implementing them, TA.Gui can rapidly iterate with new features that let it handle new and increasingly complex automation scenarios.
 
 To get updates on TA.Gui automation news, email hi@tebel.org. Unsubscribe anytime by emailing bye@tebel.org. Newsletter service managed by a homemade mailbot, modified from open-source mailbot TA.Mail. More automation stuff @ tebelorg on Facebook, Twitter, YouTube, Medium.
 
@@ -54,7 +52,7 @@ To get updates on TA.Gui automation news, email hi@tebel.org. Unsubscribe anytim
 TA.Gui is in v1.0 and runs on macOS, Linux, Windows
 
 ### PACKAGED INSTALLATION
-Fastest way to try TA.Gui - no setup is needed, all dependencies are packaged in
+Fastest way to use TA.Gui - no setup is needed, all dependencies are packaged in
 
 Platform|macOS|Linux|Windows|Node.js
 :------:|:---:|:---:|:-----:|:-----:
