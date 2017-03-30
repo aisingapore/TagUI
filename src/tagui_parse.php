@@ -399,63 +399,6 @@ $quote_type.substr($logic,$pos_quote_start+1,$pos_quote_end-$pos_quote_start-1).
 $quote_type.")".$contain_operator.")".substr($logic,$pos_quote_end+1);}}
 else break;}}
 
-/*
-for ($condition_counter=1;$condition_counter<=5;$condition_counter++) { // avoid while to prevent infinite loops
-if (strpos($logic," not contains ")==!false) {$pos_keyword = strpos($logic," not contains ");
-$pos_single_quote = strpos($logic,"'",$pos_keyword+14); if ($pos_single_quote == false) $pos_single_quote = 1024;
-$pos_double_quote = strpos($logic,"\"",$pos_keyword+14); if ($pos_double_quote == false) $pos_double_quote = 1024;
-if ($pos_double_quote < $pos_single_quote) {$pos_quote_start = $pos_double_quote; $quote_type = "\"";}
-else if ($pos_single_quote < $pos_double_quote) {$pos_quote_start = $pos_single_quote; $quote_type = "'";}
-else {echo "ERROR - " . current_line() . " no quoted text - " . $logic . "\n"; $quote_type = "missing";}
-if ($quote_type != "missing"){$pos_quote_end = strpos($logic,$quote_type,$pos_quote_start+1);
-$pos_variable_start = strrpos($logic," ",$pos_keyword-strlen($logic)-2); $logic = substr($logic,0,$pos_variable_start+1).
-"(".trim(substr($logic,$pos_variable_start,$pos_keyword-$pos_variable_start)).".indexOf(".$quote_type.
-substr($logic,$pos_quote_start+1,$pos_quote_end-$pos_quote_start-1).$quote_type.")<0)".substr($logic,$pos_quote_end+1);}}
-else break;}
-
-// special handling to manage not contain condition
-for ($condition_counter=1;$condition_counter<=5;$condition_counter++) { // avoid while to prevent infinite loops
-if (strpos($logic," not contain ")==!false) {$pos_keyword = strpos($logic," not contain ");
-$pos_single_quote = strpos($logic,"'",$pos_keyword+13); if ($pos_single_quote == false) $pos_single_quote = 1024;
-$pos_double_quote = strpos($logic,"\"",$pos_keyword+13); if ($pos_double_quote == false) $pos_double_quote = 1024;
-if ($pos_double_quote < $pos_single_quote) {$pos_quote_start = $pos_double_quote; $quote_type = "\"";}
-else if ($pos_single_quote < $pos_double_quote) {$pos_quote_start = $pos_single_quote; $quote_type = "'";}
-else {echo "ERROR - " . current_line() . " no quoted text - " . $logic . "\n"; $quote_type = "missing";}
-if ($quote_type != "missing"){$pos_quote_end = strpos($logic,$quote_type,$pos_quote_start+1);
-$pos_variable_start = strrpos($logic," ",$pos_keyword-strlen($logic)-2); $logic = substr($logic,0,$pos_variable_start+1).
-"(".trim(substr($logic,$pos_variable_start,$pos_keyword-$pos_variable_start)).".indexOf(".$quote_type.
-substr($logic,$pos_quote_start+1,$pos_quote_end-$pos_quote_start-1).$quote_type.")<0)".substr($logic,$pos_quote_end+1);}}
-else break;}
-
-// special handling to manage contains condition
-for ($condition_counter=1;$condition_counter<=5;$condition_counter++) { // avoid while to prevent infinite loops
-if (strpos($logic," contains ")==!false) {$pos_keyword = strpos($logic," contains ");
-$pos_single_quote = strpos($logic,"'",$pos_keyword+10); if ($pos_single_quote == false) $pos_single_quote = 1024;
-$pos_double_quote = strpos($logic,"\"",$pos_keyword+10); if ($pos_double_quote == false) $pos_double_quote = 1024;
-if ($pos_double_quote < $pos_single_quote) {$pos_quote_start = $pos_double_quote; $quote_type = "\"";}
-else if ($pos_single_quote < $pos_double_quote) {$pos_quote_start = $pos_single_quote; $quote_type = "'";}
-else {echo "ERROR - " . current_line() . " no quoted text - " . $logic . "\n"; $quote_type = "missing";}
-if ($quote_type != "missing"){$pos_quote_end = strpos($logic,$quote_type,$pos_quote_start+1);
-$pos_variable_start = strrpos($logic," ",$pos_keyword-strlen($logic)-2); $logic = substr($logic,0,$pos_variable_start+1).
-"(".trim(substr($logic,$pos_variable_start,$pos_keyword-$pos_variable_start)).".indexOf(".$quote_type.
-substr($logic,$pos_quote_start+1,$pos_quote_end-$pos_quote_start-1).$quote_type.")>-1)".substr($logic,$pos_quote_end+1);}}
-else break;}
-
-// special handling to manage contain condition
-for ($condition_counter=1;$condition_counter<=5;$condition_counter++) { // avoid while to prevent infinite loops
-if (strpos($logic," contain ")==!false) {$pos_keyword = strpos($logic," contain ");
-$pos_single_quote = strpos($logic,"'",$pos_keyword+9); if ($pos_single_quote == false) $pos_single_quote = 1024;
-$pos_double_quote = strpos($logic,"\"",$pos_keyword+9); if ($pos_double_quote == false) $pos_double_quote = 1024;
-if ($pos_double_quote < $pos_single_quote) {$pos_quote_start = $pos_double_quote; $quote_type = "\"";}
-else if ($pos_single_quote < $pos_double_quote) {$pos_quote_start = $pos_single_quote; $quote_type = "'";}
-else {echo "ERROR - " . current_line() . " no quoted text - " . $logic . "\n"; $quote_type = "missing";}
-if ($quote_type != "missing"){$pos_quote_end = strpos($logic,$quote_type,$pos_quote_start+1);
-$pos_variable_start = strrpos($logic," ",$pos_keyword-strlen($logic)-2); $logic = substr($logic,0,$pos_variable_start+1).
-"(".trim(substr($logic,$pos_variable_start,$pos_keyword-$pos_variable_start)).".indexOf(".$quote_type.
-substr($logic,$pos_quote_start+1,$pos_quote_end-$pos_quote_start-1).$quote_type.")>-1)".substr($logic,$pos_quote_end+1);}}
-else break;}
-*/
-
 // $logic = str_replace(" not "," ! ",$logic); // leaving not out until meaningful to implement
 $logic = str_replace(" and ",") && (",$logic); $logic = str_replace(" or ",") || (",$logic);
 
