@@ -378,7 +378,28 @@ $logic = str_replace(" lesser than "," < ",$logic); $logic = str_replace(" lower
 $logic = str_replace(" not equals to "," != ",$logic); $logic = str_replace(" equals to "," == ",$logic);
 $logic = str_replace(" not equal to "," != ",$logic); $logic = str_replace(" equal to "," == ",$logic);
 
-// special handling to manage not contains condition
+// special handling to manage not contains, not contain, contains, contain conditions
+$contain_list = array(" not contains ", " not contain ", " contains ", " contain ");
+foreach ($contain_list as $contain_type) { // outer loop, iterate through 4 types of contain conditions
+for ($condition_counter=1;$condition_counter<=5;$condition_counter++) { // inner loop, avoid while due to infinite loops
+if (strpos($logic,$contain_type)==!false) {$pos_keyword = strpos($logic,$contain_type);
+$pos_single_quote = strpos($logic,"'",$pos_keyword+strlen($contain_type)); // check type of quote used
+if ($pos_single_quote == false) $pos_single_quote = 1024; // set to large number, for comparison later
+$pos_double_quote = strpos($logic,"\"",$pos_keyword+strlen($contain_type)); // check type of quote used
+if ($pos_double_quote == false) $pos_double_quote = 1024; // set to large number, for comparison later
+if ($pos_double_quote < $pos_single_quote) {$pos_quote_start = $pos_double_quote; $quote_type = "\"";}
+else if ($pos_single_quote < $pos_double_quote) {$pos_quote_start = $pos_single_quote; $quote_type = "'";}
+else {echo "ERROR - " . current_line() . " no quoted text - " . $logic . "\n"; $quote_type = "missing";}
+if ($quote_type != "missing"){$pos_quote_end = strpos($logic,$quote_type,$pos_quote_start+1);
+$pos_variable_start = strrpos($logic," ",$pos_keyword-strlen($logic)-2); $contain_operator = "<0";
+if (($contain_type == " contains ") or ($contain_type == " contain ")) $contain_operator = ">-1"; 
+$logic = substr($logic,0,$pos_variable_start+1)."(".
+trim(substr($logic,$pos_variable_start,$pos_keyword-$pos_variable_start)).".indexOf(".
+$quote_type.substr($logic,$pos_quote_start+1,$pos_quote_end-$pos_quote_start-1).
+$quote_type.")".$contain_operator.")".substr($logic,$pos_quote_end+1);}}
+else break;}}
+
+/*
 for ($condition_counter=1;$condition_counter<=5;$condition_counter++) { // avoid while to prevent infinite loops
 if (strpos($logic," not contains ")==!false) {$pos_keyword = strpos($logic," not contains ");
 $pos_single_quote = strpos($logic,"'",$pos_keyword+14); if ($pos_single_quote == false) $pos_single_quote = 1024;
@@ -433,6 +454,7 @@ $pos_variable_start = strrpos($logic," ",$pos_keyword-strlen($logic)-2); $logic 
 "(".trim(substr($logic,$pos_variable_start,$pos_keyword-$pos_variable_start)).".indexOf(".$quote_type.
 substr($logic,$pos_quote_start+1,$pos_quote_end-$pos_quote_start-1).$quote_type.")>-1)".substr($logic,$pos_quote_end+1);}}
 else break;}
+*/
 
 // $logic = str_replace(" not "," ! ",$logic); // leaving not out until meaningful to implement
 $logic = str_replace(" and ",") && (",$logic); $logic = str_replace(" or ",") || (",$logic);
