@@ -44,15 +44,15 @@ Originally developed by a test automation engineer to avoid writing code to auto
 ### PILOT AND UPDATES
 The goal of making automation accessible to more people is somewhat met by TA.Gui v1.0. By recording and then editing in simple natural language, a streamline development workflow is now possible for rapid prototyping and deployment of automation. Whether someone knows programming or not.
 
-The goal for TA.Gui v2.0 is to push the boundaries of what is possible to be done by an automation tool. Tebel.Automation, the solo-engineer startup that created TA.Gui, is now calling out globally to businesses and individuals to implement pilot web automation projects FREE OF CHARGE. [Here's more info](https://medium.com/tebelorg/tebel-automation-is-calling-out-for-free-implementation-of-web-automation-2c0c4130d753) if you have a repetitive or time-sensitive task / process that you think might be good to automate. By gathering use cases from wide groups of people and implementing them, TA.Gui can rapidly iterate with new features that let it handle new and increasingly complex automation scenarios.
+The goal for TA.Gui v2.0 is to push the boundaries of what is possible to be done by an automation tool. Tebel.Automation (solo-engineer startup that created TA.Gui) is now calling out to businesses and individuals to implement pilot web automation projects free of charge. [Here's more info](https://medium.com/tebelorg/tebel-automation-is-calling-out-for-free-implementation-of-web-automation-2c0c4130d753) if you have a repetitive or time-sensitive task / process that you think might be good to automate.
 
-To get updates on TA.Gui automation news, email hi@tebel.org. Unsubscribe anytime by emailing bye@tebel.org. Newsletter service managed by a homemade mailbot, modified from open-source mailbot TA.Mail. More automation stuff @ tebelorg on Facebook, Twitter, YouTube, Medium.
+By gathering use cases from wide groups of people and implementing them, TA.Gui can rapidly iterate with new features that let it handle new and increasingly complex automation scenarios. To get updates on TA.Gui automation news, email hi@tebel.org. Unsubscribe by emailing bye@tebel.org. News service is self-hosted using a homemade mailbot, so your contact remains secured on TA's server instead of 3rd-party email service providers.
 
 # Set Up
 TA.Gui is in v1.0 and runs on macOS, Linux, Windows
 
 ### PACKAGED INSTALLATION
-Fastest way to use TA.Gui - no setup is needed, all dependencies are packaged in
+Easiest way to use TA.Gui - no setup is needed, all dependencies are packaged in
 
 Platform|macOS|Linux|Windows|Node.js
 :------:|:---:|:---:|:-----:|:-----:
@@ -69,7 +69,7 @@ If you prefer to download dependencies manually from respective websites
 4. TA.Gui (general purpose web automation tool) - https://git.io/vMCTZ
 5. PHP (only required for manual Windows setup) - http://windows.php.net
 
-Tip - for manual Windows setup, 1. set SLIMERJS_EXECUTABLE environment variable to point to slimerjs.bat, 2. place [GNU utilities](http://unxutils.sourceforge.net) (gawk/tee/sort/head/tail) in tagui\src\unx folder, 3. add phantomjs\bin and casperjs\bin folders to path
+Tip - for manual Windows setup, 1. set SLIMERJS_EXECUTABLE environment variable to point to slimerjs.bat, 2. place [GNU utilities](http://unxutils.sourceforge.net) (gawk/tee/sort/head/tail) in tagui\src\unx folder, 3. add phantomjs\bin, casperjs\bin, php folders to path
 
 # To Use
 ### COMMAND LINE
@@ -218,8 +218,8 @@ CasperJS test scripts are inherently different in structure and syntax from its 
 
 TA.Gui allows you to reuse the same flow for testing or automation by running it with or without the test option. Below are examples of CasperJS test assertions written in JavaScript code that can be used directly in your automation flow (after navigating and taking desired actions using usual flow steps).
 ```javascript
-test.assertTextExists('About Tebel.Automation','Check for About Tebel.Automation text');
-test.assertSelectorHasText(tx('header'), 'interface automation','Check for phrase in header element');
+test.assertTextExists('About Tebel','Check for About Tebel text');
+test.assertSelectorHasText(tx('header'), 'Interface automation','Check for phrase in header element');
 ```
 
 For the list of expressive test assertions built into CasperJS, [click here](http://docs.casperjs.org/en/latest/modules/tester.html). To know more about CasperJS testing framework, [click here](http://docs.casperjs.org/en/latest/testing.html). As TA.Gui allows you to write JavaScript code directly within the automation flow, advanced testing or coding techniques that can be implemented in CasperJS should work directly within your flow.
