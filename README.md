@@ -11,13 +11,11 @@ Automate repetitive parts of your work - use cases include data acquisition, pro
 ### FEATURES
 - natural language with JavaScript support
 - Chrome extension for recording steps
-- headless (invisible) and visible mode
 - native repositories and datatables
 - auto-wait for element to interact
 - dynamic XPath/CSS element selector
 - run by schedule, command line, REST API
 - support outgoing API calls to webservices
-- cross-platform for macOS, Linux, Windows
 
 ### HOW IT WORKS
 TA.Gui converts your intentions in simple natural language into lines of working JavaScript code for CasperJS, PhantomJS & SlimerJS to cast their web automation magic. For example, TA.Gui will instantly convert the automation flow below into 100+ lines of JavaScript code and perform the steps to download a Typeform report automatically.  
