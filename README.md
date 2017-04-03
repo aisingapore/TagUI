@@ -12,8 +12,7 @@ Automate repetitive parts of your work - use cases include data acquisition, pro
 - natural language with JavaScript support
 - Chrome extension for recording steps
 - headless (invisible) and visible mode
-- repositories for reusable objects
-- datatables for batch automation
+- native repositories and datatables
 - auto-wait for element to interact
 - dynamic XPath/CSS element selector
 - run by schedule, command line, REST API
@@ -40,13 +39,6 @@ The automation flow can be triggered from scheduling, command line, URL, REST AP
 If you know JavaScript coding and want to be more expressive, you can even use JavaScript directly in the flow. If not, you will still enjoy friendly but powerful features such as repositories to store your reusable objects, datatables for batch automation, and a Chrome extension which creates automation flows by recording your actions.
 
 Originally developed by a test automation engineer to avoid writing code to automate web interactions.
-
-### PILOT AND UPDATES
-The goal of making automation accessible to more people is somewhat met by TA.Gui v1.0. By recording and then editing in simple natural language, a streamline development workflow is now possible for rapid prototyping and deployment of automation. Whether someone knows programming or not.
-
-The goal for TA.Gui v2.0 is to push the boundaries of what is possible to be done by an automation tool. Tebel.Automation (solo-engineer startup that created TA.Gui) is now calling out to businesses and individuals to implement pilot web automation projects free of charge. [Here's more info](https://medium.com/tebelorg/tebel-automation-is-calling-out-for-free-implementation-of-web-automation-2c0c4130d753) if you have a repetitive or time-sensitive task / process that you think might be good to automate.
-
-By gathering use cases from wide groups of people and implementing them, TA.Gui can rapidly iterate with new features that let it handle new and increasingly complex automation scenarios. To get updates on TA.Gui automation news, email hi@tebel.org. Unsubscribe by emailing bye@tebel.org. News service is self-hosted using a homemade mailbot, so your contact remains secured on TA's server instead of 3rd-party email service providers.
 
 # Set Up
 TA.Gui is in v1.0 and runs on macOS, Linux, Windows
@@ -119,9 +111,11 @@ Flow Sample |Purpose
 7_testing|shows how to use check step and CasperJS test assertions
 
 # Pipeline
-TA.Gui is a young project, in development since Dec 2016 and still in v1.0. Feedback from the community will have a huge impact in shaping its development pipeline. By reproducing cognitive interactions that represent our intentions, we can let computers work on repetitive or time-sensitive tasks that people need to get done.
+The goal of making automation accessible to more people is somewhat met by TA.Gui v1.0. By recording and then editing in simple natural language, a streamline development workflow is now possible for rapid prototyping and deployment of automation. Whether someone knows programming or not.
 
-The overarching goal is to make automation accessible to more people and handle increasingly complex processes as cognitive abilities of computers continue to improve. This helps free up people's time for higher-value activities, or simply for more leisure. Suggestions or pull requests that support this goal are certainly welcome.
+The goal for TA.Gui v2.0 is to push the boundaries of what is possible to be done by an automation tool.
+
+By reproducing increasingly complex cognitive interactions that represent our intentions, we can let computers work on repetitive or time-critical tasks that people need to get done. This helps free up people's time for higher-value activities, or simply for more leisure. Suggestions or pull requests that support this goal are certainly welcome.
 
 To feedback bugs, suggestions or pull requests, kindly [raise an issue](https://github.com/tebelorg/TA.Gui/issues) or email support@tebel.org
 
@@ -226,7 +220,7 @@ For the list of expressive test assertions built into CasperJS, [click here](htt
 
 TA.Gui recognizes most JavaScript code. In the rare event you get an error saying that it cannot understand the step for your JavaScript line, kindly raise an issue or feel free to modify the source code (tagui_parse.php is where interpretation of natural language to CasperJS JavaScript code takes place). Alternatively, you can use the undocumented step js to explicitly declare that whatever follows on that line is JavaScript code.
 
-### API (for developers, tinkerers, curious spectators, etc)
+### API (for developers, tinkerers, curious folks, etc)
 Automation flows can also be triggered via REST API. TA.Gui has an API service and runner for managing a queue of incoming requests via API. To set up, add a crontab entry on your server with the desired frequency to check and process incoming service requests. Below example will check every 15 minutes and run pending flows in the queue.
 ```
 0,15,30,45 * * * * /full_path_on_your_server/tagui_crontab
