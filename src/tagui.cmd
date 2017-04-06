@@ -5,13 +5,14 @@ rem enable windows for loop advanced flow control
 setlocal enableextensions enabledelayedexpansion
 
 if "%~1"=="" (
-echo tagui v1.0: missing parameter^(s^) - use this syntax and below options to run ./tagui flow_filename option^(s^)
+echo tagui v1.0: use following syntax and below options to run ./tagui flow_filename option^(s^)
 echo.
 echo firefox - run on visible Firefox web browser instead of invisible browser ^(first install Firefox^)
 echo report - generate a web report for easy sharing of run results ^(default is only a text log file^)
 echo debug - show run-time backend messages from PhantomJS for detailed tracing and logging
 echo quiet - run without output except for explicit output ^(echo / show / check / api / errors etc^)
 echo test - professional testing using CasperJS assertions ^(TA.Gui dynamic tx^('selector'^) usable^)
+echo input^(s^) - add your own parameter^(s^) to be used in your automation flow as variables p1 to p9
 echo.
 echo TA.Gui is a tool for non-developers and business users to automate web ~ http://tebel.org
 echo.
