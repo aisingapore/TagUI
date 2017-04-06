@@ -5,7 +5,7 @@ rem enable windows for loop advanced flow control
 setlocal enableextensions enabledelayedexpansion
 
 if "%~1"=="" (
-echo tagui v1.0: use following syntax and below options to run ./tagui flow_filename option^(s^)
+echo tagui v1.0: use following syntax and below options to run - tagui flow_filename option^(s^)
 echo.
 echo firefox - run on visible Firefox web browser instead of invisible browser ^(first install Firefox^)
 echo report - generate a web report for easy sharing of run results ^(default is only a text log file^)
