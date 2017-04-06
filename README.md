@@ -231,7 +231,7 @@ To call an automation flow from your application or web browser, use below API s
 your_website_url/tagui_service.php?SETTINGS="flow_filename option(s)"
 ```
 
-Besides integrating with web applications, TA.Gui can be extended to integrate with hardware (eg Arduino or Raspberry Pi) for physical world interactions or machine learning service providers for AI decision-making ability. Input parameters can be sent to an automation flow to be used as variables p1 to p9. Output parameters from an automation flow can be sent to your Arduino or application REST URL (see flow sample 3_github and 6C_datatables for examples).
+Besides integrating with web applications, TA.Gui can be extended to integrate with hardware (eg Arduino or Raspberry Pi) for physical world interactions or machine learning service providers for AI decision-making ability. Input parameters can be sent to an automation flow to be used as variables p1 to p9. Output parameters from an automation flow can be sent to your Arduino or application REST URL (see flow samples 3_github and 6C_datatables for examples).
 
 For making outgoing API calls in your automation flow, to feed data somewhere or send emails etc, use the api step followed by full URL (including parameters) of the API call. Response from the API will be printed to output. For example using TA.Mail, emails with run-time variables can be sent directly from your flow with a single line.
 

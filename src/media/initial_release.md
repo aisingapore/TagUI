@@ -11,9 +11,8 @@ Automate repetitive parts of your work - use cases include data acquisition, pro
 ### FEATURES
 - natural language with JavaScript support
 - Chrome extension for recording steps
-- native repositories and datatables
-- auto-wait for element to interact
-- dynamic XPath/CSS element selector
+- support repositories and datatables
+- auto-wait XPath/CSS element selector
 - run by schedule, command line, REST API
 - support outgoing API calls to webservices
 
@@ -76,14 +75,17 @@ report|generate a web report for easy sharing of run results (default is only a 
 debug|show run-time backend messages from PhantomJS for detailed tracing and logging
 quiet|run without output except for explicit output (echo / show / check / api / errors etc)
 test|professional testing using [CasperJS assertions](http://docs.casperjs.org/en/latest/modules/tester.html) (TA.Gui dynamic tx('selector') usable)
+input(s)|add your own parameter(s) to be used in your automation flow as variables p1 to p9
 
 Tip - if you have issue running visible automation using Firefox/SlimerJS [check this setting](https://docs.slimerjs.org/current/installation.html#using-unstable-version-or-very-old-versions-of-firefox)
 
 ### BY SCHEDULING
-To schedule an automation flow in crontab, for example at 8am daily
+To schedule an automation flow in crontab (macOS/Linux), for example at 8am daily
 ```
 0 8 * * * /full_path_on_your_server/tagui flow_filename option(s)
 ```
+
+Tip - for Windows, use Task Scheduler instead (search schedule from Start Menu)
 
 ### CHROME EXTENSION
 Download from [Chrome Web Store](https://chrome.google.com/webstore/detail/tagui-web-automation/egdllmehgfgjebhlkjmcnhiocfcidnjk/) to use TA.Gui Chrome web browser extension for recording automation flows. TA.Gui Chrome extension is based on [Resurrectio tool](https://github.com/ebrehault/resurrectio) and records steps such as page navigation, clicking web elements and entering information. To start recording your automation flows, simply click TA.Gui icon on your Chrome toolbar. Right-click for shortcuts to various TA.Gui steps, such as capturing webpage or element screenshot.
@@ -208,28 +210,28 @@ The step check allows simple testing of conditions. For professional test automa
 
 CasperJS test scripts are inherently different in structure and syntax from its usual automation scripts. With the test option, TA.Gui automatically converts your automation flow to work as a test script. CasperJS will output a XUnit XML file, which is compatible with continuous integration tools such as Jenkins. Running together with the report option outputs a web report of the test execution for easy sharing.
 
-TA.Gui allows you to reuse the same flow for testing or automation by running it with or without the test option. Below are examples of CasperJS test assertions written in JavaScript code that can be used directly in your automation flow (after navigating and taking desired actions using usual flow steps).
+TA.Gui allows you to reuse the same flow for testing or automation by running it with or without the test option. Below are examples of CasperJS test assertions written in JavaScript code that can be used directly in your automation flow (after navigating and taking desired actions using usual flow steps). As this is direct CasperJS code, there is no auto-wait. You can use the wait step to explicitly wait for a few seconds for steps which will take a long time for web-server to respond.
 ```javascript
 test.assertTextExists('About Tebel','Check for About Tebel text');
 test.assertSelectorHasText(tx('header'), 'Interface automation','Check for phrase in header element');
 ```
 
-For the list of expressive test assertions built into CasperJS, [click here](http://docs.casperjs.org/en/latest/modules/tester.html). To know more about CasperJS testing framework, [click here](http://docs.casperjs.org/en/latest/testing.html). As TA.Gui allows you to write JavaScript code directly within the automation flow, advanced testing or coding techniques that can be implemented in CasperJS should work directly within your flow.
+For the list of 30+ expressive test assertions built into CasperJS, [click here](http://docs.casperjs.org/en/latest/modules/tester.html). To know more about CasperJS testing framework, [click here](http://docs.casperjs.org/en/latest/testing.html). As TA.Gui allows you to write JavaScript code directly within the automation flow, advanced testing or coding techniques that can be implemented in CasperJS should work directly within your flow.
 
 TA.Gui recognizes most JavaScript code. In the rare event you get an error saying that it cannot understand the step for your JavaScript line, kindly raise an issue or feel free to modify the source code (tagui_parse.php is where interpretation of natural language to CasperJS JavaScript code takes place). Alternatively, you can use the undocumented step js to explicitly declare that whatever follows on that line is JavaScript code.
 
 ### API (for developers, tinkerers, curious folks, etc)
-Automation flows can also be triggered via REST API. TA.Gui has an API service and runner for managing a queue of incoming requests via API. To set up, add a crontab entry on your server with the desired frequency to check and process incoming service requests. Below example will check every 15 minutes and run pending flows in the queue.
+Automation flows can also be triggered via REST API. TA.Gui has an API service and runner for managing a queue of incoming requests via API. To set up, add a crontab entry on your server with the desired frequency to check and process incoming service requests. Below example will check every 15 minutes and run pending flows in the queue. Most servers or development boxes using this should be on Linux or macOS, kindly email or raise an issue if otherwise.
 ```
 0,15,30,45 * * * * /full_path_on_your_server/tagui_crontab
 ```
 
-To call an automation flow from your application or web browser, use below API syntax. Automation flows can also be triggered from emails using the API. For email integration, [install TA.Mail](https://github.com/tebelorg/TA.Mail). Its main job is an open-source mailbot to act on incoming emails or perform mass emailing; its part-time job is delivering emails through API.
+To call an automation flow from your application or web browser, use below API syntax. Custom input(s) supported. Automation flows can also be triggered from emails using the API. For email integration, [install TA.Mail](https://github.com/tebelorg/TA.Mail). Its main job is an open-source mailbot to act on incoming emails or perform mass emailing; its part-time job is delivering emails by API.
 ```
 your_website_url/tagui_service.php?SETTINGS="flow_filename option(s)"
 ```
 
-Besides integrating with web applications, TA.Gui can be extended to integrate with hardware (eg Arduino or Raspberry Pi) for physical world interactions or machine learning service providers for AI decision-making ability.
+Besides integrating with web applications, TA.Gui can be extended to integrate with hardware (eg Arduino or Raspberry Pi) for physical world interactions or machine learning service providers for AI decision-making ability. Input parameters can be sent to an automation flow to be used as variables p1 to p9. Output parameters from an automation flow can be sent to your Arduino or application REST URL (see flow samples 3_github and 6C_datatables for examples).
 
 For making outgoing API calls in your automation flow, to feed data somewhere or send emails etc, use the api step followed by full URL (including parameters) of the API call. Response from the API will be printed to output. For example using TA.Mail, emails with run-time variables can be sent directly from your flow with a single line.
 
