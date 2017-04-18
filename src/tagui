@@ -34,7 +34,10 @@ set -- "$(cd "$(dirname "$1")"; pwd)/$(basename "$1")" "${@:2}"
 initial_dir=`pwd`
 
 # change current directory to TA.GUI directory
-cd "`dirname "$0"`"
+SOURCE="${BASH_SOURCE[0]}" # slimerjs's implementation instead of cd "`dirname "$0"`"
+while [ -h "$SOURCE" ]; do TAGUI_DIR="$( cd -P "$( dirname "$SOURCE" )" && pwd )"
+SOURCE="$(readlink "$SOURCE")"; [[ $SOURCE != /* ]] && SOURCE="$TAGUI_DIR/$SOURCE"; done
+TAGUI_DIR="$( cd -P "$( dirname "$SOURCE" )" && pwd )"; cd "$TAGUI_DIR"
 
 # below 3 blocks dynamically set up dependencies paths for different setups
 # first set dependencies to local symbolic links (for manual installation)
