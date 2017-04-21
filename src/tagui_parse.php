@@ -106,6 +106,7 @@ case "save": return save_intent($script_line); break;
 case "dump": return dump_intent($script_line); break;
 case "snap": return snap_intent($script_line); break;
 case "wait": return wait_intent($script_line); break;
+case "live": return live_intent($script_line); break;
 case "check": return check_intent($script_line); break;
 case "test": return test_intent($script_line); break;
 case "frame": return frame_intent($script_line); break;
@@ -131,6 +132,7 @@ else if (strtolower(substr($raw_intent,0,5))=="save ") return "save";
 else if (strtolower(substr($raw_intent,0,5))=="dump ") return "dump";
 else if (strtolower(substr($raw_intent,0,5))=="snap ") return "snap";
 else if (strtolower(substr($raw_intent,0,5))=="wait ") return "wait";
+else if (strtolower(substr($raw_intent,0,5))=="live ") return "live";
 else if (strtolower(substr($raw_intent,0,6))=="check ") return "check";
 else if (strtolower(substr($raw_intent,0,5))=="test ") return "test";
 else if (strtolower(substr($raw_intent,0,6))=="frame ") return "frame";
@@ -151,6 +153,7 @@ else if (strtolower($raw_intent)=="save") return "save";
 else if (strtolower($raw_intent)=="dump") return "dump";
 else if (strtolower($raw_intent)=="snap") return "snap";
 else if (strtolower($raw_intent)=="wait") return "wait";
+else if (strtolower($raw_intent)=="live") return "live";
 else if (strtolower($raw_intent)=="check") return "check";
 else if (strtolower($raw_intent)=="test") return "test";
 else if (strtolower($raw_intent)=="frame") return "frame";
@@ -314,6 +317,11 @@ function wait_intent($raw_intent) { // wait is a new block, invalid to use after
 $params = trim(substr($raw_intent." ",1+strpos($raw_intent." "," "))); if ($params == "") $params = "5"; 
 if ($GLOBALS['inside_frame']!=0) echo "ERROR - " . current_line() . " invalid after frame - " . $raw_intent . "\n"; else
 return "techo('".$raw_intent."');});\n\ncasper.wait(" . (floatval($params)*1000) . ", function() {\n";}
+
+function live_intent($raw_intent) { // live mode to interactively test tagui steps and js code (casperjs context)
+return "{var live_input = ''; var sys = require('system'); sys.stdout.write('LIVE MODE - type done to quit\\n \\b');\n".
+"while (true) {live_input = sys.stdin.readLine(); // evaluate input in casperjs context until done is entered\n".
+"if (live_input.indexOf('done') == 0) break; eval(tagui_parse(live_input));}}".end_fi()."\n";}
 
 function check_intent($raw_intent) {
 $params = trim(substr($raw_intent." ",1+strpos($raw_intent." "," ")));

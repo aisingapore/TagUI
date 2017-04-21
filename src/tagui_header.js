@@ -73,6 +73,9 @@ if (casper.exists(x('//*[@href="'+locator+'"]'))) return true;
 if (casper.exists(x('//*[contains(@href,"'+locator+'")]'))) return true;
 return false;}
 
+// for live mode simple parsing of tagui steps into js code
+function tagui_parse(raw_input) {return raw_input;}
+
 // for calling rest api url synchronously
 function call_api(rest_url) { // can extend to advanced api in future
 var xhttp = new XMLHttpRequest(); xhttp.open("GET", rest_url, false);
