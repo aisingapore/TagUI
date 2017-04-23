@@ -119,9 +119,15 @@ By reproducing increasingly complex cognitive interactions that represent our in
 
 To feedback bugs, suggestions or pull requests, kindly [raise an issue](https://github.com/tebelorg/TA.Gui/issues) or email support@tebel.org
 
-Feature|Purpose
-:-----:|:------
-Enhancements|feel free to review and suggest new features
+Feature|Purpose|Status
+:-----:|:------|:----:
+Live mode|try out TA.Gui steps or JS code interactively|WIP
+Run anywhere|run tagui command anywhere from prompt|WIP
+Online flow|run automation flow that is hosted at an URL|WIP
+Online storage|explore storing automation flow or result online|
+Visual automation|explore hybrid automation by integrating SikuliX|
+API integrations|reduce user friction with H2O, Arduino, others|
+Enhancements|feel free to review and suggest new features|
 
 # Cheat Sheet
 ### STEPS DESCRIPTION
