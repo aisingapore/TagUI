@@ -119,49 +119,49 @@ function get_intent($raw_intent) {$lc_raw_intent = strtolower($raw_intent);
 if ((substr($lc_raw_intent,0,7)=="http://") or (substr($lc_raw_intent,0,8)=="https://")) return "url";
 
 // first set of conditions check for valid keywords with their parameters
-else if ((substr($lc_raw_intent,0,4)=="tap ") or (substr($lc_raw_intent,0,6)=="click ")) return "tap"; 
-else if ((substr($lc_raw_intent,0,6)=="hover ")or(substr($lc_raw_intent,0,5)=="move ")) return "hover";
-else if ((substr($lc_raw_intent,0,5)=="type ") or (substr($lc_raw_intent,0,6)=="enter ")) return "type";
-else if ((substr($lc_raw_intent,0,7)=="select ") or (substr($lc_raw_intent,0,7)=="choose ")) return "select";
-else if ((substr($lc_raw_intent,0,5)=="read ") or (substr($lc_raw_intent,0,6)=="fetch ")) return "read";
-else if ((substr($lc_raw_intent,0,5)=="show ") or (substr($lc_raw_intent,0,6)=="print ")) return "show";
-else if ((substr($lc_raw_intent,0,5)=="down ") or (substr($lc_raw_intent,4,5)=="load ")) return "down";
-else if (substr($lc_raw_intent,0,8)=="receive ") return "receive";
-else if (substr($lc_raw_intent,0,5)=="echo ") return "echo";
-else if (substr($lc_raw_intent,0,5)=="save ") return "save";
-else if (substr($lc_raw_intent,0,5)=="dump ") return "dump";
-else if (substr($lc_raw_intent,0,5)=="snap ") return "snap";
-else if (substr($lc_raw_intent,0,5)=="wait ") return "wait";
-else if (substr($lc_raw_intent,0,5)=="live ") return "live";
-else if (substr($lc_raw_intent,0,6)=="check ") return "check";
-else if (substr($lc_raw_intent,0,5)=="test ") return "test";
-else if (substr($lc_raw_intent,0,6)=="frame ") return "frame";
-else if (substr($lc_raw_intent,0,4)=="api ") return "api";
-else if (substr($lc_raw_intent,0,3)=="js ") return "js";
+if ((substr($lc_raw_intent,0,4)=="tap ") or (substr($lc_raw_intent,0,6)=="click ")) return "tap"; 
+if ((substr($lc_raw_intent,0,6)=="hover ")or(substr($lc_raw_intent,0,5)=="move ")) return "hover";
+if ((substr($lc_raw_intent,0,5)=="type ") or (substr($lc_raw_intent,0,6)=="enter ")) return "type";
+if ((substr($lc_raw_intent,0,7)=="select ") or (substr($lc_raw_intent,0,7)=="choose ")) return "select";
+if ((substr($lc_raw_intent,0,5)=="read ") or (substr($lc_raw_intent,0,6)=="fetch ")) return "read";
+if ((substr($lc_raw_intent,0,5)=="show ") or (substr($lc_raw_intent,0,6)=="print ")) return "show";
+if ((substr($lc_raw_intent,0,5)=="down ") or (substr($lc_raw_intent,4,5)=="load ")) return "down";
+if (substr($lc_raw_intent,0,8)=="receive ") return "receive";
+if (substr($lc_raw_intent,0,5)=="echo ") return "echo";
+if (substr($lc_raw_intent,0,5)=="save ") return "save";
+if (substr($lc_raw_intent,0,5)=="dump ") return "dump";
+if (substr($lc_raw_intent,0,5)=="snap ") return "snap";
+if (substr($lc_raw_intent,0,5)=="wait ") return "wait";
+if (substr($lc_raw_intent,0,5)=="live ") return "live";
+if (substr($lc_raw_intent,0,6)=="check ") return "check";
+if (substr($lc_raw_intent,0,5)=="test ") return "test";
+if (substr($lc_raw_intent,0,6)=="frame ") return "frame";
+if (substr($lc_raw_intent,0,4)=="api ") return "api";
+if (substr($lc_raw_intent,0,3)=="js ") return "js";
 
 // second set of conditions check for valid keywords with missing parameters
-else if (($lc_raw_intent=="tap") or ($lc_raw_intent=="click")) return "tap";
-else if (($lc_raw_intent=="hover") or ($lc_raw_intent=="move")) return "hover";
-else if (($lc_raw_intent=="type") or ($lc_raw_intent=="enter")) return "type";
-else if (($lc_raw_intent=="select") or ($lc_raw_intent=="choose")) return "select";
-else if (($lc_raw_intent=="read") or ($lc_raw_intent=="fetch")) return "read";
-else if (($lc_raw_intent=="show") or ($lc_raw_intent=="print")) return "show";
-else if (($lc_raw_intent=="down") or ($lc_raw_intent=="download")) return "down";
-else if ($lc_raw_intent=="receive") return "receive";
-else if ($lc_raw_intent=="echo") return "echo";
-else if ($lc_raw_intent=="save") return "save";
-else if ($lc_raw_intent=="dump") return "dump";
-else if ($lc_raw_intent=="snap") return "snap";
-else if ($lc_raw_intent=="wait") return "wait";
-else if ($lc_raw_intent=="live") return "live";
-else if ($lc_raw_intent=="check") return "check";
-else if ($lc_raw_intent=="test") return "test";
-else if ($lc_raw_intent=="frame") return "frame";
-else if ($lc_raw_intent=="api") return "api";
-else if ($lc_raw_intent=="js") return "js";
+if (($lc_raw_intent=="tap") or ($lc_raw_intent=="click")) return "tap";
+if (($lc_raw_intent=="hover") or ($lc_raw_intent=="move")) return "hover";
+if (($lc_raw_intent=="type") or ($lc_raw_intent=="enter")) return "type";
+if (($lc_raw_intent=="select") or ($lc_raw_intent=="choose")) return "select";
+if (($lc_raw_intent=="read") or ($lc_raw_intent=="fetch")) return "read";
+if (($lc_raw_intent=="show") or ($lc_raw_intent=="print")) return "show";
+if (($lc_raw_intent=="down") or ($lc_raw_intent=="download")) return "down";
+if ($lc_raw_intent=="receive") return "receive";
+if ($lc_raw_intent=="echo") return "echo";
+if ($lc_raw_intent=="save") return "save";
+if ($lc_raw_intent=="dump") return "dump";
+if ($lc_raw_intent=="snap") return "snap";
+if ($lc_raw_intent=="wait") return "wait";
+if ($lc_raw_intent=="live") return "live";
+if ($lc_raw_intent=="check") return "check";
+if ($lc_raw_intent=="test") return "test";
+if ($lc_raw_intent=="frame") return "frame";
+if ($lc_raw_intent=="api") return "api";
+if ($lc_raw_intent=="js") return "js";
 
 // final check for recognized code before returning error 
-else if (is_code($raw_intent)) return "code"; else return "error";}
+if (is_code($raw_intent)) return "code"; else return "error";}
 
 function is_code($raw_intent) {
 // due to asynchronous waiting for element, if/for/while can work for parsing single step
