@@ -261,7 +261,7 @@ tagui_service.run|service request batch currently running
 tagui_service.done|service request batch finished running
 
 # Be a Force for Good
-TA.Gui code is intentionally made honest and not hiding identity as an automated user.
+TA.Gui code is intentionally made honest and not hiding identity as an automated user
 
 # License
 TA.Gui is open-source software released under the MIT license
