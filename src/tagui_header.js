@@ -105,28 +105,28 @@ default: return "this.echo('ERROR - cannot understand step " + live_line + "')";
 
 // for live mode understanding intent of line entered
 function get_intent(raw_intent) {var lc_raw_intent = raw_intent.toLowerCase();
-if (lc_raw_intent.substring(0,7) == 'http://' || lc_raw_intent.substring(0,8) == 'https://') return 'url';
+if (lc_raw_intent.substr(0,7) == 'http://' || lc_raw_intent.substr(0,8) == 'https://') return 'url';
 
 // first set of conditions check for valid keywords with their parameters
-if ((lc_raw_intent.substring(0,4) == 'tap ') || (lc_raw_intent.substring(0,6) == 'click ')) return 'tap';
-if ((lc_raw_intent.substring(0,6) == 'hover ') || (lc_raw_intent.substring(0,5) == 'move ')) return 'hover';
-if ((lc_raw_intent.substring(0,5) == 'type ') || (lc_raw_intent.substring(0,6) == 'enter ')) return 'type';
-if ((lc_raw_intent.substring(0,7) == 'select ') || (lc_raw_intent.substring(0,7) == 'choose ')) return 'select';
-if ((lc_raw_intent.substring(0,5) == 'read ') || (lc_raw_intent.substring(0,6) == 'fetch ')) return 'read';
-if ((lc_raw_intent.substring(0,5) == 'show ') || (lc_raw_intent.substring(0,6) == 'print ')) return 'show';
-if ((lc_raw_intent.substring(0,5) == 'down ') || (lc_raw_intent.substring(4,9) == 'load ')) return 'down';
-if (lc_raw_intent.substring(0,8) == 'receive ') return 'receive';
-if (lc_raw_intent.substring(0,5) == 'echo ') return 'echo';
-if (lc_raw_intent.substring(0,5) == 'save ') return 'save';
-if (lc_raw_intent.substring(0,5) == 'dump ') return 'dump';
-if (lc_raw_intent.substring(0,5) == 'snap ') return 'snap';
-if (lc_raw_intent.substring(0,5) == 'wait ') return 'wait';
-if (lc_raw_intent.substring(0,5) == 'live ') return 'live';
-if (lc_raw_intent.substring(0,6) == 'check ') return 'check';
-if (lc_raw_intent.substring(0,5) == 'test ') return 'test';
-if (lc_raw_intent.substring(0,6) == 'frame ') return 'frame';
-if (lc_raw_intent.substring(0,4) == 'api ') return 'api';
-if (lc_raw_intent.substring(0,3) == 'js ') return 'js';
+if ((lc_raw_intent.substr(0,4) == 'tap ') || (lc_raw_intent.substr(0,6) == 'click ')) return 'tap';
+if ((lc_raw_intent.substr(0,6) == 'hover ') || (lc_raw_intent.substr(0,5) == 'move ')) return 'hover';
+if ((lc_raw_intent.substr(0,5) == 'type ') || (lc_raw_intent.substr(0,6) == 'enter ')) return 'type';
+if ((lc_raw_intent.substr(0,7) == 'select ') || (lc_raw_intent.substr(0,7) == 'choose ')) return 'select';
+if ((lc_raw_intent.substr(0,5) == 'read ') || (lc_raw_intent.substr(0,6) == 'fetch ')) return 'read';
+if ((lc_raw_intent.substr(0,5) == 'show ') || (lc_raw_intent.substr(0,6) == 'print ')) return 'show';
+if ((lc_raw_intent.substr(0,5) == 'down ') || (lc_raw_intent.substr(4,5) == 'load ')) return 'down';
+if (lc_raw_intent.substr(0,8) == 'receive ') return 'receive';
+if (lc_raw_intent.substr(0,5) == 'echo ') return 'echo';
+if (lc_raw_intent.substr(0,5) == 'save ') return 'save';
+if (lc_raw_intent.substr(0,5) == 'dump ') return 'dump';
+if (lc_raw_intent.substr(0,5) == 'snap ') return 'snap';
+if (lc_raw_intent.substr(0,5) == 'wait ') return 'wait';
+if (lc_raw_intent.substr(0,5) == 'live ') return 'live';
+if (lc_raw_intent.substr(0,6) == 'check ') return 'check';
+if (lc_raw_intent.substr(0,5) == 'test ') return 'test';
+if (lc_raw_intent.substr(0,6) == 'frame ') return 'frame';
+if (lc_raw_intent.substr(0,4) == 'api ') return 'api';
+if (lc_raw_intent.substr(0,3) == 'js ') return 'js';
 
 // second set of conditions check for valid keywords with missing parameters
 if ((lc_raw_intent == 'tap') || (lc_raw_intent == 'click')) return 'tap';
@@ -155,20 +155,20 @@ if (is_code(raw_intent)) return 'code'; else return 'error';}
 function is_code(raw_intent) {
 // due to asynchronous waiting for element, if/for/while can work for parsing single step
 // other scenarios can be assumed to behave as unparsed javascript in casperjs context
-if ((raw_intent.substring(0,4) == 'var ') || (raw_intent.substring(0,3) == 'do ')) return true;
-if ((raw_intent.substring(0,1) == '{') || (raw_intent.substring(0,1) == '}')) return true;
-if ((raw_intent.substring(0,3) == 'if ') || (raw_intent.substring(0,4) == 'else')) return true;
-if ((raw_intent.substring(0,4) == 'for ') || (raw_intent.substring(0,6) == 'while ')) return true;
-if ((raw_intent.substring(0,7) == 'switch ') || (raw_intent.substring(0,5) == 'case ')) return true;
-if ((raw_intent.substring(0,6) == 'break;') || (raw_intent.substring(0,9) == 'function ')) return true;
-if ((raw_intent.substring(0,7) == 'casper.') || (raw_intent.substring(0,5) == 'this.')) return true;
-if (raw_intent.substring(0,5) == 'test.') return true;
-if ((raw_intent.substring(0,2) == '//') || (raw_intent.charAt(raw_intent.length-1) == ';')) return true; return false;}
+if ((raw_intent.substr(0,4) == 'var ') || (raw_intent.substr(0,3) == 'do ')) return true;
+if ((raw_intent.substr(0,1) == '{') || (raw_intent.substr(0,1) == '}')) return true;
+if ((raw_intent.substr(0,3) == 'if ') || (raw_intent.substr(0,4) == 'else')) return true;
+if ((raw_intent.substr(0,4) == 'for ') || (raw_intent.substr(0,6) == 'while ')) return true;
+if ((raw_intent.substr(0,7) == 'switch ') || (raw_intent.substr(0,5) == 'case ')) return true;
+if ((raw_intent.substr(0,6) == 'break;') || (raw_intent.substr(0,9) == 'function ')) return true;
+if ((raw_intent.substr(0,7) == 'casper.') || (raw_intent.substr(0,5) == 'this.')) return true;
+if (raw_intent.substr(0,5) == 'test.') return true;
+if ((raw_intent.substr(0,2) == '//') || (raw_intent.charAt(raw_intent.length-1) == ';')) return true; return false;}
 
 function abs_file(filename) { // helper function to return absolute filename
 if (filename == '') return ''; // unlike tagui_parse.php not deriving path from script variable
-if (filename.substring(0,1) == '/') return filename; // return mac/linux absolute filename directly
-if (filename.substring(1,2) == ':') return filename.replace('\\','/'); // return windows absolute filename directly
+if (filename.substr(0,1) == '/') return filename; // return mac/linux absolute filename directly
+if (filename.substr(1,1) == ':') return filename.replace('\\','/'); // return windows absolute filename directly
 var tmp_flow_path = flow_path; // otherwise use flow_path defined in generated script to build absolute filename
 // above str_replace is because casperjs/phantomjs do not seem to support \ for windows paths, replace with / to work
 if (tmp_flow_path.indexOf('/') > -1) return tmp_flow_path + '/' + filename; else return tmp_flow_path + '\\' + filename;}
@@ -191,50 +191,50 @@ function url_intent(raw_intent) {
 return "this.echo('ERROR - step not supported in live mode')";}
 
 function tap_intent(raw_intent) {
-var params = ((raw_intent + ' ').substring(1+(raw_intent + ' ').indexOf(' '))).trim();
+var params = ((raw_intent + ' ').substr(1+(raw_intent + ' ').indexOf(' '))).trim();
 if (params == '') return "this.echo('ERROR - target missing for " + raw_intent + "')";
 else if (check_tx(params)) return "this.click(tx('" + params + "'))";
 else return "this.echo('ERROR - cannot find " + params + "')";}
 
 function hover_intent(raw_intent) {
-var params = ((raw_intent + ' ').substring(1+(raw_intent + ' ').indexOf(' '))).trim();
+var params = ((raw_intent + ' ').substr(1+(raw_intent + ' ').indexOf(' '))).trim();
 if (params == '') return "this.echo('ERROR - target missing for " + raw_intent + "')";
 else if (check_tx(params)) return "this.mouse.move(tx('" + params + "'))";
 else return "this.echo('ERROR - cannot find " + params + "')";}
 
 function type_intent(raw_intent) {
-var params = ((raw_intent + ' ').substring(1+(raw_intent + ' ').indexOf(' '))).trim();
-var param1 = (params.substring(0,params.indexOf(' as '))).trim();
-var param2 = (params.substring(4+params.indexOf(' as '))).trim();
+var params = ((raw_intent + ' ').substr(1+(raw_intent + ' ').indexOf(' '))).trim();
+var param1 = (params.substr(0,params.indexOf(' as '))).trim();
+var param2 = (params.substr(4+params.indexOf(' as '))).trim();
 if ((param1 == '') || (param2 == '')) return "this.echo('ERROR - target/text missing for " + raw_intent + "')";
 else if (check_tx(param1)) return "this.sendKeys(tx('" + param1 + "'),'" + param2 + "')";
 else return "this.echo('ERROR - cannot find " + param1 + "')";}
 
 function select_intent(raw_intent) {
-var params = ((raw_intent + ' ').substring(1+(raw_intent + ' ').indexOf(' '))).trim();
-var param1 = (params.substring(0,params.indexOf(' as '))).trim();
-var param2 = (params.substring(4+params.indexOf(' as '))).trim();
+var params = ((raw_intent + ' ').substr(1+(raw_intent + ' ').indexOf(' '))).trim();
+var param1 = (params.substr(0,params.indexOf(' as '))).trim();
+var param2 = (params.substr(4+params.indexOf(' as '))).trim();
 if ((param1 == '') || (param2 == '')) return "this.echo('ERROR - target/option missing for " + raw_intent + "')";
 else if (check_tx(param1)) return "var select_locator = tx('" + param1 + "'); if (is_xpath_selector(select_locator.toString().replace('xpath selector: ',''))) select_locator = select_locator.toString().substring(16); this.selectOptionByValue(select_locator,'" + param2 + "');";
 else return "this.echo('ERROR - cannot find " + param1 + "')";}
 
 function read_intent(raw_intent) {
-var params = ((raw_intent + ' ').substring(1+(raw_intent + ' ').indexOf(' '))).trim();
-var param1 = (params.substring(0,params.indexOf(' to '))).trim();
-var param2 = (params.substring(4+params.indexOf(' to '))).trim();
+var params = ((raw_intent + ' ').substr(1+(raw_intent + ' ').indexOf(' '))).trim();
+var param1 = (params.substr(0,params.indexOf(' to '))).trim();
+var param2 = (params.substr(4+params.indexOf(' to '))).trim();
 if ((param1 == '') || (param2 == '')) return "this.echo('ERROR - target/variable missing for " + raw_intent + "')";
 else if (check_tx(param1)) return param2 + " =  this.fetchText(tx('" + param1 + "')).trim()";
 else return "this.echo('ERROR - cannot find " + param1 + "')";}
 
 function show_intent(raw_intent) {
-var params = ((raw_intent + ' ').substring(1+(raw_intent + ' ').indexOf(' '))).trim();
+var params = ((raw_intent + ' ').substr(1+(raw_intent + ' ').indexOf(' '))).trim();
 if (params == '') return "this.echo('ERROR - target missing for " + raw_intent + "')";
 else if (check_tx(params)) return "this.echo('" + raw_intent + "' + ' - ' + this.fetchText(tx('" + params + "')).trim())";else return "this.echo('ERROR - cannot find " + params + "')";}
 
 function down_intent(raw_intent) {
-var params = ((raw_intent + ' ').substring(1+(raw_intent + ' ').indexOf(' '))).trim();
-var param1 = (params.substring(0,params.indexOf(' to '))).trim();
-var param2 = (params.substring(4+params.indexOf(' to '))).trim();
+var params = ((raw_intent + ' ').substr(1+(raw_intent + ' ').indexOf(' '))).trim();
+var param1 = (params.substr(0,params.indexOf(' to '))).trim();
+var param2 = (params.substr(4+params.indexOf(' to '))).trim();
 if ((param1 == '') || (param2 == '')) return "this.echo('ERROR - url/filename missing for " + raw_intent + "')";
 else return "this.download('" + param1 + "','" + abs_file(param2) + "')";}
 
@@ -242,14 +242,14 @@ function receive_intent(raw_intent) {
 return "this.echo('ERROR - step not supported in live mode')";}
 
 function echo_intent(raw_intent) {
-var params = ((raw_intent + ' ').substring(1+(raw_intent + ' ').indexOf(' '))).trim();
+var params = ((raw_intent + ' ').substr(1+(raw_intent + ' ').indexOf(' '))).trim();
 if (params == '') return "this.echo('ERROR - text missing for " + raw_intent + "')";
 else return "this.echo(" + add_concat(params) + ")";}
 
 function save_intent(raw_intent) {
-var params = ((raw_intent + ' ').substring(1+(raw_intent + ' ').indexOf(' '))).trim();
-var param1 = (params.substring(0,params.indexOf(' to '))).trim();
-var param2 = (params.substring(4+params.indexOf(' to '))).trim();
+var params = ((raw_intent + ' ').substr(1+(raw_intent + ' ').indexOf(' '))).trim();
+var param1 = (params.substr(0,params.indexOf(' to '))).trim();
+var param2 = (params.substr(4+params.indexOf(' to '))).trim();
 if (params == '') return "this.echo('ERROR - target missing for " + raw_intent + "')";
 else if (params.indexOf(' to ') > -1)
 {if (check_tx(param1)) return "save_text('" + abs_file(param2) + "',this.fetchText(tx('" + param1 + "')).trim())";
@@ -258,18 +258,18 @@ else {if (check_tx(params)) return "save_text('',this.fetchText(tx('" + params +
 else return "this.echo('ERROR - cannot find " + params + "')";}}
 
 function dump_intent(raw_intent) {
-var params = ((raw_intent + ' ').substring(1+(raw_intent + ' ').indexOf(' '))).trim();
-var param1 = (params.substring(0,params.indexOf(' to '))).trim();
-var param2 = (params.substring(4+params.indexOf(' to '))).trim();
+var params = ((raw_intent + ' ').substr(1+(raw_intent + ' ').indexOf(' '))).trim();
+var param1 = (params.substr(0,params.indexOf(' to '))).trim();
+var param2 = (params.substr(4+params.indexOf(' to '))).trim();
 if (params == '') return "this.echo('ERROR - variable missing for " + raw_intent + "')";
 else if (params.indexOf(' to ') > -1)
 return "save_text('" + abs_file(param2) + "'," + add_concat(param1) + ")"; else
 return "save_text(''," + add_concat(params) + ")";}
 
 function snap_intent(raw_intent) {
-var params = ((raw_intent + ' ').substring(1+(raw_intent + ' ').indexOf(' '))).trim();
-var param1 = (params.substring(0,params.indexOf(' to '))).trim();
-var param2 = (params.substring(4+params.indexOf(' to '))).trim();
+var params = ((raw_intent + ' ').substr(1+(raw_intent + ' ').indexOf(' '))).trim();
+var param1 = (params.substr(0,params.indexOf(' to '))).trim();
+var param2 = (params.substr(4+params.indexOf(' to '))).trim();
 if ((params.toLowerCase() == 'page') || (param1.toLowerCase() == 'page')) {
 if (params.indexOf(' to ') > -1) return "this.capture('" + abs_file(param2) + "')";
 else return "this.capture(snap_image())";}
@@ -296,12 +296,12 @@ function frame_intent(raw_intent) {
 return "this.echo('ERROR - step not supported in live mode')";}
 
 function api_intent(raw_intent) {
-var params = ((raw_intent + ' ').substring(1+(raw_intent + ' ').indexOf(' '))).trim();
+var params = ((raw_intent + ' ').substr(1+(raw_intent + ' ').indexOf(' '))).trim();
 if (params == '') return "this.echo('ERROR - API URL missing for " + raw_intent + "')";
 else return "this.echo(call_api('" + params + "'))";}
 
 function js_intent(raw_intent) {
-var params = ((raw_intent + ' ').substring(1+(raw_intent + ' ').indexOf(' '))).trim();
+var params = ((raw_intent + ' ').substr(1+(raw_intent + ' ').indexOf(' '))).trim();
 if (params == '') return "this.echo('ERROR - statement missing for " + raw_intent + "')";
 else return params;}
 
