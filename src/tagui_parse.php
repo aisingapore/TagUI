@@ -258,7 +258,7 @@ return "{techo('".$raw_intent."');".beg_tx($param1).$param2." = this.fetchText(t
 
 function show_intent($raw_intent) {
 $params = trim(substr($raw_intent." ",1+strpos($raw_intent." "," ")));
-if (strtolower($params) == "page") return "this.echo(this.getHTML());".end_fi()."\n";
+if (strtolower($params) == "page") return "this.echo('".$raw_intent."' + ' - ' + '\\n' + this.getHTML());".end_fi()."\n";
 if ($params == "") echo "ERROR - " . current_line() . " target missing for " . $raw_intent . "\n"; else
 return "{// nothing to do on this line".beg_tx($params).
 "this.echo('".$raw_intent."' + ' - ' + this.fetchText(tx('" . $params . "')).trim());".end_tx($params);}
