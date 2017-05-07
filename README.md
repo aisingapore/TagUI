@@ -1,5 +1,9 @@
 # TA.Gui
+<<<<<<< HEAD
 TA.Gui is a tool for non-developers and business users to automate web apps ~ http://tebel.org
+=======
+TA.Gui is a tool for non-developers and business users to automate web apps
+>>>>>>> parent of f2db4f1... Merge pull request #17 from gitter-badger/gitter-badge
 
 ![Sample Automation Flow](https://raw.githubusercontent.com/tebelorg/TA.Dump/master/tagui_flow.gif)
 
