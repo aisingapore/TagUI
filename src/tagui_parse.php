@@ -250,12 +250,15 @@ return "{techo('".$raw_intent."');".beg_tx($param1)."var select_locator = tx('".
 function read_intent($raw_intent) {
 $params = trim(substr($raw_intent." ",1+strpos($raw_intent." "," ")));
 $param1 = trim(substr($params,0,strpos($params," to "))); $param2 = trim(substr($params,4+strpos($params," to ")));
+if ((strtolower($param1) == "page") and ($param2 != ""))
+return "{techo('".$raw_intent."');\n".$param2." = this.getHTML();}".end_fi()."\n";
 if (($param1 == "") or ($param2 == "")) 
 echo "ERROR - " . current_line() . " target/variable missing for " . $raw_intent . "\n"; else
 return "{techo('".$raw_intent."');".beg_tx($param1).$param2." = this.fetchText(tx('".$param1."')).trim();".end_tx($param1);}
 
 function show_intent($raw_intent) {
 $params = trim(substr($raw_intent." ",1+strpos($raw_intent." "," ")));
+if (strtolower($params) == "page") return "this.echo(this.getHTML());".end_fi()."\n";
 if ($params == "") echo "ERROR - " . current_line() . " target missing for " . $raw_intent . "\n"; else
 return "{// nothing to do on this line".beg_tx($params).
 "this.echo('".$raw_intent."' + ' - ' + this.fetchText(tx('" . $params . "')).trim());".end_tx($params);}
@@ -284,6 +287,9 @@ return "this.echo(".add_concat($params).");".end_fi()."\n";}
 function save_intent($raw_intent) {
 $params = trim(substr($raw_intent." ",1+strpos($raw_intent." "," ")));
 $param1 = trim(substr($params,0,strpos($params," to "))); $param2 = trim(substr($params,4+strpos($params," to ")));
+if ((strtolower($params) == "page") or (strtolower($param1) == "page")) {if (strpos($params," to ")!==false)
+return "{techo('".$raw_intent."');\nsave_text('".abs_file($param2)."',this.getHTML());}".end_fi()."\n";
+else return "{techo('".$raw_intent."');\nsave_text('',this.getHTML());}".end_fi()."\n";}
 if ($params == "") echo "ERROR - " . current_line() . " target missing for " . $raw_intent . "\n"; 
 else if (strpos($params," to ")!==false)
 return "{techo('".$raw_intent."');".beg_tx($param1).
