@@ -124,9 +124,12 @@ Feature|Purpose|Status
 Live mode|try out TA.Gui steps or JS code interactively|WIP
 Run anywhere|run tagui command anywhere from prompt|WIP
 Online flow|run automation flow that is hosted at an URL|WIP
-Online storage|explore storing automation flow or result online|
+Step popup|run next step or JS code on a popup window|WIP
+Step dom|run JS code in Document Object Model context|WIP
+Page source|support page source for save/show/read steps|WIP
 Visual automation|explore hybrid automation by integrating SikuliX|
 API integrations|reduce user friction with H2O, Arduino, others|
+Online storage|explore storing automation flow or result online|
 Enhancements|feel free to review and suggest new features|
 
 # Cheat Sheet
