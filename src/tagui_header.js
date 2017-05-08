@@ -99,6 +99,7 @@ case 'check': return check_intent(live_line); break;
 case 'test': return test_intent(live_line); break;
 case 'frame': return frame_intent(live_line); break;
 case 'api': return api_intent(live_line); break;
+case 'dom': return dom_intent(live_line); break;
 case 'js': return js_intent(live_line); break;
 case 'code': return code_intent(live_line); break;
 default: return "this.echo('ERROR - cannot understand step " + live_line + "')";}}
@@ -126,6 +127,7 @@ if (lc_raw_intent.substr(0,6) == 'check ') return 'check';
 if (lc_raw_intent.substr(0,5) == 'test ') return 'test';
 if (lc_raw_intent.substr(0,6) == 'frame ') return 'frame';
 if (lc_raw_intent.substr(0,4) == 'api ') return 'api';
+if (lc_raw_intent.substr(0,4) == 'dom ') return 'dom';
 if (lc_raw_intent.substr(0,3) == 'js ') return 'js';
 
 // second set of conditions check for valid keywords with missing parameters
@@ -147,6 +149,7 @@ if (lc_raw_intent == 'check') return 'check';
 if (lc_raw_intent == 'test') return 'test';
 if (lc_raw_intent == 'frame') return 'frame';
 if (lc_raw_intent == 'api') return 'api';
+if (lc_raw_intent == 'dom') return 'dom';
 if (lc_raw_intent == 'js') return 'js';
 
 // final check for recognized code before returning error
@@ -304,6 +307,11 @@ function api_intent(raw_intent) {
 var params = ((raw_intent + ' ').substr(1+(raw_intent + ' ').indexOf(' '))).trim();
 if (params == '') return "this.echo('ERROR - API URL missing for " + raw_intent + "')";
 else return "this.echo(call_api('" + params + "'))";}
+
+function dom_intent(raw_intent) {
+var params = ((raw_intent + ' ').substr(1+(raw_intent + ' ').indexOf(' '))).trim();
+if (params == '') return "this.echo('ERROR - statement missing for " + raw_intent + "')";
+else return "this.evaluate(function() {" + params + "})";}
 
 function js_intent(raw_intent) {
 var params = ((raw_intent + ' ').substr(1+(raw_intent + ' ').indexOf(' '))).trim();

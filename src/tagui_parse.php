@@ -111,6 +111,7 @@ case "check": return check_intent($script_line); break;
 case "test": return test_intent($script_line); break;
 case "frame": return frame_intent($script_line); break;
 case "api": return api_intent($script_line); break;
+case "dom": return dom_intent($script_line); break;
 case "js": return js_intent($script_line); break;
 case "code": return code_intent($script_line); break;
 default: echo "ERROR - " . current_line() . " cannot understand step " . $script_line . "\n";}}
@@ -137,6 +138,7 @@ if (substr($lc_raw_intent,0,6)=="check ") return "check";
 if (substr($lc_raw_intent,0,5)=="test ") return "test";
 if (substr($lc_raw_intent,0,6)=="frame ") return "frame";
 if (substr($lc_raw_intent,0,4)=="api ") return "api";
+if (substr($lc_raw_intent,0,4)=="dom ") return "dom";
 if (substr($lc_raw_intent,0,3)=="js ") return "js";
 
 // second set of conditions check for valid keywords with missing parameters
@@ -158,6 +160,7 @@ if ($lc_raw_intent=="check") return "check";
 if ($lc_raw_intent=="test") return "test";
 if ($lc_raw_intent=="frame") return "frame";
 if ($lc_raw_intent=="api") return "api";
+if ($lc_raw_intent=="dom") return "dom";
 if ($lc_raw_intent=="js") return "js";
 
 // final check for recognized code before returning error 
@@ -360,6 +363,11 @@ function api_intent($raw_intent) {
 $params = trim(substr($raw_intent." ",1+strpos($raw_intent." "," ")));
 if ($params == "") echo "ERROR - " . current_line() . " API URL missing for " . $raw_intent . "\n"; else
 return "{techo('".$raw_intent."');\nthis.echo(call_api('".$params."'));}".end_fi()."\n";}
+
+function dom_intent($raw_intent) {
+$params = trim(substr($raw_intent." ",1+strpos($raw_intent." "," ")));
+if ($params == "") echo "ERROR - " . current_line() . " statement missing for " . $raw_intent . "\n";
+else return "this.evaluate(function() {".$params."});".end_fi()."\n";}
 
 function js_intent($raw_intent) {
 $params = trim(substr($raw_intent." ",1+strpos($raw_intent." "," ")));
