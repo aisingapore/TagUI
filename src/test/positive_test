@@ -244,6 +244,16 @@ echo "test mainframe"
 frame mainframe | subframe
 echo "test subframe"
 
+// test popup
+popup url_keyword
+echo "test popup"
+popup url_keyword
+frame mainframe
+echo "test popup with mainframe"
+popup url_keyword
+frame mainframe | subframe
+echo "test popup with subframe"
+
 // test api
 api http://www.dummytestsite.com/api?COLOR1=red&COLOR2=green&COLOR3=blue
 

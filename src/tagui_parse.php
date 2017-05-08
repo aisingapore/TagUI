@@ -23,7 +23,8 @@ if (count($repo_data[$repo_count]) == 0) die("ERROR - empty row found in " . $sc
 $repo_count++;} fclose($repo_file); $repo_count-=2;} //-1 for header, -1 for EOF
 
 $inside_loop = 0; // track if step is in loop and avoid async wait
-$inside_frame = 0; $line_number = 0; // track html frame, flow lines
+$inside_frame = 0; $inside_popup = 0; // track html frame and popup step
+$line_number = 0; // track flow line number for error message
 $test_automation = 0; // to determine casperjs script structure
 $url_provided = false; // to detect if url is provided in user-script
 
@@ -110,6 +111,7 @@ case "live": return live_intent($script_line); break;
 case "check": return check_intent($script_line); break;
 case "test": return test_intent($script_line); break;
 case "frame": return frame_intent($script_line); break;
+case "popup": return popup_intent($script_line); break;
 case "api": return api_intent($script_line); break;
 case "dom": return dom_intent($script_line); break;
 case "js": return js_intent($script_line); break;
@@ -137,6 +139,7 @@ if (substr($lc_raw_intent,0,5)=="live ") return "live";
 if (substr($lc_raw_intent,0,6)=="check ") return "check";
 if (substr($lc_raw_intent,0,5)=="test ") return "test";
 if (substr($lc_raw_intent,0,6)=="frame ") return "frame";
+if (substr($lc_raw_intent,0,6)=="popup ") return "popup";
 if (substr($lc_raw_intent,0,4)=="api ") return "api";
 if (substr($lc_raw_intent,0,4)=="dom ") return "dom";
 if (substr($lc_raw_intent,0,3)=="js ") return "js";
@@ -159,6 +162,7 @@ if ($lc_raw_intent=="live") return "live";
 if ($lc_raw_intent=="check") return "check";
 if ($lc_raw_intent=="test") return "test";
 if ($lc_raw_intent=="frame") return "frame";
+if ($lc_raw_intent=="popup") return "popup";
 if ($lc_raw_intent=="api") return "api";
 if ($lc_raw_intent=="dom") return "dom";
 if ($lc_raw_intent=="js") return "js";
@@ -197,9 +201,11 @@ return "},\nfunction timeout() {this.echo('ERROR - cannot find ".
 $locator."').exit();});}".end_fi()."});\n\ncasper.then(function() {\n";
 else {$GLOBALS['inside_loop'] = 0; return "}});\n\ncasper.then(function() {\n";}}
 
-function end_fi() { // helper function to end frame_intent by closing parsed step block
-if ($GLOBALS['inside_frame'] == 1) {$GLOBALS['inside_frame']=0; return " });} ";}
-else if ($GLOBALS['inside_frame'] == 2) {$GLOBALS['inside_frame']=0; return " });});} ";}}
+function end_fi() { // helper function to end frame_intent and popup_intent by closing parsed step block
+if ($GLOBALS['inside_popup'] == 1) {$GLOBALS['inside_popup']=0; $popup_exit = " });} ";} else $popup_exit = "";
+if ($GLOBALS['inside_frame'] == 0) {return "".$popup_exit;} // form exit brackets for frame and popup
+else if ($GLOBALS['inside_frame'] == 1) {$GLOBALS['inside_frame']=0; return " });} ".$popup_exit;}
+else if ($GLOBALS['inside_frame'] == 2) {$GLOBALS['inside_frame']=0; return " });});} ".$popup_exit;}}
 
 function add_concat($source_string) { // parse string and add missing + concatenator 
 if ((strpos($source_string,"'")!==false) and (strpos($source_string,"\"")!==false))
@@ -277,7 +283,7 @@ function receive_intent($raw_intent) {
 $params = trim(substr($raw_intent." ",1+strpos($raw_intent." "," ")));
 $param1 = trim(substr($params,0,strpos($params," to "))); $param2 = trim(substr($params,4+strpos($params," to ")));
 if (($param1 == "") or ($param2 == "")) 
-echo "ERROR - " . current_line() . " resource/filename missing for " . $raw_intent . "\n"; else
+echo "ERROR - " . current_line() . " keyword/filename missing for " . $raw_intent . "\n"; else
 return "{techo('".$raw_intent."');\n".
 "casper.on('resource.received', function(resource) {if (resource.stage !== 'end') return;\n".
 "if (resource.url.indexOf('".$param1."') > -1) this.download(resource.url, '".abs_file($param2)."');});}".end_fi()."\n";}
@@ -324,8 +330,9 @@ return "{techo('".$raw_intent."');".beg_tx($params).
 
 function wait_intent($raw_intent) { // wait is a new block, invalid to use after frame, thus skip end_fi()
 $params = trim(substr($raw_intent." ",1+strpos($raw_intent." "," "))); if ($params == "") $params = "5"; 
-if ($GLOBALS['inside_frame']!=0) echo "ERROR - " . current_line() . " invalid after frame - " . $raw_intent . "\n"; else
-return "techo('".$raw_intent."');});\n\ncasper.wait(" . (floatval($params)*1000) . ", function() {\n";}
+if ($GLOBALS['inside_frame']!=0) echo "ERROR - " . current_line() . " invalid after frame - " . $raw_intent . "\n";
+else if ($GLOBALS['inside_popup']!=0) echo "ERROR - " . current_line() . " invalid after popup - " . $raw_intent . "\n";
+else return "techo('".$raw_intent."');});\n\ncasper.wait(" . (floatval($params)*1000) . ", function() {\n";}
 
 function live_intent($raw_intent) { // live mode to interactively test tagui steps and js code (casperjs context)
 return "{var live_input = ''; var sys = require('system'); sys.stdout.write('LIVE MODE - type done to quit\\n \\b');\n".
@@ -358,6 +365,15 @@ else if (strpos($params,"|")!==false)
 {$GLOBALS['inside_frame']=2; return "{techo('".$raw_intent."');\ncasper.withFrame('".
 $param1."', function() {casper.withFrame('".$param2."', function() {\n";} else
 {$GLOBALS['inside_frame']=1; return "{techo('".$raw_intent."');\ncasper.withFrame('".$params."', function() {\n";}}
+
+function popup_intent($raw_intent) {
+if ($GLOBALS['inside_popup'] != 0)
+{echo "ERROR - " . current_line() . " popup called consecutively " . $raw_intent . "\n"; return;}
+$params = trim(substr($raw_intent." ",1+strpos($raw_intent." "," ")));
+if ($GLOBALS['inside_frame']!=0) echo "ERROR - " . current_line() . " invalid after frame - " . $raw_intent . "\n";
+else if ($params == "") echo "ERROR - " . current_line() . " keyword missing for " . $raw_intent . "\n";
+else {$GLOBALS['inside_popup']=1;
+return "{techo('".$raw_intent."');\ncasper.withPopup(/".preg_quote($params)."/, function() {\n";}}
 
 function api_intent($raw_intent) {
 $params = trim(substr($raw_intent." ",1+strpos($raw_intent." "," ")));
