@@ -373,8 +373,10 @@ if ($GLOBALS['inside_popup'] != 0)
 $params = trim(substr($raw_intent." ",1+strpos($raw_intent." "," ")));
 if ($GLOBALS['inside_frame']!=0) echo "ERROR - " . current_line() . " invalid after frame - " . $raw_intent . "\n";
 else if ($params == "") echo "ERROR - " . current_line() . " keyword missing for " . $raw_intent . "\n";
-else {$GLOBALS['inside_popup']=1;
-return "{techo('".$raw_intent."');\ncasper.withPopup(/".preg_quote($params)."/, function() {\n";}}
+else {$GLOBALS['inside_popup']=1; // during execution check for popup before going into popup context
+return "{techo('".$raw_intent."');\ncasper.waitForPopup(/".preg_quote($params)."/, function then() {},\n".
+"function timeout() {this.echo('ERROR - cannot find popup ".$params."').exit();});\n".
+"casper.withPopup(/".preg_quote($params)."/, function() {\n";}}
 
 function api_intent($raw_intent) {
 $params = trim(substr($raw_intent." ",1+strpos($raw_intent." "," ")));
