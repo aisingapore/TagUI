@@ -160,16 +160,23 @@ choose element as option
 
 // test read / fetch
 read element to variable
+read page to variable
 fetch element to variable
+fetch page to variable
 
 // test show / print
 show element
+show page
 print element
+print page
 
 // test save
 save element
 save element to filename.txt
 save element to /tmp/filename.txt
+save page
+save page to filename.txt
+save page to /tmp/filename.txt
 
 // test echo
 echo variable
@@ -239,6 +246,9 @@ echo "test subframe"
 
 // test api
 api http://www.dummytestsite.com/api?COLOR1=red&COLOR2=green&COLOR3=blue
+
+// test dom
+dom var page_title = document.title;
 
 // test comment
 // user comment
