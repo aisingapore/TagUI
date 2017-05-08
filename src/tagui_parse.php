@@ -201,11 +201,12 @@ return "},\nfunction timeout() {this.echo('ERROR - cannot find ".
 $locator."').exit();});}".end_fi()."});\n\ncasper.then(function() {\n";
 else {$GLOBALS['inside_loop'] = 0; return "}});\n\ncasper.then(function() {\n";}}
 
-function end_fi() { // helper function to end frame_intent and popup_intent by closing parsed step block
+function end_fi() { $end_step = ""; // helper function to end frame_intent and popup_intent by closing parsed step block
+if (($GLOBALS['inside_popup'] == 1) or ($GLOBALS['inside_frame'] != 0)) $end_step = "});\n\ncasper.then(function() {";
 if ($GLOBALS['inside_popup'] == 1) {$GLOBALS['inside_popup']=0; $popup_exit = " });} ";} else $popup_exit = "";
-if ($GLOBALS['inside_frame'] == 0) {return "".$popup_exit;} // form exit brackets for frame and popup
-else if ($GLOBALS['inside_frame'] == 1) {$GLOBALS['inside_frame']=0; return " });} ".$popup_exit;}
-else if ($GLOBALS['inside_frame'] == 2) {$GLOBALS['inside_frame']=0; return " });});} ".$popup_exit;}}
+if ($GLOBALS['inside_frame'] == 0) {return "".$popup_exit.$end_step;} // form exit brackets for frame and popup
+else if ($GLOBALS['inside_frame'] == 1) {$GLOBALS['inside_frame']=0; return " });} ".$popup_exit.$end_step;}
+else if ($GLOBALS['inside_frame'] == 2) {$GLOBALS['inside_frame']=0; return " });});} ".$popup_exit.$end_step;}}
 
 function add_concat($source_string) { // parse string and add missing + concatenator 
 if ((strpos($source_string,"'")!==false) and (strpos($source_string,"\"")!==false))
