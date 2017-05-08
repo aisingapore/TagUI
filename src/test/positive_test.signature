@@ -119,6 +119,7 @@ case 'live': return live_intent(live_line); break;
 case 'check': return check_intent(live_line); break;
 case 'test': return test_intent(live_line); break;
 case 'frame': return frame_intent(live_line); break;
+case 'popup': return popup_intent(live_line); break;
 case 'api': return api_intent(live_line); break;
 case 'dom': return dom_intent(live_line); break;
 case 'js': return js_intent(live_line); break;
@@ -147,6 +148,7 @@ if (lc_raw_intent.substr(0,5) == 'live ') return 'live';
 if (lc_raw_intent.substr(0,6) == 'check ') return 'check';
 if (lc_raw_intent.substr(0,5) == 'test ') return 'test';
 if (lc_raw_intent.substr(0,6) == 'frame ') return 'frame';
+if (lc_raw_intent.substr(0,6) == 'popup ') return 'popup';
 if (lc_raw_intent.substr(0,4) == 'api ') return 'api';
 if (lc_raw_intent.substr(0,4) == 'dom ') return 'dom';
 if (lc_raw_intent.substr(0,3) == 'js ') return 'js';
@@ -169,6 +171,7 @@ if (lc_raw_intent == 'live') return 'live';
 if (lc_raw_intent == 'check') return 'check';
 if (lc_raw_intent == 'test') return 'test';
 if (lc_raw_intent == 'frame') return 'frame';
+if (lc_raw_intent == 'popup') return 'popup';
 if (lc_raw_intent == 'api') return 'api';
 if (lc_raw_intent == 'dom') return 'dom';
 if (lc_raw_intent == 'js') return 'js';
@@ -322,6 +325,9 @@ function test_intent(raw_intent) {
 return "this.echo('ERROR - use CasperJS tester module to professionally " + raw_intent + "\\nERROR - info at http://docs.casperjs.org/en/latest/modules/tester.html\\nERROR - support CSS selector or tx(\\'selector\\') for XPath algo by TA.Gui')";}
 
 function frame_intent(raw_intent) {
+return "this.echo('ERROR - step not supported in live mode')";}
+
+function popup_intent(raw_intent) {
 return "this.echo('ERROR - step not supported in live mode')";}
 
 function api_intent(raw_intent) {
