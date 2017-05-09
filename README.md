@@ -98,7 +98,7 @@ What happens behind the scenes when you run an automation flow
 ### FLOW SAMPLES
 Following automation flow samples (/src/samples folder) are included as part of this repository. They demo different features of TA.Gui and are excellent reference material to use in addition to the cheatsheet. The samples can be browsed in sequence, starting from easy automation flows to more complex ones. They can also be browsed directly to learn a particular feature. They include plenty of notes for self-learning at your own pace.
 
-If you run into any issue or questions, kindly post to [Gitter chat room](https://gitter.im/tebelorg/TA.Gui) or email support@tebel.org
+If you run into any issue or questions, kindly [raise an issue](https://github.com/tebelorg/TA.Gui/issues) or email support@tebel.org
 
 Flow Sample |Purpose
 :-----------|:------
