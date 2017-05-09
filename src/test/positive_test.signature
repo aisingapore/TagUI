@@ -753,24 +753,40 @@ else this.echo('eggs not lesser than 10');}
 // test frame
 {techo('frame mainframe');
 casper.withFrame('mainframe', function() {
-this.echo("test mainframe"); });} 
+this.echo("test mainframe"); });} });
+
+casper.then(function() {
 {techo('frame mainframe | subframe');
 casper.withFrame('mainframe', function() {casper.withFrame('subframe', function() {
-this.echo("test subframe"); });});} 
+this.echo("test subframe"); });});} });
+
+casper.then(function() {
 // test popup
 {techo('popup url_keyword');
+casper.waitForPopup(/url_keyword/, function then() {},
+function timeout() {this.echo('ERROR - cannot find popup url_keyword').exit();});
 casper.withPopup(/url_keyword/, function() {
-this.echo("test popup"); });} 
+this.echo("test popup"); });} });
+
+casper.then(function() {
 {techo('popup url_keyword');
+casper.waitForPopup(/url_keyword/, function then() {},
+function timeout() {this.echo('ERROR - cannot find popup url_keyword').exit();});
 casper.withPopup(/url_keyword/, function() {
 {techo('frame mainframe');
 casper.withFrame('mainframe', function() {
-this.echo("test popup with mainframe"); });}  });} 
+this.echo("test popup with mainframe"); });}  });} });
+
+casper.then(function() {
 {techo('popup url_keyword');
+casper.waitForPopup(/url_keyword/, function then() {},
+function timeout() {this.echo('ERROR - cannot find popup url_keyword').exit();});
 casper.withPopup(/url_keyword/, function() {
 {techo('frame mainframe | subframe');
 casper.withFrame('mainframe', function() {casper.withFrame('subframe', function() {
-this.echo("test popup with subframe"); });});}  });} 
+this.echo("test popup with subframe"); });});}  });} });
+
+casper.then(function() {
 // test api
 {techo('api http://www.dummytestsite.com/api?COLOR1=red&COLOR2=green&COLOR3=blue');
 this.echo(call_api('http://www.dummytestsite.com/api?COLOR1=red&COLOR2=green&COLOR3=blue'));}
