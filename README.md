@@ -34,9 +34,9 @@ download https://admin.typeform.com/form/2592751/analyze/csv to report.csv
 
 The automation flow can be triggered from scheduling, command line, URL, REST API, email etc. Everything happens headlessly in the background without seeing any web browser, so you can continue using the computer or server uninterrupted. Running on a visible web browser is also supported, using Firefox browser and SlimerJS (see firefox option below). Outgoing API calls can be made with a single line to integrate with other downstream applications.
 
-If you know JavaScript coding and want to be more expressive, you can even use JavaScript directly in the flow. If not, you will still enjoy friendly but powerful features such as repositories to store your reusable objects, datatables for batch automation, and a Chrome extension which creates automation flows by recording your actions. Also not forgetting an interactive live mode for trying out almost all TA.Gui steps or JavaScript code in real-time for rapid prototyping.
+If you know JavaScript coding and want to be more expressive, you can even use JavaScript directly in the flow. If not, you will still enjoy friendly but powerful features such as repositories to store your reusable objects, datatables for batch automation, and a Chrome extension which creates automation flows by recording your actions. For rapid prototyping, there's also an interactive live mode for trying out TA.Gui steps or JavaScript code in real-time.
 
-Originally developed by a test automation engineer to avoid writing code to automate web interactions.
+Originally developed by a test automation engineer to avoid writing code when automating web interactions.
 
 # Set Up
 TA.Gui is in v1.5 and runs on macOS, Linux, Windows
@@ -66,11 +66,9 @@ Tip - for manual Windows setup, 1. set SLIMERJS_EXECUTABLE environment variable 
 ```
 ./tagui flow_filename option(s) for macOS/Linux, tagui flow_filename option(s) for Windows
 ```
-- Flow filename (and its .csv) can be URL of a file hosted on the internet
+- Flow filename (and its .csv) can be a local file or the URL of an online file
 - Automation flow filename can have no extension, .gui or .txt file extension
 - Objects, keywords, datatables can be defined in flow_filename.csv (optional)
-
-To run tagui from anywhere in macOS/Linux, create symbolic link with ln -sf /full_path/tagui/src/tagui /usr/local/bin/tagui. To run tagui from anywhere in Windows, add tagui/src [folder to path](http://lmgtfy.com/?q=add+to+path+in+windows). Then tagui will be accessible from any folder.
 
 Option|Purpose
 :----:|:------
@@ -81,7 +79,7 @@ quiet|run without output except for explicit output (echo / show / check / api /
 test|professional testing using [CasperJS assertions](http://docs.casperjs.org/en/latest/modules/tester.html) (TA.Gui dynamic tx('selector') usable)
 input(s)|add your own parameter(s) to be used in your automation flow as variables p1 to p9
 
-Tip - if you have issue running visible automation using Firefox/SlimerJS [check this setting](https://docs.slimerjs.org/current/installation.html#using-unstable-version-or-very-old-versions-of-firefox)
+Tip - to run tagui from anywhere in macOS/Linux, use ln -sf /full_path/tagui/src/tagui /usr/local/bin/tagui to create symbolic link. To run tagui from anywhere in Windows, add tagui/src [folder to path](http://lmgtfy.com/?q=add+to+path+in+windows). Then tagui will be accessible from any folder. If you have issue running visible automation using Firefox/SlimerJS [check this setting](https://docs.slimerjs.org/current/installation.html#using-unstable-version-or-very-old-versions-of-firefox).
 
 ### BY SCHEDULING
 To schedule an automation flow in crontab (macOS/Linux), for example at 8am daily
@@ -119,7 +117,7 @@ The goal of making automation accessible to more people is somewhat met by TA.Gu
 
 The goal for TA.Gui v2.0 is to push the boundaries of what is possible to be done by an automation tool.
 
-By reproducing increasingly complex cognitive interactions that represent our intentions, we can let computers work on repetitive or time-critical tasks that people need to get done. This helps free up people's time for higher-value activities, or simply for more leisure. Suggestions or pull requests that support this goal are certainly welcome.
+By reproducing increasingly complex cognitive interactions that represent our intentions, we can let computers work on repetitive or time-critical tasks that people need to get done. This helps free up people's time for higher-value activities, or simply for more leisure. Suggestions or pull requests that support this goal are welcome.
 
 To feedback bugs, suggestions or pull requests, kindly [raise an issue](https://github.com/tebelorg/TA.Gui/issues) or email support@tebel.org
 
