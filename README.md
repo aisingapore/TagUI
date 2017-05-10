@@ -38,7 +38,7 @@ If you know JavaScript coding and want to be more expressive, you can even use J
 Originally developed by a test automation engineer to avoid writing code to automate web interactions.
 
 # Set Up
-TA.Gui is in v1.0 and runs on macOS, Linux, Windows
+TA.Gui is in v1.5 and runs on macOS, Linux, Windows
 
 ### PACKAGED INSTALLATION
 Easiest way to use TA.Gui - no setup is needed, all dependencies are packaged in
@@ -58,15 +58,18 @@ If you prefer to download dependencies manually from respective websites
 4. TA.Gui (general purpose web automation tool) - https://git.io/vMCTZ
 5. PHP (only required for manual Windows setup) - http://windows.php.net
 
-Tip - for manual Windows setup, 1. set SLIMERJS_EXECUTABLE environment variable to point to slimerjs.bat, 2. place [GNU utilities](http://unxutils.sourceforge.net) (gawk/tee/sort/head/tail) in tagui\src\unx folder, 3. add phantomjs\bin, casperjs\bin, php folders to path
+Tip - for manual Windows setup, 1. set SLIMERJS_EXECUTABLE environment variable to point to slimerjs.bat, 2. place [GNU utilities](http://unxutils.sourceforge.net) (gawk/tee/sort/head/tail) + [curl ssl](https://curl.haxx.se) in tagui\src\unx folder, 3. add phantomjs\bin, casperjs\bin, php folders to path
 
 # To Use
 ### COMMAND LINE
 ```
 ./tagui flow_filename option(s) for macOS/Linux, tagui flow_filename option(s) for Windows
 ```
+- Flow filename (and its .csv) can be URL of a file hosted on the internet
 - Automation flow filename can have no extension, .gui or .txt file extension
 - Objects, keywords, datatables can be defined in flow_filename.csv (optional)
+
+To run tagui from anywhere in macOS/Linux, create symbolic link with ln -sf /full_path/tagui/src/tagui /usr/local/bin/tagui. To run tagui from anywhere in Windows, add tagui/src [folder to path](http://lmgtfy.com/?q=add+to+path+in+windows). Then tagui will be accessible from any folder.
 
 Option|Purpose
 :----:|:------
@@ -122,8 +125,8 @@ To feedback bugs, suggestions or pull requests, kindly [raise an issue](https://
 Feature|Purpose|Status
 :-----:|:------|:----:
 Live mode|try out TA.Gui steps or JS code interactively|WIP
-Run anywhere|run tagui command anywhere from prompt|WIP
-Online flow|run automation flow that is hosted at an URL|WIP
+Run anywhere|run tagui command anywhere from prompt|done
+Online flow|run automation flow that is hosted at an URL|done
 Step popup|run next step or JS code on a popup window|done
 Step dom|run JS code in Document Object Model context|done
 Page source|support page source for save/show/read steps|done
