@@ -13,6 +13,7 @@ Automate repetitive parts of your work - use cases include data acquisition, pro
 - Chrome extension for recording steps
 - support repositories and datatables
 - auto-wait XPath/CSS element selector
+- live mode to try steps or code in real-time
 - run by schedule, command line, REST API
 - support outgoing API calls to webservices
 
@@ -33,7 +34,7 @@ download https://admin.typeform.com/form/2592751/analyze/csv to report.csv
 
 The automation flow can be triggered from scheduling, command line, URL, REST API, email etc. Everything happens headlessly in the background without seeing any web browser, so you can continue using the computer or server uninterrupted. Running on a visible web browser is also supported, using Firefox browser and SlimerJS (see firefox option below). Outgoing API calls can be made with a single line to integrate with other downstream applications.
 
-If you know JavaScript coding and want to be more expressive, you can even use JavaScript directly in the flow. If not, you will still enjoy friendly but powerful features such as repositories to store your reusable objects, datatables for batch automation, and a Chrome extension which creates automation flows by recording your actions.
+If you know JavaScript coding and want to be more expressive, you can even use JavaScript directly in the flow. If not, you will still enjoy friendly but powerful features such as repositories to store your reusable objects, datatables for batch automation, and a Chrome extension which creates automation flows by recording your actions. Also not forgetting an interactive live mode for trying out almost all TA.Gui steps or JavaScript code in real-time for rapid prototyping.
 
 Originally developed by a test automation engineer to avoid writing code to automate web interactions.
 
@@ -58,7 +59,7 @@ If you prefer to download dependencies manually from respective websites
 4. TA.Gui (general purpose web automation tool) - https://git.io/vMCTZ
 5. PHP (only required for manual Windows setup) - http://windows.php.net
 
-Tip - for manual Windows setup, 1. set SLIMERJS_EXECUTABLE environment variable to point to slimerjs.bat, 2. place [GNU utilities](http://unxutils.sourceforge.net) (gawk/tee/sort/head/tail) + [curl ssl](https://curl.haxx.se) in tagui\src\unx folder, 3. add phantomjs\bin, casperjs\bin, php folders to path
+Tip - for manual Windows setup, 1. set SLIMERJS_EXECUTABLE environment variable to point to slimerjs.bat, 2. place [GNU utilities](http://unxutils.sourceforge.net) (gawk/tee/sort/head/tail), [curl ssl](https://curl.haxx.se) in tagui\src\unx folder, 3. add phantomjs\bin, casperjs\bin, php folders to path
 
 # To Use
 ### COMMAND LINE
@@ -124,15 +125,15 @@ To feedback bugs, suggestions or pull requests, kindly [raise an issue](https://
 
 Feature|Purpose|Status
 :-----:|:------|:----:
-Live mode|try out TA.Gui steps or JS code interactively|WIP
+Visual automation|explore hybrid automation by integrating SikuliX|WIP
+API integrations|reduce user friction with H2O, Arduino, others|WIP
+Online storage|explore storing automation flow or result online|WIP
+Live mode|try out TA.Gui steps or JS code interactively|done
 Run anywhere|run tagui command anywhere from prompt|done
 Online flow|run automation flow that is hosted at an URL|done
 Step popup|run next step or JS code on a popup window|done
 Step dom|run JS code in Document Object Model context|done
 Page source|support page source for save/show/read steps|done
-Visual automation|explore hybrid automation by integrating SikuliX|
-API integrations|reduce user friction with H2O, Arduino, others|
-Online storage|explore storing automation flow or result online|
 Enhancements|feel free to review and suggest new features|
 
 # Cheat Sheet
@@ -156,6 +157,7 @@ snap|element (page = webpage) ***to*** optional filename|save screenshot to file
 download|url to download ***to*** filename to save|download from url to file
 receive|url keyword to watch ***to*** filename to save|receive resource to file
 wait|optional time in seconds (default is 5 seconds)|explicitly wait for some time
+live|try steps or code interactively in invisible browser|enter live mode ([firefox pending](https://github.com/laurentj/slimerjs/issues/188))
 check|condition **&#124;** text if true **&#124;** text if false (text in quotes)|check condition and print result
 frame|frame name **&#124;** subframe name if any|run next step in frame/subframe
 popup|url keyword of popup window to look for|run next step in popup window
