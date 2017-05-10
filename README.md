@@ -124,9 +124,9 @@ Feature|Purpose|Status
 Live mode|try out TA.Gui steps or JS code interactively|WIP
 Run anywhere|run tagui command anywhere from prompt|WIP
 Online flow|run automation flow that is hosted at an URL|WIP
-Step popup|run next step or JS code on a popup window|WIP
-Step dom|run JS code in Document Object Model context|WIP
-Page source|support page source for save/show/read steps|WIP
+Step popup|run next step or JS code on a popup window|done
+Step dom|run JS code in Document Object Model context|done
+Page source|support page source for save/show/read steps|done
 Visual automation|explore hybrid automation by integrating SikuliX|
 API integrations|reduce user friction with H2O, Arduino, others|
 Online storage|explore storing automation flow or result online|
@@ -144,9 +144,9 @@ tap / click|element to click|click on an element
 hover / move|element to hover|move cursor to element
 type / enter|element to type ***as*** text to type|enter element as text
 select / choose|element to select ***as*** option to select|choose dropdown option
-read / fetch|element to read ***to*** variable name|fetch element text to variable
-show / print|element to read |print element text to output
-save|element to read ***to*** optional filename|save element text to file
+read / fetch|element to read (page = webpage) ***to*** variable name|fetch element text to variable
+show / print|element to read (page = webpage, ie raw html) |print element text to output
+save|element (page = webpage) ***to*** optional filename|save element text to file
 echo|text (in quotation marks) and variables|print text/variables to output
 dump|text and variables ***to*** optional filename|save text/variables to file
 snap|element (page = webpage) ***to*** optional filename|save screenshot to file
@@ -154,7 +154,9 @@ download|url to download ***to*** filename to save|download from url to file
 receive|url keyword to watch ***to*** filename to save|receive resource to file
 wait|optional time in seconds (default is 5 seconds)|explicitly wait for some time
 check|condition **&#124;** text if true **&#124;** text if false (text in quotes)|check condition and print result
-frame|frame name **&#124;** subframe name if any|next step in frame/subframe
+frame|frame name **&#124;** subframe name if any|run next step in frame/subframe
+popup|url keyword of popup window to look for|run next step in popup window
+dom|javascript code for document object model|run code in dom context
 api|full url (including parameters) of api call|call api and print response
 //|user comments (ignored during execution)|add user comments
 
