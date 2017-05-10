@@ -18,11 +18,11 @@ exit 1
 fi
 
 # download file if first parameter is online resource
-if [[ "$1" == "http"* ]]
-then online_flowname=`echo "${1##*/}"`; curl -s -o $online_flowname "$1"; set -- "$online_flowname" "${@:2}"
-if [ -f "$online_flowname" ]; then if grep -iq "404\|400" "$online_flowname"; then rm "$online_flowname"; fi
-else online_reponame=`echo "${1##*/}.csv"`; curl -s -o $online_reponame "$1".csv;
-if [ -f "$online_reponame" ]; then if grep -iq "404\|400" "$online_reponame"; then rm "$online_reponame"; fi;fi;fi;fi
+if [[ "$1" == "http"* ]]; then online_flowname=`echo "${1##*/}"`; curl -k -s -o $online_flowname "$1"
+if [ -f "$online_flowname" ]; then if grep -iq "404\|400" "$online_flowname"; then rm "$online_flowname"
+else online_reponame=`echo "${1##*/}.csv"`; curl -k -s -o $online_reponame "$1".csv
+if [ -f "$online_reponame" ]; then if grep -iq "404\|400" "$online_reponame"; then rm "$online_reponame"
+fi;fi;fi;fi; set -- "$online_flowname" "${@:2}"; fi
 
 # check whether specified automation flow file exists
 if ! [ -f "$1" ]; then echo "ERROR - cannot find $1"; exit 1; fi

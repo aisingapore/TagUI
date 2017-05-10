@@ -19,14 +19,41 @@ echo.
 exit /b 1
 )
 
+rem download file if first parameter is online resource
+set arg1=%~1
+if "%arg1:~0,4%"=="http" (
+	if exist "%~dp0unx\curl.exe" set "path=%~dp0unx;%path%"
+	set arg1=%arg1:/= %
+	for %%a in (!arg1!) do set "online_flowname=%%a"
+	curl -k -s -o !online_flowname! "%~1"
+	for %%i in ("!online_flowname!") do set "flow_file=%%~dpnxi"
+
+	if exist "!online_flowname!" (
+		find /i /c "404" "!online_flowname!" > nul || find /i /c "400" "!online_flowname!" > nul
+		if not errorlevel 1 del "!online_flowname!"
+	)
+	if exist "!online_flowname!" (
+		for %%a in (!arg1!) do set "online_reponame=%%a.csv"		
+		curl -k -s -o !online_reponame! "%~1.csv"
+		if exist "!online_reponame!" (
+			find /i /c "404" "!online_reponame!" > nul || find /i /c "400" "!online_reponame!" > nul
+			if not errorlevel 1 del "!online_reponame!"
+		)
+	)
+)
+
 rem check whether specified automation flow file exists
-if not exist "%~1" (
+if "%flow_file%"=="" if not exist "%~1" (
 	echo ERROR - cannot find %~1
+	exit /b 1
+)
+if not "%flow_file%"=="" if not exist "%online_flowname%" (
+	echo ERROR - cannot find %online_flowname%
 	exit /b 1
 )
 
 rem get and set absolute filename of automation flow file
-set "flow_file=%~dpnx1"
+if "%flow_file%"=="" set "flow_file=%~dpnx1"
 
 rem save location of initial directory where tagui is called
 set "initial_dir=%cd%"
