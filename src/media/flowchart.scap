@@ -7,7 +7,7 @@
                 <TextColor>1.0 1.0 1.0</TextColor>
                 <Fill>0.314662 0.314653 0.314658</Fill>
             </Appearance>
-            <String>v1.0 flowchart  </String>
+            <String>v1.5 flowchart  </String>
             <Formatting>
                 <FormatRange Bold="Yes">0,16</FormatRange>
             </Formatting>
@@ -35,19 +35,22 @@ text files, execution logs, outgoing API calls and other outcomes resulting from
             </Appearance>
             <String>create automation flows by recording user actions</String>
         </Note>
-        <Note ID="10" FontSize="9.0" Position="41.0,43.0" Width="137.0">
+        <Note ID="10" FontSize="9.0" Position="39.912874,23.0" Width="137.0">
             <Appearance>
                 <Alignment>Center</Alignment>
                 <Border Style="Square"></Border>
             </Appearance>
-            <String>write manually or edit from chrome extension recording</String>
+            <String>write manually or edit from chrome extension recording
+(flow can be a local file or
+URL to an online file)</String>
         </Note>
-        <Note ID="12" FontSize="9.0" Position="215.0,82.0" Width="111.0">
+        <Note ID="12" FontSize="9.0" Position="213.0,61.0" Width="112.0">
             <Appearance>
                 <Alignment>Center</Alignment>
                 <Border Style="Square"></Border>
             </Appearance>
-            <String>instantly convert flow from natural language into working JavaScript code for CasperJS and run automation steps</String>
+            <String>instantly convert flow from natural language into working JavaScript code for CasperJS and run automation steps
+(has a live mode to try out TA.Gui steps or JS code)</String>
         </Note>
         <Note ID="11" FontSize="9.0" Position="18.0,139.0" Width="131.0">
             <Appearance>
