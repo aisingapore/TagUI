@@ -1,24 +1,24 @@
 # TA.Gui
-TA.Gui is a tool for non-developers and business users to automate web apps ~ http://tebel.org
+TA.Gui is a general purpose tool for automating web interactions ~ http://tebel.org
 
 ![Sample Automation Flow](https://raw.githubusercontent.com/tebelorg/TA.Dump/master/tagui_flow.gif)
 
-A sample automation flow to automate mass account registrations in 30 seconds - 1. recording sequence of steps, 2. editing to wait for a few seconds, 3. playing the automation flow (skip submission step in order not to spam)
+A sample automation flow to automate mass account registrations in 30 seconds - 1. recording sequence of steps, 2. editing to wait for a few seconds, 3. playing the automation flow (csv datatables supported for datasets)
 
 # Why This
-Automate repetitive parts of your work - use cases include data acquisition, process and test automations of web apps. TA.Gui is open-source software released under MIT license, that means you can freely use, modify or share it.
+Automate your repetitive or time-critical tasks - use cases include process automation, data acquisition and testing of web apps. TA.Gui is open-source software released under MIT license, that means you can freely use, modify or share it.
 
 ### FEATURES
 - natural language with JavaScript support
 - Chrome extension for recording steps
-- support repositories and datatables
+- object repositories and datatables
 - auto-wait XPath/CSS element selector
 - live mode to try steps or code in real-time
 - run by schedule, command line, REST API
 - support outgoing API calls to webservices
 
 ### HOW IT WORKS
-TA.Gui converts your intentions in simple natural language into lines of working JavaScript code for CasperJS, PhantomJS & SlimerJS to cast their web automation magic. For example, TA.Gui will instantly convert the automation flow below into 100+ lines of JavaScript code and perform the steps to download a Typeform report automatically.  
+TA.Gui converts your intentions in simple natural language into lines of working JavaScript code for CasperJS, PhantomJS & SlimerJS to cast their web automation magic. For example, TA.Gui will instantly convert the automation flow below into 100+ lines of JavaScript code and perform the steps to download a Typeform report automatically.
 
 ```
 https://www.typeform.com
@@ -32,7 +32,7 @@ click section_results
 download https://admin.typeform.com/form/2592751/analyze/csv to report.csv
 ```
 
-The automation flow can be triggered from scheduling, command line, URL, REST API, email etc. Everything happens headlessly in the background without seeing any web browser, so you can continue using the computer or server uninterrupted. Running on a visible web browser is also supported, using Firefox browser and SlimerJS (see firefox option below). Outgoing API calls can be made with a single line to integrate with other downstream applications.
+The automation flow can be triggered from scheduling, command line, URL, REST API, email etc. Everything happens headlessly in the background without seeing any web browser, so that you can continue using the computer or server uninterrupted. Running on a visible web browser is also supported, using Firefox browser and SlimerJS (see firefox option below). Outgoing API calls can be made with a single line to integrate with other downstream applications.
 
 If you know JavaScript coding and want to be more expressive, you can even use JavaScript directly in the flow. If not, you will still enjoy friendly but powerful features such as repositories to store your reusable objects, datatables for batch automation, and a Chrome extension which creates automation flows by recording your actions. For rapid prototyping, there's also an interactive live mode for trying out TA.Gui steps or JavaScript code in real-time.
 
