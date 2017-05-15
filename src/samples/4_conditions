@@ -10,8 +10,8 @@ https://www.facebook.com/tebelorg/
 // variables can be from read / fetch step, or self-declared / from files using JavaScript
 // write text in quotation marks (either " or ' works) to differentiate from variable names
 
-// declare some variables for use in this sample flow
-var menu = "salads fruits sandwiches"; var cupcakes = 12; // text in quotation marks 
+// declare some variables for use in this sample flow, text in quotation marks
+menu = "salads fruits sandwiches"; cupcakes = 12;
 
 // conditions can be expressed in natural language (optional brackets) or JavaScript
 // for conditions such as contain / equal, you can use with or without s behind
