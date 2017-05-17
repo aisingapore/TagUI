@@ -14,7 +14,7 @@ echo quiet - run without output except for explicit output ^(echo / show / check
 echo test - professional testing using CasperJS assertions ^(TA.Gui dynamic tx^('selector'^) usable^)
 echo input^(s^) - add your own parameter^(s^) to be used in your automation flow as variables p1 to p9
 echo.
-echo TA.Gui is a tool for non-developers and business users to automate web ~ http://tebel.org
+echo TA.Gui is a general purpose tool for automating web interactions ~ http://tebel.org
 echo.
 exit /b 1
 )
