@@ -1,5 +1,5 @@
 // --------------------------------------------------------------------------------
-// CasperRenderer - class to render recorded steps to TA.Gui automation flow format
+// CasperRenderer - class to render recorded steps to TagUI automation flow format
 // --------------------------------------------------------------------------------
 
 if (typeof(EventTypes) == "undefined") {
