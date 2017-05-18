@@ -1,4 +1,4 @@
-https://github.com/tebelorg/TA.Mail
+https://github.com/tebelorg/Tmail
 // automation flow files start with an URL to tell TagUI where to go
 
 // this flow goes to a GitHub page and downloads the repo using 2 ways
@@ -15,7 +15,7 @@ check license_type equals to "MIT" | "Yes, repo is under MIT license." | "No, re
 
 // note - some websites including GitHub may detect and block automated downloads
 // use download step to proactively download a file directly from an URL
-download https://github.com/tebelorg/TA.Mail/archive/master.zip to download.zip
+download https://github.com/tebelorg/Tmail/archive/master.zip to download.zip
 
 // use receive step for event-based download when an URL accessed contains your keyword
 receive archive/master.zip to receive.zip
