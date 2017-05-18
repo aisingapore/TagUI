@@ -1,10 +1,10 @@
 https://www.facebook.com/tebelorg/
-// automation flow files start with an URL to tell TA.Gui where to go
+// automation flow files start with an URL to tell TagUI where to go
 
 // this flow goes through examples of using conditions in natural language
 // for issues or questions, kindly feedback on GitHub or support@tebel.org
 // see cheatsheet for steps, conditions, finding element identifiers, etc
-// https://github.com/tebelorg/TA.Gui#cheat-sheet
+// https://github.com/tebelorg/TagUI#cheat-sheet
 
 // conditions involve comparing of variables and values to determine what to do next
 // variables can be from read / fetch step, or self-declared / from files using JavaScript
