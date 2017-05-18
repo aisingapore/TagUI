@@ -22,7 +22,7 @@ https://medium.com/tebelorg
 
 // contents of 6C_datatables.csv 
 // file in this format can be from flow 6B using JavaScript, or using Excel transpose function
-// TA.ETL may also be useful to do this programmatically (another open-source project from TA)
+// TLE may also be useful to do this programmatically (another open-source project from TA)
 // 6C_SENDMAIL,#1,#2,#3
 // GITHUB_ID,ironman,batman,superman
 // USER_EMAIL,tony@stark.org,bruce@wayne.org,clarke@kent.org
@@ -39,10 +39,10 @@ echo github_id " - " user_email
 // only display the api call to screen, obviously we are not going to actually email the superheroes
 this.echo('api your_website_url/mailer.php?APIKEY=unique_key&SUBJECT=Hi @'+github_id+'&SENDTO='+user_email+'&SENDFROM=Your Name <your_email@gmail.com>&MESSAGE=Your message line 1.<br><br>Your message line 2.');
 
-// how api step is used to send email with 1 line, in this case using TA.Mail (another open-source project from TA)
+// how api step is used to send email with 1 line, in this case using Tmail (another open-source project from TA)
 // api your_website_url/mailer.php?APIKEY=unique_key&SUBJECT=Hi @'+github_id+'&SENDTO='+user_email+'&SENDFROM=Your Name <your_email@gmail.com>&MESSAGE=Your message line 1.<br><br>Your message line 2.
 
-// response and result from the api call will be printed to screen and log, below is sample response from TA.Mail
+// response and result from the api call will be printed to screen and log, below is sample response from Tmail
 // OK - Hi @ironman mail sent successfully to tony@stark.org
 
 // wait a few seconds to reduce risk of network police flagging your mail server as bad actors and blocking you
