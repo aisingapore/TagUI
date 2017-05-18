@@ -1,10 +1,10 @@
 https://twitter.com/tebelorg
-// automation flow files start with an URL to tell TA.Gui where to go
+// automation flow files start with an URL to tell TagUI where to go
 
 // this flow goes to a Twitter page and saves some profile information
 // for issues or questions, kindly feedback on GitHub or support@tebel.org
 // see cheatsheet for steps, conditions, finding element identifiers, etc
-// https://github.com/tebelorg/TA.Gui#cheat-sheet
+// https://github.com/tebelorg/TagUI#cheat-sheet
 
 // use hover (or move) step to hover cursor over a webpage element
 // below step hovers over profile image to test a pop-up label
