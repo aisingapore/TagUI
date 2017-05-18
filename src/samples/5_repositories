@@ -1,13 +1,13 @@
 https://vk.com/kensoh
-// automation flow files start with an URL to tell TA.Gui where to go
+// automation flow files start with an URL to tell TagUI where to go
 
 // this flow shows using repositories on Russian social media site VK.com
 // for issues or questions, kindly feedback on GitHub or support@tebel.org
 // see cheatsheet for steps, conditions, finding element identifiers, etc
-// https://github.com/tebelorg/TA.Gui#cheat-sheet
+// https://github.com/tebelorg/TagUI#cheat-sheet
 
 // please note that in these comments, the symbol ` is replaced with '
-// otherwise TA.Gui will try to interpret it as repository definition
+// otherwise TagUI will try to interpret it as repository definition
 
 // repositories help to make objects or steps reusable and improve readability
 // save repository file with same name as your flow filename and with .csv behind
@@ -15,7 +15,7 @@ https://vk.com/kensoh
 // using 'object' in your flow replaces it with its definition (which can contain objects)
 // for example during execution, 'click link' becomes click //*[@id="profile_full"]//a
 // if you have watched Inception movie, this is inception level 2 (capped at max 2 for now)
-// don't worry about mistakes, TA.Gui is usually able to tell you which line has what error
+// don't worry about mistakes, TagUI is usually able to tell you which line has what error
 
 // contents of 5_repositories.csv
 // OBJECT,DEFINITION
