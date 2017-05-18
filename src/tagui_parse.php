@@ -1,6 +1,6 @@
 <?php
 
-/* PARSER SCRIPT FOR TA.GUI FRAMEWORK ~ TEBEL.ORG */
+/* PARSER SCRIPT FOR TAGUI FRAMEWORK ~ TEBEL.ORG */
 
 // check flow filename for .gui or .txt or no extension
 $script = $argv[1]; if ($script=="") die("ERROR - specify flow filename as first parameter\n");
@@ -31,7 +31,7 @@ $url_provided = false; // to detect if url is provided in user-script
 // series of loops to create casperjs script from header, user flow, footer files
 
 // create header of casperjs script using tagui config and header template
-fwrite($output_file,"/* OUTPUT CASPERJS SCRIPT FOR TA.GUI FRAMEWORK ~ TEBEL.ORG */\n\n");
+fwrite($output_file,"/* OUTPUT CASPERJS SCRIPT FOR TAGUI FRAMEWORK ~ TEBEL.ORG */\n\n");
 fwrite($output_file,"var casper = require('casper').create();\n"); // opening lines
 while(!feof($config_file)) {fwrite($output_file,fgets($config_file));} fclose($config_file);
 while(!feof($header_file)) {fwrite($output_file,fgets($header_file));} fclose($header_file);
@@ -354,7 +354,7 @@ return "{".parse_condition("if ".$param1)."\nthis.echo(".$param2.");\nelse this.
 function test_intent($raw_intent) {
 echo "ERROR - " . current_line() . " use CasperJS tester module to professionally " . $raw_intent . "\n";
 echo "ERROR - " . current_line() . " info at http://docs.casperjs.org/en/latest/modules/tester.html" . "\n";
-echo "ERROR - " . current_line() . " support CSS selector or tx('selector') for XPath algo by TA.Gui" . "\n";}
+echo "ERROR - " . current_line() . " support CSS selector or tx('selector') for XPath algo by TagUI" . "\n";}
 
 function frame_intent($raw_intent) {
 if ($GLOBALS['inside_frame'] != 0) 

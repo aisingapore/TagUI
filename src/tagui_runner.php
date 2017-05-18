@@ -1,6 +1,6 @@
 <?php
 
-/* SERVICE API RUNNER SCRIPT FOR TA.GUI FRAMEWORK ~ TEBEL.ORG */
+/* SERVICE API RUNNER SCRIPT FOR TAGUI FRAMEWORK ~ TEBEL.ORG */
 
 // verify that both service queue files are accessible
 $service_in_file = fopen('tagui_service.in','a') or die("ERROR - cannot open " . 'tagui_service.in' . "\n");

@@ -1,6 +1,6 @@
 <?php
 
-/* REPORT SCRIPT FOR TA.GUI FRAMEWORK ~ TEBEL.ORG */
+/* REPORT SCRIPT FOR TAGUI FRAMEWORK ~ TEBEL.ORG */
 
 // verify automation log file exists and can be opened
 $script = $argv[1]; if ($script=="") die("ERROR - specify flow filename for report\n");

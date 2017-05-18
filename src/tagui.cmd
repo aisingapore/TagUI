@@ -1,5 +1,5 @@
 @echo off
-rem # SCRIPT FOR RUNNING TA.GUI FRAMEWORK ~ TEBEL.ORG #
+rem # SCRIPT FOR RUNNING TAGUI FRAMEWORK ~ TEBEL.ORG #
 
 rem enable windows for loop advanced flow control
 setlocal enableextensions enabledelayedexpansion
@@ -11,10 +11,10 @@ echo firefox - run on visible Firefox web browser instead of invisible browser ^
 echo report - generate a web report for easy sharing of run results ^(default is only a text log file^)
 echo debug - show run-time backend messages from PhantomJS for detailed tracing and logging
 echo quiet - run without output except for explicit output ^(echo / show / check / api / errors etc^)
-echo test - professional testing using CasperJS assertions ^(TA.Gui dynamic tx^('selector'^) usable^)
+echo test - professional testing using CasperJS assertions ^(TagUI dynamic tx^('selector'^) usable^)
 echo input^(s^) - add your own parameter^(s^) to be used in your automation flow as variables p1 to p9
 echo.
-echo TA.Gui is a general purpose tool for automating web interactions ~ http://tebel.org
+echo TagUI is a general purpose tool for automating web interactions ~ http://tebel.org
 echo.
 exit /b 1
 )
@@ -58,7 +58,7 @@ if "%flow_file%"=="" set "flow_file=%~dpnx1"
 rem save location of initial directory where tagui is called
 set "initial_dir=%cd%"
 
-rem change current directory to TA.GUI directory
+rem change current directory to TAGUI directory
 cd /d "%~dp0"
 
 rem below 3 blocks dynamically set up dependencies paths for different setups

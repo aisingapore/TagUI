@@ -1,6 +1,6 @@
 <?php
 
-/* SERVICE API SCRIPT FOR TA.GUI FRAMEWORK ~ TEBEL.ORG */
+/* SERVICE API SCRIPT FOR TAGUI FRAMEWORK ~ TEBEL.ORG */
 
 // grab tagui automation settings from SETTINGS parameter
 $service_settings = $_GET['SETTINGS'];

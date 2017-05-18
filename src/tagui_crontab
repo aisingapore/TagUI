@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
-# SCRIPT TO MANAGE SERVICE API FOR TA.GUI FRAMEWORK ~ TEBEL.ORG #
+# SCRIPT TO MANAGE SERVICE API FOR TAGUI FRAMEWORK ~ TEBEL.ORG #
 
-# change current directory to TA.GUI directory
+# change current directory to TAGUI directory
 cd "`dirname "$0"`"
 
 # if nothing running now, call runner script to generate service action script

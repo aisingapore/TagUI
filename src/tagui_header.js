@@ -301,7 +301,7 @@ function check_intent(raw_intent) {
 return "this.echo('ERROR - step not supported in live mode')";}
 
 function test_intent(raw_intent) {
-return "this.echo('ERROR - use CasperJS tester module to professionally " + raw_intent + "\\nERROR - info at http://docs.casperjs.org/en/latest/modules/tester.html\\nERROR - support CSS selector or tx(\\'selector\\') for XPath algo by TA.Gui')";}
+return "this.echo('ERROR - use CasperJS tester module to professionally " + raw_intent + "\\nERROR - info at http://docs.casperjs.org/en/latest/modules/tester.html\\nERROR - support CSS selector or tx(\\'selector\\') for XPath algo by TagUI')";}
 
 function frame_intent(raw_intent) {
 return "this.echo('ERROR - step not supported in live mode')";}
