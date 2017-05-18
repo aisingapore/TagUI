@@ -100,7 +100,7 @@ What happens behind the scenes when you run an automation flow
 ### FLOW SAMPLES
 Following automation flow samples (/src/samples folder) are included as part of this repository. They demo different features of TagUI and are excellent reference material to use in addition to the cheatsheet. The samples can be browsed in sequence, starting from easy automation flows to more complex ones. They can also be browsed directly to learn a particular feature. They include plenty of notes for self-learning at your own pace.
 
-If you run into any issue or questions, kindly [raise an issue](https://github.com/tebelorg/TagUI/issues) or email support@tebel.org
+If you run into any issue or questions, kindly [raise an issue](https://github.com/tebelorg/TagUI/issues) or email ken@tebel.org
 
 Flow Sample |Purpose
 :-----------|:------
@@ -119,7 +119,7 @@ The goal for TagUI v2.0 is to push the boundaries of what is possible to be done
 
 By reproducing increasingly complex cognitive interactions that represent our intentions, we can let computers work on repetitive or time-critical tasks that people need to get done. This helps free up people's time for higher-value activities, or simply for more leisure. Suggestions or pull requests that support this goal are welcome.
 
-To feedback bugs, suggestions or pull requests, kindly [raise an issue](https://github.com/tebelorg/TagUI/issues) or email support@tebel.org
+To feedback bugs, suggestions or pull requests, kindly [raise an issue](https://github.com/tebelorg/TagUI/issues) or email ken@tebel.org
 
 Feature|Purpose|Status
 :-----:|:------|:----:
