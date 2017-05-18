@@ -1,10 +1,10 @@
 https://github.com/tebelorg/TA.Mail
-// automation flow files start with an URL to tell TA.Gui where to go
+// automation flow files start with an URL to tell TagUI where to go
 
 // this flow goes to a GitHub page and downloads the repo using 2 ways
 // for issues or questions, kindly feedback on GitHub or support@tebel.org
 // see cheatsheet for steps, conditions, finding element identifiers, etc
-// https://github.com/tebelorg/TA.Gui#cheat-sheet
+// https://github.com/tebelorg/TagUI#cheat-sheet
 
 // use read (or fetch) step to fetch webpage element text to variable
 fetch (//*[@class="numbers-summary"]/li)[5] to license_type
