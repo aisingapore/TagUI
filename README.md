@@ -36,7 +36,7 @@ The automation flow can be triggered from scheduling, command line, URL, REST AP
 
 If you know JavaScript coding and want to be more expressive, you can even use JavaScript directly in the flow. If not, you will still enjoy friendly but powerful features such as repositories to store your reusable objects, datatables for batch automation, and a Chrome extension which creates automation flows by recording your actions. For rapid prototyping, there's also an interactive live mode for trying out TagUI steps or JavaScript code in real-time.
 
-Originally developed by a test automation engineer to avoid writing code when automating web interactions.
+This is a full-feature and free open-source tool, there's nothing to upgrade to or any paid subscription. To feedback suggestions or bugs, kindly [raise an issue](https://github.com/tebelorg/TagUI/issues) or email ken@tebel.org. Originally developed by a test automation engineer to avoid writing code when automating web interactions. 
 
 # Set Up
 TagUI is in v1.5 and runs on macOS, Linux, Windows
@@ -100,8 +100,6 @@ What happens behind the scenes when you run an automation flow
 ### FLOW SAMPLES
 Following automation flow samples (/src/samples folder) are included as part of this repository. They demo different features of TagUI and are excellent reference material to use in addition to the cheatsheet. The samples can be browsed in sequence, starting from easy automation flows to more complex ones. They can also be browsed directly to learn a particular feature. They include plenty of notes for self-learning at your own pace.
 
-If you run into any issue or questions, kindly [raise an issue](https://github.com/tebelorg/TagUI/issues) or email ken@tebel.org
-
 Flow Sample |Purpose
 :-----------|:------
 1_yahoo|searches github on Yahoo and captures screenshot of results
@@ -115,11 +113,7 @@ Flow Sample |Purpose
 # Pipeline
 The goal of making automation accessible to more people is somewhat met by TagUI v1.0. By recording and then editing in simple natural language, a streamline development workflow is now possible for rapid prototyping and deployment of automation. Whether someone knows programming or not.
 
-The goal for TagUI v2.0 is to push the boundaries of what is possible to be done by an automation tool.
-
-By reproducing increasingly complex cognitive interactions that represent our intentions, we can let computers work on repetitive or time-critical tasks that people need to get done. This helps free up people's time for higher-value activities, or simply for more leisure. Suggestions or pull requests that support this goal are welcome.
-
-To feedback bugs, suggestions or pull requests, kindly [raise an issue](https://github.com/tebelorg/TagUI/issues) or email ken@tebel.org
+The goal for TagUI v2.0 is to push the boundaries of what is possible to be done by an automation tool. By reproducing increasingly complex cognitive interactions that represent our intentions, we can let computers work on repetitive or time-critical tasks that people need to get done. This helps free up people's time for higher-value activities, or simply for more leisure. Suggestions or pull requests that support this goal are welcome.
 
 Feature|Purpose|Status
 :-----:|:------|:----:
@@ -133,6 +127,8 @@ Step popup|run next step or JS code on a popup window|done
 Step dom|run JS code in Document Object Model context|done
 Page source|support page source for save/show/read steps|done
 Enhancements|feel free to review and suggest new features|
+
+What about TagUI v3.0? There are many changes lately in the web automation space. Chrome is coming up with an headless version, same for Firefox. PhantomJS's maintainer is stepping down. Depending on how these events pan out and CasperJS's response, TagUI probably has to add new endpoints to its web automation framework in v3.0. Possible new endpoints include WebdriverIO (Selenium to various browsers) and Chrome Debugging Protocol (headless Chrome).
 
 # Cheat Sheet
 ### STEPS DESCRIPTION
