@@ -129,7 +129,7 @@ Page source|support page source for save/show/read steps|done
 Framework|explore improvements on loops, frame, popup|
 Enhancements|feel free to review and suggest new features|
 
-What about TagUI v3.0? There are many changes lately in the web automation space. Chrome is coming up with an headless version, same for Firefox. PhantomJS's maintainer is stepping down. Depending on how these events pan out and CasperJS's response, TagUI probably has to add new endpoints to its web automation framework in v3.0. Possible new endpoints include WebdriverIO (Selenium to various browsers) and Chrome Debugging Protocol (headless Chrome).
+What about TagUI v3.0? There are many changes lately in the web automation space. Chrome is coming up with an headless version, same for Firefox. PhantomJS's maintainer is stepping down. Depending on how these events pan out and CasperJS's response, TagUI may have to add new endpoints to its web automation framework in v3.0. Possible new endpoints include WebdriverIO (Selenium to various browsers) and Chrome Debugging Protocol (headless Chrome).
 
 # Cheat Sheet
 ### STEPS DESCRIPTION
