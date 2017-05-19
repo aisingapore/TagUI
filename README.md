@@ -117,7 +117,7 @@ The goal for TagUI v2.0 is to push the boundaries of what is possible to be done
 
 Feature|Purpose|Status
 :-----:|:------|:----:
-Visual automation|explore hybrid automation by integrating SikuliX|WIP
+Visual automation|add hybrid automation by integrating SikuliX|WIP
 API integrations|reduce user friction with H2O, Arduino, others|WIP
 Online storage|explore storing automation flow or result online|WIP
 Live mode|try out TagUI steps or JS code interactively|done
@@ -126,6 +126,7 @@ Online flow|run automation flow that is hosted at an URL|done
 Step popup|run next step or JS code on a popup window|done
 Step dom|run JS code in Document Object Model context|done
 Page source|support page source for save/show/read steps|done
+Framework|explore improvements on loops, frame, popup|
 Enhancements|feel free to review and suggest new features|
 
 What about TagUI v3.0? There are many changes lately in the web automation space. Chrome is coming up with an headless version, same for Firefox. PhantomJS's maintainer is stepping down. Depending on how these events pan out and CasperJS's response, TagUI probably has to add new endpoints to its web automation framework in v3.0. Possible new endpoints include WebdriverIO (Selenium to various browsers) and Chrome Debugging Protocol (headless Chrome).
