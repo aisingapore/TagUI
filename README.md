@@ -250,6 +250,7 @@ File Reference |Purpose
 :--------------|:------
 tagui|main runner for TagUI web automation
 tagui.cmd|main runner for Windows platform
+tagui.py|interface for Sikuli visual automation
 tagui_config.txt|web browser settings used for automation
 tagui_crontab|to run service request batch from crontab
 tagui_footer.js|footer template for CasperJS code
@@ -264,6 +265,8 @@ tagui_service.log|log to track service requests history
 tagui_service.act|service request batch ready to execute
 tagui_service.run|service request batch currently running
 tagui_service.done|service request batch finished running
+tagui_sikuli.in|interface in-file for Sikuli integration
+tagui_sikuli.out|interface out-file for Sikuli integration
 
 # Be a Force for Good
 TagUI code is intentionally made honest and not hiding identity as an automated user
