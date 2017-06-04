@@ -12,11 +12,13 @@ tagui_count = '0'
 # function for tap / click step
 def tap_intent ( raw_intent ):
 	params = (raw_intent + ' ')[1+(raw_intent + ' ').find(' '):].strip()
+	print '[tagui] ACTION - click ' + params
 	return click(params)
 
 # function for hover / move step
 def hover_intent ( raw_intent ):
 	params = (raw_intent + ' ')[1+(raw_intent + ' ').find(' '):].strip()
+	print '[tagui] ACTION - hover ' + params
 	return hover(params)
 
 # function for type / enter step
@@ -24,6 +26,7 @@ def type_intent ( raw_intent ):
 	params = (raw_intent + ' ')[1+(raw_intent + ' ').find(' '):].strip()
 	param1 = params[:params.find(' as ')].strip()
 	param2 = params[4+params.find(' as '):].strip()
+	print '[tagui] ACTION - type ' + param1 + ' as ' + param2
 	return type(param1,param2) 
 
 # function for select / choose step
@@ -31,9 +34,11 @@ def select_intent ( raw_intent ):
 	params = (raw_intent + ' ')[1+(raw_intent + ' ').find(' '):].strip()
 	param1 = params[:params.find(' as ')].strip()
 	param2 = params[4+params.find(' as '):].strip()
+	print '[tagui] ACTION - click ' + param1
 	if click(param1) == 0:
 		return 0
 	else:
+		print '[tagui] ACTION - click ' + param2
 		return click(param2)
 
 # function to interpret input intent
@@ -62,15 +67,25 @@ def parse_intent ( script_line ):
 	else:
 		return 0 
 
+# write to interface out-file to signal ready for inputs
+tagui_output = open('tagui.sikuli/tagui_sikuli.out','w')
+tagui_output.write('[0] READY')
+tagui_output.close()
+
 # main loop to scan inputs from automation flow
+print '[tagui] START  - listening for inputs'; print
 while True:
 	# scan input from run-time interface in-file
-	tagui_input = open('tagui.sikuli/tagui_sikuli.in','r')
+	try:
+		tagui_input = open('tagui.sikuli/tagui_sikuli.in','r')
+	except IOError, OSError:
+		print '[tagui] ERROR  - cannot open tagui.sikuli/tagui_sikuli.in'; print
+		break
 	tagui_intent = tagui_input.read().strip()
 	tagui_input.close()
 
-	# quit if finished, repeat loop if blank
-	if tagui_intent == 'finished':
+	# quit if finish, repeat loop if blank
+	if tagui_intent == 'finish':
 		break
 	elif not tagui_intent:
 		wait(scan_period)
@@ -86,6 +101,7 @@ while True:
 		tagui_count = temp_count
 
 	# otherwise parse and act on input intent
+	print '[tagui] INPUT  - ' + '[' + tagui_count + '] ' + tagui_intent 
 	intent_result_value = parse_intent(tagui_intent)
 	if intent_result_value == 1:
 		intent_result_string = 'SUCCESS'
@@ -93,7 +109,14 @@ while True:
 		intent_result_string = 'ERROR'
 
 	# save intent_result to interface out-file
+	print '[tagui] OUTPUT - ' + '[' + tagui_count + '] ' + intent_result_string; print
 	tagui_output = open('tagui.sikuli/tagui_sikuli.out','w')
-	tagui_output.write('['+tagui_count+'] '+intent_result_string)
+	tagui_output.write('[' + tagui_count + '] ' + intent_result_string)
 	tagui_output.close()
 	wait(scan_period)
+
+# write to interface out-file to signal finish listening
+print '[tagui] FINISH - stopped listening'
+tagui_output = open('tagui.sikuli/tagui_sikuli.out','w')
+tagui_output.write('[0] FINISH')
+tagui_output.close()
