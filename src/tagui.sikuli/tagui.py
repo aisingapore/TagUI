@@ -6,6 +6,9 @@ setAutoWaitTimeout(10)
 # delay in seconds between scanning for inputs
 scan_period = 1
 
+# counter to track current tagui sikuli step
+tagui_count = '0'
+
 # function for tap / click step
 def tap_intent ( raw_intent ):
 	params = (raw_intent + ' ')[1+(raw_intent + ' ').find(' '):].strip()
@@ -73,11 +76,24 @@ while True:
 		wait(scan_period)
 		continue
 
+	# get count and repeat loop if same count as last iteration
+	temp_count = tagui_intent[1:tagui_intent.find('] ')].strip()
+	tagui_intent = tagui_intent[2+tagui_intent.find('] '):].strip()
+	if tagui_count == temp_count:
+		wait(scan_period)
+		continue
+	else:
+		tagui_count = temp_count
+
 	# otherwise parse and act on input intent
-	intent_result = parse_intent(tagui_intent)
+	intent_result_value = parse_intent(tagui_intent)
+	if intent_result_value == 1:
+		intent_result_string = 'SUCCESS'
+	else:
+		intent_result_string = 'ERROR'
 
 	# save intent_result to interface out-file
 	tagui_output = open('tagui.sikuli/tagui_sikuli.out','w')
-	tagui_output.write(str(intent_result))
+	tagui_output.write('['+tagui_count+'] '+intent_result_string)
 	tagui_output.close()
 	wait(scan_period)
