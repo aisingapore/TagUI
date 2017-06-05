@@ -6,7 +6,7 @@ TagUI is a general purpose tool for automating web interactions ~ http://tebel.o
 A sample automation flow to automate mass account registrations in 30 seconds - 1. recording sequence of steps, 2. editing to wait for a few seconds, 3. playing the automation flow (csv datatables supported for datasets)
 
 # Why This
-Automate your repetitive or time-critical tasks - use cases include process automation, data acquisition and testing of web apps. TagUI is open-source software released under MIT license, that means you can freely use, modify or share it.
+The goal of web automation is to reproduce cognitive interactions that you have with certain websites so that your laptop or server can do it for you, base on your preferred schedule or conditions. TagUI helps you automate your repetitive or time-critical tasks - use cases include process automation, data acquisition and testing of web apps.
 
 ### FEATURES
 - natural language with JavaScript support
@@ -18,7 +18,7 @@ Automate your repetitive or time-critical tasks - use cases include process auto
 - support outgoing API calls to webservices
 
 ### HOW IT WORKS
-TagUI converts your intentions in simple natural language into lines of working JavaScript code for CasperJS, PhantomJS & SlimerJS to cast their web automation magic. For example, TagUI will instantly convert the automation flow below into 100+ lines of JavaScript code and perform the steps to download a Typeform report automatically.
+TagUI converts your intentions in simple natural language into lines of working JavaScript code that perform web automation. Under the hood, it uses CasperJS, PhantomJS & SlimerJS. As an example, TagUI will instantly convert the automation flow below into 100+ lines of JavaScript code and automatically perform the steps to download a Typeform report. This makes it very easy for rapid prototyping, deployment and maintenance of web automation.
 
 ```
 https://www.typeform.com
@@ -36,7 +36,7 @@ The automation flow can be triggered from scheduling, command line, URL, REST AP
 
 If you know JavaScript coding and want to be more expressive, you can even use JavaScript directly in the flow. If not, you will still enjoy friendly but powerful features such as repositories to store your reusable objects, datatables for batch automation, and a Chrome extension which creates automation flows by recording your actions. For rapid prototyping, there's also an interactive live mode for trying out TagUI steps or JavaScript code in real-time.
 
-This is a full-feature and free open-source tool, there's nothing to upgrade to or any paid subscription. To feedback suggestions or bugs, kindly [raise an issue](https://github.com/tebelorg/TagUI/issues) or email ken@tebel.org. Originally developed by a test automation engineer to avoid writing code when automating web interactions. 
+This is a full-feature and free open-source tool, so there's nothing to upgrade to or any paid subscription. To feedback suggestions or bugs, kindly [raise an issue](https://github.com/tebelorg/TagUI/issues) or email ken@tebel.org. Originally developed by a test automation engineer to avoid writing code when automating web interactions. 
 
 # Set Up
 TagUI is in v1.5 and runs on macOS, Linux, Windows
@@ -98,7 +98,7 @@ What happens behind the scenes when you run an automation flow
 ![TagUI Flowchart](https://raw.githubusercontent.com/tebelorg/TagUI/master/src/media/flowchart.png)
 
 ### FLOW SAMPLES
-Following automation flow samples (/src/samples folder) are included as part of this repository. They demo different features of TagUI and are excellent reference material to use in addition to the cheatsheet. The samples can be browsed in sequence, starting from easy automation flows to more complex ones. They can also be browsed directly to learn a particular feature. They include plenty of notes for self-learning at your own pace.
+Following automation flow samples ([tagui/src/samples folder](https://github.com/tebelorg/TagUI/tree/master/src/samples)) are included as part of this repository
 
 Flow Sample |Purpose
 :-----------|:------
@@ -111,25 +111,14 @@ Flow Sample |Purpose
 7_testing|shows how to use check step and CasperJS test assertions
 
 # Pipeline
-The goal of making automation accessible to more people is somewhat met by TagUI v1.0. By recording and then editing in simple natural language, a streamline development workflow is now possible for rapid prototyping and deployment of automation. Whether someone knows programming or not.
-
-The goal for TagUI v2.0 is to push the boundaries of what is possible to be done by an automation tool. By reproducing increasingly complex cognitive interactions that represent our intentions, we can let computers work on repetitive or time-critical tasks that people need to get done. This helps free up people's time for higher-value activities, or simply for more leisure. Suggestions or pull requests that support this goal are welcome.
-
 Feature|Purpose|Status
 :-----:|:------|:----:
 Visual automation|add hybrid automation by integrating SikuliX|WIP
-API integrations|reduce user friction with H2O, Arduino, others|WIP
-Online storage|explore storing automation flow or result online|WIP
-Live mode|try out TagUI steps or JS code interactively|done
-Run anywhere|run tagui command anywhere from prompt|done
-Online flow|run automation flow that is hosted at an URL|done
-Step popup|run next step or JS code on a popup window|done
-Step dom|run JS code in Document Object Model context|done
-Page source|support page source for save/show/read steps|done
+API integrations|reduce user friction with H2O, Arduino, others|
+Online storage|explore storing automation flow or result online|
 Framework|explore improvements on loops, frame, popup|
+New endpoints|explore headless Chrome, Selenium WebdriverIO|
 Enhancements|feel free to review and suggest new features|
-
-What about TagUI v3.0? There are many changes lately in the web automation space. Chrome is coming up with an headless version, same for Firefox. PhantomJS's maintainer is stepping down. Depending on how these events pan out and CasperJS's response, TagUI may have to add new endpoints to its web automation framework in v3.0. Possible new endpoints include WebdriverIO (Selenium to various browsers) and Chrome Debugging Protocol (headless Chrome).
 
 # Cheat Sheet
 ### STEPS DESCRIPTION
@@ -219,20 +208,20 @@ direction|BUY|SELL|BUY
 ### TESTING (for QA, test automation engineers, etc)
 The step check allows simple testing of conditions. For professional test automation, CasperJS comes with a tester module for unit and functional testing purpose. To use the advanced testing features, run TagUI with the test option.
 
-CasperJS test scripts are inherently different in structure and syntax from its usual automation scripts. With the test option, TagUI automatically converts your automation flow to work as a test script. CasperJS will output a XUnit XML file, which is compatible with continuous integration tools such as Jenkins. Running together with the report option outputs a web report of the test execution for easy sharing.
+CasperJS test scripts are inherently different in structure and syntax from its usual automation scripts. With the test option, TagUI automatically sets up your automation flow to work as a test script. CasperJS will output a XUnit XML file, which is compatible with continuous integration tools such as Jenkins. Running together with the report option outputs a web report of the test execution for easy sharing.
 
-TagUI allows you to reuse the same flow for testing or automation by running it with or without the test option. Below are examples of CasperJS test assertions written in JavaScript code that can be used directly in your automation flow (after navigating and taking desired actions using usual flow steps). As this is direct CasperJS code, there is no auto-wait. You can use the wait step to explicitly wait for a few seconds for steps which will take a long time for web-server to respond.
+TagUI allows you to reuse the same flow for testing or automation by running it with or without the test option. Below are examples of CasperJS test assertions written in JavaScript code that can be used directly in your automation flow (after navigating using usual flow steps). As this is direct CasperJS code, there is no auto-wait. You can use the wait step to explicitly wait for a few seconds for steps which take a long time for web-server to respond.
 ```javascript
-test.assertTextExists('About Tebel','Check for About Tebel text');
+test.assertTextExists('ABOUT','Check for ABOUT text');
 test.assertSelectorHasText(tx('header'), 'Interface automation','Check for phrase in header element');
 ```
 
 For the list of 30+ expressive test assertions built into CasperJS, [click here](http://docs.casperjs.org/en/latest/modules/tester.html). To know more about CasperJS testing framework, [click here](http://docs.casperjs.org/en/latest/testing.html). As TagUI allows you to write JavaScript code directly within the automation flow, advanced testing or coding techniques that can be implemented in CasperJS should work directly within your flow.
 
-TagUI recognizes most JavaScript code. In the rare event you get an error saying that it cannot understand the step for your JavaScript line, kindly raise an issue or feel free to modify the source code (tagui_parse.php is where interpretation of natural language to CasperJS JavaScript code takes place). Alternatively, you can use the undocumented step js to explicitly declare that whatever follows on that line is JavaScript code.
+TagUI recognizes most JavaScript code. In the rare event you get an error saying that it cannot understand the step for your JavaScript line, kindly raise an issue or modify the source code (tagui_parse.php is where interpretation of natural language to CasperJS JavaScript code takes place). Alternatively, you can use the undocumented step js to explicitly declare that whatever follows on that line is JavaScript code.
 
 ### API (for developers, tinkerers, curious folks, etc)
-Automation flows can also be triggered via REST API. TagUI has an API service and runner for managing a queue of incoming requests via API. To set up, add a crontab entry on your server with the desired frequency to check and process incoming service requests. Below example will check every 15 minutes and run pending flows in the queue. Most servers or development boxes using this should be on Linux or macOS, kindly email or raise an issue if otherwise.
+Automation flows can also be triggered via REST API. TagUI has an API service and runner for managing a queue of incoming requests via API. To set up, add a crontab entry on your server with the desired frequency to check and process incoming service requests. Below example will check every 15 minutes and run pending flows in the queue.
 ```
 0,15,30,45 * * * * /full_path_on_your_server/tagui_crontab
 ```
@@ -244,7 +233,7 @@ your_website_url/tagui_service.php?SETTINGS="flow_filename option(s)"
 
 Besides integrating with web applications, TagUI can be extended to integrate with hardware (eg Arduino or Raspberry Pi) for physical world interactions or machine learning service providers for AI decision-making ability. Input parameters can be sent to an automation flow to be used as variables p1 to p9. Output parameters from an automation flow can be sent to your Arduino or application REST URL (see flow samples 3_github and 6C_datatables for examples).
 
-For making outgoing API calls in your automation flow, to feed data somewhere or send emails etc, use the api step followed by full URL (including parameters) of the API call. Response from the API will be printed to output. For example using Tmail, emails with run-time variables can be sent directly from your flow with a single line.
+For making outgoing API calls in your automation flow, to feed data somewhere or send emails etc, use the api step followed by full URL (including parameters) of the API call. Response from the API will be printed to output and saved in api_result variable. Emails with run-time variables can be sent directly from your flow with a single line.
 
 File Reference |Purpose
 :--------------|:------
