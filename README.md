@@ -36,7 +36,16 @@ The automation flow can be triggered from scheduling, command line, URL, REST AP
 
 If you know JavaScript coding and want to be more expressive, you can even use JavaScript directly in the flow. If not, you will still enjoy friendly but powerful features such as repositories to store your reusable objects, datatables for batch automation, and a Chrome extension which creates automation flows by recording your actions. For rapid prototyping, there's also an interactive live mode for trying out TagUI steps or JavaScript code in real-time.
 
-This is a full-feature and free open-source tool, so there's nothing to upgrade to or any paid subscription. To feedback suggestions or bugs, kindly [raise an issue](https://github.com/tebelorg/TagUI/issues) or email ken@tebel.org. Originally developed by a test automation engineer to avoid writing code when automating web interactions. 
+This is a full-feature and free open-source tool, so there's nothing to upgrade to or any paid subscription. To feedback suggestions or bugs, kindly [raise an issue](https://github.com/tebelorg/TagUI/issues) or email ken@tebel.org. Originally developed by a test automation engineer to avoid writing code when automating web interactions.
+
+### PIPELINE
+Feature|Purpose|Status
+:-----:|:------|:----:
+Visual automation|add hybrid automation by integrating SikuliX|WIP
+API integrations|reduce user friction with H2O, Arduino, others|
+Online storage|explore storing automation flow or result online|
+Framework|explore improvements on loops, frame, popup|
+New endpoints|explore headless Chrome, Selenium WebdriverIO|
 
 # Set Up
 TagUI is in v1.5 and runs on macOS, Linux, Windows
@@ -92,11 +101,6 @@ Tip - for Windows, use Task Scheduler instead (search schedule from Start Menu)
 ### CHROME EXTENSION
 Download from [Chrome Web Store](https://chrome.google.com/webstore/detail/tagui-web-automation/egdllmehgfgjebhlkjmcnhiocfcidnjk/) to use TagUI Chrome web browser extension for recording automation flows. TagUI Chrome extension is based on [Resurrectio tool](https://github.com/ebrehault/resurrectio) and records steps such as page navigation, clicking web elements and entering information. To start recording your automation flows, simply click TagUI icon on your Chrome toolbar. Right-click for shortcuts to various TagUI steps, such as capturing webpage or element screenshot.
 
-### AUTOMATION WORKFLOW
-What happens behind the scenes when you run an automation flow
-
-![TagUI Flowchart](https://raw.githubusercontent.com/tebelorg/TagUI/master/src/media/flowchart.png)
-
 ### FLOW SAMPLES
 Following automation flow samples ([tagui/src/samples folder](https://github.com/tebelorg/TagUI/tree/master/src/samples)) are included as part of this repository
 
@@ -110,17 +114,12 @@ Flow Sample |Purpose
 6_datatables|set of flows uses datatables to retrieve and act on GitHub info
 7_testing|shows how to use check step and CasperJS test assertions
 
-# Pipeline
-Feature|Purpose|Status
-:-----:|:------|:----:
-Visual automation|add hybrid automation by integrating SikuliX|WIP
-API integrations|reduce user friction with H2O, Arduino, others|
-Online storage|explore storing automation flow or result online|
-Framework|explore improvements on loops, frame, popup|
-New endpoints|explore headless Chrome, Selenium WebdriverIO|
-Enhancements|feel free to review and suggest new features|
-
 # Cheat Sheet
+### AUTOMATION WORKFLOW
+- What happens behind the scenes when you run an automation flow
+
+![TagUI Flowchart](https://raw.githubusercontent.com/tebelorg/TagUI/master/src/media/flowchart.png)
+
 ### STEPS DESCRIPTION
 - TagUI auto-waits for a webpage element to appear and interacts with it as soon as it appears
 - Element identifier can be auto-recorded using TagUI Chrome extension, or [found from web browser](https://help.surveygizmo.com/help/how-to-find-element-ids-to-use-with-javascript)
@@ -205,6 +204,7 @@ currency-pair|USDSGD|USDJPY|EURUSD
 size|10000|1000|100000
 direction|BUY|SELL|BUY
 
+# Developers Reference
 ### TESTING (for QA, test automation engineers, etc)
 The step check allows simple testing of conditions. For professional test automation, CasperJS comes with a tester module for unit and functional testing purpose. To use the advanced testing features, run TagUI with the test option.
 
