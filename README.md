@@ -38,15 +38,6 @@ If you know JavaScript coding and want to be more expressive, you can even use J
 
 This is a full-feature and free open-source tool, so there's nothing to upgrade to or any paid subscription. To feedback suggestions or bugs, kindly [raise an issue](https://github.com/tebelorg/TagUI/issues) or email ken@tebel.org. Originally developed by a test automation engineer to avoid writing code when automating web interactions.
 
-### PIPELINE
-Feature|Purpose|Status
-:-----:|:------|:----:
-Visual automation|add hybrid automation by integrating SikuliX|WIP
-API integrations|reduce user friction with H2O, Arduino, others|
-Online storage|explore storing automation flow or result online|
-Framework|explore improvements on loops, frame, popup|
-New endpoints|explore headless Chrome, Selenium WebdriverIO|
-
 # Set Up
 TagUI is in v1.5 and runs on macOS, Linux, Windows ([link to release notes](https://github.com/tebelorg/TagUI/releases))
 
@@ -235,7 +226,7 @@ Besides integrating with web applications, TagUI can be extended to integrate wi
 
 For making outgoing API calls in your automation flow, to feed data somewhere or send emails etc, use the api step followed by full URL (including parameters) of the API call. Response from the API will be printed to output and saved in api_result variable. Emails with run-time variables can be sent directly from your flow with a single line.
 
-### FILE REFERENCE (for hacking, tweaking, modification, etc)
+### FILES (to hack, tweak, modify, etc)
 Filename |Purpose
 :--------|:------
 tagui|main runner for TagUI web automation
