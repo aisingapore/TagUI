@@ -9,17 +9,26 @@ scan_period = 1
 # counter to track current tagui sikuli step
 tagui_count = '0'
 
+# prevent premature exit on unhandled exception
+setThrowException(False)
+
 # function for tap / click step
 def tap_intent ( raw_intent ):
 	params = (raw_intent + ' ')[1+(raw_intent + ' ').find(' '):].strip()
 	print '[tagui] ACTION - click ' + params
-	return click(params)
+	if exists(params):
+		return click(params)
+	else:
+		return 0
 
 # function for hover / move step
 def hover_intent ( raw_intent ):
 	params = (raw_intent + ' ')[1+(raw_intent + ' ').find(' '):].strip()
 	print '[tagui] ACTION - hover ' + params
-	return hover(params)
+	if exists(params):
+		return hover(params)
+	else:
+		return 0
 
 # function for type / enter step
 def type_intent ( raw_intent ):
@@ -27,7 +36,10 @@ def type_intent ( raw_intent ):
 	param1 = params[:params.find(' as ')].strip()
 	param2 = params[4+params.find(' as '):].strip()
 	print '[tagui] ACTION - type ' + param1 + ' as ' + param2
-	return type(param1,param2) 
+	if exists(param1):
+		return type(param1,param2) 
+	else:
+		return 0
 
 # function for select / choose step
 def select_intent ( raw_intent ):
@@ -35,11 +47,17 @@ def select_intent ( raw_intent ):
 	param1 = params[:params.find(' as ')].strip()
 	param2 = params[4+params.find(' as '):].strip()
 	print '[tagui] ACTION - click ' + param1
-	if click(param1) == 0:
-		return 0
+	if exists(param1):
+		if click(param1) == 0:
+			return 0
+		else:
+			print '[tagui] ACTION - click ' + param2
+			if exists(param2):
+				return click(param2)
+			else:
+				return 0
 	else:
-		print '[tagui] ACTION - click ' + param2
-		return click(param2)
+		return 0
 
 # function to interpret input intent
 def get_intent ( raw_intent ):
@@ -69,8 +87,13 @@ def parse_intent ( script_line ):
 
 # write to interface out-file to signal ready for inputs
 tagui_output = open('tagui.sikuli/tagui_sikuli.out','w')
-tagui_output.write('[0] READY')
+tagui_output.write('[0] START')
 tagui_output.close()
+
+# initialise interface in-file before starting main loop
+tagui_input = open('tagui.sikuli/tagui_sikuli.in','w')
+tagui_input.write('')
+tagui_input.close()
 
 # main loop to scan inputs from automation flow
 print '[tagui] START  - listening for inputs'; print
@@ -84,10 +107,14 @@ while True:
 	tagui_intent = tagui_input.read().strip()
 	tagui_input.close()
 
-	# quit if finish, repeat loop if blank
+	# quit if finish signal received, initialise and repeat loop if blank
 	if tagui_intent == 'finish':
 		break
 	elif not tagui_intent:
+		tagui_count = '0'
+		tagui_output = open('tagui.sikuli/tagui_sikuli.out','w')
+		tagui_output.write('[0] START')
+		tagui_output.close()
 		wait(scan_period)
 		continue
 
