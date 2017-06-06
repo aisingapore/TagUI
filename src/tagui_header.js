@@ -11,7 +11,7 @@ var p7 = casper.cli.raw.get(6); var p8 = casper.cli.raw.get(7); var p9 = casper.
 var automation_start_time = Date.now(); casper.echo('\nSTART - automation started - ' + Date().toLocaleString());
 
 // initialise default global variables
-var quiet_mode = false; var save_text_count = 0; var snap_image_count = 0
+var quiet_mode = false; var save_text_count = 0; var snap_image_count = 0; var sikuli_count = 0;
 
 // techo function for handling quiet option
 function techo(echo_string) {if (!quiet_mode) casper.echo(echo_string); return;}
@@ -72,6 +72,28 @@ if (casper.exists(x('//*[contains(text(),"'+locator+'")]'))) return true;
 if (casper.exists(x('//*[@href="'+locator+'"]'))) return true;
 if (casper.exists(x('//*[contains(@href,"'+locator+'")]'))) return true;
 return false;}
+
+function sleep(ms) { // helper to add delay during loops
+var start = new Date().getTime(); var end = start;
+while(end < start + ms) {end = new Date().getTime();}}
+
+// for initialising integration with sikuli visual automation
+function sikuli_handshake() {techo('connecting to sikuli');
+var ds; if (flow_path.indexOf('/') !== -1) ds = '/'; else ds = '\\';
+var fs = require('fs'); fs.write('tagui.sikuli'+ds+'tagui_sikuli.in','','w'); var sikuli_handshake = '';
+if (!fs.exists('tagui.sikuli'+ds+'tagui_sikuli.out')) fs.write('tagui.sikuli'+ds+'tagui_sikuli.out','','w');
+do {sikuli_handshake = fs.read('tagui.sikuli'+ds+'tagui_sikuli.out').trim(); sleep(1000);}
+while (sikuli_handshake !== '[0] START');
+techo('connected to sikuli');}
+
+// for using sikuli visual automation instead of casperjs
+function sikuli_step(sikuli_intent) {sikuli_count++;
+if (sikuli_count == 1) sikuli_handshake(); // handshake on first call
+var ds; if (flow_path.indexOf('/') !== -1) ds = '/'; else ds = '\\';
+var fs = require('fs'); fs.write('tagui.sikuli'+ds+'tagui_sikuli.in','['+sikuli_count.toString()+'] '+sikuli_intent,'w');
+var sikuli_result = ''; do {sikuli_result = fs.read('tagui.sikuli'+ds+'tagui_sikuli.out').trim(); sleep(1000);}
+while (sikuli_result.indexOf('['+sikuli_count.toString()+'] ') == -1);
+if (sikuli_result.indexOf('SUCCESS') !== -1) return true; else return false;}
 
 // for live mode simple parsing of tagui steps into js code
 function tagui_parse(raw_input) {return parse_intent(raw_input);}
