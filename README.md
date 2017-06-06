@@ -6,7 +6,7 @@ TagUI is a general purpose tool for automating web interactions ~ http://tebel.o
 A sample automation flow to automate mass account registrations in 30 seconds - 1. recording sequence of steps, 2. editing to wait for a few seconds, 3. playing the automation flow (csv datatables supported for datasets)
 
 # Why This
-The goal of web automation is to reproduce cognitive interactions that you have with certain websites so that your laptop or server can do it for you, base on your preferred schedule or conditions. TagUI helps you automate your repetitive or time-critical tasks - use cases include process automation, data acquisition and testing of web apps.
+The goal of web automation is to reproduce cognitive interactions that you have with certain websites so that your laptop or server can do it for you, base on your preferred schedule or conditions. TagUI helps you rapidly automate your repetitive or time-critical tasks - use cases include process automation, data acquisition and testing of web apps.
 
 ### FEATURES
 - natural language with JavaScript support
@@ -48,7 +48,7 @@ Framework|explore improvements on loops, frame, popup|
 New endpoints|explore headless Chrome, Selenium WebdriverIO|
 
 # Set Up
-TagUI is in v1.5 and runs on macOS, Linux, Windows
+TagUI is in v1.5 and runs on macOS, Linux, Windows ([link to release notes](https://github.com/tebelorg/TagUI/releases))
 
 ### PACKAGED INSTALLATION
 Easiest way to use TagUI - no setup is needed, all dependencies are packaged in
@@ -235,8 +235,9 @@ Besides integrating with web applications, TagUI can be extended to integrate wi
 
 For making outgoing API calls in your automation flow, to feed data somewhere or send emails etc, use the api step followed by full URL (including parameters) of the API call. Response from the API will be printed to output and saved in api_result variable. Emails with run-time variables can be sent directly from your flow with a single line.
 
-File Reference |Purpose
-:--------------|:------
+### FILE REFERENCE (for hacking, tweaking, modification, etc)
+Filename |Purpose
+:--------|:------
 tagui|main runner for TagUI web automation
 tagui.cmd|main runner for Windows platform
 tagui.py|interface for Sikuli visual automation
