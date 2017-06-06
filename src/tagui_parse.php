@@ -221,6 +221,17 @@ $source_string = str_replace("+++++","+",$source_string); $source_string = str_r
 $source_string = str_replace("+++","+",$source_string); $source_string = str_replace("++","+",$source_string);
 return $source_string;} // replacing multiple variations of + to handle user typos of double spaces etc 
 
+function is_sikuli($input_params) { // helper function to check if input is meant for sikuli visual automation
+if (strlen($input_params)>4 and strtolower(substr($input_params,-4))=='.png') return true; // support png and bmp
+else if (strlen($input_params)>4 and strtolower(substr($input_params,-4))=='.bmp') return true; else return false;}
+
+function call_sikuli($input_intent,$input_params) { // helper function to use sikuli visual automation
+return "{techo('".$input_intent."'); var fs = require('fs');\n" .
+"if (!sikuli_step('".$input_intent."')) if (!fs.exists('".$input_params."'))\n" .
+"this.echo('ERROR - cannot find image file ".$input_params."').exit(); else\n" . 
+"this.echo('ERROR - cannot find " . $input_params." on screen').exit(); this.wait(0);}" .
+end_fi()."});\n\ncasper.then(function() {\n";}
+
 // set of functions to interpret steps into corresponding casperjs code
 function url_intent($raw_intent) {
 if (filter_var($raw_intent, FILTER_VALIDATE_URL) == false) 
@@ -232,17 +243,24 @@ $raw_intent."' + ' - ' + this.getTitle());});\n\ncasper.then(function() {\n";}
 
 function tap_intent($raw_intent) {
 $params = trim(substr($raw_intent." ",1+strpos($raw_intent." "," "))); 
+if (is_sikuli($params)) {$abs_params = abs_file($params); $abs_intent = str_replace($params,$abs_params,$raw_intent);
+return call_sikuli($abs_intent,$abs_params);} // use sikuli visual automation as needed
 if ($params == "") echo "ERROR - " . current_line() . " target missing for " . $raw_intent . "\n"; else
 return "{techo('".$raw_intent."');".beg_tx($params)."this.click(tx('" . $params . "'));".end_tx($params);}
 
 function hover_intent($raw_intent) {
 $params = trim(substr($raw_intent." ",1+strpos($raw_intent." "," "))); 
+if (is_sikuli($params)) {$abs_params = abs_file($params); $abs_intent = str_replace($params,$abs_params,$raw_intent);
+return call_sikuli($abs_intent,$abs_params);} // use sikuli visual automation as needed
 if ($params == "") echo "ERROR - " . current_line() . " target missing for " . $raw_intent . "\n"; else
 return "{techo('".$raw_intent."');".beg_tx($params)."this.mouse.move(tx('" . $params . "'));".end_tx($params);}
 
 function type_intent($raw_intent) {
 $params = trim(substr($raw_intent." ",1+strpos($raw_intent." "," ")));
 $param1 = trim(substr($params,0,strpos($params," as "))); $param2 = trim(substr($params,4+strpos($params," as ")));
+if (is_sikuli($param1) and $param2 != "") {
+$abs_param1 = abs_file($param1); $abs_intent = str_replace($param1,$abs_param1,$raw_intent);
+return call_sikuli($abs_intent,$abs_param1);} // use sikuli visual automation as needed
 if (($param1 == "") or ($param2 == "")) 
 echo "ERROR - " . current_line() . " target/text missing for " . $raw_intent . "\n"; else 
 return "{techo('".$raw_intent."');".beg_tx($param1)."this.sendKeys(tx('".$param1."'),'".$param2."');".end_tx($param1);}
@@ -250,6 +268,10 @@ return "{techo('".$raw_intent."');".beg_tx($param1)."this.sendKeys(tx('".$param1
 function select_intent($raw_intent) {
 $params = trim(substr($raw_intent." ",1+strpos($raw_intent." "," ")));
 $param1 = trim(substr($params,0,strpos($params," as "))); $param2 = trim(substr($params,4+strpos($params," as ")));
+if (is_sikuli($param1) and is_sikuli($param2)) {
+$abs_param1 = abs_file($param1); $abs_intent = str_replace($param1,$abs_param1,$raw_intent);
+$abs_param2 = abs_file($param2); $abs_intent = str_replace($param2,$abs_param2,$abs_intent);
+return call_sikuli($abs_intent,$abs_param1);} // use sikuli visual automation as neededd
 if (($param1 == "") or ($param2 == ""))
 echo "ERROR - " . current_line() . " target/option missing for " . $raw_intent . "\n"; else
 return "{techo('".$raw_intent."');".beg_tx($param1)."var select_locator = tx('".$param1."');\n".
