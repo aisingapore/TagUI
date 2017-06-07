@@ -118,6 +118,10 @@ echo -n "" > "$1".log; chmod 600 "$1".log
 # check if api call is made in automation flow file to set appropriate setting for phantomjs to work
 api=""; if [ -f "$1" ]; then if grep -iq "api http" "$1"; then api=" --web-security=false"; fi; fi
 
+# delete sikuli visual automation integration files if they exist
+if [ -f "tagui.sikuli/tagui_sikuli.in" ]; then rm tagui.sikuli/tagui_sikuli.in; fi
+if [ -f "tagui.sikuli/tagui_sikuli.out" ]; then rm tagui.sikuli/tagui_sikuli.out; fi
+
 # check datatable csv file for batch automation
 tagui_data_set_size=1
 if [ -f "$1".csv ]; then
@@ -137,10 +141,11 @@ do export tagui_data_set=$tagui_data_set
 # parse automation flow file and check for initial parse error before calling casperjs
 php -q tagui_parse.php "$1" | tee -a "$1".log
 if [ -s "$1".log ] && [ "$tagui_data_set" -eq 1 ]
-then echo "ERROR - automation aborted due to above" | tee -a "$1".log; tagui_error_code=1; break
-elif [ "$tagui_test_mode" == false ]; then "$CASPERJS_EXECUTABLE" "$1".js $params$api | tee -a "$1".log
+then echo "ERROR - automation aborted due to above" | tee -a "$1".log; tagui_error_code=1; break; fi
+if [ -f "tagui.sikuli/tagui_sikuli.in" ]; then tagui.sikuli/runsikulix -r tagui.sikuli > tagui.sikuli/tagui.log &
+fi; if [ "$tagui_test_mode" == false ]; then "$CASPERJS_EXECUTABLE" "$1".js $params$api | tee -a "$1".log
 else export tagui_test_mode=true; "$CASPERJS_EXECUTABLE" test "$1".js $params$api --xunit="$1".xml | tee -a "$1".log
-fi; done
+fi; echo finish > tagui.sikuli/tagui_sikuli.in; done
 
 # check report option to generate html automation log
 if [ -s "$1".log ] && [ "$tagui_html_report" == true ]; then php -q tagui_report.php "$1"; fi

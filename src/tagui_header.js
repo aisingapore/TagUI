@@ -78,7 +78,7 @@ var start = new Date().getTime(); var end = start;
 while(end < start + ms) {end = new Date().getTime();}}
 
 // for initialising integration with sikuli visual automation
-function sikuli_handshake() {techo('connecting to sikuli');
+function sikuli_handshake() {techo('waiting for sikuli');
 var ds; if (flow_path.indexOf('/') !== -1) ds = '/'; else ds = '\\';
 var fs = require('fs'); fs.write('tagui.sikuli'+ds+'tagui_sikuli.in','','w'); var sikuli_handshake = '';
 if (!fs.exists('tagui.sikuli'+ds+'tagui_sikuli.out')) fs.write('tagui.sikuli'+ds+'tagui_sikuli.out','','w');

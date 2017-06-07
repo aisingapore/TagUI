@@ -226,6 +226,8 @@ if (strlen($input_params)>4 and strtolower(substr($input_params,-4))=='.png') re
 else if (strlen($input_params)>4 and strtolower(substr($input_params,-4))=='.bmp') return true; else return false;}
 
 function call_sikuli($input_intent,$input_params) { // helper function to use sikuli visual automation
+if (!touch('tagui.sikuli/tagui_sikuli.in')) die("ERROR - cannot initialise tagui_sikuli.in\n");
+if (!touch('tagui.sikuli/tagui_sikuli.out')) die("ERROR - cannot initialise tagui_sikuli.out\n");
 return "{techo('".$input_intent."'); var fs = require('fs');\n" .
 "if (!sikuli_step('".$input_intent."')) if (!fs.exists('".$input_params."'))\n" .
 "this.echo('ERROR - cannot find image file ".$input_params."').exit(); else\n" . 
