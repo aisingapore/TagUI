@@ -16,3 +16,11 @@
 /src/tagui_service.act
 /src/tagui_service.run
 /src/tagui_service.done
+
+# exclude local files for sikuli integration 
+/src/tagui.sikuli/tagui_sikuli.in
+/src/tagui.sikuli/tagui_sikuli.out
+/src/tagui.sikuli/tagui.log
+/src/tagui.sikuli/sikulix*
+/src/tagui.sikuli/SikuliX*
+/src/tagui.sikuli/runsikulix
