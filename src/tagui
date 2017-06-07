@@ -7,6 +7,7 @@ echo "tagui v1.5: use following syntax and below options to run - ./tagui flow_f
 echo
 echo "firefox - run on visible Firefox web browser instead of invisible browser (first install Firefox)"
 echo "report - generate a web report for easy sharing of run results (default is only a text log file)"
+echo "upload - upload automation flow and result to online storage (expires 30 days after last view)"
 echo "debug - show run-time backend messages from PhantomJS for detailed tracing and logging"
 echo "quiet - run without output except for explicit output (echo / show / check / api / errors etc)"
 echo "test - professional testing using CasperJS assertions (TagUI dynamic tx('selector') usable)"
@@ -108,6 +109,17 @@ if [ "$7" = "report" ]; then set -- "${@:1:6}" "${@:8}"; tagui_html_report=true;
 if [ "$8" = "report" ]; then set -- "${@:1:7}" "${@:9}"; tagui_html_report=true; fi
 if [ "$9" = "report" ]; then set -- "${@:1:8}"; tagui_html_report=true; fi
 
+tagui_upload_result=false
+# check upload parameter to upload flow result to online storage
+if [ "$2" = "upload" ]; then set -- "$1" "${@:3}"; tagui_upload_result=true; fi
+if [ "$3" = "upload" ]; then set -- "${@:1:2}" "${@:4}"; tagui_upload_result=true; fi
+if [ "$4" = "upload" ]; then set -- "${@:1:3}" "${@:5}"; tagui_upload_result=true; fi
+if [ "$5" = "upload" ]; then set -- "${@:1:4}" "${@:6}"; tagui_upload_result=true; fi
+if [ "$6" = "upload" ]; then set -- "${@:1:5}" "${@:7}"; tagui_upload_result=true; fi
+if [ "$7" = "upload" ]; then set -- "${@:1:6}" "${@:8}"; tagui_upload_result=true; fi
+if [ "$8" = "upload" ]; then set -- "${@:1:7}" "${@:9}"; tagui_upload_result=true; fi
+if [ "$9" = "upload" ]; then set -- "${@:1:8}"; tagui_upload_result=true; fi
+
 # concatenate parameters in order to fix issue when calling casperjs test
 # $1 left out - filenames with spaces have issue when casperjs $params
 params="$2"" ""$3"" ""$4"" ""$5"" ""$6"" ""$7"" ""$8"" ""$9"
@@ -149,6 +161,9 @@ fi; echo finish > tagui.sikuli/tagui_sikuli.in; done
 
 # check report option to generate html automation log
 if [ -s "$1".log ] && [ "$tagui_html_report" == true ]; then php -q tagui_report.php "$1"; fi
+
+# check upload option to upload result to hastebin.com
+if [ -s "$1".log ] && [ "$tagui_upload_result" == true ]; then ./tagui samples/8_hastebin quiet "$1"; fi
 
 # change back to initial directory where tagui is called
 cd "$initial_dir"
