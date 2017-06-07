@@ -104,6 +104,7 @@ Flow Sample |Purpose
 5_repositories|shows using repositories on Russian social media site VK.com
 6_datatables|set of flows uses datatables to retrieve and act on GitHub info
 7_testing|shows how to use check step and CasperJS test assertions
+8_hastebin|shows uploading of automation flow result to hastebin.com
 
 # Cheat Sheet
 ### AUTOMATION WORKFLOW
