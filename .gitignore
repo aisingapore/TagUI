@@ -9,6 +9,10 @@
 /src/php/*
 /src/unx/*
 
+# exclude generated files for hastebin upload
+/src/samples/8_hastebin.js
+/src/samples/8_hastebin.log
+
 # exclude local log files from api service
 /src/tagui_service.in
 /src/tagui_service.out
