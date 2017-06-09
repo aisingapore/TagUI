@@ -121,8 +121,8 @@ Step|Parameters (separator in bold)|Purpose
 :---|:-----------------------------|:------
 tap / click|element to click|click on an element
 hover / move|element to hover|move cursor to element
-type / enter|element to type ***as*** text to type|enter element as text
-select / choose|element to select ***as*** option to select|choose dropdown option
+type / enter|element to type ***as*** text to type |enter element as text
+select / choose|element to select ***as*** option value to select|choose dropdown option
 read / fetch|element to read (page = webpage) ***to*** variable name|fetch element text to variable
 show / print|element to read (page = webpage, ie raw html) |print element text to output
 save|element (page = webpage) ***to*** optional filename|save element text to file
@@ -140,7 +140,7 @@ dom|javascript code for document object model|run code in dom context
 api|full url (including parameters) of api call|call api and print response
 //|user comments (ignored during execution)|add user comments
 
-Tip - if you want to write xpath, use double quotes for text //\*[@title="Login"]
+Tip - in general, '+variable+' can be used where text is expected to use variables. xpath is an expressive way to identify web elements. if you are writing xpath for element identifier, use double quotes for text //\*[@title="Login"]
 
 ### CONDITIONS EXAMPLES
 - Conditions can be expressed in natural language (optional brackets) or [JavaScript](https://www.w3schools.com/js/)
