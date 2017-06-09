@@ -140,7 +140,7 @@ dom|javascript code for document object model|run code in dom context
 api|full url (including parameters) of api call|call api and print response
 //|user comments (ignored during execution)|add user comments
 
-Tip - in general, '+variable+' can be used where text is expected to use variables. xpath is an expressive way to identify web elements. if you are writing xpath for element identifier, use double quotes for text //\*[@title="Login"]
+Tip - in general to use variables, '+variable+' can be used where text is expected. xpath is an expressive way to identify web elements. if you know xpath and are using xpath for element identifier, use double quotes for text //\*[@title="Login"]
 
 ### CONDITIONS EXAMPLES
 - Conditions can be expressed in natural language (optional brackets) or [JavaScript](https://www.w3schools.com/js/)
