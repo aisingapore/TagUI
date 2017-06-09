@@ -203,14 +203,14 @@ Automation flows can also be triggered via REST API. TagUI has an API service an
 0,15,30,45 * * * * /full_path_on_your_server/tagui_crontab
 ```
 
-To call an automation flow from your application or web browser, use below API syntax. Custom input(s) supported. Automation flows can also be triggered from emails using the API. For email integration, [install Tmail](https://github.com/tebelorg/Tmail). Its main job is an open-source mailbot to act on incoming emails or perform mass emailing; its part-time job is delivering emails by API.
+To call an automation flow from your application or web browser, use below API syntax. Custom input(s) supported. Automation flows can also be triggered from emails using the API. For email integration, [install Tmail](https://github.com/tebelorg/Tmail). Its main job is an open-source mailbot to act on incoming emails or perform mass emailing; its part-time job is delivering emails by API. Emails with run-time variables can be sent directly from your flow with a single line (see flow sample 6C_datatables).
 ```
 your_website_url/tagui_service.php?SETTINGS="flow_filename option(s)"
 ```
 
 Besides integrating with web applications, TagUI can be extended to integrate with hardware (eg Arduino or Raspberry Pi) for physical world interactions or machine learning service providers for AI decision-making ability. Input parameters can be sent to an automation flow to be used as variables p1 to p9. Output parameters from an automation flow can be sent to your Arduino or application REST URL (see flow samples 3_github and 6C_datatables for examples).
 
-For making outgoing API calls in your automation flow, to feed data somewhere or send emails etc, use the api step followed by full URL (including parameters) of the API call. Response from the API will be printed to output and saved in api_result variable. Emails with run-time variables can be sent directly from your flow with a single line.
+For making outgoing API calls in your automation flow, to feed data somewhere or send emails etc, use the api step followed by full URL (including parameters) of the API call. Response from the API will be printed to output and saved in api_result variable. If the API response is JSON data, the variable api_json will be created for easy access to JSON data elements. For example api_json.parent_element.child_element retrieves value of child_element. If not, api_json will be null.
 
 ### TESTING
 The step check allows simple testing of conditions. For professional test automation, CasperJS comes with a tester module for unit and functional testing purpose. To use the advanced testing features, run TagUI with the test option.
