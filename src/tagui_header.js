@@ -352,7 +352,7 @@ return raw_intent;}
 // for calling rest api url synchronously
 function call_api(rest_url) { // can extend to advanced api in future
 var xhttp = new XMLHttpRequest(); xhttp.open("GET", rest_url, false);
-xhttp.send(); return xhttp.statusText + ' - ' + xhttp.responseText;}
+xhttp.send(); return xhttp.responseText;}
 
 // custom function to handle dropdown option
 casper.selectOptionByValue = function(selector, valueToMatch){ // solution posted in casperjs issue #1390
