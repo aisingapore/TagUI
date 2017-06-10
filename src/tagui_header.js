@@ -188,6 +188,7 @@ function is_code(raw_intent) {
 // other scenarios can be assumed to behave as unparsed javascript in casperjs context
 if ((raw_intent.substr(0,4) == 'var ') || (raw_intent.substr(0,3) == 'do ')) return true;
 if ((raw_intent.substr(0,1) == '{') || (raw_intent.substr(0,1) == '}')) return true;
+if ((raw_intent.charAt(raw_intent.length-1) == '{') || (raw_intent.charAt(raw_intent.length-1) == '}')) return true;
 if ((raw_intent.substr(0,3) == 'if ') || (raw_intent.substr(0,4) == 'else')) return true;
 if ((raw_intent.substr(0,4) == 'for ') || (raw_intent.substr(0,6) == 'while ')) return true;
 if ((raw_intent.substr(0,7) == 'switch ') || (raw_intent.substr(0,5) == 'case ')) return true;

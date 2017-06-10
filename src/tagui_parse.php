@@ -175,6 +175,7 @@ function is_code($raw_intent) {
 // other scenarios can be assumed to behave as unparsed javascript in casperjs context
 if ((substr($raw_intent,0,4)=="var ") or (substr($raw_intent,0,3)=="do ")) return true;
 if ((substr($raw_intent,0,1)=="{") or (substr($raw_intent,0,1)=="}")) return true;
+if ((substr($raw_intent,-1)=="{") or (substr($raw_intent,-1)=="}")) return true;
 if ((substr($raw_intent,0,3)=="if ") or (substr($raw_intent,0,4)=="else")) return true;
 if ((substr($raw_intent,0,4)=="for ") or (substr($raw_intent,0,6)=="while ")) return true;
 if ((substr($raw_intent,0,7)=="switch ") or (substr($raw_intent,0,5)=="case ")) return true;
