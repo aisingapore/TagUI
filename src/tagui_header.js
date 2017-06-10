@@ -128,7 +128,7 @@ case 'api': return api_intent(live_line); break;
 case 'dom': return dom_intent(live_line); break;
 case 'js': return js_intent(live_line); break;
 case 'code': return code_intent(live_line); break;
-default: return "this.echo('ERROR - cannot understand step " + live_line + "')";}}
+default: return "this.echo('ERROR - cannot understand step " + live_line.replace(/'/g,'\\\'') + "')";}}
 
 // for live mode understanding intent of line entered
 function get_intent(raw_intent) {var lc_raw_intent = raw_intent.toLowerCase();
@@ -200,7 +200,7 @@ if ((raw_intent.substr(0,2) == '//') || (raw_intent.charAt(raw_intent.length-1) 
 function abs_file(filename) { // helper function to return absolute filename
 if (filename == '') return ''; // unlike tagui_parse.php not deriving path from script variable
 if (filename.substr(0,1) == '/') return filename; // return mac/linux absolute filename directly
-if (filename.substr(1,1) == ':') return filename.replace('\\','/'); // return windows absolute filename directly
+if (filename.substr(1,1) == ':') return filename.replace(/\\/g,'/'); // return windows absolute filename directly
 var tmp_flow_path = flow_path; // otherwise use flow_path defined in generated script to build absolute filename
 // above str_replace is because casperjs/phantomjs do not seem to support \ for windows paths, replace with / to work
 if (tmp_flow_path.indexOf('/') > -1) return tmp_flow_path + '/' + filename; else return tmp_flow_path + '\\' + filename;}
@@ -215,8 +215,8 @@ for (srcpos = 0; srcpos < source_string.length; srcpos++){
 if (source_string.charAt(srcpos) == quote_type) within_quote = !(within_quote);
 if ((within_quote == false) && (source_string.charAt(srcpos)==" "))
 source_string = source_string.substring(0,srcpos) + "+" + source_string.substring(srcpos+1);}
-source_string = source_string.replace('+++++','+'); source_string = source_string.replace('++++','+');
-source_string = source_string.replace('+++','+'); source_string = source_string.replace('++','+');
+source_string = source_string.replace(/\+\+\+\+\+/g,'+'); source_string = source_string.replace(/\+\+\+\+/g,'+');
+source_string = source_string.replace(/\+\+\+/g,'+'); source_string = source_string.replace(/\+\+/g,'+');
 return source_string;} // replacing multiple variations of + to handle user typos of double spaces etc
 
 function url_intent(raw_intent) {
