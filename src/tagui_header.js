@@ -14,7 +14,7 @@ var automation_start_time = Date.now(); casper.echo('\nSTART - automation starte
 var quiet_mode = false; var save_text_count = 0; var snap_image_count = 0; var sikuli_count = 0;
 
 // variable for advance usage of api step
-var api_config = {method:'GET', header:[''], body:''};
+var api_config = {method:'GET', header:[], body:{}};
 
 // techo function for handling quiet option
 function techo(echo_string) {if (!quiet_mode) casper.echo(echo_string); return;}
@@ -356,13 +356,13 @@ return raw_intent;}
 
 // for calling rest api url synchronously
 function call_api(rest_url) { // advance users can define api_config for advance calls
-// the api_config variable defaults to {method:'GET', header:[''], body:''}
+// the api_config variable defaults to {method:'GET', header:[], body:{}}
 var xhttp = new XMLHttpRequest(); xhttp.open(api_config.method, rest_url, false);
 for (var item=0;item<api_config.header.length;item++) { // process headers
 if (api_config.header[item] == '') continue; // skip if header is not defined
 var header_value_pair = api_config.header[item].split(':'); // format is 'Header_name: Header_value'
 xhttp.setRequestHeader(header_value_pair[0].trim(),header_value_pair[1].trim());}
-xhttp.send(api_config.body); return xhttp.responseText;}
+xhttp.send(JSON.stringify(api_config.body)); return xhttp.responseText;}
 
 // custom function to handle dropdown option
 casper.selectOptionByValue = function(selector, valueToMatch){ // solution posted in casperjs issue #1390
