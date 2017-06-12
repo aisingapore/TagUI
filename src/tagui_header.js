@@ -219,17 +219,34 @@ source_string = source_string.replace(/\+\+\+\+\+/g,'+'); source_string = source
 source_string = source_string.replace(/\+\+\+/g,'+'); source_string = source_string.replace(/\+\+/g,'+');
 return source_string;} // replacing multiple variations of + to handle user typos of double spaces etc
 
+function is_sikuli(input_params) { // helper function to check if input is meant for sikuli visual automation
+if (input_params.length > 4 && input_params.substr(-4).toLowerCase() == '.png') return true; // support png and bmp
+else if (input_params.length > 4 && input_params.substr(-4).toLowerCase() == '.bmp') return true; else return false;}
+
+function call_sikuli(input_intent,input_params) { // helper function to use sikuli visual automation
+var fs = require('fs'); // use phantomjs fs file system module to access files and directories
+fs.write('tagui.sikuli/tagui_sikuli.in', '', 'w'); fs.write('tagui.sikuli/tagui_sikuli.out', '', 'w');
+if (!fs.exists('tagui.sikuli/tagui_sikuli.in')) return "this.echo('ERROR - cannot initialise tagui_sikuli.in')";
+if (!fs.exists('tagui.sikuli/tagui_sikuli.out')) return "this.echo('ERROR - cannot initialise tagui_sikuli.out')";
+return "var fs = require('fs'); if (!sikuli_step('"+input_intent+"')) if (!fs.exists('"+input_params+"')) " +
+"this.echo('ERROR - cannot find image file "+input_params+"'); " +
+"else this.echo('ERROR - cannot find "+input_params+" on screen');";}
+
 function url_intent(raw_intent) {
 return "this.echo('ERROR - step not supported in live mode')";}
 
 function tap_intent(raw_intent) {
 var params = ((raw_intent + ' ').substr(1+(raw_intent + ' ').indexOf(' '))).trim();
+if (is_sikuli(params)) {var abs_params = abs_file(params); var abs_intent = raw_intent.replace(params,abs_params);
+return call_sikuli(abs_intent,abs_params);} // use sikuli visual automation as needed
 if (params == '') return "this.echo('ERROR - target missing for " + raw_intent + "')";
 else if (check_tx(params)) return "this.click(tx('" + params + "'))";
 else return "this.echo('ERROR - cannot find " + params + "')";}
 
 function hover_intent(raw_intent) {
 var params = ((raw_intent + ' ').substr(1+(raw_intent + ' ').indexOf(' '))).trim();
+if (is_sikuli(params)) {var abs_params = abs_file(params); var abs_intent = raw_intent.replace(params,abs_params);
+return call_sikuli(abs_intent,abs_params);} // use sikuli visual automation as needed
 if (params == '') return "this.echo('ERROR - target missing for " + raw_intent + "')";
 else if (check_tx(params)) return "this.mouse.move(tx('" + params + "'))";
 else return "this.echo('ERROR - cannot find " + params + "')";}
@@ -238,6 +255,9 @@ function type_intent(raw_intent) {
 var params = ((raw_intent + ' ').substr(1+(raw_intent + ' ').indexOf(' '))).trim();
 var param1 = (params.substr(0,params.indexOf(' as '))).trim();
 var param2 = (params.substr(4+params.indexOf(' as '))).trim();
+if (is_sikuli(param1) && param2 !== '') {
+var abs_param1 = abs_file(param1); var abs_intent = raw_intent.replace(param1,abs_param1);
+return call_sikuli(abs_intent,abs_param1);} // use sikuli visual automation as needed
 if ((param1 == '') || (param2 == '')) return "this.echo('ERROR - target/text missing for " + raw_intent + "')";
 else if (check_tx(param1)) return "this.sendKeys(tx('" + param1 + "'),'" + param2 + "')";
 else return "this.echo('ERROR - cannot find " + param1 + "')";}
@@ -246,6 +266,10 @@ function select_intent(raw_intent) {
 var params = ((raw_intent + ' ').substr(1+(raw_intent + ' ').indexOf(' '))).trim();
 var param1 = (params.substr(0,params.indexOf(' as '))).trim();
 var param2 = (params.substr(4+params.indexOf(' as '))).trim();
+if (is_sikuli(param1) && is_sikuli(param2)) {
+var abs_param1 = abs_file(param1); var abs_intent = raw_intent.replace(param1,abs_param1);
+var abs_param2 = abs_file(param2); abs_intent = abs_intent.replace(param2,abs_param2);
+return call_sikuli(abs_intent,abs_param1);} // use sikuli visual automation as needed
 if ((param1 == '') || (param2 == '')) return "this.echo('ERROR - target/option missing for " + raw_intent + "')";
 else if (check_tx(param1)) return "var select_locator = tx('" + param1 + "'); if (is_xpath_selector(select_locator.toString().replace('xpath selector: ',''))) select_locator = select_locator.toString().substring(16); this.selectOptionByValue(select_locator,'" + param2 + "');";
 else return "this.echo('ERROR - cannot find " + param1 + "')";}
@@ -360,7 +384,7 @@ function call_api(rest_url) { // advance users can define api_config for advance
 var xhttp = new XMLHttpRequest(); xhttp.open(api_config.method, rest_url, false);
 for (var item=0;item<api_config.header.length;item++) { // process headers
 if (api_config.header[item] == '') continue; // skip if header is not defined
-var header_value_pair = api_config.header[item].split(':'); // format is 'Header_name: Header_value'
+var header_value_pair = api_config.header[item].split(':'); // format is 'Header_name: header_value'
 xhttp.setRequestHeader(header_value_pair[0].trim(),header_value_pair[1].trim());}
 xhttp.send(JSON.stringify(api_config.body)); return xhttp.responseText;}
 
