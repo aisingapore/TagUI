@@ -32,7 +32,10 @@ var p7 = casper.cli.raw.get(6); var p8 = casper.cli.raw.get(7); var p9 = casper.
 var automation_start_time = Date.now(); casper.echo('\nSTART - automation started - ' + Date().toLocaleString());
 
 // initialise default global variables
-var quiet_mode = false; var save_text_count = 0; var snap_image_count = 0
+var quiet_mode = false; var save_text_count = 0; var snap_image_count = 0; var sikuli_count = 0;
+
+// variable for advance usage of api step
+var api_config = {method:'GET', header:[], body:{}};
 
 // techo function for handling quiet option
 function techo(echo_string) {if (!quiet_mode) casper.echo(echo_string); return;}
@@ -94,6 +97,28 @@ if (casper.exists(x('//*[@href="'+locator+'"]'))) return true;
 if (casper.exists(x('//*[contains(@href,"'+locator+'")]'))) return true;
 return false;}
 
+function sleep(ms) { // helper to add delay during loops
+var start = new Date().getTime(); var end = start;
+while(end < start + ms) {end = new Date().getTime();}}
+
+// for initialising integration with sikuli visual automation
+function sikuli_handshake() {techo('waiting for sikuli');
+var ds; if (flow_path.indexOf('/') !== -1) ds = '/'; else ds = '\\';
+var fs = require('fs'); fs.write('tagui.sikuli'+ds+'tagui_sikuli.in','','w'); var sikuli_handshake = '';
+if (!fs.exists('tagui.sikuli'+ds+'tagui_sikuli.out')) fs.write('tagui.sikuli'+ds+'tagui_sikuli.out','','w');
+do {sikuli_handshake = fs.read('tagui.sikuli'+ds+'tagui_sikuli.out').trim(); sleep(1000);}
+while (sikuli_handshake !== '[0] START');
+techo('connected to sikuli');}
+
+// for using sikuli visual automation instead of casperjs
+function sikuli_step(sikuli_intent) {sikuli_count++;
+if (sikuli_count == 1) sikuli_handshake(); // handshake on first call
+var ds; if (flow_path.indexOf('/') !== -1) ds = '/'; else ds = '\\';
+var fs = require('fs'); fs.write('tagui.sikuli'+ds+'tagui_sikuli.in','['+sikuli_count.toString()+'] '+sikuli_intent,'w');
+var sikuli_result = ''; do {sikuli_result = fs.read('tagui.sikuli'+ds+'tagui_sikuli.out').trim(); sleep(1000);}
+while (sikuli_result.indexOf('['+sikuli_count.toString()+'] ') == -1);
+if (sikuli_result.indexOf('SUCCESS') !== -1) return true; else return false;}
+
 // for live mode simple parsing of tagui steps into js code
 function tagui_parse(raw_input) {return parse_intent(raw_input);}
 
@@ -124,7 +149,7 @@ case 'api': return api_intent(live_line); break;
 case 'dom': return dom_intent(live_line); break;
 case 'js': return js_intent(live_line); break;
 case 'code': return code_intent(live_line); break;
-default: return "this.echo('ERROR - cannot understand step " + live_line + "')";}}
+default: return "this.echo('ERROR - cannot understand step " + live_line.replace(/'/g,'\\\'') + "')";}}
 
 // for live mode understanding intent of line entered
 function get_intent(raw_intent) {var lc_raw_intent = raw_intent.toLowerCase();
@@ -184,6 +209,7 @@ function is_code(raw_intent) {
 // other scenarios can be assumed to behave as unparsed javascript in casperjs context
 if ((raw_intent.substr(0,4) == 'var ') || (raw_intent.substr(0,3) == 'do ')) return true;
 if ((raw_intent.substr(0,1) == '{') || (raw_intent.substr(0,1) == '}')) return true;
+if ((raw_intent.charAt(raw_intent.length-1) == '{') || (raw_intent.charAt(raw_intent.length-1) == '}')) return true;
 if ((raw_intent.substr(0,3) == 'if ') || (raw_intent.substr(0,4) == 'else')) return true;
 if ((raw_intent.substr(0,4) == 'for ') || (raw_intent.substr(0,6) == 'while ')) return true;
 if ((raw_intent.substr(0,7) == 'switch ') || (raw_intent.substr(0,5) == 'case ')) return true;
@@ -195,7 +221,7 @@ if ((raw_intent.substr(0,2) == '//') || (raw_intent.charAt(raw_intent.length-1) 
 function abs_file(filename) { // helper function to return absolute filename
 if (filename == '') return ''; // unlike tagui_parse.php not deriving path from script variable
 if (filename.substr(0,1) == '/') return filename; // return mac/linux absolute filename directly
-if (filename.substr(1,1) == ':') return filename.replace('\\','/'); // return windows absolute filename directly
+if (filename.substr(1,1) == ':') return filename.replace(/\\/g,'/'); // return windows absolute filename directly
 var tmp_flow_path = flow_path; // otherwise use flow_path defined in generated script to build absolute filename
 // above str_replace is because casperjs/phantomjs do not seem to support \ for windows paths, replace with / to work
 if (tmp_flow_path.indexOf('/') > -1) return tmp_flow_path + '/' + filename; else return tmp_flow_path + '\\' + filename;}
@@ -210,21 +236,38 @@ for (srcpos = 0; srcpos < source_string.length; srcpos++){
 if (source_string.charAt(srcpos) == quote_type) within_quote = !(within_quote);
 if ((within_quote == false) && (source_string.charAt(srcpos)==" "))
 source_string = source_string.substring(0,srcpos) + "+" + source_string.substring(srcpos+1);}
-source_string = source_string.replace('+++++','+'); source_string = source_string.replace('++++','+');
-source_string = source_string.replace('+++','+'); source_string = source_string.replace('++','+');
+source_string = source_string.replace(/\+\+\+\+\+/g,'+'); source_string = source_string.replace(/\+\+\+\+/g,'+');
+source_string = source_string.replace(/\+\+\+/g,'+'); source_string = source_string.replace(/\+\+/g,'+');
 return source_string;} // replacing multiple variations of + to handle user typos of double spaces etc
+
+function is_sikuli(input_params) { // helper function to check if input is meant for sikuli visual automation
+if (input_params.length > 4 && input_params.substr(-4).toLowerCase() == '.png') return true; // support png and bmp
+else if (input_params.length > 4 && input_params.substr(-4).toLowerCase() == '.bmp') return true; else return false;}
+
+function call_sikuli(input_intent,input_params) { // helper function to use sikuli visual automation
+var fs = require('fs'); // use phantomjs fs file system module to access files and directories
+fs.write('tagui.sikuli/tagui_sikuli.in', '', 'w'); fs.write('tagui.sikuli/tagui_sikuli.out', '', 'w');
+if (!fs.exists('tagui.sikuli/tagui_sikuli.in')) return "this.echo('ERROR - cannot initialise tagui_sikuli.in')";
+if (!fs.exists('tagui.sikuli/tagui_sikuli.out')) return "this.echo('ERROR - cannot initialise tagui_sikuli.out')";
+return "var fs = require('fs'); if (!sikuli_step('"+input_intent+"')) if (!fs.exists('"+input_params+"')) " +
+"this.echo('ERROR - cannot find image file "+input_params+"'); " +
+"else this.echo('ERROR - cannot find "+input_params+" on screen');";}
 
 function url_intent(raw_intent) {
 return "this.echo('ERROR - step not supported in live mode')";}
 
 function tap_intent(raw_intent) {
 var params = ((raw_intent + ' ').substr(1+(raw_intent + ' ').indexOf(' '))).trim();
+if (is_sikuli(params)) {var abs_params = abs_file(params); var abs_intent = raw_intent.replace(params,abs_params);
+return call_sikuli(abs_intent,abs_params);} // use sikuli visual automation as needed
 if (params == '') return "this.echo('ERROR - target missing for " + raw_intent + "')";
 else if (check_tx(params)) return "this.click(tx('" + params + "'))";
 else return "this.echo('ERROR - cannot find " + params + "')";}
 
 function hover_intent(raw_intent) {
 var params = ((raw_intent + ' ').substr(1+(raw_intent + ' ').indexOf(' '))).trim();
+if (is_sikuli(params)) {var abs_params = abs_file(params); var abs_intent = raw_intent.replace(params,abs_params);
+return call_sikuli(abs_intent,abs_params);} // use sikuli visual automation as needed
 if (params == '') return "this.echo('ERROR - target missing for " + raw_intent + "')";
 else if (check_tx(params)) return "this.mouse.move(tx('" + params + "'))";
 else return "this.echo('ERROR - cannot find " + params + "')";}
@@ -233,6 +276,9 @@ function type_intent(raw_intent) {
 var params = ((raw_intent + ' ').substr(1+(raw_intent + ' ').indexOf(' '))).trim();
 var param1 = (params.substr(0,params.indexOf(' as '))).trim();
 var param2 = (params.substr(4+params.indexOf(' as '))).trim();
+if (is_sikuli(param1) && param2 !== '') {
+var abs_param1 = abs_file(param1); var abs_intent = raw_intent.replace(param1,abs_param1);
+return call_sikuli(abs_intent,abs_param1);} // use sikuli visual automation as needed
 if ((param1 == '') || (param2 == '')) return "this.echo('ERROR - target/text missing for " + raw_intent + "')";
 else if (check_tx(param1)) return "this.sendKeys(tx('" + param1 + "'),'" + param2 + "')";
 else return "this.echo('ERROR - cannot find " + param1 + "')";}
@@ -241,6 +287,10 @@ function select_intent(raw_intent) {
 var params = ((raw_intent + ' ').substr(1+(raw_intent + ' ').indexOf(' '))).trim();
 var param1 = (params.substr(0,params.indexOf(' as '))).trim();
 var param2 = (params.substr(4+params.indexOf(' as '))).trim();
+if (is_sikuli(param1) && is_sikuli(param2)) {
+var abs_param1 = abs_file(param1); var abs_intent = raw_intent.replace(param1,abs_param1);
+var abs_param2 = abs_file(param2); abs_intent = abs_intent.replace(param2,abs_param2);
+return call_sikuli(abs_intent,abs_param1);} // use sikuli visual automation as needed
 if ((param1 == '') || (param2 == '')) return "this.echo('ERROR - target/option missing for " + raw_intent + "')";
 else if (check_tx(param1)) return "var select_locator = tx('" + param1 + "'); if (is_xpath_selector(select_locator.toString().replace('xpath selector: ',''))) select_locator = select_locator.toString().substring(16); this.selectOptionByValue(select_locator,'" + param2 + "');";
 else return "this.echo('ERROR - cannot find " + param1 + "')";}
@@ -333,7 +383,8 @@ return "this.echo('ERROR - step not supported in live mode')";}
 function api_intent(raw_intent) {
 var params = ((raw_intent + ' ').substr(1+(raw_intent + ' ').indexOf(' '))).trim();
 if (params == '') return "this.echo('ERROR - API URL missing for " + raw_intent + "')";
-else return "this.echo(call_api('" + params + "'))";}
+else return "api_result = call_api('" + params + "'); this.echo(api_result); " +
+"try {api_json = JSON.parse(api_result);} catch(e) {api_json = JSON.parse('null');}";}
 
 function dom_intent(raw_intent) {
 var params = ((raw_intent + ' ').substr(1+(raw_intent + ' ').indexOf(' '))).trim();
@@ -349,9 +400,14 @@ function code_intent(raw_intent) {
 return raw_intent;}
 
 // for calling rest api url synchronously
-function call_api(rest_url) { // can extend to advanced api in future
-var xhttp = new XMLHttpRequest(); xhttp.open("GET", rest_url, false);
-xhttp.send(); return xhttp.statusText + ' - ' + xhttp.responseText;}
+function call_api(rest_url) { // advance users can define api_config for advance calls
+// the api_config variable defaults to {method:'GET', header:[], body:{}}
+var xhttp = new XMLHttpRequest(); xhttp.open(api_config.method, rest_url, false);
+for (var item=0;item<api_config.header.length;item++) { // process headers
+if (api_config.header[item] == '') continue; // skip if header is not defined
+var header_value_pair = api_config.header[item].split(':'); // format is 'Header_name: header_value'
+xhttp.setRequestHeader(header_value_pair[0].trim(),header_value_pair[1].trim());}
+xhttp.send(JSON.stringify(api_config.body)); return xhttp.responseText;}
 
 // custom function to handle dropdown option
 casper.selectOptionByValue = function(selector, valueToMatch){ // solution posted in casperjs issue #1390
@@ -476,17 +532,23 @@ for (n=6; n<=10; n++)
 this.echo("ITERATION "+n);
 for (n=1; n<=5; n++)
 {techo('click element');
-this.click(tx('element'));}});
+casper.waitFor(function check() {return check_tx('element');},
+function then() {this.click(tx('element'));},
+function timeout() {this.echo('ERROR - cannot find element').exit();});}});
 
 casper.then(function() {
 for (n=0; n<=0; n++)
 {techo('click element');
-this.click(tx('element'));}});
+casper.waitFor(function check() {return check_tx('element');},
+function then() {this.click(tx('element'));},
+function timeout() {this.echo('ERROR - cannot find element').exit();});}});
 
 casper.then(function() {
 for (n=6; n<=10; n++)
 {techo('click element');
-this.click(tx('element'));}});
+casper.waitFor(function check() {return check_tx('element');},
+function then() {this.click(tx('element'));},
+function timeout() {this.echo('ERROR - cannot find element').exit();});}});
 
 casper.then(function() {
 // test while
@@ -504,6 +566,176 @@ while ((((2 > 3) && (3 > 4))))
 this.click(tx('element'));}});
 
 casper.then(function() {
+// test {} simple
+
+// start of code block
+{casper.then(function() {
+this.echo('test');
+})}; // end of code block
+
+
+// start of code block
+{casper.then(function() {
+{techo('click test');
+casper.waitFor(function check() {return check_tx('test');},
+function then() {this.click(tx('test'));},
+function timeout() {this.echo('ERROR - cannot find test').exit();});}});
+
+casper.then(function() {
+})}; // end of code block
+
+// test {} complex
+
+// start of code block
+{casper.then(function() {
+{techo('click test1');
+casper.waitFor(function check() {return check_tx('test1');},
+function then() {this.click(tx('test1'));},
+function timeout() {this.echo('ERROR - cannot find test1').exit();});}});
+
+casper.then(function() {
+{techo('click test2');
+casper.waitFor(function check() {return check_tx('test2');},
+function then() {this.click(tx('test2'));},
+function timeout() {this.echo('ERROR - cannot find test2').exit();});}});
+
+casper.then(function() {
+this.echo('test');
+{techo('click test3');
+casper.waitFor(function check() {return check_tx('test3');},
+function then() {this.click(tx('test3'));},
+function timeout() {this.echo('ERROR - cannot find test3').exit();});}});
+
+casper.then(function() {
+})}; // end of code block
+
+// test {} for loop simple
+for (number=1; number<=5; number++)
+
+// start of code block
+{casper.then(function() {
+{techo('click test');
+casper.waitFor(function check() {return check_tx('test');},
+function then() {this.click(tx('test'));},
+function timeout() {this.echo('ERROR - cannot find test').exit();});}});
+
+casper.then(function() {
+})}; // end of code block
+
+// test {} for loop complex
+for (number=1; number<=5; number++)
+
+// start of code block
+{casper.then(function() {
+{techo('click test1');
+casper.waitFor(function check() {return check_tx('test1');},
+function then() {this.click(tx('test1'));},
+function timeout() {this.echo('ERROR - cannot find test1').exit();});}});
+
+casper.then(function() {
+{techo('click test2');
+casper.waitFor(function check() {return check_tx('test2');},
+function then() {this.click(tx('test2'));},
+function timeout() {this.echo('ERROR - cannot find test2').exit();});}});
+
+casper.then(function() {
+this.echo('test');
+{techo('click test3');
+casper.waitFor(function check() {return check_tx('test3');},
+function then() {this.click(tx('test3'));},
+function timeout() {this.echo('ERROR - cannot find test3').exit();});}});
+
+casper.then(function() {
+})}; // end of code block
+
+// test {} while loop simple
+var number = 1;
+while (((number <= 5)))
+{
+{techo('click test');
+this.click(tx('test'));}
+}
+// test {} while loop complex
+while (((number <= 5)))
+{
+{techo('click test1');
+this.click(tx('test1'));}
+{techo('click test2');
+this.click(tx('test2'));}
+this.echo('test');
+{techo('click test3');
+this.click(tx('test3'));}
+number++;
+}
+// test {} for popup step
+{techo('popup about');
+casper.waitForPopup(/about/, function then() {},
+function timeout() {this.echo('ERROR - cannot find popup about').exit();});
+casper.withPopup(/about/, function() {
+{
+{techo('click test');
+this.click(tx('test'));}
+} });} });
+
+casper.then(function() {
+{techo('popup about');
+casper.waitForPopup(/about/, function then() {},
+function timeout() {this.echo('ERROR - cannot find popup about').exit();});
+casper.withPopup(/about/, function() {
+{
+{techo('click test1');
+this.click(tx('test1'));}
+{techo('click test2');
+this.click(tx('test2'));}
+this.echo('test');
+{techo('click test3');
+this.click(tx('test3'));}
+} });} });
+
+casper.then(function() {
+// test {} for frame step
+{techo('frame about');
+casper.withFrame('about', function() {
+{
+{techo('click test');
+this.click(tx('test'));}
+} });} });
+
+casper.then(function() {
+{techo('frame about');
+casper.withFrame('about', function() {
+{
+{techo('click test1');
+this.click(tx('test1'));}
+{techo('click test2');
+this.click(tx('test2'));}
+this.echo('test');
+{techo('click test3');
+this.click(tx('test3'));}
+} });} });
+
+casper.then(function() {
+{techo('frame about | detail');
+casper.withFrame('about', function() {casper.withFrame('detail', function() {
+{
+{techo('click test');
+this.click(tx('test'));}
+} });});} });
+
+casper.then(function() {
+{techo('frame about | detail');
+casper.withFrame('about', function() {casper.withFrame('detail', function() {
+{
+{techo('click test1');
+this.click(tx('test1'));}
+{techo('click test2');
+this.click(tx('test2'));}
+this.echo('test');
+{techo('click test3');
+this.click(tx('test3'));}
+} });});} });
+
+casper.then(function() {
 // test if in javascript
 if (((2 < 3)))
 this.echo("TRUE");
@@ -512,11 +744,9 @@ this.echo("TRUE");
 // test js
 this.echo('THIS IS JAVASCRIPT');
 // TEST STEPS
-// test tap / click
+// test tap / click (including sikuli visual automation)
 {techo('tap element');
-casper.waitFor(function check() {return check_tx('element');},
-function then() {this.click(tx('element'));},
-function timeout() {this.echo('ERROR - cannot find element').exit();});}});
+this.click(tx('element'));}});
 
 casper.then(function() {
 {techo('click element');
@@ -525,7 +755,19 @@ function then() {this.click(tx('element'));},
 function timeout() {this.echo('ERROR - cannot find element').exit();});}});
 
 casper.then(function() {
-// test hover / move
+{techo('tap /full_path/button.png'); var fs = require('fs');
+if (!sikuli_step('tap /full_path/button.png')) if (!fs.exists('/full_path/button.png'))
+this.echo('ERROR - cannot find image file /full_path/button.png').exit(); else
+this.echo('ERROR - cannot find /full_path/button.png on screen').exit(); this.wait(0);}});
+
+casper.then(function() {
+{techo('click /full_path/button.bmp'); var fs = require('fs');
+if (!sikuli_step('click /full_path/button.bmp')) if (!fs.exists('/full_path/button.bmp'))
+this.echo('ERROR - cannot find image file /full_path/button.bmp').exit(); else
+this.echo('ERROR - cannot find /full_path/button.bmp on screen').exit(); this.wait(0);}});
+
+casper.then(function() {
+// test hover / move (including sikuli visual automation)
 {techo('hover element');
 casper.waitFor(function check() {return check_tx('element');},
 function then() {this.mouse.move(tx('element'));},
@@ -538,7 +780,19 @@ function then() {this.mouse.move(tx('element'));},
 function timeout() {this.echo('ERROR - cannot find element').exit();});}});
 
 casper.then(function() {
-// test type / enter
+{techo('hover /full_path/button.png'); var fs = require('fs');
+if (!sikuli_step('hover /full_path/button.png')) if (!fs.exists('/full_path/button.png'))
+this.echo('ERROR - cannot find image file /full_path/button.png').exit(); else
+this.echo('ERROR - cannot find /full_path/button.png on screen').exit(); this.wait(0);}});
+
+casper.then(function() {
+{techo('move /full_path/button.bmp'); var fs = require('fs');
+if (!sikuli_step('move /full_path/button.bmp')) if (!fs.exists('/full_path/button.bmp'))
+this.echo('ERROR - cannot find image file /full_path/button.bmp').exit(); else
+this.echo('ERROR - cannot find /full_path/button.bmp on screen').exit(); this.wait(0);}});
+
+casper.then(function() {
+// test type / enter (including sikuli visual automation)
 {techo('type element as some text');
 casper.waitFor(function check() {return check_tx('element');},
 function then() {this.sendKeys(tx('element'),'some text');},
@@ -551,7 +805,19 @@ function then() {this.sendKeys(tx('element'),'some text');},
 function timeout() {this.echo('ERROR - cannot find element').exit();});}});
 
 casper.then(function() {
-// test select / enter
+{techo('type /full_path/textbox.png as some text'); var fs = require('fs');
+if (!sikuli_step('type /full_path/textbox.png as some text')) if (!fs.exists('/full_path/textbox.png'))
+this.echo('ERROR - cannot find image file /full_path/textbox.png').exit(); else
+this.echo('ERROR - cannot find /full_path/textbox.png on screen').exit(); this.wait(0);}});
+
+casper.then(function() {
+{techo('enter /full_path/textbox.bmp as some text'); var fs = require('fs');
+if (!sikuli_step('enter /full_path/textbox.bmp as some text')) if (!fs.exists('/full_path/textbox.bmp'))
+this.echo('ERROR - cannot find image file /full_path/textbox.bmp').exit(); else
+this.echo('ERROR - cannot find /full_path/textbox.bmp on screen').exit(); this.wait(0);}});
+
+casper.then(function() {
+// test select / enter (including sikuli visual automation)
 {techo('select element as option');
 casper.waitFor(function check() {return check_tx('element');},
 function then() {var select_locator = tx('element');
@@ -568,6 +834,18 @@ if (is_xpath_selector(select_locator.toString().replace('xpath selector: ','')))
 select_locator = select_locator.toString().substring(16);
 this.selectOptionByValue(select_locator,'option');},
 function timeout() {this.echo('ERROR - cannot find element').exit();});}});
+
+casper.then(function() {
+{techo('select /full_path/option_list.png as /full_path/option_item.bmp'); var fs = require('fs');
+if (!sikuli_step('select /full_path/option_list.png as /full_path/option_item.bmp')) if (!fs.exists('/full_path/option_list.png'))
+this.echo('ERROR - cannot find image file /full_path/option_list.png').exit(); else
+this.echo('ERROR - cannot find /full_path/option_list.png on screen').exit(); this.wait(0);}});
+
+casper.then(function() {
+{techo('choose /full_path/option_list.bmp as /full_path/option_item.png'); var fs = require('fs');
+if (!sikuli_step('choose /full_path/option_list.bmp as /full_path/option_item.png')) if (!fs.exists('/full_path/option_list.bmp'))
+this.echo('ERROR - cannot find image file /full_path/option_list.bmp').exit(); else
+this.echo('ERROR - cannot find /full_path/option_list.bmp on screen').exit(); this.wait(0);}});
 
 casper.then(function() {
 // test read / fetch
@@ -787,9 +1065,15 @@ casper.withFrame('mainframe', function() {casper.withFrame('subframe', function(
 this.echo("test popup with subframe"); });});}  });} });
 
 casper.then(function() {
-// test api
+// test api direct
 {techo('api http://www.dummytestsite.com/api?COLOR1=red&COLOR2=green&COLOR3=blue');
-this.echo(call_api('http://www.dummytestsite.com/api?COLOR1=red&COLOR2=green&COLOR3=blue'));}
+api_result = call_api('http://www.dummytestsite.com/api?COLOR1=red&COLOR2=green&COLOR3=blue');
+this.echo(api_result); try {api_json = JSON.parse(api_result);} catch(e) {api_json = JSON.parse('null');}}
+// test api with variables
+var COLOR1='red'; var COLOR2='green'; var COLOR3='blue';
+{techo('api http://www.dummytestsite.com/api?COLOR1='+COLOR1+'&COLOR2='+COLOR2+'&COLOR3='+COLOR3+'');
+api_result = call_api('http://www.dummytestsite.com/api?COLOR1='+COLOR1+'&COLOR2='+COLOR2+'&COLOR3='+COLOR3+'');
+this.echo(api_result); try {api_json = JSON.parse(api_result);} catch(e) {api_json = JSON.parse('null');}}
 // test dom
 this.evaluate(function() {var page_title = document.title;});
 // test comment

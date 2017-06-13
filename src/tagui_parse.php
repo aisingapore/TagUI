@@ -426,6 +426,8 @@ function code_intent($raw_intent) {
 $params = parse_condition($raw_intent); return $params.end_fi()."\n";}
 
 function parse_condition($logic) { // natural language handling for conditions
+if (substr($logic,0,2)=="//") return $logic; // skip processing for comment
+
 // section 1 - replace braces block {} with casperjs block to group steps or code
 $GLOBALS['inside_code_block'] += substr_count($logic,"{"); $GLOBALS['inside_code_block'] -= substr_count($logic,"}");
 if ($GLOBALS['inside_while_loop']==0) { // while loop check as casper.then will hang while loop

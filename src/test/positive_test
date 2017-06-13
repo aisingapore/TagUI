@@ -130,6 +130,92 @@ click element
 while ((2 > 3) && (3 > 4))
 click element
 
+// test {} simple
+{
+this.echo('test');
+}
+{
+click test
+}
+
+// test {} complex
+{
+click test1
+click test2
+this.echo('test');
+click test3
+}
+
+// test {} for loop simple
+for number from 1 to 5
+{
+click test
+}
+
+// test {} for loop complex
+for number from 1 to 5
+{
+click test1
+click test2
+this.echo('test');
+click test3
+}
+
+// test {} while loop simple
+var number = 1;
+while (number <= 5)
+{
+click test
+}
+
+// test {} while loop complex
+while (number <= 5)
+{
+click test1
+click test2
+this.echo('test');
+click test3
+number++;
+}
+
+// test {} for popup step
+popup about
+{
+click test
+}
+popup about
+{
+click test1
+click test2
+this.echo('test');
+click test3
+}
+
+// test {} for frame step
+frame about
+{
+click test
+}
+frame about
+{
+click test1
+click test2
+this.echo('test');
+click test3
+}
+
+frame about | detail
+{
+click test
+}
+frame about | detail
+{
+click test1
+click test2
+this.echo('test');
+click test3
+}
+
 // test if in javascript
 if (2 < 3)
 echo "TRUE"
@@ -142,21 +228,29 @@ js this.echo('THIS IS JAVASCRIPT');
 
 // TEST STEPS
 
-// test tap / click
+// test tap / click (including sikuli visual automation)
 tap element
 click element
+tap button.png
+click button.bmp
 
-// test hover / move
+// test hover / move (including sikuli visual automation)
 hover element
 move element
+hover button.png
+move button.bmp
 
-// test type / enter
+// test type / enter (including sikuli visual automation)
 type element as some text
 enter element as some text
+type textbox.png as some text
+enter textbox.bmp as some text
 
-// test select / enter
+// test select / enter (including sikuli visual automation)
 select element as option
 choose element as option
+select option_list.png as option_item.bmp
+choose option_list.bmp as option_item.png
 
 // test read / fetch
 read element to variable
@@ -254,8 +348,12 @@ popup url_keyword
 frame mainframe | subframe
 echo "test popup with subframe"
 
-// test api
+// test api direct
 api http://www.dummytestsite.com/api?COLOR1=red&COLOR2=green&COLOR3=blue
+
+// test api with variables
+var COLOR1='red'; var COLOR2='green'; var COLOR3='blue';
+api http://www.dummytestsite.com/api?COLOR1='+COLOR1+'&COLOR2='+COLOR2+'&COLOR3='+COLOR3+'
 
 // test dom
 dom var page_title = document.title;
