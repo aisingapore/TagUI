@@ -22,7 +22,8 @@ while (!feof($repo_file)) {$repo_data[$repo_count] = fgetcsv($repo_file);
 if (count($repo_data[$repo_count]) == 0) die("ERROR - empty row found in " . $script . '.csv' . "\n");
 $repo_count++;} fclose($repo_file); $repo_count-=2;} //-1 for header, -1 for EOF
 
-$inside_loop = 0; // track if step is in loop and avoid async wait
+$inside_code_block = 0; // track if step or code is inside user-defined code block
+$inside_while_loop = 0; // track if step is in while loop and avoid async wait
 $inside_frame = 0; $inside_popup = 0; // track html frame and popup step
 $line_number = 0; // track flow line number for error message
 $test_automation = 0; // to determine casperjs script structure
@@ -193,16 +194,18 @@ $flow_path = str_replace("\\","/",dirname($flow_script)); // otherwise use flow 
 if (strpos($flow_path,"/")!==false) return $flow_path . '/' . $filename; else return $flow_path . '\\' . $filename;} 
 
 function beg_tx($locator) { // helper function to return beginning string for handling locators
-if ($GLOBALS['inside_loop'] == 0)
+if ($GLOBALS['inside_while_loop'] == 0)
 return "\ncasper.waitFor(function check() {return check_tx('".$locator."');},\nfunction then() {"; else return "\n";}
 
 function end_tx($locator) { // helper function to return ending string for handling locators
-if ($GLOBALS['inside_loop'] == 0)
+if ($GLOBALS['inside_while_loop'] == 0)
 return "},\nfunction timeout() {this.echo('ERROR - cannot find ".
 $locator."').exit();});}".end_fi()."});\n\ncasper.then(function() {\n";
-else {$GLOBALS['inside_loop'] = 0; return "}});\n\ncasper.then(function() {\n";}}
+else if ($GLOBALS['inside_code_block']==0) // reset inside_while_loop if not inside code block
+{$GLOBALS['inside_while_loop'] = 0; return "}});\n\ncasper.then(function() {\n";} else return "}\n";}
 
 function end_fi() { $end_step = ""; // helper function to end frame_intent and popup_intent by closing parsed step block
+if ($GLOBALS['inside_code_block']>0) return ""; // don't return frame or popup closure when inside code block
 if (($GLOBALS['inside_popup'] == 1) or ($GLOBALS['inside_frame'] != 0)) $end_step = "});\n\ncasper.then(function() {";
 if ($GLOBALS['inside_popup'] == 1) {$GLOBALS['inside_popup']=0; $popup_exit = " });} ";} else $popup_exit = "";
 if ($GLOBALS['inside_frame'] == 0) {return "".$popup_exit.$end_step;} // form exit brackets for frame and popup
@@ -422,7 +425,14 @@ else return $params.end_fi()."\n";}
 function code_intent($raw_intent) {
 $params = parse_condition($raw_intent); return $params.end_fi()."\n";}
 
-function parse_condition($logic) { // natural language handling for conditions 
+function parse_condition($logic) { // natural language handling for conditions
+// section 1 - replace braces block {} with casperjs block to group steps or code
+$GLOBALS['inside_code_block'] += substr_count($logic,"{"); $GLOBALS['inside_code_block'] -= substr_count($logic,"}");
+if ($GLOBALS['inside_while_loop']==0) { // while loop check as casper.then will hang while loop
+$logic = str_replace("{","\n// start of code block\n{casper.then(function() {",$logic);
+$logic = str_replace("}","})}; // end of code block\n",$logic);}
+
+// section 2 - natural language handling for conditions and loops 
 if ((substr($logic,0,3)=="if ") or (substr($logic,0,8)=="else if ")
 or (substr($logic,0,4)=="for ") or (substr($logic,0,6)=="while ")) {
 
@@ -482,8 +492,11 @@ if (substr($logic,0,3)=="if ") $logic = "if ((" . trim(substr($logic,3)) . "))";
 if (substr($logic,0,8)=="else if ") $logic = "else if ((" . trim(substr($logic,8)) . "))";
 if (substr($logic,0,6)=="while ") $logic = "while ((" . trim(substr($logic,6)) . "))";}
 
-// track if next statement is inside a loop, then avoid async wait (will hang casperjs/phantomjs)   
-if ((substr($logic,0,4)=="for ") or (substr($logic,0,6)=="while ")) $GLOBALS['inside_loop'] = 1; 
+// section 3 - track if next statement is going to be or still inside while loop,
+// then avoid async wait (casper.then/waitFor/timeout will hang casperjs/phantomjs)   
+if (substr($logic,0,6)=="while ") $GLOBALS['inside_while_loop'] = 1; 
+
+// return code after all the parsing and special handling
 return $logic;}
 
 ?>
