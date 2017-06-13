@@ -140,6 +140,7 @@ frame|frame name **&#124;** subframe name if any|run next step in frame/subframe
 popup|url keyword of popup window to look for|run next step in popup window
 dom|javascript code for document object model|run code in dom context
 api|full url (including parameters) of api call|call api and print response
+{ and }|use { to start block and } to end block|define step/code block
 //|user comments (ignored during execution)|add user comments
 
 Tip - in general to use variables, '+variable+' can be used where text is expected. xpath is an expressive way to identify web elements. if you know xpath and are using xpath for element identifier, use double quotes for text //\*[@title="Login"]
@@ -165,9 +166,9 @@ more than or equal to / greater than or equal to / higher than or equal to|>=
 less than / lesser than / lower than|<
 less than or equal to / lesser than or equal to / lower than or equal to|<=
 and|&&
-or|**&#124;&#124;**
+or|&#124;&#124;
 
-Tip - when using contain / equal conditions, you can write with or without s behind
+Tip - use { and } step to define step/code blocks for powerful repetitive automation with for loop. conversion to CasperJS blocks syntax happens automatically. when using contain / equal conditions, you can write with or without s behind
 
 ### REPOSITORIES
 - Repositories help to make objects or steps reusable and improve readability
