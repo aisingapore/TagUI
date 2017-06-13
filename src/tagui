@@ -7,7 +7,7 @@ echo "tagui v1.5: use following syntax and below options to run - ./tagui flow_f
 echo
 echo "firefox - run on visible Firefox web browser instead of invisible browser (first install Firefox)"
 echo "report - generate a web report for easy sharing of run results (default is only a text log file)"
-echo "upload - upload automation flow and result to online storage (expires 30 days after last view)"
+echo "upload - upload automation flow and result to hastebin.com (expires 30 days after last view)"
 echo "debug - show run-time backend messages from PhantomJS for detailed tracing and logging"
 echo "quiet - run without output except for explicit output (echo / show / check / api / errors etc)"
 echo "test - professional testing using CasperJS assertions (TagUI dynamic tx('selector') usable)"
