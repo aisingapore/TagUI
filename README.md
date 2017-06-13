@@ -8,11 +8,14 @@ A sample automation flow to automate mass account registrations in 30 seconds - 
 # Why This
 The goal of web automation is to reproduce cognitive interactions that you have with certain websites so that your laptop or server can do it for you, base on your preferred schedule or conditions. TagUI helps you rapidly automate your repetitive or time-critical tasks - use cases include process automation, data acquisition and testing of web apps.
 
+This is a full-feature and free open-source tool, so there's nothing to upgrade to or any paid subscription. To feedback suggestions or bugs, kindly [raise an issue](https://github.com/tebelorg/TagUI/issues) or email ken@tebel.org. Originally developed by a test automation engineer to avoid writing code when automating web interactions.
+
 ### FEATURES
 - natural language with JavaScript support
 - Chrome extension for recording steps
 - object repositories and datatables
 - auto-wait XPath/CSS element selector
+- visual automation of website and desktop
 - live mode to try steps or code in real-time
 - run by schedule, command line, REST API
 - support outgoing API calls to webservices
@@ -36,7 +39,7 @@ The automation flow can be triggered from scheduling, command line, URL, REST AP
 
 If you know JavaScript coding and want to be more expressive, you can even use JavaScript directly in the flow. If not, you will still enjoy friendly but powerful features such as repositories to store your reusable objects, datatables for batch automation, and a Chrome extension which creates automation flows by recording your actions. For rapid prototyping, there's also an interactive live mode for trying out TagUI steps or JavaScript code in real-time.
 
-This is a full-feature and free open-source tool, so there's nothing to upgrade to or any paid subscription. To feedback suggestions or bugs, kindly [raise an issue](https://github.com/tebelorg/TagUI/issues) or email ken@tebel.org. Originally developed by a test automation engineer to avoid writing code when automating web interactions.
+In addition to these features, there is automatic waiting for web elements to appear + error-checking + nesting of CasperJS code blocks. TagUI also supports visual automation of website and desktop through built-in integration with Sikuli. Instead of using element identifiers, images are used to identify user interface elements to interact with.
 
 # Set Up
 TagUI is in v1.5 and runs on macOS, Linux, Windows ([link to release notes](https://github.com/tebelorg/TagUI/releases))
@@ -147,7 +150,7 @@ api|full url (including parameters) of api call|call api and print response
 Tip - in general to use variables, '+variable+' can be used where text is expected. xpath is an expressive way to identify web elements. if you know xpath and are using xpath for element identifier, use double quotes for text //\*[@title="Login"]
 
 ### CONDITIONS EXAMPLES
-- Conditions can be expressed in natural language (optional brackets) or [JavaScript](https://www.w3schools.com/js/)
+- Conditions can be expressed in natural language (brackets optional) or [JavaScript](https://www.w3schools.com/js/)
 - Write text in quotation marks (either " or ' works) to differentiate text from variable names
 - if / for / while apply to next step or block, async auto-disables in while loop (will hang CasperJS)
 
@@ -202,7 +205,7 @@ direction|BUY|SELL|BUY
 
 # Developers Reference
 ### API
-Automation flows can also be triggered via REST API. TagUI has an API service and runner for managing a queue of incoming requests via API. To set up, add a crontab entry on your server with the desired frequency to check and process incoming service requests. Below example will check every 15 minutes and run pending flows in the queue.
+Automation flows can also be triggered via REST API. TagUI has an API service and runner for managing a queue of incoming requests via API. To set up, add a crontab entry on your server with the desired frequency to check and process incoming service requests. Below example will check every 15 minutes and run pending flows in the queue. 
 ```
 0,15,30,45 * * * * /full_path_on_your_server/tagui_crontab
 ```
@@ -216,8 +219,8 @@ Besides integrating with web applications, TagUI can be extended to integrate wi
 
 For making outgoing API calls in your automation flow, to feed data somewhere or send emails etc, use the api step followed by full URL (including parameters) of the API call. Response from the API will be printed to output and saved in api_result variable. If the API response is JSON data, the variable api_json will be created for easy access to JSON data elements. Eg, api_json.parent_element.child_element retrieves value of child_element. If not, api_json will be null.
 
-For advance API calls, you can use the variable api_config which defaults as `{method:'GET', header:[], body:{}}`. Besides GET, you can use other methods such as POST, PUT, DELETE etc. You can define multiple headers in the format `'Header_name: header_value'` and provide a payload body for PUT requests for example. You can set it like below before using the api step, or set using `api_config.method = 'PUT';` and `api_config.header[0] = 'Header1: value1';` etc. Also, `api_config.body` will be automatically converted to JSON format for sending to the API endpoint.
-```
+For advance API calls, you can use the variable api_config which defaults as `{method:'GET', header:[], body:{}}`. Besides GET, you can use other methods such as POST, PUT, DELETE etc. You can define multiple headers in the format `'Header_name: header_value'` and provide a payload body for PUT requests for example. You can also set it like below before using the api step, or set using `api_config.method = 'PUT';` and `api_config.header[0] = 'Header1: value1';` etc. Also, `api_config.body` will be automatically converted to JSON format for sending to the API endpoint.
+```js
 api_config = {method:'PUT', header:['Header1: value1','Header2: value2'], body:{'id':123,'pwd':'abc'}};
 ```
 
