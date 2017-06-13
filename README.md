@@ -39,7 +39,7 @@ The automation flow can be triggered from scheduling, command line, URL, REST AP
 
 If you know JavaScript coding and want to be more expressive, you can even use JavaScript directly in the flow. If not, you will still enjoy friendly but powerful features such as repositories to store your reusable objects, datatables for batch automation, and a Chrome extension which creates automation flows by recording your actions. For rapid prototyping, there's also an interactive live mode for trying out TagUI steps or JavaScript code in real-time.
 
-In addition to these features, there is automatic waiting for web elements to appear + error-checking + nesting of CasperJS code blocks. TagUI also supports visual automation of website and desktop through built-in integration with Sikuli. Instead of using element identifiers, images are used to identify user interface elements to interact with.
+In addition to these features, there is automatic waiting for web elements to appear + error-checking + nesting of CasperJS code blocks. TagUI also supports visual automation of website and desktop through built-in integration with Sikuli. Instead of using element identifiers, images can be used to identify user interface elements to interact with.
 
 # Set Up
 TagUI is in v1.5 and runs on macOS, Linux, Windows ([link to release notes](https://github.com/tebelorg/TagUI/releases))
@@ -97,6 +97,9 @@ Tip - for Windows, use Task Scheduler instead (search schedule from Start Menu)
 
 ### CHROME EXTENSION
 Download from [Chrome Web Store](https://chrome.google.com/webstore/detail/tagui-web-automation/egdllmehgfgjebhlkjmcnhiocfcidnjk/) to use TagUI Chrome web browser extension for recording automation flows. TagUI Chrome extension is based on [Resurrectio tool](https://github.com/ebrehault/resurrectio) and records steps such as page navigation, clicking web elements and entering information. To start recording your automation flows, simply click TagUI icon on your Chrome toolbar. Right-click for shortcuts to various TagUI steps, such as capturing webpage or element screenshot.
+
+### VISUAL AUTOMATION
+TagUI has built-in integration with [Sikuli (base on OpenCV)](http://sikulix.com) to allow identifying web elements and desktop user interface elements for interaction. Steps that support visual automation are tap / click, hover / move, type / enter, select / choose. Simply specify an image filename (.png or .bmp format) of what to look for visually, in place of the element identifier, to use visual automation along your usual automation steps. Sikuli is excluded from packaged installation due to complex dependencies that are handled by its installer. To setup, [install Sikuli](http://sikulix.com/quickstart/) (choose Option 1) to tagui/src/tagui.sikuli folder.
 
 ### FLOW SAMPLES
 Following automation flow samples ([tagui/src/samples folder](https://github.com/tebelorg/TagUI/tree/master/src/samples)) are included as part of this repository
@@ -205,7 +208,7 @@ direction|BUY|SELL|BUY
 
 # Developers Reference
 ### API
-Automation flows can also be triggered via REST API. TagUI has an API service and runner for managing a queue of incoming requests via API. To set up, add a crontab entry on your server with the desired frequency to check and process incoming service requests. Below example will check every 15 minutes and run pending flows in the queue. 
+Automation flows can also be triggered via REST API. TagUI has an API service and runner for managing a queue of incoming requests via API. To set up, add a crontab entry on your server with the desired frequency to check and process incoming service requests. Below example will check every 15 minutes and run pending flows in the queue. If there's an automation running in progress, TagUI will wait for the next check instead of concurrently starting a new run.
 ```
 0,15,30,45 * * * * /full_path_on_your_server/tagui_crontab
 ```
@@ -230,7 +233,7 @@ The step check allows simple testing of conditions. For professional test automa
 CasperJS test scripts are inherently different in structure and syntax from its usual automation scripts. With the test option, TagUI automatically sets up your automation flow to work as a test script. CasperJS will output a XUnit XML file, which is compatible with continuous integration tools such as Jenkins. Running together with the report option outputs a web report of the test execution for easy sharing.
 
 TagUI allows you to reuse the same flow for testing or automation by running it with or without the test option. Below are examples of CasperJS test assertions written in JavaScript code that can be used directly in your automation flow (after navigating using usual flow steps). As this is direct CasperJS code, there is no auto-wait. You can use the wait step to explicitly wait for a few seconds for steps which take a long time for web-server to respond.
-```javascript
+```js
 test.assertTextExists('ABOUT','Check for ABOUT text');
 test.assertSelectorHasText(tx('header'), 'Interface automation','Check for phrase in header element');
 ```
@@ -263,7 +266,7 @@ tagui_sikuli.in|interface in-file for Sikuli integration
 tagui_sikuli.out|interface out-file for Sikuli integration
 
 # Be a Force for Good
-TagUI code is intentionally made honest and not hiding identity as an automated user
+TagUI default config does not hide identity as an automated user
 
 # License
 TagUI is open-source software released under the MIT license
