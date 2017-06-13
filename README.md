@@ -147,7 +147,7 @@ Tip - in general to use variables, '+variable+' can be used where text is expect
 ### CONDITIONS EXAMPLES
 - Conditions can be expressed in natural language (optional brackets) or [JavaScript](https://www.w3schools.com/js/)
 - Write text in quotation marks (either " or ' works) to differentiate from variable names
-- Conditions if / for / while apply to the next step and async wait auto-disables in loops
+- Conditions if / for / while apply to next step and async wait auto-disables in while loop
 
 Condition (in natural language)|JavaScript
 :------------------------------|:---------
