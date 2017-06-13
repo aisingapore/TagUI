@@ -76,6 +76,7 @@ Option|Purpose
 :----:|:------
 firefox|run on visible Firefox web browser instead of invisible browser (first install [Firefox](https://www.mozilla.org/en-US/firefox/new/))
 report|generate a web report for easy sharing of run results (default is only a text log file)
+upload|upload automation flow and result to [hastebin.com](https://hastebin.com) (expires 30 days after last view)
 debug|show run-time backend messages from PhantomJS for detailed tracing and logging
 quiet|run without output except for explicit output (echo / show / check / api / errors etc)
 test|professional testing using [CasperJS assertions](http://docs.casperjs.org/en/latest/modules/tester.html) (TagUI dynamic tx('selector') usable)
@@ -106,7 +107,7 @@ Flow Sample |Purpose
 5_repositories|shows using repositories on Russian social media site VK.com
 6_datatables|set of flows uses datatables to retrieve and act on GitHub info
 7_testing|shows how to use check step and CasperJS test assertions
-8_hastebin|shows uploading of automation flow result to hastebin.com
+8_hastebin|used by upload option to upload flow result to hastebin.com
 
 # Cheat Sheet
 ### AUTOMATION WORKFLOW
@@ -136,8 +137,8 @@ receive|url keyword to watch ***to*** filename to save|receive resource to file
 wait|optional time in seconds (default is 5 seconds)|explicitly wait for some time
 live|try steps or code interactively in invisible browser|enter live mode ([firefox pending](https://github.com/laurentj/slimerjs/issues/188))
 check|condition **&#124;** text if true **&#124;** text if false (text in quotes)|check condition and print result
-frame|frame name **&#124;** subframe name if any|run next step in frame/subframe
-popup|url keyword of popup window to look for|run next step in popup window
+frame|frame name **&#124;** subframe name if any|next step or block in frame/subframe
+popup|url keyword of popup window to look for|next step or block in popup window
 dom|javascript code for document object model|run code in dom context
 api|full url (including parameters) of api call|call api and print response
 { and }|use { to start block and } to end block|define step/code block
