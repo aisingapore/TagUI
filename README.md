@@ -41,6 +41,8 @@ This is a full-feature and free open-source tool, so there's nothing to upgrade 
 # Set Up
 TagUI is in v1.5 and runs on macOS, Linux, Windows ([link to release notes](https://github.com/tebelorg/TagUI/releases))
 
+~ ***TagUI readme and packages are in process of being updated to v1.8*** ~
+
 ### PACKAGED INSTALLATION
 Easiest way to use TagUI - no setup is needed, all dependencies are packaged in
 
