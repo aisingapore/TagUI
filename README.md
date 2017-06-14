@@ -101,6 +101,8 @@ Download from [Chrome Web Store](https://chrome.google.com/webstore/detail/tagui
 ### VISUAL AUTOMATION
 TagUI has built-in integration with [Sikuli (base on OpenCV)](http://sikulix.com) to allow identifying web elements and desktop user interface elements for interaction. Steps that support visual automation are tap / click, hover / move, type / enter, select / choose. Simply specify an image filename (.png or .bmp format) of what to look for visually, in place of the element identifier, to use visual automation along your usual automation steps. Sikuli is excluded from TagUI packaged installation due to complex dependencies that are handled by its installer. To setup, [install Sikuli](http://sikulix.com/quickstart/) (choose Option 1) to tagui/src/tagui.sikuli folder.
 
+![Sample Visual Automation](https://raw.githubusercontent.com/tebelorg/Tump/master/visual_flow.gif)
+
 ### FLOW SAMPLES
 Following automation flow samples ([tagui/src/samples folder](https://github.com/tebelorg/TagUI/tree/master/src/samples)) are included as part of this repository
 
