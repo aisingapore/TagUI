@@ -130,7 +130,7 @@ Step|Parameters (separator in bold)|Purpose
 :---|:-----------------------------|:------
 tap / click|element to click|click on an element
 hover / move|element to hover|move cursor to element
-type / enter|element to type ***as*** text to type |enter element as text
+type / enter|element to type ***as*** text to type ([enter] = enter key)|enter element as text
 select / choose|element to select ***as*** option value to select|choose dropdown option
 read / fetch|element to read (page = webpage) ***to*** variable name|fetch element text to variable
 show / print|element to read (page = webpage, ie raw html) |print element text to output
