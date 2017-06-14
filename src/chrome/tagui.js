@@ -276,7 +276,12 @@ CasperRenderer.prototype.getLinkXPath = function(item) {
 //  else if (item.info.title)
 //    way = '@title=' + '"' + this.pyrepr(item.info.title) + '"';
   else if (item.text)
-    way = 'text()=' + '"' + this.cleanStringForXpath(item.text, true) + '"';
+    {
+    if (item.text.indexOf('[whitespace]')==-1) // return normally if no beginning or ending whitespace
+      way = 'text()=' + '"' + this.cleanStringForXpath(item.text, true) + '"';
+    else // otherwise return using contains keyword in order to match the element via text comparison
+      way = 'contains(text(),' + '"' + this.cleanStringForXpath(item.text.replace(/\[whitespace\]/g,''), true) + '")';
+    }
   else if (item.info.href)
     way = '@href=' + '"' + this.pyrepr(item.info.href) + '"';
   return way;
@@ -338,7 +343,9 @@ CasperRenderer.prototype.mousedrag = function(item) {
 }
 
 CasperRenderer.prototype.keypress = function(item) {
-  var text = item.text.replace('\n','').replace('\r', '\\r');
+//  var text = item.text.replace('\n','').replace('\r', '\\r');
+//  change above to [enter] to handle typing of enter key
+  var text = item.text.replace('\r\n','[enter]').replace('\r', '[enter]').replace('\n', '[enter]');
   var selector; selector = this.getControl(item);
   if (selector.charAt(0) == '#') {selector = selector.substring(1);}
   this.stmt('enter ' + selector + ' as ' + text);

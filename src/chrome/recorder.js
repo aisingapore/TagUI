@@ -1191,8 +1191,10 @@ TestRecorder.Recorder.prototype.onkeypress = function(e) {
     return true;
 }
 
-TestRecorder.Recorder.prototype.strip = function(s) { 
-    return s.replace('\n', ' ').replace(/^\s*/, "").replace(/\s*$/, "");
+TestRecorder.Recorder.prototype.strip = function(s) {
+//    return s.replace('\n', ' ').replace(/^\s*/, "").replace(/\s*$/, "");
+//  change code to replace with [whitespace] as it will break element text match if simply strip
+    return s.replace(/^\s+/, "[whitespace]").replace(/\s+$/, "[whitespace]");
 }
 
 TestRecorder.Recorder.prototype.log = function(text) {
