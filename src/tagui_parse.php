@@ -268,8 +268,14 @@ if (is_sikuli($param1) and $param2 != "") {
 $abs_param1 = abs_file($param1); $abs_intent = str_replace($param1,$abs_param1,$raw_intent);
 return call_sikuli($abs_intent,$abs_param1);} // use sikuli visual automation as needed
 if (($param1 == "") or ($param2 == "")) 
-echo "ERROR - " . current_line() . " target/text missing for " . $raw_intent . "\n"; else 
-return "{techo('".$raw_intent."');".beg_tx($param1)."this.sendKeys(tx('".$param1."'),'".$param2."');".end_tx($param1);}
+echo "ERROR - " . current_line() . " target/text missing for " . $raw_intent . "\n";
+else if (strpos($param2,"[enter]")===false)
+return "{techo('".$raw_intent."');".beg_tx($param1)."this.sendKeys(tx('".$param1."'),'".$param2."');".end_tx($param1);
+else // special handling to send enter key events
+{$param2 = str_replace("[enter]","',{keepFocus: true});\n" .
+"this.sendKeys(tx('".$param1."'),casper.page.event.key.Enter,{keepFocus: true});\n" .
+"this.sendKeys(tx('".$param1."'),'",$param2); return "{techo('".$raw_intent."');".beg_tx($param1) .
+"this.sendKeys(tx('".$param1."'),'".$param2."',{keepFocus: true});".end_tx($param1);}}
 
 function select_intent($raw_intent) {
 $params = trim(substr($raw_intent." ",1+strpos($raw_intent." "," ")));

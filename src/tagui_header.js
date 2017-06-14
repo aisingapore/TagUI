@@ -259,7 +259,11 @@ if (is_sikuli(param1) && param2 !== '') {
 var abs_param1 = abs_file(param1); var abs_intent = raw_intent.replace(param1,abs_param1);
 return call_sikuli(abs_intent,abs_param1);} // use sikuli visual automation as needed
 if ((param1 == '') || (param2 == '')) return "this.echo('ERROR - target/text missing for " + raw_intent + "')";
-else if (check_tx(param1)) return "this.sendKeys(tx('" + param1 + "'),'" + param2 + "')";
+else if (check_tx(param1)) 
+{if (param2.indexOf('[enter]') == -1) return "this.sendKeys(tx('" + param1 + "'),'" + param2 + "')";
+else // special handling to send enter key events
+{param2 = param2.replace(/\[enter\]/g,"',{keepFocus: true}); this.sendKeys(tx('" + param1 + "'),casper.page.event.key.Enter,{keepFocus: true}); this.sendKeys(tx('" + param1 + "'),'");
+return "this.sendKeys(tx('" + param1 + "'),'" + param2 + "',{keepFocus: true});";}}
 else return "this.echo('ERROR - cannot find " + param1 + "')";}
 
 function select_intent(raw_intent) {
