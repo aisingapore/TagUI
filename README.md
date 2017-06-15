@@ -64,7 +64,7 @@ If you prefer to download dependencies manually from respective websites
 4. TagUI (general purpose web automation tool) - https://git.io/vMCTZ
 5. PHP (only required for manual Windows setup) - http://windows.php.net
 
-Tip - recommend extracting TagUI package to a folder without spaces (some dependencies have issue with that). for manual Windows setup, 1. set SLIMERJS_EXECUTABLE environment variable to point to slimerjs.bat, 2. place [GNU utilities](http://unxutils.sourceforge.net) (gawk/tee/sort/head/tail), [curl ssl](https://curl.haxx.se) in tagui\src\unx folder, 3. add phantomjs\bin, casperjs\bin, php folders to path
+Tip - recommend extracting TagUI package to a folder path without spaces (some dependencies have issue with that). for manual Windows setup, 1. set SLIMERJS_EXECUTABLE environment variable to point to slimerjs.bat, 2. place [GNU utilities](http://unxutils.sourceforge.net) (gawk/tee/sort/head/tail), [curl ssl](https://curl.haxx.se) in tagui\src\unx folder, 3. add phantomjs\bin, casperjs\bin, php folders to path
 
 # To Use
 ### COMMAND LINE
