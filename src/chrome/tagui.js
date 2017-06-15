@@ -281,9 +281,11 @@ CasperRenderer.prototype.getLinkXPath = function(item) {
       way = 'text()=' + '"' + this.cleanStringForXpath(item.text, true) + '"';
     else // otherwise return using contains keyword in order to match the element via text comparison
       way = 'contains(text(),' + '"' + this.cleanStringForXpath(item.text.replace(/\[whitespace\]/g,''), true) + '")';
+    if (item.info.href)
+      way += ' or @href=' + '"' + this.pyrepr(this.shortUrl(item.info.href)) + '"';
     }
   else if (item.info.href)
-    way = '@href=' + '"' + this.pyrepr(item.info.href) + '"';
+    way = '@href=' + '"' + this.pyrepr(this.shortUrl(item.info.href)) + '"';
   return way;
 }
 
