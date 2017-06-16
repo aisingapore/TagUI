@@ -5,10 +5,11 @@ rem enable windows for loop advanced flow control
 setlocal enableextensions enabledelayedexpansion
 
 if "%~1"=="" (
-echo tagui v1.5: use following syntax and below options to run - tagui flow_filename option^(s^)
+echo tagui v1.8: use following syntax and below options to run - tagui flow_filename option^(s^)
 echo.
 echo firefox - run on visible Firefox web browser instead of invisible browser ^(first install Firefox^)
 echo report - generate a web report for easy sharing of run results ^(default is only a text log file^)
+echo upload - upload automation flow and result to hastebin.com ^(expires 30 days after last view^)
 echo debug - show run-time backend messages from PhantomJS for detailed tracing and logging
 echo quiet - run without output except for explicit output ^(echo / show / check / api / errors etc^)
 echo test - professional testing using CasperJS assertions ^(TagUI dynamic tx^('selector'^) usable^)
@@ -212,6 +213,41 @@ if "%arg9%"=="report" (
 	set tagui_html_report=true
 )
 
+set tagui_upload_result=false
+rem check upload parameter to upload flow result to online storage
+if "%arg2%"=="upload" (
+	set arg2=
+	set tagui_upload_result=true
+)
+if "%arg3%"=="upload" (
+	set arg3=
+	set tagui_upload_result=true
+)
+if "%arg4%"=="upload" (
+	set arg4=
+	set tagui_upload_result=true
+)
+if "%arg5%"=="upload" (
+	set arg5=
+	set tagui_upload_result=true
+)
+if "%arg6%"=="upload" (
+	set arg6=
+	set tagui_upload_result=true
+)
+if "%arg7%"=="upload" (
+	set arg7=
+	set tagui_upload_result=true
+)
+if "%arg8%"=="upload" (
+	set arg8=
+	set tagui_upload_result=true
+)
+if "%arg9%"=="upload" (
+	set arg9=
+	set tagui_upload_result=true
+)
+
 rem concatenate parameters in order to fix issue when calling casperjs test
 rem $1 left out - filenames with spaces have issue when casperjs $params
 set params=%arg2% %arg3% %arg4% %arg5% %arg6% %arg7% %arg8% %arg9%
@@ -226,6 +262,10 @@ if exist "%flow_file%" (
 	find /i /c "api http" "%flow_file%" > nul
 	if not errorlevel 1 set api= --web-security=false
 )
+
+rem delete sikuli visual automation integration files if they exist
+if exist "tagui.sikuli\tagui_sikuli.in" del "tagui.sikuli\tagui_sikuli.in" 
+if exist "tagui.sikuli\tagui_sikuli.out" del "tagui.sikuli\tagui_sikuli.out"
 
 rem check datatable csv file for batch automation
 set tagui_data_set_size=1 
@@ -260,12 +300,15 @@ if !file_size! gtr 0 (
 	)
 )
 
+if exist "tagui.sikuli\tagui_sikuli.in" start /b tagui.sikuli\runsikulix -r tagui.sikuli > tagui.sikuli\tagui.log
+
 if %tagui_test_mode%==false (
 	casperjs "%flow_file%.js" %params%%api% | tee -a "%flow_file%.log"
 ) else (
 	casperjs test "%flow_file%.js" %params%%api% --xunit="%flow_file%.xml" | tee -a "%flow_file%.log"
 )
 
+echo finish > tagui.sikuli\tagui_sikuli.in
 )
 :break_for_loop
 
@@ -281,6 +324,15 @@ if %file_size% gtr 0 if %tagui_html_report%==true (
 	php -q tagui_report.php "%flow_file%"
 	gawk "sub(\"$\", \"\")" "%flow_file%.html" > "%flow_file%.html.tmp"
 	move "%flow_file%.html.tmp" "%flow_file%.html" > nul
+)
+
+rem check upload option to upload result to hastebin.com
+for /f "usebackq" %%f in ('%flow_file%.log') do set file_size=%%~zf
+if %file_size% gtr 0 if %tagui_upload_result%==true (
+rem set flow_file to blank or the variable will break that tagui call
+	set "tmp_flow_file=%flow_file%"
+	set flow_file=
+	tagui samples\8_hastebin quiet "!tmp_flow_file!"
 )
 
 rem change back to initial directory where tagui is called
