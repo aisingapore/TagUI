@@ -252,12 +252,17 @@ CasperRenderer.prototype.getControl = function(item) {
   var type = item.info.type;
   var tag = item.info.tagName.toLowerCase();
   var selector;
-  if ((type == "submit" || type == "button") && item.info.value)
-  //  selector = tag+'[type='+type+'][value='+this.pyrepr(this.normalizeWhitespace(item.info.value))+']';
-    selector = this.pyrepr(item.info.value);
-  else if (item.info.id)
+  if (item.info.id)
   //  selector = tag+'#'+item.info.id;
     selector = this.pyrepr(item.info.id);
+  else if ((type == "submit" || type == "button") && item.info.value)
+  {
+  //  selector = tag+'[type='+type+'][value='+this.pyrepr(this.normalizeWhitespace(item.info.value))+']';
+    if (item.info.name)
+      selector = '//*[@value="' + this.pyrepr(item.info.value) + '" or @name="' + this.pyrepr(item.info.name) + '"]';
+    else
+      selector = '//*[@value="' + this.pyrepr(item.info.value) + '"]';
+  }
   else if (item.info.name)
   //  selector = tag+'[name='+this.pyrepr(item.info.name)+']';
     selector = this.pyrepr(item.info.name);
@@ -276,16 +281,16 @@ CasperRenderer.prototype.getLinkXPath = function(item) {
 //  else if (item.info.title)
 //    way = '@title=' + '"' + this.pyrepr(item.info.title) + '"';
   else if (item.text)
-    {
-    if (item.text.indexOf('[whitespace]')==-1) // return normally if no beginning or ending whitespace
+  {
+    if (item.text.indexOf('[whitespace]')==-1) // return normally if not beginning / ending whitespace
       way = 'text()=' + '"' + this.cleanStringForXpath(item.text, true) + '"';
     else // otherwise return using contains keyword in order to match the element via text comparison
       way = 'contains(text(),' + '"' + this.cleanStringForXpath(item.text.replace(/\[whitespace\]/g,''), true) + '")';
     if (item.info.href)
-      way += ' or @href=' + '"' + this.pyrepr(this.shortUrl(item.info.href)) + '"';
-    }
+      way += ' or contains("' + this.pyrepr(item.info.href) + '",@href)';
+  }
   else if (item.info.href)
-    way = '@href=' + '"' + this.pyrepr(this.shortUrl(item.info.href)) + '"';
+    way = 'contains("' + this.pyrepr(item.info.href) + '",@href)';
   return way;
 }
 
@@ -347,14 +352,14 @@ CasperRenderer.prototype.mousedrag = function(item) {
 CasperRenderer.prototype.keypress = function(item) {
 //  var text = item.text.replace('\n','').replace('\r', '\\r');
 //  change above to [enter] to handle typing of enter key
-  var text = item.text.replace('\r\n','[enter]').replace('\r', '[enter]').replace('\n', '[enter]');
+  var text = item.text.replace(/\r\n/g,'[enter]').replace(/\r/g, '[enter]').replace(/\n/g, '[enter]');
   var selector; selector = this.getControl(item);
   if (selector.charAt(0) == '#') {selector = selector.substring(1);}
   this.stmt('enter ' + selector + ' as ' + text);
 }
 
 CasperRenderer.prototype.submit = function(item) {
-  // the submit has been called somehow (user, or script) so no need to trigger it
+  // the submit has been called somehow (user, script) so no need to trigger it
 }
 
 CasperRenderer.prototype.screenShot = function(item) {
