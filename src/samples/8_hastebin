@@ -3,6 +3,12 @@ https://hastebin.com
 // url expires 30 days after last view date
 // to use - tagui hastebin flow_filename
 
+// join input filename with spaces (input parameters p1, p2 etc..)
+// use js step to prevent natural language processing of if condition
+// otherwise statement should be entered on the next line after condition 
+js if (p2) p1 = p1 + ' ' + p2; if (p3) p1 = p1 + ' ' + p3; if (p4) p1 = p1 + ' ' + p4;
+js if (p5) p1 = p1 + ' ' + p5; if (p6) p1 = p1 + ' ' + p6; // done for readability
+
 // combine flow and log from input filename
 var fs = require('fs');
 flow_data = fs.read(abs_file(p1));
