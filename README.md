@@ -42,9 +42,7 @@ If you know JavaScript coding and want to be more expressive, you can even use J
 In addition to these features, there is automatic waiting for web elements to appear + error-checking + nesting of CasperJS code blocks. TagUI also supports visual automation of website and desktop through built-in integration with Sikuli. Instead of using element identifiers, images can be used to identify user interface elements to interact with.
 
 # Set Up
-TagUI is in v1.5 and runs on macOS, Linux, Windows ([link to release notes](https://github.com/tebelorg/TagUI/releases))
-
-~ ***TagUI readme and packages are in process of being updated to v1.8*** ~
+TagUI is in v1.8 and runs on macOS, Linux, Windows ([link to release notes](https://github.com/tebelorg/TagUI/releases))
 
 ### PACKAGED INSTALLATION
 Easiest way to use TagUI - no setup is needed, all dependencies are packaged in
