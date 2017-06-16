@@ -300,7 +300,7 @@ if !file_size! gtr 0 (
 	)
 )
 
-if exist "tagui.sikuli\tagui_sikuli.in" start /b tagui.sikuli\runsikulix -r tagui.sikuli > tagui.sikuli\tagui.log
+if exist "tagui.sikuli\tagui_sikuli.in" start /min cmd /c tagui.sikuli\runsikulix -r tagui.sikuli ^> tagui.sikuli\tagui.log
 
 if %tagui_test_mode%==false (
 	casperjs "%flow_file%.js" %params%%api% | tee -a "%flow_file%.log"
