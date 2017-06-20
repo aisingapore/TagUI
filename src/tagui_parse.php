@@ -22,6 +22,9 @@ while (!feof($repo_file)) {$repo_data[$repo_count] = fgetcsv($repo_file);
 if (count($repo_data[$repo_count]) == 0) die("ERROR - empty row found in " . $script . '.csv' . "\n");
 $repo_count++;} fclose($repo_file); $repo_count-=2;} //-1 for header, -1 for EOF
 
+$tagui_web_browser = "this"; // set the web browser to be used base on tagui_web_browser environment variable
+if ((getenv('tagui_web_browser')=='headless') or (getenv('tagui_web_browser')=='chrome')) $tagui_web_browser = "chrome";
+
 $inside_code_block = 0; // track if step or code is inside user-defined code block
 $inside_while_loop = 0; // track if step is in while loop and avoid async wait
 $inside_frame = 0; $inside_popup = 0; // track html frame and popup step
@@ -247,21 +250,21 @@ if ($GLOBALS['line_number'] == 1) {$GLOBALS['url_provided'] = true; return "casp
 else return "});casper.thenOpen('".$raw_intent."', function() {\ntecho('".
 $raw_intent."' + ' - ' + this.getTitle());});\n\ncasper.then(function() {\n";}
 
-function tap_intent($raw_intent) {
+function tap_intent($raw_intent) {$twb = $GLOBALS['tagui_web_browser'];
 $params = trim(substr($raw_intent." ",1+strpos($raw_intent." "," "))); 
 if (is_sikuli($params)) {$abs_params = abs_file($params); $abs_intent = str_replace($params,$abs_params,$raw_intent);
 return call_sikuli($abs_intent,$abs_params);} // use sikuli visual automation as needed
 if ($params == "") echo "ERROR - " . current_line() . " target missing for " . $raw_intent . "\n"; else
-return "{techo('".$raw_intent."');".beg_tx($params)."this.click(tx('" . $params . "'));".end_tx($params);}
+return "{techo('".$raw_intent."');".beg_tx($params).$twb.".click(tx('" . $params . "'));".end_tx($params);}
 
-function hover_intent($raw_intent) {
+function hover_intent($raw_intent) {$twb = $GLOBALS['tagui_web_browser'];
 $params = trim(substr($raw_intent." ",1+strpos($raw_intent." "," "))); 
 if (is_sikuli($params)) {$abs_params = abs_file($params); $abs_intent = str_replace($params,$abs_params,$raw_intent);
 return call_sikuli($abs_intent,$abs_params);} // use sikuli visual automation as needed
 if ($params == "") echo "ERROR - " . current_line() . " target missing for " . $raw_intent . "\n"; else
-return "{techo('".$raw_intent."');".beg_tx($params)."this.mouse.move(tx('" . $params . "'));".end_tx($params);}
+return "{techo('".$raw_intent."');".beg_tx($params).$twb.".mouse.move(tx('" . $params . "'));".end_tx($params);}
 
-function type_intent($raw_intent) {
+function type_intent($raw_intent) {$twb = $GLOBALS['tagui_web_browser'];
 $params = trim(substr($raw_intent." ",1+strpos($raw_intent." "," ")));
 $param1 = trim(substr($params,0,strpos($params," as "))); $param2 = trim(substr($params,4+strpos($params," as ")));
 if (is_sikuli($param1) and $param2 != "") {
@@ -270,14 +273,14 @@ return call_sikuli($abs_intent,$abs_param1);} // use sikuli visual automation as
 if (($param1 == "") or ($param2 == "")) 
 echo "ERROR - " . current_line() . " target/text missing for " . $raw_intent . "\n";
 else if (strpos($param2,"[enter]")===false)
-return "{techo('".$raw_intent."');".beg_tx($param1)."this.sendKeys(tx('".$param1."'),'".$param2."');".end_tx($param1);
+return "{techo('".$raw_intent."');".beg_tx($param1).$twb.".sendKeys(tx('".$param1."'),'".$param2."');".end_tx($param1);
 else // special handling to send enter key events
 {$param2 = str_replace("[enter]","',{keepFocus: true});\n" .
-"this.sendKeys(tx('".$param1."'),casper.page.event.key.Enter,{keepFocus: true});\n" .
-"this.sendKeys(tx('".$param1."'),'",$param2); return "{techo('".$raw_intent."');".beg_tx($param1) .
-"this.sendKeys(tx('".$param1."'),'".$param2."',{keepFocus: true});".end_tx($param1);}}
+$twb.".sendKeys(tx('".$param1."'),casper.page.event.key.Enter,{keepFocus: true});\n" .
+$twb.".sendKeys(tx('".$param1."'),'",$param2); return "{techo('".$raw_intent."');".beg_tx($param1) .
+$twb.".sendKeys(tx('".$param1."'),'".$param2."',{keepFocus: true});".end_tx($param1);}}
 
-function select_intent($raw_intent) {
+function select_intent($raw_intent) {$twb = $GLOBALS['tagui_web_browser'];
 $params = trim(substr($raw_intent." ",1+strpos($raw_intent." "," ")));
 $param1 = trim(substr($params,0,strpos($params," as "))); $param2 = trim(substr($params,4+strpos($params," as ")));
 if (is_sikuli($param1) and is_sikuli($param2)) {
@@ -289,57 +292,57 @@ echo "ERROR - " . current_line() . " target/option missing for " . $raw_intent .
 return "{techo('".$raw_intent."');".beg_tx($param1)."var select_locator = tx('".$param1."');\n".
 "if (is_xpath_selector(select_locator.toString().replace('xpath selector: ','')))\n".
 "select_locator = select_locator.toString().substring(16);\n".
-"this.selectOptionByValue(select_locator,'".$param2."');".end_tx($param1);}
+$twb.".selectOptionByValue(select_locator,'".$param2."');".end_tx($param1);}
 
-function read_intent($raw_intent) {
+function read_intent($raw_intent) {$twb = $GLOBALS['tagui_web_browser'];
 $params = trim(substr($raw_intent." ",1+strpos($raw_intent." "," ")));
 $param1 = trim(substr($params,0,strpos($params," to "))); $param2 = trim(substr($params,4+strpos($params," to ")));
 if ((strtolower($param1) == "page") and ($param2 != ""))
-return "{techo('".$raw_intent."');\n".$param2." = this.getHTML();}".end_fi()."\n";
+return "{techo('".$raw_intent."');\n".$param2." = ".$twb.".getHTML();}".end_fi()."\n";
 if (($param1 == "") or ($param2 == "")) 
 echo "ERROR - " . current_line() . " target/variable missing for " . $raw_intent . "\n"; else
-return "{techo('".$raw_intent."');".beg_tx($param1).$param2." = this.fetchText(tx('".$param1."')).trim();".end_tx($param1);}
+return "{techo('".$raw_intent."');".beg_tx($param1).$param2." = ".$twb.".fetchText(tx('".$param1."')).trim();".end_tx($param1);}
 
-function show_intent($raw_intent) {
+function show_intent($raw_intent) {$twb = $GLOBALS['tagui_web_browser'];
 $params = trim(substr($raw_intent." ",1+strpos($raw_intent." "," ")));
-if (strtolower($params) == "page") return "this.echo('".$raw_intent."' + ' - ' + '\\n' + this.getHTML());".end_fi()."\n";
+if (strtolower($params) == "page") return "this.echo('".$raw_intent."' + ' - \\n' + ".$twb.".getHTML());".end_fi()."\n";
 if ($params == "") echo "ERROR - " . current_line() . " target missing for " . $raw_intent . "\n"; else
 return "{// nothing to do on this line".beg_tx($params).
-"this.echo('".$raw_intent."' + ' - ' + this.fetchText(tx('" . $params . "')).trim());".end_tx($params);}
+"this.echo('".$raw_intent."' + ' - ' + ".$twb.".fetchText(tx('" . $params . "')).trim());".end_tx($params);}
 
-function down_intent($raw_intent) {
+function down_intent($raw_intent) {$twb = $GLOBALS['tagui_web_browser'];
 $params = trim(substr($raw_intent." ",1+strpos($raw_intent." "," ")));
 $param1 = trim(substr($params,0,strpos($params," to "))); $param2 = trim(substr($params,4+strpos($params," to ")));
 if (($param1 == "") or ($param2 == "")) 
 echo "ERROR - " . current_line() . " url/filename missing for " . $raw_intent . "\n"; else
-return "{techo('".$raw_intent."');\nthis.download('".$param1."','".abs_file($param2)."');}".end_fi()."\n";}
+return "{techo('".$raw_intent."');\n".$twb.".download('".$param1."','".abs_file($param2)."');}".end_fi()."\n";}
 
-function receive_intent($raw_intent) {
+function receive_intent($raw_intent) {$twb = $GLOBALS['tagui_web_browser'];
 $params = trim(substr($raw_intent." ",1+strpos($raw_intent." "," ")));
 $param1 = trim(substr($params,0,strpos($params," to "))); $param2 = trim(substr($params,4+strpos($params," to ")));
 if (($param1 == "") or ($param2 == "")) 
 echo "ERROR - " . current_line() . " keyword/filename missing for " . $raw_intent . "\n"; else
 return "{techo('".$raw_intent."');\n".
 "casper.on('resource.received', function(resource) {if (resource.stage !== 'end') return;\n".
-"if (resource.url.indexOf('".$param1."') > -1) this.download(resource.url, '".abs_file($param2)."');});}".end_fi()."\n";}
+"if (resource.url.indexOf('".$param1."') > -1) ".$twb.".download(resource.url, '".abs_file($param2)."');});}".end_fi()."\n";}
 
 function echo_intent($raw_intent) {
 $params = trim(substr($raw_intent." ",1+strpos($raw_intent." "," ")));
 if ($params == "") echo "ERROR - " . current_line() . " text missing for " . $raw_intent . "\n"; else 
 return "this.echo(".add_concat($params).");".end_fi()."\n";}
 
-function save_intent($raw_intent) {
+function save_intent($raw_intent) {$twb = $GLOBALS['tagui_web_browser'];
 $params = trim(substr($raw_intent." ",1+strpos($raw_intent." "," ")));
 $param1 = trim(substr($params,0,strpos($params," to "))); $param2 = trim(substr($params,4+strpos($params," to ")));
 if ((strtolower($params) == "page") or (strtolower($param1) == "page")) {if (strpos($params," to ")!==false)
-return "{techo('".$raw_intent."');\nsave_text('".abs_file($param2)."',this.getHTML());}".end_fi()."\n";
-else return "{techo('".$raw_intent."');\nsave_text('',this.getHTML());}".end_fi()."\n";}
+return "{techo('".$raw_intent."');\nsave_text('".abs_file($param2)."',".$twb.".getHTML());}".end_fi()."\n";
+else return "{techo('".$raw_intent."');\nsave_text('',".$twb.".getHTML());}".end_fi()."\n";}
 if ($params == "") echo "ERROR - " . current_line() . " target missing for " . $raw_intent . "\n"; 
 else if (strpos($params," to ")!==false)
 return "{techo('".$raw_intent."');".beg_tx($param1).
-	"save_text('".abs_file($param2)."',this.fetchText(tx('".$param1."')).trim());".end_tx($param1); else
+	"save_text('".abs_file($param2)."',".$twb.".fetchText(tx('".$param1."')).trim());".end_tx($param1); else
 return "{techo('".$raw_intent."');".beg_tx($params).
-	"save_text('',this.fetchText(tx('" . $params . "')).trim());".end_tx($params);}
+	"save_text('',".$twb.".fetchText(tx('" . $params . "')).trim());".end_tx($params);}
 
 function dump_intent($raw_intent) {
 $raw_intent = str_replace("'","\"",$raw_intent); // avoid breaking echo below when single quote is used
@@ -350,18 +353,18 @@ else if (strpos($params," to ")!==false)
 return "{techo('".$raw_intent."');\nsave_text('".abs_file($param2)."',".add_concat($param1).");}".end_fi()."\n";
 else return "{techo('".$raw_intent."');\nsave_text(''," . add_concat($params) . ");}".end_fi()."\n";}
 
-function snap_intent($raw_intent) {
+function snap_intent($raw_intent) {$twb = $GLOBALS['tagui_web_browser'];
 $params = trim(substr($raw_intent." ",1+strpos($raw_intent." "," ")));
 $param1 = trim(substr($params,0,strpos($params," to "))); $param2 = trim(substr($params,4+strpos($params," to ")));
 if ((strtolower($params) == "page") or (strtolower($param1) == "page")) {if (strpos($params," to ")!==false)
-return "{techo('".$raw_intent."');\nthis.capture('".abs_file($param2)."');}".end_fi()."\n";
-else return "{techo('".$raw_intent."');\nthis.capture(snap_image());}".end_fi()."\n";}
+return "{techo('".$raw_intent."');\n".$twb.".capture('".abs_file($param2)."');}".end_fi()."\n";
+else return "{techo('".$raw_intent."');\n".$twb.".capture(snap_image());}".end_fi()."\n";}
 if ($params == "") echo "ERROR - " . current_line() . " target missing for " . $raw_intent . "\n"; 
 else if (strpos($params," to ")!==false)
 return "{techo('".$raw_intent."');".beg_tx($param1).
-	"this.captureSelector('".abs_file($param2)."',tx('".$param1."'));".end_tx($param1); else
+	$twb.".captureSelector('".abs_file($param2)."',tx('".$param1."'));".end_tx($param1); else
 return "{techo('".$raw_intent."');".beg_tx($params).
-	"this.captureSelector(snap_image(),tx('".$params."'));".end_tx($params);}
+	$twb.".captureSelector(snap_image(),tx('".$params."'));".end_tx($params);}
 
 function wait_intent($raw_intent) { // wait is a new block, invalid to use after frame, thus skip end_fi()
 $params = trim(substr($raw_intent." ",1+strpos($raw_intent." "," "))); if ($params == "") $params = "5"; 
@@ -418,10 +421,10 @@ if ($params == "") echo "ERROR - " . current_line() . " API URL missing for " . 
 return "{techo('".$raw_intent."');\napi_result = call_api('".$params."');\nthis.echo(api_result); " . 
 "try {api_json = JSON.parse(api_result);} catch(e) {api_json = JSON.parse('null');}}".end_fi()."\n";}
 
-function dom_intent($raw_intent) {
+function dom_intent($raw_intent) {$twb = $GLOBALS['tagui_web_browser'];
 $params = trim(substr($raw_intent." ",1+strpos($raw_intent." "," ")));
 if ($params == "") echo "ERROR - " . current_line() . " statement missing for " . $raw_intent . "\n";
-else return "this.evaluate(function() {".$params."});".end_fi()."\n";}
+else return $twb.".evaluate(function() {".$params."});".end_fi()."\n";}
 
 function js_intent($raw_intent) {
 $params = trim(substr($raw_intent." ",1+strpos($raw_intent." "," ")));
