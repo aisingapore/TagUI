@@ -150,6 +150,7 @@ popup|url keyword of popup window to look for|next step or block in popup window
 dom|javascript code for document object model|run code in dom context
 api|full url (including parameters) of api call|call api and print response
 { and }|use { to start block and } to end block|define step/code block
+js|JavaScript statements (skip auto-detection)|treat as JS code explicitly
 //|user comments (ignored during execution)|add user comments
 
 Tip - in general to use variables, '+variable+' can be used where text is expected. xpath is an expressive way to identify web elements. if you know xpath and are using xpath for element identifier, use double quotes for text //\*[@title="Login"]
@@ -242,7 +243,7 @@ test.assertSelectorHasText(tx('header'), 'Interface automation','Check for phras
 
 For the list of 30+ expressive test assertions built into CasperJS, [click here](http://docs.casperjs.org/en/latest/modules/tester.html). To know more about CasperJS testing framework, [click here](http://docs.casperjs.org/en/latest/testing.html). As TagUI allows you to write JavaScript code directly within the automation flow, advanced testing or coding techniques that can be implemented in CasperJS should work directly within your flow.
 
-TagUI recognizes most JavaScript code. In the rare event you get an error saying that it cannot understand the step for your JavaScript line, kindly raise an issue or modify the source code (tagui_parse.php is where interpretation of natural language to CasperJS JavaScript code takes place). Alternatively, you can use the undocumented step js to explicitly declare that whatever follows on that line is JavaScript code.
+TagUI recognizes most JavaScript code automatically. In the rare event you get an error saying that it cannot understand the step for your JavaScript line, kindly raise an issue or modify the source code (tagui_parse.php is where interpretation of natural language to CasperJS JavaScript code takes place). Alternatively, you can use step js to explicitly declare that whatever follows on that line is JavaScript code and ensure that the line is not treated as a TagUI step.
 
 ### FILES
 Filename |Purpose
