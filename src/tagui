@@ -56,15 +56,41 @@ if [ -f "$(pwd)/casperjs/bin/casperjs" ]; then CASPERJS_EXECUTABLE="$(pwd)/caspe
 if [ -f "$(pwd)/phantomjs/bin/phantomjs" ]; then export PHANTOMJS_EXECUTABLE="$(pwd)/phantomjs/bin/phantomjs"; fi
 if [ -f "$(pwd)/slimerjs/slimerjs" ]; then export SLIMERJS_EXECUTABLE="$(pwd)/slimerjs/slimerjs"; fi
 
-# check firefox parameter to run on visible firefox browser through slimerjs 
-if [ "$2" = "firefox" ]; then set -- "$1" "--engine=slimerjs" "${@:3}"; fi
-if [ "$3" = "firefox" ]; then set -- "${@:1:2}" "--engine=slimerjs" "${@:4}"; fi
-if [ "$4" = "firefox" ]; then set -- "${@:1:3}" "--engine=slimerjs" "${@:5}"; fi
-if [ "$5" = "firefox" ]; then set -- "${@:1:4}" "--engine=slimerjs" "${@:6}"; fi
-if [ "$6" = "firefox" ]; then set -- "${@:1:5}" "--engine=slimerjs" "${@:7}"; fi
-if [ "$7" = "firefox" ]; then set -- "${@:1:6}" "--engine=slimerjs" "${@:8}"; fi
-if [ "$8" = "firefox" ]; then set -- "${@:1:7}" "--engine=slimerjs" "${@:9}"; fi
-if [ "$9" = "firefox" ]; then set -- "${@:1:8}" "--engine=slimerjs"; fi
+# set default web browser to be used to phantomjs
+tagui_web_browser="phantomjs"
+
+# check chrome parameter to run on in-built integration with visible chrome
+if [ "$2" = "chrome" ]; then set -- "$1" "${@:3}"; tagui_web_browser="chrome"; fi
+if [ "$3" = "chrome" ]; then set -- "${@:1:2}" "${@:4}"; tagui_web_browser="chrome"; fi
+if [ "$4" = "chrome" ]; then set -- "${@:1:3}" "${@:5}"; tagui_web_browser="chrome"; fi
+if [ "$5" = "chrome" ]; then set -- "${@:1:4}" "${@:6}"; tagui_web_browser="chrome"; fi
+if [ "$6" = "chrome" ]; then set -- "${@:1:5}" "${@:7}"; tagui_web_browser="chrome"; fi
+if [ "$7" = "chrome" ]; then set -- "${@:1:6}" "${@:8}"; tagui_web_browser="chrome"; fi
+if [ "$8" = "chrome" ]; then set -- "${@:1:7}" "${@:9}"; tagui_web_browser="chrome"; fi
+if [ "$9" = "chrome" ]; then set -- "${@:1:8}"; tagui_web_browser="chrome"; fi
+
+# check headless parameter to run on in-built integration with headless chrome
+if [ "$2" = "headless" ]; then set -- "$1" "${@:3}"; tagui_web_browser="headless"; fi
+if [ "$3" = "headless" ]; then set -- "${@:1:2}" "${@:4}"; tagui_web_browser="headless"; fi
+if [ "$4" = "headless" ]; then set -- "${@:1:3}" "${@:5}"; tagui_web_browser="headless"; fi
+if [ "$5" = "headless" ]; then set -- "${@:1:4}" "${@:6}"; tagui_web_browser="headless"; fi
+if [ "$6" = "headless" ]; then set -- "${@:1:5}" "${@:7}"; tagui_web_browser="headless"; fi
+if [ "$7" = "headless" ]; then set -- "${@:1:6}" "${@:8}"; tagui_web_browser="headless"; fi
+if [ "$8" = "headless" ]; then set -- "${@:1:7}" "${@:9}"; tagui_web_browser="headless"; fi
+if [ "$9" = "headless" ]; then set -- "${@:1:8}"; tagui_web_browser="headless"; fi
+
+# check firefox parameter to run on visible firefox browser through slimerjs
+if [ "$2" = "firefox" ]; then set -- "$1" "--engine=slimerjs" "${@:3}"; tagui_web_browser="firefox"; fi
+if [ "$3" = "firefox" ]; then set -- "${@:1:2}" "--engine=slimerjs" "${@:4}"; tagui_web_browser="firefox"; fi
+if [ "$4" = "firefox" ]; then set -- "${@:1:3}" "--engine=slimerjs" "${@:5}"; tagui_web_browser="firefox"; fi
+if [ "$5" = "firefox" ]; then set -- "${@:1:4}" "--engine=slimerjs" "${@:6}"; tagui_web_browser="firefox"; fi
+if [ "$6" = "firefox" ]; then set -- "${@:1:5}" "--engine=slimerjs" "${@:7}"; tagui_web_browser="firefox"; fi
+if [ "$7" = "firefox" ]; then set -- "${@:1:6}" "--engine=slimerjs" "${@:8}"; tagui_web_browser="firefox"; fi
+if [ "$8" = "firefox" ]; then set -- "${@:1:7}" "--engine=slimerjs" "${@:9}"; tagui_web_browser="firefox"; fi
+if [ "$9" = "firefox" ]; then set -- "${@:1:8}" "--engine=slimerjs"; tagui_web_browser="firefox"; fi
+
+# export web browser variable for use in parsing flow
+export tagui_web_browser=$tagui_web_browser
 
 # check debug parameter to show run-time backend messages from phantomjs
 if [ "$2" = "debug" ]; then set -- "$1" "--verbose" "${@:3}"; fi

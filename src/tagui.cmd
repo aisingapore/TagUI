@@ -88,15 +88,112 @@ set arg7=%7
 set arg8=%8
 set arg9=%9
 
+rem set default web browser to be used to phantomjs
+set tagui_web_browser=phantomjs
+
+rem check chrome parameter to run on in-built integration with visible chrome
+if "%arg2%"=="chrome" (
+	set arg2=
+	set tagui_web_browser=chrome
+)
+if "%arg3%"=="chrome" (
+	set arg3=
+	set tagui_web_browser=chrome
+)
+if "%arg4%"=="chrome" (
+	set arg4=
+	set tagui_web_browser=chrome
+)
+if "%arg5%"=="chrome" (
+	set arg5=
+	set tagui_web_browser=chrome
+)
+if "%arg6%"=="chrome" (
+	set arg6=
+	set tagui_web_browser=chrome
+)
+if "%arg7%"=="chrome" (
+	set arg7=
+	set tagui_web_browser=chrome
+)
+if "%arg8%"=="chrome" (
+	set arg8=
+	set tagui_web_browser=chrome
+)
+if "%arg9%"=="chrome" (
+	set arg9=
+	set tagui_web_browser=chrome
+)
+
+rem check headless parameter to run on in-built integration with headless chrome
+if "%arg2%"=="headless" (
+	set arg2=
+	set tagui_web_browser=headless
+)
+if "%arg3%"=="headless" (
+	set arg3=
+	set tagui_web_browser=headless
+)
+if "%arg4%"=="headless" (
+	set arg4=
+	set tagui_web_browser=headless
+)
+if "%arg5%"=="headless" (
+	set arg5=
+	set tagui_web_browser=headless
+)
+if "%arg6%"=="headless" (
+	set arg6=
+	set tagui_web_browser=headless
+)
+if "%arg7%"=="headless" (
+	set arg7=
+	set tagui_web_browser=headless
+)
+if "%arg8%"=="headless" (
+	set arg8=
+	set tagui_web_browser=headless
+)
+if "%arg9%"=="headless" (
+	set arg9=
+	set tagui_web_browser=headless
+)
+
 rem check firefox parameter to run on visible firefox browser through slimerjs
-if "%arg2%"=="firefox" set arg2=--engine=slimerjs
-if "%arg3%"=="firefox" set arg3=--engine=slimerjs
-if "%arg4%"=="firefox" set arg4=--engine=slimerjs
-if "%arg5%"=="firefox" set arg5=--engine=slimerjs
-if "%arg6%"=="firefox" set arg6=--engine=slimerjs
-if "%arg7%"=="firefox" set arg7=--engine=slimerjs
-if "%arg8%"=="firefox" set arg8=--engine=slimerjs
-if "%arg9%"=="firefox" set arg9=--engine=slimerjs
+if "%arg2%"=="firefox" (
+	set arg2=--engine=slimerjs
+	set tagui_web_browser=firefox
+)
+if "%arg3%"=="firefox" (
+	set arg3=--engine=slimerjs
+	set tagui_web_browser=firefox
+)
+if "%arg4%"=="firefox" (
+	set arg4=--engine=slimerjs
+	set tagui_web_browser=firefox
+)
+if "%arg5%"=="firefox" (
+	set arg5=--engine=slimerjs
+	set tagui_web_browser=firefox
+)
+if "%arg6%"=="firefox" (
+	set arg6=--engine=slimerjs
+	set tagui_web_browser=firefox
+)
+if "%arg7%"=="firefox" (
+	set arg7=--engine=slimerjs
+	set tagui_web_browser=firefox
+)
+if "%arg8%"=="firefox" (
+	set arg8=--engine=slimerjs
+	set tagui_web_browser=firefox
+)
+if "%arg9%"=="firefox" (
+	set arg9=--engine=slimerjs
+	set tagui_web_browser=firefox
+)
+
+rem export web browser variable not needed for windows batch file
 
 rem check debug parameter to show run-time backend messages from phantomjs
 if "%arg2%"=="debug" set arg2=--verbose
