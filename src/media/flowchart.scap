@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ScappleDocument Version="1.1" ID="678FCC46-7C7E-49FB-9DC3-3C38BC6C43AB">
     <Notes>
-        <Note ID="25" FontSize="9.0" Position="207.462858,261.0" Width="113.0">
+        <Note ID="25" FontSize="9.0" Position="207.0,261.0" Width="113.0">
             <Appearance>
                 <Alignment>Center</Alignment>
                 <Border Style="Square"></Border>
             </Appearance>
             <String>visual automation of web browser and desktop</String>
         </Note>
-        <Note ID="20" FontSize="9.0" Position="562.217165,62.770287" Width="107.0">
+        <Note ID="20" FontSize="9.0" Position="562.0,63.0" Width="107.0">
             <Appearance>
                 <Alignment>Center</Alignment>
                 <Border Style="Square"></Border>
@@ -80,12 +80,12 @@ URL to an online file)</String>
             </Appearance>
             <String>CasperJS</String>
             <ConnectedNoteIDs>0, 2-3</ConnectedNoteIDs>
-            <PointsToNoteIDs>2-3</PointsToNoteIDs>
+            <PointsToNoteIDs>0, 2-3</PointsToNoteIDs>
             <Formatting>
                 <FormatRange Bold="Yes">0,8</FormatRange>
             </Formatting>
         </Note>
-        <Note ID="2" FontSize="12.0" Position="424.912874,78.738622" Width="87.0">
+        <Note ID="2" FontSize="12.0" Position="425.0,79.0" Width="87.0">
             <Appearance>
                 <Alignment>Center</Alignment>
                 <TextColor>1.0 0.999974 0.999991</TextColor>
@@ -99,7 +99,7 @@ URL to an online file)</String>
                 <FormatRange Bold="Yes">0,9</FormatRange>
             </Formatting>
         </Note>
-        <Note ID="3" FontSize="12.0" Position="363.0,235.692572" Width="87.0">
+        <Note ID="3" FontSize="12.0" Position="363.0,236.0" Width="87.0">
             <Appearance>
                 <Alignment>Center</Alignment>
                 <TextColor>0.117647 0.509804 0.788235</TextColor>
@@ -113,7 +113,7 @@ URL to an online file)</String>
                 <FormatRange Bold="Yes">0,8</FormatRange>
             </Formatting>
         </Note>
-        <Note ID="4" FontSize="12.0" Position="489.0,235.912874" Width="87.0">
+        <Note ID="4" FontSize="12.0" Position="489.0,236.0" Width="87.0">
             <Appearance>
                 <Alignment>Center</Alignment>
                 <TextColor>1.0 0.999974 0.999991</TextColor>
@@ -155,21 +155,21 @@ URL to an online file)</String>
                 <FormatRange Bold="Yes">0,15</FormatRange>
             </Formatting>
         </Note>
-        <Note ID="15" FontSize="9.0" Position="408.912874,30.738622" Width="118.0">
+        <Note ID="15" FontSize="9.0" Position="409.0,31.0" Width="118.0">
             <Appearance>
                 <Alignment>Center</Alignment>
                 <Border Style="Square"></Border>
             </Appearance>
             <String>scriptable headless (invisible) web browser similar to Safari &amp; Chrome</String>
         </Note>
-        <Note ID="16" FontSize="9.0" Position="350.353492,261.765434" Width="113.0">
+        <Note ID="16" FontSize="9.0" Position="350.0,262.0" Width="113.0">
             <Appearance>
                 <Alignment>Center</Alignment>
                 <Border Style="Square"></Border>
             </Appearance>
             <String>scriptable web browser executed on top of Firefox</String>
         </Note>
-        <Note ID="17" FontSize="9.0" Position="476.0,262.220302" Width="113.0">
+        <Note ID="17" FontSize="9.0" Position="476.0,262.0" Width="113.0">
             <Appearance>
                 <Alignment>Center</Alignment>
                 <Border Style="Square"></Border>
@@ -189,7 +189,7 @@ URL to an online file)</String>
                 <FormatRange Bold="Yes">0,7</FormatRange>
             </Formatting>
         </Note>
-        <Note ID="24" FontSize="12.0" Position="220.521456,235.0" Width="85.0">
+        <Note ID="24" FontSize="12.0" Position="221.0,235.0" Width="85.0">
             <Appearance>
                 <Alignment>Center</Alignment>
                 <TextColor>0.117647 0.509804 0.788235</TextColor>
@@ -198,11 +198,12 @@ URL to an online file)</String>
             </Appearance>
             <String>Sikuli</String>
             <ConnectedNoteIDs>0</ConnectedNoteIDs>
+            <PointsToNoteIDs>0</PointsToNoteIDs>
             <Formatting>
                 <FormatRange Bold="Yes">0,6</FormatRange>
             </Formatting>
         </Note>
-        <Note ID="21" FontSize="9.0" Position="229.462858,170.0" Width="31.0">
+        <Note ID="21" FontSize="9.0" Position="229.0,170.0" Width="31.0">
             <Appearance>
                 <Alignment>Center</Alignment>
                 <TextColor>1.0 1.0 1.0</TextColor>
