@@ -147,10 +147,10 @@ live|try steps or code interactively in invisible browser|enter live mode ([fire
 check|condition **&#124;** text if true **&#124;** text if false (text in quotes)|check condition and print result
 frame|frame name **&#124;** subframe name if any|next step or block in frame/subframe
 popup|url keyword of popup window to look for|next step or block in popup window
-dom|javascript code for document object model|run code in dom context
-api|full url (including parameters) of api call|call api and print response
 { and }|use { to start block and } to end block|define step/code block
-js|JavaScript statements (skip auto-detection)|treat as JS code explicitly
+api|full url (including parameters) of api call|call api and print response
+dom|javascript code for document object model|run code in dom context
+js|javascript statements (skip auto-detection)|treat as JS code explicitly
 //|user comments (ignored during execution)|add user comments
 
 Tip - in general to use variables, '+variable+' can be used where text is expected. xpath is an expressive way to identify web elements. if you know xpath and are using xpath for element identifier, use double quotes for text //\*[@title="Login"]
