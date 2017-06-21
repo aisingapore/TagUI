@@ -51,6 +51,11 @@ while(!feof($input_file)) {fwrite($output_file,parse_intent(fgets($input_file)))
 while(!feof($footer_file)) {fwrite($output_file,fgets($footer_file));} fclose($footer_file); fclose($output_file);
 chmod ($script . '.js',0600); if (!$url_provided) echo "ERROR - first line of " . $script . " not URL\n";
 
+// special handling if chrome or headless chrome is used as browser for automation
+if ($tagui_web_browser == 'chrome') {$script_content = file_get_contents($script . '.js'); // read generated script
+$script_content = str_replace("casper.exists","chrome.exists",$script_content); // change locator check to chrome
+file_put_contents($script . '.js',$script_content);}
+
 // check quiet parameter to run flow quietly by only showing explicit output
 if (getenv('tagui_quiet_mode') == 'true') {$script_content = file_get_contents($script . '.js'); // read generated script
 $script_content = str_replace("var quiet_mode = false;","var quiet_mode = true;",$script_content); // set quiet_mode
@@ -70,7 +75,7 @@ $script_content = str_replace("var casper = require(","// var casper = require("
 // following help to define the script structure required by casperjs for test automation purpose
 $script_content = str_replace("casper.start(","casper.test.begin('" . str_replace("\\","\\\\",$script) . "', " . 
 $test_automation.", function(test) {\ncasper.start(",$script_content); // define required casperjs test structure
-$script_content = str_replace("casper.run();","casper.run(function(){test.done();});});",$script_content);
+$script_content = str_replace("casper.run();","casper.run(function() {test.done();});});",$script_content);
 file_put_contents($script . '.js',$script_content);} // save script after restructuring for testing
 
 // otherwise prep for normal execution by commenting out test assertions as they will kill the script
@@ -185,6 +190,7 @@ if ((substr($raw_intent,0,4)=="for ") or (substr($raw_intent,0,6)=="while ")) re
 if ((substr($raw_intent,0,7)=="switch ") or (substr($raw_intent,0,5)=="case ")) return true;
 if ((substr($raw_intent,0,6)=="break;") or (substr($raw_intent,0,9)=="function ")) return true;
 if ((substr($raw_intent,0,7)=="casper.") or (substr($raw_intent,0,5)=="this.")) return true;
+if (substr($raw_intent,0,7)=="chrome.") return true; // chrome object for chrome integration
 if (substr($raw_intent,0,5)=="test.") {$GLOBALS['test_automation']++; return true;}
 if ((substr($raw_intent,0,2)=="//") or (substr($raw_intent,-1)==";")) return true; return false;}
 
@@ -221,7 +227,7 @@ if ((strpos($source_string,"'")!==false) and (strpos($source_string,"\"")!==fals
 else if (strpos($source_string,"'")!==false) $quote_type = "'"; // derive quote type used
 else if (strpos($source_string,"\"")!==false) $quote_type = "\""; else $quote_type = "none";
 $within_quote = false; $source_string = trim($source_string); // trim for future proof
-for ($srcpos=0; $srcpos<strlen($source_string); $srcpos++){
+for ($srcpos=0; $srcpos<strlen($source_string); $srcpos++) {
 if ($source_string[$srcpos] == $quote_type) $within_quote = !$within_quote; 
 if (($within_quote == false) and ($source_string[$srcpos]==" ")) $source_string[$srcpos] = "+";}
 $source_string = str_replace("+++++","+",$source_string); $source_string = str_replace("++++","+",$source_string);
@@ -441,7 +447,7 @@ if (substr($logic,0,2)=="//") return $logic; // skip processing for comment
 $GLOBALS['inside_code_block'] += substr_count($logic,"{"); $GLOBALS['inside_code_block'] -= substr_count($logic,"}");
 if ($GLOBALS['inside_while_loop']==0) { // while loop check as casper.then will hang while loop
 $logic = str_replace("{","\n// start of code block\n{casper.then(function() {",$logic);
-$logic = str_replace("}","})}; // end of code block\n",$logic);}
+$logic = str_replace("}","})} // end of code block\n",$logic);}
 
 // section 2 - natural language handling for conditions and loops 
 if ((substr($logic,0,3)=="if ") or (substr($logic,0,8)=="else if ")
@@ -478,7 +484,7 @@ if ($pos_double_quote == false) $pos_double_quote = 1024; // set to large number
 if ($pos_double_quote < $pos_single_quote) {$pos_quote_start = $pos_double_quote; $quote_type = "\"";}
 else if ($pos_single_quote < $pos_double_quote) {$pos_quote_start = $pos_single_quote; $quote_type = "'";}
 else {echo "ERROR - " . current_line() . " no quoted text - " . $logic . "\n"; $quote_type = "missing";}
-if ($quote_type != "missing"){$pos_quote_end = strpos($logic,$quote_type,$pos_quote_start+1);
+if ($quote_type != "missing") {$pos_quote_end = strpos($logic,$quote_type,$pos_quote_start+1);
 $pos_variable_start = strrpos($logic," ",$pos_keyword-strlen($logic)-2); $contain_operator = "<0";
 if (($contain_type == " contains ") or ($contain_type == " contain ")) $contain_operator = ">-1"; 
 $logic = substr($logic,0,$pos_variable_start+1)."(".

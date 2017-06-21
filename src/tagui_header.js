@@ -98,6 +98,58 @@ var sikuli_result = ''; do {sikuli_result = fs.read('tagui.sikuli'+ds+'tagui_sik
 while (sikuli_result.indexOf('['+sikuli_count.toString()+'] ') == -1);
 if (sikuli_result.indexOf('SUCCESS') !== -1) return true; else return false;}
 
+// chrome object for handling integration with chrome or headless chrome
+var chrome = new Object(); chrome.mouse = new Object();
+
+// chrome methods as casper methods replacement for chrome integration
+chrome.click = function(selector) {
+};
+
+chrome.mouse.move = function(selector) {
+};
+
+chrome.sendKeys = function(selector,value) {
+};
+
+chrome.selectOptionByValue = function(selector,value) {
+};
+
+chrome.fetchText = function(selector) {
+return '';
+};
+
+chrome.capture = function(filename) {
+};
+
+chrome.captureSelector = function(filename,selector) {
+};
+
+chrome.download = function(url,filename) {
+};
+
+chrome.evaluate = function(statement) {
+};
+
+chrome.getHTML = function() {
+return '';
+};
+
+chrome.getTitle = function() {
+return '';
+};
+
+chrome.getCurrentUrl = function() {
+return '';
+};
+
+chrome.exists = function(selector) {
+return false;
+};
+
+chrome.echo = function(value) {casper.echo(value);};
+
+chrome.on = function(value,statement) {casper.on(value,statement);};
+
 // for live mode simple parsing of tagui steps into js code
 function tagui_parse(raw_input) {return parse_intent(raw_input);}
 
@@ -194,6 +246,7 @@ if ((raw_intent.substr(0,4) == 'for ') || (raw_intent.substr(0,6) == 'while ')) 
 if ((raw_intent.substr(0,7) == 'switch ') || (raw_intent.substr(0,5) == 'case ')) return true;
 if ((raw_intent.substr(0,6) == 'break;') || (raw_intent.substr(0,9) == 'function ')) return true;
 if ((raw_intent.substr(0,7) == 'casper.') || (raw_intent.substr(0,5) == 'this.')) return true;
+if (raw_intent.substr(0,7) == 'chrome.') return true; // chrome object for chrome integration
 if (raw_intent.substr(0,5) == 'test.') return true;
 if ((raw_intent.substr(0,2) == '//') || (raw_intent.charAt(raw_intent.length-1) == ';')) return true; return false;}
 
@@ -211,7 +264,7 @@ return "'ERROR - inconsistent quotes in text'";
 else if (source_string.indexOf("'") > -1) var quote_type = "'"; // derive quote type used
 else if (source_string.indexOf('"') > -1) var quote_type = '"'; else var quote_type = "none";
 var within_quote = false; source_string = source_string.trim(); // trim for future proof
-for (srcpos = 0; srcpos < source_string.length; srcpos++){
+for (srcpos = 0; srcpos < source_string.length; srcpos++) {
 if (source_string.charAt(srcpos) == quote_type) within_quote = !(within_quote);
 if ((within_quote == false) && (source_string.charAt(srcpos)==" "))
 source_string = source_string.substring(0,srcpos) + "+" + source_string.substring(srcpos+1);}
@@ -393,11 +446,11 @@ xhttp.setRequestHeader(header_value_pair[0].trim(),header_value_pair[1].trim());
 xhttp.send(JSON.stringify(api_config.body)); return xhttp.responseText;}
 
 // custom function to handle dropdown option
-casper.selectOptionByValue = function(selector, valueToMatch){ // solution posted in casperjs issue #1390
+casper.selectOptionByValue = function(selector, valueToMatch) { // solution posted in casperjs issue #1390
 this.evaluate(function(selector, valueToMatch) {var found = false; // modified to allow xpath / css locators
 if ((selector.indexOf('/') == 0) || (selector.indexOf('(') == 0)) var select = __utils__.getElementByXPath(selector);
 else var select = document.querySelector(selector); // auto-select xpath or query css method to get element
-Array.prototype.forEach.call(select.children, function(opt, i){ // loop through list to select option
+Array.prototype.forEach.call(select.children, function(opt, i) { // loop through list to select option
 if (!found && opt.value.indexOf(valueToMatch) !== -1) {select.selectedIndex = i; found = true;}});
 var evt = document.createEvent("UIEvents"); // dispatch change event in case there is validation
 evt.initUIEvent("change", true, true); select.dispatchEvent(evt);}, selector, valueToMatch);};
