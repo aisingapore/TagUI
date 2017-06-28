@@ -21,6 +21,11 @@
 /src/tagui_service.run
 /src/tagui_service.done
 
+# exclude local files for chrome integration
+/src/tagui_chrome.in
+/src/tagui_chrome.out
+/src/tagui_chrome.log
+
 # exclude local files for sikuli integration 
 /src/tagui.sikuli/tagui_sikuli.in
 /src/tagui.sikuli/tagui_sikuli.out
