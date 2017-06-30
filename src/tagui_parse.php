@@ -23,7 +23,7 @@ if (count($repo_data[$repo_count]) == 0) die("ERROR - empty row found in " . $sc
 $repo_count++;} fclose($repo_file); $repo_count-=2;} //-1 for header, -1 for EOF
 
 $tagui_web_browser = "this"; // set the web browser to be used base on tagui_web_browser environment variable
-if ((getenv('tagui_web_browser')=='headless') or (getenv('tagui_web_browser')=='chrome')) $tagui_web_browser = "chrome";
+if ((getenv('tagui_web_browser')=='headless') or (getenv('tagui_web_browser')=='chrome')) $tagui_web_browser = 'chrome';
 
 $inside_code_block = 0; // track if step or code is inside user-defined code block
 $inside_while_loop = 0; // track if step is in while loop and avoid async wait
@@ -52,8 +52,35 @@ while(!feof($footer_file)) {fwrite($output_file,fgets($footer_file));} fclose($f
 chmod ($script . '.js',0600); if (!$url_provided) echo "ERROR - first line of " . $script . " not URL\n";
 
 // special handling if chrome or headless chrome is used as browser for automation
+// replacement of this.method already happens in step intents, this is mostly to handle user inserted casperjs code 
 if ($tagui_web_browser == 'chrome') {$script_content = file_get_contents($script . '.js'); // read generated script
+$script_content = str_replace("var chrome_id = 0;","var chrome_id = 1;",$script_content); // websocket message id
 $script_content = str_replace("casper.exists","chrome.exists",$script_content); // change locator check to chrome
+$script_content = str_replace("this.exists","chrome.exists",$script_content); // change this.exists call as well
+$script_content = str_replace("casper.click","chrome.click",$script_content); // change click method to chrome
+$script_content = str_replace("this.click","chrome.click",$script_content); // change this.click call as well
+$script_content = str_replace("casper.mouse","chrome.mouse",$script_content); // change mouse object to chrome
+$script_content = str_replace("this.mouse","chrome.mouse",$script_content); // change this.mouse call as well
+$script_content = str_replace("casper.sendKeys","chrome.sendKeys",$script_content); // change sendKeys method to chrome
+$script_content = str_replace("this.sendKeys","chrome.sendKeys",$script_content); // change this.sendKeys call as well
+$script_content = str_replace("casper.selectOptionByValue","chrome.selectOptionByValue",$script_content); // select option
+$script_content = str_replace("this.selectOptionByValue","chrome.selectOptionByValue",$script_content); // select option
+$script_content = str_replace("casper.fetchText","chrome.fetchText",$script_content); // change fetchText method to chrome
+$script_content = str_replace("this.fetchText","chrome.fetchText",$script_content); // change this.fetchText call as well
+$script_content = str_replace("casper.capture","chrome.capture",$script_content); // change capture method to chrome
+$script_content = str_replace("this.capture","chrome.capture",$script_content); // change this.capture call as well
+$script_content = str_replace("casper.captureSelector","chrome.captureSelector",$script_content); // capture selector
+$script_content = str_replace("this.captureSelector","chrome.captureSelector",$script_content); // capture selector
+$script_content = str_replace("casper.download","chrome.download",$script_content); // change download method to chrome
+$script_content = str_replace("this.download","chrome.download",$script_content); // change this.download call as well
+$script_content = str_replace("casper.evaluate","chrome.evaluate",$script_content); // change evaluate method to chrome
+$script_content = str_replace("this.evaluate","chrome.evaluate",$script_content); // change this.evaluate call as well
+$script_content = str_replace("casper.getHTML","chrome.getHTML",$script_content); // change getHTML method to chrome
+$script_content = str_replace("this.getHTML","chrome.getHTML",$script_content); // change this.getHTML call as well
+$script_content = str_replace("casper.getTitle","chrome.getTitle",$script_content); // change getTitle method to chrome
+$script_content = str_replace("this.getTitle","chrome.getTitle",$script_content); // change this.getTitle call as well
+$script_content = str_replace("casper.getCurrentUrl","chrome.getCurrentUrl",$script_content); // get current url
+$script_content = str_replace("this.getCurrentUrl","chrome.getCurrentUrl",$script_content); // get current url
 file_put_contents($script . '.js',$script_content);}
 
 // check quiet parameter to run flow quietly by only showing explicit output
@@ -248,13 +275,15 @@ return "{techo('".$input_intent."'); var fs = require('fs');\n" .
 end_fi()."});\n\ncasper.then(function() {\n";}
 
 // set of functions to interpret steps into corresponding casperjs code
-function url_intent($raw_intent) {
+function url_intent($raw_intent) {$twb = $GLOBALS['tagui_web_browser']; $casper_url = $raw_intent; $chrome_call = '';
+if ($twb == 'chrome')
+{$casper_url = 'about:blank'; $chrome_call = "chrome_step('Page.navigate',{url: '".$raw_intent."'}); sleep(1000);\n";}
 if (filter_var($raw_intent, FILTER_VALIDATE_URL) == false) 
 echo "ERROR - " . current_line() . " invalid URL " . $raw_intent . "\n"; else
-if ($GLOBALS['line_number'] == 1) {$GLOBALS['url_provided'] = true; return "casper.start('".$raw_intent.
-"', function() {\ntecho('".$raw_intent."' + ' - ' + this.getTitle() + '\\n');});\n\ncasper.then(function() {\n";}
-else return "});casper.thenOpen('".$raw_intent."', function() {\ntecho('".
-$raw_intent."' + ' - ' + this.getTitle());});\n\ncasper.then(function() {\n";}
+if ($GLOBALS['line_number'] == 1) {$GLOBALS['url_provided']=true; return "casper.start('".$casper_url."', function() {\n".
+$chrome_call."techo('".$raw_intent."' + ' - ' + ".$twb.".getTitle() + '\\n');});\n\ncasper.then(function() {\n";}
+else return "});casper.thenOpen('".$casper_url."', function() {\n".$chrome_call."techo('".
+$raw_intent."' + ' - ' + ".$twb.".getTitle());});\n\ncasper.then(function() {\n";}
 
 function tap_intent($raw_intent) {$twb = $GLOBALS['tagui_web_browser'];
 $params = trim(substr($raw_intent." ",1+strpos($raw_intent." "," "))); 
