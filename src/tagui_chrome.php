@@ -12,8 +12,8 @@
 require('ws/Base.php'); require('ws/Client.php'); require('ws/Exception.php'); require('ws/BadOpcodeException.php');
 require('ws/BadUriException.php'); require('ws/ConnectionException.php'); use WebSocket\Client; // project namespace
 
-// delay in seconds between scanning for inputs
-$scan_period = 0.050;
+// delay in microseconds between scanning for inputs
+$scan_period = 100000;
 
 // counter to track current tagui chrome step
 $tagui_count = '0';
@@ -35,12 +35,12 @@ $tagui_intent = trim(file_get_contents('tagui_chrome.in'));
 
 // quit if finish signal received, initialise and repeat loop if blank
 if ($tagui_intent == 'finish') break; else if ($tagui_intent == '')
-{$tagui_count = '0'; file_put_contents('tagui_chrome.out','[0] START'); sleep($scan_period); continue;}
+{$tagui_count = '0'; file_put_contents('tagui_chrome.out','[0] START'); usleep($scan_period); continue;}
 
 // get count and repeat loop if same count as last iteration
 $temp_count = trim(substr($tagui_intent,1,strpos($tagui_intent,'] ')-1));
 $tagui_intent = trim(substr($tagui_intent,strpos($tagui_intent,'] ')+2));
-if ($tagui_count == $temp_count) {sleep($scan_period); continue;} else $tagui_count = $temp_count;
+if ($tagui_count == $temp_count) {usleep($scan_period); continue;} else $tagui_count = $temp_count;
 
 // otherwise send input intent to chrome websocket
 echo "[tagui] INPUT  - \n" . "[" . $tagui_count . "] " . $tagui_intent . "\n";
@@ -48,7 +48,7 @@ $client->send($tagui_intent); $intent_result_string = trim($client->receive());
 
 // save intent_result to interface out-file
 echo "[tagui] OUTPUT - \n" . "[" . $tagui_count . "] " . $intent_result_string . "\n\n";
-file_put_contents('tagui_chrome.out',"[" . $tagui_count . "] " . $intent_result_string); sleep($scan_period);} 
+file_put_contents('tagui_chrome.out',"[" . $tagui_count . "] " . $intent_result_string); usleep($scan_period);} 
 
 // write to interface out-file to signal finish listening
 echo "[tagui] FINISH - stopped listening\n";

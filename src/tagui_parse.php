@@ -63,8 +63,9 @@ $script_content = str_replace("casper.mouse","chrome.mouse",$script_content); //
 $script_content = str_replace("this.mouse","chrome.mouse",$script_content); // change this.mouse call as well
 $script_content = str_replace("casper.sendKeys","chrome.sendKeys",$script_content); // change sendKeys method to chrome
 $script_content = str_replace("this.sendKeys","chrome.sendKeys",$script_content); // change this.sendKeys call as well
-$script_content = str_replace("casper.selectOptionByValue","chrome.selectOptionByValue",$script_content); // select option
-$script_content = str_replace("this.selectOptionByValue","chrome.selectOptionByValue",$script_content); // select option
+// for selectOptionByValue check for '(' in order to only overwrite calls and not the custom defined function
+$script_content = str_replace("casper.selectOptionByValue(","chrome.selectOptionByValue(",$script_content); // select
+$script_content = str_replace("this.selectOptionByValue(","chrome.selectOptionByValue(",$script_content); // select
 $script_content = str_replace("casper.fetchText","chrome.fetchText",$script_content); // change fetchText method to chrome
 $script_content = str_replace("this.fetchText","chrome.fetchText",$script_content); // change this.fetchText call as well
 $script_content = str_replace("casper.capture","chrome.capture",$script_content); // change capture method to chrome
@@ -81,6 +82,14 @@ $script_content = str_replace("casper.getTitle","chrome.getTitle",$script_conten
 $script_content = str_replace("this.getTitle","chrome.getTitle",$script_content); // change this.getTitle call as well
 $script_content = str_replace("casper.getCurrentUrl","chrome.getCurrentUrl",$script_content); // get current url
 $script_content = str_replace("this.getCurrentUrl","chrome.getCurrentUrl",$script_content); // get current url
+$script_content = str_replace("casper.debugHTML","chrome.debugHTML",$script_content); // change debugHTML method to chrome
+$script_content = str_replace("this.debugHTML","chrome.debugHTML",$script_content); // change this.debugHTML call as well
+$script_content = str_replace("casper.reload","chrome.reload",$script_content); // change reload method to chrome
+$script_content = str_replace("this.reload","chrome.reload",$script_content); // change this.reload call as well
+$script_content = str_replace("casper.back","chrome.back",$script_content); // change back method to chrome
+$script_content = str_replace("this.back","chrome.back",$script_content); // change this.back call as well
+$script_content = str_replace("casper.forward","chrome.forward",$script_content); // change forward method to chrome
+$script_content = str_replace("this.forward","chrome.forward",$script_content); // change this.forward call as well
 file_put_contents($script . '.js',$script_content);}
 
 // check quiet parameter to run flow quietly by only showing explicit output
@@ -459,7 +468,7 @@ return "{techo('".$raw_intent."');\napi_result = call_api('".$params."');\nthis.
 function dom_intent($raw_intent) {$twb = $GLOBALS['tagui_web_browser'];
 $params = trim(substr($raw_intent." ",1+strpos($raw_intent." "," ")));
 if ($params == "") echo "ERROR - " . current_line() . " statement missing for " . $raw_intent . "\n";
-else return $twb.".evaluate(function() {".$params."});".end_fi()."\n";}
+else return "dom_result = ".$twb.".evaluate(function() {".$params."});".end_fi()."\n";}
 
 function js_intent($raw_intent) {
 $params = trim(substr($raw_intent." ",1+strpos($raw_intent." "," ")));
