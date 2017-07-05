@@ -46,6 +46,11 @@ if ($tagui_count == $temp_count) {usleep($scan_period); continue;} else $tagui_c
 echo "[tagui] INPUT  - \n" . "[" . $tagui_count . "] " . $tagui_intent . "\n";
 $client->send($tagui_intent); $intent_result_string = trim($client->receive());
 
+// retrieve message a second time for some Target methods as the real message is the second incoming message
+if (strpos($tagui_intent,'Target.sendMessageToTarget') !== false) $intent_result_string = trim($client->receive());
+else if (strpos($tagui_intent,'Target.attachToTarget') !== false) $intent_result_string = trim($client->receive());
+else if (strpos($tagui_intent,'Target.detachFromTarget') !== false) $intent_result_string = trim($client->receive());
+
 // save intent_result to interface out-file
 echo "[tagui] OUTPUT - \n" . "[" . $tagui_count . "] " . $intent_result_string . "\n\n";
 file_put_contents('tagui_chrome.out',"[" . $tagui_count . "] " . $intent_result_string); usleep($scan_period);} 
