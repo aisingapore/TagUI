@@ -87,13 +87,13 @@ var time_now = new Date().getTime(); var time_end = time_now + ms;
 while(time_now < time_end) {time_now = new Date().getTime();}}
 
 // for initialising integration with sikuli visual automation
-function sikuli_handshake() {techo('waiting for sikuli');
+function sikuli_handshake() {techo('[connecting to sikuli process]');
 var ds; if (flow_path.indexOf('/') !== -1) ds = '/'; else ds = '\\';
 var fs = require('fs'); fs.write('tagui.sikuli'+ds+'tagui_sikuli.in','','w'); var sikuli_handshake = '';
 if (!fs.exists('tagui.sikuli'+ds+'tagui_sikuli.out')) fs.write('tagui.sikuli'+ds+'tagui_sikuli.out','','w');
 do {sleep(1000); sikuli_handshake = fs.read('tagui.sikuli'+ds+'tagui_sikuli.out').trim();}
-while (sikuli_handshake !== '[0] START');
-techo('connected to sikuli');}
+while (sikuli_handshake !== '[0] START'); // techo('[connected to sikuli process]');
+}
 
 // for using sikuli visual automation instead of casperjs
 function sikuli_step(sikuli_intent) {sikuli_count++;
@@ -108,11 +108,11 @@ if (chrome_id > 0) { // super large if block to load chrome related functions if
 chrome_id = 0; // reset chrome_id from 1 back to 0 to prepare for initial call of chrome_step
 
 // for initialising integration with chrome web browser
-function chrome_handshake() {// techo('waiting for chrome');
+function chrome_handshake() { techo('[connecting to chrome websocket]');
 var fs = require('fs'); fs.write('tagui_chrome.in','','w'); var chrome_handshake = '';
 if (!fs.exists('tagui_chrome.out')) fs.write('tagui_chrome.out','','w');
 do {sleep(100); chrome_handshake = fs.read('tagui_chrome.out').trim();}
-while (chrome_handshake !== '[0] START'); //techo('connected to chrome');
+while (chrome_handshake !== '[0] START'); // techo('[connected to chrome websocket]');
 }
 
 // send websocket message to chrome browser using chrome debugging protocol
@@ -125,7 +125,7 @@ var fs = require('fs'); fs.write('tagui_chrome.in','['+chrome_id.toString()+'] '
 var chrome_result = ''; do {sleep(100); chrome_result = fs.read('tagui_chrome.out').trim();}
 while (chrome_result.indexOf('['+chrome_id.toString()+'] ') == -1);
 if (chrome_targetid == '') return chrome_result.substring(chrome_result.indexOf('] ')+2); // below for handling popup
-else {try {var raw_json_string = JSON.stringify(JSON.parse(chrome_result.substring(chrome_result.indexOf('] ')+2)).params.message); return raw_json_string.slice(1,-1).replace(/\\"/g,'"').replace(/\\\\n/g,'\\n');} catch(e) {return '';}}}
+else {try {var raw_json_string = JSON.stringify(JSON.parse(chrome_result.substring(chrome_result.indexOf('] ')+2)).params.message); return raw_json_string.slice(1,-1).replace(/\\"/g,'"').replace(/\\\\n/g,"\\n");} catch(e) {return '';}}}
 
 // chrome object for handling integration with chrome or headless chrome
 var chrome = new Object(); chrome.mouse = new Object();
@@ -293,8 +293,9 @@ return ws_json.result.result.value; else return '';} catch(e) {return '';}};
 
 chrome.getCurrentUrl = function() { // get url of current webpage
 var ws_message = chrome_step('Runtime.evaluate',{expression: 'document.location.href'});
-try {var ws_json = JSON.parse(ws_message); if (ws_json.result.result.value)
-return ws_json.result.result.value; else return '';} catch(e) {return '';}};
+try {var ws_json = JSON.parse(ws_message); // chrome returns below value on empty dead url
+if (ws_json.result.result.value == 'data:text/html,chromewebdata') ws_json.result.result.value = 'about:blank';
+if (ws_json.result.result.value) return ws_json.result.result.value; else return '';} catch(e) {return '';}};
 
 chrome.debugHTML = function() {casper.echo(chrome.getHTML());}; // print raw html of current webpage
 

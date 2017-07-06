@@ -18,14 +18,14 @@ $scan_period = 100000;
 // counter to track current tagui chrome step
 $tagui_count = '0';
 
+if ($argv[1]=="") die("[tagui] ERROR  - specify web socket URL as parameter\n"); 
+$client = new Client($argv[1]);
+
 // write to interface out-file to signal ready for inputs
 file_put_contents('tagui_chrome.out','[0] START');
 
 // initialise interface in-file before starting main loop
 file_put_contents('tagui_chrome.in','');
-
-if ($argv[1]=="") die("[tagui] ERROR  - specify web socket URL as parameter\n");
-$client = new Client($argv[1]);
 
 // main loop to scan inputs from automation flow
 echo "[tagui] START  - listening for inputs\n\n"; while (true) {

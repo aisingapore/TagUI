@@ -96,7 +96,9 @@ $script_content = str_replace("casper.back","chrome.back",$script_content); // c
 $script_content = str_replace("this.back","chrome.back",$script_content); // change this.back call as well
 $script_content = str_replace("casper.forward","chrome.forward",$script_content); // change forward method to chrome
 $script_content = str_replace("this.forward","chrome.forward",$script_content); // change this.forward call as well
-file_put_contents($script . '.js',$script_content);}
+file_put_contents($script . '.js',$script_content); // below initialise chrome integration files
+if (!touch('tagui_chrome.in')) die("ERROR - cannot initialise tagui_chrome.in\n");
+if (!touch('tagui_chrome.out')) die("ERROR - cannot initialise tagui_chrome.out\n");}
 
 // check quiet parameter to run flow quietly by only showing explicit output
 if (getenv('tagui_quiet_mode') == 'true') {$script_content = file_get_contents($script . '.js'); // read generated script
