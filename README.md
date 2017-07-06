@@ -8,17 +8,18 @@ A sample automation flow to automate mass account registrations in 30 seconds - 
 # Why This
 The goal of web automation is to reproduce cognitive interactions that you have with certain websites so that your laptop or server can do it for you, base on your preferred schedule or conditions. TagUI helps you rapidly automate your repetitive or time-critical tasks - use cases include process automation, data acquisition and testing of web apps.
 
-This is a full-feature and free open-source tool, so there's nothing to upgrade to or any paid subscription. To feedback suggestions or bugs, kindly [raise an issue](https://github.com/tebelorg/TagUI/issues) or email ken@tebel.org. Originally developed by a test automation engineer to avoid writing code when automating web interactions.
+This is a full-feature and free open-source tool, so there's nothing to upgrade to or any paid subscription. To feedback suggestions or bugs, [raise an issue](https://github.com/tebelorg/TagUI/issues) or email ken@tebel.org. Originally developed by a test automation engineer to avoid writing chunks of code when automating web interactions.
 
 ### FEATURES
+- automate on Chrome, Firefox, PhantomJS
 - natural language with JavaScript support
 - Chrome extension for recording steps
-- object repositories and datatables
-- auto-wait XPath/CSS element selector
+- object repositories / flexible datatables
+- intelligent XPath/CSS element selector
 - visual automation of website and desktop
 - live mode to try steps or code in real-time
 - run by schedule, command line, REST API
-- support outgoing API calls to webservices
+- advance outgoing API calls to webservices
 
 ### HOW IT WORKS
 TagUI converts your intentions in simple natural language into lines of working JavaScript code that perform web automation. Under the hood, it uses CasperJS, PhantomJS & SlimerJS. As an example, TagUI will instantly convert the automation flow below into 100+ lines of JavaScript code and automatically perform the steps to download a Typeform report. This makes it very easy for rapid prototyping, deployment and maintenance of web automation.
@@ -35,14 +36,16 @@ click section_results
 download https://admin.typeform.com/form/2592751/analyze/csv to report.csv
 ```
 
-The automation flow can be triggered from scheduling, command line, URL, REST API, email etc. Everything happens headlessly in the background without seeing any web browser, so that you can continue using the computer or server uninterrupted. Running on a visible web browser is also supported, using Firefox browser and SlimerJS (see firefox option below). Outgoing API calls can be made with a single line to integrate with other downstream applications.
+The automation flow can be triggered from scheduling, command line, URL, REST API, email etc. Everything happens headlessly in the background without seeing any web browser, so that you can continue using the computer or server uninterrupted. Running on a visible web browser is also supported, using Chrome or Firefox browser (see chrome or firefox option below). API calls can be made with a single line to integrate with other applications.
 
-If you know JavaScript coding and want to be more expressive, you can even use JavaScript directly in the flow. If not, you will still enjoy friendly but powerful features such as repositories to store your reusable objects, datatables for batch automation, and a Chrome extension which creates automation flows by recording your actions. For rapid prototyping, there's also an interactive live mode for trying out TagUI steps or JavaScript code in real-time.
+If you know JavaScript and want to be more expressive, you can even use JavaScript directly in the flow. If not, you will still enjoy friendly but powerful features such as repositories to store your reusable objects, flexible datatables for batch automation, and a Chrome extension which creates automation flows by recording your actions. For rapid prototyping, there's also an interactive live mode for trying out TagUI steps or JavaScript code in real-time. TagUI has built-in integration with Chrome / headless Chrome through direct websocket connection, which also works in live mode.
 
-In addition to these features, there is automatic waiting for web elements to appear + error-checking + nesting of CasperJS code blocks. TagUI also supports visual automation of website and desktop through built-in integration with Sikuli. Instead of using element identifiers, images can be used to identify user interface elements to interact with.
+In addition to these features, there is automatic waiting for web elements to appear + error-checking + nesting of CasperJS code blocks. Not forgetting the ability to run automation flows hosted online or auto-uploading run results online for sharing. TagUI also supports visual automation of website and desktop through built-in integration with Sikuli. Instead of using element identifiers, images can be used to identify user interface elements to interact with.
 
 # Set Up
 TagUI is in v1.8 and runs on macOS, Linux, Windows ([link to release notes](https://github.com/tebelorg/TagUI/releases))
+
+***This readme and TagUI packages are in process of being updated to v2.0***
 
 ### PACKAGED INSTALLATION
 Easiest way to use TagUI - no setup is needed, all dependencies are packaged in
@@ -75,9 +78,11 @@ Tip - recommend extracting TagUI package to a folder path without spaces (some d
 
 Option|Purpose
 :----:|:------
+headless|run on invisible Chrome web browser instead of default PhantomJS (first install [Chrome](https://www.google.com/chrome/))
+chrome|run on visible Chrome web browser instead of invisible PhantomJS (first install Chrome)
 firefox|run on visible Firefox web browser instead of invisible browser (first install [Firefox](https://www.mozilla.org/en-US/firefox/new/))
-report|generate a web report for easy sharing of run results (default is only a text log file)
 upload|upload automation flow and result to [hastebin.com](https://hastebin.com) (expires 30 days after last view)
+report|generate a web report for easy sharing of run results (default is only a text log file)
 debug|show run-time backend messages from PhantomJS for detailed tracing and logging
 quiet|run without output except for explicit output (echo / show / check / errors etc)
 test|professional testing using [CasperJS assertions](http://docs.casperjs.org/en/latest/modules/tester.html) (TagUI dynamic tx('selector') usable)
@@ -243,7 +248,7 @@ test.assertSelectorHasText(tx('header'), 'Interface automation','Check for phras
 
 For the list of 30+ expressive test assertions built into CasperJS, [click here](http://docs.casperjs.org/en/latest/modules/tester.html). To know more about CasperJS testing framework, [click here](http://docs.casperjs.org/en/latest/testing.html). As TagUI allows you to write JavaScript code directly within the automation flow, advanced testing or coding techniques that can be implemented in CasperJS should work directly within your flow.
 
-TagUI recognizes most JavaScript code automatically. In the rare event you get an error saying that it cannot understand the step for your JavaScript line, kindly raise an issue or modify the source code (tagui_parse.php is where interpretation of natural language to CasperJS JavaScript code takes place). Alternatively, you can use step js to explicitly declare that whatever follows on that line is JavaScript code and ensure that the line is not treated as a TagUI step.
+TagUI recognizes most JavaScript code automatically. In the rare event you get an error saying that it cannot understand the step for your JavaScript line, raise an issue or modify the source code (tagui_parse.php is where interpretation of natural language to CasperJS JavaScript code takes place). Alternatively, you can use step js to explicitly declare that whatever follows on that line is JavaScript code and ensure that the line is not treated as a TagUI step.
 
 ### FILES
 Filename |Purpose
