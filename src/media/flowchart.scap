@@ -1,6 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ScappleDocument Version="1.1" ID="678FCC46-7C7E-49FB-9DC3-3C38BC6C43AB">
     <Notes>
+        <Note ID="12" FontSize="9.0" Position="222.0,73.0" Width="110.0">
+            <Appearance>
+                <Alignment>Center</Alignment>
+                <Border Style="Square"></Border>
+            </Appearance>
+            <String>instantly convert flow from natural language into working JavaScript web automation code
+(with live mode to test TagUI steps or JS code)</String>
+        </Note>
         <Note ID="25" FontSize="9.0" Position="207.0,261.0" Width="113.0">
             <Appearance>
                 <Alignment>Center</Alignment>
@@ -41,14 +49,6 @@ text files, execution logs, outgoing API calls and other outcomes resulting from
 (flow can be a local file or
 URL to an online file)</String>
         </Note>
-        <Note ID="12" FontSize="9.0" Position="213.0,61.0" Width="112.0">
-            <Appearance>
-                <Alignment>Center</Alignment>
-                <Border Style="Square"></Border>
-            </Appearance>
-            <String>instantly convert flow from natural language into working JavaScript code for CasperJS and run automation steps
-(has a live mode to try out TagUI steps or JS code)</String>
-        </Note>
         <Note ID="11" FontSize="9.0" Position="18.0,139.0" Width="131.0">
             <Appearance>
                 <Alignment>Center</Alignment>
@@ -65,8 +65,8 @@ URL to an online file)</String>
                 <Fill>1.0 1.0 1.0</Fill>
             </Appearance>
             <String>TagUI</String>
-            <ConnectedNoteIDs>1, 6-7, 24</ConnectedNoteIDs>
-            <PointsToNoteIDs>1, 24</PointsToNoteIDs>
+            <ConnectedNoteIDs>1, 6-7, 24, 27</ConnectedNoteIDs>
+            <PointsToNoteIDs>1, 24, 27</PointsToNoteIDs>
             <Formatting>
                 <FormatRange Bold="Yes">0,5</FormatRange>
             </Formatting>
@@ -209,10 +209,31 @@ URL to an online file)</String>
                 <TextColor>1.0 1.0 1.0</TextColor>
                 <Fill>0.314662 0.314653 0.314658</Fill>
             </Appearance>
-            <String>v1.8  </String>
+            <String>v2.0  </String>
             <Formatting>
                 <FormatRange Bold="Yes">0,6</FormatRange>
             </Formatting>
+        </Note>
+        <Note ID="27" FontSize="12.0" Position="186.0,30.0" Width="87.0">
+            <Appearance>
+                <Alignment>Center</Alignment>
+                <TextColor>1.0 0.999974 0.999991</TextColor>
+                <Border Style="Square"></Border>
+                <Fill>0.5 0.0 0.5</Fill>
+            </Appearance>
+            <String>Chrome</String>
+            <ConnectedNoteIDs>0</ConnectedNoteIDs>
+            <PointsToNoteIDs>0</PointsToNoteIDs>
+            <Formatting>
+                <FormatRange Bold="Yes">0,6</FormatRange>
+            </Formatting>
+        </Note>
+        <Note ID="28" FontSize="9.0" Position="276.756733,14.269074" Width="125.0">
+            <Appearance>
+                <Alignment>Center</Alignment>
+                <Border Style="Square"></Border>
+            </Appearance>
+            <String>built-in direct integration with Chrome visible and headless mode for similar results as Firefox or PhantomJS</String>
         </Note>
     </Notes>
     <BackgroundShapes></BackgroundShapes>
