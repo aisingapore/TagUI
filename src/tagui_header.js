@@ -589,7 +589,7 @@ return "this.echo('ERROR - step not supported in live mode')";}
 function api_intent(raw_intent) {
 var params = ((raw_intent + ' ').substr(1+(raw_intent + ' ').indexOf(' '))).trim();
 if (params == '') return "this.echo('ERROR - API URL missing for " + raw_intent + "')";
-else return "api_result = call_api('" + params + "'); this.echo(api_result); " +
+else return "api_result = call_api('" + params + "'); " +
 "try {api_json = JSON.parse(api_result);} catch(e) {api_json = JSON.parse('null');}";}
 
 function dom_intent(raw_intent) {

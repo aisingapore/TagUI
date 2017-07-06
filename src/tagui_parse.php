@@ -470,7 +470,7 @@ return "{techo('".$raw_intent."');\ncasper.waitForPopup(/".preg_quote($params)."
 function api_intent($raw_intent) {
 $params = trim(substr($raw_intent." ",1+strpos($raw_intent." "," ")));
 if ($params == "") echo "ERROR - " . current_line() . " API URL missing for " . $raw_intent . "\n"; else
-return "{techo('".$raw_intent."');\napi_result = call_api('".$params."');\nthis.echo(api_result); " . 
+return "{techo('".$raw_intent."');\napi_result = call_api('".$params."');\n" . 
 "try {api_json = JSON.parse(api_result);} catch(e) {api_json = JSON.parse('null');}}".end_fi()."\n";}
 
 function dom_intent($raw_intent) {$twb = $GLOBALS['tagui_web_browser'];

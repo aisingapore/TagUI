@@ -79,7 +79,7 @@ firefox|run on visible Firefox web browser instead of invisible browser (first i
 report|generate a web report for easy sharing of run results (default is only a text log file)
 upload|upload automation flow and result to [hastebin.com](https://hastebin.com) (expires 30 days after last view)
 debug|show run-time backend messages from PhantomJS for detailed tracing and logging
-quiet|run without output except for explicit output (echo / show / check / api / errors etc)
+quiet|run without output except for explicit output (echo / show / check / errors etc)
 test|professional testing using [CasperJS assertions](http://docs.casperjs.org/en/latest/modules/tester.html) (TagUI dynamic tx('selector') usable)
 input(s)|add your own parameter(s) to be used in your automation flow as variables p1 to p9
 
@@ -148,7 +148,7 @@ check|condition **&#124;** text if true **&#124;** text if false (text in quotes
 frame|frame name **&#124;** subframe name if any|next step or block in frame/subframe
 popup|url keyword of popup window to look for|next step or block in popup window
 { and }|use { to start block and } to end block|define step/code block
-api|full url (including parameters) of api call|call api and print response
+api|full url (including parameters) of api call|call api save response to api_result
 dom|javascript code for document object model|run code in dom context
 js|javascript statements (skip auto-detection)|treat as JS code explicitly
 //|user comments (ignored during execution)|add user comments
@@ -223,7 +223,7 @@ your_website_url/tagui_service.php?SETTINGS="flow_filename option(s)"
 
 Besides integrating with web applications, TagUI can be extended to integrate with hardware (eg Arduino or Raspberry Pi) for physical world interactions or machine learning service providers for AI decision-making ability. Input parameters can be sent to an automation flow to be used as variables p1 to p9. Output parameters from an automation flow can be sent to your Arduino or application REST URL (see flow samples 3_github and 6C_datatables for examples).
 
-For making outgoing API calls in your automation flow, to feed data somewhere or send emails etc, use the api step followed by full URL (including parameters) of the API call. Response from the API will be printed to output and saved in api_result variable. If the API response is JSON data, the variable api_json will be created for easy access to JSON data elements. Eg, api_json.parent_element.child_element retrieves value of child_element. If not, api_json will be null.
+For making outgoing API calls in your automation flow, to feed data somewhere or send emails etc, use the api step followed by full URL (including parameters) of the API call. Response from the API will be saved in api_result variable. If the API response is JSON data, the variable api_json will be created for easy access to JSON data elements. Eg, api_json.parent_element.child_element retrieves value of child_element. If not, api_json will be null.
 
 For advance API calls, you can use the variable api_config which defaults as `{method:'GET', header:[], body:{}}`. Besides GET, you can use other methods such as POST, PUT, DELETE etc. You can define multiple headers in the format `'Header_name: header_value'` and provide a payload body for PUT requests for example. You can also set it like below before using the api step, or set using `api_config.method = 'PUT';` and `api_config.header[0] = 'Header1: value1';` etc. Also, `api_config.body` will be automatically converted to JSON format for sending to the API endpoint.
 ```js
