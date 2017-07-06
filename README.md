@@ -82,10 +82,10 @@ headless|run on invisible Chrome web browser instead of default PhantomJS (first
 chrome|run on visible Chrome web browser instead of invisible PhantomJS (first install Chrome)
 firefox|run on visible Firefox web browser instead of invisible browser (first install [Firefox](https://www.mozilla.org/en-US/firefox/new/))
 upload|upload automation flow and result to [hastebin.com](https://hastebin.com) (expires 30 days after last view)
-report|generate a web report for easy sharing of run results (default is only a text log file)
+report|web report for sharing of run results on webserver (default is only a text log file)
 debug|show run-time backend messages from PhantomJS for detailed tracing and logging
 quiet|run without output except for explicit output (echo / show / check / errors etc)
-test|professional testing using [CasperJS assertions](http://docs.casperjs.org/en/latest/modules/tester.html) (TagUI dynamic tx('selector') usable)
+test|professional testing using [CasperJS assertions](http://docs.casperjs.org/en/latest/modules/tester.html) (TagUI smart tx('selector') usable)
 input(s)|add your own parameter(s) to be used in your automation flow as variables p1 to p9
 
 Tip - to run tagui from anywhere in macOS/Linux, use ln -sf /full_path/tagui/src/tagui /usr/local/bin/tagui to create symbolic link. To run tagui from anywhere in Windows, add tagui/src [folder to path](http://lmgtfy.com/?q=add+to+path+in+windows). Then tagui will be accessible from any folder. If you have issue running visible automation using Firefox/SlimerJS [check this setting](https://docs.slimerjs.org/current/installation.html#using-unstable-version-or-very-old-versions-of-firefox).
@@ -99,17 +99,17 @@ To schedule an automation flow in crontab (macOS/Linux), for example at 8am dail
 Tip - for Windows, use Task Scheduler instead (search schedule from Start Menu)
 
 ### CHROME EXTENSION
-Download from [Chrome Web Store](https://chrome.google.com/webstore/detail/tagui-web-automation/egdllmehgfgjebhlkjmcnhiocfcidnjk/) to use TagUI Chrome web browser extension for recording automation flows. TagUI Chrome extension is based on [Resurrectio tool](https://github.com/ebrehault/resurrectio) and records steps such as page navigation, clicking web elements and entering information. To start recording your automation flows, simply click TagUI icon on your Chrome toolbar. Right-click for shortcuts to various TagUI steps, such as capturing webpage or element screenshot. The recording cannot be 100% foolproof. It is meant to simplify flow creation with some edits, instead of having to type everything manually.
+Download from [Chrome Web Store](https://chrome.google.com/webstore/detail/tagui-web-automation/egdllmehgfgjebhlkjmcnhiocfcidnjk/) to use TagUI Chrome web browser extension for recording automation flows. TagUI Chrome extension is based on [Resurrectio tool](https://github.com/ebrehault/resurrectio) and records steps such as page navigation, clicking web elements and entering information. To start recording your automation flows, simply click TagUI icon on your Chrome toolbar. Right-click for shortcuts to various TagUI steps, such as capturing webpage or element screenshot. The recording is not 100% foolproof. It is meant to simplify flow creation with some edits, instead of having to type everything manually.
 
 ### VISUAL AUTOMATION
 TagUI has built-in integration with [Sikuli (base on OpenCV)](http://sikulix.com) to allow identifying web elements and desktop user interface elements for interaction. Steps that support visual automation are tap / click, hover / move, type / enter, select / choose. Simply specify an image filename (.png or .bmp format) of what to look for visually, in place of the element identifier, to use visual automation alongside your usual automation steps. Powerful stuff - hybrid automation.
 
-Sikuli is excluded from TagUI packaged installation due to complex dependencies that are handled by its installer. [Download Sikuli](http://sikulix.com/quickstart/) (choose Option 1) to tagui/src/tagui.sikuli folder and setup. Relative paths are supported for image filenames (eg pc.png, images/button.bmp). A screen (real or Xvfb) is needed for visual automation.
+Sikuli is excluded from TagUI packaged installation due to complex dependencies that are handled by its installer. [Download Sikuli](http://sikulix.com/quickstart/) to tagui/src/tagui.sikuli folder and setup (choose option 1 - Pack1). Relative paths are supported for image filenames (eg pc.png, images/button.bmp). A screen (real or Xvfb) is needed for visual automation.
 
 ![Sample Visual Automation](https://raw.githubusercontent.com/tebelorg/Tump/master/visual_flow.gif)
 
 ### FLOW SAMPLES
-Following automation flow samples ([tagui/src/samples folder](https://github.com/tebelorg/TagUI/tree/master/src/samples)) are included as part of this repository
+Following automation flow samples ([tagui/src/samples folder](https://github.com/tebelorg/TagUI/tree/master/src/samples)) are included with TagUI
 
 Flow Sample |Purpose
 :-----------|:------
@@ -148,22 +148,22 @@ snap|element (page = webpage) ***to*** optional filename|save screenshot to file
 download|url to download ***to*** filename to save|download from url to file
 receive|url keyword to watch ***to*** filename to save|receive resource to file
 wait|optional time in seconds (default is 5 seconds)|explicitly wait for some time
-live|try steps or code interactively in invisible browser|enter live mode ([firefox pending](https://github.com/laurentj/slimerjs/issues/188))
+live|try steps or code interactively in Chrome / PhantomJS|enter live mode ([firefox pending](https://github.com/laurentj/slimerjs/issues/188))
 check|condition **&#124;** text if true **&#124;** text if false (text in quotes)|check condition and print result
 frame|frame name **&#124;** subframe name if any|next step or block in frame/subframe
 popup|url keyword of popup window to look for|next step or block in popup window
 { and }|use { to start block and } to end block|define step/code block
 api|full url (including parameters) of api call|call api save response to api_result
-dom|javascript code for document object model|run code in dom context
+dom|javascript code for document object model|run code in dom save to dom_result
 js|javascript statements (skip auto-detection)|treat as JS code explicitly
 //|user comments (ignored during execution)|add user comments
 
-Tip - in general to use variables, '+variable+' can be used where text is expected. xpath is an expressive way to identify web elements. if you know xpath and are using xpath for element identifier, use double quotes for text //\*[@title="Login"]
+Tip - to use variables where text is expected, '+variable+' can be used. xpath is an expressive way to identify web elements. if you know xpath and using xpath for element identifier, use double quotes for text //\*[@title="Login"]
 
 ### CONDITIONS EXAMPLES
-- Conditions can be expressed in natural language (brackets optional) or [JavaScript](https://www.w3schools.com/js/)
+- Conditions can be expressed in natural language (optional brackets) or [JavaScript](https://www.w3schools.com/js/)
 - Write text in quotation marks (either " or ' works) to differentiate text from variable names
-- if / for / while apply to next step or block, async auto-disables in while loop (will hang CasperJS)
+- if / for / while apply to next step or block, auto-wait disables in while loop (will hang CasperJS)
 
 Condition (in natural language)|JavaScript
 :------------------------------|:---------
@@ -200,10 +200,10 @@ type email|type \`email\` as user@gmail.com
   
 ### DATATABLES
 - Datatables extend the power of repositories files to manage batch automation
-- Datatable has 2 or more columns, for example below (headers up to you to name)
-- Data-centric approach with rows representing data fields (usually row = test case)
 - TagUI loops through each column to automate using values from different datasets
 - Eg, echo "TESTCASE - \`testname\`" in your flow shows TESTCASE - Trade USDSGD
+- Data-centric approach with rows representing data fields (usually row = test case)
+- Auto-detect and tranpose if datatable is in traditional format (column = data fields)
 
 TEST TRADES|TEST #1|TEST #2|TEST #3
 :----------|:------|:------|:------
@@ -228,17 +228,17 @@ your_website_url/tagui_service.php?SETTINGS="flow_filename option(s)"
 
 Besides integrating with web applications, TagUI can be extended to integrate with hardware (eg Arduino or Raspberry Pi) for physical world interactions or machine learning service providers for AI decision-making ability. Input parameters can be sent to an automation flow to be used as variables p1 to p9. Output parameters from an automation flow can be sent to your Arduino or application REST URL (see flow samples 3_github and 6C_datatables for examples).
 
-For making outgoing API calls in your automation flow, to feed data somewhere or send emails etc, use the api step followed by full URL (including parameters) of the API call. Response from the API will be saved in api_result variable. If the API response is JSON data, the variable api_json will be created for easy access to JSON data elements. Eg, api_json.parent_element.child_element retrieves value of child_element. If not, api_json will be null.
+For making outgoing API calls in your automation flow, to feed data somewhere or send emails etc, use the api step followed by full URL (including parameters) of the API call. Response from the API will be saved in api_result variable. If the API response is JSON data, the variable api_json will be created for easy access to JSON data elements. For example, api_json.parent_element.child_element retrieves value of child_element. If not, api_json will be null.
 
-For advance API calls, you can use the variable api_config which defaults as `{method:'GET', header:[], body:{}}`. Besides GET, you can use other methods such as POST, PUT, DELETE etc. You can define multiple headers in the format `'Header_name: header_value'` and provide a payload body for PUT requests for example. You can also set it like below before using the api step, or set using `api_config.method = 'PUT';` and `api_config.header[0] = 'Header1: value1';` etc. Also, `api_config.body` will be automatically converted to JSON format for sending to the API endpoint.
 ```js
 api_config = {method:'PUT', header:['Header1: value1','Header2: value2'], body:{'id':123,'pwd':'abc'}};
 ```
+For advance API calls, you can set above variable api_config which defaults as `{method:'GET', header:[], body:{}}`. Besides GET, you can use other methods such as POST, PUT, DELETE etc. You can define multiple headers in the format `'Header_name: header_value'` and provide a payload body for PUT requests for example. You can also set it like below before using the api step, or set using `api_config.method = 'PUT';` and `api_config.header[0] = 'Header1: value1';` etc. Also, `api_config.body` will be automatically converted to JSON format for sending to the API endpoint.
 
 ### TESTING
 The step check allows simple testing of conditions. For professional test automation, CasperJS comes with a tester module for unit and functional testing purpose. To use the advanced testing features, run TagUI with the test option.
 
-CasperJS test scripts are inherently different in structure and syntax from its usual automation scripts. With the test option, TagUI automatically sets up your automation flow to work as a test script. CasperJS will output a XUnit XML file, which is compatible with continuous integration tools such as Jenkins. Running together with the report option outputs a web report of the test execution for easy sharing.
+CasperJS test scripts are inherently different in structure and syntax from its usual automation scripts. With the test option, TagUI automatically sets up your automation flow to work as a test script. CasperJS will output a XUnit XML file, which is compatible with continuous integration tools such as Jenkins.
 
 TagUI allows you to reuse the same flow for testing or automation by running it with or without the test option. Below are examples of CasperJS test assertions written in JavaScript code that can be used directly in your automation flow (after navigating using usual flow steps). As this is direct CasperJS code, there is no auto-wait. You can use the wait step to explicitly wait for a few seconds for steps which take a long time for web-server to respond.
 ```js
@@ -256,10 +256,14 @@ Filename |Purpose
 tagui|main runner for TagUI web automation
 tagui.cmd|main runner for Windows platform
 tagui.py|interface for Sikuli visual automation
+tagui_chrome.php|PHP thread for Chrome integration
+tagui_chrome.in|interface in-file for Chrome integration
+tagui_chrome.out|interface out-file for Chrome integration
+tagui_chrome.log|log for Chrome websocket transactions
 tagui_config.txt|web browser settings used for automation
 tagui_crontab|to run service request batch from crontab
-tagui_footer.js|footer template for CasperJS code
-tagui_header.js|header template for CasperJS code
+tagui_footer.js|template for CasperJS / integrations code
+tagui_header.js|template for CasperJS / integrations code
 tagui_parse.php|to interpret natural language into code
 tagui_report.php|to generate html report from text log
 tagui_runner.php|retrieving service requests from queue
@@ -272,6 +276,7 @@ tagui_service.run|service request batch currently running
 tagui_service.done|service request batch finished running
 tagui_sikuli.in|interface in-file for Sikuli integration
 tagui_sikuli.out|interface out-file for Sikuli integration
+tagui.sikuli/tagui.log|log for Sikuli Python transactions
 
 # Be a Force for Good
 TagUI default config does not hide identity as an automated user
