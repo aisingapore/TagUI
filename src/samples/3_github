@@ -14,6 +14,7 @@ fetch (//*[@class="numbers-summary"]/li)[5] to license_type
 check license_type equals to "MIT" | "Yes, repo is under MIT license." | "No, repo is not under MIT license."  
 
 // note - some websites including GitHub may detect and block automated downloads
+
 // use download step to proactively download a file directly from an URL
 download https://github.com/tebelorg/Tmail/archive/master.zip to download.zip
 
@@ -24,8 +25,10 @@ receive archive/master.zip to receive.zip
 click Clone or download
 click Download ZIP
 
-// use api step to call api and print response (bonus example for developers and tinkerers)
+// use api step to call api, response will be saved in api_result variable
 // variables can be used (eg from fetch or read step, files or self-declared)
 // use '+variable_name+' to incorporate variables into your api call 
 var country = "SG";
 api http://services.groupkt.com/country/get/iso2code/'+country+'
+echo api_result
+echo 'Country name - ' + api_json.RestResponse.result.name
