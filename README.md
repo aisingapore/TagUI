@@ -235,6 +235,17 @@ api_config = {method:'PUT', header:['Header1: value1','Header2: value2'], body:{
 ```
 For advance API calls, you can set above variable api_config which defaults as `{method:'GET', header:[], body:{}}`. Besides GET, you can use other methods such as POST, PUT, DELETE etc. You can define multiple headers in the format `'Header_name: header_value'` and provide a payload body for PUT requests for example. You can also set it like below before using the api step, or set using `api_config.method = 'PUT';` and `api_config.header[0] = 'Header1: value1';` etc. Also, `api_config.body` will be automatically converted to JSON format for sending to the API endpoint.
 
+### CHROME
+TagUI has built-in integration with Chrome web browser to run automation in visible or headless mode. It uses a websocket connection to directly communicate automation steps and JavaScript code to Chrome and back.
+
+TagUI will start a separate PHP thread in the background to manage the integration with Chrome for concurrent communication. The [Textalk PHP websocket](https://github.com/Textalk/websocket-php) is used as it is super-light and most importantly, it works even without any update for 2 years. The normal approach to integrate with Chrome is through [chrome-remote-interface](https://github.com/cyrus-and/chrome-remote-interface) project or tools [such as Chromy](https://github.com/OnetapInc/chromy) which is based on chrome-remote-interface. However, this approach introduces Node.js dependency which means that users without a Node.js development environment cannot run TagUI with Chrome.
+
+In order to avoid adding new dependencies, the approach of launching a separate PHP thread is chosen. Since the TagUI natural language interpreter is already written in PHP, there is no new dependency. Also, doing websocket communication within the single-threaded JavaScript environment used by CasperJS is not possible as it involves a redesign of fundamental CasperJS methods such as casper.exists to support async/await or use JavaScript promises which are not yet supported by CasperJS (for compatibility with the latest PhantomJS).
+
+Like chrome-remote-interface, TagUI communicates with Chrome through [chrome debugging protocol](https://chromedevtools.github.io/devtools-protocol/). The protocol is primarily designed for debugging the web browser instead of web automation, so many methods are still in experimental status. However, the API is stable enough for TagUI steps to work with Chrome. Basically, CasperJS methods used by TagUI steps are replaced with custom methods to talk to Chrome instead of PhantomJS when chrome or headless option is used. When firefox option is used or by default, TagUI does not invoke these custom methods.
+
+To develop new custom methods for Chrome integration, see this [TagUI issue](https://github.com/tebelorg/TagUI/issues/24#issuecomment-312361674) and [tagui_header.js](https://github.com/tebelorg/TagUI/blob/master/src/tagui_header.js) for examples of websocket calls from TagUI to Chrome via Chrome Debugging Protocol. You will see examples from simple websocket calls such as getting webpage title to stacked ones such as handling of frame or popup window.
+
 ### TESTING
 The step check allows simple testing of conditions. For professional test automation, CasperJS comes with a tester module for unit and functional testing purpose. To use the advanced testing features, run TagUI with the test option.
 
@@ -248,14 +259,13 @@ test.assertSelectorHasText(tx('header'), 'Interface automation','Check for phras
 
 For the list of 30+ expressive test assertions built into CasperJS, [click here](http://docs.casperjs.org/en/latest/modules/tester.html). To know more about CasperJS testing framework, [click here](http://docs.casperjs.org/en/latest/testing.html). As TagUI allows you to write JavaScript code directly within the automation flow, advanced testing or coding techniques that can be implemented in CasperJS should work directly within your flow.
 
-TagUI recognizes most JavaScript code automatically. In the rare event you get an error saying that it cannot understand the step for your JavaScript line, raise an issue or modify the source code (tagui_parse.php is where interpretation of natural language to CasperJS JavaScript code takes place). Alternatively, you can use step js to explicitly declare that whatever follows on that line is JavaScript code and ensure that the line is not treated as a TagUI step.
+TagUI recognizes most JavaScript code automatically. In the rare event you get an error saying that it cannot understand the step for your JavaScript line, raise an issue or modify the source code ([tagui_parse.php](https://github.com/tebelorg/TagUI/blob/master/src/tagui_parse.php) is where interpretation of natural language to CasperJS JavaScript code takes place). Alternatively, you can use step js to explicitly declare that whatever follows on that line is JavaScript code and ensure that the line is not treated as a TagUI step.
 
 ### FILES
 Filename |Purpose
 :--------|:------
 tagui|main runner for TagUI web automation
 tagui.cmd|main runner for Windows platform
-tagui.py|interface for Sikuli visual automation
 tagui_chrome.php|PHP thread for Chrome integration
 tagui_chrome.in|interface in-file for Chrome integration
 tagui_chrome.out|interface out-file for Chrome integration
@@ -274,9 +284,10 @@ tagui_service.log|log to track service requests history
 tagui_service.act|service request batch ready to execute
 tagui_service.run|service request batch currently running
 tagui_service.done|service request batch finished running
+tagui.py|interface for Sikuli visual automation
+tagui.log|log for Sikuli Python transactions
 tagui_sikuli.in|interface in-file for Sikuli integration
 tagui_sikuli.out|interface out-file for Sikuli integration
-tagui.sikuli/tagui.log|log for Sikuli Python transactions
 
 # Be a Force for Good
 TagUI default config does not hide identity as an automated user
