@@ -11,14 +11,16 @@ The goal of web automation is to reproduce cognitive interactions that you have 
 This is a full-feature and free open-source tool, so there's nothing to upgrade to or any paid subscription. To feedback suggestions or bugs, [raise an issue](https://github.com/tebelorg/TagUI/issues) or email ken@tebel.org. Originally developed by a test automation engineer to avoid writing chunks of code when automating web interactions.
 
 ### FEATURES
-- automate on Chrome, Firefox, PhantomJS
+- automate Chrome, Firefox, PhantomJS
+- unzip and run on macOS, Linux, Windows
 - natural language with JavaScript support
 - Chrome extension for recording steps
 - object repositories / flexible datatables
 - intelligent XPath/CSS element selector
 - visual automation of website and desktop
 - live mode to try steps or code in real-time
-- run by schedule, command line, REST API
+- option to auto-upload run results online
+- run by schedule, command line, API URL
 - advance outgoing API calls to webservices
 
 ### HOW IT WORKS
@@ -36,11 +38,11 @@ click section_results
 download https://admin.typeform.com/form/2592751/analyze/csv to report.csv
 ```
 
-The automation flow can be triggered from scheduling, command line, URL, REST API, email etc. Everything happens headlessly in the background without seeing any web browser, so that you can continue using the computer or server uninterrupted. Running on a visible web browser is also supported, using Chrome or Firefox browser (see chrome or firefox option below). API calls can be made with a single line to integrate with other applications.
+The automation flow can be triggered from scheduling, command line, API URL, email etc. Everything happens headlessly in the background without seeing any web browser, so that you can continue using the computer or server uninterrupted. Running on a visible web browser is also supported, using Chrome or Firefox browser (see chrome or firefox option below). API calls can be made with a single line to integrate with other applications.
 
 If you know JavaScript and want to be more expressive, you can even use JavaScript directly in the flow. If not, you will still enjoy friendly but powerful features such as repositories to store your reusable objects, flexible datatables for batch automation, and a Chrome extension which creates automation flows by recording your actions. For rapid prototyping, there's also an interactive live mode for trying out TagUI steps or JavaScript code in real-time. TagUI has built-in integration with Chrome / headless Chrome directly, which also works in live mode.
 
-There is automatic waiting for web elements to appear + error-checking + nesting of JavaScript code blocks. Not forgetting the ability to run automation flows hosted online or auto-uploading run results online for sharing. TagUI also supports visual automation of website and desktop through built-in integration with Sikuli. Instead of using element identifiers, images can be used to identify user interface elements to interact with.
+There is automatic waiting for web elements to appear + error-checking + nesting of JavaScript code blocks. Not forgetting the option to run automation flows hosted online or auto-upload run results online for sharing. TagUI also supports visual automation of website and desktop through built-in integration with Sikuli. Instead of using element identifiers, images can be used to identify user interface elements to interact with.
 
 # Set Up
 TagUI is in v1.8 and runs on macOS, Linux, Windows ([link to release notes](https://github.com/tebelorg/TagUI/releases))
@@ -65,7 +67,7 @@ If you prefer to download dependencies manually from respective websites
 4. TagUI (general purpose web automation tool) - https://git.io/vMCTZ
 5. PHP (only required for manual Windows setup) - http://windows.php.net
 
-Tip - recommend putting TagUI to a folder path without spaces (some dependencies have issue with that). for manual Windows setup, 1. set SLIMERJS_EXECUTABLE env variable to point to slimerjs.bat, 2. place [GNU utilities](http://unxutils.sourceforge.net) (gawk/tee/sort/head/tail), [curl ssl](https://curl.haxx.se) in tagui\src\unx, 3. add phantomjs\bin, casperjs\bin, php folders to path
+Tip - recommend putting TagUI to a folder path without spaces (some dependencies have issue with that). for manual Windows setup, 1. set SLIMERJS_EXECUTABLE env variable to point to slimerjs.bat, 2. put [GNU utilities](http://unxutils.sourceforge.net) (cut / gawk / grep / head / sort / tail / tee), [curl ssl](https://curl.haxx.se) in tagui\src\unx, 3. add phantomjs\bin, casperjs\bin, php folders to path
 
 # To Use
 ### COMMAND LINE
@@ -216,7 +218,7 @@ direction|BUY|SELL|BUY
 
 # Developers Reference
 ### API
-Automation flows can also be triggered via REST API. TagUI has an API service and runner for managing a queue of incoming requests via API. To set up, add a crontab entry on your server with the desired frequency to check and process incoming service requests. Below will check every 15 minutes and run pending flows in the queue. If there's an automation in progress, TagUI will wait for the next check instead of concurrently starting a new run.
+Automation flows can also be triggered via API URL. TagUI has an API service and runner for managing a queue of incoming requests via API. To set up, add a crontab entry on your server with the desired frequency to check and process incoming service requests. Below will check every 15 minutes and run pending flows in the queue. If there's an automation in progress, TagUI will wait for the next check instead of concurrently starting a new run.
 ```
 0,15,30,45 * * * * /full_path_on_your_server/tagui_crontab
 ```
@@ -226,7 +228,7 @@ To call an automation flow from your application or web browser, use below API s
 your_website_url/tagui_service.php?SETTINGS="flow_filename option(s)"
 ```
 
-Besides integrating with web applications, TagUI can be extended to integrate with hardware (eg Arduino or Raspberry Pi) for physical world interactions or machine learning service providers for AI decision-making ability. Input parameters can be sent to an automation flow to be used as variables p1 to p9. Output parameters from an automation flow can be sent to your Arduino or application REST URL (see samples 3_github and 6C_datatables).
+Besides integrating with web applications, TagUI can be extended to integrate with hardware (eg Arduino or Raspberry Pi) for physical world interactions or machine learning service providers for AI decision-making ability. Input parameters can be sent to an automation flow to be used as variables p1 to p9. Output parameters from an automation flow can be sent to your Arduino or application API URL (see samples 3_github and 6C_datatables).
 
 For making outgoing API calls in your automation flow, to feed data somewhere or send emails etc, use the api step followed by full URL (including parameters) of the API call. Response from the API will be saved in api_result variable. If the API response is JSON data, the variable api_json will be created for easy access to JSON data elements. For example, api_json.parent_element.child_element retrieves value of child_element. If not, api_json will be null.
 
@@ -238,15 +240,15 @@ For advance API calls, you can set above variable api_config which defaults as `
 ### CHROME
 TagUI has built-in integration with Chrome web browser to run web automation in visible or headless mode. It uses a websocket connection to directly communicate automation JavaScript code and information to Chrome.
 
-TagUI will start a separate PHP thread in the background to manage the integration with Chrome for concurrent communication. The [Textalk PHP websocket](https://github.com/Textalk/websocket-php) is used as it is super-light and most importantly, it works even without any update for 2 years. The normal approach to integrate with Chrome is through [chrome-remote-interface](https://github.com/cyrus-and/chrome-remote-interface) project or tools [such as Chromy](https://github.com/OnetapInc/chromy) which is based on chrome-remote-interface. However, that approach introduces Node.js dependency which means users without a Node.js development environment cannot run TagUI with Chrome.
+To develop new custom methods for Chrome integration, see this [TagUI issue](https://github.com/tebelorg/TagUI/issues/24#issuecomment-312361674) and [tagui_header.js](https://github.com/tebelorg/TagUI/blob/master/src/tagui_header.js) for examples of websocket calls from TagUI to Chrome (via Chrome Debugging Protocol). The function chrome_step(method, params) sends message to Chrome and returns the response. You will see examples from simple websocket calls such as getting webpage title to stacked ones such as handling of frame or popup window. To tweak how TagUI launches / kills Chrome and the integration PHP process, see TagUI runner script for [macOS/Linux](https://github.com/tebelorg/TagUI/blob/master/src/tagui) or [Windows](https://github.com/tebelorg/TagUI/blob/master/src/tagui.cmd). 
+
+Probably the best way to see the websocket communication in action is to enter TagUI live mode (add live step in your automation flow), then tail -f tagui_chrome.log in another terminal to see the Chrome Debugging Protocol messages going to and fro as you enter TagUI steps or JavaScript code. If you are running on Windows, you can click on the PHP process window directly to see the messages.
+
+At run-time TagUI will start a PHP thread in the background to manage the integration with Chrome for concurrent communication. The [Textalk PHP websocket](https://github.com/Textalk/websocket-php) is used as it is super-light and most importantly, it works even without any update for 2 years. The normal approach to integrate with Chrome is through [chrome-remote-interface](https://github.com/cyrus-and/chrome-remote-interface) project or tools [such as Chromy](https://github.com/OnetapInc/chromy) which is based on chrome-remote-interface. However, that approach introduces Node.js dependency which means users without a Node.js development environment cannot run TagUI with Chrome.
 
 In order to retain TagUI unzip and run functionality, the approach of launching a [separate PHP thread](https://github.com/tebelorg/TagUI/blob/master/src/tagui_chrome.php) is chosen. Since the TagUI [natural language interpreter](https://github.com/tebelorg/TagUI/blob/master/src/tagui_parse.php) is already written in PHP, there is no new dependency. Also, doing websocket communication within the single-threaded JavaScript environment used by CasperJS is not possible as it involves a redesign of fundamental CasperJS methods such as casper.exists to support async/await or use JavaScript promises which are not yet supported by CasperJS (for compatibility with [latest PhantomJS](https://github.com/casperjs/casperjs/issues/1663#issuecomment-285952446)).
 
 Like chrome-remote-interface, TagUI communicates with Chrome through [Chrome Debugging Protocol](https://chromedevtools.github.io/devtools-protocol/). The protocol is primarily designed for debugging the web browser instead of web automation, so many methods are still in experimental status. However, the API is stable enough for TagUI steps to work with Chrome. When chrome or headless option is used, TagUI replaces CasperJS methods it uses with custom methods to talk to Chrome instead of PhantomJS. When firefox option is used or by default, TagUI doesn't invoke custom methods and PHP process.
-
-To develop new custom methods for Chrome integration, see this [TagUI issue](https://github.com/tebelorg/TagUI/issues/24#issuecomment-312361674) and [tagui_header.js](https://github.com/tebelorg/TagUI/blob/master/src/tagui_header.js) for examples of websocket calls from TagUI to Chrome (via Chrome Debugging Protocol). The function chrome_step(method, params) sends message to Chrome and returns the response. You will see examples from simple websocket calls such as getting webpage title to stacked ones such as handling of frame or popup window. To change how TagUI launches / kills Chrome and the PHP process, see TagUI runner script for [macOS/Linux](https://github.com/tebelorg/TagUI/blob/master/src/tagui) or [Windows](https://github.com/tebelorg/TagUI/blob/master/src/tagui.cmd). 
-
-Probably the best way to see the websocket communication in action is to enter TagUI live mode (add live step in your automation flow), then tail -f tagui_chrome.log in another terminal to see the Chrome Debugging Protocol messages going to and fro as you enter TagUI steps or JavaScript code.
 
 ### TESTING
 The step check allows simple testing of conditions. For professional test automation, CasperJS comes with a tester module for unit and functional testing purpose. To use the advanced testing features, run TagUI with test option.
