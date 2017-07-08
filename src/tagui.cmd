@@ -417,7 +417,7 @@ if exist "tagui.sikuli\tagui_sikuli.in" (
 rem start chrome processes if integration file is created during parsing
 set chrome_started=
 if exist "tagui_chrome.in" (
-	echo [starting chrome websocket] | tee -a "%flow_file%.log"
+	rem echo [starting chrome websocket] | tee -a "%flow_file%.log"
 
 	rem get window size from tagui_config.txt to set for chrome, estimating into account the height of chrome title bar
 	for /f "tokens=* usebackq" %%w in (`grep width tagui_config.txt ^| cut -d" " -f 2`) do set width=%%w
@@ -430,6 +430,7 @@ if exist "tagui_chrome.in" (
 	if "%tagui_web_browser%"=="headless" set headless_switch=--headless --disable-gpu
 
 	rem check for which operating system and launch chrome accordingly
+	taskkill /IM chrome.exe /T /F > nul 2>&1
 	set chrome_started=Windows
 	set chrome_switches=--remote-debugging-port=9222 about:blank
 	start "" "%chrome_command%" !chrome_switches! !window_size! !headless_switch!

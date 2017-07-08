@@ -87,7 +87,7 @@ var time_now = new Date().getTime(); var time_end = time_now + ms;
 while(time_now < time_end) {time_now = new Date().getTime();}}
 
 // for initialising integration with sikuli visual automation
-function sikuli_handshake() {techo('[connecting to sikuli process]');
+function sikuli_handshake() { // techo('[connecting to sikuli process]');
 var ds; if (flow_path.indexOf('/') !== -1) ds = '/'; else ds = '\\';
 var fs = require('fs'); fs.write('tagui.sikuli'+ds+'tagui_sikuli.in','','w'); var sikuli_handshake = '';
 if (!fs.exists('tagui.sikuli'+ds+'tagui_sikuli.out')) fs.write('tagui.sikuli'+ds+'tagui_sikuli.out','','w');
@@ -108,7 +108,7 @@ if (chrome_id > 0) { // super large if block to load chrome related functions if
 chrome_id = 0; // reset chrome_id from 1 back to 0 to prepare for initial call of chrome_step
 
 // for initialising integration with chrome web browser
-function chrome_handshake() { techo('[connecting to chrome websocket]');
+function chrome_handshake() { // techo('[connecting to chrome websocket]');
 var fs = require('fs'); fs.write('tagui_chrome.in','','w'); var chrome_handshake = '';
 if (!fs.exists('tagui_chrome.out')) fs.write('tagui_chrome.out','','w');
 do {sleep(100); chrome_handshake = fs.read('tagui_chrome.out').trim();}

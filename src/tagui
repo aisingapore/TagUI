@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # SCRIPT FOR RUNNING TAGUI FRAMEWORK ~ TEBEL.ORG #
 
-# configure command to launch chrome for Linux
+# configure command to launch chrome for Linux (configuration for macOS not required as path is fixed)
 chrome_command="google-chrome"
 
 if [ -z "$1" ]
@@ -200,7 +200,7 @@ fi
 # start chrome processes if integration file is created during parsing
 chrome_started=""
 if [ -f "tagui_chrome.in" ]; then
-echo "[starting chrome websocket]" | tee -a "$1".log
+# echo "[starting chrome websocket]" | tee -a "$1".log
 
 # get window size from tagui_config.txt to set for chrome, estimating into account the height of chrome title bar
 width="$(grep width tagui_config.txt | cut -d' ' -f 2)"; height="$(grep height tagui_config.txt | cut -d' ' -f 2)"
@@ -212,8 +212,8 @@ headless_switch=""; if [ "$tagui_web_browser" == "headless" ]; then headless_swi
 # check for which operating system and launch chrome accordingly
 chrome_started="$(uname -s)"; chrome_switches="--remote-debugging-port=9222 about:blank"
 if [ "$chrome_started" == "Darwin" ]; then
-open -a Google\ Chrome --args $chrome_switches $window_size $headless_switch
-else $chrome_command $chrome_switches $window_size $headless_switch &
+pkill Google\ Chrome; /Applications/Google\ Chrome.app/Contents/MacOS/Google\ Chrome $chrome_switches $window_size $headless_switch > /dev/null 2>&1 &
+else pkill $chrome_command; $chrome_command $chrome_switches $window_size $headless_switch > /dev/null 2>&1 &
 fi
 
 # wait until chrome is ready with websocket url for php thread
