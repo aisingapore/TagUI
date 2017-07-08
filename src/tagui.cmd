@@ -1,18 +1,23 @@
 @echo off
 rem # SCRIPT FOR RUNNING TAGUI FRAMEWORK ~ TEBEL.ORG #
 
+rem configure command to launch chrome for Windows
+set chrome_command=C:\Program Files (x86)\Google\Chrome\Application\chrome.exe
+
 rem enable windows for loop advanced flow control
 setlocal enableextensions enabledelayedexpansion
 
 if "%~1"=="" (
-echo tagui v1.8: use following syntax and below options to run - tagui flow_filename option^(s^)
+echo tagui v2.0: use following syntax and below options to run - tagui flow_filename option^(s^)
 echo.
-echo firefox - run on visible Firefox web browser instead of invisible browser ^(first install Firefox^)
-echo report - generate a web report for easy sharing of run results ^(default is only a text log file^)
-echo upload - upload automation flow and result to hastebin.com ^(expires 30 days after last view^)
-echo debug - show run-time backend messages from PhantomJS for detailed tracing and logging
-echo quiet - run without output except for explicit output ^(echo / show / check / api / errors etc^)
-echo test - professional testing using CasperJS assertions ^(TagUI dynamic tx^('selector'^) usable^)
+echo headless - run on invisible Chrome web browser instead of default PhantomJS ^(first install Chrome^)
+echo chrome   - run on visible Chrome web browser instead of invisible PhantomJS ^(first install Chrome^)
+echo firefox  - run on visible Firefox web browser instead of invisible browser ^(first install Firefox^)
+echo upload   - upload automation flow and result to hastebin.com ^(expires 30 days after last view^)
+echo report   - web report for sharing of run results on webserver ^(default is only a text log file^)
+echo debug    - show run-time backend messages from PhantomJS for detailed tracing and logging
+echo quiet    - run without output except for explicit output ^(echo / show / check / errors etc^)
+echo test     - professional testing using CasperJS assertions ^(TagUI smart tx^('selector'^) usable^)
 echo input^(s^) - add your own parameter^(s^) to be used in your automation flow as variables p1 to p9
 echo.
 echo TagUI is a general purpose tool for automating web interactions ~ http://tebel.org
@@ -349,10 +354,6 @@ rem concatenate parameters in order to fix issue when calling casperjs test
 rem $1 left out - filenames with spaces have issue when casperjs $params
 set params=%arg2% %arg3% %arg4% %arg5% %arg6% %arg7% %arg8% %arg9%
 
-rem initialise log file and set permissions to protect user data
-rem skip permissions setting for windows, only done for macos and linux
-type nul > "%flow_file%.log"
-
 rem check if api call is made in automation flow file to set appropriate setting for phantomjs to work
 set api=
 if exist "%flow_file%" (
@@ -360,9 +361,22 @@ if exist "%flow_file%" (
 	if not errorlevel 1 set api= --web-security=false
 )
 
+rem initialise log file and set permissions to protect user data
+rem skip permissions setting for windows, only done for macos and linux
+type nul > "%flow_file%.log"
+type nul > "tagui.sikuli\tagui.log"
+type nul > "tagui_chrome.log"
+
 rem delete sikuli visual automation integration files if they exist
 if exist "tagui.sikuli\tagui_sikuli.in" del "tagui.sikuli\tagui_sikuli.in" 
 if exist "tagui.sikuli\tagui_sikuli.out" del "tagui.sikuli\tagui_sikuli.out"
+
+rem delete chrome / headless chrome integration files if they exist 
+if exist "tagui_chrome.in" del "tagui_chrome.in"
+if exist "tagui_chrome.out" del "tagui_chrome.out"
+
+rem default exit code 0 to mean no error parsing automation flow file
+set tagui_error_code=0
 
 rem check datatable csv file for batch automation
 set tagui_data_set_size=1 
@@ -379,14 +393,11 @@ if not exist "%flow_file%.csv" goto no_datatable
 	)
 :no_datatable
 
-rem default exit code 0 to mean no error parsing automation flow file
-set tagui_error_code=0
-
-rem loop for managing multiple data sets in datatable
+rem big loop for managing multiple data sets in datatable
 for /l %%n in (1,1,%tagui_data_set_size%) do (
 set tagui_data_set=%%n
 
-rem parse automation flow file and check for initial parse error before calling casperjs
+rem parse automation flow file, check for initial parse error, check sikuli and chrome, before calling casperjs
 php -q tagui_parse.php "%flow_file%" | tee -a "%flow_file%.log"
 for /f "usebackq" %%f in ('%flow_file%.log') do set file_size=%%~zf
 if !file_size! gtr 0 (
@@ -397,15 +408,57 @@ if !file_size! gtr 0 (
 	)
 )
 
-if exist "tagui.sikuli\tagui_sikuli.in" start /min cmd /c tagui.sikuli\runsikulix -r tagui.sikuli ^> tagui.sikuli\tagui.log
+rem start sikuli process if integration file is created during parsing
+if exist "tagui.sikuli\tagui_sikuli.in" (
+	echo [starting sikuli process] | tee -a "%flow_file%.log"
+	start /min cmd /c tagui.sikuli\runsikulix -r tagui.sikuli ^| tee -a tagui.sikuli\tagui.log
+)
 
+rem start chrome processes if integration file is created during parsing
+set chrome_started=
+if exist "tagui_chrome.in" (
+	echo [starting chrome websocket] | tee -a "%flow_file%.log"
+
+	rem get window size from tagui_config.txt to set for chrome, estimating into account the height of chrome title bar
+	for /f "tokens=* usebackq" %%w in (`grep width tagui_config.txt ^| cut -d" " -f 2`) do set width=%%w
+	for /f "tokens=* usebackq" %%h in (`grep height tagui_config.txt ^| cut -d" " -f 2`) do set height=%%h
+	if "%tagui_web_browser%"=="chrome" set /a height=!height!+74
+	set window_size=--window-size=!width!!height!
+
+	rem setting to run chrome in headless mode if headless option is used
+	set headless_switch=
+	if "%tagui_web_browser%"=="headless" set headless_switch=--headless --disable-gpu
+
+	rem check for which operating system and launch chrome accordingly
+	set chrome_started=Windows
+	set chrome_switches=--remote-debugging-port=9222 about:blank
+	start "" "%chrome_command%" !chrome_switches! !window_size! !headless_switch!
+
+	:scan_ws_again
+	rem wait until chrome is ready with websocket url for php thread
+	for /f "tokens=* usebackq" %%u in (`curl -s localhost:9222/json ^| grep -A 1 "\"url\": \"about:blank\"" ^| grep webSocketDebuggerUrl ^| cut -d" " -f 5`) do set ws_url=%%u
+	if "!ws_url!"=="" goto scan_ws_again
+
+	rem launch php process to manage chrome websocket communications
+	start /min cmd /c php -q tagui_chrome.php !ws_url! ^| tee -a tagui_chrome.log
+
+rem end of if block to start chrome processes
+)
+
+rem check if test mode is enabled and run casperjs accordingly, before sending finish signal if integrations are active
 if %tagui_test_mode%==false (
 	casperjs "%flow_file%.js" %params%%api% | tee -a "%flow_file%.log"
 ) else (
 	casperjs test "%flow_file%.js" %params%%api% --xunit="%flow_file%.xml" | tee -a "%flow_file%.log"
 )
+rem checking for existence of files is important, otherwise in loops integrations will run even without enabling
+if exist "tagui.sikuli\tagui_sikuli.in" echo finish > tagui.sikuli\tagui_sikuli.in
+if exist "tagui_chrome.in" echo finish > tagui_chrome.in
 
-echo finish > tagui.sikuli\tagui_sikuli.in
+rem kill chrome processes by checking which os the processes are started on
+if not "!chrome_started!"=="" taskkill /IM chrome.exe /T /F > nul 2>&1
+
+rem end of big loop for managing multiple data sets in datatable
 )
 :break_for_loop
 
@@ -414,6 +467,10 @@ gawk "sub(\"$\", \"\")" "%flow_file%.js" > "%flow_file%.js.tmp"
 move "%flow_file%.js.tmp" "%flow_file%.js" > nul
 gawk "sub(\"$\", \"\")" "%flow_file%.log" > "%flow_file%.log.tmp"
 move "%flow_file%.log.tmp" "%flow_file%.log" > nul
+gawk "sub(\"$\", \"\")" "tagui.sikuli\tagui.log" > "tagui.sikuli\tagui.log.tmp"
+move "tagui.sikuli\tagui.log.tmp" "tagui.sikuli\tagui.log" > nul
+gawk "sub(\"$\", \"\")" "tagui_chrome.log" > "tagui_chrome.log.tmp"
+move "tagui_chrome.log.tmp" "tagui_chrome.log" > nul
 
 rem check report option to generate html automation log
 for /f "usebackq" %%f in ('%flow_file%.log') do set file_size=%%~zf
