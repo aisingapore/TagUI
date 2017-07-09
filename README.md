@@ -80,6 +80,7 @@ Tip - recommend putting TagUI to a folder path without spaces (some dependencies
 
 Option|Purpose
 :----:|:------
+IMPORTANT|SAVE YOUR WORK BEFORE USING CHROME OR HEADLESS, TAGUI WILL RESTART CHROME
 headless|run on invisible Chrome web browser instead of default PhantomJS (first install [Chrome](https://www.google.com/chrome/))
 chrome|run on visible Chrome web browser instead of invisible PhantomJS (first install Chrome)
 firefox|run on visible Firefox web browser instead of invisible browser (first install [Firefox](https://www.mozilla.org/en-US/firefox/new/))
@@ -251,7 +252,7 @@ In order to retain TagUI unzip and run functionality, the approach of launching 
 Like chrome-remote-interface, TagUI communicates with Chrome through [Chrome Debugging Protocol](https://chromedevtools.github.io/devtools-protocol/). The protocol is primarily designed for debugging the web browser instead of web automation, so many methods are still in experimental status. However, the API is stable enough for TagUI steps to work with Chrome. When chrome or headless option is used, TagUI replaces CasperJS methods it uses with custom methods to talk to Chrome instead of PhantomJS. When firefox option is used or by default, TagUI doesn't invoke custom methods and PHP process.
 
 ### TESTING
-The step check allows simple testing of conditions. For professional test automation, CasperJS comes with a tester module for unit and functional testing purpose. To use the advanced testing features, run TagUI with test option.
+The step check allows simple testing of conditions. For professional test automation, CasperJS comes with a tester module for unit and functional testing purpose. To use the advanced testing features, run TagUI with test option. As CasperJS is not yet [supporting Chrome](https://github.com/casperjs/casperjs/issues/1825), below won't work when chrome or headless option is used.
 
 CasperJS test scripts are inherently different in structure and syntax from its usual automation scripts. With the test option, TagUI automatically sets up your automation flow to work as a test script. CasperJS will output a XUnit XML file, which is compatible with continuous integration tools such as Jenkins.
 
