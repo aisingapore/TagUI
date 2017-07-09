@@ -435,6 +435,7 @@ if exist "tagui_chrome.in" (
 	set chrome_switches=--remote-debugging-port=9222 about:blank
 	if not exist "%chrome_command%" (
 		echo ERROR - cannot find Chrome at "%chrome_command%"
+		echo update chrome_command setting in tagui\src\tagui.cmd to your chrome.exe
 		exit /b 1
 	)
 	taskkill /IM chrome.exe /T /F > nul 2>&1
