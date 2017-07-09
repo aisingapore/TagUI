@@ -21,7 +21,7 @@ This is a full-feature and free open-source tool, so there's nothing to upgrade 
 - live mode to try steps or code in real-time
 - option to auto-upload run results online
 - run by schedule, command line, API URL
-- advance outgoing API calls to webservices
+- advanced outgoing API calls to webservices
 
 ### HOW IT WORKS
 TagUI converts your intentions in simple natural language into lines of working JavaScript code that perform web automation. Under the hood, it uses CasperJS, PhantomJS & SlimerJS. As an example, TagUI will instantly convert the automation flow below into 100+ lines of JavaScript code and automatically perform the steps to download a report. This makes it easy for rapid prototyping, deployment and maintenance of web automation.
@@ -236,7 +236,7 @@ For making outgoing API calls in your automation flow, to feed data somewhere or
 ```js
 api_config = {method:'PUT', header:['Header1: value1','Header2: value2'], body:{'id':123,'pwd':'abc'}};
 ```
-For advance API calls, you can set above variable api_config which defaults as `{method:'GET', header:[], body:{}}`. Besides GET, you can use other methods such as POST, PUT, DELETE etc. You can define multiple headers in the format `'Header_name: header_value'` and provide a payload body for PUT requests for example. You can also set it like below before using the api step, or set using `api_config.method = 'PUT';` and `api_config.header[0] = 'Header1: value1';` etc. `api_config.body` will be automatically converted to JSON format for sending to API endpoint.
+For advanced API calls, you can set above variable api_config which defaults as `{method:'GET', header:[], body:{}}`. Besides GET, you can use other methods such as POST, PUT, DELETE etc. You can define multiple headers in the format `'Header_name: header_value'` and provide a payload body for PUT requests for example. You can also set it like below before using the api step, or set using `api_config.method = 'PUT';` and `api_config.header[0] = 'Header1: value1';` etc. `api_config.body` will be automatically converted to JSON format for sending to API endpoint.
 
 ### CHROME
 TagUI has built-in integration with Chrome web browser to run web automation in visible or headless mode. It uses a websocket connection to directly communicate automation JavaScript code and information to Chrome.
