@@ -1,11 +1,6 @@
 # TagUI
 TagUI is a general purpose tool for automating web interactions ~ http://tebel.org
 
-# Why This
-The goal of web automation is to reproduce cognitive interactions that you have with websites so that your laptop or server can do it for you, base on your schedule or conditions. TagUI helps you rapidly automate your repetitive or time-critical tasks - use cases include process automation, data acquisition and testing of web apps.
-
-This is a full-feature and free open-source tool, so there's nothing to upgrade to or any paid subscription. To feedback suggestions or bugs, [raise an issue](https://github.com/tebelorg/TagUI/issues) or email ken@tebel.org. Originally developed by a test automation engineer to avoid writing chunks of code when automating web interactions.
-
 ### FEATURES
 - automate Chrome, Firefox, PhantomJS
 - unzip and run on macOS, Linux, Windows
@@ -18,6 +13,11 @@ This is a full-feature and free open-source tool, so there's nothing to upgrade 
 - option to auto-upload run results online
 - run by schedule, command line, API URL
 - advanced outgoing API calls to webservices
+
+# Why This
+The goal of web automation is to reproduce cognitive interactions that you have with websites so that your laptop or server can do it for you, base on your schedule or conditions. TagUI helps you rapidly automate your repetitive or time-critical tasks - use cases include process automation, data acquisition and testing of web apps.
+
+This is a full-feature and free open-source tool, so there's nothing to upgrade to or any paid subscription. To feedback suggestions or bugs, [raise an issue](https://github.com/tebelorg/TagUI/issues) or email ken@tebel.org. Originally developed by a test automation engineer to avoid writing chunks of code when automating web interactions.
 
 ### HOW IT WORKS
 TagUI converts your intentions in simple natural language into lines of working JavaScript code that perform web automation. Under the hood, it uses CasperJS, PhantomJS & SlimerJS. As an example, TagUI will instantly convert the automation flow below into 100+ lines of JavaScript code and automatically perform the steps to download a report. This makes it easy for rapid prototyping, deployment and maintenance of web automation.
