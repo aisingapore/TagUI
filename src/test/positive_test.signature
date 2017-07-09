@@ -32,7 +32,13 @@ var p7 = casper.cli.raw.get(6); var p8 = casper.cli.raw.get(7); var p9 = casper.
 var automation_start_time = Date.now(); casper.echo('\nSTART - automation started - ' + Date().toLocaleString());
 
 // initialise default global variables
-var quiet_mode = false; var save_text_count = 0; var snap_image_count = 0; var sikuli_count = 0;
+var quiet_mode = false; var save_text_count = 0; var snap_image_count = 0;
+
+// counters for tracking messages in sikuli and chrome integrations
+var sikuli_count = 0; var chrome_id = 0;
+
+// chrome context for frame handling and targetid for popup handling
+var chrome_context = 'document'; var chrome_targetid = '';
 
 // variable for advance usage of api step
 var api_config = {method:'GET', header:[], body:{}};
@@ -98,26 +104,242 @@ if (casper.exists(x('//*[contains(@href,"'+locator+'")]'))) return true;
 return false;}
 
 function sleep(ms) { // helper to add delay during loops
-var start = new Date().getTime(); var end = start;
-while(end < start + ms) {end = new Date().getTime();}}
+var time_now = new Date().getTime(); var time_end = time_now + ms;
+while(time_now < time_end) {time_now = new Date().getTime();}}
 
 // for initialising integration with sikuli visual automation
-function sikuli_handshake() {techo('waiting for sikuli');
+function sikuli_handshake() { // techo('[connecting to sikuli process]');
 var ds; if (flow_path.indexOf('/') !== -1) ds = '/'; else ds = '\\';
 var fs = require('fs'); fs.write('tagui.sikuli'+ds+'tagui_sikuli.in','','w'); var sikuli_handshake = '';
 if (!fs.exists('tagui.sikuli'+ds+'tagui_sikuli.out')) fs.write('tagui.sikuli'+ds+'tagui_sikuli.out','','w');
-do {sikuli_handshake = fs.read('tagui.sikuli'+ds+'tagui_sikuli.out').trim(); sleep(1000);}
-while (sikuli_handshake !== '[0] START');
-techo('connected to sikuli');}
+do {sleep(1000); sikuli_handshake = fs.read('tagui.sikuli'+ds+'tagui_sikuli.out').trim();}
+while (sikuli_handshake !== '[0] START'); // techo('[connected to sikuli process]');
+}
 
 // for using sikuli visual automation instead of casperjs
 function sikuli_step(sikuli_intent) {sikuli_count++;
 if (sikuli_count == 1) sikuli_handshake(); // handshake on first call
 var ds; if (flow_path.indexOf('/') !== -1) ds = '/'; else ds = '\\';
 var fs = require('fs'); fs.write('tagui.sikuli'+ds+'tagui_sikuli.in','['+sikuli_count.toString()+'] '+sikuli_intent,'w');
-var sikuli_result = ''; do {sikuli_result = fs.read('tagui.sikuli'+ds+'tagui_sikuli.out').trim(); sleep(1000);}
+var sikuli_result = ''; do {sleep(1000); sikuli_result = fs.read('tagui.sikuli'+ds+'tagui_sikuli.out').trim();}
 while (sikuli_result.indexOf('['+sikuli_count.toString()+'] ') == -1);
 if (sikuli_result.indexOf('SUCCESS') !== -1) return true; else return false;}
+
+if (chrome_id > 0) { // super large if block to load chrome related functions if chrome or headless option is used
+chrome_id = 0; // reset chrome_id from 1 back to 0 to prepare for initial call of chrome_step
+
+// for initialising integration with chrome web browser
+function chrome_handshake() { // techo('[connecting to chrome websocket]');
+var fs = require('fs'); fs.write('tagui_chrome.in','','w'); var chrome_handshake = '';
+if (!fs.exists('tagui_chrome.out')) fs.write('tagui_chrome.out','','w');
+do {sleep(100); chrome_handshake = fs.read('tagui_chrome.out').trim();}
+while (chrome_handshake !== '[0] START'); // techo('[connected to chrome websocket]');
+}
+
+// send websocket message to chrome browser using chrome debugging protocol
+// php helper process tagui_chrome.php running to handle this concurrently
+function chrome_step(method,params) {chrome_id++;
+if (chrome_id == 1) chrome_handshake(); // handshake on first call
+var chrome_intent = JSON.stringify({'id': chrome_id, 'method': method, 'params': params});
+if (chrome_targetid !== '') chrome_intent = JSON.stringify({'id': chrome_id, 'method': 'Target.sendMessageToTarget', 'params': {'targetId': chrome_targetid, 'message': chrome_intent}}); // send as message to target if context is popup
+var fs = require('fs'); fs.write('tagui_chrome.in','['+chrome_id.toString()+'] '+chrome_intent,'w');
+var chrome_result = ''; do {sleep(100); chrome_result = fs.read('tagui_chrome.out').trim();}
+while (chrome_result.indexOf('['+chrome_id.toString()+'] ') == -1);
+if (chrome_targetid == '') return chrome_result.substring(chrome_result.indexOf('] ')+2); // below for handling popup
+else {try {var raw_json_string = JSON.stringify(JSON.parse(chrome_result.substring(chrome_result.indexOf('] ')+2)).params.message); return raw_json_string.slice(1,-1).replace(/\\"/g,'"').replace(/\\\\n/g,"\\n");} catch(e) {return '';}}}
+
+// chrome object for handling integration with chrome or headless chrome
+var chrome = new Object(); chrome.mouse = new Object();
+
+// chrome methods as casper methods replacement for chrome integration
+chrome.exists = function(selector) { // different handling for xpath and css to support both
+if ((selector.toString().length >= 16) && (selector.toString().substr(0,16) == 'xpath selector: '))
+{if (selector.toString().length == 16) selector = ''; else selector = selector.toString().substring(16);
+var ws_message = chrome_step('Runtime.evaluate',{expression: 'document.evaluate(\''+selector+'\','+chrome_context+',null,XPathResult.ORDERED_NODE_SNAPSHOT_TYPE,null).snapshotLength'});}
+else var ws_message = chrome_step('Runtime.evaluate',{expression: chrome_context+'.querySelectorAll(\''+selector+'\').length'});
+try {var ws_json = JSON.parse(ws_message); if (ws_json.result.result.value > 0) return true; else return false;}
+catch(e) {return false;}};
+
+chrome.click = function(selector) { // click by sending click event instead of mouse down/up/click, then focus on element
+if ((selector.toString().length >= 16) && (selector.toString().substr(0,16) == 'xpath selector: '))
+{if (selector.toString().length == 16) selector = ''; else selector = selector.toString().substring(16);
+chrome_step('Runtime.evaluate',{expression: 'document.evaluate(\''+selector+'\','+chrome_context+',null,XPathResult.ORDERED_NODE_SNAPSHOT_TYPE,null).snapshotItem(0).click()'}); chrome_step('Runtime.evaluate',{expression: 'document.evaluate(\''+selector+'\','+chrome_context+',null,XPathResult.ORDERED_NODE_SNAPSHOT_TYPE,null).snapshotItem(0).focus()'});}
+else {chrome_step('Runtime.evaluate',{expression: chrome_context+'.querySelector(\''+selector+'\').click()'});
+chrome_step('Runtime.evaluate',{expression: chrome_context+'.querySelector(\''+selector+'\').focus()'});}};
+
+chrome.mouse.action = function(type,x,y,button,clickCount) { // helper function to send various mouse events
+chrome_step('Input.dispatchMouseEvent',{type: type, x: x, y: y, button: button, clickCount: clickCount});};
+
+chrome.mouse.getXY = function(selector) { // helper function to get xy center coordinates of selector
+if ((selector.toString().length >= 16) && (selector.toString().substr(0,16) == 'xpath selector: '))
+{if (selector.toString().length == 16) selector = ''; else selector = selector.toString().substring(16);
+var ws_message = chrome_step('Runtime.evaluate',{expression: 'var result_bounds = document.evaluate(\''+selector+'\','+chrome_context+',null,XPathResult.ORDERED_NODE_SNAPSHOT_TYPE,null).snapshotItem(0).getBoundingClientRect(); var result_xy = {x: Math.round(result_bounds.left + result_bounds.width / 2), y: Math.round(result_bounds.top + result_bounds.height / 2)}; result_xy', returnByValue: true});}
+else var ws_message = chrome_step('Runtime.evaluate',{expression: 'var result_bounds = '+chrome_context+'.querySelector(\''+selector+'\').getBoundingClientRect(); var result_xy = {x: Math.round(result_bounds.left + result_bounds.width / 2), y: Math.round(result_bounds.top + result_bounds.height / 2)}; result_xy', returnByValue: true});
+try {var ws_json = JSON.parse(ws_message); if (ws_json.result.result.value.x > 0 && ws_json.result.result.value.y > 0)
+return ws_json.result.result.value; else return {x: 0, y: 0};} catch(e) {return {x: 0, y: 0};}};
+
+chrome.getRect = function(selector) { // helper function to get rectangle boundary coordinates of selector
+if ((selector.toString().length >= 16) && (selector.toString().substr(0,16) == 'xpath selector: '))
+{if (selector.toString().length == 16) selector = ''; else selector = selector.toString().substring(16);
+var ws_message = chrome_step('Runtime.evaluate',{expression: 'var result_bounds = document.evaluate(\''+selector+'\','+chrome_context+',null,XPathResult.ORDERED_NODE_SNAPSHOT_TYPE,null).snapshotItem(0).getBoundingClientRect(); var result_rect = {top: Math.round(result_bounds.top), left: Math.round(result_bounds.left), width: Math.round(result_bounds.width), height: Math.round(result_bounds.height)}; result_rect', returnByValue: true});}
+else var ws_message = chrome_step('Runtime.evaluate',{expression: 'var result_bounds = '+chrome_context+'.querySelector(\''+selector+'\').getBoundingClientRect(); var result_rect = {top: Math.round(result_bounds.top), left: Math.round(result_bounds.left), width: Math.round(result_bounds.width), height: Math.round(result_bounds.height)}; result_rect', returnByValue: true}); try {var ws_json = JSON.parse(ws_message); // check if width and height are valid before returning coordinates
+if (ws_json.result.result.value.width > 0 && ws_json.result.result.value.height > 0) return ws_json.result.result.value;
+else return {left: 0, top: 0, width: 0, height: 0};} catch(e) {return {left: 0, top: 0, width: 0, height: 0};}};
+
+chrome.mouse.move = function(selector,y) { // move mouse pointer to center of specified selector or point 
+if (!y) var xy = chrome.mouse.getXY(selector); else var xy = {x: selector, y: y}; // get coordinates accordingly
+chrome.mouse.action('mouseMoved',xy.x,xy.y,'none',0);};
+
+chrome.mouse.click = function(selector,y) { // press and release on center of specfied selector or point
+if (!y) var xy = chrome.mouse.getXY(selector); else var xy = {x: selector, y: y}; // get coordinates accordingly
+chrome.mouse.action('mousePressed',xy.x,xy.y,'left',1); chrome.mouse.action('mouseReleased',xy.x,xy.y,'left',1);};
+
+chrome.mouse.doubleclick = function(selector,y) { // double press and release on center of selector or point
+if (!y) var xy = chrome.mouse.getXY(selector); else var xy = {x: selector, y: y}; // get coordinates accordingly
+chrome.mouse.action('mousePressed',xy.x,xy.y,'left',1); chrome.mouse.action('mouseReleased',xy.x,xy.y,'left',1);
+chrome.mouse.action('mousePressed',xy.x,xy.y,'left',1); chrome.mouse.action('mouseReleased',xy.x,xy.y,'left',1);};
+
+chrome.mouse.rightclick = function(selector,y) { // right click press and release on center of selector or point
+if (!y) var xy = chrome.mouse.getXY(selector); else var xy = {x: selector, y: y}; // get coordinates accordingly
+chrome.mouse.action('mousePressed',xy.x,xy.y,'right',1); chrome.mouse.action('mouseReleased',xy.x,xy.y,'right',1);};
+
+chrome.mouse.down = function(selector,y) { // left press on center of specified selector or point
+if (!y) var xy = chrome.mouse.getXY(selector); else var xy = {x: selector, y: y}; // get coordinates accordingly
+chrome.mouse.action('mousePressed',xy.x,xy.y,'left',1);};
+
+chrome.mouse.up = function(selector,y) { // left release on center of specified selector or point
+if (!y) var xy = chrome.mouse.getXY(selector); else var xy = {x: selector, y: y}; // get coordinates accordingly
+chrome.mouse.action('mouseReleased',xy.x,xy.y,'left',1);};
+
+chrome.sendKeys = function(selector,value,options) { // send key strokes to selector, options not implemented
+if (value == casper.page.event.key.Enter) value = '\r';
+if ((selector.toString().length >= 16) && (selector.toString().substr(0,16) == 'xpath selector: '))
+{if (selector.toString().length == 16) selector = ''; else selector = selector.toString().substring(16);
+chrome_step('Runtime.evaluate',{expression: 'document.evaluate(\''+selector+'\','+chrome_context+',null,XPathResult.ORDERED_NODE_SNAPSHOT_TYPE,null).snapshotItem(0).focus()'});}
+else chrome_step('Runtime.evaluate',{expression: chrome_context+'.querySelector(\''+selector+'\').focus()'});
+for (var character = 0, length = value.length; character < length; character++) {
+chrome_step('Input.dispatchKeyEvent',{type: 'char', text: value[character]});}};
+
+chrome.selectOptionByValue = function(selector,valueToMatch) { // select dropdown option (base on casperjs issue #1390)
+chrome.evaluate('function() {var selector = \''+selector+'\'; var valueToMatch = \''+valueToMatch+'\'; var found = false; if ((selector.indexOf(\'/\') == 0) || (selector.indexOf(\'(\') == 0)) var select = document.evaluate(selector,'+chrome_context+',null,XPathResult.ORDERED_NODE_SNAPSHOT_TYPE,null).snapshotItem(0); else var select = '+chrome_context+'.querySelector(selector); Array.prototype.forEach.call(select.children, function(opt, i) {if (!found && opt.value.indexOf(valueToMatch) !== -1) {select.selectedIndex = i; found = true;}}); var evt = document.createEvent("UIEvents"); evt.initUIEvent("change", true, true); select.dispatchEvent(evt);}');};
+
+chrome.fetchText = function(selector) { // grab text from selector following casperjs logic, but grab only first match
+if ((selector.toString().length >= 16) && (selector.toString().substr(0,16) == 'xpath selector: '))
+{if (selector.toString().length == 16) selector = ''; else selector = selector.toString().substring(16);
+var ws_message = chrome_step('Runtime.evaluate',{expression: 'document.evaluate(\''+selector+'\','+chrome_context+',null,XPathResult.ORDERED_NODE_SNAPSHOT_TYPE,null).snapshotItem(0).textContent || document.evaluate(\''+selector+'\','+chrome_context+',null,XPathResult.ORDERED_NODE_SNAPSHOT_TYPE,null).snapshotItem(0).innerText || document.evaluate(\''+selector+'\','+chrome_context+',null,XPathResult.ORDERED_NODE_SNAPSHOT_TYPE,null).snapshotItem(0).value || \'\''});}
+else var ws_message = chrome_step('Runtime.evaluate',{expression: chrome_context+'.querySelector(\''+selector+'\').textContent || '+chrome_context+'.querySelector(\''+selector+'\').innerText || '+chrome_context+'.querySelector(\''+selector+'\').value || \'\''});
+try {var ws_json = JSON.parse(ws_message); if (ws_json.result.result.value)
+return ws_json.result.result.value; else return '';} catch(e) {return '';}};
+
+chrome.decode = function(str) { // funtion to convert base64 data to binary string
+// used in https://github.com/casperjs/casperjs/blob/master/modules/clientutils.js
+if (!str) return ''; // return empty string if somehow null value is passed in
+var BASE64_DECODE_CHARS = [
+-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,
+-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,62,-1,-1,-1,63,52,53,54,55,56,57,58,59,60,61,-1,-1,-1,-1,-1,-1,
+-1, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,-1,-1,-1,-1,-1,
+-1,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51,-1,-1,-1,-1,-1];
+var c1, c2, c3, c4, i = 0, len = str.length, out = ""; while (i < len) {
+do {c1 = BASE64_DECODE_CHARS[str.charCodeAt(i++) & 0xff];} while (i < len && c1 === -1); if (c1 === -1) {break;}
+do {c2 = BASE64_DECODE_CHARS[str.charCodeAt(i++) & 0xff];} while (i < len && c2 === -1); if (c2 === -1) {break;}
+out += String.fromCharCode(c1 << 2 | (c2 & 0x30) >> 4);
+do {c3 = str.charCodeAt(i++) & 0xff; if (c3 === 61) {return out;} c3 = BASE64_DECODE_CHARS[c3];}
+while (i < len && c3 === -1); if (c3 === -1) {break;} out += String.fromCharCode((c2 & 0XF) << 4 | (c3 & 0x3C) >> 2);
+do {c4 = str.charCodeAt(i++) & 0xff; if (c4 === 61) {return out;} c4 = BASE64_DECODE_CHARS[c4];}
+while (i < len && c4 === -1); if (c4 === -1) {break;} out += String.fromCharCode((c3 & 0x03) << 6 | c4);} return out;};
+
+chrome.capture = function(filename) { // capture screenshot of webpage to file in png/jpg/jpeg format
+var format = 'png'; var quality = 80; var fromSurface = true; var screenshot_data = ''; // options not implemented
+if ((filename.substr(-3).toLowerCase() == 'jpg') || (filename.substr(-4).toLowerCase() == 'jpeg')) format = 'jpeg';
+var ws_message = chrome_step('Page.captureScreenshot',{format: format, quality: quality, fromSurface: fromSurface});
+try {var ws_json = JSON.parse(ws_message); screenshot_data = ws_json.result.data;} catch(e) {screenshot_data = '';}
+var fs = require('fs'); fs.write(filename,chrome.decode(screenshot_data),'wb');};
+
+chrome.captureSelector = function(filename,selector) { // capture screenshot of selector to png/jpg/jpeg format
+// first capture entire screen, then use casperjs / phantomjs browser to crop image base on selector dimensions
+chrome.capture(filename); var selector_rect = chrome.getRect(selector); // so that there is no extra dependency
+if (selector_rect.width > 0 && selector_rect.height > 0) // from using other libraries or creating html canvas 
+casper.thenOpen(filename, function() {casper . capture(filename, // spaces around . intentional to avoid replacing 
+{top: selector_rect.top, left: selector_rect.left, width: selector_rect.width, height: selector_rect.height});
+casper . thenOpen('about:blank');});}; // reset phantomjs browser state, spaces intentional to avoid replacing
+
+chrome.download = function(url,filename) { // download function for downloading url resource to file
+// casper download cannot be used for url which requires login as casperjs context is not in chrome
+// the chromium issue seems to be moving, otherwise another way may be to inject casper clientutils.js
+casper.echo('ERROR - for visible Chrome, download file directly through normal webpage interaction');
+casper.echo('ERROR - for headless Chrome, it prevents file download for now - Chromium issue 696481');};
+
+chrome.evaluate = function(fn_statement) { // evaluate expression in browser dom context
+// chrome runtime.evaluate is different from casperjs evaluate, do some processing to reduce gap
+var statement = fn_statement.toString(); statement = statement.slice(statement.indexOf('{')+1,statement.lastIndexOf('}'));
+statement = statement.replace(/return /g,''); // defining as function() and return keyword is invalid for chrome
+var ws_message = chrome_step('Runtime.evaluate',{expression: statement}); // statements can be separated by ;
+try {var ws_json = JSON.parse(ws_message); if (ws_json.result.result.value)
+return ws_json.result.result.value; else return '';} catch(e) {return '';}};
+
+chrome.withFrame = function(frameInfo,then) { // replace casperjs frame for switching frame context
+var new_context = ''; if (chrome_context == 'document') new_context = 'mainframe_context';
+else if (chrome_context == 'mainframe_context') new_context = 'subframe_context';
+casper.then(function _step() {chrome_step('Runtime.evaluate',{expression: new_context+' = document.evaluate(\'(//frame|//iframe)[@name="'+frameInfo+'" or @id="'+frameInfo+'"]\','+chrome_context+',null,XPathResult.ORDERED_NODE_SNAPSHOT_TYPE,null).snapshotItem(0).contentDocument'}); chrome_context = new_context;}); // set mainframe_context/subframe_context in dom
+casper.then(then); casper.then(function _step() {if (chrome_context == 'subframe_context') {chrome_step('Runtime.evaluate',{expression: 'subframe_context = null'}); chrome_context = 'mainframe_context';} else if (chrome_context == 'mainframe_context') {chrome_step('Runtime.evaluate',{expression: 'mainframe_context = null'}); chrome_context = 'document';}});};
+
+chrome.waitForPopup = function(popupInfo,then,onTimeout) { // replace casperjs waitforpopup for checking popup window
+casper.waitFor(function check() { // use similar logic as chrome withpopup to scan through list of browser targets
+var found_popup = false; var chrome_targets = []; var ws_message = chrome_step('Target.getTargets',{});
+try {var ws_json = JSON.parse(ws_message); if (ws_json.result.targetInfos) chrome_targets = ws_json.result.targetInfos;
+else chrome_targets = [];} catch(e) {chrome_targets = [];} // following line scan through targets to find match
+chrome_targets.forEach(function(target) {if (target.url.search(popupInfo) !== -1) found_popup = true;});
+return found_popup;},then,onTimeout);};
+
+chrome.withPopup = function(popupInfo,then) { // replace casperjs withpopup for handling popup window
+casper.then(function _step() { // get list of targets, find a match, attach to the target and set chrome_targetid
+var found_targetid = ''; var chrome_targets = []; var ws_message = chrome_step('Target.getTargets',{});
+try {var ws_json = JSON.parse(ws_message); if (ws_json.result.targetInfos) chrome_targets = ws_json.result.targetInfos;
+else chrome_targets = [];} catch(e) {chrome_targets = [];} // following line scan through targets to find match
+chrome_targets.forEach(function(target) {if (target.url.search(popupInfo) !== -1) found_targetid = target.targetId;});
+if (found_targetid !== '') {var ws_message = chrome_step('Target.attachToTarget',{targetId: found_targetid}); try {var ws_json = JSON.parse(ws_message); if (ws_json.result.success !== true) found_targetid = '';} catch(e) {found_targetid = ''};}
+chrome_targetid = found_targetid;}); // set chrome_targetid only after attaching to found target successfully
+casper.then(then); casper.then(function _step() {if (chrome_targetid !== '') // detach from target after running then
+{var found_targetid = chrome_targetid; chrome_targetid = ''; chrome_step('Target.detachFromTarget',{targetId: found_targetid});}});};
+
+chrome.getHTML = function() { // get raw html of current webpage
+var ws_message = chrome_step('Runtime.evaluate',{expression: 'document.documentElement.outerHTML'});
+try {var ws_json = JSON.parse(ws_message); if (ws_json.result.result.value)
+return ws_json.result.result.value; else return '';} catch(e) {return '';}};
+
+chrome.getTitle = function() { // get title of current webpage
+var ws_message = chrome_step('Runtime.evaluate',{expression: 'document.title'});
+try {var ws_json = JSON.parse(ws_message); if (ws_json.result.result.value)
+return ws_json.result.result.value; else return '';} catch(e) {return '';}};
+
+chrome.getCurrentUrl = function() { // get url of current webpage
+var ws_message = chrome_step('Runtime.evaluate',{expression: 'document.location.href'});
+try {var ws_json = JSON.parse(ws_message); // chrome returns below value on empty dead url
+if (ws_json.result.result.value == 'data:text/html,chromewebdata') ws_json.result.result.value = 'about:blank';
+if (ws_json.result.result.value) return ws_json.result.result.value; else return '';} catch(e) {return '';}};
+
+chrome.debugHTML = function() {casper.echo(chrome.getHTML());}; // print raw html of current webpage
+
+chrome.reload = function() { // reload the current webpage, then not implemented
+var ws_message = chrome_step('Runtime.evaluate',{expression: 'document.location.reload()'});
+try {var ws_json = JSON.parse(ws_message); if (ws_json.result.result.value)
+return ws_json.result.result.value; else return '';} catch(e) {return '';}};
+
+chrome.back = function() { // move back a step in browser history
+var ws_message = chrome_step('Runtime.evaluate',{expression: 'window.history.back()'});
+try {var ws_json = JSON.parse(ws_message); if (ws_json.result.result.value)
+return ws_json.result.result.value; else return '';} catch(e) {return '';}};
+
+chrome.forward = function() { // move forward a step in browser history
+var ws_message = chrome_step('Runtime.evaluate',{expression: 'window.history.forward()'});
+try {var ws_json = JSON.parse(ws_message); if (ws_json.result.result.value)
+return ws_json.result.result.value; else return '';} catch(e) {return '';}};
+
+chrome.echo = function(value) {casper.echo(value);}; // use casper echo to print output
+
+chrome.on = function(value,statement) {casper.on(value,statement);}; // use casper event system
+
+} // end of super large if block to load chrome related functions if chrome or headless option is used
 
 // for live mode simple parsing of tagui steps into js code
 function tagui_parse(raw_input) {return parse_intent(raw_input);}
@@ -215,6 +437,7 @@ if ((raw_intent.substr(0,4) == 'for ') || (raw_intent.substr(0,6) == 'while ')) 
 if ((raw_intent.substr(0,7) == 'switch ') || (raw_intent.substr(0,5) == 'case ')) return true;
 if ((raw_intent.substr(0,6) == 'break;') || (raw_intent.substr(0,9) == 'function ')) return true;
 if ((raw_intent.substr(0,7) == 'casper.') || (raw_intent.substr(0,5) == 'this.')) return true;
+if (raw_intent.substr(0,7) == 'chrome.') return true; // chrome object for chrome integration
 if (raw_intent.substr(0,5) == 'test.') return true;
 if ((raw_intent.substr(0,2) == '//') || (raw_intent.charAt(raw_intent.length-1) == ';')) return true; return false;}
 
@@ -232,7 +455,7 @@ return "'ERROR - inconsistent quotes in text'";
 else if (source_string.indexOf("'") > -1) var quote_type = "'"; // derive quote type used
 else if (source_string.indexOf('"') > -1) var quote_type = '"'; else var quote_type = "none";
 var within_quote = false; source_string = source_string.trim(); // trim for future proof
-for (srcpos = 0; srcpos < source_string.length; srcpos++){
+for (srcpos = 0; srcpos < source_string.length; srcpos++) {
 if (source_string.charAt(srcpos) == quote_type) within_quote = !(within_quote);
 if ((within_quote == false) && (source_string.charAt(srcpos)==" "))
 source_string = source_string.substring(0,srcpos) + "+" + source_string.substring(srcpos+1);}
@@ -280,7 +503,11 @@ if (is_sikuli(param1) && param2 !== '') {
 var abs_param1 = abs_file(param1); var abs_intent = raw_intent.replace(param1,abs_param1);
 return call_sikuli(abs_intent,abs_param1);} // use sikuli visual automation as needed
 if ((param1 == '') || (param2 == '')) return "this.echo('ERROR - target/text missing for " + raw_intent + "')";
-else if (check_tx(param1)) return "this.sendKeys(tx('" + param1 + "'),'" + param2 + "')";
+else if (check_tx(param1)) 
+{if (param2.indexOf('[enter]') == -1) return "this.sendKeys(tx('" + param1 + "'),'" + param2 + "')";
+else // special handling to send enter key events
+{param2 = param2.replace(/\[enter\]/g,"',{keepFocus: true}); this.sendKeys(tx('" + param1 + "'),casper.page.event.key.Enter,{keepFocus: true}); this.sendKeys(tx('" + param1 + "'),'");
+return "this.sendKeys(tx('" + param1 + "'),'" + param2 + "',{keepFocus: true});";}}
 else return "this.echo('ERROR - cannot find " + param1 + "')";}
 
 function select_intent(raw_intent) {
@@ -383,21 +610,43 @@ return "this.echo('ERROR - step not supported in live mode')";}
 function api_intent(raw_intent) {
 var params = ((raw_intent + ' ').substr(1+(raw_intent + ' ').indexOf(' '))).trim();
 if (params == '') return "this.echo('ERROR - API URL missing for " + raw_intent + "')";
-else return "api_result = call_api('" + params + "'); this.echo(api_result); " +
+else return "api_result = call_api('" + params + "'); " +
 "try {api_json = JSON.parse(api_result);} catch(e) {api_json = JSON.parse('null');}";}
 
 function dom_intent(raw_intent) {
 var params = ((raw_intent + ' ').substr(1+(raw_intent + ' ').indexOf(' '))).trim();
 if (params == '') return "this.echo('ERROR - statement missing for " + raw_intent + "')";
-else return "this.evaluate(function() {" + params + "})";}
+else return "dom_result = this.evaluate(function() {" + params + "})";}
 
 function js_intent(raw_intent) {
 var params = ((raw_intent + ' ').substr(1+(raw_intent + ' ').indexOf(' '))).trim();
 if (params == '') return "this.echo('ERROR - statement missing for " + raw_intent + "')";
-else return params;}
+else return check_chrome_context(params);}
 
 function code_intent(raw_intent) {
-return raw_intent;}
+return check_chrome_context(raw_intent);}
+
+function check_chrome_context(source_code) { // function to convert javascript code to chrome context
+// specifically for live mode, as statements in flow file are already converted by tagui_parse.php
+if (chrome_id == 0) return source_code; // if chrome or headless option is used, chrome_id will be > 0
+source_code = source_code.replace(/casper\.exists/g,'chrome.exists').replace(/this\.exists/g,'chrome.exists');
+source_code = source_code.replace(/casper\.click/g,'chrome.click').replace(/this\.click/g,'chrome.click');
+source_code = source_code.replace(/casper\.mouse/g,'chrome.mouse').replace(/this\.mouse/g,'chrome.mouse');
+source_code = source_code.replace(/casper\.sendKeys/g,'chrome.sendKeys').replace(/this\.sendKeys/g,'chrome.sendKeys');
+source_code = source_code.replace(/casper\.selectOptionByValue/g,'chrome.selectOptionByValue').replace(/this\.selectOptionByValue/g,'chrome.selectOptionByValue');
+source_code = source_code.replace(/casper\.fetchText/g,'chrome.fetchText').replace(/this\.fetchText/g,'chrome.fetchText');
+source_code = source_code.replace(/casper\.capture/g,'chrome.capture').replace(/this\.capture/g,'chrome.capture');
+source_code = source_code.replace(/casper\.captureSelector/g,'chrome.captureSelector').replace(/this\.captureSelector/g,'chrome.captureSelector');
+source_code = source_code.replace(/casper\.download/g,'chrome.download').replace(/this\.download/g,'chrome.download');
+source_code = source_code.replace(/casper\.evaluate/g,'chrome.evaluate').replace(/this\.evaluate/g,'chrome.evaluate');
+source_code = source_code.replace(/casper\.getHTML/g,'chrome.getHTML').replace(/this\.getHTML/g,'chrome.getHTML');
+source_code = source_code.replace(/casper\.getTitle/g,'chrome.getTitle').replace(/this\.getTitle/g,'chrome.getTitle');
+source_code = source_code.replace(/casper\.getCurrentUrl/g,'chrome.getCurrentUrl').replace(/this\.getCurrentUrl/g,'chrome.getCurrentUrl');
+source_code = source_code.replace(/casper\.debugHTML/g,'chrome.debugHTML').replace(/this\.debugHTML/g,'chrome.debugHTML');
+source_code = source_code.replace(/casper\.reload/g,'chrome.reload').replace(/this\.reload/g,'chrome.reload');
+source_code = source_code.replace(/casper\.back/g,'chrome.back').replace(/this\.back/g,'chrome.back');
+source_code = source_code.replace(/casper\.forward/g,'chrome.forward').replace(/this\.forward/g,'chrome.forward');
+return source_code;};
 
 // for calling rest api url synchronously
 function call_api(rest_url) { // advance users can define api_config for advance calls
@@ -410,11 +659,11 @@ xhttp.setRequestHeader(header_value_pair[0].trim(),header_value_pair[1].trim());
 xhttp.send(JSON.stringify(api_config.body)); return xhttp.responseText;}
 
 // custom function to handle dropdown option
-casper.selectOptionByValue = function(selector, valueToMatch){ // solution posted in casperjs issue #1390
+casper.selectOptionByValue = function(selector, valueToMatch) { // solution posted in casperjs issue #1390
 this.evaluate(function(selector, valueToMatch) {var found = false; // modified to allow xpath / css locators
 if ((selector.indexOf('/') == 0) || (selector.indexOf('(') == 0)) var select = __utils__.getElementByXPath(selector);
 else var select = document.querySelector(selector); // auto-select xpath or query css method to get element
-Array.prototype.forEach.call(select.children, function(opt, i){ // loop through list to select option
+Array.prototype.forEach.call(select.children, function(opt, i) { // loop through list to select option
 if (!found && opt.value.indexOf(valueToMatch) !== -1) {select.selectedIndex = i; found = true;}});
 var evt = document.createEvent("UIEvents"); // dispatch change event in case there is validation
 evt.initUIEvent("change", true, true); select.dispatchEvent(evt);}, selector, valueToMatch);};
@@ -571,7 +820,7 @@ casper.then(function() {
 // start of code block
 {casper.then(function() {
 this.echo('test');
-})}; // end of code block
+})} // end of code block
 
 
 // start of code block
@@ -582,7 +831,7 @@ function then() {this.click(tx('test'));},
 function timeout() {this.echo('ERROR - cannot find test').exit();});}});
 
 casper.then(function() {
-})}; // end of code block
+})} // end of code block
 
 // test {} complex
 
@@ -607,7 +856,7 @@ function then() {this.click(tx('test3'));},
 function timeout() {this.echo('ERROR - cannot find test3').exit();});}});
 
 casper.then(function() {
-})}; // end of code block
+})} // end of code block
 
 // test {} for loop simple
 for (number=1; number<=5; number++)
@@ -620,7 +869,7 @@ function then() {this.click(tx('test'));},
 function timeout() {this.echo('ERROR - cannot find test').exit();});}});
 
 casper.then(function() {
-})}; // end of code block
+})} // end of code block
 
 // test {} for loop complex
 for (number=1; number<=5; number++)
@@ -646,7 +895,7 @@ function then() {this.click(tx('test3'));},
 function timeout() {this.echo('ERROR - cannot find test3').exit();});}});
 
 casper.then(function() {
-})}; // end of code block
+})} // end of code block
 
 // test {} while loop simple
 var number = 1;
@@ -872,14 +1121,14 @@ function then() {this.echo('show element' + ' - ' + this.fetchText(tx('element')
 function timeout() {this.echo('ERROR - cannot find element').exit();});}});
 
 casper.then(function() {
-this.echo('show page' + ' - ' + '\n' + this.getHTML());
+this.echo('show page' + ' - \n' + this.getHTML());
 {// nothing to do on this line
 casper.waitFor(function check() {return check_tx('element');},
 function then() {this.echo('print element' + ' - ' + this.fetchText(tx('element')).trim());},
 function timeout() {this.echo('ERROR - cannot find element').exit();});}});
 
 casper.then(function() {
-this.echo('print page' + ' - ' + '\n' + this.getHTML());
+this.echo('print page' + ' - \n' + this.getHTML());
 // test save
 {techo('save element');
 casper.waitFor(function check() {return check_tx('element');},
@@ -1068,14 +1317,14 @@ casper.then(function() {
 // test api direct
 {techo('api http://www.dummytestsite.com/api?COLOR1=red&COLOR2=green&COLOR3=blue');
 api_result = call_api('http://www.dummytestsite.com/api?COLOR1=red&COLOR2=green&COLOR3=blue');
-this.echo(api_result); try {api_json = JSON.parse(api_result);} catch(e) {api_json = JSON.parse('null');}}
+try {api_json = JSON.parse(api_result);} catch(e) {api_json = JSON.parse('null');}}
 // test api with variables
 var COLOR1='red'; var COLOR2='green'; var COLOR3='blue';
 {techo('api http://www.dummytestsite.com/api?COLOR1='+COLOR1+'&COLOR2='+COLOR2+'&COLOR3='+COLOR3+'');
 api_result = call_api('http://www.dummytestsite.com/api?COLOR1='+COLOR1+'&COLOR2='+COLOR2+'&COLOR3='+COLOR3+'');
-this.echo(api_result); try {api_json = JSON.parse(api_result);} catch(e) {api_json = JSON.parse('null');}}
+try {api_json = JSON.parse(api_result);} catch(e) {api_json = JSON.parse('null');}}
 // test dom
-this.evaluate(function() {var page_title = document.title;});
+dom_result = this.evaluate(function() {var page_title = document.title;});
 // test comment
 // user comment
 //user comment
