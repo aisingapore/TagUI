@@ -206,7 +206,6 @@ type email|type \`email\` as user@gmail.com
 - TagUI loops through each column to automate using values from different datasets
 - Eg, echo "TESTCASE - \`testname\`" in your flow shows TESTCASE - Trade USDSGD
 - Data-centric approach with rows representing data fields (usually row = test case)
-- Auto-detect and tranpose if datatable is in traditional format (column = data fields)
 
 TEST TRADES|TEST #1|TEST #2|TEST #3
 :----------|:------|:------|:------
