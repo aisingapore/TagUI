@@ -10,6 +10,7 @@ setlocal enableextensions enabledelayedexpansion
 if "%~1"=="" (
 echo tagui v2.0: use following syntax and below options to run - tagui flow_filename option^(s^)
 echo.
+echo IMPORTANT: SAVE YOUR WORK BEFORE USING CHROME OR HEADLESS, TAGUI WILL RESTART CHROME
 echo headless - run on invisible Chrome web browser instead of default PhantomJS ^(first install Chrome^)
 echo chrome   - run on visible Chrome web browser instead of invisible PhantomJS ^(first install Chrome^)
 echo firefox  - run on visible Firefox web browser instead of invisible browser ^(first install Firefox^)
@@ -430,9 +431,13 @@ if exist "tagui_chrome.in" (
 	if "%tagui_web_browser%"=="headless" set headless_switch=--headless --disable-gpu
 
 	rem check for which operating system and launch chrome accordingly
-	taskkill /IM chrome.exe /T /F > nul 2>&1
 	set chrome_started=Windows
 	set chrome_switches=--remote-debugging-port=9222 about:blank
+	if not exist "%chrome_command%" (
+		echo ERROR - cannot find Chrome at "%chrome_command%"
+		exit /b 1
+	)
+	taskkill /IM chrome.exe /T /F > nul 2>&1
 	start "" "%chrome_command%" !chrome_switches! !window_size! !headless_switch!
 
 	:scan_ws_again

@@ -8,6 +8,7 @@ if [ -z "$1" ]
 then
 echo "tagui v2.0: use following syntax and below options to run ./tagui flow_filename option(s)"
 echo
+echo "IMPORTANT: SAVE YOUR WORK BEFORE USING CHROME OR HEADLESS, TAGUI WILL RESTART CHROME"
 echo "headless - run on invisible Chrome web browser instead of default PhantomJS (first install Chrome)"
 echo "chrome   - run on visible Chrome web browser instead of invisible PhantomJS (first install Chrome)"
 echo "firefox  - run on visible Firefox web browser instead of invisible PhantomJS (first install Firefox)"
@@ -212,8 +213,11 @@ headless_switch=""; if [ "$tagui_web_browser" == "headless" ]; then headless_swi
 # check for which operating system and launch chrome accordingly
 chrome_started="$(uname -s)"; chrome_switches="--remote-debugging-port=9222 about:blank"
 if [ "$chrome_started" == "Darwin" ]; then
+if ! [ -f "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome" ]; then echo "ERROR - cannot find Chrome at \"/Applications/Google Chrome.app/Contents/MacOS/Google Chrome\""; exit 1; fi
 pkill Google\ Chrome; /Applications/Google\ Chrome.app/Contents/MacOS/Google\ Chrome $chrome_switches $window_size $headless_switch > /dev/null 2>&1 &
-else pkill $chrome_command; $chrome_command $chrome_switches $window_size $headless_switch > /dev/null 2>&1 &
+else
+if ! type "$chrome_command" > /dev/null; then echo "ERROR - cannot find Chrome command \"$chrome_command\""; exit 1; fi
+pkill $chrome_command; $chrome_command $chrome_switches $window_size $headless_switch > /dev/null 2>&1 &
 fi
 
 # wait until chrome is ready with websocket url for php thread
