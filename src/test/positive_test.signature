@@ -819,12 +819,14 @@ casper.then(function() {
 
 // start of code block
 {casper.then(function() {
+
 this.echo('test');
 })} // end of code block
 
 
 // start of code block
 {casper.then(function() {
+
 {techo('click test');
 casper.waitFor(function check() {return check_tx('test');},
 function then() {this.click(tx('test'));},
@@ -837,6 +839,7 @@ casper.then(function() {
 
 // start of code block
 {casper.then(function() {
+
 {techo('click test1');
 casper.waitFor(function check() {return check_tx('test1');},
 function then() {this.click(tx('test1'));},
@@ -861,8 +864,11 @@ casper.then(function() {
 // test {} for loop simple
 for (number=1; number<=5; number++)
 
+// start of IIFE pattern
+(function (number) {
 // start of code block
 {casper.then(function() {
+
 {techo('click test');
 casper.waitFor(function check() {return check_tx('test');},
 function then() {this.click(tx('test'));},
@@ -870,12 +876,18 @@ function timeout() {this.echo('ERROR - cannot find test').exit();});}});
 
 casper.then(function() {
 })} // end of code block
+})(number); // end of IIFE pattern
+});
 
+casper.then(function() {
 // test {} for loop complex
 for (number=1; number<=5; number++)
 
+// start of IIFE pattern
+(function (number) {
 // start of code block
 {casper.then(function() {
+
 {techo('click test1');
 casper.waitFor(function check() {return check_tx('test1');},
 function then() {this.click(tx('test1'));},
@@ -896,7 +908,10 @@ function timeout() {this.echo('ERROR - cannot find test3').exit();});}});
 
 casper.then(function() {
 })} // end of code block
+})(number); // end of IIFE pattern
+});
 
+casper.then(function() {
 // test {} while loop simple
 var number = 1;
 while (((number <= 5)))
@@ -1329,6 +1344,9 @@ dom_result = this.evaluate(function() {var page_title = document.title;});
 // user comment
 //user comment
 //
+});
+
+casper.then(function() {
 techo('\n' + this.getCurrentUrl() + ' - ' + this.getTitle());
 techo('FINISH - automation finished - ' + ((Date.now()-automation_start_time)/1000).toFixed(1) + 's\n');});
 

@@ -28,6 +28,7 @@ if ((getenv('tagui_web_browser')=='headless') or (getenv('tagui_web_browser')=='
 $inside_code_block = 0; // track if step or code is inside user-defined code block
 $inside_while_loop = 0; // track if step is in while loop and avoid async wait
 $inside_frame = 0; $inside_popup = 0; // track html frame and popup step
+$for_loop_tracker = ""; // track for loop to implement IIFE pattern
 $line_number = 0; // track flow line number for error message
 $test_automation = 0; // to determine casperjs script structure
 $url_provided = false; // to detect if url is provided in user-script
@@ -50,6 +51,7 @@ while(!feof($input_file)) {fwrite($output_file,parse_intent(fgets($input_file)))
 // create footer of casperjs script using footer template and do post-processing 
 while(!feof($footer_file)) {fwrite($output_file,fgets($footer_file));} fclose($footer_file); fclose($output_file);
 chmod ($script . '.js',0600); if (!$url_provided) echo "ERROR - first line of " . $script . " not URL\n";
+if ($inside_code_block != 0) echo "ERROR - number of step { does not tally with with }\n";
 
 // special handling if chrome or headless chrome is used as browser for automation
 // replacement of this.method already happens in step intents, this is mostly to handle user inserted casperjs code 
@@ -254,8 +256,10 @@ function end_tx($locator) { // helper function to return ending string for handl
 if ($GLOBALS['inside_while_loop'] == 0)
 return "},\nfunction timeout() {this.echo('ERROR - cannot find ".
 $locator."').exit();});}".end_fi()."});\n\ncasper.then(function() {\n";
-else if ($GLOBALS['inside_code_block']==0) // reset inside_while_loop if not inside code block
-{$GLOBALS['inside_while_loop'] = 0; return "}});\n\ncasper.then(function() {\n";} else return "}\n";}
+else if ($GLOBALS['inside_code_block']==0)
+{$GLOBALS['inside_while_loop'] = 0; // reset inside_while_loop if not inside code block
+$GLOBALS['for_loop_tracker'] = ""; // reset for_loop_tracker if not inside code block
+return "}});\n\ncasper.then(function() {\n";} else return "}\n";}
 
 function end_fi() { $end_step = ""; // helper function to end frame_intent and popup_intent by closing parsed step block
 if ($GLOBALS['inside_code_block']>0) return ""; // don't return frame or popup closure when inside code block
@@ -487,13 +491,23 @@ function code_intent($raw_intent) {
 $params = parse_condition($raw_intent); return $params.end_fi()."\n";}
 
 function parse_condition($logic) { // natural language handling for conditions
+$raw_logic = $logic; // store an original copy for use when showing error message
 if (substr($logic,0,2)=="//") return $logic; // skip processing for comment
 
 // section 1 - replace braces block {} with casperjs block to group steps or code
+if (substr_count($raw_logic,"{")>1) echo "ERROR - " . current_line() . " multiple step { found - " . $raw_logic . "\n";
+if (substr_count($raw_logic,"}")>1) echo "ERROR - " . current_line() . " multiple step } found - " . $raw_logic . "\n";
 $GLOBALS['inside_code_block'] += substr_count($logic,"{"); $GLOBALS['inside_code_block'] -= substr_count($logic,"}");
-if ($GLOBALS['inside_while_loop']==0) { // while loop check as casper.then will hang while loop
-$logic = str_replace("{","\n// start of code block\n{casper.then(function() {",$logic);
-$logic = str_replace("}","})} // end of code block\n",$logic);}
+if ($GLOBALS['inside_while_loop']==0) { // while loop check as casper.then will hang while loop, recommend use for loop
+$for_loop_header = ""; $for_loop_footer = ""; // add provision to implement IIFE pattern if inside for loop code block
+if ($GLOBALS['for_loop_tracker']!="") { // otherwise the number variable used by for loop will be a wrong static number
+$last_delimiter_pos = strrpos($GLOBALS['for_loop_tracker'],"|");
+$for_loop_variable_name = substr($GLOBALS['for_loop_tracker'],$last_delimiter_pos+1);
+$for_loop_header = "\n// start of IIFE pattern\n(function (" . $for_loop_variable_name . ") {";
+$for_loop_footer = "})(" . $for_loop_variable_name . "); // end of IIFE pattern\n});\n\ncasper.then(function() {";
+if (strpos($logic,"}")!==false) $GLOBALS['for_loop_tracker']=substr($GLOBALS['for_loop_tracker'],0,$last_delimiter_pos);}
+$logic = str_replace("{",$for_loop_header."\n// start of code block\n{casper.then(function() {\n",$logic);
+$logic = str_replace("}","})} // end of code block\n".$for_loop_footer,$logic);}
 
 // section 2 - natural language handling for conditions and loops 
 if ((substr($logic,0,3)=="if ") or (substr($logic,0,8)=="else if ")
@@ -529,7 +543,7 @@ $pos_double_quote = strpos($logic,"\"",$pos_keyword+strlen($contain_type)); // c
 if ($pos_double_quote == false) $pos_double_quote = 1024; // set to large number, for comparison later
 if ($pos_double_quote < $pos_single_quote) {$pos_quote_start = $pos_double_quote; $quote_type = "\"";}
 else if ($pos_single_quote < $pos_double_quote) {$pos_quote_start = $pos_single_quote; $quote_type = "'";}
-else {echo "ERROR - " . current_line() . " no quoted text - " . $logic . "\n"; $quote_type = "missing";}
+else {echo "ERROR - " . current_line() . " no quoted text - " . $raw_logic . "\n"; $quote_type = "missing";}
 if ($quote_type != "missing") {$pos_quote_end = strpos($logic,$quote_type,$pos_quote_start+1);
 $pos_variable_start = strrpos($logic," ",$pos_keyword-strlen($logic)-2); $contain_operator = "<0";
 if (($contain_type == " contains ") or ($contain_type == " contain ")) $contain_operator = ">-1"; 
@@ -547,8 +561,16 @@ if ((substr($logic,0,4)=="for ") and (strpos($logic,";")==false)) { // no ; mean
 $logic = str_replace("(","",$logic); $logic = str_replace(")","",$logic); // remove brackets if present
 $logic = str_replace("   "," ",$logic); $logic = str_replace("  "," ",$logic); // remove typo extra spaces
 $token = explode(" ",$logic); // split into tokens for loop in natural language, eg - for cupcake from 1 to 4
-if (count($token)!= 6) echo "ERROR - " . current_line() . " invalid for loop - " . $logic . "\n";
+if (substr($raw_logic,-1)=="{") // show error to put { to  next line for parsing as { step
+echo "ERROR - " . current_line() . " put { to next line - " . $raw_logic . "\n";
+else if (count($token) != 6) echo "ERROR - " . current_line() . " invalid for loop - " . $raw_logic . "\n";
 else $logic = $token[0]." (".$token[1]."=".$token[3]."; ".$token[1]."<=".$token[5]."; ".$token[1]."++)";}
+else if ((substr($logic,0,4)=="for ") and (substr($raw_logic,-1)=="{"))
+echo "ERROR - " . current_line() . " put { to next line - " . $raw_logic . "\n";
+
+// add to tracker the for loop variable name, to implement IIFE pattern if step/code blocks are used
+if (substr($logic,0,4)=="for ") { // get the variable name used in the for loop and append into tracker
+$GLOBALS['for_loop_tracker'] .= "|" . (substr($logic,strpos($logic,"(")+1,strpos($logic,"=")-strpos($logic,"(")-1));}
 
 // add opening and closing brackets twice to handle no brackets, and, or cases
 if (substr($logic,0,3)=="if ") $logic = "if ((" . trim(substr($logic,3)) . "))";

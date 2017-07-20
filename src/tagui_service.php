@@ -27,6 +27,11 @@ else
 	else if (substr($service_settings,-1)=="\"") die("ERROR - no opening \" in SETTINGS parameter" . "\n");
 	else if (substr($service_settings,-1)=="'") die("ERROR - no opening ' in SETTINGS parameter" . "\n");
 
+	// perform some sanity check to filter shell escaping characters for code injection
+	if ((strpos($service_settings,'|')!== false) or (strpos($service_settings,';')!== false)
+	or (strpos($service_settings,'&')!== false) or (strpos($service_settings,'>')!== false))
+	die("ERROR - illegal character found that poses command injection risk");
+
 	// add service request into queue file tagui_service.in
 	$service_in_file = fopen('tagui_service.in','a') or die("ERROR - cannot open " . 'tagui_service.in' . "\n");
 	$service_count = get_next_service_count('tagui_service.in');

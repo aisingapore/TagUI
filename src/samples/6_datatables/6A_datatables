@@ -8,11 +8,10 @@ https://github.com/telegramdesktop/tdesktop/stargazers?page=`page_no`
 // https://github.com/tebelorg/TagUI#cheat-sheet
 
 // CONTEXT - When TagUI beta was released, someone shared to Hacker News
-// and GitHub stars for this project jumped from 2 to 1.5k in about 1 week.
+// and GitHub stars for the project jumped from 2 to 1.5k in a week or so.
 // I wanted to send an one-time thank you email to all TagUI supporters,
 // so I created these automation flows to let my laptop do the job quickly.
-// I have since stopped using this as it might be borderline spam for some.
-// Check Gitter chat instead for updates - https://gitter.im/tebelorg/TagUI
+// I have since stopped using this as it might be spammy for some people.
 
 // datatables extend the power of repositories files to manage batch automation
 // datatable has 2 or more columns, for example below (headers up to you to name)
@@ -26,21 +25,14 @@ https://github.com/telegramdesktop/tdesktop/stargazers?page=`page_no`
 
 // now here's the actual flow, it grabs URLs of first 3 pages of Telegram Starrers 
 
-// use JavaScript to define an array, TagUI supports JavaScript directly in the flow
-var ID = []; // JavaScript can be used as needed to create more complex automation flows
+// first take a snapshot of repository name, concurrently making sure page is loaded
+snap .public
 
-// for loop in natural language
-for n from 1 to 76
+// JavaScript can be used directly in the flow for more expressive and advanced automation
+// default execution context for JavaScript is local, to work on webpage dom, use dom step
+// following loop through directly in webpage dom to compile and return list of profile ids
+dom id_list = ""; for (n=1;n<=51;n++) {id_list += document.querySelector('.follow-list-item:nth-child('+n+') a').href + '\n'}; return id_list; 
+echo dom_result
 
-{ // opening brace to denote whole section belonging to loop
-
-// below grabs the URL, does some filtering of results, and outputs the URL to screen and log file
-ID[n]="https://github.com"+this.getElementAttribute(x('(//*[contains(@class,"follow-list-item")]//a)['+2*n+']'),"href");
-if ID[n] not contains "/login?return_to="
-echo ID[n]
-
-// you can also use JavaScript to do post-processing and append to a file, or to a format directly usable by flow 6B
-// if ID[n] not contains "/login?return_to="
-// {var fs = require('fs'); fs.write("/tmp/urls.csv", ID[n] + "\n", 'a');}
-
-} // closing brace to denote end of the section belonging to loop
+// you can also use JavaScript to do post-processing and write to a file, or to a format directly usable by flow 6B
+// var fs = require('fs'); fs.write("/tmp/urls.csv", dom_result + "\n", 'w');

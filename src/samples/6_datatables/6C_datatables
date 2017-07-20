@@ -8,11 +8,10 @@ https://medium.com/tebelorg
 // https://github.com/tebelorg/TagUI#cheat-sheet
 
 // CONTEXT - When TagUI beta was released, someone shared to Hacker News
-// and GitHub stars for this project jumped from 2 to 1.5k in about 1 week.
+// and GitHub stars for the project jumped from 2 to 1.5k in a week or so.
 // I wanted to send an one-time thank you email to all TagUI supporters,
 // so I created these automation flows to let my laptop do the job quickly.
-// I have since stopped using this as it might be borderline spam for some.
-// Check Gitter chat instead for updates - https://gitter.im/tebelorg/TagUI
+// I have since stopped using this as it might be spammy for some people.
 
 // datatables extend the power of repositories files to manage batch automation
 // datatable has 2 or more columns, for example below (headers up to you to name)
@@ -32,8 +31,8 @@ https://medium.com/tebelorg
 // JavaScript can be used as needed to create more complex automation flows
 
 // set respective User IDs and User Emails and display to screen and log file
-var github_id = "`GITHUB_ID`"
-var user_email = "`USER_EMAIL`"
+github_id = "`GITHUB_ID`";
+user_email = "`USER_EMAIL`";
 echo github_id " - " user_email
 
 // only display the api call to screen, obviously we are not going to actually email the superheroes
