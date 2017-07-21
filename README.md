@@ -41,7 +41,7 @@ If you know JavaScript and want to be more expressive, you can even use JavaScri
 There is automatic waiting for web elements to appear + error-checking + nesting of JavaScript code blocks. Not forgetting the option to run automation flows hosted online or auto-upload run results online for sharing. TagUI also supports visual automation of website and desktop through built-in integration with Sikuli. Instead of using element identifiers, images can be used to identify user interface elements to interact with.
 
 # Set Up
-TagUI is in v2.0 and runs on macOS, Linux, Windows ([link to release notes](https://github.com/tebelorg/TagUI/releases))
+TagUI is in v2.1 and runs on macOS, Linux, Windows ([link to release notes](https://github.com/tebelorg/TagUI/releases))
 
 ### PACKAGED INSTALLATION
 Easiest way to use TagUI - no setup is needed, all dependencies are packaged in
@@ -212,9 +212,9 @@ size|10000|1000|100000
 direction|BUY|SELL|BUY
 
 # Developers Reference
-TagUI is a young tool and it tries to do the specific task of automating web interactions very well (especially process automation). It's designed to make prototyping, deployment and maintenance of web automation easier by minimizing iteration time for each phase. While TagUI can be used for test automation or data-scraping, there are some resources below which may be better fits for these goals.
+TagUI is a young tool and it tries to do the specific task of automating web interactions very well (especially process automation). It's designed to make prototyping, deployment and maintenance of web automation easier by minimizing iteration time for each phase. While TagUI can be used for test automation or data-scraping, there are other popular open-source tools which may be better fits for these goals.
 
-For test automation, there are already very established open-source tools/frameworks with mature and supportive ecosystems, which you can find out more what's current from resources such as this [test automation list](https://github.com/atinfo/awesome-test-automation). For data-scraping, there are various open-source projects just to handle that very well, which you can find out more by searching [crawler topic on GitHub](https://github.com/search?utf8=✓&q=topic%3Acrawler&type=Repositories). There's even a tool for extracting and curating articles, [how cool is that](https://github.com/codelucas/newspaper).
+For test automation, there are very established open-source tools/frameworks with mature and supportive ecosystems. You can find out more what's current from resources such as this [test automation list](https://github.com/atinfo/awesome-test-automation). For data-scraping, there are various open-source projects just to handle that very well. You can find out more by searching [crawler topic on GitHub](https://github.com/search?utf8=✓&q=topic%3Acrawler&type=Repositories). There's even a tool for extracting and curating articles, [how cool is that](https://github.com/codelucas/newspaper).
 
 ### API
 Automation flows can also be triggered via API URL. TagUI has an API service and runner for managing a queue of incoming requests via API. To set up, add a crontab entry on your server with the desired frequency to check and process incoming service requests. Below will check every 15 minutes and run pending flows in the queue. If there's an automation in progress, TagUI will wait for the next check instead of concurrently starting a new run.
