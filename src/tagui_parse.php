@@ -228,6 +228,7 @@ if (is_code($raw_intent)) return "code"; else return "error";}
 function is_code($raw_intent) {
 // due to asynchronous waiting for element, if/for/while can work for parsing single step
 // other scenarios can be assumed to behave as unparsed javascript in casperjs context
+// to let if/for/while handle multiple steps/code use the { and } steps to define block
 if ((substr($raw_intent,0,4)=="var ") or (substr($raw_intent,0,3)=="do ")) return true;
 if ((substr($raw_intent,0,1)=="{") or (substr($raw_intent,0,1)=="}")) return true;
 if ((substr($raw_intent,-1)=="{") or (substr($raw_intent,-1)=="}")) return true;
@@ -238,7 +239,9 @@ if ((substr($raw_intent,0,6)=="break;") or (substr($raw_intent,0,9)=="function "
 if ((substr($raw_intent,0,7)=="casper.") or (substr($raw_intent,0,5)=="this.")) return true;
 if (substr($raw_intent,0,7)=="chrome.") return true; // chrome object for chrome integration
 if (substr($raw_intent,0,5)=="test.") {$GLOBALS['test_automation']++; return true;}
-if ((substr($raw_intent,0,2)=="//") or (substr($raw_intent,-1)==";")) return true; return false;}
+if ((substr($raw_intent,0,2)=="//") or (substr($raw_intent,-1)==";")) return true;
+// assume = is assignment statement, kinda acceptable as this is checked at the very end
+if (strpos($raw_intent,"=")!==false) return true; return false;}
 
 function abs_file($filename) { // helper function to return absolute filename
 if ($filename == "") return ""; $flow_script = $GLOBALS['script']; // get flow filename

@@ -412,6 +412,7 @@ if (is_code(raw_intent)) return 'code'; else return 'error';}
 function is_code(raw_intent) {
 // due to asynchronous waiting for element, if/for/while can work for parsing single step
 // other scenarios can be assumed to behave as unparsed javascript in casperjs context
+// to let if/for/while handle multiple steps/code use the { and } steps to define block
 if ((raw_intent.substr(0,4) == 'var ') || (raw_intent.substr(0,3) == 'do ')) return true;
 if ((raw_intent.substr(0,1) == '{') || (raw_intent.substr(0,1) == '}')) return true;
 if ((raw_intent.charAt(raw_intent.length-1) == '{') || (raw_intent.charAt(raw_intent.length-1) == '}')) return true;
@@ -422,7 +423,9 @@ if ((raw_intent.substr(0,6) == 'break;') || (raw_intent.substr(0,9) == 'function
 if ((raw_intent.substr(0,7) == 'casper.') || (raw_intent.substr(0,5) == 'this.')) return true;
 if (raw_intent.substr(0,7) == 'chrome.') return true; // chrome object for chrome integration
 if (raw_intent.substr(0,5) == 'test.') return true;
-if ((raw_intent.substr(0,2) == '//') || (raw_intent.charAt(raw_intent.length-1) == ';')) return true; return false;}
+if ((raw_intent.substr(0,2) == '//') || (raw_intent.charAt(raw_intent.length-1) == ';')) return true;
+// assume = is assignment statement, kinda acceptable as this is checked at the very end
+if (raw_intent.indexOf('=') > -1) return true; return false;}
 
 function abs_file(filename) { // helper function to return absolute filename
 if (filename == '') return ''; // unlike tagui_parse.php not deriving path from script variable
