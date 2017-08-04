@@ -133,6 +133,7 @@ Flow Sample |Purpose
 
 Step|Parameters (separator in bold)|Purpose
 :---|:-----------------------------|:------
+http(s)://|no parameters, just enter the full url of webpage|go to specified webpage
 tap / click|element to click|click on an element
 hover / move|element to hover|move cursor to element
 type / enter|element to type ***as*** text to type ([enter] = enter key)|enter element as text
@@ -150,11 +151,12 @@ live|try steps or code interactively in Chrome / PhantomJS|enter live mode ([fir
 check|condition **&#124;** text if true **&#124;** text if false (text in quotes)|check condition and print result
 frame|frame name **&#124;** subframe name if any|next step or block in frame/subframe
 popup|url keyword of popup window to look for|next step or block in popup window
-{ and }|use { to start block and } to end block|define step/code block
+{ and }|use { to start block and } to end block|define block of steps and code
 api|full url (including parameters) of api call|call api save response to api_result
 dom|javascript code for document object model|run code in dom save to dom_result
 js|javascript statements (skip auto-detection)|treat as JS code explicitly
-//|user comments (ignored during execution)|add user comments
+variable_name| = value; (for text, put in quotes, use + to concat)|define variable variable_name
+// (on new line)|user comments (ignored during execution)|add user comments
 
 Tip - to use variables where text is expected, '+variable+' can be used. as default execution context is local, to run javascript on webpage dom (eg document.querySelector) use dom step. xpath is an expressive way to identify web elements. if you know xpath and using xpath for element identifier, use double quotes for text //\*[@title="Login"]
 
@@ -229,12 +231,12 @@ your_website_url/tagui_service.php?SETTINGS="flow_filename option(s)"
 
 Besides integrating with web applications, TagUI can be extended to integrate with hardware (eg Arduino or Raspberry Pi) for physical world interactions or machine learning service providers for AI decision-making ability. Input parameters can be sent to an automation flow to be used as variables p1 to p9. Output parameters from an automation flow can be sent to your Arduino or application API URL (see samples 3_github and 6C_datatables).
 
-For making outgoing API calls in your automation flow, to feed data somewhere or send emails etc, use the api step followed by full URL (including parameters) of the API call. Response from the API will be saved in api_result variable. If the API response is JSON data, the variable api_json will be created for easy access to JSON data elements. For example, api_json.parent_element.child_element retrieves value of child_element. If not, api_json will be null.
+For making outgoing API calls in your automation flow, to feed data somewhere or send emails etc, use the api step followed by full URL (including parameters) of the API call. Raw response from API will be saved in api_result variable. If the API response is JSON data, the variable api_json will be created for easy access to JSON data elements. If not, api_json will be null. For example, api_json.parent_element.child_element retrieves value of child_element.
 
 ```js
 api_config = {method:'PUT', header:['Header1: value1','Header2: value2'], body:{'id':123,'pwd':'abc'}};
 ```
-For advanced API calls, you can set above variable api_config which defaults as `{method:'GET', header:[], body:{}}`. Besides GET, you can use other methods such as POST, PUT, DELETE etc. You can define multiple headers in the format `'Header_name: header_value'` and provide a payload body for PUT requests for example. You can set it like above before using the api step, or set using `api_config.method = 'PUT';` and `api_config.header[0] = 'Header1: value1';` etc. `api_config.body` will be automatically converted to JSON format for sending to API endpoint.
+For advanced API calls, you can set above api_config variable which defaults as `{method:'GET', header:[], body:{}}`. Besides GET, you can use other methods such as POST, PUT, DELETE etc. You can define multiple headers in the format `'Header_name: header_value'` and provide a payload body for PUT requests for example. You can set it as above before using the api step, or set using `api_config.method = 'PUT';` and `api_config.header[0] = 'Header1: value1';` etc. `api_config.body` will be automatically converted to JSON format for sending to API endpoint.
 
 ### CHROME
 TagUI has built-in integration with Chrome web browser to run web automation in visible or headless mode. It uses a websocket connection to directly communicate automation JavaScript code and information to Chrome.
@@ -250,7 +252,7 @@ In order to retain TagUI unzip and run functionality, the approach of launching 
 Like chrome-remote-interface, TagUI communicates with Chrome through [Chrome Debugging Protocol](https://chromedevtools.github.io/devtools-protocol/). The protocol is primarily designed for debugging the web browser instead of web automation, so many methods are still in experimental status. However, the API is stable enough for TagUI steps to work with Chrome. When chrome or headless option is used, TagUI replaces CasperJS methods it uses with custom methods to talk to Chrome instead of PhantomJS. When firefox option is used or by default, TagUI doesn't invoke custom methods and PHP process.
 
 ### TESTING
-The step check allows simple testing of conditions. For professional test automation, CasperJS comes with a tester module for unit and functional testing purpose. To use the advanced testing features, run TagUI with test option. As CasperJS is not yet [supporting Chrome](https://github.com/casperjs/casperjs/issues/1825), below won't work when chrome or headless option is used.
+The step check allows simple testing of conditions. For professional test automation, CasperJS comes with a tester module for unit and functional testing purpose. To use advanced testing features, run TagUI with the test option. Note that CasperJS is not yet [supporting Chrome](https://github.com/casperjs/casperjs/issues/1825), below won't work when chrome or headless option is used.
 
 CasperJS test scripts are inherently different in structure and syntax from its usual automation scripts. With the test option, TagUI automatically sets up your automation flow to work as a test script. CasperJS will output a XUnit XML file, which is compatible with continuous integration tools such as Jenkins.
 
@@ -260,9 +262,9 @@ test.assertTextExists('ABOUT','Check for ABOUT text');
 test.assertSelectorHasText(tx('header'), 'Interface automation','Check for phrase in header element');
 ```
 
-For the list of 30+ expressive test assertions built into CasperJS, [click here](http://docs.casperjs.org/en/latest/modules/tester.html). To know more about CasperJS testing framework, [click here](http://docs.casperjs.org/en/latest/testing.html). As TagUI allows you to write JavaScript code directly within the automation flow, advanced testing or coding techniques that can be implemented in CasperJS should work directly within your flow.
+For the list of 30+ expressive test assertions built into CasperJS, [click here](http://docs.casperjs.org/en/latest/modules/tester.html). To know more about CasperJS testing framework, [click here](http://docs.casperjs.org/en/latest/testing.html). As TagUI allows you to write JavaScript / CasperJS code directly within the automation flow, advanced testing or coding techniques that can be implemented in CasperJS should work directly within your flow.
 
-TagUI recognizes most JavaScript code. In the event you get an error saying that it cannot understand the step for your JavaScript line, raise an issue or modify the source code ([tagui_parse.php](https://github.com/tebelorg/TagUI/blob/master/src/tagui_parse.php) is where interpretation of natural language to CasperJS JavaScript code takes place). Alternatively, use step js to explicitly declare that whatever follows on that line is JavaScript code and ensure that the line is not treated as a TagUI step.
+TagUI recognizes most JavaScript / CasperJS code. In the event you get an error saying that it cannot understand the step for your JavaScript line, raise an issue or modify the source code ([tagui_parse.php](https://github.com/tebelorg/TagUI/blob/master/src/tagui_parse.php) is where interpretation of natural language to CasperJS JavaScript code takes place). Alternatively, use step js to explicitly declare that whatever follows on that line is JavaScript code and ensure that the line is not treated as a TagUI step.
 
 ### FILES
 Filename |Purpose
