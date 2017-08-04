@@ -362,3 +362,10 @@ dom var page_title = document.title;
 // user comment
 //user comment
 //
+
+// test url without variable
+http://www.dummytestsite.com
+
+// test url with variable
+target_url = "www.dummytestsite.com";
+http://'+target_url+'

@@ -1344,6 +1344,20 @@ dom_result = this.evaluate(function() {var page_title = document.title;});
 // user comment
 //user comment
 //
+// test url without variable
+});casper.thenOpen('http://www.dummytestsite.com', function() {
+techo('http://www.dummytestsite.com' + ' - ' + this.getTitle());});
+
+casper.then(function() {
+// test url with variable
+target_url = "www.dummytestsite.com";
+
+{casper.then(function() {
+});casper.thenOpen('http://'+target_url+'', function() {
+techo('http://'+target_url+'' + ' - ' + this.getTitle());});
+
+casper.then(function() {
+})} // end of dynamic url block
 });
 
 casper.then(function() {

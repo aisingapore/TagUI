@@ -299,12 +299,17 @@ end_fi()."});\n\ncasper.then(function() {\n";}
 function url_intent($raw_intent) {$twb = $GLOBALS['tagui_web_browser']; $casper_url = $raw_intent; $chrome_call = '';
 if ($twb == 'chrome')
 {$casper_url = 'about:blank'; $chrome_call = "chrome_step('Page.navigate',{url: '".$raw_intent."'}); sleep(1000);\n";}
-if (filter_var($raw_intent, FILTER_VALIDATE_URL) == false) 
-echo "ERROR - " . current_line() . " invalid URL " . $raw_intent . "\n"; else
-if ($GLOBALS['line_number'] == 1) {$GLOBALS['url_provided']=true; return "casper.start('".$casper_url."', function() {\n".
-$chrome_call."techo('".$raw_intent."' + ' - ' + ".$twb.".getTitle() + '\\n');});\n\ncasper.then(function() {\n";}
-else return "});casper.thenOpen('".$casper_url."', function() {\n".$chrome_call."techo('".
-$raw_intent."' + ' - ' + ".$twb.".getTitle());});\n\ncasper.then(function() {\n";}
+if (strpos($raw_intent,"'+")!==false and strpos($raw_intent,"+'")!==false) // check if dynamic url is used
+// wrap step within casper context if variable (casper context) is used in url, in order to access variable
+{$dynamic_header = "\n{casper.then(function() {\n"; $dynamic_footer = "})} // end of dynamic url block\n";}
+else {$dynamic_header = ""; $dynamic_footer = ""; // else casper.start/thenOpen can be outside casper context
+if (filter_var($raw_intent, FILTER_VALIDATE_URL) == false) // do url validation only for raw text url string
+echo "ERROR - " . current_line() . " invalid URL " . $raw_intent . "\n";}
+if ($GLOBALS['line_number'] == 1) { // use casper.start for first URL call and casper.thenOpen for subsequent calls
+$GLOBALS['url_provided']=true; return $dynamic_header."casper.start('".$casper_url."', function() {\n".$chrome_call.
+"techo('".$raw_intent."' + ' - ' + ".$twb.".getTitle() + '\\n');});\n\ncasper.then(function() {\n".$dynamic_footer;}
+else return $dynamic_header."});casper.thenOpen('".$casper_url."', function() {\n".$chrome_call."techo('".
+$raw_intent."' + ' - ' + ".$twb.".getTitle());});\n\ncasper.then(function() {\n".$dynamic_footer;}
 
 function tap_intent($raw_intent) {$twb = $GLOBALS['tagui_web_browser'];
 $params = trim(substr($raw_intent." ",1+strpos($raw_intent." "," "))); 
