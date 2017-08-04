@@ -196,6 +196,10 @@ if ((selector.toString().length >= 16) && (selector.toString().substr(0,16) == '
 {if (selector.toString().length == 16) selector = ''; else selector = selector.toString().substring(16);
 chrome_step('Runtime.evaluate',{expression: 'document.evaluate(\''+selector+'\','+chrome_context+',null,XPathResult.ORDERED_NODE_SNAPSHOT_TYPE,null).snapshotItem(0).focus()'});}
 else chrome_step('Runtime.evaluate',{expression: chrome_context+'.querySelector(\''+selector+'\').focus()'});
+if (options && options.reset == true) // handling for clearing field by checking options.reset
+{if ((selector.indexOf('/') == 0) || (selector.indexOf('(') == 0)) // check for xpath selector and handle accordingly
+{chrome_step('Runtime.evaluate',{expression: 'var sendKeys_field = document.evaluate(\''+selector+'\','+chrome_context+',null,XPathResult.ORDERED_NODE_SNAPSHOT_TYPE,null).snapshotItem(0); sendKeys_field.value = \'\'; var evt = document.createEvent(\'UIEvents\'); evt.initUIEvent(\'change\', true, true); sendKeys_field.dispatchEvent(evt);'});}
+else chrome_step('Runtime.evaluate',{expression: 'var sendKeys_field = '+chrome_context+'.querySelector(\''+selector+'\'); sendKeys_field.value = \'\'; var evt = document.createEvent(\'UIEvents\'); evt.initUIEvent(\'change\', true, true); sendKeys_field.dispatchEvent(evt);'});}
 for (var character = 0, length = value.length; character < length; character++) {
 chrome_step('Input.dispatchKeyEvent',{type: 'char', text: value[character]});}};
 
@@ -483,10 +487,12 @@ var abs_param1 = abs_file(param1); var abs_intent = raw_intent.replace(param1,ab
 return call_sikuli(abs_intent,abs_param1);} // use sikuli visual automation as needed
 if ((param1 == '') || (param2 == '')) return "this.echo('ERROR - target/text missing for " + raw_intent + "')";
 else if (check_tx(param1)) 
-{if (param2.indexOf('[enter]') == -1) return "this.sendKeys(tx('" + param1 + "'),'" + param2 + "')";
+{if (param2.indexOf('[clear]') == 0) {if (param2.length>7) param2 = param2.substr(7); else param2 = "";
+clear_field = "this.sendKeys(tx('" + param1 + "'),'',{reset: true}); ";} else clear_field = "";
+if (param2.indexOf('[enter]') == -1) return clear_field + "this.sendKeys(tx('" + param1 + "'),'" + param2 + "')";
 else // special handling to send enter key events
 {param2 = param2.replace(/\[enter\]/g,"',{keepFocus: true}); this.sendKeys(tx('" + param1 + "'),casper.page.event.key.Enter,{keepFocus: true}); this.sendKeys(tx('" + param1 + "'),'");
-return "this.sendKeys(tx('" + param1 + "'),'" + param2 + "',{keepFocus: true});";}}
+return clear_field + "this.sendKeys(tx('" + param1 + "'),'" + param2 + "',{keepFocus: true});";}}
 else return "this.echo('ERROR - cannot find " + param1 + "')";}
 
 function select_intent(raw_intent) {

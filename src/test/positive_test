@@ -246,6 +246,14 @@ enter element as some text
 type textbox.png as some text
 enter textbox.bmp as some text
 
+// test type / enter for [enter] and [clear] keywords
+type element as some text[enter]
+enter element as some text[enter]
+type element as [clear]
+enter element as [clear]
+type element as [clear]some text[enter]
+enter element as [clear]some text[enter]
+
 // test select / enter (including sikuli visual automation)
 select element as option
 choose element as option
