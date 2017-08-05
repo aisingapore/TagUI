@@ -8,7 +8,7 @@ rem enable windows for loop advanced flow control
 setlocal enableextensions enabledelayedexpansion
 
 if "%~1"=="" (
-echo tagui v2.0: use following syntax and below options to run - tagui flow_filename option^(s^)
+echo tagui v2.2: use following syntax and below options to run - tagui flow_filename option^(s^)
 echo.
 echo IMPORTANT: SAVE YOUR WORK BEFORE USING CHROME OR HEADLESS, TAGUI WILL RESTART CHROME
 echo headless - run on invisible Chrome web browser instead of default PhantomJS ^(first install Chrome^)
@@ -19,6 +19,7 @@ echo report   - web report for sharing of run results on webserver ^(default is 
 echo debug    - show run-time backend messages from PhantomJS for detailed tracing and logging
 echo quiet    - run without output except for explicit output ^(echo / show / check / errors etc^)
 echo test     - professional testing using CasperJS assertions ^(TagUI smart tx^('selector'^) usable^)
+echo baseline - output execution log and relative-path output files to a separate baseline directory
 echo input^(s^) - add your own parameter^(s^) to be used in your automation flow as variables p1 to p9
 echo.
 echo TagUI is a general purpose tool for automating web interactions ~ http://tebel.org
@@ -59,8 +60,52 @@ if not "%flow_file%"=="" if not exist "%online_flowname%" (
 	exit /b 1
 )
 
-rem get and set absolute filename of automation flow file
-if "%flow_file%"=="" set "flow_file=%~dpnx1"
+set tagui_baseline_mode=false
+rem check baseline parameter to output files to baseline directory
+if "%arg2%"=="baseline" (
+	set arg2=
+	set tagui_baseline_mode=true
+)
+if "%arg3%"=="baseline" (
+	set arg3=
+	set tagui_baseline_mode=true
+)
+if "%arg4%"=="baseline" (
+	set arg4=
+	set tagui_baseline_mode=true
+)
+if "%arg5%"=="baseline" (
+	set arg5=
+	set tagui_baseline_mode=true
+)
+if "%arg6%"=="baseline" (
+	set arg6=
+	set tagui_baseline_mode=true
+)
+if "%arg7%"=="baseline" (
+	set arg7=
+	set tagui_baseline_mode=true
+)
+if "%arg8%"=="baseline" (
+	set arg8=
+	set tagui_baseline_mode=true
+)
+if "%arg9%"=="baseline" (
+	set arg9=
+	set tagui_baseline_mode=true
+)
+
+rem check baseline option, get and set absolute filename of automation flow file
+if %tagui_baseline_mode%==false (
+	if "%flow_file%"=="" set "flow_file=%~dpnx1"
+) else (
+	if "%flow_file%"=="" set "flow_file=%~dpnx1"
+	for %%i in ("%flow_file%") do set "flow_folder=%%~dpi"
+	for %%i in ("%flow_file%") do set "flow_filename=%%~nxi"
+	if not exist "!flow_folder!baseline" mkdir "!flow_folder!baseline"
+	copy "%flow_file%" "!flow_folder!baseline\." > nul
+	set "flow_file=!flow_folder!baseline\!flow_filename!"
+)
 
 rem save location of initial directory where tagui is called
 set "initial_dir=%cd%"

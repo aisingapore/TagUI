@@ -6,7 +6,7 @@ chrome_command="google-chrome"
 
 if [ -z "$1" ]
 then
-echo "tagui v2.0: use following syntax and below options to run ./tagui flow_filename option(s)"
+echo "tagui v2.2: use following syntax and below options to run ./tagui flow_filename option(s)"
 echo
 echo "IMPORTANT: SAVE YOUR WORK BEFORE USING CHROME OR HEADLESS, TAGUI WILL RESTART CHROME"
 echo "headless - run on invisible Chrome web browser instead of default PhantomJS (first install Chrome)"
@@ -17,6 +17,7 @@ echo "report   - web report for sharing of run results on webserver (default is 
 echo "debug    - show run-time backend messages from PhantomJS for detailed tracing and logging"
 echo "quiet    - run without output except for explicit output (echo / show / check / errors etc)"
 echo "test     - professional testing using CasperJS assertions (TagUI smart tx('selector') usable)"
+echo "baseline - output execution log and relative-path output files to a separate baseline directory"
 echo "input(s) - add your own parameter(s) to be used in your automation flow as variables p1 to p9"
 echo
 echo "TagUI is a general purpose tool for automating web interactions ~ http://tebel.org"
@@ -34,8 +35,23 @@ fi;fi;fi;fi; set -- "$online_flowname" "${@:2}"; fi
 # check whether specified automation flow file exists
 if ! [ -f "$1" ]; then echo "ERROR - cannot find $1"; exit 1; fi
 
-# get and set absolute filename of automation flow file
-set -- "$(cd "$(dirname "$1")"; pwd)/$(basename "$1")" "${@:2}"
+tagui_baseline_mode=false
+# check baseline parameter to output files to baseline directory
+if [ "$2" = "baseline" ]; then set -- "$1" "${@:3}"; tagui_baseline_mode=true; fi
+if [ "$3" = "baseline" ]; then set -- "${@:1:2}" "${@:4}"; tagui_baseline_mode=true; fi
+if [ "$4" = "baseline" ]; then set -- "${@:1:3}" "${@:5}"; tagui_baseline_mode=true; fi
+if [ "$5" = "baseline" ]; then set -- "${@:1:4}" "${@:6}"; tagui_baseline_mode=true; fi
+if [ "$6" = "baseline" ]; then set -- "${@:1:5}" "${@:7}"; tagui_baseline_mode=true; fi
+if [ "$7" = "baseline" ]; then set -- "${@:1:6}" "${@:8}"; tagui_baseline_mode=true; fi
+if [ "$8" = "baseline" ]; then set -- "${@:1:7}" "${@:9}"; tagui_baseline_mode=true; fi
+if [ "$9" = "baseline" ]; then set -- "${@:1:8}"; tagui_baseline_mode=true; fi
+
+# check baseline option, get and set absolute filename of automation flow file
+if [ "$tagui_baseline_mode" == false ]; then set -- "$(cd "$(dirname "$1")"; pwd)/$(basename "$1")" "${@:2}"
+else if ! [ -d "$(cd "$(dirname "$1")"; pwd)/baseline" ]; then mkdir "$(cd "$(dirname "$1")"; pwd)/baseline"; fi
+cp "$1" "$(cd "$(dirname "$1")"; pwd)/baseline/."
+set -- "$(cd "$(dirname "$1")"; pwd)/baseline/$(basename "$1")" "${@:2}"
+fi
 
 # save location of initial directory where tagui is called
 initial_dir=`pwd`
