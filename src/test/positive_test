@@ -1,4 +1,12 @@
 http://www.google.com
+// code to auto-replace local path names in generated js file with /full_path
+var fs = require('fs');
+var js_result = fs.read(fs.workingDirectory + fs.separator + 'test' + fs.separator + 'positive_test.js');
+var local_path = js_result.substring(js_result.indexOf("var flow_path = '") + 17);
+local_path = local_path.substring(0,local_path.indexOf("'"));
+var regex = new RegExp(local_path,"g"); js_result = js_result.replace(regex,"/full_path");
+fs.write(fs.workingDirectory + fs.separator + 'test' + fs.separator + 'positive_test.js', js_result, 'w');
+
 // TEST CONDITIONS
 
 // test contain / not contain
@@ -304,6 +312,10 @@ snap element to /tmp/filename.png
 snap page
 snap page to filename.png
 snap page to /tmp/filename.png
+
+// test upload
+upload #css_selector as abc.png
+upload #css_selector as /tmp/abc.png
 
 // test download
 download http://www.dummytestsite.com/report/month.txt to filename.txt

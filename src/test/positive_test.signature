@@ -265,7 +265,19 @@ chrome.capture(filename); var selector_rect = chrome.getRect(selector); // so th
 if (selector_rect.width > 0 && selector_rect.height > 0) // from using other libraries or creating html canvas 
 casper.thenOpen(filename, function() {casper . capture(filename, // spaces around . intentional to avoid replacing 
 {top: selector_rect.top, left: selector_rect.left, width: selector_rect.width, height: selector_rect.height});
-casper . thenOpen('about:blank');});}; // reset phantomjs browser state, spaces intentional to avoid replacing
+casper.thenOpen('about:blank');});}; // reset phantomjs browser state
+
+chrome.upload = function(selector,filename) { // upload function to upload file to provided selector
+if ((selector.toString().length >= 16) && (selector.toString().substr(0,16) == 'xpath selector: '))
+{casper.echo('ERROR - upload step is only implemented for CSS selector and not XPath selector');
+casper.echo('ERROR - for consistency with PhantomJS as it only supports upload with CSS selector');}
+else try {var ws_message = ""; var ws_json = {};
+ws_message = chrome_step('DOM.getDocument',{});
+ws_json = JSON.parse(ws_message);
+ws_message = chrome_step('DOM.querySelector',{nodeId: ws_json.result.root.nodeId, selector: selector});
+ws_json = JSON.parse(ws_message);
+ws_message = chrome_step('DOM.setFileInputFiles',{files: [filename], nodeId: ws_json.result.nodeId});
+} catch(e) {casper.echo('ERROR - unable to upload ' + selector + ' as ' + filename);}};
 
 chrome.download = function(url,filename) { // download function for downloading url resource to file
 // casper download cannot be used for url which requires login as casperjs context is not in chrome
@@ -359,6 +371,7 @@ case 'type': return type_intent(live_line); break;
 case 'select': return select_intent(live_line); break;
 case 'read': return read_intent(live_line); break;
 case 'show': return show_intent(live_line); break;
+case 'upload': return upload_intent(live_line); break;
 case 'down': return down_intent(live_line); break;
 case 'receive': return receive_intent(live_line); break;
 case 'echo': return echo_intent(live_line); break;
@@ -389,7 +402,8 @@ if ((lc_raw_intent.substr(0,5) == 'type ') || (lc_raw_intent.substr(0,6) == 'ent
 if ((lc_raw_intent.substr(0,7) == 'select ') || (lc_raw_intent.substr(0,7) == 'choose ')) return 'select';
 if ((lc_raw_intent.substr(0,5) == 'read ') || (lc_raw_intent.substr(0,6) == 'fetch ')) return 'read';
 if ((lc_raw_intent.substr(0,5) == 'show ') || (lc_raw_intent.substr(0,6) == 'print ')) return 'show';
-if ((lc_raw_intent.substr(0,5) == 'down ') || (lc_raw_intent.substr(4,5) == 'load ')) return 'down';
+if ((lc_raw_intent.substr(0,3) == 'up ') || (lc_raw_intent.substr(0,7) == 'upload ')) return 'upload';
+if ((lc_raw_intent.substr(0,5) == 'down ') || (lc_raw_intent.substr(0,9) == 'download ')) return 'down';
 if (lc_raw_intent.substr(0,8) == 'receive ') return 'receive';
 if (lc_raw_intent.substr(0,5) == 'echo ') return 'echo';
 if (lc_raw_intent.substr(0,5) == 'save ') return 'save';
@@ -413,6 +427,7 @@ if ((lc_raw_intent == 'type') || (lc_raw_intent == 'enter')) return 'type';
 if ((lc_raw_intent == 'select') || (lc_raw_intent == 'choose')) return 'select';
 if ((lc_raw_intent == 'read') || (lc_raw_intent == 'fetch')) return 'read';
 if ((lc_raw_intent == 'show') || (lc_raw_intent == 'print')) return 'show';
+if ((lc_raw_intent == 'up') || (lc_raw_intent == 'upload')) return 'upload';
 if ((lc_raw_intent == 'down') || (lc_raw_intent == 'download')) return 'down';
 if (lc_raw_intent == 'receive') return 'receive';
 if (lc_raw_intent == 'echo') return 'echo';
@@ -549,6 +564,14 @@ if (params.toLowerCase() == 'page') return "this.echo('" + raw_intent + "' + ' -
 if (params == '') return "this.echo('ERROR - target missing for " + raw_intent + "')";
 else if (check_tx(params)) return "this.echo('" + raw_intent + "' + ' - ' + this.fetchText(tx('" + params + "')).trim())";else return "this.echo('ERROR - cannot find " + params + "')";}
 
+function upload_intent(raw_intent) {
+var params = ((raw_intent + ' ').substr(1+(raw_intent + ' ').indexOf(' '))).trim();
+var param1 = (params.substr(0,params.indexOf(' as '))).trim();
+var param2 = (params.substr(4+params.indexOf(' as '))).trim();
+if ((param1 == '') || (param2 == '')) return "this.echo('ERROR - filename missing for " + raw_intent + "')";
+else if (check_tx(param1)) return "this.page.uploadFile(tx('" + param1 + "'),'" + abs_file(param2) + "')";
+else return "this.echo('ERROR - cannot find " + param1 + "')";}
+
 function down_intent(raw_intent) {
 var params = ((raw_intent + ' ').substr(1+(raw_intent + ' ').indexOf(' '))).trim();
 var param1 = (params.substr(0,params.indexOf(' to '))).trim();
@@ -654,6 +677,7 @@ source_code = source_code.replace(/casper\.selectOptionByValue/g,'chrome.selectO
 source_code = source_code.replace(/casper\.fetchText/g,'chrome.fetchText').replace(/this\.fetchText/g,'chrome.fetchText');
 source_code = source_code.replace(/casper\.capture/g,'chrome.capture').replace(/this\.capture/g,'chrome.capture');
 source_code = source_code.replace(/casper\.captureSelector/g,'chrome.captureSelector').replace(/this\.captureSelector/g,'chrome.captureSelector');
+source_code = source_code.replace(/chrome\.page\.uploadFile/g,'chrome.upload').replace(/casper\.page\.uploadFile/g,'chrome.upload').replace(/this\.page\.uploadFile/g,'chrome.upload');
 source_code = source_code.replace(/casper\.download/g,'chrome.download').replace(/this\.download/g,'chrome.download');
 source_code = source_code.replace(/casper\.evaluate/g,'chrome.evaluate').replace(/this\.evaluate/g,'chrome.evaluate');
 source_code = source_code.replace(/casper\.getHTML/g,'chrome.getHTML').replace(/this\.getHTML/g,'chrome.getHTML');
@@ -692,6 +716,11 @@ casper.start('http://www.google.com', function() {
 techo('http://www.google.com' + ' - ' + this.getTitle() + '\n');});
 
 casper.then(function() {
+var js_result = fs.read(fs.workingDirectory + fs.separator + 'test' + fs.separator + 'positive_test.js');
+var local_path = js_result.substring(js_result.indexOf("var flow_path = '") + 17);
+local_path = local_path.substring(0,local_path.indexOf("'"));
+var regex = new RegExp(local_path,"g"); js_result = js_result.replace(regex,"/full_path");
+fs.write(fs.workingDirectory + fs.separator + 'test' + fs.separator + 'positive_test.js', js_result, 'w');
 // TEST CONDITIONS
 // test contain / not contain
 var variable = "test variable with some text";
@@ -1289,6 +1318,19 @@ this.capture(snap_image());}
 this.capture('/full_path/filename.png');}
 {techo('snap page to /tmp/filename.png');
 this.capture('/tmp/filename.png');}
+// test upload
+{techo('upload #css_selector as abc.png');
+casper.waitFor(function check() {return check_tx('#css_selector');},
+function then() {this.page.uploadFile(tx('#css_selector'),'/full_path/abc.png');},
+function timeout() {this.echo('ERROR - cannot find #css_selector').exit();});}});
+
+casper.then(function() {
+{techo('upload #css_selector as /tmp/abc.png');
+casper.waitFor(function check() {return check_tx('#css_selector');},
+function then() {this.page.uploadFile(tx('#css_selector'),'/tmp/abc.png');},
+function timeout() {this.echo('ERROR - cannot find #css_selector').exit();});}});
+
+casper.then(function() {
 // test download
 {techo('download http://www.dummytestsite.com/report/month.txt to filename.txt');
 this.download('http://www.dummytestsite.com/report/month.txt','/full_path/filename.txt');}

@@ -74,6 +74,9 @@ $script_content = str_replace("casper.capture","chrome.capture",$script_content)
 $script_content = str_replace("this.capture","chrome.capture",$script_content); // change this.capture call as well
 $script_content = str_replace("casper.captureSelector","chrome.captureSelector",$script_content); // capture selector
 $script_content = str_replace("this.captureSelector","chrome.captureSelector",$script_content); // capture selector
+$script_content = str_replace("chrome.page.uploadFile","chrome.upload",$script_content); // change upload method to chrome
+$script_content = str_replace("casper.page.uploadFile","chrome.upload",$script_content); // change upload method to chrome
+$script_content = str_replace("this.page.uploadFile","chrome.upload",$script_content); // change this.upload call as well
 $script_content = str_replace("casper.download","chrome.download",$script_content); // change download method to chrome
 $script_content = str_replace("this.download","chrome.download",$script_content); // change this.download call as well
 $script_content = str_replace("casper.evaluate","chrome.evaluate",$script_content); // change evaluate method to chrome
@@ -155,6 +158,7 @@ case "type": return type_intent($script_line); break;
 case "select": return select_intent($script_line); break;
 case "read": return read_intent($script_line); break;
 case "show": return show_intent($script_line); break;
+case "upload": return upload_intent($script_line); break;
 case "down": return down_intent($script_line); break;
 case "receive": return receive_intent($script_line); break;
 case "echo": return echo_intent($script_line); break;
@@ -184,7 +188,8 @@ if ((substr($lc_raw_intent,0,5)=="type ") or (substr($lc_raw_intent,0,6)=="enter
 if ((substr($lc_raw_intent,0,7)=="select ") or (substr($lc_raw_intent,0,7)=="choose ")) return "select";
 if ((substr($lc_raw_intent,0,5)=="read ") or (substr($lc_raw_intent,0,6)=="fetch ")) return "read";
 if ((substr($lc_raw_intent,0,5)=="show ") or (substr($lc_raw_intent,0,6)=="print ")) return "show";
-if ((substr($lc_raw_intent,0,5)=="down ") or (substr($lc_raw_intent,4,5)=="load ")) return "down";
+if ((substr($lc_raw_intent,0,3)=="up ") or (substr($lc_raw_intent,0,7)=="upload ")) return "upload";
+if ((substr($lc_raw_intent,0,5)=="down ") or (substr($lc_raw_intent,0,9)=="download ")) return "down";
 if (substr($lc_raw_intent,0,8)=="receive ") return "receive";
 if (substr($lc_raw_intent,0,5)=="echo ") return "echo";
 if (substr($lc_raw_intent,0,5)=="save ") return "save";
@@ -208,6 +213,7 @@ if (($lc_raw_intent=="type") or ($lc_raw_intent=="enter")) return "type";
 if (($lc_raw_intent=="select") or ($lc_raw_intent=="choose")) return "select";
 if (($lc_raw_intent=="read") or ($lc_raw_intent=="fetch")) return "read";
 if (($lc_raw_intent=="show") or ($lc_raw_intent=="print")) return "show";
+if (($lc_raw_intent=="up") or ($lc_raw_intent=="upload")) return "upload";
 if (($lc_raw_intent=="down") or ($lc_raw_intent=="download")) return "down";
 if ($lc_raw_intent=="receive") return "receive";
 if ($lc_raw_intent=="echo") return "echo";
@@ -379,6 +385,14 @@ if (strtolower($params) == "page") return "this.echo('".$raw_intent."' + ' - \\n
 if ($params == "") echo "ERROR - " . current_line() . " target missing for " . $raw_intent . "\n"; else
 return "{// nothing to do on this line".beg_tx($params).
 "this.echo('".$raw_intent."' + ' - ' + ".$twb.".fetchText(tx('" . $params . "')).trim());".end_tx($params);}
+
+function upload_intent($raw_intent) {$twb = $GLOBALS['tagui_web_browser'];
+$params = trim(substr($raw_intent." ",1+strpos($raw_intent." "," ")));
+$param1 = trim(substr($params,0,strpos($params," as "))); $param2 = trim(substr($params,4+strpos($params," as ")));
+if (($param1 == "") or ($param2 == ""))
+echo "ERROR - " . current_line() . " filename missing for " . $raw_intent . "\n"; else
+return "{techo('".$raw_intent."');".beg_tx($param1).
+$twb.".page.uploadFile(tx('".$param1."'),'".abs_file($param2)."');".end_tx($param1);}
 
 function down_intent($raw_intent) {$twb = $GLOBALS['tagui_web_browser'];
 $params = trim(substr($raw_intent." ",1+strpos($raw_intent." "," ")));
