@@ -220,12 +220,6 @@ click test3
 if (2 < 3)
 echo "TRUE"
 
-// test test
-// test something and see what happens
-
-// test js
-js this.echo('THIS IS JAVASCRIPT');
-
 // TEST STEPS
 
 // test tap / click (including sikuli visual automation)
@@ -365,6 +359,17 @@ api http://www.dummytestsite.com/api?COLOR1='+COLOR1+'&COLOR2='+COLOR2+'&COLOR3=
 
 // test dom
 dom var page_title = document.title;
+
+// test test
+// test something and see what happens
+
+// test js
+js this.echo('THIS IS JAVASCRIPT');
+
+// test timeout
+timeout 4 seconds
+timeout 5.67
+timeout 6
 
 // test comment
 // user comment

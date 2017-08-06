@@ -374,6 +374,7 @@ case 'popup': return popup_intent(live_line); break;
 case 'api': return api_intent(live_line); break;
 case 'dom': return dom_intent(live_line); break;
 case 'js': return js_intent(live_line); break;
+case 'timeout': return timeout_intent(live_line); break;
 case 'code': return code_intent(live_line); break;
 default: return "this.echo('ERROR - cannot understand step " + live_line.replace(/'/g,'\\\'') + "')";}}
 
@@ -403,6 +404,7 @@ if (lc_raw_intent.substr(0,6) == 'popup ') return 'popup';
 if (lc_raw_intent.substr(0,4) == 'api ') return 'api';
 if (lc_raw_intent.substr(0,4) == 'dom ') return 'dom';
 if (lc_raw_intent.substr(0,3) == 'js ') return 'js';
+if (lc_raw_intent.substr(0,8) == 'timeout ') return 'timeout';
 
 // second set of conditions check for valid keywords with missing parameters
 if ((lc_raw_intent == 'tap') || (lc_raw_intent == 'click')) return 'tap';
@@ -426,6 +428,7 @@ if (lc_raw_intent == 'popup') return 'popup';
 if (lc_raw_intent == 'api') return 'api';
 if (lc_raw_intent == 'dom') return 'dom';
 if (lc_raw_intent == 'js') return 'js';
+if (lc_raw_intent == 'timeout') return 'timeout';
 
 // final check for recognized code before returning error
 if (is_code(raw_intent)) return 'code'; else return 'error';}
@@ -631,6 +634,11 @@ function js_intent(raw_intent) {
 var params = ((raw_intent + ' ').substr(1+(raw_intent + ' ').indexOf(' '))).trim();
 if (params == '') return "this.echo('ERROR - statement missing for " + raw_intent + "')";
 else return check_chrome_context(params);}
+
+function timeout_intent(raw_intent) {
+var params = ((raw_intent + ' ').substr(1+(raw_intent + ' ').indexOf(' '))).trim();
+if (params == '') return "this.echo('ERROR - time in seconds missing for " + raw_intent + "')";
+else return check_chrome_context("casper.options.waitTimeout = " + (parseFloat(params)*1000).toString() + ";");}
 
 function code_intent(raw_intent) {
 return check_chrome_context(raw_intent);}
@@ -1012,10 +1020,6 @@ casper.then(function() {
 // test if in javascript
 if (((2 < 3)))
 this.echo("TRUE");
-// test test
-// test something and see what happens
-// test js
-this.echo('THIS IS JAVASCRIPT');
 // TEST STEPS
 // test tap / click (including sikuli visual automation)
 {techo('tap element');
@@ -1398,6 +1402,14 @@ api_result = call_api('http://www.dummytestsite.com/api?COLOR1='+COLOR1+'&COLOR2
 try {api_json = JSON.parse(api_result);} catch(e) {api_json = JSON.parse('null');}}
 // test dom
 dom_result = this.evaluate(function() {var page_title = document.title;});
+// test test
+// test something and see what happens
+// test js
+this.echo('THIS IS JAVASCRIPT');
+// test timeout
+casper.options.waitTimeout = 4000;
+casper.options.waitTimeout = 5670;
+casper.options.waitTimeout = 6000;
 // test comment
 // user comment
 //user comment

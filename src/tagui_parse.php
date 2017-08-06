@@ -170,6 +170,7 @@ case "popup": return popup_intent($script_line); break;
 case "api": return api_intent($script_line); break;
 case "dom": return dom_intent($script_line); break;
 case "js": return js_intent($script_line); break;
+case "timeout": return timeout_intent($script_line); break;
 case "code": return code_intent($script_line); break;
 default: echo "ERROR - " . current_line() . " cannot understand step " . $script_line . "\n";}}
 
@@ -198,6 +199,7 @@ if (substr($lc_raw_intent,0,6)=="popup ") return "popup";
 if (substr($lc_raw_intent,0,4)=="api ") return "api";
 if (substr($lc_raw_intent,0,4)=="dom ") return "dom";
 if (substr($lc_raw_intent,0,3)=="js ") return "js";
+if (substr($lc_raw_intent,0,8)=="timeout ") return "timeout";
 
 // second set of conditions check for valid keywords with missing parameters
 if (($lc_raw_intent=="tap") or ($lc_raw_intent=="click")) return "tap";
@@ -221,6 +223,7 @@ if ($lc_raw_intent=="popup") return "popup";
 if ($lc_raw_intent=="api") return "api";
 if ($lc_raw_intent=="dom") return "dom";
 if ($lc_raw_intent=="js") return "js";
+if ($lc_raw_intent=="timeout") return "timeout";
 
 // final check for recognized code before returning error 
 if (is_code($raw_intent)) return "code"; else return "error";}
@@ -497,6 +500,11 @@ function js_intent($raw_intent) {
 $params = trim(substr($raw_intent." ",1+strpos($raw_intent." "," ")));
 if ($params == "") echo "ERROR - " . current_line() . " statement missing for " . $raw_intent . "\n";
 else return $params.end_fi()."\n";}
+
+function timeout_intent($raw_intent) {
+$params = trim(substr($raw_intent." ",1+strpos($raw_intent." "," ")));
+if ($params == "") echo "ERROR - " . current_line() . " time in seconds missing for " . $raw_intent . "\n";
+else return "casper.options.waitTimeout = " . (floatval($params)*1000) . ";" . end_fi()."\n";}
 
 function code_intent($raw_intent) {
 $params = parse_condition($raw_intent); return $params.end_fi()."\n";}
