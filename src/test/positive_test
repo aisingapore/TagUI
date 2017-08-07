@@ -1,4 +1,4 @@
-http://www.google.com
+https://www.google.com
 // code to auto-replace local path names in generated js file with /full_path
 var fs = require('fs');
 var js_result = fs.read('test' + fs.separator + 'positive_test.js');
@@ -7,11 +7,14 @@ local_path = local_path.substring(0,local_path.indexOf("'"));
 var regex = new RegExp(local_path,"g"); js_result = js_result.replace(regex,"/full_path");
 fs.write('test' + fs.separator + 'positive_test.js', js_result, 'w');
 fs.remove('test' + fs.separator + 'positive_test.log');
+this.exit(); // don't actually run the steps and code, test is for language conversion
+// add a navigation step in order to exit in time and block below output from running
+https://ca.yahoo.com
 
 // TEST CONDITIONS
 
 // test contain / not contain
-var variable = "test variable with some text";
+variable = "test variable with some text"
 if variable contain "some text"
 echo "FOUND"
 if variable contains "some text"
@@ -20,7 +23,7 @@ if variable not contain "some text"
 echo "NOT FOUND"
 if variable not contains "some text"
 echo "NOT FOUND"
-var variable ='test variable with some text';
+variable = 'test variable with some text'
 if variable contain 'some text'
 echo 'FOUND'
 if variable contains 'some text'
@@ -31,7 +34,7 @@ if variable not contains 'some text'
 echo 'NOT FOUND'
 
 // test equal to / not equal to
-var variable = "lemon";
+variable = "lemon"
 if variable equal to "lemon"
 echo "LEMON"
 if variable equals to "lemon"
@@ -48,7 +51,7 @@ if variable not equal to 'lemon'
 echo 'NOT LEMON'
 if variable not equals to 'lemon'
 echo 'NOT LEMON'
-var variable = 12345;
+variable = 12345
 if variable equal to 12345
 echo "12345"
 if variable equals to 12345
@@ -59,7 +62,7 @@ if variable not equals to 12345
 echo "NOT 12345"
 
 // test more than / greater than / higher than
-var variable = 5;
+variable = 5
 if variable more than 3
 echo "MORE THAN 3"
 if variable greater than 3
@@ -68,7 +71,7 @@ if variable higher than 3
 echo "MORE THAN 3"
 
 // test more than or equal to / greater than or equal to / higher than or equal to
-var variable = 5;
+variable = 5
 if variable more than or equal to 5
 echo "MORE THAN OR EQUAL TO 5"
 if variable greater than or equal to 5
@@ -77,7 +80,7 @@ if variable higher than or equal to 5
 echo "MORE THAN OR EQUAL TO 5"
 
 // test less than / lesser than / lower than
-var variable = 3;
+variable = 3
 if variable less than 5
 echo "LESS THAN 5"
 if variable lesser than 5
@@ -86,7 +89,7 @@ if variable lower than 5
 echo "LESS THAN 5"
 
 // test less than or equal to / lesser than or equal to / lower than or equal to
-var variable = 5;
+variable = 5
 if variable less than or equal to 5
 echo "LESS THAN OR EQUAL TO 5"
 if variable lesser than or equal to 5
@@ -111,7 +114,7 @@ if 5 lesser than 3 or 3 lesser than 4 and "kiwi" equals to "kiwi"
 echo "TRUE"
 
 // test combinations of conditions
-var menu = "fruits and salads";
+menu = "fruits and salads"
 if menu contains 'fruits' and menu not contains "potatoes"
 echo "FRUITS ONLY"
 
@@ -171,7 +174,7 @@ click test3
 }
 
 // test {} while loop simple
-var number = 1;
+number = 1
 while (number <= 5)
 {
 click test

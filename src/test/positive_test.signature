@@ -713,8 +713,8 @@ evt.initUIEvent("change", true, true); select.dispatchEvent(evt);}, selector, va
 // flow path for save_text and snap_image
 var flow_path = '/full_path';
 
-casper.start('http://www.google.com', function() {
-techo('http://www.google.com' + ' - ' + this.getTitle() + '\n');});
+casper.start('https://www.google.com', function() {
+techo('https://www.google.com' + ' - ' + this.getTitle() + '\n');});
 
 casper.then(function() {
 // code to auto-replace local path names in generated js file with /full_path
@@ -725,9 +725,15 @@ local_path = local_path.substring(0,local_path.indexOf("'"));
 var regex = new RegExp(local_path,"g"); js_result = js_result.replace(regex,"/full_path");
 fs.write('test' + fs.separator + 'positive_test.js', js_result, 'w');
 fs.remove('test' + fs.separator + 'positive_test.log');
+this.exit(); // don't actually run the steps and code, test is for language conversion
+// add a navigation step in order to exit in time and block below output from running
+});casper.thenOpen('https://ca.yahoo.com', function() {
+techo('https://ca.yahoo.com' + ' - ' + this.getTitle());});
+
+casper.then(function() {
 // TEST CONDITIONS
 // test contain / not contain
-var variable = "test variable with some text";
+variable = "test variable with some text"
 if (((variable.indexOf("some text")>-1)))
 this.echo("FOUND");
 if (((variable.indexOf("some text")>-1)))
@@ -736,7 +742,7 @@ if (((variable.indexOf("some text")<0)))
 this.echo("NOT FOUND");
 if (((variable.indexOf("some text")<0)))
 this.echo("NOT FOUND");
-var variable ='test variable with some text';
+variable = 'test variable with some text'
 if (((variable.indexOf('some text')>-1)))
 this.echo('FOUND');
 if (((variable.indexOf('some text')>-1)))
@@ -746,7 +752,7 @@ this.echo('NOT FOUND');
 if (((variable.indexOf('some text')<0)))
 this.echo('NOT FOUND');
 // test equal to / not equal to
-var variable = "lemon";
+variable = "lemon"
 if ((variable == "lemon"))
 this.echo("LEMON");
 if ((variable == "lemon"))
@@ -763,7 +769,7 @@ if ((variable != 'lemon'))
 this.echo('NOT LEMON');
 if ((variable != 'lemon'))
 this.echo('NOT LEMON');
-var variable = 12345;
+variable = 12345
 if ((variable == 12345))
 this.echo("12345");
 if ((variable == 12345))
@@ -773,7 +779,7 @@ this.echo("NOT 12345");
 if ((variable != 12345))
 this.echo("NOT 12345");
 // test more than / greater than / higher than
-var variable = 5;
+variable = 5
 if ((variable > 3))
 this.echo("MORE THAN 3");
 if ((variable > 3))
@@ -781,7 +787,7 @@ this.echo("MORE THAN 3");
 if ((variable > 3))
 this.echo("MORE THAN 3");
 // test more than or equal to / greater than or equal to / higher than or equal to
-var variable = 5;
+variable = 5
 if ((variable >= 5))
 this.echo("MORE THAN OR EQUAL TO 5");
 if ((variable >= 5))
@@ -789,7 +795,7 @@ this.echo("MORE THAN OR EQUAL TO 5");
 if ((variable >= 5))
 this.echo("MORE THAN OR EQUAL TO 5");
 // test less than / lesser than / lower than
-var variable = 3;
+variable = 3
 if ((variable < 5))
 this.echo("LESS THAN 5");
 if ((variable < 5))
@@ -797,7 +803,7 @@ this.echo("LESS THAN 5");
 if ((variable < 5))
 this.echo("LESS THAN 5");
 // test less than or equal to / lesser than or equal to / lower than or equal to
-var variable = 5;
+variable = 5
 if ((variable <= 5))
 this.echo("LESS THAN OR EQUAL TO 5");
 if ((variable <= 5))
@@ -819,7 +825,7 @@ this.echo("TRUE");
 if ((5 < 3) || (3 < 4) && ("kiwi" == "kiwi"))
 this.echo("TRUE");
 // test combinations of conditions
-var menu = "fruits and salads";
+menu = "fruits and salads"
 if (((menu.indexOf('fruits')>-1)) && ((menu.indexOf("potatoes")<0)))
 this.echo("FRUITS ONLY");
 // test for
@@ -963,7 +969,7 @@ casper.then(function() {
 
 casper.then(function() {
 // test {} while loop simple
-var number = 1;
+number = 1
 while (((number <= 5)))
 {
 {techo('click test');
@@ -986,68 +992,140 @@ number++;
 casper.waitForPopup(/about/, function then() {},
 function timeout() {this.echo('ERROR - cannot find popup about').exit();});
 casper.withPopup(/about/, function() {
-{
+
+// start of code block
+{casper.then(function() {
+
 {techo('click test');
-this.click(tx('test'));}
-} });} });
+casper.waitFor(function check() {return check_tx('test');},
+function then() {this.click(tx('test'));},
+function timeout() {this.echo('ERROR - cannot find test').exit();});}});
+
+casper.then(function() {
+})} // end of code block
+ });} });
 
 casper.then(function() {
 {techo('popup about');
 casper.waitForPopup(/about/, function then() {},
 function timeout() {this.echo('ERROR - cannot find popup about').exit();});
 casper.withPopup(/about/, function() {
-{
+
+// start of code block
+{casper.then(function() {
+
 {techo('click test1');
-this.click(tx('test1'));}
+casper.waitFor(function check() {return check_tx('test1');},
+function then() {this.click(tx('test1'));},
+function timeout() {this.echo('ERROR - cannot find test1').exit();});}});
+
+casper.then(function() {
 {techo('click test2');
-this.click(tx('test2'));}
+casper.waitFor(function check() {return check_tx('test2');},
+function then() {this.click(tx('test2'));},
+function timeout() {this.echo('ERROR - cannot find test2').exit();});}});
+
+casper.then(function() {
 this.echo('test');
 {techo('click test3');
-this.click(tx('test3'));}
-} });} });
+casper.waitFor(function check() {return check_tx('test3');},
+function then() {this.click(tx('test3'));},
+function timeout() {this.echo('ERROR - cannot find test3').exit();});}});
+
+casper.then(function() {
+})} // end of code block
+ });} });
 
 casper.then(function() {
 // test {} for frame step
 {techo('frame about');
 casper.withFrame('about', function() {
-{
+
+// start of code block
+{casper.then(function() {
+
 {techo('click test');
-this.click(tx('test'));}
-} });} });
+casper.waitFor(function check() {return check_tx('test');},
+function then() {this.click(tx('test'));},
+function timeout() {this.echo('ERROR - cannot find test').exit();});}});
+
+casper.then(function() {
+})} // end of code block
+ });} });
 
 casper.then(function() {
 {techo('frame about');
 casper.withFrame('about', function() {
-{
+
+// start of code block
+{casper.then(function() {
+
 {techo('click test1');
-this.click(tx('test1'));}
+casper.waitFor(function check() {return check_tx('test1');},
+function then() {this.click(tx('test1'));},
+function timeout() {this.echo('ERROR - cannot find test1').exit();});}});
+
+casper.then(function() {
 {techo('click test2');
-this.click(tx('test2'));}
+casper.waitFor(function check() {return check_tx('test2');},
+function then() {this.click(tx('test2'));},
+function timeout() {this.echo('ERROR - cannot find test2').exit();});}});
+
+casper.then(function() {
 this.echo('test');
 {techo('click test3');
-this.click(tx('test3'));}
-} });} });
+casper.waitFor(function check() {return check_tx('test3');},
+function then() {this.click(tx('test3'));},
+function timeout() {this.echo('ERROR - cannot find test3').exit();});}});
+
+casper.then(function() {
+})} // end of code block
+ });} });
 
 casper.then(function() {
 {techo('frame about | detail');
 casper.withFrame('about', function() {casper.withFrame('detail', function() {
-{
+
+// start of code block
+{casper.then(function() {
+
 {techo('click test');
-this.click(tx('test'));}
-} });});} });
+casper.waitFor(function check() {return check_tx('test');},
+function then() {this.click(tx('test'));},
+function timeout() {this.echo('ERROR - cannot find test').exit();});}});
+
+casper.then(function() {
+})} // end of code block
+ });});} });
 
 casper.then(function() {
 {techo('frame about | detail');
 casper.withFrame('about', function() {casper.withFrame('detail', function() {
-{
+
+// start of code block
+{casper.then(function() {
+
 {techo('click test1');
-this.click(tx('test1'));}
+casper.waitFor(function check() {return check_tx('test1');},
+function then() {this.click(tx('test1'));},
+function timeout() {this.echo('ERROR - cannot find test1').exit();});}});
+
+casper.then(function() {
 {techo('click test2');
-this.click(tx('test2'));}
+casper.waitFor(function check() {return check_tx('test2');},
+function then() {this.click(tx('test2'));},
+function timeout() {this.echo('ERROR - cannot find test2').exit();});}});
+
+casper.then(function() {
 this.echo('test');
 {techo('click test3');
-this.click(tx('test3'));}
-} });});} });
+casper.waitFor(function check() {return check_tx('test3');},
+function then() {this.click(tx('test3'));},
+function timeout() {this.echo('ERROR - cannot find test3').exit();});}});
+
+casper.then(function() {
+})} // end of code block
+ });});} });
 
 casper.then(function() {
 // test if in javascript
@@ -1056,7 +1134,9 @@ this.echo("TRUE");
 // TEST STEPS
 // test tap / click (including sikuli visual automation)
 {techo('tap element');
-this.click(tx('element'));}});
+casper.waitFor(function check() {return check_tx('element');},
+function then() {this.click(tx('element'));},
+function timeout() {this.echo('ERROR - cannot find element').exit();});}});
 
 casper.then(function() {
 {techo('click element');

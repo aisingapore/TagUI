@@ -269,12 +269,14 @@ if ($GLOBALS['inside_while_loop'] == 0)
 return "},\nfunction timeout() {this.echo('ERROR - cannot find ".
 $locator."').exit();});}".end_fi()."});\n\ncasper.then(function() {\n";
 else if ($GLOBALS['inside_code_block']==0)
-{$GLOBALS['inside_while_loop'] = 0; // reset inside_while_loop if not inside code block
-$GLOBALS['for_loop_tracker'] = ""; // reset for_loop_tracker if not inside code block
+{$GLOBALS['inside_while_loop'] = 0; // reset inside_while_loop if not inside block
+$GLOBALS['for_loop_tracker'] = ""; // reset for_loop_tracker if not inside block
 return "}});\n\ncasper.then(function() {\n";} else return "}\n";}
 
 function end_fi() { $end_step = ""; // helper function to end frame_intent and popup_intent by closing parsed step block
-if ($GLOBALS['inside_code_block']>0) return ""; // don't return frame or popup closure when inside code block
+if ($GLOBALS['inside_code_block'] == 0) $GLOBALS['inside_while_loop'] = 0; // reset inside_while_loop if not inside block
+if ($GLOBALS['inside_code_block'] == 0) $GLOBALS['for_loop_tracker'] = ""; // reset for_loop_tracker if not inside block
+if (($GLOBALS['inside_code_block'] > 0) and ($GLOBALS['for_loop_tracker'] == "") and ($GLOBALS['inside_while_loop'] == 0)) return ""; // check for code block for frame or popup then exit, don't support frame/popup code blocks within loops
 if (($GLOBALS['inside_popup'] == 1) or ($GLOBALS['inside_frame'] != 0)) $end_step = "});\n\ncasper.then(function() {";
 if ($GLOBALS['inside_popup'] == 1) {$GLOBALS['inside_popup']=0; $popup_exit = " });} ";} else $popup_exit = "";
 if ($GLOBALS['inside_frame'] == 0) {return "".$popup_exit.$end_step;} // form exit brackets for frame and popup
@@ -521,16 +523,20 @@ if ($params == "") echo "ERROR - " . current_line() . " time in seconds missing 
 else return "casper.options.waitTimeout = " . (floatval($params)*1000) . ";" . end_fi()."\n";}
 
 function code_intent($raw_intent) {
-$params = parse_condition($raw_intent); return $params.end_fi()."\n";}
+$params = parse_condition($raw_intent);
+// not relevant to call end_fi for condition statement, will reset for and while loop tracker prematurely
+if ((substr($params,0,3)=="if ") or (substr($params,0,8)=="else if ")
+or (substr($params,0,4)=="for ") or (substr($params,0,6)=="while "))
+return $params."\n"; else return $params.end_fi()."\n";}
 
 function parse_condition($logic) { // natural language handling for conditions
 $raw_logic = $logic; // store an original copy for use when showing error message
 if (substr($logic,0,2)=="//") return $logic; // skip processing for comment
 
 // section 1 - replace braces block {} with casperjs block to group steps or code
-if ((substr($logic,0,1) == "{") or (substr($logic,0,1) == "}"))
 // take only lines starting with { or } as code blocks for processing, otherwise will break many valid javascript code
-{$GLOBALS['inside_code_block'] += substr_count($logic,"{"); $GLOBALS['inside_code_block'] -= substr_count($logic,"}");}
+if (substr($logic,0,1) == "{") $GLOBALS['inside_code_block']++; // assume nothing on rest of the line except comment
+if (substr($logic,0,1) == "}") $GLOBALS['inside_code_block']--; // assume nothing on rest of the line except comment
 if ($GLOBALS['inside_while_loop']==0) { // while loop check as casper.then will hang while loop, recommend use for loop
 $for_loop_header = ""; $for_loop_footer = ""; // add provision to implement IIFE pattern if inside for loop code block
 if ($GLOBALS['for_loop_tracker']!="") { // otherwise the number variable used by for loop will be a wrong static number
@@ -538,9 +544,10 @@ $last_delimiter_pos = strrpos($GLOBALS['for_loop_tracker'],"|");
 $for_loop_variable_name = substr($GLOBALS['for_loop_tracker'],$last_delimiter_pos+1);
 $for_loop_header = "\n// start of IIFE pattern\n(function (" . $for_loop_variable_name . ") {";
 $for_loop_footer = "})(" . $for_loop_variable_name . "); // end of IIFE pattern\n});\n\ncasper.then(function() {";
-if (strpos($logic,"}")!==false) $GLOBALS['for_loop_tracker']=substr($GLOBALS['for_loop_tracker'],0,$last_delimiter_pos);}
-$logic = str_replace("{",$for_loop_header."\n// start of code block\n{casper.then(function() {\n",$logic);
-$logic = str_replace("}","})} // end of code block\n".$for_loop_footer,$logic);}
+if (substr($logic,0,1) == "}") $GLOBALS['for_loop_tracker']=substr($GLOBALS['for_loop_tracker'],0,$last_delimiter_pos);}
+if (substr($logic,0,1) == "{")
+$logic = $for_loop_header."\n// start of code block\n{casper.then(function() {\n".substr($logic,1);
+else if (substr($logic,0,1) == "}") $logic = "})} // end of code block\n".$for_loop_footer.substr($logic,1);}
 
 // section 2 - natural language handling for conditions and loops 
 if ((substr($logic,0,3)=="if ") or (substr($logic,0,8)=="else if ")
