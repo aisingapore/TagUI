@@ -481,7 +481,8 @@ return "var fs = require('fs'); if (!sikuli_step('"+input_intent+"')) if (!fs.ex
 "else this.echo('ERROR - cannot find "+input_params+" on screen');";}
 
 function url_intent(raw_intent) {
-return "this.echo('ERROR - step not supported in live mode')";}
+if (chrome_id == 0) return "this.echo('ERROR - step only supported in live mode using Chrome browser')";
+else return "this.evaluate(function() {window.location.href = \"" + raw_intent + "\"})";}
 
 function tap_intent(raw_intent) {
 var params = ((raw_intent + ' ').substr(1+(raw_intent + ' ').indexOf(' '))).trim();
@@ -559,7 +560,7 @@ if ((param1 == '') || (param2 == '')) return "this.echo('ERROR - url/filename mi
 else return "this.download('" + param1 + "','" + abs_file(param2) + "')";}
 
 function receive_intent(raw_intent) {
-return "this.echo('ERROR - step not supported in live mode')";}
+return "this.echo('ERROR - step not supported in live mode, it requires creating CasperJS event')";}
 
 function echo_intent(raw_intent) {
 var params = ((raw_intent + ' ').substr(1+(raw_intent + ' ').indexOf(' '))).trim();
@@ -604,22 +605,22 @@ else {if (check_tx(params)) return "this.captureSelector(snap_image(),tx('" + pa
 else return "this.echo('ERROR - cannot find " + params + "')";}}
 
 function wait_intent(raw_intent) {
-return "this.echo('ERROR - step not supported in live mode')";}
+return "this.echo('ERROR - waiting for some time is not relevant in live mode')";}
 
 function live_intent(raw_intent) {
-return "this.echo('ERROR - step not supported in live mode')";}
+return "this.echo('ERROR - you are already in live mode, type done to quit live mode')";}
 
 function check_intent(raw_intent) {
-return "this.echo('ERROR - step not supported in live mode')";}
+return "this.echo('ERROR - step not supported in live mode, there is no conditions language parser')";}
 
 function test_intent(raw_intent) {
 return "this.echo('ERROR - use CasperJS tester module to professionally " + raw_intent + "\\nERROR - info at http://docs.casperjs.org/en/latest/modules/tester.html\\nERROR - support CSS selector or tx(\\'selector\\') for XPath algo by TagUI')";}
 
 function frame_intent(raw_intent) {
-return "this.echo('ERROR - step not supported in live mode')";}
+return "this.echo('ERROR - step not supported in live mode, it is meant for trying single steps')";}
 
 function popup_intent(raw_intent) {
-return "this.echo('ERROR - step not supported in live mode')";}
+return "this.echo('ERROR - step not supported in live mode, it is meant for trying single steps')";}
 
 function api_intent(raw_intent) {
 var params = ((raw_intent + ' ').substr(1+(raw_intent + ' ').indexOf(' '))).trim();

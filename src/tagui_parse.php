@@ -528,9 +528,9 @@ $raw_logic = $logic; // store an original copy for use when showing error messag
 if (substr($logic,0,2)=="//") return $logic; // skip processing for comment
 
 // section 1 - replace braces block {} with casperjs block to group steps or code
-if (substr_count($raw_logic,"{")>1) echo "ERROR - " . current_line() . " multiple step { found - " . $raw_logic . "\n";
-if (substr_count($raw_logic,"}")>1) echo "ERROR - " . current_line() . " multiple step } found - " . $raw_logic . "\n";
-$GLOBALS['inside_code_block'] += substr_count($logic,"{"); $GLOBALS['inside_code_block'] -= substr_count($logic,"}");
+if ((substr($logic,0,1) == "{") or (substr($logic,0,1) == "}"))
+// take only lines starting with { or } as code blocks for processing, otherwise will break many valid javascript code
+{$GLOBALS['inside_code_block'] += substr_count($logic,"{"); $GLOBALS['inside_code_block'] -= substr_count($logic,"}");}
 if ($GLOBALS['inside_while_loop']==0) { // while loop check as casper.then will hang while loop, recommend use for loop
 $for_loop_header = ""; $for_loop_footer = ""; // add provision to implement IIFE pattern if inside for loop code block
 if ($GLOBALS['for_loop_tracker']!="") { // otherwise the number variable used by for loop will be a wrong static number
@@ -594,11 +594,11 @@ if ((substr($logic,0,4)=="for ") and (strpos($logic,";")==false)) { // no ; mean
 $logic = str_replace("(","",$logic); $logic = str_replace(")","",$logic); // remove brackets if present
 $logic = str_replace("   "," ",$logic); $logic = str_replace("  "," ",$logic); // remove typo extra spaces
 $token = explode(" ",$logic); // split into tokens for loop in natural language, eg - for cupcake from 1 to 4
-if (substr($raw_logic,-1)=="{") // show error to put { to  next line for parsing as { step
+if (strpos($raw_logic,"{")!==false) // show error to put { to  next line for parsing as { step
 echo "ERROR - " . current_line() . " put { to next line - " . $raw_logic . "\n";
 else if (count($token) != 6) echo "ERROR - " . current_line() . " invalid for loop - " . $raw_logic . "\n";
 else $logic = $token[0]." (".$token[1]."=".$token[3]."; ".$token[1]."<=".$token[5]."; ".$token[1]."++)";}
-else if ((substr($logic,0,4)=="for ") and (substr($raw_logic,-1)=="{"))
+else if ((substr($logic,0,4)=="for ") and (strpos($raw_logic,"{")!==false))
 echo "ERROR - " . current_line() . " put { to next line - " . $raw_logic . "\n";
 
 // add to tracker the for loop variable name, to implement IIFE pattern if step/code blocks are used
@@ -606,9 +606,12 @@ if (substr($logic,0,4)=="for ") { // get the variable name used in the for loop 
 $GLOBALS['for_loop_tracker'] .= "|" . (substr($logic,strpos($logic,"(")+1,strpos($logic,"=")-strpos($logic,"(")-1));}
 
 // add opening and closing brackets twice to handle no brackets, and, or cases
-if (substr($logic,0,3)=="if ") $logic = "if ((" . trim(substr($logic,3)) . "))";
-if (substr($logic,0,8)=="else if ") $logic = "else if ((" . trim(substr($logic,8)) . "))";
-if (substr($logic,0,6)=="while ") $logic = "while ((" . trim(substr($logic,6)) . "))";}
+if (substr($logic,0,3)=="if ") {$logic = "if ((" . trim(substr($logic,3)) . "))";
+if (strpos($raw_logic,"{")!==false) echo "ERROR - " . current_line() . " put { to next line - " . $raw_logic . "\n";}
+if (substr($logic,0,8)=="else if ") {$logic = "else if ((" . trim(substr($logic,8)) . "))";
+if (strpos($raw_logic,"{")!==false) echo "ERROR - " . current_line() . " put { to next line - " . $raw_logic . "\n";}
+if (substr($logic,0,6)=="while ") {$logic = "while ((" . trim(substr($logic,6)) . "))";
+if (strpos($raw_logic,"{")!==false) echo "ERROR - " . current_line() . " put { to next line - " . $raw_logic . "\n";}}
 
 // section 3 - track if next statement is going to be or still inside while loop,
 // then avoid async wait (casper.then/waitFor/timeout will hang casperjs/phantomjs)   
