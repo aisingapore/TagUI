@@ -13,6 +13,10 @@
 /src/samples/8_hastebin.js
 /src/samples/8_hastebin.log
 
+# exclude generated files for cli assistant
+/src/tagui_helper
+/src/tagui_helper.cmd
+
 # exclude local log files from api service
 /src/tagui_service.in
 /src/tagui_service.out

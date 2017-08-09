@@ -6,7 +6,7 @@ chrome_command="google-chrome"
 
 if [ -z "$1" ]
 then
-echo "tagui v2.2: use following syntax and below options to run ./tagui flow_filename option(s)"
+echo "tagui v2.3: use following syntax and below options to run ./tagui flow_filename option(s)"
 echo
 echo "IMPORTANT: SAVE YOUR WORK BEFORE USING CHROME OR HEADLESS, TAGUI WILL RESTART CHROME"
 echo "headless - run on invisible Chrome web browser instead of default PhantomJS (first install Chrome)"
@@ -185,7 +185,7 @@ if [ -f "tagui.sikuli/tagui_sikuli.in" ]; then rm tagui.sikuli/tagui_sikuli.in; 
 if [ -f "tagui.sikuli/tagui_sikuli.out" ]; then rm tagui.sikuli/tagui_sikuli.out; fi
 
 # delete chrome / headless chrome integration files if they exist 
-if [ -f "tagui_chrome.in" ]; then rm tagui_chrome.in; fi;
+if [ -f "tagui_chrome.in" ]; then rm tagui_chrome.in; fi
 if [ -f "tagui_chrome.out" ]; then rm tagui_chrome.out; fi
 
 # default exit code 0 to mean no error parsing automation flow file

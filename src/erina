@@ -1,0 +1,23 @@
+#!/usr/bin/env bash
+# HELPER ASSISTANT SCRIPT FOR RUNNING TAGUI FRAMEWORK ~ TEBEL.ORG #
+
+# save location of initial directory where helper is called
+initial_dir=`pwd`
+
+# change current directory to TAGUI directory
+SOURCE="${BASH_SOURCE[0]}" # slimerjs's implementation instead of cd "`dirname "$0"`"
+while [ -h "$SOURCE" ]; do TAGUI_DIR="$( cd -P "$( dirname "$SOURCE" )" && pwd )"
+SOURCE="$(readlink "$SOURCE")"; [[ $SOURCE != /* ]] && SOURCE="$TAGUI_DIR/$SOURCE"; done
+TAGUI_DIR="$( cd -P "$( dirname "$SOURCE" )" && pwd )"; cd "$TAGUI_DIR"
+
+# delete helper file if it exists to prevent running an old call
+if [ -f "tagui_helper" ]; then rm tagui_helper; fi
+
+# call php helper to interpret parameters passed in to cli helper
+php -q tagui_helper.php $1 $2 $3 $4 $5 $6 $7 $8 $9
+
+# run generated output from php helper to call automation flow
+if [ -f "tagui_helper" ]; then ./tagui_helper; fi
+
+# change back to initial directory where tagui is called
+cd "$initial_dir"
