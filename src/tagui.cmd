@@ -110,10 +110,10 @@ if %tagui_baseline_mode%==false (
 	if "%flow_file%"=="" set "flow_file=%~dpnx1"
 ) else (
 	if "%flow_file%"=="" set "flow_file=%~dpnx1"
-	for %%i in ("%flow_file%") do set "flow_folder=%%~dpi"
-	for %%i in ("%flow_file%") do set "flow_filename=%%~nxi"
+	for %%i in ("!flow_file!") do set "flow_folder=%%~dpi"
+	for %%i in ("!flow_file!") do set "flow_filename=%%~nxi"
 	if not exist "!flow_folder!baseline" mkdir "!flow_folder!baseline"
-	copy "%flow_file%" "!flow_folder!baseline\." > nul
+	copy "!flow_file!" "!flow_folder!baseline\." > nul
 	set "flow_file=!flow_folder!baseline\!flow_filename!"
 )
 
