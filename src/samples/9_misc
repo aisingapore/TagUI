@@ -2,7 +2,7 @@ http://tebel.org/index_mobile.php
 // automation flow files start with an URL to tell TagUI where to go
 
 // this flow shows how to use steps popup, frame, dom, js, { and } block
-// for issues or questions, kindly feedback on GitHub or support@tebel.org
+// for issues or questions, kindly feedback on GitHub or ken@tebel.org
 // see cheatsheet for steps, conditions, finding element identifiers, etc
 // https://github.com/tebelorg/TagUI#cheat-sheet
 
@@ -32,7 +32,7 @@ snap file-about_tebel-LC2
 
 // adding a blank line for output clarity, you can use either " or ' for text
 // variables can be created using read or fetch step or manually defined
-dummy_variable = 'original';
+dummy_variable = 'original'
 echo ''
 echo 'returning to ' dummy_variable ' window context'
 
@@ -57,7 +57,7 @@ echo ''
 // TagUI recognizes lines of JavaScript code automatically
 // if some code is not recognized, use step js to explicitly indicate
 // alternatively, modify logic in tagui_parse.php or raise an issue
-test_number = 123;
+test_number = 123
 echo 'test_number - ' test_number
 js test_number = 456
 echo 'test_number - ' test_number
@@ -73,7 +73,7 @@ echo ''
 
 // avoid using while loop, auto-wait disables in while loop as it will hang CasperJS
 // without auto-wait, situations where website needs time to react will not work
-// while loop might end up creating an infinite loop if condition to exit never happens
+// while loop also might create an infinite loop if condition to exit never happens
 
 // using for loop, there is auto-wait and powerful repetitive automation can be done
 // for loops can also be nested, remember to use { and } to denote step/code blocks
@@ -81,6 +81,7 @@ echo ''
 // go to another web page with a table to practice for loop
 https://github.com/tebelorg/TLE
 
+// you can choose to have ; or don't have ; after variable assignment
 test_string = "ABC";
 echo 'test_string - ' test_string
 
