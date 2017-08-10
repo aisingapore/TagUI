@@ -2,7 +2,7 @@ https://www.facebook.com/tebelorg/
 // automation flow files start with an URL to tell TagUI where to go
 
 // this flow goes through examples of using conditions in natural language
-// for issues or questions, kindly feedback on GitHub or support@tebel.org
+// for issues or questions, kindly feedback on GitHub or ken@tebel.org
 // see cheatsheet for steps, conditions, finding element identifiers, etc
 // https://github.com/tebelorg/TagUI#cheat-sheet
 
@@ -11,7 +11,8 @@ https://www.facebook.com/tebelorg/
 // write text in quotation marks (either " or ' works) to differentiate from variable names
 
 // declare some variables for use in this sample flow, text in quotation marks
-menu = "salads fruits sandwiches"; cupcakes = 12;
+menu = "salads fruits sandwiches"
+cupcakes = 12
 
 // conditions can be expressed in natural language (optional brackets) or JavaScript
 // for conditions such as contain / equal, you can use with or without s behind
@@ -57,21 +58,20 @@ echo "Just nice to fit in a box."
 if cupcakes more than 1 and cupcakes lesser than 3
 echo "Just nice for you and me."
 
-// you can use a step right after if / for / while
-// and the condition will be applied to that one step 
+// this part used to be click icon but sometimes there is captcha
+// change example to capturing snapshot of the webpage instead
 
-// natural language version for a single step
+// natural language version of a for loop
 for n from 1 to 3
-click fb_logo
+{
+snap page
+}
 
 // JavaScript version for multiple actions
 for (n=1; n<=3; n++)
 {
-this.echo("click fb_logo"); this.click(tx("fb_logo"));
-this.echo("click fb_logo"); this.click(tx("fb_logo"));
+snap page
 }
-
-// above has total of 9 clicks to Facebook logo
 
 // another example of repeating an action many times
 for Product_ID from 2 to 5
