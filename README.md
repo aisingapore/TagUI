@@ -34,14 +34,14 @@ click section_results
 download https://admin.typeform.com/form/2592751/analyze/csv to report.csv
 ```
 
-The automation flow can be triggered from scheduling, command line, API URL, email etc. Everything happens headlessly in the background without seeing any web browser, so that you can continue using the computer or server uninterrupted. Running on a visible web browser is also supported, using Chrome or Firefox browser (see chrome or firefox option below). API calls can be made with a single line to integrate with other applications.
+The automation flow can be triggered from scheduling, command line (in natural language), API URL, email etc. Everything happens headlessly in the background without seeing any web browser, so that you can continue using the computer or server uninterrupted. Running on a visible web browser is also supported, using Chrome or Firefox browser (see chrome or firefox option below). API calls can be made with a single line to integrate with other apps.
 
 If you know JavaScript and want to be more expressive, you can even use JavaScript directly in the flow. If not, you will still enjoy friendly but powerful features such as repositories to store your reusable objects, flexible datatables for batch automation, and a Chrome extension which creates automation flows by recording your actions. For rapid prototyping, there's also an interactive live mode for trying out TagUI steps or JavaScript code in real-time. TagUI has built-in integration with Chrome / headless Chrome directly, which also works in live mode.
 
 There is automatic waiting for web elements to appear + error-checking + nesting of JavaScript code blocks. Not forgetting the option to run automation flows hosted online or auto-upload run results online for sharing. TagUI also supports visual automation of website and desktop through built-in integration with Sikuli. Instead of using element identifiers, images can be used to identify user interface elements to interact with.
 
 # Set Up
-TagUI is in v2.1 and runs on macOS, Linux, Windows ([link to release notes](https://github.com/tebelorg/TagUI/releases))
+TagUI is in v2.3 (in process of being updated) and runs on macOS, Linux, Windows ([link to release notes](https://github.com/tebelorg/TagUI/releases))
 
 ### PACKAGED INSTALLATION
 Easiest way to use TagUI - no setup is needed, all dependencies are packaged in
@@ -83,6 +83,7 @@ report|web report for sharing of run results on webserver (default is only a tex
 debug|show run-time backend messages from PhantomJS for detailed tracing and logging
 quiet|run without output except for explicit output (echo / show / check / errors etc)
 test|professional testing using [CasperJS assertions](http://docs.casperjs.org/en/latest/modules/tester.html) (TagUI smart tx('selector') usable)
+baseline|output execution log and relative-path output files to a separate baseline directory
 input(s)|add your own parameter(s) to be used in your automation flow as variables p1 to p9
 
 Tip - to run tagui from anywhere in macOS/Linux, use ln -sf /full_path/tagui/src/tagui /usr/local/bin/tagui to create symbolic link. to run tagui from anywhere in Windows, add tagui/src [folder to path](http://lmgtfy.com/?q=add+to+path+in+windows). then tagui will be accessible from any folder. if you have issue running visible automation using Firefox/SlimerJS [check this setting](https://docs.slimerjs.org/current/installation.html#using-unstable-version-or-very-old-versions-of-firefox).
@@ -133,10 +134,10 @@ Flow Sample |Purpose
 
 Step|Parameters (separator in bold)|Purpose
 :---|:-----------------------------|:------
-http(s)://|no parameters, just enter the full url of webpage|go to specified webpage
+http(s)://|just enter full url of webpage ('+variable+' for variable)|go to specified webpage
 tap / click|element to click|click on an element
 hover / move|element to hover|move cursor to element
-type / enter|element to type ***as*** text to type ([enter] = enter key)|enter element as text
+type / enter|element ***as*** text ([enter] = enter, [clear] = clear)|enter element as text
 select / choose|element to select ***as*** option value to select|choose dropdown option
 read / fetch|element to read (page = webpage) ***to*** variable name|fetch element text to variable
 show / print|element to read (page = webpage, ie raw html) |print element text to output
@@ -144,18 +145,20 @@ save|element (page = webpage) ***to*** optional filename|save element text to fi
 echo|text (in quotation marks) and variables|print text/variables to output
 dump|text and variables ***to*** optional filename|save text/variables to file
 snap|element (page = webpage) ***to*** optional filename|save screenshot to file
+upload|element (CSS selector) ***as*** filename to upload|upload file to website
 download|url to download ***to*** filename to save|download from url to file
 receive|url keyword to watch ***to*** filename to save|receive resource to file
 wait|optional time in seconds (default is 5 seconds)|explicitly wait for some time
-live|try steps or code interactively in Chrome / PhantomJS|enter live mode ([firefox pending](https://github.com/laurentj/slimerjs/issues/188))
+live|try steps or code interactively in Chrome / PhantomJS|enter live mode ([Firefox not yet](https://github.com/laurentj/slimerjs/issues/639))
 check|condition **&#124;** text if true **&#124;** text if false (text in quotes)|check condition and print result
 frame|frame name **&#124;** subframe name if any|next step or block in frame/subframe
 popup|url keyword of popup window to look for|next step or block in popup window
-{ and }|use { to start block and } to end block|define block of steps and code
+{ and }|use { to start block and } to end block (on new line)|define block of steps and code
 api|full url (including parameters) of api call|call api save response to api_result
 dom|javascript code for document object model|run code in dom save to dom_result
 js|javascript statements (skip auto-detection)|treat as JS code explicitly
-variable_name| = value; (for text, put in quotes, use + to concat)|define variable variable_name
+timeout|time in seconds before step times out|change auto-wait timeout
+variable_name| = value (for text, put in quotes, use + to concat)|define variable variable_name
 // (on new line)|user comments (ignored during execution)|add user comments
 
 Tip - to use variables where text is expected, '+variable+' can be used. as default execution context is local, to run javascript on webpage dom (eg document.querySelector) use dom step. xpath is an expressive way to identify web elements. if you know xpath and using xpath for element identifier, use double quotes for text //\*[@title="Login"]
