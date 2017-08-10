@@ -1,3 +1,5 @@
+<img src="https://raw.githubusercontent.com/tebelorg/TagUI/master/src/media/tebel_icon.png" height="111" align="right">
+
 # TagUI
 
 [Why This](#why-this) | [Set Up](#set-up) | [To Use](#to-use) | [Cheat Sheet](#cheat-sheet) | [Developers Reference](#developers-reference)
