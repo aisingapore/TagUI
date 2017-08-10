@@ -1,5 +1,9 @@
+<img src="https://raw.githubusercontent.com/tebelorg/TagUI/master/src/media/tebel_icon.png" height="111" align="right">
+
 # TagUI
-TagUI is a general purpose tool for automating web interactions ~ http://tebel.org
+[Why This](#why-this) | [Set Up](#set-up) | [To Use](#to-use) | [Cheat Sheet](#cheat-sheet) | [Developers Reference](#developers-reference)
+
+TagUI is a general purpose tool for automating web interactions
 
 ### FEATURES
 - automate Chrome, Firefox, PhantomJS
@@ -11,7 +15,9 @@ TagUI is a general purpose tool for automating web interactions ~ http://tebel.o
 - visual automation of website and desktop
 - live mode to try steps or code in real-time
 - option to auto-upload run results online
+- baseline option to capture flow benchmark
 - run by schedule, command line, API URL
+- command line assistant in natural language
 - advanced outgoing API calls to webservices
 
 # Why This
@@ -41,7 +47,7 @@ If you know JavaScript and want to be more expressive, you can even use JavaScri
 There is automatic waiting for web elements to appear + error-checking + nesting of JavaScript code blocks. Not forgetting the option to run automation flows hosted online or auto-upload run results online for sharing. TagUI also supports visual automation of website and desktop through built-in integration with Sikuli. Instead of using element identifiers, images can be used to identify user interface elements to interact with.
 
 # Set Up
-TagUI is in v2.3 (in process of being updated) and runs on macOS, Linux, Windows ([link to release notes](https://github.com/tebelorg/TagUI/releases))
+TagUI is in v2.3 (***in process of being updated***) and runs on macOS, Linux, Windows ([link to release notes](https://github.com/tebelorg/TagUI/releases))
 
 ### PACKAGED INSTALLATION
 Easiest way to use TagUI - no setup is needed, all dependencies are packaged in
@@ -106,6 +112,13 @@ Sikuli is excluded from TagUI packaged installation due to complex dependencies 
 
 ![Sample Visual Automation](https://raw.githubusercontent.com/tebelorg/Tump/master/visual_flow.gif)
 
+### CLI ASSISTANT
+TagUI scripts are already in natural-language-like syntax to convert to JavaScript code. What's even better is having natural-language-like syntax on the command line. Instead of typing `tagui download_bank_report june creditcard` to run the automation flow download_bank_report with parameters june creditcard, you can type `erina download my june creditcard bank report`. This may be more intuitive than recalling which automation filename you saved to run.
+
+The commands erina (macOS/Linux) and erina.cmd (Windows) can be renamed to some other name you like. The commands can be set up in the same way as the tagui / tagui.cmd above to be accessible from any folder. The command basically interprets this general syntax `erina single-word-action fillers options/parameters fillers single-or-multi-word-context` to call run the corresponding automation flow `action_context` with `options/parameters`.
+
+Also, adding `using chrome` / `using headless` / `using firefox` at the end will let it run using the respective browsers. The default location where automation flows are searched for is in tagui/flows folder and can be changed in tagui_helper.php. Filler words are automatically ignored as they don't convey important information ([more info](https://github.com/tebelorg/TagUI/issues/44#issuecomment-321108786)).
+
 ### FLOW SAMPLES
 Following automation flow samples ([tagui/src/samples folder](https://github.com/tebelorg/TagUI/tree/master/src/samples)) are included with TagUI
 
@@ -137,7 +150,7 @@ Step|Parameters (separator in bold)|Purpose
 http(s)://|just enter full url of webpage ('+variable+' for variable)|go to specified webpage
 tap / click|element to click|click on an element
 hover / move|element to hover|move cursor to element
-type / enter|element ***as*** text ([enter] = enter, [clear] = clear)|enter element as text
+type / enter|element ***as*** text ([enter] = enter, [clear] = clear field)|enter element as text
 select / choose|element to select ***as*** option value to select|choose dropdown option
 read / fetch|element to read (page = webpage) ***to*** variable name|fetch element text to variable
 show / print|element to read (page = webpage, ie raw html) |print element text to output
@@ -145,7 +158,7 @@ save|element (page = webpage) ***to*** optional filename|save element text to fi
 echo|text (in quotation marks) and variables|print text/variables to output
 dump|text and variables ***to*** optional filename|save text/variables to file
 snap|element (page = webpage) ***to*** optional filename|save screenshot to file
-upload|element (CSS selector) ***as*** filename to upload|upload file to website
+upload|element (CSS selector only) ***as*** filename to upload|upload file to website
 download|url to download ***to*** filename to save|download from url to file
 receive|url keyword to watch ***to*** filename to save|receive resource to file
 wait|optional time in seconds (default is 5 seconds)|explicitly wait for some time
@@ -157,7 +170,7 @@ popup|url keyword of popup window to look for|next step or block in popup window
 api|full url (including parameters) of api call|call api save response to api_result
 dom|javascript code for document object model|run code in dom save to dom_result
 js|javascript statements (skip auto-detection)|treat as JS code explicitly
-timeout|time in seconds before step times out|change auto-wait timeout
+timeout|time in seconds before step errors out|change auto-wait timeout
 variable_name| = value (for text, put in quotes, use + to concat)|define variable variable_name
 // (on new line)|user comments (ignored during execution)|add user comments
 
@@ -219,7 +232,7 @@ direction|BUY|SELL|BUY
 # Developers Reference
 TagUI is a young tool and it tries to do the specific task of automating web interactions very well (especially process automation). It's designed to make prototyping, deployment and maintenance of web automation easier by minimizing iteration time for each phase. While TagUI can be used for test automation or data-scraping, there are other popular open-source tools which may be better fits for these goals.
 
-For test automation, there are very established open-source tools/frameworks with mature and supportive ecosystems. You can find out more what's current from resources such as this [test automation list](https://github.com/atinfo/awesome-test-automation). For data-scraping, there are various open-source projects just to handle that very well. You can find out more by searching [crawler topic on GitHub](https://github.com/search?utf8=✓&q=topic%3Acrawler&type=Repositories). There's even a tool for extracting and curating articles, [how cool is that](https://github.com/codelucas/newspaper).
+For test automation, there are very established open-source tools/frameworks with mature and supportive ecosystems. You can find out more what's current from resources such as this [test automation list](https://github.com/atinfo/awesome-test-automation). For data-scraping, there are various open-source projects just to handle that very well. You can find out more by searching [crawler topic on GitHub](https://github.com/search?utf8=✓&q=topic%3Acrawler&type=Repositories).
 
 ### API
 Automation flows can also be triggered via API URL. TagUI has an API service and runner for managing a queue of incoming requests via API. To set up, add a crontab entry on your server with the desired frequency to check and process incoming service requests. Below will check every 15 minutes and run pending flows in the queue. If there's an automation in progress, TagUI will wait for the next check instead of concurrently starting a new run.
@@ -234,7 +247,7 @@ your_website_url/tagui_service.php?SETTINGS="flow_filename option(s)"
 
 Besides integrating with web applications, TagUI can be extended to integrate with hardware (eg Arduino or Raspberry Pi) for physical world interactions or machine learning service providers for AI decision-making ability. Input parameters can be sent to an automation flow to be used as variables p1 to p9. Output parameters from an automation flow can be sent to your Arduino or application API URL (see samples 3_github and 6C_datatables).
 
-For making outgoing API calls in your automation flow, to feed data somewhere or send emails etc, use the api step followed by full URL (including parameters) of the API call. Raw response from API will be saved in api_result variable. If the API response is JSON data, the variable api_json will be created for easy access to JSON data elements. If not, api_json will be null. For example, api_json.parent_element.child_element retrieves value of child_element.
+For making outgoing API calls in your automation flow, to feed data somewhere or send emails etc, use the api step followed by full URL (including parameters) of the API call. Raw response from API will be saved in `api_result` variable. If the API response is JSON data, the variable `api_json` will be created for easy access to JSON data elements. If not, `api_json` will be null. For example, `api_json.parent_element.child_element` retrieves value of child_element.
 
 ```js
 api_config = {method:'PUT', header:['Header1: value1','Header2: value2'], body:{'id':123,'pwd':'abc'}};
@@ -244,9 +257,9 @@ For advanced API calls, you can set above api_config variable which defaults as 
 ### CHROME
 TagUI has built-in integration with Chrome web browser to run web automation in visible or headless mode. It uses a websocket connection to directly communicate automation JavaScript code and information to Chrome.
 
-To develop new custom methods for Chrome integration, see this [TagUI issue](https://github.com/tebelorg/TagUI/issues/24#issuecomment-312361674) and [tagui_header.js](https://github.com/tebelorg/TagUI/blob/master/src/tagui_header.js) for examples of websocket calls from TagUI to Chrome (via Chrome Debugging Protocol). The function chrome_step(method, params) sends message to Chrome and returns the response. You will see examples from simple websocket calls such as getting webpage title to stacked ones such as handling of frame or popup window. To tweak how TagUI launches / kills Chrome and the integration PHP process, see TagUI runner script for [macOS/Linux](https://github.com/tebelorg/TagUI/blob/master/src/tagui) or [Windows](https://github.com/tebelorg/TagUI/blob/master/src/tagui.cmd). 
+To develop new custom methods for Chrome integration, see this [TagUI issue](https://github.com/tebelorg/TagUI/issues/24#issuecomment-312361674) and [tagui_header.js](https://github.com/tebelorg/TagUI/blob/master/src/tagui_header.js) for examples of websocket calls from TagUI to Chrome (via Chrome Debugging Protocol). The function `chrome_step(method, params)` sends message to Chrome and returns the response. You will see examples from simple websocket calls such as getting webpage title to stacked ones such as handling of frame or popup window. To tweak how TagUI launches / kills Chrome and the integration PHP process, see TagUI runner script for [macOS/Linux](https://github.com/tebelorg/TagUI/blob/master/src/tagui) or [Windows](https://github.com/tebelorg/TagUI/blob/master/src/tagui.cmd). 
 
-Probably the best way to see the websocket communication in action is to enter TagUI live mode (add live step in your automation flow), then tail -f tagui_chrome.log in another terminal to see the Chrome Debugging Protocol messages going to and fro as you enter TagUI steps or JavaScript code. If you are running on Windows, you can click on the PHP process window directly to see the messages.
+Probably the best way to see the websocket communication in action is to enter TagUI live mode (add live step in your automation flow), then `tail -f tagui_chrome.log` in another terminal to see the Chrome Debugging Protocol messages going to and fro as you enter TagUI steps or JavaScript code. If you are running on Windows, you can click on the PHP process window directly to see the messages.
 
 At run-time TagUI will start a PHP thread in the background to manage the integration with Chrome for concurrent communication. The [Textalk PHP websocket](https://github.com/Textalk/websocket-php) is used as it is super-light and most importantly, it works even without any update for 2 years. The normal approach to integrate with Chrome is through [chrome-remote-interface](https://github.com/cyrus-and/chrome-remote-interface) project or tools [such as Chromy](https://github.com/OnetapInc/chromy) which is based on chrome-remote-interface. However, that approach introduces Node.js dependency which means users without a Node.js development environment cannot run TagUI with Chrome. Outside of JavaScript ecosystem, there are also tools like [chromedp in Go language](https://github.com/knq/chromedp) to integrate with Chrome.
 
@@ -296,6 +309,11 @@ tagui.py|interface for Sikuli visual automation
 tagui.log|log for Sikuli Python transactions
 tagui_sikuli.in|interface in-file for Sikuli integration
 tagui_sikuli.out|interface out-file for Sikuli integration
+erina|natural language command line helper
+erina.cmd|same as above but for Windows platform
+tagui_helper.php|command line natural language parser
+tagui_helper|generated normal TagUI command to run
+tagui_helper.cmd|same as above but for Windows platform
 
 # Be a Force for Good
 TagUI default config does not hide identity as an automated user
