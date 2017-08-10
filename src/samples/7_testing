@@ -2,7 +2,7 @@ http://ca.finance.yahoo.com
 // automation flow files start with an URL to tell TagUI where to go
 
 // this flow shows how to use check step and CasperJS test assertions
-// for issues or questions, kindly feedback on GitHub or support@tebel.org
+// for issues or questions, kindly feedback on GitHub or ken@tebel.org
 // see cheatsheet for steps, conditions, finding element identifiers, etc
 // https://github.com/tebelorg/TagUI#cheat-sheet
 
@@ -13,13 +13,16 @@ check search_button_text equals to "Search" | "Search button text is correct." |
 // use CasperJS expressive test assertions for advanced testing
 // http://docs.casperjs.org/en/latest/modules/tester.html
 
+// note that CasperJS is not yet supporting Chrome,
+// below won't work when chrome or headless option is used
+
 // to use CasperJS test assertions, run ./tagui with test option
 // test assertions will be enabled by running with test option
 // otherwise automation flow will run without the assertions
 // TagUI helps the same automation flow file run in 2 ways
 
 // use tx('selector') to use TagUI dynamic XPath/CSS selector to select an element 
-// in the following order - xpath, css, id, name, class, title, text(), aria-label
+// in following order - xpath, css, id, name, class, title, aria-label, text(), href
 // using this dynamic selector, a full XPath or CSS is not necessary for automation
 // as properties id, name, class and so on are checked if they contain the identifier
 // besides tx('selector'), you can also use 'selector' for CSS or x('selector') for XPath
