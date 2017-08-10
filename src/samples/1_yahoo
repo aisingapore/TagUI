@@ -2,7 +2,7 @@ https://ca.yahoo.com
 // automation flow files start with an URL to tell TagUI where to go
 
 // this flow searches github on Yahoo and captures screenshot of results
-// for issues or questions, kindly feedback on GitHub or support@tebel.org
+// for issues or questions, kindly feedback on GitHub or ken@tebel.org
 // see cheatsheet for steps, conditions, finding element identifiers, etc
 // https://github.com/tebelorg/TagUI#cheat-sheet
 
@@ -37,5 +37,6 @@ https://duckduckgo.com
 
 // and then continue the automation flow from there
 enter search_form_input_homepage as The search engine that doesn\'t track you.
+snap page to duckduckgo.png
 
 wait 4.4 seconds
