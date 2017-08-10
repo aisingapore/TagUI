@@ -60,6 +60,16 @@ if not "%flow_file%"=="" if not exist "%online_flowname%" (
 	exit /b 1
 )
 
+rem additional windows section for parameters handling using windows way
+set arg2=%2
+set arg3=%3
+set arg4=%4
+set arg5=%5
+set arg6=%6
+set arg7=%7
+set arg8=%8
+set arg9=%9
+
 set tagui_baseline_mode=false
 rem check baseline parameter to output files to baseline directory
 if "%arg2%"=="baseline" (
@@ -128,16 +138,6 @@ if exist "%~dp0phantomjs\bin\phantomjs.exe" set "path=%~dp0phantomjs\bin;%path%"
 if exist "%~dp0slimerjs\slimerjs.bat" set "SLIMERJS_EXECUTABLE=%~dp0slimerjs\slimerjs.bat"
 if exist "%~dp0php\php.exe" set "path=%~dp0php;%path%"
 if exist "%~dp0unx\gawk.exe" set "path=%~dp0unx;%path%"
-
-rem additional windows section for parameters handling using windows way
-set arg2=%2
-set arg3=%3
-set arg4=%4
-set arg5=%5
-set arg6=%6
-set arg7=%7
-set arg8=%8
-set arg9=%9
 
 rem set default web browser to be used to phantomjs
 set tagui_web_browser=phantomjs

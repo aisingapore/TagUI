@@ -71,5 +71,10 @@ fwrite($output_file,"#!/usr/bin/env bash" . "\n");
 fwrite($output_file,"# GENERATED HELPER ASSISTANT SCRIPT FOR RUNNING TAGUI FRAMEWORK ~ TEBEL.ORG #" . "\n");
 fwrite($output_file,"./tagui " . $helper_flow_filename . " quiet " . $helper_flow_options . "\n");
 fclose($output_file); chmod ('tagui_helper',0700);
+$output_file = fopen('tagui_helper.cmd','w') or die("cannot open tagui_helper.cmd, raise an issue on TagUI GitHub page" . "\n");
+fwrite($output_file,"@echo off" . "\n");
+fwrite($output_file,"rem # GENERATED HELPER ASSISTANT SCRIPT FOR RUNNING TAGUI FRAMEWORK ~ TEBEL.ORG #" . "\n");
+fwrite($output_file,"tagui " . $helper_flow_filename . " quiet " . $helper_flow_options . "\n");
+fclose($output_file); chmod ('tagui_helper.cmd',0700);
 
 ?>
