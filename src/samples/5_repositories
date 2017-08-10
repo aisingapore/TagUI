@@ -2,7 +2,7 @@ https://vk.com/kensoh
 // automation flow files start with an URL to tell TagUI where to go
 
 // this flow shows using repositories on Russian social media site VK.com
-// for issues or questions, kindly feedback on GitHub or support@tebel.org
+// for issues or questions, kindly feedback on GitHub or ken@tebel.org
 // see cheatsheet for steps, conditions, finding element identifiers, etc
 // https://github.com/tebelorg/TagUI#cheat-sheet
 
@@ -31,8 +31,8 @@ https://vk.com/kensoh
 enter `email` as `user_email`
 enter `password` as `user_password`
 
-// but we are obviously not going to click Sign up and spam VK
-// so let's use some more repository features and go over to FB
+// but we are not going to click Sign up and spam VK
+// so let's use some more repository features and go to FB
 
 // hover and click on the show info link, adding wait to see effect of action
 hover `show info`
