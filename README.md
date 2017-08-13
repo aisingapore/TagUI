@@ -4,8 +4,6 @@
 
 [Why This](#why-this) | [Set Up](#set-up) | [To Use](#to-use) | [Cheat Sheet](#cheat-sheet) | [Developers Reference](#developers-reference)
 
-TagUI is a general purpose tool for automating web interactions
-
 ### FEATURES
 - automate Chrome, Firefox, PhantomJS
 - unzip and run on macOS, Linux, Windows
@@ -200,7 +198,7 @@ less than or equal to / lesser than or equal to / lower than or equal to|<=
 and|&&
 or|&#124;&#124;
 
-Tip - use { and } step to define step/code blocks for powerful repetitive automation with for loop. conversion to CasperJS blocks syntax happens automatically. when using contain / equal, you can write with or without s behind
+Tip - use { and } step to define step/code blocks for powerful repetitive automation with for loop. conversion to CasperJS blocks syntax happens automatically. when using contain / equal, you can write with or without s behind. you can use if check_tx("element") to check if the element exists, before doing the step on next line
 
 ### REPOSITORIES
 - Repositories help to make objects or steps reusable and improve readability
