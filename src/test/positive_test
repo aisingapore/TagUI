@@ -309,13 +309,27 @@ dump 'some text - ' variable to filename.txt
 dump "some text - " variable to /tmp/filename.txt
 dump 'some text - ' variable to /tmp/filename.txt
 
+// test write
+write 'abc'
+write 'efg'
+write 'ghi' to filename.txt
+write 'ijk' to filename.txt
+
 // test snap
 snap element
 snap element to filename.png
 snap element to /tmp/filename.png
+snap element to document.pdf
 snap page
 snap page to filename.png
 snap page to /tmp/filename.png
+snap page to document.pdf
+
+// test table (no css selector)
+table element
+table element to filename.csv
+table (//table)[7]
+table (//table)[7] to filename.csv
 
 // test upload
 upload #css_selector as abc.png
@@ -398,3 +412,13 @@ http://www.dummytestsite.com
 // test url with variable
 target_url = "www.dummytestsite.com";
 http://'+target_url+'
+
+// test present function
+if present('footer')
+{
+print footer
+}
+else
+{
+echo 'footer not found'
+}

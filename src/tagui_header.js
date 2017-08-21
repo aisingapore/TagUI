@@ -33,9 +33,30 @@ function save_text(file_name,info_text) {var ds; if (flow_path.indexOf('/') !== 
 if (!file_name) {save_text_count++; file_name = flow_path + ds + 'text' + save_text_count.toString() + '.txt';}
 var fs = require('fs'); fs.write(file_name, info_text, 'w');}
 
+// for appending text information to file
+function append_text(file_name,info_text) {var ds; if (flow_path.indexOf('/') !== -1) ds = '/'; else ds = '\\';
+if (!file_name) {if (save_text_count==0) save_text_count++; // increment if 0, else use same count to append
+file_name = flow_path + ds + 'text' + save_text_count.toString() + '.txt';}
+var fs = require('fs'); fs.write(file_name, info_text + '\r\n', 'a');}
+
 // for saving snapshots of website to file
 function snap_image() {var ds; if (flow_path.indexOf('/') !== -1) ds = '/'; else ds = '\\';
 snap_image_count++; return (flow_path + ds + 'snap' + snap_image_count.toString() + '.png');}
+
+// for saving table from website to file
+function save_table(file_name,selector) {var ds; if (flow_path.indexOf('/') !== -1) ds = '/'; else ds = '\\';
+if (!file_name) {save_text_count++; file_name = flow_path + ds + 'table' + save_text_count.toString() + '.csv';}
+var row_data = ""; var table_cell = ""; var fs = require('fs'); fs.write(file_name, '', 'w'); // always reset file
+if (!casper.exists(selector) || (selector.toString().indexOf('xpath selector: ')==-1)) return false; // exit if invalid
+if (selector.toString().length == 16) selector = ''; else selector = selector.toString().substring(16); // get xpath
+for (table_row=1; table_row<=1024; table_row++) {row_data = ""; for (table_col=1; table_col<=1024; table_col++) {
+table_cell = '((' + selector + '//tr)[' + table_row + ']//td)[' + table_col + ']'; // build cell xpath selector
+if (casper.exists(x(table_cell))) row_data = row_data + '","' + casper.fetchText(x(table_cell)).trim();
+else {table_cell = '((' + selector + '//tr)[' + table_row + ']//th)[' + table_col + ']'; // for table header cells
+if (casper.exists(x(table_cell))) row_data = row_data + '","' + casper.fetchText(x(table_cell)).trim();
+else break;}} // if searching for data cell td and header cell th is not successful means end of row is reached
+if (row_data.substr(0,2) == '",') {row_data = row_data.substr(2); row_data += '"'; append_text(file_name,row_data);}
+else return true;}} // if '",' is not found, means end of table is reached as there is no cell found in row
 
 // for checking if selector is xpath selector
 function is_xpath_selector(selector) {if (selector.length == 0) return false;
@@ -82,6 +103,9 @@ if (casper.exists(x('//*[@href="'+locator+'"]'))) return true;
 if (casper.exists(x('//*[contains(@href,"'+locator+'")]'))) return true;
 return false;}
 
+// friendlier name to use check_tx() in if condition in flow
+function present(element_locator) {if (!element_locator) return false; else return check_tx(element_locator);}
+
 function sleep(ms) { // helper to add delay during loops
 var time_now = new Date().getTime(); var time_end = time_now + ms;
 while(time_now < time_end) {time_now = new Date().getTime();}}
@@ -115,7 +139,7 @@ do {sleep(100); chrome_handshake = fs.read('tagui_chrome.out').trim();}
 while (chrome_handshake !== '[0] START'); // techo('[connected to chrome websocket]');
 }
 
-// send websocket message to chrome browser using chrome debugging protocol
+// send websocket message to chrome browser using chrome devtools protocol
 // php helper process tagui_chrome.php running to handle this concurrently
 function chrome_step(method,params) {chrome_id++;
 if (chrome_id == 1) chrome_handshake(); // handshake on first call
@@ -232,9 +256,11 @@ do {c4 = str.charCodeAt(i++) & 0xff; if (c4 === 61) {return out;} c4 = BASE64_DE
 while (i < len && c4 === -1); if (c4 === -1) {break;} out += String.fromCharCode((c3 & 0x03) << 6 | c4);} return out;};
 
 chrome.capture = function(filename) { // capture screenshot of webpage to file in png/jpg/jpeg format
+// having pdf extension saves to a pdf file instead. only works in headless mode, visible mode errors out
 var format = 'png'; var quality = 80; var fromSurface = true; var screenshot_data = ''; // options not implemented
 if ((filename.substr(-3).toLowerCase() == 'jpg') || (filename.substr(-4).toLowerCase() == 'jpeg')) format = 'jpeg';
-var ws_message = chrome_step('Page.captureScreenshot',{format: format, quality: quality, fromSurface: fromSurface});
+if (filename.substr(-3).toLowerCase() == 'pdf') var ws_message = chrome_step('Page.printToPDF',{printBackground: true});
+else var ws_message = chrome_step('Page.captureScreenshot',{format: format, quality: quality, fromSurface: fromSurface});
 try {var ws_json = JSON.parse(ws_message); screenshot_data = ws_json.result.data;} catch(e) {screenshot_data = '';}
 var fs = require('fs'); fs.write(filename,chrome.decode(screenshot_data),'wb');};
 
@@ -356,7 +382,9 @@ case 'receive': return receive_intent(live_line); break;
 case 'echo': return echo_intent(live_line); break;
 case 'save': return save_intent(live_line); break;
 case 'dump': return dump_intent(live_line); break;
+case 'write': return write_intent(live_line); break;
 case 'snap': return snap_intent(live_line); break;
+case 'table': return table_intent(live_line); break;
 case 'wait': return wait_intent(live_line); break;
 case 'live': return live_intent(live_line); break;
 case 'check': return check_intent(live_line); break;
@@ -387,7 +415,9 @@ if (lc_raw_intent.substr(0,8) == 'receive ') return 'receive';
 if (lc_raw_intent.substr(0,5) == 'echo ') return 'echo';
 if (lc_raw_intent.substr(0,5) == 'save ') return 'save';
 if (lc_raw_intent.substr(0,5) == 'dump ') return 'dump';
+if (lc_raw_intent.substr(0,6) == 'write ') return 'write';
 if (lc_raw_intent.substr(0,5) == 'snap ') return 'snap';
+if (lc_raw_intent.substr(0,6) == 'table ') return 'table';
 if (lc_raw_intent.substr(0,5) == 'wait ') return 'wait';
 if (lc_raw_intent.substr(0,5) == 'live ') return 'live';
 if (lc_raw_intent.substr(0,6) == 'check ') return 'check';
@@ -412,7 +442,9 @@ if (lc_raw_intent == 'receive') return 'receive';
 if (lc_raw_intent == 'echo') return 'echo';
 if (lc_raw_intent == 'save') return 'save';
 if (lc_raw_intent == 'dump') return 'dump';
+if (lc_raw_intent == 'write') return 'write';
 if (lc_raw_intent == 'snap') return 'snap';
+if (lc_raw_intent == 'table') return 'table';
 if (lc_raw_intent == 'wait') return 'wait';
 if (lc_raw_intent == 'live') return 'live';
 if (lc_raw_intent == 'check') return 'check';
@@ -590,6 +622,15 @@ else if (params.indexOf(' to ') > -1)
 return "save_text('" + abs_file(param2) + "'," + add_concat(param1) + ")"; else
 return "save_text(''," + add_concat(params) + ")";}
 
+function write_intent(raw_intent) {
+var params = ((raw_intent + ' ').substr(1+(raw_intent + ' ').indexOf(' '))).trim();
+var param1 = (params.substr(0,params.indexOf(' to '))).trim();
+var param2 = (params.substr(4+params.indexOf(' to '))).trim();
+if (params == '') return "this.echo('ERROR - variable missing for " + raw_intent + "')";
+else if (params.indexOf(' to ') > -1)
+return "append_text('" + abs_file(param2) + "'," + add_concat(param1) + ")"; else
+return "append_text(''," + add_concat(params) + ")";}
+
 function snap_intent(raw_intent) {
 var params = ((raw_intent + ' ').substr(1+(raw_intent + ' ').indexOf(' '))).trim();
 var param1 = (params.substr(0,params.indexOf(' to '))).trim();
@@ -602,6 +643,17 @@ else if (params.indexOf(' to ') > -1)
 {if (check_tx(param1)) return "this.captureSelector('" + abs_file(param2) + "',tx('" + param1 + "'))"; 
 else return "this.echo('ERROR - cannot find " + param1 + "')";}
 else {if (check_tx(params)) return "this.captureSelector(snap_image(),tx('" + params + "'))";
+else return "this.echo('ERROR - cannot find " + params + "')";}}
+
+function table_intent(raw_intent) {
+var params = ((raw_intent + ' ').substr(1+(raw_intent + ' ').indexOf(' '))).trim();
+var param1 = (params.substr(0,params.indexOf(' to '))).trim();
+var param2 = (params.substr(4+params.indexOf(' to '))).trim();
+if (params == '') return "this.echo('ERROR - target missing for " + raw_intent + "')";
+else if (params.indexOf(' to ') > -1)
+{if (check_tx(param1)) return "save_table('" + abs_file(param2) + "',tx('" + param1 + "'))";
+else return "this.echo('ERROR - cannot find " + param1 + "')";}
+else {if (check_tx(params)) return "save_table('',tx('" + params + "'))";
 else return "this.echo('ERROR - cannot find " + params + "')";}}
 
 function wait_intent(raw_intent) {

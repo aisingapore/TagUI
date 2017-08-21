@@ -46,7 +46,7 @@ If you know JavaScript and want to be more expressive, you can even use JavaScri
 There is automatic waiting for web elements to appear + error-checking + nesting of JavaScript code blocks. Not forgetting the option to run automation flows hosted online or auto-upload run results online for sharing. TagUI also supports visual automation of website and desktop through built-in integration with Sikuli. Instead of using element identifiers, images can be used to identify user interface elements to interact with.
 
 # Set Up
-TagUI is in v2.3 and runs on macOS, Linux, Windows ([link to release notes](https://github.com/tebelorg/TagUI/releases))
+TagUI is in **process of updating to v2.4** and runs on macOS, Linux, Windows ([link to release notes](https://github.com/tebelorg/TagUI/releases))
 
 ### PACKAGED INSTALLATION
 Easiest way to use TagUI - no setup is needed, all dependencies are packaged in
@@ -156,7 +156,10 @@ show / print|element to read (page = webpage, ie raw html) |print element text t
 save|element (page = webpage) ***to*** optional filename|save element text to file
 echo|text (in quotation marks) and variables|print text/variables to output
 dump|text and variables ***to*** optional filename|save text/variables to file
+write|text and variables ***to*** optional filename|append text/variables to file
 snap|element (page = webpage) ***to*** optional filename|save screenshot to file
+snap (pdf)|page ***to*** filename.pdf (headless Chrome / PhantomJS)|save webpage to basic pdf
+table|element (non-CSS selector) ***to*** optional filename.csv|save basic html table to csv
 upload|element (CSS selector only) ***as*** filename to upload|upload file to website
 download|url to download ***to*** filename to save|download from url to file
 receive|url keyword to watch ***to*** filename to save|receive resource to file
@@ -198,7 +201,7 @@ less than or equal to / lesser than or equal to / lower than or equal to|<=
 and|&&
 or|&#124;&#124;
 
-Tip - use { and } step to define step/code blocks for powerful repetitive automation with for loop. conversion to CasperJS blocks syntax happens automatically. when using contain / equal, you can write with or without s behind. you can use if check_tx("element") to check if the element exists, before doing the step on next line
+Tip - use { and } step to define step/code blocks for powerful repetitive automation with for loop. conversion to CasperJS blocks syntax happens automatically. when using contain / equal, you can write with or without s behind. you can use if present('element') to check if the element exists, before doing the step on next line
 
 ### REPOSITORIES
 - Repositories help to make objects or steps reusable and improve readability
@@ -218,6 +221,7 @@ type email|type \`email\` as user@gmail.com
 - TagUI loops through each column to automate using values from different datasets
 - Eg, echo "TESTCASE - \`testname\`" in your flow shows TESTCASE - Trade USDSGD
 - Data-centric approach with rows representing data fields (usually row = test case)
+- To auto-transpose conventional datatable, save as flow filename plus _transpose.csv
 
 TEST TRADES|TEST #1|TEST #2|TEST #3
 :----------|:------|:------|:------
@@ -239,7 +243,7 @@ Automation flows can also be triggered via API URL. TagUI has an API service and
 0,15,30,45 * * * * /full_path_on_your_server/tagui_crontab
 ```
 
-To call an automation flow from your application or web browser, use below API syntax. Custom input(s) supported. Automation flows can also be triggered from emails using the API. For email integration, [install Tmail](https://github.com/tebelorg/Tmail). It's an open-source mailbot to act on incoming emails or perform mass emailing; it also delivers emails by API. Emails with run-time variables can be sent directly from your flow with a single line (see flow sample 6C_datatables).
+To call an automation flow from your application or web browser, use below API syntax. Custom input(s) supported. Automation flows can also be triggered from emails using the API. For email integration, [check out Tmail](https://github.com/tebelorg/Tmail). It's an open-source mailbot to act on incoming emails or perform mass emailing; it also delivers emails by API. Emails with run-time variables can be sent directly from your flow with a single line (see flow sample 6C_datatables). If you have data transformation in your process pipeline [check out TLE](https://github.com/tebelorg/TLE), which can help with converting data.
 ```
 your_website_url/tagui_service.php?SETTINGS="flow_filename option(s)"
 ```
@@ -256,15 +260,15 @@ For advanced API calls, you can set above api_config variable which defaults as 
 ### CHROME
 TagUI has built-in integration with Chrome web browser to run web automation in visible or headless mode. It uses a websocket connection to directly communicate automation JavaScript code and information to Chrome.
 
-To develop new custom methods for Chrome integration, see this [TagUI issue](https://github.com/tebelorg/TagUI/issues/24#issuecomment-312361674) and [tagui_header.js](https://github.com/tebelorg/TagUI/blob/master/src/tagui_header.js) for examples of websocket calls from TagUI to Chrome (via Chrome Debugging Protocol). The function `chrome_step(method, params)` sends message to Chrome and returns the response. You will see examples from simple websocket calls such as getting webpage title to stacked ones such as handling of frame or popup window. To tweak how TagUI launches / kills Chrome and the integration PHP process, see TagUI runner script for [macOS/Linux](https://github.com/tebelorg/TagUI/blob/master/src/tagui) or [Windows](https://github.com/tebelorg/TagUI/blob/master/src/tagui.cmd). 
+To develop new custom methods for Chrome integration, see this [TagUI issue](https://github.com/tebelorg/TagUI/issues/24#issuecomment-312361674) and [tagui_header.js](https://github.com/tebelorg/TagUI/blob/master/src/tagui_header.js) for examples of websocket calls from TagUI to Chrome (via Chrome DevTools Protocol). The function `chrome_step(method, params)` sends message to Chrome and returns the response. You will see examples from simple websocket calls such as getting webpage title to stacked ones such as handling of frame or popup window. To tweak how TagUI launches / kills Chrome and the integration PHP process, see TagUI runner script for [macOS/Linux](https://github.com/tebelorg/TagUI/blob/master/src/tagui) or [Windows](https://github.com/tebelorg/TagUI/blob/master/src/tagui.cmd). 
 
-Probably the best way to see the websocket communication in action is to enter TagUI live mode (add live step in your automation flow), then `tail -f tagui_chrome.log` in another terminal to see the Chrome Debugging Protocol messages going to and fro as you enter TagUI steps or JavaScript code. If you are running on Windows, you can click on the PHP process window directly to see the messages.
+Probably the best way to see the websocket communication in action is to enter TagUI live mode (add live step in your automation flow), then `tail -f tagui_chrome.log` in another terminal to see the Chrome DevTools Protocol messages going to and fro as you enter TagUI steps or JavaScript code. If you are running on Windows, you can click on the PHP process window directly to see the messages.
 
 At run-time TagUI will start a PHP thread in the background to manage the integration with Chrome for concurrent communication. The [Textalk PHP websocket](https://github.com/Textalk/websocket-php) is used as it is super-light and most importantly, it works even without any update for 2 years. The normal approach to integrate with Chrome is through [chrome-remote-interface](https://github.com/cyrus-and/chrome-remote-interface) project or tools [such as Chromy](https://github.com/OnetapInc/chromy) which is based on chrome-remote-interface. However, that approach introduces Node.js dependency which means users without a Node.js development environment cannot run TagUI with Chrome. Outside of JavaScript ecosystem, there are also tools like [chromedp in Go language](https://github.com/knq/chromedp) to integrate with Chrome.
 
 In order to retain TagUI unzip and run functionality, the approach of launching a [separate PHP thread](https://github.com/tebelorg/TagUI/blob/master/src/tagui_chrome.php) is chosen. Since the TagUI [natural language interpreter](https://github.com/tebelorg/TagUI/blob/master/src/tagui_parse.php) is already written in PHP, there is no new dependency. Also, doing websocket communication within the single-threaded JavaScript environment used by CasperJS is not possible as it involves a redesign of fundamental CasperJS methods such as casper.exists to support async/await or use JavaScript promises which are not yet supported by CasperJS (for compatibility with [latest PhantomJS](https://github.com/casperjs/casperjs/issues/1663#issuecomment-285952446)).
 
-Like chrome-remote-interface, TagUI communicates with Chrome through [Chrome Debugging Protocol](https://chromedevtools.github.io/devtools-protocol/). The protocol is primarily designed for debugging the web browser instead of web automation, so many methods are still in experimental status. However, the API is stable enough for TagUI steps to work with Chrome. When chrome or headless option is used, TagUI replaces CasperJS methods it uses with custom methods to talk to Chrome instead of PhantomJS. When firefox option is used or by default, TagUI doesn't invoke custom methods and PHP process.
+Like chrome-remote-interface, TagUI communicates with Chrome through [Chrome DevTools Protocol](https://chromedevtools.github.io/devtools-protocol/). The protocol is primarily designed for debugging the web browser instead of web automation, so many methods are still in experimental status. However, the API is stable enough for TagUI steps to work with Chrome. When chrome or headless option is used, TagUI replaces CasperJS methods it uses with custom methods to talk to Chrome instead of PhantomJS. When firefox option is used or by default, TagUI doesn't invoke custom methods and PHP process.
 
 ### TESTING
 The step check allows simple testing of conditions. For professional test automation, CasperJS comes with a tester module for unit and functional testing purpose. To use advanced testing features, run TagUI with the test option. Note that CasperJS is not yet [supporting Chrome](https://github.com/casperjs/casperjs/issues/1825), below won't work when chrome or headless option is used.
@@ -313,6 +317,7 @@ erina.cmd|same as above but for Windows platform
 tagui_helper.php|command line natural language parser
 tagui_helper|generated normal TagUI command to run
 tagui_helper.cmd|same as above but for Windows platform
+transpose.php|transpose conventional datatable csv
 
 # Be a Force for Good
 TagUI default config does not hide identity as an automated user

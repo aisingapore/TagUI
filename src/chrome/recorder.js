@@ -298,6 +298,7 @@ TestRecorder.EventTypes.ExplicitWait = 28;
 TestRecorder.EventTypes.FetchElementText = 29;
 TestRecorder.EventTypes.SelectElementOption = 30;
 TestRecorder.EventTypes.CancelLastStep = 31;
+TestRecorder.EventTypes.NoteDownElement = 32;
 TestRecorder.EventTypes.Cancel = 99;
 TestRecorder.EventTypes.MouseDown = 19;
 TestRecorder.EventTypes.MouseUp = 20;
@@ -477,6 +478,10 @@ TestRecorder.ElementScreenShotEvent = function() {
     this.type = TestRecorder.EventTypes.ElementScreenShot;
 }
 
+TestRecorder.NoteDownElement = function() {
+    this.type = TestRecorder.EventTypes.NoteDownElement;
+}
+
 TestRecorder.MoveCursorToElementEvent = function() {
     this.type = TestRecorder.EventTypes.MoveCursorToElement;
 }
@@ -617,16 +622,17 @@ TestRecorder.ContextMenu.prototype.build = function(t, x, y) {
 //        menu.appendChild(this.item("Screenshot", this.doScreenShot));
 //    }
 
-    menu.appendChild(this.item("Save webpage screenshot", this.doScreenShot));
-    menu.appendChild(this.item("Save element screenshot", this.doElementScreenShot));
+    menu.appendChild(this.item("Note down element", this.doNoteDownElement));
+    menu.appendChild(this.item("Move cursor to element", this.doMoveCursorToElement));
     menu.appendChild(this.item("Fetch element text", this.doFetchElementText));
     menu.appendChild(this.item("Print element text", this.doPrintElementText));
     menu.appendChild(this.item("Save element text", this.doSaveElementText));
-    menu.appendChild(this.item("Move cursor to element", this.doMoveCursorToElement));
+    menu.appendChild(this.item("Save webpage screenshot", this.doScreenShot));
+    menu.appendChild(this.item("Save element screenshot", this.doElementScreenShot));
     menu.appendChild(this.item("Wait for a few seconds", this.doExplicitWait));
-//    menu.appendChild(this.item("Cancel the last step", this.doCancelLastStep));
     menu.appendChild(this.item("Close shortcuts menu", this.cancel));
-
+//    menu.appendChild(this.item("Cancel the last step", this.doCancelLastStep));
+  
     b.insertBefore(menu, b.firstChild);
     return menu;
 }
@@ -737,6 +743,13 @@ TestRecorder.ContextMenu.prototype.doElementScreenShot = function() {
     var t = contextmenu.target;
     var et = TestRecorder.EventTypes;
     var e = new TestRecorder.ElementEvent(et.ElementScreenShot, t);
+    contextmenu.record(e);
+}
+
+TestRecorder.ContextMenu.prototype.doNoteDownElement = function() {
+    var t = contextmenu.target;
+    var et = TestRecorder.EventTypes;
+    var e = new TestRecorder.ElementEvent(et.NoteDownElement, t);
     contextmenu.record(e);
 }
 

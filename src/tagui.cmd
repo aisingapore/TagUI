@@ -8,7 +8,7 @@ rem enable windows for loop advanced flow control
 setlocal enableextensions enabledelayedexpansion
 
 if "%~1"=="" (
-echo tagui v2.3: use following syntax and below options to run - tagui flow_filename option^(s^)
+echo tagui v2.4: use following syntax and below options to run - tagui flow_filename option^(s^)
 echo.
 echo IMPORTANT: SAVE YOUR WORK BEFORE USING CHROME OR HEADLESS, TAGUI WILL RESTART CHROME
 echo headless - run on invisible Chrome web browser instead of default PhantomJS ^(first install Chrome^)
@@ -424,15 +424,20 @@ if exist "tagui_chrome.out" del "tagui_chrome.out"
 rem default exit code 0 to mean no error parsing automation flow file
 set tagui_error_code=0
 
+rem transpose datatable csv file if file to be transposed exists
+if exist "%flow_file%_transpose.csv" php -q transpose.php "%flow_file%_transpose.csv" | tee -a "%flow_file%.log"
+
 rem check datatable csv file for batch automation
 set tagui_data_set_size=1 
 if not exist "%flow_file%.csv" goto no_datatable
 	for /f "tokens=* usebackq" %%c in (`gawk -F"," "{print NF}" "%flow_file%.csv" ^| sort -nu ^| head -n 1`) do set min_column=%%c
 	for /f "tokens=* usebackq" %%c in (`gawk -F"," "{print NF}" "%flow_file%.csv" ^| sort -nu ^| tail -n 1`) do set max_column=%%c
-	
-	if %min_column% neq %max_column% (
-		echo ERROR - %flow_file%.csv has inconsistent # of columns | tee -a "%flow_file%.log"
-	) else if %min_column% lss 2 (
+
+rem comment off sanity check for columns consistency as cells with , will trigger false-positive
+rem	if %min_column% neq %max_column% (
+rem		echo ERROR - %flow_file%.csv has inconsistent # of columns | tee -a "%flow_file%.log"
+rem	)
+	if %min_column% lss 2 (
 		echo ERROR - %flow_file%.csv has has lesser than 2 columns | tee -a "%flow_file%.log"
 	) else (
 		set /a tagui_data_set_size=%min_column% - 1

@@ -6,7 +6,7 @@ chrome_command="google-chrome"
 
 if [ -z "$1" ]
 then
-echo "tagui v2.3: use following syntax and below options to run ./tagui flow_filename option(s)"
+echo "tagui v2.4: use following syntax and below options to run ./tagui flow_filename option(s)"
 echo
 echo "IMPORTANT: SAVE YOUR WORK BEFORE USING CHROME OR HEADLESS, TAGUI WILL RESTART CHROME"
 echo "headless - run on invisible Chrome web browser instead of default PhantomJS (first install Chrome)"
@@ -191,13 +191,17 @@ if [ -f "tagui_chrome.out" ]; then rm tagui_chrome.out; fi
 # default exit code 0 to mean no error parsing automation flow file
 tagui_error_code=0
 
+# transpose datatable csv file if file to be transposed exists
+if [ -f "$1_transpose".csv ]; then php -q transpose.php "$1_transpose".csv | tee -a "$1".log; fi
+
 # check datatable csv file for batch automation
 tagui_data_set_size=1
 if [ -f "$1".csv ]; then
 min_column=`awk -F',' '{print NF}' "$1".csv | sort -nu | head -n 1`
 max_column=`awk -F',' '{print NF}' "$1".csv | sort -nu | tail -n 1`
-if [ "$min_column" != "$max_column" ]; then echo "ERROR - $1.csv has inconsistent # of columns" | tee -a "$1".log
-elif [ "$min_column" -lt 2 ]; then echo "ERROR - $1.csv has lesser than 2 columns" | tee -a "$1".log
+# comment off sanity check for columns consistency as cells with , will trigger false-positive
+# if [ "$min_column" != "$max_column" ]; then echo "ERROR - $1.csv has inconsistent # of columns" | tee -a "$1".log
+if [ "$min_column" -lt 2 ]; then echo "ERROR - $1.csv has lesser than 2 columns" | tee -a "$1".log
 else tagui_data_set_size="$(($min_column-1))"; fi; fi
 
 # big loop for managing multiple data sets in datatable 
