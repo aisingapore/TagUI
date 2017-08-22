@@ -16,14 +16,12 @@
             </Appearance>
             <String>visual automation of web browser and desktop</String>
         </Note>
-        <Note ID="20" FontSize="9.0" Position="542.077715,63.077715" Width="107.0">
+        <Note ID="20" FontSize="9.0" Position="529.770287,61.0" Width="119.0">
             <Appearance>
                 <Alignment>Center</Alignment>
                 <Border Style="Square"></Border>
             </Appearance>
-            <String>saved screenshots, 
-text files, execution logs, outgoing API calls and other outcomes resulting from automated actions 
-(option to auto-upload results to hastebin.com)</String>
+            <String>saved screenshots, text files, pdf, csv, execution logs, outgoing API calls and other outcomes resulting from automated actions (option to auto-upload results to hastebin.com)</String>
         </Note>
         <Note ID="14" FontSize="9.0" Position="399.0,143.0" Width="67.0">
             <Appearance>
@@ -113,7 +111,7 @@ URL to an online file)</String>
                 <FormatRange Bold="Yes">0,8</FormatRange>
             </Formatting>
         </Note>
-        <Note ID="4" FontSize="12.0" Position="485.077715,236.385143" Width="87.0">
+        <Note ID="4" FontSize="12.0" Position="485.0,236.0" Width="87.0">
             <Appearance>
                 <Alignment>Center</Alignment>
                 <TextColor>1.0 0.999974 0.999991</TextColor>
@@ -169,14 +167,14 @@ URL to an online file)</String>
             </Appearance>
             <String>scriptable web browser executed on top of Firefox</String>
         </Note>
-        <Note ID="17" FontSize="9.0" Position="472.077715,262.385143" Width="113.0">
+        <Note ID="17" FontSize="9.0" Position="472.0,262.0" Width="113.0">
             <Appearance>
                 <Alignment>Center</Alignment>
                 <Border Style="Square"></Border>
             </Appearance>
             <String>work with SlimerJS for visible web automation</String>
         </Note>
-        <Note ID="19" FontSize="12.0" Position="501.783304,152.946671" Width="87.0">
+        <Note ID="19" FontSize="12.0" Position="502.0,153.0" Width="87.0">
             <Appearance>
                 <Alignment>Center</Alignment>
                 <TextColor>1.0 0.999974 0.999991</TextColor>
@@ -209,7 +207,7 @@ URL to an online file)</String>
                 <TextColor>1.0 1.0 1.0</TextColor>
                 <Fill>0.314662 0.314653 0.314658</Fill>
             </Appearance>
-            <String>v2.3  </String>
+            <String>v2.4  </String>
             <Formatting>
                 <FormatRange Bold="Yes">0,6</FormatRange>
             </Formatting>

@@ -46,7 +46,7 @@ If you know JavaScript and want to be more expressive, you can even use JavaScri
 There is automatic waiting for web elements to appear + error-checking + nesting of JavaScript code blocks. Not forgetting the option to run automation flows hosted online or auto-upload run results online for sharing. TagUI also supports visual automation of website and desktop through built-in integration with Sikuli. Instead of using element identifiers, images can be used to identify user interface elements to interact with.
 
 # Set Up
-TagUI is in **process of updating to v2.4** and runs on macOS, Linux, Windows ([link to release notes](https://github.com/tebelorg/TagUI/releases))
+TagUI is in v2.4 and runs on macOS, Linux, Windows ([link to release notes](https://github.com/tebelorg/TagUI/releases))
 
 ### PACKAGED INSTALLATION
 Easiest way to use TagUI - no setup is needed, all dependencies are packaged in
@@ -223,7 +223,7 @@ type email|type \`email\` as user@gmail.com
 - TagUI loops through each column to automate using values from different datasets
 - Eg, echo "TESTCASE - \`testname\`" in your flow shows TESTCASE - Trade USDSGD
 - Data-centric approach with rows representing data fields (usually row = test case)
-- To auto-transpose conventional datatable, save as flow filename plus _transpose.csv
+- To auto-transpose conventional datatable, save as flow filename plus \_transpose.csv
 
 TEST TRADES|TEST #1|TEST #2|TEST #3
 :----------|:------|:------|:------
