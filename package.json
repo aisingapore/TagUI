@@ -1,10 +1,11 @@
 {
   "name": "tagui",
-  "version": "2.4.0",
+  "version": "2.4.1",
   "description": "General purpose tool for automating web interactions",
   "keywords": [
     "tagui"
   ],
+  "bin": "./src/tagui",
   "license": "MIT",
   "author": "Tebel.Automation",
   "homepage": "https://github.com/tebelorg/TagUI",
