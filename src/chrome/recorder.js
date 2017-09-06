@@ -319,7 +319,7 @@ TestRecorder.ElementInfo = function(element) {
     if (this.type)
         this.type = this.type.toLowerCase();
     if (element.form)
-        this.form = {id: element.form.id, name: element.form.name};
+        this.form = {id: element.form.id, name: element.form.getAttribute('name')};
     this.src = element.src;
     this.id = element.id;
     this.title = element.title;
@@ -1082,12 +1082,18 @@ TestRecorder.Recorder.prototype.onchange = function(e) {
     var e = new TestRecorder.Event(e);
     var et = TestRecorder.EventTypes;
     var t = e.target();
-if (t.selectedIndex || t.type == "option")
-{
-    var v = new TestRecorder.ElementEvent(et.SelectElementOption, e.target());
-    recorder.testcase.append(v);
-    recorder.log("value changed: " + e.target().value);
-}
+    if (t.selectedIndex || t.type == "option")
+    {
+        var v = new TestRecorder.ElementEvent(et.SelectElementOption, e.target());
+        recorder.testcase.append(v);
+        recorder.log("value changed: " + e.target().value);
+    }
+    else
+    {
+        var v = new TestRecorder.ElementEvent(et.Change, e.target());
+        recorder.testcase.append(v);
+        recorder.log("value changed: " + e.target().value);
+    }
 }
 
 TestRecorder.Recorder.prototype.onselect = function(e) {
