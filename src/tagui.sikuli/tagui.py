@@ -4,7 +4,7 @@
 setAutoWaitTimeout(10)
 
 # delay in seconds between scanning for inputs
-scan_period = 1
+scan_period = 0.5
 
 # counter to track current tagui sikuli step
 tagui_count = '0'

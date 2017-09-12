@@ -50,11 +50,10 @@ var row_data = ""; var table_cell = ""; var fs = require('fs'); fs.write(file_na
 if (!casper.exists(selector) || (selector.toString().indexOf('xpath selector: ')==-1)) return false; // exit if invalid
 if (selector.toString().length == 16) selector = ''; else selector = selector.toString().substring(16); // get xpath
 for (table_row=1; table_row<=1024; table_row++) {row_data = ""; for (table_col=1; table_col<=1024; table_col++) {
-table_cell = '((' + selector + '//tr)[' + table_row + ']//td)[' + table_col + ']'; // build cell xpath selector
+table_cell = '(((' + selector + '//tr)[' + table_row + ']//th)' + '|'; // build cell xpath selector to include
+table_cell += '((' + selector + '//tr)[' + table_row + ']//td))[' + table_col + ']'; // both td and td elements
 if (casper.exists(x(table_cell))) row_data = row_data + '","' + casper.fetchText(x(table_cell)).trim();
-else {table_cell = '((' + selector + '//tr)[' + table_row + ']//th)[' + table_col + ']'; // for table header cells
-if (casper.exists(x(table_cell))) row_data = row_data + '","' + casper.fetchText(x(table_cell)).trim();
-else break;}} // if searching for data cell td and header cell th is not successful means end of row is reached
+else break;} // if searching for table cells (th and td) is not successful,  means end of row is reached
 if (row_data.substr(0,2) == '",') {row_data = row_data.substr(2); row_data += '"'; append_text(file_name,row_data);}
 else return true;}} // if '",' is not found, means end of table is reached as there is no cell found in row
 
@@ -115,7 +114,7 @@ function sikuli_handshake() { // techo('[connecting to sikuli process]');
 var ds; if (flow_path.indexOf('/') !== -1) ds = '/'; else ds = '\\';
 var fs = require('fs'); fs.write('tagui.sikuli'+ds+'tagui_sikuli.in','','w'); var sikuli_handshake = '';
 if (!fs.exists('tagui.sikuli'+ds+'tagui_sikuli.out')) fs.write('tagui.sikuli'+ds+'tagui_sikuli.out','','w');
-do {sleep(1000); sikuli_handshake = fs.read('tagui.sikuli'+ds+'tagui_sikuli.out').trim();}
+do {sleep(500); sikuli_handshake = fs.read('tagui.sikuli'+ds+'tagui_sikuli.out').trim();}
 while (sikuli_handshake !== '[0] START'); // techo('[connected to sikuli process]');
 }
 
@@ -124,7 +123,7 @@ function sikuli_step(sikuli_intent) {sikuli_count++;
 if (sikuli_count == 1) sikuli_handshake(); // handshake on first call
 var ds; if (flow_path.indexOf('/') !== -1) ds = '/'; else ds = '\\';
 var fs = require('fs'); fs.write('tagui.sikuli'+ds+'tagui_sikuli.in','['+sikuli_count.toString()+'] '+sikuli_intent,'w');
-var sikuli_result = ''; do {sleep(1000); sikuli_result = fs.read('tagui.sikuli'+ds+'tagui_sikuli.out').trim();}
+var sikuli_result = ''; do {sleep(500); sikuli_result = fs.read('tagui.sikuli'+ds+'tagui_sikuli.out').trim();}
 while (sikuli_result.indexOf('['+sikuli_count.toString()+'] ') == -1);
 if (sikuli_result.indexOf('SUCCESS') !== -1) return true; else return false;}
 
