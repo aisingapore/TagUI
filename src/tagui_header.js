@@ -19,6 +19,9 @@ var sikuli_count = 0; var chrome_id = 0;
 // chrome context for frame handling and targetid for popup handling
 var chrome_context = 'document'; var chrome_targetid = '';
 
+// JSON variable to pass variables into browser DOM
+var dom_json = {}; var dom_result = '';
+
 // variable for advance usage of api step
 var api_config = {method:'GET', header:[], body:{}};
 
@@ -289,13 +292,15 @@ chrome.download = function(url,filename) { // download function for downloading 
 casper.echo('ERROR - for visible Chrome, download file directly through normal webpage interaction');
 casper.echo('ERROR - for headless Chrome, it prevents file download for now - Chromium issue 696481');};
 
-chrome.evaluate = function(fn_statement) { // evaluate expression in browser dom context
+chrome.evaluate = function(fn_statement,eval_json) { // evaluate expression in browser dom context
 // chrome runtime.evaluate is different from casperjs evaluate, do some processing to reduce gap
-var statement = fn_statement.toString(); statement = statement.slice(statement.indexOf('{')+1,statement.lastIndexOf('}'));
-statement = statement.replace(/return /g,''); // defining as function() and return keyword is invalid for chrome
+var statement = fn_statement.toString(); if (!eval_json)
+{statement = statement.slice(statement.indexOf('{')+1,statement.lastIndexOf('}'));
+statement = statement.replace(/return /g,'');} // defining function() with return keyword is invalid for chrome
+else statement = '(' + statement + ')' + '(' + JSON.stringify(eval_json) + ')'; // unless variable is passed into fx
 var ws_message = chrome_step('Runtime.evaluate',{expression: statement}); // statements can be separated by ;
 try {var ws_json = JSON.parse(ws_message); if (ws_json.result.result.value)
-return ws_json.result.result.value; else return '';} catch(e) {return '';}};
+return ws_json.result.result.value; else return null;} catch(e) {return null;}};
 
 chrome.withFrame = function(frameInfo,then) { // replace casperjs frame for switching frame context
 var new_context = ''; if (chrome_context == 'document') new_context = 'mainframe_context';
@@ -682,7 +687,7 @@ else return "api_result = call_api('" + params + "'); " +
 function dom_intent(raw_intent) {
 var params = ((raw_intent + ' ').substr(1+(raw_intent + ' ').indexOf(' '))).trim();
 if (params == '') return "this.echo('ERROR - statement missing for " + raw_intent + "')";
-else return "dom_result = this.evaluate(function() {" + params + "})";}
+else return "dom_result = this.evaluate(function(dom_json) {" + params + "}, dom_json)";}
 
 function js_intent(raw_intent) {
 var params = ((raw_intent + ' ').substr(1+(raw_intent + ' ').indexOf(' '))).trim();

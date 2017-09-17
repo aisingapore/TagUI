@@ -535,7 +535,7 @@ return "{techo('".$raw_intent."');\napi_result = call_api('".$params."');\n" .
 function dom_intent($raw_intent) {$twb = $GLOBALS['tagui_web_browser'];
 $params = trim(substr($raw_intent." ",1+strpos($raw_intent." "," ")));
 if ($params == "") echo "ERROR - " . current_line() . " statement missing for " . $raw_intent . "\n";
-else return "dom_result = ".$twb.".evaluate(function() {".$params."});".end_fi()."\n";}
+else return "dom_result = ".$twb.".evaluate(function(dom_json) {".$params."}, dom_json);".end_fi()."\n";}
 
 function js_intent($raw_intent) {
 $params = trim(substr($raw_intent." ",1+strpos($raw_intent." "," ")));
