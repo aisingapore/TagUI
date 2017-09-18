@@ -387,6 +387,7 @@ case 'echo': return echo_intent(live_line); break;
 case 'save': return save_intent(live_line); break;
 case 'dump': return dump_intent(live_line); break;
 case 'write': return write_intent(live_line); break;
+case 'load': return load_intent(live_line); break;
 case 'snap': return snap_intent(live_line); break;
 case 'table': return table_intent(live_line); break;
 case 'wait': return wait_intent(live_line); break;
@@ -420,6 +421,7 @@ if (lc_raw_intent.substr(0,5) == 'echo ') return 'echo';
 if (lc_raw_intent.substr(0,5) == 'save ') return 'save';
 if (lc_raw_intent.substr(0,5) == 'dump ') return 'dump';
 if (lc_raw_intent.substr(0,6) == 'write ') return 'write';
+if (lc_raw_intent.substr(0,5) == 'load ') return 'load';
 if (lc_raw_intent.substr(0,5) == 'snap ') return 'snap';
 if (lc_raw_intent.substr(0,6) == 'table ') return 'table';
 if (lc_raw_intent.substr(0,5) == 'wait ') return 'wait';
@@ -447,6 +449,7 @@ if (lc_raw_intent == 'echo') return 'echo';
 if (lc_raw_intent == 'save') return 'save';
 if (lc_raw_intent == 'dump') return 'dump';
 if (lc_raw_intent == 'write') return 'write';
+if (lc_raw_intent == 'load') return 'load';
 if (lc_raw_intent == 'snap') return 'snap';
 if (lc_raw_intent == 'table') return 'table';
 if (lc_raw_intent == 'wait') return 'wait';
@@ -634,6 +637,15 @@ if (params == '') return "this.echo('ERROR - variable missing for " + raw_intent
 else if (params.indexOf(' to ') > -1)
 return "append_text('" + abs_file(param2) + "'," + add_concat(param1) + ")"; else
 return "append_text(''," + add_concat(params) + ")";}
+
+function load_intent(raw_intent) {
+var params = ((raw_intent + ' ').substr(1+(raw_intent + ' ').indexOf(' '))).trim();
+var param1 = (params.substr(0,params.indexOf(' to '))).trim();
+var param2 = (params.substr(4+params.indexOf(' to '))).trim();
+if (params == '') return "this.echo('ERROR - filename missing for " + raw_intent + "')";
+else if (params.indexOf(' to ') > -1)
+return "var fs = require('fs'); " + param2 + " = ''; if (fs.exists('" + abs_file(param1) + "')) " + param2 +  " = fs.read('" + abs_file(param1) + "').trim(); else this.echo('ERROR - cannot find file " + param1 + "')"; else
+return "this.echo('ERROR - variable missing for " + raw_intent + "')";}
 
 function snap_intent(raw_intent) {
 var params = ((raw_intent + ' ').substr(1+(raw_intent + ' ').indexOf(' '))).trim();

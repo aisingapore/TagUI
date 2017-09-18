@@ -165,6 +165,7 @@ case "echo": return echo_intent($script_line); break;
 case "save": return save_intent($script_line); break;
 case "dump": return dump_intent($script_line); break;
 case "write": return write_intent($script_line); break;
+case "load": return load_intent($script_line); break;
 case "snap": return snap_intent($script_line); break;
 case "table": return table_intent($script_line); break;
 case "wait": return wait_intent($script_line); break;
@@ -197,6 +198,7 @@ if (substr($lc_raw_intent,0,5)=="echo ") return "echo";
 if (substr($lc_raw_intent,0,5)=="save ") return "save";
 if (substr($lc_raw_intent,0,5)=="dump ") return "dump";
 if (substr($lc_raw_intent,0,6)=="write ") return "write";
+if (substr($lc_raw_intent,0,5)=="load ") return "load";
 if (substr($lc_raw_intent,0,5)=="snap ") return "snap";
 if (substr($lc_raw_intent,0,6)=="table ") return "table";
 if (substr($lc_raw_intent,0,5)=="wait ") return "wait";
@@ -224,6 +226,7 @@ if ($lc_raw_intent=="echo") return "echo";
 if ($lc_raw_intent=="save") return "save";
 if ($lc_raw_intent=="dump") return "dump";
 if ($lc_raw_intent=="write") return "write";
+if ($lc_raw_intent=="load") return "load";
 if ($lc_raw_intent=="snap") return "snap";
 if ($lc_raw_intent=="table") return "table";
 if ($lc_raw_intent=="wait") return "wait";
@@ -437,22 +440,33 @@ return "{techo('".$raw_intent."');".beg_tx($params).
 	"save_text('',".$twb.".fetchText(tx('" . $params . "')).trim());".end_tx($params);}
 
 function dump_intent($raw_intent) {
-$raw_intent = str_replace("'","\"",$raw_intent); // avoid breaking echo below when single quote is used
+$safe_intent = str_replace("'","\"",$raw_intent); // avoid breaking echo below when single quote is used
 $params = trim(substr($raw_intent." ",1+strpos($raw_intent." "," ")));
 $param1 = trim(substr($params,0,strpos($params," to "))); $param2 = trim(substr($params,4+strpos($params," to ")));
 if ($params == "") echo "ERROR - " . current_line() . " variable missing for " . $raw_intent . "\n"; 
 else if (strpos($params," to ")!==false)
-return "{techo('".$raw_intent."');\nsave_text('".abs_file($param2)."',".add_concat($param1).");}".end_fi()."\n";
-else return "{techo('".$raw_intent."');\nsave_text(''," . add_concat($params) . ");}".end_fi()."\n";}
+return "{techo('".$safe_intent."');\nsave_text('".abs_file($param2)."',".add_concat($param1).");}".end_fi()."\n";
+else return "{techo('".$safe_intent."');\nsave_text(''," . add_concat($params) . ");}".end_fi()."\n";}
 
 function write_intent($raw_intent) {
-$raw_intent = str_replace("'","\"",$raw_intent); // avoid breaking echo below when single quote is used
+$safe_intent = str_replace("'","\"",$raw_intent); // avoid breaking echo below when single quote is used
 $params = trim(substr($raw_intent." ",1+strpos($raw_intent." "," ")));
 $param1 = trim(substr($params,0,strpos($params," to "))); $param2 = trim(substr($params,4+strpos($params," to ")));
 if ($params == "") echo "ERROR - " . current_line() . " variable missing for " . $raw_intent . "\n";
 else if (strpos($params," to ")!==false)
-return "{techo('".$raw_intent."');\nappend_text('".abs_file($param2)."',".add_concat($param1).");}".end_fi()."\n";
-else return "{techo('".$raw_intent."');\nappend_text(''," . add_concat($params) . ");}".end_fi()."\n";}
+return "{techo('".$safe_intent."');\nappend_text('".abs_file($param2)."',".add_concat($param1).");}".end_fi()."\n";
+else return "{techo('".$safe_intent."');\nappend_text(''," . add_concat($params) . ");}".end_fi()."\n";}
+
+function load_intent($raw_intent) {
+$safe_intent = str_replace("'","\"",$raw_intent); // avoid breaking echo below when single quote is used
+$params = trim(substr($raw_intent." ",1+strpos($raw_intent." "," ")));
+$param1 = trim(substr($params,0,strpos($params," to "))); $param2 = trim(substr($params,4+strpos($params," to ")));
+if ($params == "") echo "ERROR - " . current_line() . " filename missing for " . $raw_intent . "\n";
+else if (strpos($params," to ")!==false)
+return "{techo('".$safe_intent."');\nvar fs = require('fs'); ".$param2." = '';\n".
+	"if (fs.exists('".abs_file($param1)."'))\n".$param2." = fs.read('".abs_file($param1)."').trim();\n".
+	"else this.echo('ERROR - cannot find file ".$param1."').exit();}".end_fi()."\n";
+else echo "ERROR - " . current_line() . " variable missing for " . $raw_intent . "\n";}
 
 function snap_intent($raw_intent) {$twb = $GLOBALS['tagui_web_browser'];
 $params = trim(substr($raw_intent." ",1+strpos($raw_intent." "," ")));
