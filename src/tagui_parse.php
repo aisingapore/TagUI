@@ -440,7 +440,7 @@ return "{techo('".$raw_intent."');".beg_tx($params).
 	"save_text('',".$twb.".fetchText(tx('" . $params . "')).trim());".end_tx($params);}
 
 function dump_intent($raw_intent) {
-$safe_intent = str_replace("'","\"",$raw_intent); // avoid breaking echo below when single quote is used
+$safe_intent = str_replace("'","\'",$raw_intent); // avoid breaking echo below when single quote is used
 $params = trim(substr($raw_intent." ",1+strpos($raw_intent." "," ")));
 $param1 = trim(substr($params,0,strpos($params," to "))); $param2 = trim(substr($params,4+strpos($params," to ")));
 if ($params == "") echo "ERROR - " . current_line() . " variable missing for " . $raw_intent . "\n"; 
@@ -449,7 +449,7 @@ return "{techo('".$safe_intent."');\nsave_text('".abs_file($param2)."',".add_con
 else return "{techo('".$safe_intent."');\nsave_text(''," . add_concat($params) . ");}".end_fi()."\n";}
 
 function write_intent($raw_intent) {
-$safe_intent = str_replace("'","\"",$raw_intent); // avoid breaking echo below when single quote is used
+$safe_intent = str_replace("'","\'",$raw_intent); // avoid breaking echo below when single quote is used
 $params = trim(substr($raw_intent." ",1+strpos($raw_intent." "," ")));
 $param1 = trim(substr($params,0,strpos($params," to "))); $param2 = trim(substr($params,4+strpos($params," to ")));
 if ($params == "") echo "ERROR - " . current_line() . " variable missing for " . $raw_intent . "\n";
@@ -458,7 +458,7 @@ return "{techo('".$safe_intent."');\nappend_text('".abs_file($param2)."',".add_c
 else return "{techo('".$safe_intent."');\nappend_text(''," . add_concat($params) . ");}".end_fi()."\n";}
 
 function load_intent($raw_intent) {
-$safe_intent = str_replace("'","\"",$raw_intent); // avoid breaking echo below when single quote is used
+$safe_intent = str_replace("'","\'",$raw_intent); // avoid breaking echo below when single quote is used
 $params = trim(substr($raw_intent." ",1+strpos($raw_intent." "," ")));
 $param1 = trim(substr($params,0,strpos($params," to "))); $param2 = trim(substr($params,4+strpos($params," to ")));
 if ($params == "") echo "ERROR - " . current_line() . " filename missing for " . $raw_intent . "\n";

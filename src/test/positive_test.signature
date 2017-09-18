@@ -1426,36 +1426,36 @@ this.echo(variable+" - some text - "+variable+" - some text "+"some text - "+var
 // test dump
 {techo('dump "some text - " + variable');
 save_text('',"some text - "+variable);}
-{techo('dump "some text - " + variable');
+{techo('dump \'some text - \' + variable');
 save_text('','some text - '+variable);}
 {techo('dump "some text - " + variable to filename.txt');
 save_text('/full_path/filename.txt',"some text - "+variable);}
-{techo('dump "some text - " + variable to filename.txt');
+{techo('dump \'some text - \' + variable to filename.txt');
 save_text('/full_path/filename.txt','some text - '+variable);}
 {techo('dump "some text - " + variable to /tmp/filename.txt');
 save_text('/tmp/filename.txt',"some text - "+variable);}
-{techo('dump "some text - " + variable to /tmp/filename.txt');
+{techo('dump \'some text - \' + variable to /tmp/filename.txt');
 save_text('/tmp/filename.txt','some text - '+variable);}
 {techo('dump "some text - " variable');
 save_text('',"some text - "+variable);}
-{techo('dump "some text - " variable');
+{techo('dump \'some text - \' variable');
 save_text('','some text - '+variable);}
 {techo('dump "some text - " variable to filename.txt');
 save_text('/full_path/filename.txt',"some text - "+variable);}
-{techo('dump "some text - " variable to filename.txt');
+{techo('dump \'some text - \' variable to filename.txt');
 save_text('/full_path/filename.txt','some text - '+variable);}
 {techo('dump "some text - " variable to /tmp/filename.txt');
 save_text('/tmp/filename.txt',"some text - "+variable);}
-{techo('dump "some text - " variable to /tmp/filename.txt');
+{techo('dump \'some text - \' variable to /tmp/filename.txt');
 save_text('/tmp/filename.txt','some text - '+variable);}
 // test write
-{techo('write "abc"');
+{techo('write \'abc\'');
 append_text('','abc');}
-{techo('write "efg"');
+{techo('write \'efg\'');
 append_text('','efg');}
-{techo('write "ghi" to filename.txt');
+{techo('write \'ghi\' to filename.txt');
 append_text('/full_path/filename.txt','ghi');}
-{techo('write "ijk" to filename.txt');
+{techo('write \'ijk\' to filename.txt');
 append_text('/full_path/filename.txt','ijk');}
 // test snap
 {techo('snap element');
