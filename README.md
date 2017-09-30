@@ -25,7 +25,7 @@ The goal of web automation is to reproduce cognitive interactions that you have 
 This is a full-feature and free open-source tool, so there's nothing to upgrade to or any paid subscription. To feedback suggestions or bugs, [raise an issue](https://github.com/tebelorg/TagUI/issues) or email ken@tebel.org. Originally developed by a test automation engineer to avoid writing chunks of code when automating web interactions.
 
 ### HOW IT WORKS
-TagUI converts your intentions in simple natural language into lines of working JavaScript code that perform web automation. Under the hood, it uses CasperJS, PhantomJS & SlimerJS. As an example, TagUI will instantly convert the automation flow below into 100+ lines of JavaScript code and automatically perform the steps to download a report. This makes it easy for rapid prototyping, deployment and maintenance of web automation.
+TagUI converts your intentions in simple natural language into lines of working JavaScript code that perform web automation. Under the hood, it uses CasperJS, PhantomJS & SlimerJS. For example, TagUI will instantly convert the automation flow below into 100+ lines of JavaScript code and automatically perform the steps to download a report. This makes it easy for rapid prototyping, deployment and maintenance of web automation.
 
 ```
 https://www.typeform.com
@@ -58,7 +58,7 @@ Package|[unzip and run](https://raw.githubusercontent.com/tebelorg/Tump/master/T
 Optional - configure web browser settings in tagui_config.txt, such as browser resolution, step timeout of 10s etc
 
 ### MANUAL INSTALLATION
-If you prefer to download dependencies manually from respective websites
+Step-by-step setup if you prefer to download dependencies manually from respective websites
 
 1. PhantomJS (headless scriptable web browser) - http://phantomjs.org
 2. CasperJS (navigation/testing for PhantomJS) - http://casperjs.org
@@ -118,7 +118,7 @@ TagUI scripts are already in natural-language-like syntax to convert to JavaScri
 
 The commands erina (macOS/Linux) and erina.cmd (Windows) can be renamed to some other name you like. The commands can be set up in the same way as the tagui / tagui.cmd above to be accessible from any folder. The command basically interprets this general syntax `erina single-word-action fillers options/parameters fillers single-or-multi-word-context` to call run the corresponding automation flow `action_context` with `options/parameters`.
 
-Also, adding `using chrome` / `using headless` / `using firefox` at the end will let it run using the respective browsers. The default location where automation flows are searched for is in tagui/flows folder and can be changed in tagui_helper.php. Filler words are automatically ignored as they don't convey important information ([more info](https://github.com/tebelorg/TagUI/issues/44#issuecomment-321108786)).
+Also, adding `using chrome` / `using headless` / `using firefox` at the end will let it run using the respective browsers. The default location where automation flows are searched for is in tagui/flows folder and can be changed in tagui_helper.php. Filler words (is, are, was, were, my, me) are ignored as they don't convey important information ([more info](https://github.com/tebelorg/TagUI/issues/44#issuecomment-321108786)).
 
 ### FLOW SAMPLES
 Following automation flow samples ([tagui/src/samples folder](https://github.com/tebelorg/TagUI/tree/master/src/samples)) are included with TagUI
@@ -144,6 +144,7 @@ Flow Sample |Purpose
 ### STEPS DESCRIPTION
 - TagUI auto-waits for a webpage element to appear and interacts with it as soon as it appears
 - Element identifier can be auto-recorded using TagUI Chrome extension, or [found from web browser](https://help.surveygizmo.com/help/how-to-find-element-ids-to-use-with-javascript)
+- Identifiers help to pinpoint which webpage elements you want to interact with ([examples in flow samples](https://github.com/tebelorg/TagUI#flow-samples))
 - TagUI auto-selects provided identifier in this order - xpath, css, id, name, class, title, aria-label, text(), href
 
 Step|Parameters (separator in bold)|Purpose
@@ -178,10 +179,11 @@ timeout|time in seconds before step errors out|change auto-wait timeout
 variable_name| = value (for text, put in quotes, use + to concat)|define variable variable_name
 // (on new line)|user comments (ignored during execution)|add user comments
 
-Tip - to use variables where text is expected, '+variable+' can be used. as default execution context is local, to run javascript on webpage dom (eg document.querySelector) use dom step. xpath is an expressive way to identify web elements. if you know xpath and using xpath for element identifier, use double quotes for text //\*[@title="Login"]
+Tip - to use variables where text is expected, '+variable+' can be used. as default execution context is local, to run javascript on webpage dom (eg document.querySelector) use dom step. xpath is an expressive way to identify web elements. if you know xpath and use xpath for element identifier, use double quotes for text //\*[@title="Login"]
 
 ### CONDITIONS EXAMPLES
 - Conditions can be expressed in natural language (optional brackets) or [JavaScript](https://www.w3schools.com/js/)
+- Conditions help in decision-making and taking different actions base on run-time context
 - Write text in quotation marks (either " or ' works) to differentiate text from variable names
 - { and } block is required after for / while, auto-wait disables in while loop (will hang CasperJS)
 
@@ -223,7 +225,7 @@ type email|type \`email\` as user@gmail.com
 - TagUI loops through each column to automate using values from different datasets
 - Eg, echo "TESTCASE - \`testname\`" in your flow shows TESTCASE - Trade USDSGD
 - Data-centric approach with rows representing data fields (usually row = test case)
-- To auto-transpose conventional datatable, save as flow filename plus \_transpose.csv
+- To auto-transpose a conventional datatable, save csv as flow\_filename\_transpose.csv
 
 TEST TRADES|TEST #1|TEST #2|TEST #3
 :----------|:------|:------|:------
