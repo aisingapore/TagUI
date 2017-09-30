@@ -13,8 +13,6 @@
 - intelligent XPath/CSS element selector
 - visual automation of website and desktop
 - live mode to try steps or code in real-time
-- option to auto-upload run results online
-- baseline option to capture flow benchmark
 - run by schedule, command line, API URL
 - command line assistant in natural language
 - advanced outgoing API calls to webservices
@@ -33,9 +31,6 @@ click login
 type username as user@gmail.com
 type password as 12345678
 click btnlogin
-hover Test Event
-click action results tooltip
-click section_results
 download https://admin.typeform.com/form/2592751/analyze/csv to report.csv
 ```
 
@@ -147,8 +142,8 @@ Flow Sample |Purpose
 - Identifiers help to pinpoint which webpage elements you want to interact with ([examples in flow samples](https://github.com/tebelorg/TagUI#flow-samples))
 - TagUI auto-selects provided identifier in this order - xpath, css, id, name, class, title, aria-label, text(), href
 
-Step|Parameters (separator in bold)|Purpose
-:---|:-----------------------------|:------
+Basic Step|Parameters (separator in bold)|Purpose
+:---------|:-----------------------------|:------
 http(s)://|just enter full url of webpage ('+variable+' for variable)|go to specified webpage
 tap / click|element to click|click on an element
 hover / move|element to hover|move cursor to element
@@ -162,13 +157,16 @@ dump|text and variables ***to*** optional filename|save text/variables to file
 write|text and variables ***to*** optional filename|append text/variables to file
 snap|element (page = webpage) ***to*** optional filename|save screenshot to file
 snap (pdf)|page ***to*** filename.pdf (headless Chrome / PhantomJS)|save webpage to basic pdf
-table|element (non-CSS selector) ***to*** optional filename.csv|save basic html table to csv
-upload|element (CSS selector only) ***as*** filename to upload|upload file to website
-download|url to download ***to*** filename to save|download from url to file
-receive|url keyword to watch ***to*** filename to save|receive resource to file
+table|element (XPath selector only) ***to*** optional filename.csv|save basic html table to csv
+
+Pro Step|Parameters (separator in bold)|Purpose
+:-------|:-----------------------------|:------
 wait|optional time in seconds (default is 5 seconds)|explicitly wait for some time
 live|try steps or code interactively in Chrome / PhantomJS|enter live mode ([Firefox not yet](https://github.com/laurentj/slimerjs/issues/639))
 check|condition **&#124;** text if true **&#124;** text if false (text in quotes)|check condition and print result
+upload|element (CSS selector only) ***as*** filename to upload|upload file to website
+download|url to download ***to*** filename to save|download from url to file
+receive|url keyword to watch ***to*** filename to save|receive resource to file
 frame|frame name **&#124;** subframe name if any|next step or block in frame/subframe
 popup|url keyword of popup window to look for|next step or block in popup window
 { and }|use { to start block and } to end block (on new line)|define block of steps and code
@@ -277,7 +275,9 @@ Like chrome-remote-interface, TagUI communicates with Chrome through [Chrome Dev
 ### TESTING
 The step check allows simple testing of conditions. For professional test automation, CasperJS comes with a tester module for unit and functional testing purpose. To use advanced testing features, run TagUI with the test option. Note that CasperJS is not yet [supporting Chrome](https://github.com/casperjs/casperjs/issues/1825), below won't work when chrome or headless option is used.
 
-CasperJS test scripts are inherently different in structure and syntax from its usual automation scripts. With the test option, TagUI automatically sets up your automation flow to work as a test script. CasperJS will output a XUnit XML file, which is compatible with continuous integration tools such as Jenkins. TagUI allows you to reuse the same flow for testing or automation by running it with or without the test option. Below are examples of CasperJS test assertions written in JavaScript that can be used within your automation flow.
+CasperJS test scripts are inherently different in structure and syntax from its usual automation scripts. With the test option, TagUI automatically sets up your automation flow to work as a test script. CasperJS will output a XUnit XML file, which is compatible with continuous integration tools such as Jenkins.
+
+TagUI allows you to reuse the same flow for testing or automation by running it with or without the test option. Below are examples of CasperJS test assertions written in JavaScript that can be used within your automation flow.
 ```js
 test.assertTextExists('ABOUT','Check for ABOUT text');
 test.assertSelectorHasText(tx('header'), 'Interface automation','Check for phrase in header element');
