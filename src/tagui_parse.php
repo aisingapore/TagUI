@@ -583,7 +583,9 @@ $last_delimiter_pos = strrpos($GLOBALS['for_loop_tracker'],"|");
 $for_loop_variable_name = substr($GLOBALS['for_loop_tracker'],$last_delimiter_pos+1);
 $for_loop_header = "\n// start of IIFE pattern\n(function (" . $for_loop_variable_name . ") {";
 $for_loop_footer = "})(" . $for_loop_variable_name . "); // end of IIFE pattern\n});\n\ncasper.then(function() {";
-if (substr($logic,0,1) == "}") $GLOBALS['for_loop_tracker']=substr($GLOBALS['for_loop_tracker'],0,$last_delimiter_pos);}
+// pop for_loop_tracker only if for loop count tallies with the code block count (to support if popup frame in for loop)
+if ((substr($logic,0,1) == "}") and (substr_count($GLOBALS['for_loop_tracker'],'|')==($GLOBALS['inside_code_block']+1)))
+$GLOBALS['for_loop_tracker']=substr($GLOBALS['for_loop_tracker'],0,$last_delimiter_pos);}
 if (substr($logic,0,1) == "{")
 $logic = $for_loop_header."\n// start of code block\n{casper.then(function() {\n".substr($logic,1);
 else if (substr($logic,0,1) == "}") $logic = "})} // end of code block\n".$for_loop_footer.substr($logic,1);}
@@ -649,7 +651,7 @@ echo "ERROR - " . current_line() . " put { to next line - " . $raw_logic . "\n";
 
 // add to tracker the for loop variable name, to implement IIFE pattern if step/code blocks are used
 if (substr($logic,0,4)=="for ") { // get the variable name used in the for loop and append into tracker
-$GLOBALS['for_loop_tracker'] .= "|" . (substr($logic,strpos($logic,"(")+1,strpos($logic,"=")-strpos($logic,"(")-1));}
+$GLOBALS['for_loop_tracker'] .= "|" . trim(substr($logic,strpos($logic,"(")+1,strpos($logic,"=")-strpos($logic,"(")-1));}
 
 // add opening and closing brackets twice to handle no brackets, and, or cases
 if (substr($logic,0,3)=="if ") {$logic = "if ((" . trim(substr($logic,3)) . "))";
