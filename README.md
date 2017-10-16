@@ -41,7 +41,7 @@ If you know JavaScript and want to be more expressive, you can even use JavaScri
 There is automatic waiting for web elements to appear + error-checking + nesting of JavaScript code blocks. Not forgetting the option to run automation flows hosted online or auto-upload run results online for sharing. TagUI also supports visual automation of website and desktop through built-in integration with Sikuli. Instead of using element identifiers, images can be used to identify user interface elements to interact with.
 
 # Set Up
-TagUI is in v2.4 and runs on macOS, Linux, Windows ([link to release notes](https://github.com/tebelorg/TagUI/releases))
+TagUI is in ***process of updating to v2.5*** and runs on macOS, Linux, Windows ([link to release notes](https://github.com/tebelorg/TagUI/releases))
 
 ### PACKAGED INSTALLATION
 Easiest way to use TagUI - no setup is needed, all dependencies are packaged in
@@ -148,16 +148,19 @@ http(s)://|just enter full url of webpage ('+variable+' for variable)|go to spec
 tap / click|element to click|click on an element
 hover / move|element to hover|move cursor to element
 type / enter|element ***as*** text ([enter] = enter, [clear] = clear field)|enter element as text
-select / choose|element to select ***as*** option value to select|choose dropdown option
+select / choose|element to select ***as*** option value ([clear] = clear selection)|choose dropdown option
 read / fetch|element to read (page = webpage) ***to*** variable name|fetch element text to variable
 show / print|element to read (page = webpage, ie raw html) |print element text to output
 save|element (page = webpage) ***to*** optional filename|save element text to file
+load|filename ***to*** variable name|load file content to variable
 echo|text (in quotation marks) and variables|print text/variables to output
 dump|text and variables ***to*** optional filename|save text/variables to file
 write|text and variables ***to*** optional filename|append text/variables to file
 snap|element (page = webpage) ***to*** optional filename|save screenshot to file
 snap (pdf)|page ***to*** filename.pdf (headless Chrome / PhantomJS)|save webpage to basic pdf
 table|element (XPath selector only) ***to*** optional filename.csv|save basic html table to csv
+
+Tip - to use variables where text is expected, '+variable+' can be used. xpath is an expressive way to identify web elements. if you know xpath and use xpath for element identifier, use double quotes for text //\*[@title="Login"]
 
 Pro Step|Parameters (separator in bold)|Purpose
 :-------|:-----------------------------|:------
@@ -177,7 +180,7 @@ timeout|time in seconds before step errors out|change auto-wait timeout
 variable_name| = value (for text, put in quotes, use + to concat)|define variable variable_name
 // (on new line)|user comments (ignored during execution)|add user comments
 
-Tip - to use variables where text is expected, '+variable+' can be used. as default execution context is local, to run javascript on webpage dom (eg document.querySelector) use dom step. xpath is an expressive way to identify web elements. if you know xpath and use xpath for element identifier, use double quotes for text //\*[@title="Login"]
+Tip - as default execution context is local, to run javascript on webpage dom (eg document.querySelector) use dom step. set dom_json variable to pass a variable for use in dom step. or dom_json = {tmp_number: phone, tmp_text: name} to pass multiple variables for use in dom step (dom_json.tmp_number and dom_json.tmp_text)
 
 ### CONDITIONS EXAMPLES
 - Conditions can be expressed in natural language (optional brackets) or [JavaScript](https://www.w3schools.com/js/)
