@@ -510,8 +510,10 @@ $param3 = trim(substr($param2,1+strpos($param2,"|"))); $param2 = trim(substr($pa
 $param1 = str_replace(" JAVASCRIPT_OR ","||",$param1); // to restore back "||" that were replaced
 $param2 = str_replace(" JAVASCRIPT_OR ","||",$param2); $param3 = str_replace(" JAVASCRIPT_OR ","||",$param3);
 if (substr_count($params,"|")!=2) 
-echo "ERROR - " . current_line() . " if/true/false missing for " . $raw_intent . "\n"; else
-return "{".parse_condition("if ".$param1)."\nthis.echo(".$param2.");\nelse this.echo(".$param3.");}".end_fi()."\n";}
+echo "ERROR - " . current_line() . " if/true/false missing for " . $raw_intent . "\n";
+else if (getenv('tagui_test_mode') == 'true') return "{".parse_condition("if ".$param1).
+"\ntest.assert(true,".$param2.");\nelse test.assert(false,".$param3.");}".end_fi()."\n";
+else return "{".parse_condition("if ".$param1)."\nthis.echo(".$param2.");\nelse this.echo(".$param3.");}".end_fi()."\n";}
 
 function test_intent($raw_intent) {
 echo "ERROR - " . current_line() . " use CasperJS tester module to professionally " . $raw_intent . "\n";
