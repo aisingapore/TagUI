@@ -108,6 +108,21 @@ return false;}
 // friendlier name to use check_tx() in if condition in flow
 function present(element_locator) {if (!element_locator) return false; else return check_tx(element_locator);}
 
+// friendlier name to count elements using countElements()
+function count(element_locator) {if (!element_locator) return 0;
+var element_located = tx(element_locator); var element_count = casper.countElements(element_located);
+// if tx() returns x('/html') means that the element is not found, so set element_count to 0
+if (element_located.toString() == x('/html').toString()) element_count = 0; return element_count;}
+
+// friendlier name to get web page title using getTitle()
+function title() {return casper.getTitle();}
+
+// friendlier name to get web page url using getCurrentUrl() 
+function url() {return casper.getCurrentUrl();}
+
+// friendlier name to get web page text content using evaluate()
+function text() {return casper.evaluate(function() {return document.body.innerText || document.body.textContent;});}
+
 function sleep(ms) { // helper to add delay during loops
 var time_now = new Date().getTime(); var time_end = time_now + ms;
 while(time_now < time_end) {time_now = new Date().getTime();}}
@@ -164,6 +179,15 @@ var ws_message = chrome_step('Runtime.evaluate',{expression: 'document.evaluate(
 else var ws_message = chrome_step('Runtime.evaluate',{expression: chrome_context+'.querySelectorAll(\''+selector+'\').length'});
 try {var ws_json = JSON.parse(ws_message); if (ws_json.result.result.value > 0) return true; else return false;}
 catch(e) {return false;}};
+
+chrome.countElements = function(selector) { // same as chrome.exists, except element count is returned
+if ((selector.toString().length >= 16) && (selector.toString().substr(0,16) == 'xpath selector: '))
+{if (selector.toString().length == 16) selector = ''; else selector = selector.toString().substring(16);
+var ws_message = chrome_step('Runtime.evaluate',{expression: 'document.evaluate(\''+selector+'\','+chrome_context+',null,XPathResult.ORDERED_NODE_SNAPSHOT_TYPE,null).snapshotLength'});}
+else var ws_message = chrome_step('Runtime.evaluate',{expression: chrome_context+'.querySelectorAll(\''+selector+'\').length'});
+try {var ws_json = JSON.parse(ws_message); if (ws_json.result.result.value > 0)
+return ws_json.result.result.value; else return 0;}
+catch(e) {return 0;}};
 
 chrome.click = function(selector) { // click by sending click event instead of mouse down/up/click, then focus on element
 if ((selector.toString().length >= 16) && (selector.toString().substr(0,16) == 'xpath selector: '))
@@ -722,6 +746,7 @@ source_code = source_code.replace(/casper\.click/g,'chrome.click').replace(/this
 source_code = source_code.replace(/casper\.mouse/g,'chrome.mouse').replace(/this\.mouse/g,'chrome.mouse');
 source_code = source_code.replace(/casper\.sendKeys/g,'chrome.sendKeys').replace(/this\.sendKeys/g,'chrome.sendKeys');
 source_code = source_code.replace(/casper\.selectOptionByValue/g,'chrome.selectOptionByValue').replace(/this\.selectOptionByValue/g,'chrome.selectOptionByValue');
+source_code = source_code.replace(/casper\.countElements/g,'chrome.countElements').replace(/this\.countElements/g,'chrome.countElements');
 source_code = source_code.replace(/casper\.fetchText/g,'chrome.fetchText').replace(/this\.fetchText/g,'chrome.fetchText');
 source_code = source_code.replace(/casper\.capture/g,'chrome.capture').replace(/this\.capture/g,'chrome.capture');
 source_code = source_code.replace(/casper\.captureSelector/g,'chrome.captureSelector').replace(/this\.captureSelector/g,'chrome.captureSelector');
@@ -757,5 +782,13 @@ Array.prototype.forEach.call(select.children, function(opt, i) { // loop through
 if (!found && opt.value.indexOf(valueToMatch) !== -1) {select.selectedIndex = i; found = true;}});
 var evt = document.createEvent("UIEvents"); // dispatch change event in case there is validation
 evt.initUIEvent("change", true, true); select.dispatchEvent(evt);}, selector, valueToMatch);};
+
+// custom function to return element count
+casper.countElements = function(selector) { // different handling for xpath and css to support both
+if ((selector.toString().length >= 16) && (selector.toString().substr(0,16) == 'xpath selector: '))
+{if (selector.toString().length == 16) selector = ''; else selector = selector.toString().substring(16);
+var count_result = casper.evaluate(function(selector) {return document.evaluate(selector,document,null,XPathResult.ORDERED_NODE_SNAPSHOT_TYPE,null).snapshotLength;},selector);}
+else var count_result = casper.evaluate(function(selector) {return document.querySelectorAll(selector).length;},selector);
+try {if (count_result > 0) return count_result; else return 0;} catch(e) {return 0;}};
 
 // flow path for save_text and snap_image

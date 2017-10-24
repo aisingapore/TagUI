@@ -422,3 +422,26 @@ else
 {
 echo 'footer not found'
 }
+
+// test title function
+echo title() 
+if title() contains 'About'
+echo 'page title contains About'
+
+// test url function
+echo url()
+if url() contains 'org'
+echo 'page url contains org'
+
+// test text function
+echo text()
+if text() contains 'automation'
+echo 'page text contains automation'
+
+// test count function
+echo count('element')
+element_count = count('element')
+for n from 1 to element_count
+{
+echo n
+}

@@ -68,6 +68,9 @@ $script_content = str_replace("this.sendKeys","chrome.sendKeys",$script_content)
 // for selectOptionByValue check for '(' in order to only overwrite calls and not the custom defined function
 $script_content = str_replace("casper.selectOptionByValue(","chrome.selectOptionByValue(",$script_content); // select
 $script_content = str_replace("this.selectOptionByValue(","chrome.selectOptionByValue(",$script_content); // select
+// for countElements check for '(' in order to only overwrite calls and not the custom function casper.countElements()
+$script_content = str_replace("casper.countElements(","chrome.countElements(",$script_content); // count elements
+$script_content = str_replace("this.countElements(","chrome.countElements(",$script_content); // count elements
 $script_content = str_replace("casper.fetchText","chrome.fetchText",$script_content); // change fetchText method to chrome
 $script_content = str_replace("this.fetchText","chrome.fetchText",$script_content); // change this.fetchText call as well
 $script_content = str_replace("casper.capture","chrome.capture",$script_content); // change capture method to chrome
