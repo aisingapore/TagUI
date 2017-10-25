@@ -10,6 +10,9 @@ var p7 = casper.cli.raw.get(6); var p8 = casper.cli.raw.get(7); var p9 = casper.
 // save start time to measure execution time
 var automation_start_time = Date.now(); casper.echo('\nSTART - automation started - ' + Date().toLocaleString());
 
+// initialise time for timer() function
+var timer_start_time = Date.now();
+
 // initialise default global variables
 var quiet_mode = false; var save_text_count = 0; var snap_image_count = 0;
 
@@ -122,6 +125,9 @@ function url() {return casper.getCurrentUrl();}
 
 // friendlier name to get web page text content using evaluate()
 function text() {return casper.evaluate(function() {return document.body.innerText || document.body.textContent;});}
+
+function timer() {// return time elapsed in seconds between calls
+var time_elapsed = ((Date.now()-timer_start_time)/1000); timer_start_time = Date.now(); return time_elapsed;}
 
 function sleep(ms) { // helper to add delay during loops
 var time_now = new Date().getTime(); var time_end = time_now + ms;

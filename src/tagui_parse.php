@@ -644,6 +644,8 @@ $logic = str_replace(" and ",") && (",$logic); $logic = str_replace(" or ",") ||
 
 // special handling to manage for loop in natural language 
 if ((substr($logic,0,4)=="for ") and (strpos($logic,";")==false)) { // no ; means in natural language
+if (strpos($raw_logic,"count(")!==false)
+echo "ERROR - " . current_line() . " assign count() to variable before using - " . $raw_logic . "\n";
 $logic = str_replace("(","",$logic); $logic = str_replace(")","",$logic); // remove brackets if present
 $logic = str_replace("   "," ",$logic); $logic = str_replace("  "," ",$logic); // remove typo extra spaces
 $token = explode(" ",$logic); // split into tokens for loop in natural language, eg - for cupcake from 1 to 4
