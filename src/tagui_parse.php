@@ -71,6 +71,9 @@ $script_content = str_replace("this.selectOptionByValue(","chrome.selectOptionBy
 // for countElements check for '(' in order to only overwrite calls and not the custom function casper.countElements()
 $script_content = str_replace("casper.countElements(","chrome.countElements(",$script_content); // count elements
 $script_content = str_replace("this.countElements(","chrome.countElements(",$script_content); // count elements
+// for elementVisible check for '(' in order to only overwrite calls and not the custom function casper.elementVisible()
+$script_content = str_replace("casper.elementVisible(","chrome.elementVisible(",$script_content); // check element visible
+$script_content = str_replace("this.elementVisible(","chrome.elementVisible(",$script_content); // check element visible
 $script_content = str_replace("casper.fetchText","chrome.fetchText",$script_content); // change fetchText method to chrome
 $script_content = str_replace("this.fetchText","chrome.fetchText",$script_content); // change this.fetchText call as well
 $script_content = str_replace("casper.capture","chrome.capture",$script_content); // change capture method to chrome

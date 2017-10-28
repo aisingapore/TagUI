@@ -423,6 +423,16 @@ else
 echo 'footer not found'
 }
 
+// test visible function
+if visible('footer')
+{
+echo 'footer is visible'
+}
+else
+{
+echo 'footer not visible'
+}
+
 // test title function
 echo title() 
 if title() contains 'About'

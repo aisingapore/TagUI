@@ -111,6 +111,12 @@ return false;}
 // friendlier name to use check_tx() in if condition in flow
 function present(element_locator) {if (!element_locator) return false; else return check_tx(element_locator);}
 
+// friendlier name to check element visibility using elementVisible()
+function visible(element_locator) {if (!element_locator) return false;
+var element_located = tx(element_locator); var element_visible = casper.elementVisible(element_located);
+// if tx() returns x('/html') means that the element is not found, so set element_visible to false
+if (element_located.toString() == x('/html').toString()) element_visible = false; return element_visible;}
+
 // friendlier name to count elements using countElements()
 function count(element_locator) {if (!element_locator) return 0;
 var element_located = tx(element_locator); var element_count = casper.countElements(element_located);
@@ -184,6 +190,15 @@ if ((selector.toString().length >= 16) && (selector.toString().substr(0,16) == '
 var ws_message = chrome_step('Runtime.evaluate',{expression: 'document.evaluate(\''+selector+'\','+chrome_context+',null,XPathResult.ORDERED_NODE_SNAPSHOT_TYPE,null).snapshotLength'});}
 else var ws_message = chrome_step('Runtime.evaluate',{expression: chrome_context+'.querySelectorAll(\''+selector+'\').length'});
 try {var ws_json = JSON.parse(ws_message); if (ws_json.result.result.value > 0) return true; else return false;}
+catch(e) {return false;}};
+
+chrome.elementVisible = function(selector) { // same as chrome.exists, except for checking visibility
+if ((selector.toString().length >= 16) && (selector.toString().substr(0,16) == 'xpath selector: '))
+{if (selector.toString().length == 16) selector = ''; else selector = selector.toString().substring(16);
+var ws_message = chrome_step('Runtime.evaluate',{expression: 'var e = document.evaluate(\''+selector+'\','+chrome_context+',null,XPathResult.ORDERED_NODE_SNAPSHOT_TYPE,null).snapshotItem(0); var visible = false; if (!e) visible = false; else {var style = window.getComputedStyle(e); visible = style && style.display !== \'none\' && style.visibility !== \'hidden\' && style.opacity !== \'0\';}; visible'});}
+else var ws_message = chrome_step('Runtime.evaluate',{expression: 'var e = '+chrome_context+'.querySelector(\''+selector+'\'); var visible = false; if (!e) visible = false; else {var style = window.getComputedStyle(e); visible = style && style.display !== \'none\' && style.visibility !== \'hidden\' && style.opacity !== \'0\';}; visible'});
+try {var ws_json = JSON.parse(ws_message); if (ws_json.result.result.value == true)
+return ws_json.result.result.value; else return false;}
 catch(e) {return false;}};
 
 chrome.countElements = function(selector) { // same as chrome.exists, except element count is returned
@@ -753,6 +768,7 @@ source_code = source_code.replace(/casper\.mouse/g,'chrome.mouse').replace(/this
 source_code = source_code.replace(/casper\.sendKeys/g,'chrome.sendKeys').replace(/this\.sendKeys/g,'chrome.sendKeys');
 source_code = source_code.replace(/casper\.selectOptionByValue/g,'chrome.selectOptionByValue').replace(/this\.selectOptionByValue/g,'chrome.selectOptionByValue');
 source_code = source_code.replace(/casper\.countElements/g,'chrome.countElements').replace(/this\.countElements/g,'chrome.countElements');
+source_code = source_code.replace(/casper\.elementVisible/g,'chrome.elementVisible').replace(/this\.elementVisible/g,'chrome.elementVisible');
 source_code = source_code.replace(/casper\.fetchText/g,'chrome.fetchText').replace(/this\.fetchText/g,'chrome.fetchText');
 source_code = source_code.replace(/casper\.capture/g,'chrome.capture').replace(/this\.capture/g,'chrome.capture');
 source_code = source_code.replace(/casper\.captureSelector/g,'chrome.captureSelector').replace(/this\.captureSelector/g,'chrome.captureSelector');
@@ -789,12 +805,12 @@ if (!found && opt.value.indexOf(valueToMatch) !== -1) {select.selectedIndex = i;
 var evt = document.createEvent("UIEvents"); // dispatch change event in case there is validation
 evt.initUIEvent("change", true, true); select.dispatchEvent(evt);}, selector, valueToMatch);};
 
+// custom function to return element visibility
+casper.elementVisible = function(selector) {return casper.visible(selector);} // use casperjs to maximize compatibility
+
 // custom function to return element count
-casper.countElements = function(selector) { // different handling for xpath and css to support both
-if ((selector.toString().length >= 16) && (selector.toString().substr(0,16) == 'xpath selector: '))
-{if (selector.toString().length == 16) selector = ''; else selector = selector.toString().substring(16);
-var count_result = casper.evaluate(function(selector) {return document.evaluate(selector,document,null,XPathResult.ORDERED_NODE_SNAPSHOT_TYPE,null).snapshotLength;},selector);}
-else var count_result = casper.evaluate(function(selector) {return document.querySelectorAll(selector).length;},selector);
+casper.countElements = function(selector) { // use casperjs in-built function to maximize compatibility
+var count_result = casper.evaluate(function(selector) {return __utils__.findAll(selector).length;},selector);
 try {if (count_result > 0) return count_result; else return 0;} catch(e) {return 0;}};
 
 // flow path for save_text and snap_image
