@@ -197,7 +197,7 @@ while (chrome_handshake !== '[0] START'); // techo('[connected to chrome websock
 function chrome_step(method,params) {chrome_id++;
 if (chrome_id == 1) chrome_handshake(); // handshake on first call
 var chrome_intent = JSON.stringify({'id': chrome_id, 'method': method, 'params': params});
-if (chrome_targetid !== '') chrome_intent = JSON.stringify({'id': chrome_id, 'method': 'Target.sendMessageToTarget', 'params': {'targetId': chrome_targetid, 'message': chrome_intent}}); // send as message to target if context is popup
+if (chrome_targetid !== '') chrome_intent = JSON.stringify({'id': chrome_id, 'method': 'Target.sendMessageToTarget', 'params': {'sessionId': chrome_targetid, 'message': chrome_intent}}); // send as message to target if context is popup
 var fs = require('fs'); fs.write('tagui_chrome.in','['+chrome_id.toString()+'] '+chrome_intent,'w');
 var chrome_result = ''; do {sleep(100); chrome_result = fs.read('tagui_chrome.out').trim();}
 while (chrome_result.indexOf('['+chrome_id.toString()+'] ') == -1);
@@ -391,10 +391,12 @@ var found_targetid = ''; var chrome_targets = []; var ws_message = chrome_step('
 try {var ws_json = JSON.parse(ws_message); if (ws_json.result.targetInfos) chrome_targets = ws_json.result.targetInfos;
 else chrome_targets = [];} catch(e) {chrome_targets = [];} // following line scan through targets to find match
 chrome_targets.forEach(function(target) {if (target.url.search(popupInfo) !== -1) found_targetid = target.targetId;});
-if (found_targetid !== '') {var ws_message = chrome_step('Target.attachToTarget',{targetId: found_targetid}); try {var ws_json = JSON.parse(ws_message); if (ws_json.result.success !== true) found_targetid = '';} catch(e) {found_targetid = ''};}
+if (found_targetid !== '') {var ws_message = chrome_step('Target.attachToTarget',{targetId: found_targetid});
+try {var ws_json = JSON.parse(ws_message); if (ws_json.result.sessionId.indexOf(found_targetid) > -1)
+found_targetid = ws_json.result.sessionId; else found_targetid = '';} catch(e) {found_targetid = ''};}
 chrome_targetid = found_targetid;}); // set chrome_targetid only after attaching to found target successfully
 casper.then(then); casper.then(function _step() {if (chrome_targetid !== '') // detach from target after running then
-{var found_targetid = chrome_targetid; chrome_targetid = ''; chrome_step('Target.detachFromTarget',{targetId: found_targetid});}});};
+{var found_targetid = chrome_targetid; chrome_targetid = ''; chrome_step('Target.detachFromTarget',{sessionId: found_targetid});}});};
 
 chrome.getHTML = function() { // get raw html of current webpage
 var ws_message = chrome_step('Runtime.evaluate',{expression: 'document.documentElement.outerHTML'});
