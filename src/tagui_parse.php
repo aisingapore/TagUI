@@ -209,7 +209,7 @@ if (substr($lc_raw_intent,0,5)=="snap ") return "snap";
 if (substr($lc_raw_intent,0,6)=="table ") return "table";
 if (substr($lc_raw_intent,0,5)=="wait ") return "wait";
 if (substr($lc_raw_intent,0,5)=="live ") return "live";
-if (substr($lc_raw_intent,0,6)=="check ") return "check";
+if (substr($lc_raw_intent,0,6)=="check ") {$GLOBALS['test_automation']++; return "check";}
 if (substr($lc_raw_intent,0,5)=="test ") return "test";
 if (substr($lc_raw_intent,0,6)=="frame ") return "frame";
 if (substr($lc_raw_intent,0,6)=="popup ") return "popup";
@@ -237,7 +237,7 @@ if ($lc_raw_intent=="snap") return "snap";
 if ($lc_raw_intent=="table") return "table";
 if ($lc_raw_intent=="wait") return "wait";
 if ($lc_raw_intent=="live") return "live";
-if ($lc_raw_intent=="check") return "check";
+if ($lc_raw_intent=="check") {$GLOBALS['test_automation']++; return "check";}
 if ($lc_raw_intent=="test") return "test";
 if ($lc_raw_intent=="frame") return "frame";
 if ($lc_raw_intent=="popup") return "popup";
