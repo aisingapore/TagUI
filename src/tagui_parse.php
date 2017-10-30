@@ -122,6 +122,7 @@ if (getenv('tagui_test_mode') == 'true') {$script_content = file_get_contents($s
 $script_content = str_replace("casper.echo('\\nSTART - automation started - ","casper.echo('",$script_content); // date
 $script_content = str_replace("techo('FINISH - automation","dummy_echo('FINISH - test",$script_content); // silent
 $script_content = str_replace("this.echo(","test.comment(",$script_content); // change echo to test comment
+$script_content = str_replace("test.comment('ERROR","test.fail('ERROR",$script_content); // error comment to fail
 $script_content = str_replace("if (!quiet_mode) casper.echo(echo_string);",
 "if (!quiet_mode) casper.test.comment(echo_string);",$script_content); // change echo to test comment in techo
 $script_content = str_replace("\\n'","'",str_replace("'\\n","'",$script_content)); // compact test output
@@ -518,8 +519,8 @@ $param2 = str_replace(" JAVASCRIPT_OR ","||",$param2); $param3 = str_replace(" J
 if (substr_count($params,"|")!=2) 
 echo "ERROR - " . current_line() . " if/true/false missing for " . $raw_intent . "\n";
 else if (getenv('tagui_test_mode') == 'true') return "{".parse_condition("if ".$param1).
-"\ntest.assert(true,".$param2.");\nelse test.assert(false,".$param3.");}".end_fi()."\n";
-else return "{".parse_condition("if ".$param1)."\nthis.echo(".$param2.");\nelse this.echo(".$param3.");}".end_fi()."\n";}
+"\ntest.assert(true,".add_concat($param2).");\nelse test.assert(false,".add_concat($param3).");}".end_fi()."\n";
+else return "{".parse_condition("if ".$param1)."\nthis.echo(".add_concat($param2).");\nelse this.echo(".add_concat($param3).");}".end_fi()."\n";}
 
 function test_intent($raw_intent) {
 echo "ERROR - " . current_line() . " use CasperJS tester module to professionally " . $raw_intent . "\n";
