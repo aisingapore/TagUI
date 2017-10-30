@@ -207,7 +207,7 @@ URL to an online file)</String>
                 <TextColor>1.0 1.0 1.0</TextColor>
                 <Fill>0.314662 0.314653 0.314658</Fill>
             </Appearance>
-            <String>v2.5  </String>
+            <String>v2.6  </String>
             <Formatting>
                 <FormatRange Bold="Yes">0,6</FormatRange>
             </Formatting>
