@@ -23,7 +23,9 @@ The goal of web automation is to reproduce cognitive interactions that you have 
 This is a full-feature and free open-source tool, so there's nothing to upgrade to or any paid subscription. To feedback suggestions or bugs, [raise an issue](https://github.com/tebelorg/TagUI/issues) or email ken@tebel.org. Originally developed by a test automation engineer to avoid writing chunks of code when automating web interactions.
 
 ### HOW IT WORKS
-TagUI converts your intentions in simple natural language into lines of working JavaScript code that perform web automation. Under the hood, it uses Chrome DevTools Protocol, CasperJS, PhantomJS & SlimerJS. For example, TagUI will instantly convert the automation flow below into 100+ lines of JavaScript code and automatically perform the steps to download a report. No further backend coding or step definition is required. This makes it easy for rapid prototyping, deployment and maintenance of web automation, whether you are a developer or not.
+TagUI converts your intentions in simple natural language into lines of working JavaScript code that perform web automation. Under the hood, it uses Chrome DevTools Protocol, CasperJS, PhantomJS & SlimerJS.
+
+For example, TagUI will instantly convert the automation flow below into 100+ lines of JavaScript code and automatically perform the steps to download a report. No further backend coding or step definition is required. This makes it easy for rapid prototyping, deployment and maintenance of web automation, whether you are a developer or not.
 
 ```
 https://www.typeform.com
@@ -34,7 +36,7 @@ click btnlogin
 download https://admin.typeform.com/form/2592751/analyze/csv to report.csv
 ```
 
-The automation flow can be triggered from scheduling, command line (in natural language), API URL, email etc. Everything happens headlessly in the background without seeing any web browser, so that you can continue using the computer or server uninterrupted. Running on a visible web browser is also supported, using Chrome or Firefox browser (see chrome or firefox option below). API calls can be made with a single line to integrate with other apps.
+The automation flow can be triggered from scheduling, command line (in natural language), API URL, email etc. Everything happens headlessly in the background without seeing any web browser, so that you can continue using the computer or server uninterrupted. Running on a visible web browser is also supported, using Chrome or Firefox browser (see chrome or firefox option below). API calls can be made with a single line to integrate with other apps. Continuous integration with CI/CD tools is possible using CasperJS framework and TagUI's Chrome integration.
 
 If you know JavaScript and want to be more expressive, you can even use JavaScript directly in the flow. If not, you will still enjoy friendly but powerful features such as repositories to store your reusable objects, flexible datatables for batch automation, and a Chrome extension which creates automation flows by recording your actions. For rapid prototyping, there's also an interactive live mode for trying out TagUI steps or JavaScript code in real-time. TagUI has built-in integration with Chrome / headless Chrome directly, which also works in live mode.
 
@@ -206,7 +208,7 @@ less than or equal to / lesser than or equal to / lower than or equal to|<=
 and|&&
 or|&#124;&#124;
 
-Tip - use { and } step to define step/code blocks for powerful repetitive automation with for loop. conversion to CasperJS blocks syntax happens automatically. when using contain / equal, you can write with or without s behind. you can use if present('element') to check if the element exists, before doing the step on next line. other useful functions include visible('element'), count('element'), url(), title(), text(), timer(), which can be used in conditions and steps such as check or echo
+Tip - use { and } step to define step/code blocks for powerful repetitive automation with for loop. when using contain / equal, you can write with or without s behind. you can use if present('element') to check if the element exists, before doing the step on next line. other useful functions include visible('element'), count('element'), url(), title(), text(), timer(), which can be used in conditions and steps such as check or echo
 
 ### REPOSITORIES
 - Repositories help to make objects or steps reusable and improve readability
@@ -238,7 +240,7 @@ size|10000|1000|100000
 direction|BUY|SELL|BUY
 
 # Developers Reference
-TagUI is a young tool and it tries to do the task of automating web interactions very well (especially process automation). It's designed to make prototyping, deployment and maintenance of web automation easier by minimizing iteration time for each phase. If you are a Node.js developer, be sure to check out [Puppeteer project](https://github.com/GoogleChrome/puppeteer). It's developed by Google Chrome team and the synergy made possible by the tight integration will usher in a new era of browser automation.
+TagUI is a young tool and it tries to do the task of automating web interactions very well (especially process automation). It's designed to make prototyping, deployment and maintenance of web automation easier by minimizing iteration time for each phase. If you are a Node.js developer, be sure to check out [Puppeteer project](https://github.com/GoogleChrome/puppeteer). It's developed by Google Chrome team and the synergy made possible by the tight integration is ushering in a new era of browser automation.
 
 While TagUI can be used for test automation or data-scraping, there are other popular open-source tools which may be better fits for these goals. For test automation, there are very established open-source tools/frameworks with mature and supportive ecosystems. Be sure to check out what's current from resources such as this [test automation list](https://github.com/atinfo/awesome-test-automation). For data-scraping, there are various open-source projects just to [handle that very well](https://github.com/search?utf8=✓&q=topic%3Acrawler&type=Repositories).
 
@@ -276,19 +278,32 @@ In order to retain TagUI unzip and run functionality, the approach of launching 
 Like chrome-remote-interface, TagUI communicates with Chrome through [Chrome DevTools Protocol](https://chromedevtools.github.io/devtools-protocol/). The protocol is primarily designed for debugging the web browser instead of web automation, so many methods are still in experimental status. However, the API is stable enough for TagUI steps to work with Chrome. When chrome or headless option is used, TagUI replaces CasperJS methods it uses with custom methods to talk to Chrome instead of PhantomJS. When firefox option is used or by default, TagUI doesn't invoke custom methods and PHP process.
 
 ### TESTING
-The step check allows simple testing of conditions. For professional test automation, CasperJS comes with a tester module for unit and functional testing purpose. To use advanced testing features, run TagUI with the test option. Note that CasperJS is not yet [supporting Chrome](https://github.com/casperjs/casperjs/issues/1825), below won't work when chrome or headless option is used.
+The check step allows easy testing of conditions. When the test option is used, test assertions are automatically performed for check steps. This lets CasperJS framework output a XUnit XML file, which can be used for CI/CD integration with tools such as Jenkins. Below are examples of check steps, more examples in [sample flow 7_testing](https://github.com/tebelorg/TagUI/blob/master/src/samples/7_testing).
 
-CasperJS test scripts are inherently different in structure and syntax from its usual automation scripts. With the test option, TagUI automatically sets up your automation flow to work as a test script. CasperJS will output a XUnit XML file, which is compatible with continuous integration tools such as Jenkins.
+```
+// check whether the element search-buttons exists
+check present('search-buttons') | 'search button exists' | 'search button does not exist'
 
-TagUI allows you to reuse the same flow for testing or automation by running it with or without the test option. Below are examples of CasperJS test assertions written in JavaScript that can be used within your automation flow.
+// check whether the search button text is correct
+read search-buttons to button
+check button equals to 'Search' | 'search button text is correct - ' button | 'search button text is wrong - ' button
+
+// check that the page has the text My Portfolio
+check text() contains 'My Portfolio' | 'page text contains My Portfolio' | 'page text does not contain My Portfolio'
+
+// check that number of header menu items are more than or equals to 6
+check count('uh-tb-') more than or equals to 6 | 'header menu items >= 6' | 'header menu items < 6'
+```
+
+CasperJS test scripts are inherently different in structure and syntax from its usual automation scripts. With the test option, TagUI automatically sets up your automation flow to work as a test script. TagUI allows you to reuse the same flow for testing or automation by running it with or without the test option. [More info](http://docs.casperjs.org/en/latest/testing.html) about CasperJS testing framework.
+
+Note that CasperJS is not yet [supporting Chrome](https://github.com/casperjs/casperjs/issues/1825), below additional examples using CasperJS [built-in test assertions](http://docs.casperjs.org/en/latest/modules/tester.html) won't work when chrome or headless option is used. TagUI smart selector can still be accessed using tx('selector'). As TagUI allows you to write JavaScript / CasperJS code directly within the automation flow, advanced testing or coding techniques that can be implemented in CasperJS should work directly within your flow.
 ```js
 test.assertTextExists('ABOUT','Check for ABOUT text');
 test.assertSelectorHasText(tx('header'), 'Interface automation','Check for phrase in header element');
 ```
 
-For the list of 30+ expressive test assertions built into CasperJS, [click here](http://docs.casperjs.org/en/latest/modules/tester.html). To know more about CasperJS testing framework, [click here](http://docs.casperjs.org/en/latest/testing.html). As TagUI allows you to write JavaScript / CasperJS code directly within the automation flow, advanced testing or coding techniques that can be implemented in CasperJS should work directly within your flow.
-
-TagUI recognizes most JavaScript / CasperJS code. In the event you get an error saying that it cannot understand the step for your JavaScript line, raise an issue or modify the source code ([tagui_parse.php](https://github.com/tebelorg/TagUI/blob/master/src/tagui_parse.php) is where interpretation of natural language to CasperJS JavaScript code takes place). Alternatively, use step js to explicitly declare that whatever follows on that line is JavaScript code and ensure that the line is not treated as a TagUI step.
+In the event you get an error saying that it cannot understand the step for your JavaScript line, raise an issue or modify the source code ([tagui_parse.php](https://github.com/tebelorg/TagUI/blob/master/src/tagui_parse.php) is where interpretation of natural language to CasperJS JavaScript code takes place). Alternatively, use step js to explicitly declare that whatever follows on that line is JavaScript code and ensure that the line is not treated as a TagUI step.
 
 ### FILES
 Filename |Purpose
