@@ -23,7 +23,7 @@ The goal of web automation is to reproduce cognitive interactions that you have 
 This is a full-feature and free open-source tool, so there's nothing to upgrade to or any paid subscription. To feedback suggestions or bugs, [raise an issue](https://github.com/tebelorg/TagUI/issues) or email ken@tebel.org. Originally developed by a test automation engineer to avoid writing chunks of code when automating web interactions.
 
 ### HOW IT WORKS
-TagUI converts your intentions in simple natural language into lines of working JavaScript code that perform web automation. Under the hood, it uses CasperJS, PhantomJS & SlimerJS. For example, TagUI will instantly convert the automation flow below into 100+ lines of JavaScript code and automatically perform the steps to download a report. This makes it easy for rapid prototyping, deployment and maintenance of web automation.
+TagUI converts your intentions in simple natural language into lines of working JavaScript code that perform web automation. Under the hood, it uses Chrome DevTools Protocol, CasperJS, PhantomJS & SlimerJS. For example, TagUI will instantly convert the automation flow below into 100+ lines of JavaScript code and automatically perform the steps to download a report. No further backend coding or step definition is required. This makes it easy for rapid prototyping, deployment and maintenance of web automation, whether you are a developer or not.
 
 ```
 https://www.typeform.com
@@ -41,7 +41,7 @@ If you know JavaScript and want to be more expressive, you can even use JavaScri
 There is automatic waiting for web elements to appear + error-checking + nesting of JavaScript code blocks. Not forgetting the option to run automation flows hosted online or auto-upload run results online for sharing. TagUI also supports visual automation of website and desktop through built-in integration with Sikuli. Instead of using element identifiers, images can be used to identify user interface elements to interact with.
 
 # Set Up
-TagUI is in v2.5 and runs on macOS, Linux, Windows ([link to release notes](https://github.com/tebelorg/TagUI/releases))
+TagUI is in **process of updating to v2.6** and runs on macOS, Linux, Windows ([link to release notes](https://github.com/tebelorg/TagUI/releases))
 
 ### PACKAGED INSTALLATION
 Easiest way to use TagUI - no setup is needed, all dependencies are packaged in
@@ -82,7 +82,7 @@ upload|upload automation flow and result to [hastebin.com](https://hastebin.com)
 report|web report for sharing of run results on webserver (default is only a text log file)
 debug|show run-time backend messages from PhantomJS for detailed tracing and logging
 quiet|run without output except for explicit output (echo / show / check / errors etc)
-test|professional testing using [CasperJS assertions](http://docs.casperjs.org/en/latest/modules/tester.html) (TagUI smart tx('selector') usable)
+test|testing with check step test assertions for CI/CD integration (output XUnit XML file)
 baseline|output execution log and relative-path output files to a separate baseline directory
 input(s)|add your own parameter(s) to be used in your automation flow as variables p1 to p9
 
@@ -97,7 +97,7 @@ To schedule an automation flow in crontab (macOS/Linux), for example at 8am dail
 Tip - for Windows, use Task Scheduler instead (search schedule from Start Menu)
 
 ### CHROME EXTENSION
-Download from [Chrome Web Store](https://chrome.google.com/webstore/detail/tagui-web-automation/egdllmehgfgjebhlkjmcnhiocfcidnjk/) to use TagUI Chrome web browser extension for recording automation flows. TagUI Chrome extension is based on [Resurrectio tool](https://github.com/ebrehault/resurrectio) and records steps such as page navigation, clicking web elements and entering information. To start recording automation flows, click TagUI icon on your Chrome toolbar. Right-click for shortcuts to various TagUI steps, such as capturing webpage or element screenshot.
+Download from [Chrome Web Store](https://chrome.google.com/webstore/detail/tagui-web-automation/egdllmehgfgjebhlkjmcnhiocfcidnjk/) to use TagUI Chrome web browser extension for recording automation flows. TagUI Chrome extension is based on [Resurrectio tool](https://github.com/ebrehault/resurrectio) and records steps such as page navigation, clicking web elements and entering information. To start recording automation flows, click TagUI icon on your Chrome toolbar. Right-click for shortcuts to some TagUI steps, such as capturing webpage screenshot or to note down element identifier.
 
 The recording is not foolproof (for example, the underlying recording engine cannot capture frames, popup windows or tab key input). It is meant to simplify flow creation with some edits, instead of typing everything manually. [See this video](https://www.youtube.com/watch?v=bFvsc4a8hWQ) for an example of recording sequence of steps, editing for adjustments and playing back the automation.
 
@@ -126,7 +126,7 @@ Flow Sample |Purpose
 4_conditions|goes through examples of using conditions in natural language
 5_repositories|shows using repositories on Russian social media site VK.com
 6_datatables|set of flows uses datatables to retrieve and act on GitHub info
-7_testing|shows how to use check step and CasperJS test assertions
+7_testing|shows how to use check step assertions for CI/CD integration
 8_hastebin|used by upload option to upload flow result to hastebin.com
 9_misc|shows how to use steps popup, frame, dom, js, { and } block
 
@@ -206,7 +206,7 @@ less than or equal to / lesser than or equal to / lower than or equal to|<=
 and|&&
 or|&#124;&#124;
 
-Tip - use { and } step to define step/code blocks for powerful repetitive automation with for loop. conversion to CasperJS blocks syntax happens automatically. when using contain / equal, you can write with or without s behind. you can use if present('element') to check if the element exists, before doing the step on next line
+Tip - use { and } step to define step/code blocks for powerful repetitive automation with for loop. conversion to CasperJS blocks syntax happens automatically. when using contain / equal, you can write with or without s behind. you can use if present('element') to check if the element exists, before doing the step on next line. other useful functions include visible('element'), count('element'), url(), title(), text(), timer(), which can be used in conditions and steps such as check or echo
 
 ### REPOSITORIES
 - Repositories help to make objects or steps reusable and improve readability
@@ -240,7 +240,7 @@ direction|BUY|SELL|BUY
 # Developers Reference
 TagUI is a young tool and it tries to do the task of automating web interactions very well (especially process automation). It's designed to make prototyping, deployment and maintenance of web automation easier by minimizing iteration time for each phase. If you are a Node.js developer, be sure to check out [Puppeteer project](https://github.com/GoogleChrome/puppeteer). It's developed by Google Chrome team and the synergy made possible by the tight integration will usher in a new era of browser automation.
 
-While TagUI can be used for test automation or data-scraping, there are other popular open-source tools which may be better fits for these goals. For test automation, there are very established open-source tools/frameworks with mature and supportive ecosystems. You can find out more what's current from resources such as this [test automation list](https://github.com/atinfo/awesome-test-automation). For data-scraping, there are various open-source projects just to [handle that very well](https://github.com/search?utf8=✓&q=topic%3Acrawler&type=Repositories).
+While TagUI can be used for test automation or data-scraping, there are other popular open-source tools which may be better fits for these goals. For test automation, there are very established open-source tools/frameworks with mature and supportive ecosystems. Be sure to check out what's current from resources such as this [test automation list](https://github.com/atinfo/awesome-test-automation). For data-scraping, there are various open-source projects just to [handle that very well](https://github.com/search?utf8=✓&q=topic%3Acrawler&type=Repositories).
 
 ### API
 Automation flows can also be triggered via API URL. TagUI has an API service and runner for managing a queue of incoming requests via API. To set up, add a crontab entry on your server with the desired frequency to check and process incoming service requests. Below will check every 15 minutes and run pending flows in the queue. If there's an automation in progress, TagUI will wait for the next check instead of concurrently starting a new run.
