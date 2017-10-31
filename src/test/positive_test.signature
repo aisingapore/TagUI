@@ -356,10 +356,10 @@ ws_message = chrome_step('DOM.setFileInputFiles',{files: [filename], nodeId: ws_
 } catch(e) {casper.echo('ERROR - unable to upload ' + selector + ' as ' + filename);}};
 
 chrome.download = function(url,filename) { // download function for downloading url resource to file
-// casper download cannot be used for url which requires login as casperjs context is not in chrome
-// the chromium issue seems to be moving, otherwise another way may be to inject casper clientutils.js
-casper.echo('ERROR - for visible Chrome, download file directly through normal webpage interaction');
-casper.echo('ERROR - for headless Chrome, it prevents file download for now - Chromium issue 696481');};
+// casper download cannot be used for urls which requires login as casperjs engine can't access chrome
+// the chromium issue 696481 is moving well, else an alternative may be to inject casper clientutils.js 
+// TagUI by default auto-sets to allow downloads for headless Chrome (otherwise it prevents downloads)
+casper.echo('ERROR - for headless and visible Chrome, download file using normal webpage interaction');};
 
 chrome.evaluate = function(fn_statement,eval_json) { // evaluate expression in browser dom context
 // chrome runtime.evaluate is different from casperjs evaluate, do some processing to reduce gap

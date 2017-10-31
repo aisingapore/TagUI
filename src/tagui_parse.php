@@ -328,7 +328,8 @@ end_fi()."});\n\ncasper.then(function() {\n";}
 // set of functions to interpret steps into corresponding casperjs code
 function url_intent($raw_intent) {$twb = $GLOBALS['tagui_web_browser']; $casper_url = $raw_intent; $chrome_call = '';
 if ($twb == 'chrome')
-{$casper_url = 'about:blank'; $chrome_call = "chrome_step('Page.navigate',{url: '".$raw_intent."'}); sleep(1000);\n";}
+{$chrome_call = "chrome_step('Page.setDownloadBehavior',{behavior: 'allow', downloadPath: flow_path});\n";
+$casper_url = 'about:blank'; $chrome_call .= "chrome_step('Page.navigate',{url: '".$raw_intent."'}); sleep(1000);\n";}
 if (strpos($raw_intent,"'+")!==false and strpos($raw_intent,"+'")!==false) // check if dynamic url is used
 // wrap step within casper context if variable (casper context) is used in url, in order to access variable
 {$dynamic_header = "\n{casper.then(function() {\n"; $dynamic_footer = "})} // end of dynamic url block\n";}
