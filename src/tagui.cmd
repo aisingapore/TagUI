@@ -448,6 +448,9 @@ rem big loop for managing multiple data sets in datatable
 for /l %%n in (1,1,%tagui_data_set_size%) do (
 set tagui_data_set=%%n
 
+rem add delay between repetitions to avoid system overheat
+rem skip for windows as there is extra dependency on ping
+
 rem parse automation flow file, check for initial parse error, check sikuli and chrome, before calling casperjs
 php -q tagui_parse.php "%flow_file%" | tee -a "%flow_file%.log"
 for /f "usebackq" %%f in ('%flow_file%.log') do set file_size=%%~zf
