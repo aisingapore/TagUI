@@ -18,14 +18,14 @@
 - advanced outgoing API calls to webservices
 
 # Why This
-The goal of web automation is to reproduce cognitive interactions that you have with websites so that your laptop or server can do it for you, base on your schedule or conditions. TagUI helps you rapidly automate your repetitive or time-critical tasks - use cases include process automation, data acquisition and testing of web apps.
+The goal of web automation is to reproduce cognitive interactions that you have with websites so that your laptop or server can do it for you, base on your schedule or conditions. TagUI helps you rapidly automate your repetitive or time-critical tasks - use cases include process automation, data acquisition and testing of web apps. Read on for more info or jump right into the [flow samples section](https://github.com/tebelorg/TagUI#flow-samples) to see examples of TagUI automation in natural-language-like syntax.
 
 This is a full-feature and free open-source tool, so there's nothing to upgrade to or any paid subscription. To feedback suggestions or bugs, [raise an issue](https://github.com/tebelorg/TagUI/issues) or email ken@tebel.org. Originally developed by a test automation engineer to avoid writing chunks of code when automating web interactions.
 
 ### HOW IT WORKS
 TagUI converts your intentions in simple natural language into lines of working JavaScript code that perform web automation. Under the hood, it uses Chrome DevTools Protocol, CasperJS, PhantomJS & SlimerJS.
 
-For example, TagUI will instantly convert the automation flow below into 100+ lines of JavaScript code and automatically perform the steps to download a report. No further backend coding or step definition is required. This makes it easy for rapid prototyping, deployment and maintenance of web automation, whether you are a developer or not.
+For example, TagUI will instantly convert the automation flow below into 100+ lines of JavaScript code and automatically perform the steps to download a report. Conditions can also be written in natural language for making decisions or checking webpage. No further backend coding or step definition is required. This makes it easy for rapid prototyping, deployment and maintenance of web automation, whether you are a developer or not.
 
 ```
 https://www.typeform.com
@@ -122,15 +122,15 @@ Following automation flow samples ([tagui/src/samples folder](https://github.com
 
 Flow Sample |Purpose
 :-----------|:------
-1_yahoo|searches github on Yahoo and captures screenshot of results
-2_twitter|goes to a Twitter page and saves some profile information
-3_github|goes to a GitHub page and downloads the repo using 2 ways
-4_conditions|goes through examples of using conditions in natural language
-5_repositories|shows using repositories on Russian social media site VK.com
-6_datatables|set of flows uses datatables to retrieve and act on GitHub info
-7_testing|shows how to use check step assertions for CI/CD integration
-8_hastebin|used by upload option to upload flow result to hastebin.com
-9_misc|shows how to use steps popup, frame, dom, js, { and } block
+[1_yahoo](https://github.com/tebelorg/TagUI/blob/master/src/samples/1_yahoo)|searches github on Yahoo and captures screenshot of results
+[2_twitter](https://github.com/tebelorg/TagUI/blob/master/src/samples/2_twitter)|goes to a Twitter page and saves some profile information
+[3_github](https://github.com/tebelorg/TagUI/blob/master/src/samples/3_github)|goes to a GitHub page and downloads the repo using 2 ways
+[4_conditions](https://github.com/tebelorg/TagUI/blob/master/src/samples/4_conditions)|goes through examples of using conditions in natural language
+[5_repositories](https://github.com/tebelorg/TagUI/blob/master/src/samples/5_repositories)|shows using repositories on Russian social media site VK.com
+[6_datatables](https://github.com/tebelorg/TagUI/tree/master/src/samples/6_datatables)|set of flows uses datatables to retrieve and act on GitHub info
+[7_testing](https://github.com/tebelorg/TagUI/blob/master/src/samples/7_testing)|shows how to use check step assertions for CI/CD integration
+[8_hastebin](https://github.com/tebelorg/TagUI/blob/master/src/samples/8_hastebin)|used by upload option to upload flow result to hastebin.com
+[9_misc](https://github.com/tebelorg/TagUI/blob/master/src/samples/9_misc)|shows how to use steps popup, frame, dom, js, { and } block
 
 # Cheat Sheet
 ### AUTOMATION WORKFLOW
