@@ -182,7 +182,7 @@ timeout|time in seconds before step errors out|change auto-wait timeout
 variable_name| = value (for text, put in quotes, use + to concat)|define variable variable_name
 // (on new line)|user comments (ignored during execution)|add user comments
 
-Tip - as default execution context is local, to run javascript on webpage dom (eg document.querySelector) use dom step. set dom_json variable to pass a variable for use in dom step. or dom_json = {tmp_number: phone, tmp_text: name} to pass multiple variables for use in dom step (dom_json.tmp_number and dom_json.tmp_text)
+Tip - for headless and visible Chrome, file downloads can be done using normal webpage interaction or specifying the URL as a navigation flow step. for Firefox and PhantomJS, the download and receive step can be used. as TagUI default execution context is local, to run javascript on webpage dom (eg document.querySelector) use dom step. set dom_json variable to pass a variable for use in dom step. or dom_json = {tmp_number: phone, tmp_text: name} to pass multiple variables for use in dom step (dom_json.tmp_number and dom_json.tmp_text)
 
 ### CONDITIONS EXAMPLES
 - Conditions can be expressed in natural language (optional brackets) or [JavaScript](https://www.w3schools.com/js/)
@@ -243,6 +243,8 @@ direction|BUY|SELL|BUY
 TagUI is a young tool and it tries to do the task of automating web interactions very well (especially process automation). It's designed to make prototyping, deployment and maintenance of web automation easier by minimizing iteration time for each phase. If you are a Node.js developer, be sure to check out [Puppeteer project](https://github.com/GoogleChrome/puppeteer). It's developed by Google Chrome team and the synergy made possible by the tight integration is ushering in a new era of browser automation.
 
 While TagUI can be used for test automation or data-scraping, there are other popular open-source tools which may be better fits for these goals. For test automation, there are very established open-source tools/frameworks with mature and supportive ecosystems. Be sure to check out what's current from resources such as this [test automation list](https://github.com/atinfo/awesome-test-automation). For data-scraping, there are various open-source projects just to [handle that very well](https://github.com/search?utf8=✓&q=topic%3Acrawler&type=Repositories).
+
+Some future ideas for TagUI is integration with AI open-source tools, more advanced visual automation with Sikuli, and improved natural language processing. Also, as PhantomJS is no longer maintained, maybe in a few years it will be necessary to migrate TagUI from CasperJS + PhantomJS engine to Puppeteer + Node.js engine. That will require users to have Node.js development environment instead of TagUI's current form where it can be unzipped and run directly.
 
 ### API
 Automation flows can also be triggered via API URL. TagUI has an API service and runner for managing a queue of incoming requests via API. To set up, add a crontab entry on your server with the desired frequency to check and process incoming service requests. Below will check every 15 minutes and run pending flows in the queue. If there's an automation in progress, TagUI will wait for the next check instead of concurrently starting a new run.
