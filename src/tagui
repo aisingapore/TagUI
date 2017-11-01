@@ -208,7 +208,7 @@ else tagui_data_set_size="$(($min_column-1))"; fi; fi
 for (( tagui_data_set=1; tagui_data_set<=$tagui_data_set_size; tagui_data_set++ ))
 do export tagui_data_set=$tagui_data_set
 
-# add delay between repetitions to avoid system overheat
+# add delay between repetitions to pace out iterations
 if [ "$tagui_data_set" -ne 1 ]; then sleep 3; fi
 
 # parse automation flow file, check for initial parse error, check sikuli and chrome, before calling casperjs
