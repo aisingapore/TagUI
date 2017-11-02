@@ -396,6 +396,41 @@ if "%arg9%"=="upload" (
 	set tagui_upload_result=true
 )
 
+set tagui_speed_mode=false
+rem check speed parameter to skip delay and chrome restart between iterations
+if "%arg2%"=="speed" (
+	set arg2=
+	set tagui_speed_mode=true
+)
+if "%arg3%"=="speed" (
+	set arg3=
+	set tagui_speed_mode=true
+)
+if "%arg4%"=="speed" (
+	set arg4=
+	set tagui_speed_mode=true
+)
+if "%arg5%"=="speed" (
+	set arg5=
+	set tagui_speed_mode=true
+)
+if "%arg6%"=="speed" (
+	set arg6=
+	set tagui_speed_mode=true
+)
+if "%arg7%"=="speed" (
+	set arg7=
+	set tagui_speed_mode=true
+)
+if "%arg8%"=="speed" (
+	set arg8=
+	set tagui_speed_mode=true
+)
+if "%arg9%"=="speed" (
+	set arg9=
+	set tagui_speed_mode=true
+)
+
 rem concatenate parameters in order to fix issue when calling casperjs test
 rem $1 left out - filenames with spaces have issue when casperjs $params
 set params=%arg2% %arg3% %arg4% %arg5% %arg6% %arg7% %arg8% %arg9%
@@ -449,9 +484,7 @@ for /l %%n in (1,1,%tagui_data_set_size%) do (
 set tagui_data_set=%%n
 
 rem add delay between repetitions to pace out iterations
-if !tagui_data_set! neq 1 (
-php -q sleep.php 3
-)
+if !tagui_data_set! neq 1 if %tagui_speed_mode%==false php -q sleep.php 3
 
 rem parse automation flow file, check for initial parse error, check sikuli and chrome, before calling casperjs
 php -q tagui_parse.php "%flow_file%" | tee -a "%flow_file%.log"
@@ -485,6 +518,12 @@ if exist "tagui_chrome.in" (
 	set headless_switch=
 	if "%tagui_web_browser%"=="headless" set headless_switch=--headless --disable-gpu
 
+	rem skip restarting chrome in speed mode and resuse 1st websocket url	
+	set or_result=F
+	if !tagui_data_set! equ 1 set or_result=T
+	if %tagui_speed_mode%==false set or_result=T
+	if "!or_result!"=="T" (
+
 	rem check for which operating system and launch chrome accordingly
 	set chrome_started=Windows
 	set chrome_switches=--remote-debugging-port=9222 about:blank
@@ -500,6 +539,9 @@ if exist "tagui_chrome.in" (
 	rem wait until chrome is ready with websocket url for php thread
 	for /f "tokens=* usebackq" %%u in (`curl -s localhost:9222/json ^| grep -A 1 "\"url\": \"about:blank\"" ^| grep webSocketDebuggerUrl ^| cut -d" " -f 5`) do set ws_url=%%u
 	if "!ws_url!"=="" goto scan_ws_again
+
+	rem end of if block for restarting chrome process
+	)
 
 	rem launch php process to manage chrome websocket communications
 	start /min cmd /c php -q tagui_chrome.php !ws_url! ^| tee -a tagui_chrome.log
@@ -518,7 +560,7 @@ if exist "tagui.sikuli\tagui_sikuli.in" echo finish > tagui.sikuli\tagui_sikuli.
 if exist "tagui_chrome.in" echo finish > tagui_chrome.in
 
 rem kill chrome processes by checking which os the processes are started on
-if not "!chrome_started!"=="" taskkill /IM chrome.exe /T /F > nul 2>&1
+if not "!chrome_started!"=="" if %tagui_speed_mode%==false taskkill /IM chrome.exe /T /F > nul 2>&1
 
 rem end of big loop for managing multiple data sets in datatable
 )
