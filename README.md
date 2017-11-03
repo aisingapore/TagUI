@@ -45,6 +45,8 @@ There is automatic waiting for web elements to appear + error-checking + nesting
 # Set Up
 TagUI is in v2.6 and runs on macOS, Linux, Windows ([link to release notes](https://github.com/tebelorg/TagUI/releases))
 
+Tip - for [cutting edge](https://github.com/tebelorg/TagUI/compare/v2.6.0...master) version, download [from here](https://github.com/tebelorg/TagUI/archive/master.zip) to overwrite your packaged installation
+
 ### PACKAGED INSTALLATION
 Easiest way to use TagUI - no setup is needed, all dependencies are packaged in
 
