@@ -468,6 +468,7 @@ case 'test': return test_intent(live_line); break;
 case 'frame': return frame_intent(live_line); break;
 case 'popup': return popup_intent(live_line); break;
 case 'api': return api_intent(live_line); break;
+case 'run': return run_intent(live_line); break;
 case 'dom': return dom_intent(live_line); break;
 case 'js': return js_intent(live_line); break;
 case 'timeout': return timeout_intent(live_line); break;
@@ -502,6 +503,7 @@ if (lc_raw_intent.substr(0,5) == 'test ') return 'test';
 if (lc_raw_intent.substr(0,6) == 'frame ') return 'frame';
 if (lc_raw_intent.substr(0,6) == 'popup ') return 'popup';
 if (lc_raw_intent.substr(0,4) == 'api ') return 'api';
+if (lc_raw_intent.substr(0,4) == 'run ') return 'run';
 if (lc_raw_intent.substr(0,4) == 'dom ') return 'dom';
 if (lc_raw_intent.substr(0,3) == 'js ') return 'js';
 if (lc_raw_intent.substr(0,8) == 'timeout ') return 'timeout';
@@ -530,6 +532,7 @@ if (lc_raw_intent == 'test') return 'test';
 if (lc_raw_intent == 'frame') return 'frame';
 if (lc_raw_intent == 'popup') return 'popup';
 if (lc_raw_intent == 'api') return 'api';
+if (lc_raw_intent == 'run') return 'run';
 if (lc_raw_intent == 'dom') return 'dom';
 if (lc_raw_intent == 'js') return 'js';
 if (lc_raw_intent == 'timeout') return 'timeout';
@@ -767,6 +770,9 @@ if (params == '') return "this.echo('ERROR - API URL missing for " + raw_intent 
 else return "api_result = call_api('" + params + "'); " +
 "try {api_json = JSON.parse(api_result);} catch(e) {api_json = JSON.parse('null');}";}
 
+function run_intent(raw_intent) {
+return "this.echo('ERROR - step not supported in live mode, as run output cannot be retrieved')";}
+
 function dom_intent(raw_intent) {
 var params = ((raw_intent + ' ').substr(1+(raw_intent + ' ').indexOf(' '))).trim();
 if (params == '') return "this.echo('ERROR - statement missing for " + raw_intent + "')";
@@ -838,6 +844,118 @@ casper.elementVisible = function(selector) {return casper.visible(selector);} //
 casper.countElements = function(selector) { // use casperjs in-built function to maximize compatibility
 var count_result = casper.evaluate(function(selector) {return __utils__.findAll(selector).length;},selector);
 try {if (count_result > 0) return count_result; else return 0;} catch(e) {return 0;}};
+
+// custom function from casperjs v1.1.5 (not yet released)
+casper.waitForExec = function (command, parameters, then, onTimeout, timeout) {
+    "use strict";
+    var killTimeout;
+    var utils = require('utils'); var f = utils.format; // custom added line from casper.js global
+    if (utils.isArray(timeout)) {
+        killTimeout = utils.isNumber(timeout[1]) ? getTimeoutAndCheckNextStepFunction(timeout[1], then, 'waitForExec', this.options.waitTimeout) : getTimeoutAndCheckNextStepFunction(timeout[0], then, 'waitForExec', this.options.waitTimeout);
+        timeout = getTimeoutAndCheckNextStepFunction(timeout[0], then, 'waitForExec', this.options.waitTimeout);
+    } else {
+        timeout = getTimeoutAndCheckNextStepFunction(timeout, then, 'waitForExec', this.options.waitTimeout);
+        killTimeout = timeout;
+    }
+
+    if ( (!utils.isString(command)) && (!utils.isArray(parameters))  ) {
+        throw new CasperError("waitForExec() needs an command string as program and parameters separated by space to run or an array of parameters. if program is falsy or not a string, it uses default system shell");
+    }
+    if (utils.isFalsy(command) || !utils.isString(command)) {
+        var system = require('system');
+        command = (system.env.SHELL || system.env.ComSpec); // SHELL for UNIX(?), ComSpec for Windows(?)
+        this.log('Casper.waitForExec()  is going to use default system shell ' + JSON.stringify(command) + ' - command is falsy or is not a string', "warning");
+    }
+    if (utils.isFalsy(parameters) || !utils.isArray(parameters)) {
+        parameters = [];
+    }
+
+    // add use of a escape char like '\'??? (e.g.: '/bin/bash -c {\ ls\ /\ &&\ ls\ /home\ }' becomes ['/bin/bash', '-c', '{ ls / && ls /home }']
+    command = command.split(' ');
+    parameters = command.splice(-1,(command.length-1)).concat(parameters);
+    command = command[0];
+    var fs = require('fs');
+    if (!fs.isExecutable(command)) {
+        this.log('Casper.waitForExec() is going to call non executable file ' + JSON.stringify(command) + ' - maybe runs if is in PATH', "warning");
+    }
+
+    var spawn = require("child_process").spawn;
+    var stdout = ''; // VARIABLE TO STORE PROGRAM STDOUT
+    var stderr = ''; // VARIABLE TO STORE PROGRAM STDERR
+    var exitCode = null; // VARIABLE TO STORE PROGRAM EXIT CODE
+    var realPid = null; // VARIABLE TO STORE PROGRAM REAL PID
+    var elapsedTime = null; // VARIABLE TO STORE PROGRAM DURATION
+
+    var childStartTime = new Date().getTime();
+    var child = spawn(command, parameters);
+    realPid = child.pid;
+
+    child.stdout.on("data", function (standardOut) { // keeps stdout updated
+        stdout += standardOut;
+    });
+    child.stderr.on("data", function (standardError) { // keeps stderr updated
+        stderr += standardError;
+    });
+    child.on("exit", function (code) {
+        elapsedTime = (new Date().getTime()) - childStartTime;
+        exitCode = code;
+    });
+
+    function __details() {
+        return {data: {command: command, parameters: parameters, pid: realPid, stdout: stdout, stderr: stderr, exitCode: exitCode, elapsedTime: elapsedTime, isChildNotFinished: child.pid }};
+    }
+    function __onTimeout(timeout, details) {
+        var __onWaitTimeout = onTimeout ? onTimeout : this.options.onWaitTimeout;
+        var signalToKill = "SIGTERM";
+        child.kill(signalToKill);
+        
+        killTimeout = getTimeoutAndCheckNextStepFunction(killTimeout, __onWaitTimeout, 'killAndCallOnWaitTimeout', this.options.waitTimeout, false);
+        (function killAndCallOnWaitTimeout() {
+            // I don't know if it should return
+            // return this.waitFor(function isProgramKilled() { // HAVE TO ADD waitFor() TO MAKE child.on("exit"... UPDATES exitCode AND TO child.pid BE UPDATED
+            this.waitFor(function isProgramKilled() { // HAVE TO ADD waitFor() TO MAKE child.on("exit"... UPDATES exitCode AND TO child.pid BE UPDATED
+                return !child.pid;
+            }, function onProgramKilled() { 
+                    this.log(f("waitForExec() has killed %s %s (PID %d) with %s", details.data.command, JSON.stringify(details.data.parameters), details.data.pid, signalToKill), "info");
+                    // this.then(this.createStep(__onWaitTimeout, timeout, __details()));
+                    __onWaitTimeout.call(this, timeout, __details());
+            }, function onProgramNotKilled() {
+                    this.log(f("waitForExec() has not killed %s %s (PID %d) with %s", details.data.command, JSON.stringify(details.data.parameters), details.data.pid, signalToKill), "warning");
+                    signalToKill = (require('system').os.name !== "windows") ? "SIGKILL" : "WM_QUIT"; // "WM_QUIT" SEEMS TO BE THE WINDOWS EQUIVALENT TO UNIX SIGKILL
+                    child.kill(signalToKill);
+                    killTimeout = 1;
+                    killAndCallOnWaitTimeout.call(this);
+            }, killTimeout);
+        }).call(this);
+    }
+    this.log(f("waitForExec() called %s (PID %d) with %s arguments", JSON.stringify(command), realPid, JSON.stringify(parameters)), "info");
+    return this.waitFor(function isProgramFinished() {
+        return !child.pid;
+    }, function onProgramFinished() {
+        this.then(this.createStep(then, __details()));
+    }, __onTimeout, timeout, __details());
+};
+
+// dependency function of casper.waitForExec in v1.1.5 (not yet released)
+function getTimeoutAndCheckNextStepFunction(timeout, then, methodName, defaultTimeout, isThenRequired) {
+    var utils = require('utils'); // custom added line from casper.js global
+    if (isThenRequired || then) {
+        var isFunction = utils.isFunction(then); // Optimization to perform "isFunction" check only once.
+
+        if (isThenRequired && !isFunction) {
+            throw new CasperError(methodName + "() needs a step function");
+        } else if (then && !isFunction) {
+            throw new CasperError(methodName + "() next step definition must be a function");
+        }
+    }
+
+    timeout = ~~timeout || ~~defaultTimeout;
+    if (timeout < 0) {
+        throw new CasperError(methodName + "() only accepts an integer >= 0 as a timeout value");
+    }
+
+    return timeout;
+}
 
 // flow path for save_text and snap_image
 var flow_path = '/full_path';

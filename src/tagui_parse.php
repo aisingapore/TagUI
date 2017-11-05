@@ -182,6 +182,7 @@ case "test": return test_intent($script_line); break;
 case "frame": return frame_intent($script_line); break;
 case "popup": return popup_intent($script_line); break;
 case "api": return api_intent($script_line); break;
+case "run": return run_intent($script_line); break;
 case "dom": return dom_intent($script_line); break;
 case "js": return js_intent($script_line); break;
 case "timeout": return timeout_intent($script_line); break;
@@ -215,6 +216,7 @@ if (substr($lc_raw_intent,0,5)=="test ") return "test";
 if (substr($lc_raw_intent,0,6)=="frame ") return "frame";
 if (substr($lc_raw_intent,0,6)=="popup ") return "popup";
 if (substr($lc_raw_intent,0,4)=="api ") return "api";
+if (substr($lc_raw_intent,0,4)=="run ") return "run";
 if (substr($lc_raw_intent,0,4)=="dom ") return "dom";
 if (substr($lc_raw_intent,0,3)=="js ") return "js";
 if (substr($lc_raw_intent,0,8)=="timeout ") return "timeout";
@@ -243,6 +245,7 @@ if ($lc_raw_intent=="test") return "test";
 if ($lc_raw_intent=="frame") return "frame";
 if ($lc_raw_intent=="popup") return "popup";
 if ($lc_raw_intent=="api") return "api";
+if ($lc_raw_intent=="run") return "run";
 if ($lc_raw_intent=="dom") return "dom";
 if ($lc_raw_intent=="js") return "js";
 if ($lc_raw_intent=="timeout") return "timeout";
@@ -555,6 +558,14 @@ $params = trim(substr($raw_intent." ",1+strpos($raw_intent." "," ")));
 if ($params == "") echo "ERROR - " . current_line() . " API URL missing for " . $raw_intent . "\n"; else
 return "{techo('".$raw_intent."');\napi_result = call_api('".$params."');\n" . 
 "try {api_json = JSON.parse(api_result);} catch(e) {api_json = JSON.parse('null');}}".end_fi()."\n";}
+
+function run_intent($raw_intent) { // waitForExec is a new block, invalid to use after frame, thus skip end_fi()
+$params = trim(substr($raw_intent." ",1+strpos($raw_intent." "," ")));
+if ($GLOBALS['inside_frame']!=0) echo "ERROR - " . current_line() . " invalid after frame - " . $raw_intent . "\n";
+else if ($GLOBALS['inside_popup']!=0) echo "ERROR - " . current_line() . " invalid after popup - " . $raw_intent . "\n";
+else if ($params == "") echo "ERROR - " . current_line() . " command to run missing for " . $raw_intent . "\n"; else
+return "techo('".$raw_intent."');});\n\ncasper.waitForExec('".$params."', null, function(response) {\n" .
+"run_result = (response.data.stdout.trim() || response.data.stderr.trim());\nrun_json = response.data;\n";}
 
 function dom_intent($raw_intent) {$twb = $GLOBALS['tagui_web_browser'];
 $params = trim(substr($raw_intent." ",1+strpos($raw_intent." "," ")));

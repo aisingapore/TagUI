@@ -37,3 +37,6 @@
 /src/tagui.sikuli/sikulix*
 /src/tagui.sikuli/SikuliX*
 /src/tagui.sikuli/runsikulix
+
+# exclude local files for catboost integration
+/src/catboost/*
