@@ -1,0 +1,68 @@
+ENGLISH,CHINESE
+click,点击
+tap,点击
+move,移到
+hover,移到
+type,输入
+enter,输入
+select,选择
+choose,选择
+read,读取
+fetch,读取
+show,显示
+print,显示
+save,储存
+echo,回声
+dump,转储
+write,写入
+snap,快照
+table,表格
+wait,等待
+live,互动
+check,验证
+download,下载
+upload,上载
+load,加载
+receive,接收
+frame,框架
+popup,弹出
+timeout,倒数
+seconds,秒
+second,秒
+api,api
+dom,dom
+js,js
+as,为
+to,到
+more than or equals to,多过或等于
+greater than or equals to,多过或等于
+higher than or equals to,多过或等于
+more than or equal to,多过或等于
+greater than or equal to,多过或等于
+higher than or equal to,多过或等于
+less than or equals to,少过或等于
+less than or equal to,少过或等于
+lesser than or equals to,少过或等于
+lesser than or equal to,少过或等于
+lower than or equals to,少过或等于
+lower than or equal to,少过或等于
+more than,多过
+greater than,多过
+higher than,多过
+less than,少过
+lesser than,少过
+lower than,少过
+not equals to,不等于
+not equal to,不等于
+equals to,等于
+equal to,等于
+not contains,不包括
+not contain,不包括
+contains,包括
+contain,包括
+and,和
+or,或
+while,当
+from,从
+for,让
+if,如果
