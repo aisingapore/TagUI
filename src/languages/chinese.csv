@@ -17,28 +17,31 @@ dump,转储
 write,写入
 snap,快照
 table,表格
-wait,等待
 live,互动
-check,验证
 download,下载
 upload,上载
 load,加载
 receive,接收
 frame,框架
 popup,弹出
+wait,等待
 timeout,倒数
 seconds,秒
 second,秒
 api,api
 dom,dom
 js,js
-as,为
-to,到
+else if,否则如果
+else,否则
+if,如果
+for,让
+while,当
+check,验证
 more than or equals to,多过或等于
-greater than or equals to,多过或等于
-higher than or equals to,多过或等于
 more than or equal to,多过或等于
+greater than or equals to,多过或等于
 greater than or equal to,多过或等于
+higher than or equals to,多过或等于
 higher than or equal to,多过或等于
 less than or equals to,少过或等于
 less than or equal to,少过或等于
@@ -62,7 +65,6 @@ contains,包括
 contain,包括
 and,和
 or,或
-while,当
 from,从
-for,让
-if,如果
+to,到
+as,为
