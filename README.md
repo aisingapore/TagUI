@@ -50,8 +50,8 @@ Tip - for [cutting edge](https://github.com/tebelorg/TagUI/compare/v2.6.0...mast
 ### PACKAGED INSTALLATION
 Easiest way to use TagUI - no setup is needed, all dependencies are packaged in
 
-Platform|macOS|Linux|Windows|Node.js
-:------:|:---:|:---:|:-----:|:-----:
+Platform|macOS|Linux|Windows|Node.js (macOS/Linux)
+:------:|:---:|:---:|:-----:|:-------------------:
 Package|[unzip and run](https://raw.githubusercontent.com/tebelorg/Tump/master/TagUI_macOS.zip)|[unzip and run](https://raw.githubusercontent.com/tebelorg/Tump/master/TagUI_Linux.zip)|[unzip and run](https://raw.githubusercontent.com/tebelorg/Tump/master/TagUI_Windows.zip)|[npm install tagui](https://www.npmjs.com/package/tagui)
 
 Optional - configure web browser settings in tagui_config.txt, such as browser resolution, step timeout of 10s etc
