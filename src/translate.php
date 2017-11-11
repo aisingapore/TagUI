@@ -15,11 +15,15 @@ $as_separator_keywords = '|type|enter|select|choose|upload|';
 // list of keywords that are supposed to happen specifically after for loop
 $forloop_keywords = '|from|';
 
+// list of keywords at start of flow statement for valid conditions
+$start_conditions_keywords = '|else if|if|for|while|check|';
+
 // list of keywords that are supposed to happen in conditions (after - else if, if, for, while, check)
 $conditions_keywords = '|more than or equals to|more than or equal to|greater than or equals to|greater than or equal to|higher than or equals to|higher than or equal to|less than or equals to|less than or equal to|lesser than or equals to|lesser than or equal to|lower than or equals to|lower than or equal to|more than|greater than|higher than|less than|lesser than|lower than|not equals to|not equal to|equals to|equal to|not contains|not contain|contains|contain|and|or|';
 
-// list of keywords at start of flow statement for valid conditions
-$start_conditions_keywords = '|else if|if|for|while|check|';
+// list of helper functions that are supposed to happen in conditions, some steps, or assignments
+$helper_keywords = '|title()|url()|text()|timer()|count()|present()|visible()|';
+$start_helper_keywords = '|echo|dump|write|'; // other steps not relevant / safe to include
 
 // list of seconds keywords that are supposed to happen after wait and timeout steps
 $seconds_keywords = '|seconds|second|'; $start_seconds_keywords = '|wait|timeout|';
@@ -40,6 +44,7 @@ $language_file = fopen('languages/' . $language . '.csv','r') or die("ERROR - ca
 while (!feof($language_file)) {$language_data[$language_count] = fgetcsv($language_file);
 if (count($language_data[$language_count]) == 0) die("ERROR - empty row found in " . $language . '.csv' . "\n");
 $language_count++;} fclose($language_file); $language_count-=2;} //-1 for header, -1 for EOF
+else die("ERROR - missing language file " . $language . '.csv' . "\n");
 
 // load automation flow file and perform translation using language definition
 $target_flow = $source_flow . '_translated'; // add translated postfix to target flow name
@@ -62,6 +67,9 @@ $script_line = str_replace('[START_OF_LINE]'.$GLOBALS['language_data'][$language
 if ($replace_count > 0) $start_word = $GLOBALS['language_data'][$language_check][0];}
 
 else if (strpos($GLOBALS['conditions_keywords'],'|'.$GLOBALS['language_data'][$language_check][0].'|')!==false) {
+if ($start_word == 'check') {$array_script_line = explode('|',$script_line); $array_script_line[0] = str_replace(' '.$GLOBALS['language_data'][$language_check][$GLOBALS['column_from']].' ',' '.$GLOBALS['language_data'][$language_check][$GLOBALS['column_to']].' ',$array_script_line[0]); $script_line = implode('|',$array_script_line);}}
+
+else if (strpos($GLOBALS['conditions_keywords'],'|'.$GLOBALS['language_data'][$language_check][0].'|')!==false) {
 if (($start_word != '[NOT_ASSIGNED]') and (strpos($GLOBALS['start_conditions_keywords'],'|'.$start_word.'|')!==false))
 $script_line = str_replace(' '.$GLOBALS['language_data'][$language_check][$GLOBALS['column_from']].' ',' '.$GLOBALS['language_data'][$language_check][$GLOBALS['column_to']].' ',$script_line);}
 
@@ -78,7 +86,13 @@ $script_line = str_replace(' '.$GLOBALS['language_data'][$language_check][$GLOBA
 
 else if ($GLOBALS['language_data'][$language_check][0]=='as') {
 if (($start_word != '[NOT_ASSIGNED]') and (strpos($GLOBALS['as_separator_keywords'],'|'.$start_word.'|')!==false))
-$script_line = str_replace(' '.$GLOBALS['language_data'][$language_check][$GLOBALS['column_from']].' ',' '.$GLOBALS['language_data'][$language_check][$GLOBALS['column_to']].' ',$script_line);}}
+$script_line = str_replace(' '.$GLOBALS['language_data'][$language_check][$GLOBALS['column_from']].' ',' '.$GLOBALS['language_data'][$language_check][$GLOBALS['column_to']].' ',$script_line);}
+
+else if (strpos($GLOBALS['helper_keywords'],'|'.$GLOBALS['language_data'][$language_check][0].'|')!==false) {
+if ((($start_word != '[NOT_ASSIGNED]') and (strpos($GLOBALS['start_conditions_keywords'],'|'.$start_word.'|')!==false)) 
+or (($start_word != '[NOT_ASSIGNED]') and (strpos($GLOBALS['start_helper_keywords'],'|'.$start_word.'|')!==false))
+or (strpos($script_line,'=')!==false))
+$script_line = str_replace(' '.str_replace(')','',$GLOBALS['language_data'][$language_check][$GLOBALS['column_from']]),' '.str_replace(')','',$GLOBALS['language_data'][$language_check][$GLOBALS['column_to']]),$script_line);}}
 
 $script_line = str_replace('[START_OF_LINE]','',str_replace('[END_OF_LINE]','',$script_line));
 return trim($script_line)."\n";}

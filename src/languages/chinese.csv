@@ -68,3 +68,10 @@ or,或
 from,从
 to,到
 as,为
+title(),标题()
+url(),网址()
+text(),文本()
+timer(),计时()
+count(),计数()
+present(),存在()
+visible(),可见()
