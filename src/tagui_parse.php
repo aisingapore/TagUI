@@ -123,8 +123,9 @@ $script_content = str_replace("casper.echo('\\nSTART - automation started - ","c
 $script_content = str_replace("techo('FINISH - automation","dummy_echo('FINISH - test",$script_content); // silent
 $script_content = str_replace("this.echo(","test.comment(",$script_content); // change echo to test comment
 $script_content = str_replace("test.comment('ERROR","test.fail('ERROR",$script_content); // error comment to fail
-$script_content = str_replace("if (!quiet_mode) casper.echo(echo_string);",
-"if (!quiet_mode) casper.test.comment(echo_string);",$script_content); // change echo to test comment in techo
+// change echo to test comment in techo to show output correctly as test comments
+$script_content = str_replace("casper.echo(echo_string);","casper.test.comment(echo_string);",$script_content);
+$script_content = str_replace("casper.echo(translated_string);","casper.test.comment(translated_string);",$script_content);
 $script_content = str_replace("\\n'","'",str_replace("'\\n","'",$script_content)); // compact test output
 // casperjs testing does not allow creation of casper object as it is already created by test engine
 $script_content = str_replace("var casper = require(","// var casper = require(",$script_content);

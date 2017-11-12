@@ -16,9 +16,6 @@ var timer_start_time = Date.now();
 // initialise default global variables
 var quiet_mode = false; var save_text_count = 0; var snap_image_count = 0;
 
-// initialise default flow language
-var flow_language = 'english';
-
 // counters for tracking messages in sikuli and chrome integrations
 var sikuli_count = 0; var chrome_id = 0;
 

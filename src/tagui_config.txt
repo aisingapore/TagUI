@@ -1,6 +1,9 @@
 // TagUI web automation browser settings
 // verbose style to support tester module
 
+// set default flow language
+var flow_language = 'english';
+
 // set time in ms before error out
 casper.options.waitTimeout = 10000;
 casper.options.logLevel = 'debug';
