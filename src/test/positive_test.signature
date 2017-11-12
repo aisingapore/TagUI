@@ -40,6 +40,9 @@ var timer_start_time = Date.now();
 // initialise default global variables
 var quiet_mode = false; var save_text_count = 0; var snap_image_count = 0;
 
+// initialise default flow language
+var flow_language = 'english';
+
 // counters for tracking messages in sikuli and chrome integrations
 var sikuli_count = 0; var chrome_id = 0;
 
@@ -53,7 +56,9 @@ var dom_json = {}; var dom_result = '';
 var api_config = {method:'GET', header:[], body:{}};
 
 // techo function for handling quiet option
-function techo(echo_string) {if (!quiet_mode) casper.echo(echo_string); return;}
+function techo(echo_string) {if (!quiet_mode) {if (flow_language == 'english') casper.echo(echo_string); else 
+{var translated_string = translate(echo_string,'to',flow_language); casper.echo(translated_string);
+if (translated_string.indexOf('ERROR - translation engine') !== -1) casper.exit();}} return;}
 
 // for muting echo in test automation scripts
 function dummy_echo(muted_string) {return;}
@@ -86,6 +91,74 @@ if (casper.exists(x(table_cell))) row_data = row_data + '","' + casper.fetchText
 else break;} // if searching for table cells (th and td) is not successful,  means end of row is reached
 if (row_data.substr(0,2) == '",') {row_data = row_data.substr(2); row_data += '"'; append_text(file_name,row_data);}
 else return true;}} // if '",' is not found, means end of table is reached as there is no cell found in row
+
+// for translating multi-language flows (comments in translate.php)
+function translate(script_line,direction,language) {var start_keywords = 
+'|click|tap|move|hover|type|enter|select|choose|read|fetch|show|print|save|echo|dump|write|snap|table|'+
+'wait|live|download|upload|load|receive|frame|popup|timeout|api|dom|js|else if|else|if|for|while|check|';
+var to_separator_keywords = '|read|fetch|save|load|dump|write|snap|table|download|receive|for|'
+var as_separator_keywords = '|type|enter|select|choose|upload|'; var forloop_keywords = '|from|';
+var start_conditions_keywords = '|else if|if|for|while|check|'; var start_helper_keywords = '|echo|dump|write|';
+var conditions_keywords = '|more than or equals to|more than or equal to|greater than or equals to|greater than or equal to|higher than or equals to|higher than or equal to|less than or equals to|less than or equal to|lesser than or equals to|lesser than or equal to|lower than or equals to|lower than or equal to|more than|greater than|higher than|less than|lesser than|lower than|not equals to|not equal to|equals to|equal to|not contains|not contain|contains|contain|and|or|';
+var helper_keywords = '|title()|url()|text()|timer()|count()|present()|visible()|';
+var seconds_keywords = '|seconds|second|'; var start_seconds_keywords = '|wait|timeout|';
+if (!script_line) return 'ERROR - translation engine script_line parameter missing';
+if (!direction || direction == '') return 'ERROR - translation engine direction parameter missing';
+if (!language || language == '') return 'ERROR - translation engine language parameter missing';
+if (script_line == '' || script_line == '\r\n' || script_line == '\n') return script_line;
+var front_script_line_return = ''; if (script_line.charAt(0) == '\n') front_script_line_return = '\n';
+var back_script_line_return = ''; if (script_line.substr(-1) == '\n') back_script_line_return = '\n';
+if (direction !== 'to' && direction !== 'from') return 'ERROR - translation engine direction must be to or from'; 
+if (direction == 'from') {var column_from = 1; var column_to = 0;} else {var column_from = 0; var column_to = 1;}
+language = language.toLowerCase(); var language_count = 0;
+var ds; if (flow_path.indexOf('/') !== -1) ds = '/'; else ds = '\\';
+var language_file = 'languages' + ds + language + '.csv'; var fs = require('fs');
+if (!fs.exists(language_file)) return 'ERROR - translation engine ' + language + '.csv file missing'; else {
+var language_raw = fs.read(language_file); if (language_raw.indexOf('\r\n') !== -1)
+var language_data = language_raw.split(/\r\n/).map(function(line) {return line.split(',');});
+else var language_data = language_raw.split(/\n/).map(function(line) {return line.split(',');});
+language_count = language_data.length-2;}
+script_line = '[START_OF_LINE]'+script_line.trim()+'[END_OF_LINE]'; var start_word = '[NOT_ASSIGNED]';
+for (language_check = 1; language_check <= language_count; language_check++) {
+if (start_keywords.indexOf('|'+language_data[language_check][0]+'|') !== -1) {
+if (start_word !== '[NOT_ASSIGNED]') continue;
+if (script_line.indexOf('[START_OF_LINE]'+language_data[language_check][column_from]+' ') !== -1)
+start_word = language_data[language_check][0];
+var regex = new RegExp('\\[START_OF_LINE\\]'+language_data[language_check][column_from]+' ','g');
+script_line = script_line.replace(regex,'[START_OF_LINE]'+language_data[language_check][column_to]+' ');}
+else if (conditions_keywords.indexOf('|'+language_data[language_check][0]+'|') !== -1) {
+if (start_word == 'check') {var array_script_line = script_line.split('|');
+var regex = new RegExp(' '+language_data[language_check][column_from]+' ','g');
+array_script_line[0] = array_script_line[0].replace(regex,' '+language_data[language_check][column_to]+' ');
+script_line = array_script_line.join('|');}}
+else if (conditions_keywords.indexOf('|'+language_data[language_check][0]+'|') !== -1) {
+if ((start_word !== '[NOT_ASSIGNED]') && (start_conditions_keywords.indexOf('|'+start_word+'|') !== -1))
+{var regex = new RegExp(' '+language_data[language_check][column_from]+' ','g');
+script_line = script_line.replace(regex,' '+language_data[language_check][column_to]+' ');}}
+else if (seconds_keywords.indexOf('|'+language_data[language_check][0]+'|') !== -1) {
+if ((start_word !== '[NOT_ASSIGNED]') && (start_seconds_keywords.indexOf('|'+start_word+'|') !== -1))
+{var regex = new RegExp(' '+language_data[language_check][column_from]+'[END_OF_LINE]','g');
+script_line = script_line.replace(regex,' '+language_data[language_check][column_to]+'[END_OF_LINE]');}}
+else if (forloop_keywords.indexOf('|'+language_data[language_check][0]+'|') !== -1) {
+if (start_word == 'for')
+{var regex = new RegExp(' '+language_data[language_check][column_from]+' ','g');
+script_line = script_line.replace(regex,' '+language_data[language_check][column_to]+' ');}}
+else if (language_data[language_check][0] == 'to') {
+if ((start_word !== '[NOT_ASSIGNED]') && (to_separator_keywords.indexOf('|'+start_word+'|') !== -1))
+{var regex = new RegExp(' '+language_data[language_check][column_from]+' ','g');
+script_line = script_line.replace(regex,' '+language_data[language_check][column_to]+' ');}}
+else if (language_data[language_check][0] == 'as') {
+if ((start_word !== '[NOT_ASSIGNED]') && (as_separator_keywords.indexOf('|'+start_word+'|') !== -1))
+{var regex = new RegExp(' '+language_data[language_check][column_from]+' ','g');
+script_line = script_line.replace(regex,' '+language_data[language_check][column_to]+' ');}}
+else if (helper_keywords.indexOf('|'+language_data[language_check][0]+'|') !== -1) {
+if (((start_word !== '[NOT_ASSIGNED]') && (start_conditions_keywords.indexOf('|'+start_word+'|') !== -1))
+|| ((start_word !== '[NOT_ASSIGNED]') && (start_helper_keywords.indexOf('|'+start_word+'|') !== -1))
+|| (script_line.indexOf('=') !== -1))
+{var regex = new RegExp((' '+language_data[language_check][column_from]).replace('(','\\(').replace(')',''),'g');
+script_line = script_line.replace(regex,(' '+language_data[language_check][column_to]).replace(')',''));}}}
+script_line = script_line.replace('[START_OF_LINE]','').replace('[END_OF_LINE]','');
+return front_script_line_return+script_line.trim()+back_script_line_return;}
 
 // for checking if selector is xpath selector
 function is_xpath_selector(selector) {if (selector.length == 0) return false;

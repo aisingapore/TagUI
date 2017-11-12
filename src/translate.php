@@ -30,12 +30,12 @@ $seconds_keywords = '|seconds|second|'; $start_seconds_keywords = '|wait|timeout
 
 // experimental entry point
 $source_flow = $argv[1]; if ($source_flow=="") die("ERROR - specify flow filename as first parameter\n");
-$direction = $argv[2]; if ($direction=="") die("ERROR - specify to or from as third parameter\n");
+$direction = $argv[2]; if ($direction=="") die("ERROR - specify to or from as second parameter\n");
 $language = $argv[3]; if ($language=="") die("ERROR - specify language as third parameter\n");
 
 // set language definition array columns base on direction of translation
 $direction = strtolower($direction);
-if (($direction != 'to') and ($direction != 'from')) die("ERROR - specify to or from as third parameter\n");
+if (($direction != 'to') and ($direction != 'from')) die("ERROR - specify to or from as second parameter\n");
 if ($direction == 'from') {$column_from = 1; $column_to = 0;} else {$column_from = 0; $column_to = 1;}
 
 // load desired language definition file into array for use in translation

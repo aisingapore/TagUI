@@ -103,7 +103,7 @@ echo "TRUE"
 if 5 greater than 3 and 3 lesser than 4
 echo "TRUE"
 if 5 greater than 3 and 3 lesser than 4 and "kiwi" equals to "kiwi"
-echo "TRUE" 
+echo "TRUE"
 
 // test or
 if 'apple' equals to 'apple' or 'orange' equals to 'kiwi'
@@ -293,7 +293,7 @@ echo "some text - " + variable
 echo 'some text - ' + variable
 echo "some text - " variable
 echo 'some text - ' variable
-echo variable " - some text - " variable  " - some text "   "some text - "  +  variable  
+echo variable " - some text - " variable  " - some text "   "some text - "  +  variable
 
 // test dump
 dump "some text - " + variable
@@ -434,7 +434,7 @@ echo 'footer not visible'
 }
 
 // test title function
-echo title() 
+echo title()
 if title() contains 'About'
 echo 'page title contains About'
 
