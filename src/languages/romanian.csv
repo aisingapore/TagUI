@@ -1,0 +1,77 @@
+EN,RO
+click,clic
+tap,atingeți
+move,mișcare
+hover,planare
+type,tip
+enter,introduce
+select,selectați
+choose,alege
+read,citit
+fetch,aduce
+show,spectacol
+print,imprimare
+save,salvați
+echo,ecou
+dump,depozit
+write,scrie
+snap,agrafă
+table,masa
+live,trăi
+download,descarca
+upload,încărcați
+load,sarcină
+receive,a primi
+frame,cadru
+popup,pop-up
+wait,aștepta
+timeout,pauză
+seconds,secunde
+second,secunde
+api,api
+dom,dom
+js,js
+else if,altfel dacă
+else,altfel
+if,dacă
+for,pentru
+while,in timp ce
+check,verifica
+more than or equals to,mai mult sau egal cu
+more than or equal to,mai mult sau egal cu
+greater than or equals to,mai mare sau egal cu
+greater than or equal to,mai mare sau egal cu
+higher than or equals to,mai mare sau egal cu
+higher than or equal to,mai mare sau egal cu
+less than or equals to,mai puțin sau egal cu
+less than or equal to,mai mică sau egală cu
+lesser than or equals to,mai mică sau egală cu
+lesser than or equal to,mai mică sau egală cu
+lower than or equals to,mai mică sau egală cu
+lower than or equal to,mai mică sau egală cu
+more than,mai mult decât
+greater than,mai mare ca
+higher than,mai mare decât
+less than,mai puțin decât
+lesser than,mai puțin decât
+lower than,mai putin decat
+not equals to,nu este egal cu
+not equal to,nu este egal cu
+equals to,este egal cu
+equal to,egal cu
+not contains,nu conține
+not contain,nu conține
+contains,conține
+contain,conține
+and,și
+or,sau
+from,din
+to,la
+as,la fel de
+title(),titlu()
+url(),url-ul()
+text(),text()
+timer(),cronometru()
+count(),numara()
+present(),prezent()
+visible(),vizibil()

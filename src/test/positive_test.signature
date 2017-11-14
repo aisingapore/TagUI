@@ -5,7 +5,7 @@ var casper = require('casper').create();
 // verbose style to support tester module
 
 // set default flow language
-var flow_language = 'english';
+var tagui_language = 'english';
 
 // set time in ms before error out
 casper.options.waitTimeout = 10000;
@@ -56,8 +56,8 @@ var dom_json = {}; var dom_result = '';
 var api_config = {method:'GET', header:[], body:{}};
 
 // techo function for handling quiet option
-function techo(echo_string) {if (!quiet_mode) {if (flow_language == 'english') casper.echo(echo_string); else 
-{var translated_string = translate(echo_string,'to',flow_language); casper.echo(translated_string);
+function techo(echo_string) {if (!quiet_mode) {if (tagui_language.toLowerCase() == 'english') casper.echo(echo_string);
+else {var translated_string = translate(echo_string,'to',tagui_language.toLowerCase()); casper.echo(translated_string);
 if (translated_string.indexOf('ERROR - translation engine') !== -1) casper.exit();}} return;}
 
 // for muting echo in test automation scripts
@@ -102,12 +102,13 @@ var start_conditions_keywords = '|else if|if|for|while|check|'; var start_helper
 var conditions_keywords = '|more than or equals to|more than or equal to|greater than or equals to|greater than or equal to|higher than or equals to|higher than or equal to|less than or equals to|less than or equal to|lesser than or equals to|lesser than or equal to|lower than or equals to|lower than or equal to|more than|greater than|higher than|less than|lesser than|lower than|not equals to|not equal to|equals to|equal to|not contains|not contain|contains|contain|and|or|';
 var helper_keywords = '|title()|url()|text()|timer()|count()|present()|visible()|';
 var seconds_keywords = '|seconds|second|'; var start_seconds_keywords = '|wait|timeout|';
-if (!script_line) return 'ERROR - translation engine script_line parameter missing';
+if (!script_line || script_line == '') return '';
 if (!direction || direction == '') return 'ERROR - translation engine direction parameter missing';
 if (!language || language == '') return 'ERROR - translation engine language parameter missing';
 if (script_line == '' || script_line == '\r\n' || script_line == '\n') return script_line;
 var front_script_line_return = ''; if (script_line.charAt(0) == '\n') front_script_line_return = '\n';
 var back_script_line_return = ''; if (script_line.substr(-1) == '\n') back_script_line_return = '\n';
+direction = direction.toLowerCase();
 if (direction !== 'to' && direction !== 'from') return 'ERROR - translation engine direction must be to or from'; 
 if (direction == 'from') {var column_from = 1; var column_to = 0;} else {var column_from = 0; var column_to = 1;}
 language = language.toLowerCase(); var language_count = 0;
@@ -117,27 +118,30 @@ if (!fs.exists(language_file)) return 'ERROR - translation engine ' + language +
 var language_raw = fs.read(language_file); if (language_raw.indexOf('\r\n') !== -1)
 var language_data = language_raw.split(/\r\n/).map(function(line) {return line.split(',');});
 else var language_data = language_raw.split(/\n/).map(function(line) {return line.split(',');});
-language_count = language_data.length-2;}
+language_count = language_data.length-1;
+if (!language_data[language_count][0] || language_data[language_count][0] == '') language_count--;}
 script_line = '[START_OF_LINE]'+script_line.trim()+'[END_OF_LINE]'; var start_word = '[NOT_ASSIGNED]';
 for (language_check = 1; language_check <= language_count; language_check++) {
 if (start_keywords.indexOf('|'+language_data[language_check][0]+'|') !== -1) {
 if (start_word !== '[NOT_ASSIGNED]') continue;
-if (script_line.indexOf('[START_OF_LINE]'+language_data[language_check][column_from]+' ') !== -1)
+if ((script_line.indexOf('[START_OF_LINE]'+language_data[language_check][column_from]+' ') !== -1) || 
+(script_line.indexOf('[START_OF_LINE]'+language_data[language_check][column_from]+'[END_OF_LINE]') !== -1))
 start_word = language_data[language_check][0];
 var regex = new RegExp('\\[START_OF_LINE\\]'+language_data[language_check][column_from]+' ','g');
-script_line = script_line.replace(regex,'[START_OF_LINE]'+language_data[language_check][column_to]+' ');}
+script_line = script_line.replace(regex,'[START_OF_LINE]'+language_data[language_check][column_to]+' ');
+var regex = new RegExp('\\[START_OF_LINE\\]'+language_data[language_check][column_from]+'\\[END_OF_LINE\\]','g');
+script_line = script_line.replace(regex,'[START_OF_LINE]'+language_data[language_check][column_to]+'[END_OF_LINE]');}
 else if (conditions_keywords.indexOf('|'+language_data[language_check][0]+'|') !== -1) {
 if (start_word == 'check') {var array_script_line = script_line.split('|');
 var regex = new RegExp(' '+language_data[language_check][column_from]+' ','g');
 array_script_line[0] = array_script_line[0].replace(regex,' '+language_data[language_check][column_to]+' ');
-script_line = array_script_line.join('|');}}
-else if (conditions_keywords.indexOf('|'+language_data[language_check][0]+'|') !== -1) {
-if ((start_word !== '[NOT_ASSIGNED]') && (start_conditions_keywords.indexOf('|'+start_word+'|') !== -1))
+script_line = array_script_line.join('|');}
+else if ((start_word !== '[NOT_ASSIGNED]') && (start_conditions_keywords.indexOf('|'+start_word+'|') !== -1))
 {var regex = new RegExp(' '+language_data[language_check][column_from]+' ','g');
 script_line = script_line.replace(regex,' '+language_data[language_check][column_to]+' ');}}
 else if (seconds_keywords.indexOf('|'+language_data[language_check][0]+'|') !== -1) {
 if ((start_word !== '[NOT_ASSIGNED]') && (start_seconds_keywords.indexOf('|'+start_word+'|') !== -1))
-{var regex = new RegExp(' '+language_data[language_check][column_from]+'[END_OF_LINE]','g');
+{var regex = new RegExp(' '+language_data[language_check][column_from]+'\\[END_OF_LINE\\]','g');
 script_line = script_line.replace(regex,' '+language_data[language_check][column_to]+'[END_OF_LINE]');}}
 else if (forloop_keywords.indexOf('|'+language_data[language_check][0]+'|') !== -1) {
 if (start_word == 'for')
@@ -511,7 +515,10 @@ chrome.on = function(value,statement) {casper.on(value,statement);}; // use casp
 } // end of super large if block to load chrome related functions if chrome or headless option is used
 
 // for live mode simple parsing of tagui steps into js code
-function tagui_parse(raw_input) {return parse_intent(raw_input);}
+function tagui_parse(raw_input) {if (tagui_language.toLowerCase() == 'english') return parse_intent(raw_input);
+else {var translated_string = translate(raw_input,'from',tagui_language.toLowerCase());
+if (translated_string.indexOf('ERROR - translation engine') !== -1) casper.echo(translated_string).exit();
+else return parse_intent(translated_string);}}
 
 // for live mode interpretation of step into casperjs code
 function parse_intent(live_line) {
@@ -728,7 +735,7 @@ function show_intent(raw_intent) {
 var params = ((raw_intent + ' ').substr(1+(raw_intent + ' ').indexOf(' '))).trim();
 if (params.toLowerCase() == 'page') return "this.echo('" + raw_intent + "' + ' - ' + '\\n' + this.getHTML())";
 if (params == '') return "this.echo('ERROR - target missing for " + raw_intent + "')";
-else if (check_tx(params)) return "this.echo('" + raw_intent + "' + ' - ' + this.fetchText(tx('" + params + "')).trim())";else return "this.echo('ERROR - cannot find " + params + "')";}
+else if (check_tx(params)) return "this.echo(this.fetchText(tx('" + params + "')).trim())";else return "this.echo('ERROR - cannot find " + params + "')";}
 
 function upload_intent(raw_intent) {
 var params = ((raw_intent + ' ').substr(1+(raw_intent + ' ').indexOf(' '))).trim();
@@ -1625,16 +1632,16 @@ casper.then(function() {
 {techo('fetch page to variable');
 variable = this.getHTML();}
 // test show / print
-{// nothing to do on this line
+{techo('show element');
 casper.waitFor(function check() {return check_tx('element');},
-function then() {this.echo('show element' + ' - ' + this.fetchText(tx('element')).trim());},
+function then() {this.echo(this.fetchText(tx('element')).trim());},
 function timeout() {this.echo('ERROR - cannot find element').exit();});}});
 
 casper.then(function() {
 this.echo('show page' + ' - \n' + this.getHTML());
-{// nothing to do on this line
+{techo('print element');
 casper.waitFor(function check() {return check_tx('element');},
-function then() {this.echo('print element' + ' - ' + this.fetchText(tx('element')).trim());},
+function then() {this.echo(this.fetchText(tx('element')).trim());},
 function timeout() {this.echo('ERROR - cannot find element').exit();});}});
 
 casper.then(function() {
@@ -1922,9 +1929,9 @@ if ((present('footer')))
 // start of code block
 {casper.then(function() {
 
-{// nothing to do on this line
+{techo('print footer');
 casper.waitFor(function check() {return check_tx('footer');},
-function then() {this.echo('print footer' + ' - ' + this.fetchText(tx('footer')).trim());},
+function then() {this.echo(this.fetchText(tx('footer')).trim());},
 function timeout() {this.echo('ERROR - cannot find footer').exit();});}});
 
 casper.then(function() {

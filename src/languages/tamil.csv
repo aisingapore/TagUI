@@ -1,0 +1,77 @@
+EN,TA
+click,கிளிக்
+tap,குழாய்
+move,நடவடிக்கை
+hover,மிதவை
+type,வகை
+enter,நுழைய
+select,தேர்வு
+choose,தேர்வு
+read,படிக்க
+fetch,எடுக்க
+show,நிகழ்ச்சி
+print,அச்சு
+save,காப்பாற்ற
+echo,எதிரொலி
+dump,டம்ப்
+write,எழுத
+snap,நொடியில்
+table,மேசை
+live,வாழ
+download,பதிவிறக்க
+upload,பதிவேற்ற
+load,சுமை
+receive,பெறும்
+frame,சட்ட
+popup,பாப்
+wait,காத்திரு
+timeout,நேரம் முடிந்தது
+seconds,விநாடிகள்
+second,இரண்டாவது
+api,api
+dom,dom
+js,js
+else if,வேறு ஏதேனும் இருந்தால்
+else,வேறு
+if,என்றால்
+for,ஐந்து
+while,போது
+check,சரிபார்க்கவும்
+more than or equals to,விட அல்லது சமமாக
+more than or equal to,அதிகமாக அல்லது சமமாக
+greater than or equals to,அதிகமாக அல்லது சமமாக
+greater than or equal to,அதிகமாக அல்லது சமமாக
+higher than or equals to,அதிகமாக அல்லது சமமாக
+higher than or equal to,அதிகமாக அல்லது சமமாக
+less than or equals to,குறைவாக அல்லது சமமாக
+less than or equal to,குறைவாக அல்லது சமமாக
+lesser than or equals to,விட குறைவாக அல்லது சமமாக
+lesser than or equal to,குறைவான அல்லது சமமாக
+lower than or equals to,விட குறைவாக அல்லது சமமாக
+lower than or equal to,குறைவாக அல்லது சமமாக
+more than,விட
+greater than,விட அதிகமாக
+higher than,விட அதிக
+less than,குறைவாக
+lesser than,குறைவாக
+lower than,விட குறைவாக
+not equals to,சமமாக இல்லை
+not equal to,சமமாக இல்லை
+equals to,சமமாக
+equal to,சமமாக
+not contains,இல்லை
+not contain,இல்லை
+contains,கொண்டிருந்தால்
+contain,கொண்டிருக்கும்
+and,மற்றும்
+or,அல்லது
+from,இருந்து
+to,க்கு
+as,போன்ற
+title(),தலைப்பு()
+url(),இணைய முகவரிக்கு()
+text(),உரை()
+timer(),டைமர்()
+count(),எண்ண()
+present(),தற்போது()
+visible(),புலப்படும்()

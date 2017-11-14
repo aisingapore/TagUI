@@ -1,0 +1,77 @@
+EN,HU
+click,kettyenés
+tap,koppintson a
+move,mozog
+hover,lebeg
+type,típus
+enter,belép
+select,választ
+choose,választ
+read,olvas
+fetch,lekérés
+show,előadás
+print,nyomtatás
+save,mentés
+echo,visszhang
+dump,lerak
+write,ír
+snap,snap
+table,asztal
+live,élő
+download,letöltés
+upload,feltölt
+load,betöltés
+receive,kap
+frame,keret
+popup,felugrik
+wait,várjon
+timeout,időtúllépés
+seconds,másodperc
+second,második
+api,api
+dom,dom
+js,js
+else if,egyébként ha
+else,más
+if,ha
+for,mert
+while,míg
+check,jelölje be
+more than or equals to,több vagy egyenlő
+more than or equal to,több vagy egyenlő
+greater than or equals to,nagyobb vagy egyenlő
+greater than or equal to,nagyobb vagy egyenlő
+higher than or equals to,magasabb vagy egyenlő
+higher than or equal to,nagyobb vagy egyenlő
+less than or equals to,kevesebb vagy egyenlő
+less than or equal to,kevesebb vagy egyenlő
+lesser than or equals to,kisebb vagy egyenlő
+lesser than or equal to,kisebb vagy egyenlő
+lower than or equals to,kisebb vagy egyenlő
+lower than or equal to,kisebb vagy egyenlő
+more than,több mint
+greater than,nagyobb mint
+higher than,magasabb mint
+less than,kevesebb mint
+lesser than,kevesebb mint
+lower than,alacsonyabb mint
+not equals to,nem egyenlő
+not equal to,nem egyenlő
+equals to,egyenlő
+equal to,egyenlő
+not contains,nem tartalmaz
+not contain,nem tartalmazhat
+contains,tartalmaz
+contain,tartalmaz
+and,és
+or,vagy
+from,tól től
+to,nak nek
+as,mint
+title(),cím()
+url(),url()
+text(),szöveg()
+timer(),időzítő()
+count(),számol()
+present(),ajándék()
+visible(),látható()

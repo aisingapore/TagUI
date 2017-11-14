@@ -1,0 +1,77 @@
+EN,PT
+click,clique
+tap,toque
+move,mover
+hover,flutuar
+type,tipo
+enter,entrar
+select,selecione
+choose,escolher
+read,ler
+fetch,buscar
+show,exposição
+print,impressão
+save,salve
+echo,eco
+dump,despejar
+write,escreva
+snap,snap
+table,mesa
+live,viver
+download,baixar
+upload,envio
+load,carga
+receive,receber
+frame,armação
+popup,aparecer
+wait,esperar
+timeout,tempo esgotado
+seconds,segundos
+second,segundo
+api,api
+dom,dom
+js,js
+else if,senão se
+else,outro
+if,e se
+for,para
+while,enquanto
+check,verifica
+more than or equals to,mais ou igual a
+more than or equal to,mais ou igual a
+greater than or equals to,maior ou igual a
+greater than or equal to,maior ou igual a
+higher than or equals to,superior ou igual a
+higher than or equal to,maior ou igual a
+less than or equals to,menor ou igual a
+less than or equal to,menos que ou igual a
+lesser than or equals to,menor ou igual a
+lesser than or equal to,menor ou igual a
+lower than or equals to,menor ou igual a
+lower than or equal to,inferior ou igual a
+more than,mais que
+greater than,melhor que
+higher than,mais alto que
+less than,menos que
+lesser than,menor que
+lower than,mais baixo que
+not equals to,não é igual a
+not equal to,não igual a
+equals to,igual a
+equal to,igual a
+not contains,não contém
+not contain,não contém
+contains,contém
+contain,conter
+and,e
+or,ou
+from,a partir de
+to,para
+as,como
+title(),título()
+url(),url()
+text(),texto()
+timer(),cronômetro()
+count(),contagem()
+present(),presente()
+visible(),visível()

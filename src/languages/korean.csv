@@ -1,0 +1,77 @@
+EN,KO
+click,딸깍
+tap,꼭지
+move,움직임
+hover,공중 선회
+type,유형
+enter,들어가다
+select,고르다
+choose,고르다
+read,독서
+fetch,술책
+show,보여 주다
+print,인쇄
+save,구하다
+echo,에코
+dump,덤프
+write,쓰다
+snap,스냅
+table,표
+live,살고 있다
+download,다운로드
+upload,업로드
+load,하중
+receive,받다
+frame,틀
+popup,팝업
+wait,기다림
+timeout,타임 아웃
+seconds,초
+second,둘째
+api,api
+dom,dom
+js,js
+else if,그밖에 만약
+else,그밖에
+if,만약
+for,에 대한
+while,동안
+check,검사
+more than or equals to,이상 또는 같음
+more than or equal to,이상
+greater than or equals to,보다 크거나 같음
+greater than or equal to,보다 크거나 같음
+higher than or equals to,보다 높거나 같음
+higher than or equal to,보다 크거나 같음
+less than or equals to,보다 작거나 같음
+less than or equal to,보다 작거나 같음
+lesser than or equals to,보다 작거나 같음
+lesser than or equal to,작거나 같음
+lower than or equals to,보다 작거나 같음
+lower than or equal to,보다 작거나 같음
+more than,이상
+greater than,보다 큰
+higher than,이상
+less than,미만
+lesser than,보다 작은
+lower than,보다 낮은
+not equals to,같지 않음
+not equal to,같지 않음
+equals to,같음
+equal to,동일
+not contains,포함하지 않음
+not contain,포함하지 않음
+contains,포함하다
+contain,있다
+and,과
+or,또는
+from,에서
+to,에
+as,같이
+title(),표제()
+url(),url()
+text(),본문()
+timer(),시간제 노동자()
+count(),카운트()
+present(),선물()
+visible(),명백한()

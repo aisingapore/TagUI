@@ -43,15 +43,21 @@ $language = strtolower($language); $language_count = 0; if (file_exists('languag
 $language_file = fopen('languages/' . $language . '.csv','r') or die("ERROR - cannot open " . $language . '.csv' . "\n");
 while (!feof($language_file)) {$language_data[$language_count] = fgetcsv($language_file);
 if (count($language_data[$language_count]) == 0) die("ERROR - empty row found in " . $language . '.csv' . "\n");
-$language_count++;} fclose($language_file); $language_count-=2;} //-1 for header, -1 for EOF
+$language_count++;} fclose($language_file); $language_count-=1; // -1 for header
+if ($language_data[$language_count][0] == '') $language_count-=1;} // -1 for EOF
 else die("ERROR - missing language file " . $language . '.csv' . "\n");
 
+if ($source_flow != 'tagui_parse.php') { // skip processing if internal call
 // load automation flow file and perform translation using language definition
 $target_flow = $source_flow . '_translated'; // add translated postfix to target flow name
+if (!file_exists($source_flow)) die("ERROR - cannot open " . $source_flow . "\n");
 $source_file = fopen($source_flow,'r') or die("ERROR - cannot open " . $source_flow . "\n");
 $target_file = fopen($target_flow,'w') or die("ERROR - cannot open " . $target_flow . "\n");
 while(!feof($source_file)) {fwrite($target_file,translate_intent(fgets($source_file)));}
-fclose($source_file); fclose($target_file);
+fclose($source_file); fclose($target_file);}
+
+// log translations to log file for easier checking in case of issues
+fclose(fopen('translate.log','w')); chmod('translate.log',0600);
 
 // function to perform translation of automation flow by processing each flow line
 function translate_intent($script_line) {if ($script_line == "") return ""; // avoid next line character if none
@@ -64,14 +70,12 @@ for ($language_check = 1; $language_check <= $GLOBALS['language_count']; $langua
 if (strpos($GLOBALS['start_keywords'],'|'.$GLOBALS['language_data'][$language_check][0].'|')!==false)
 {if ($start_word != '[NOT_ASSIGNED]') continue; // skip processing for start keyword if one is already found
 $script_line = str_replace('[START_OF_LINE]'.$GLOBALS['language_data'][$language_check][$GLOBALS['column_from']].' ','[START_OF_LINE]'.$GLOBALS['language_data'][$language_check][$GLOBALS['column_to']].' ',$script_line,$replace_count);
-if ($replace_count > 0) $start_word = $GLOBALS['language_data'][$language_check][0];}
+if ($replace_count > 0) $start_word = $GLOBALS['language_data'][$language_check][0];
+else {$script_line = str_replace('[START_OF_LINE]'.$GLOBALS['language_data'][$language_check][$GLOBALS['column_from']].'[END_OF_LINE]','[START_OF_LINE]'.$GLOBALS['language_data'][$language_check][$GLOBALS['column_to']].'[END_OF_LINE]',$script_line,$replace_count); if ($replace_count > 0) $start_word = $GLOBALS['language_data'][$language_check][0];}}
 
 else if (strpos($GLOBALS['conditions_keywords'],'|'.$GLOBALS['language_data'][$language_check][0].'|')!==false) {
-if ($start_word == 'check') {$array_script_line = explode('|',$script_line); $array_script_line[0] = str_replace(' '.$GLOBALS['language_data'][$language_check][$GLOBALS['column_from']].' ',' '.$GLOBALS['language_data'][$language_check][$GLOBALS['column_to']].' ',$array_script_line[0]); $script_line = implode('|',$array_script_line);}}
-
-else if (strpos($GLOBALS['conditions_keywords'],'|'.$GLOBALS['language_data'][$language_check][0].'|')!==false) {
-if (($start_word != '[NOT_ASSIGNED]') and (strpos($GLOBALS['start_conditions_keywords'],'|'.$start_word.'|')!==false))
-$script_line = str_replace(' '.$GLOBALS['language_data'][$language_check][$GLOBALS['column_from']].' ',' '.$GLOBALS['language_data'][$language_check][$GLOBALS['column_to']].' ',$script_line);}
+if ($start_word == 'check') {$array_script_line = explode('|',$script_line); $array_script_line[0] = str_replace(' '.$GLOBALS['language_data'][$language_check][$GLOBALS['column_from']].' ',' '.$GLOBALS['language_data'][$language_check][$GLOBALS['column_to']].' ',$array_script_line[0]); $script_line = implode('|',$array_script_line);}
+else if (($start_word != '[NOT_ASSIGNED]') and (strpos($GLOBALS['start_conditions_keywords'],'|'.$start_word.'|')!==false)) $script_line = str_replace(' '.$GLOBALS['language_data'][$language_check][$GLOBALS['column_from']].' ',' '.$GLOBALS['language_data'][$language_check][$GLOBALS['column_to']].' ',$script_line);}
 
 else if (strpos($GLOBALS['seconds_keywords'],'|'.$GLOBALS['language_data'][$language_check][0].'|')!==false) {
 if (($start_word != '[NOT_ASSIGNED]') and (strpos($GLOBALS['start_seconds_keywords'],'|'.$start_word.'|')!==false))
@@ -95,6 +99,7 @@ or (strpos($script_line,'=')!==false))
 $script_line = str_replace(' '.str_replace(')','',$GLOBALS['language_data'][$language_check][$GLOBALS['column_from']]),' '.str_replace(')','',$GLOBALS['language_data'][$language_check][$GLOBALS['column_to']]),$script_line);}}
 
 $script_line = str_replace('[START_OF_LINE]','',str_replace('[END_OF_LINE]','',$script_line));
+$translate_log = fopen('translate.log','a'); fwrite($translate_log, trim($script_line)."\n"); fclose($translate_log);
 return trim($script_line)."\n";}
 
 ?>

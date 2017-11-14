@@ -2,7 +2,7 @@
 // verbose style to support tester module
 
 // set default flow language
-var flow_language = 'english';
+var tagui_language = 'english';
 
 // set time in ms before error out
 casper.options.waitTimeout = 10000;

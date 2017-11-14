@@ -45,8 +45,23 @@ while(!feof($header_file)) {fwrite($output_file,fgets($header_file));} fclose($h
 // casperjs/phantomjs do not seem to support \ for windows paths, replace with / to work
 fwrite($output_file,"var flow_path = '" . str_replace("\\","/",dirname($script)) . "';\n\n");
 
-// main loop to parse intents in flow file for conversion into javascript code
-while(!feof($input_file)) {fwrite($output_file,parse_intent(fgets($input_file)));} fclose($input_file);
+if (strpos(strtolower(file_get_contents('tagui_config.txt')),"var tagui_language = 'english';")!==false)
+{ // main loop without translation to parse intents in flow file for conversion into javascript code
+while(!feof($input_file)) {fwrite($output_file,parse_intent(fgets($input_file)));} fclose($input_file);}
+else { // section and main loop which includes translation engine for handling flows in other languages
+$temp_argv1 = $argv[1]; $temp_argv2 = $argv[2]; $temp_argv3 = $argv[3];
+$argv[1] = 'tagui_parse.php'; $argv[2] = 'from';
+$temp_tagui_config = strtolower(file_get_contents('tagui_config.txt'));
+$temp_tagui_config_start = strpos($temp_tagui_config,'var tagui_language');
+$temp_tagui_config_end = strpos($temp_tagui_config,"\n",$temp_tagui_config_start);
+$temp_tagui_config = substr($temp_tagui_config,$temp_tagui_config_start,$temp_tagui_config_end-$temp_tagui_config_start);
+$temp_tagui_config = str_replace('var tagui_language','',$temp_tagui_config);
+$temp_tagui_config = str_replace('"','',$temp_tagui_config); $temp_tagui_config = str_replace("'",'',$temp_tagui_config);
+$temp_tagui_config = str_replace('=','',$temp_tagui_config); $temp_tagui_config = str_replace(';','',$temp_tagui_config); 
+$argv[3] = trim($temp_tagui_config);
+require 'translate.php'; // set parameters to load translation engine
+$argv[1] = $temp_argv1; $argv[2] = $temp_argv2; $argv[3] = $temp_argv3;
+while(!feof($input_file)) {fwrite($output_file,parse_intent(translate_intent(fgets($input_file))));} fclose($input_file);}
 
 // create footer of casperjs script using footer template and do post-processing 
 while(!feof($footer_file)) {fwrite($output_file,fgets($footer_file));} fclose($footer_file); fclose($output_file);
@@ -406,8 +421,8 @@ function show_intent($raw_intent) {$twb = $GLOBALS['tagui_web_browser'];
 $params = trim(substr($raw_intent." ",1+strpos($raw_intent." "," ")));
 if (strtolower($params) == "page") return "this.echo('".$raw_intent."' + ' - \\n' + ".$twb.".getHTML());".end_fi()."\n";
 if ($params == "") echo "ERROR - " . current_line() . " target missing for " . $raw_intent . "\n"; else
-return "{// nothing to do on this line".beg_tx($params).
-"this.echo('".$raw_intent."' + ' - ' + ".$twb.".fetchText(tx('" . $params . "')).trim());".end_tx($params);}
+return "{techo('".$raw_intent."');".beg_tx($params).
+"this.echo(".$twb.".fetchText(tx('" . $params . "')).trim());".end_tx($params);}
 
 function upload_intent($raw_intent) {$twb = $GLOBALS['tagui_web_browser'];
 $params = trim(substr($raw_intent." ",1+strpos($raw_intent." "," ")));

@@ -1,0 +1,77 @@
+EN,HI
+click,क्लिक
+tap,नल टोटी
+move,चाल
+hover,मंडराना
+type,प्रकार
+enter,दर्ज
+select,चुनते हैं
+choose,चुनें
+read,पढ़ना
+fetch,लाना
+show,दिखाना
+print,छाप
+save,बचाना
+echo,गूंज
+dump,ढेर
+write,लिखना
+snap,स्नैप
+table,तालिका
+live,जीना
+download,डाउनलोड
+upload,अपलोड
+load,भार
+receive,प्राप्त करना
+frame,ढांचा
+popup,पॉप अप
+wait,रुकिए
+timeout,समय समाप्त
+seconds,सेकंड
+second,दूसरा
+api,api
+dom,dom
+js,js
+else if,और अगर
+else,अन्य
+if,अगर
+for,के लिये
+while,जबकि
+check,चेक
+more than or equals to,से अधिक या बराबर है
+more than or equal to,से अधिक या उसके बराबर
+greater than or equals to,से अधिक या बराबर है
+greater than or equal to,इससे बड़ा या इसके बराबर
+higher than or equals to,से अधिक या बराबर है
+higher than or equal to,से अधिक या उसके बराबर
+less than or equals to,से कम या बराबर है
+less than or equal to,से कम या बराबर
+lesser than or equals to,से कम या बराबर है
+lesser than or equal to,उससे कम या बराबर
+lower than or equals to,से कम या बराबर है
+lower than or equal to,से कम या उसके बराबर
+more than,इससे अधिक
+greater than,से अधिक
+higher than,उससे ऊँचा
+less than,से कम
+lesser than,के मुकाबले कम
+lower than,से कम
+not equals to,नहीं करने के लिए बराबर
+not equal to,बराबर नही है
+equals to,बराबर है
+equal to,के बराबर
+not contains,शामिल नहीं है
+not contain,शामिल नहीं
+contains,शामिल
+contain,शामिल
+and,तथा
+or,या
+from,से
+to,सेवा मेरे
+as,जैसा
+title(),शीर्षक()
+url(),यूआरएल()
+text(),पाठ()
+timer(),टाइमर()
+count(),गिनती()
+present(),वर्तमान()
+visible(),दृश्य()

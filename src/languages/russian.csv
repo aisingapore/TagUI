@@ -1,0 +1,77 @@
+EN,RU
+click,щелчок
+tap,нажмите
+move,переехать
+hover,зависать
+type,тип
+enter,войти
+select,выбрать
+choose,выберите
+read,читать
+fetch,получать
+show,показать
+print,распечатать
+save,спасти
+echo,эхо
+dump,свалка
+write,записывать
+snap,щелчок
+table,таблица
+live,жить
+download,скачать
+upload,загружать
+load,нагрузка
+receive,получать
+frame,рамка
+popup,выскакивать
+wait,подождите
+timeout,тайм-аут
+seconds,секунд
+second,второй
+api,api
+dom,dom
+js,js
+else if,иначе если
+else,еще
+if,если
+for,для
+while,в то время как
+check,проверить
+more than or equals to,больше или равно
+more than or equal to,больше или равно
+greater than or equals to,больше или равно
+greater than or equal to,больше или равно
+higher than or equals to,выше или равна
+higher than or equal to,выше или равно
+less than or equals to,меньше или равно
+less than or equal to,меньше или равно
+lesser than or equals to,меньше или равно
+lesser than or equal to,меньше или равно
+lower than or equals to,ниже или равна
+lower than or equal to,ниже или равно
+more than,больше чем
+greater than,больше чем
+higher than,выше чем
+less than,меньше чем
+lesser than,меньше чем
+lower than,ниже чем
+not equals to,не соответствует
+not equal to,не равный
+equals to,равно
+equal to,равно
+not contains,не содержит
+not contain,не содержать
+contains,содержит
+contain,содержать
+and,а также
+or,или
+from,из
+to,в
+as,в виде
+title(),заглавие()
+url(),url()
+text(),текст()
+timer(),таймер()
+count(),кол-()
+present(),настоящее время()
+visible(),видимый()

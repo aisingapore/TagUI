@@ -1,0 +1,77 @@
+EN,VI
+click,nhấp chuột
+tap,gõ
+move,di chuyển
+hover,bay lượn
+type,kiểu
+enter,đi vào
+select,lựa chọn
+choose,chọn
+read,đọc
+fetch,lấy
+show,chỉ
+print,in
+save,tiết kiệm
+echo,echo
+dump,đổ
+write,viết
+snap,chụp nhanh
+table,bàn
+live,trực tiếp
+download,tải về
+upload,tải lên
+load,tải trọng
+receive,nhận được
+frame,khung
+popup,bật lên
+wait,chờ đợi
+timeout,hết giờ
+seconds,giây
+second,thứ hai
+api,api
+dom,dom
+js,js
+else if,khác nếu
+else,khác
+if,nếu
+for,cho
+while,trong khi
+check,kiểm tra
+more than or equals to,nhiều hơn hoặc bằng
+more than or equal to,nhiều hơn hoặc bằng
+greater than or equals to,lớn hơn hoặc bằng
+greater than or equal to,lớn hơn hoặc bằng
+higher than or equals to,cao hơn hoặc bằng
+higher than or equal to,cao hơn hoặc bằng
+less than or equals to,ít hơn hoặc bằng
+less than or equal to,ít hơn hoặc bằng
+lesser than or equals to,nhỏ hơn hoặc bằng
+lesser than or equal to,nhỏ hơn hoặc bằng
+lower than or equals to,thấp hơn hoặc bằng
+lower than or equal to,thấp hơn hoặc bằng
+more than,nhiều hơn
+greater than,lớn hơn
+higher than,cao hơn
+less than,ít hơn
+lesser than,ít hơn
+lower than,thấp hơn
+not equals to,không bằng
+not equal to,không bằng
+equals to,tương đương với
+equal to,tương đương với
+not contains,không chứa
+not contain,không chứa
+contains,chứa đựng
+contain,chứa
+and,và
+or,hoặc là
+from,từ
+to,đến
+as,như
+title(),chức vụ()
+url(),url()
+text(),bản văn()
+timer(),hẹn giờ()
+count(),đếm()
+present(),hiện tại()
+visible(),có thể nhìn thấy()
