@@ -6,18 +6,17 @@
 
 ### FEATURES
 - automate Chrome, Firefox, PhantomJS
-- visual automation of website and desktop
+- visual automation of websites and desktop
 - unzip and run on macOS, Linux, Windows
-- natural language with JavaScript support
-- write in over 20 different native languages
+- write in 20+ native languages & JavaScript
 - Chrome extension for recording actions
 - run by schedule, command line, API URL
 - advanced API / command calls to services
 
 # Why This
-The goal of web automation is to reproduce cognitive interactions that you have with websites so that your laptop or server can do it for you, base on your schedule or conditions. TagUI helps you rapidly automate your repetitive or time-critical tasks - use cases include process automation, data acquisition and testing of web apps. Read on for more info or jump right into the [flow samples section](https://github.com/tebelorg/TagUI#flow-samples) to see examples of TagUI automation in natural-language-like syntax.
+The goal of web automation is to reproduce cognitive interactions that you have with websites so that your laptop or server can do it for you, base on your schedule or conditions. TagUI helps you rapidly automate your repetitive or time-critical tasks - use cases include process automation, data acquisition and testing of web apps.
 
-This is a full-feature and free open-source tool, so there's nothing to upgrade to or any paid subscription. To feedback suggestions or bugs, [raise an issue](https://github.com/tebelorg/TagUI/issues) or email ken@tebel.org. Originally developed by a test automation engineer to avoid writing chunks of code when automating web interactions.
+Read on for more info or jump right into the [flow samples section](https://github.com/tebelorg/TagUI#flow-samples) to see examples of TagUI automation in natural-language-like syntax. This is a full-feature and free open-source tool, so there's nothing to upgrade to or any paid subscription. To feedback suggestions or bugs, [raise an issue](https://github.com/tebelorg/TagUI/issues) or email ken@tebel.org. Originally developed by a test automation engineer to avoid writing chunks of code when automating web interactions.
 
 ### HOW IT WORKS
 TagUI converts your intentions in different native languages into lines of working JavaScript code that perform web automation. Under the hood, it uses Chrome DevTools Protocol, Sikuli, CasperJS, PhantomJS & SlimerJS.
@@ -241,11 +240,11 @@ size|10000|1000|100000
 direction|BUY|SELL|BUY
 
 # Developers Reference
-TagUI is a young tool and it tries to do the task of automating web interactions very well (especially process automation). It's designed to make prototyping, deployment and maintenance of web automation easier by minimizing iteration time for each phase. If you are a Node.js developer, be sure to check out [Puppeteer project](https://github.com/GoogleChrome/puppeteer). It's developed by Google Chrome team and the synergy made possible by the tight integration is ushering in a new era of browser automation.
+TagUI is a young tool and it tries to do the task of automating web interactions very well (especially process automation). It's designed to make prototyping, deployment and maintenance of web automation easier by minimizing iteration time for each phase. If you are a Node.js developer, be sure to check out [Puppeteer project](https://github.com/GoogleChrome/puppeteer) by Google Chrome team.
 
 While TagUI can be used for test automation or data-scraping, there are other popular open-source tools which may be better fits for these goals. For test automation, there are very established open-source tools/frameworks with mature and supportive ecosystems. Be sure to check out what's current from resources such as this [test automation list](https://github.com/atinfo/awesome-test-automation). For data-scraping, there are various open-source projects just to [handle that very well](https://github.com/search?utf8=✓&q=topic%3Acrawler&type=Repositories).
 
-Some future ideas for TagUI is integration with AI open-source tools, more advanced visual automation with Sikuli, and improved natural language processing. Also, as PhantomJS is no longer maintained, maybe in a few years it will be necessary to migrate TagUI from CasperJS + PhantomJS engine to Puppeteer + Node.js engine. That will require users to have Node.js development environment instead of TagUI's current form where it can be unzipped and run directly.
+Some future ideas for TagUI is integration with AI open-source tools, advanced visual automation with Sikuli, and improved natural language processing. Also, as PhantomJS is no longer maintained, maybe in a few years it will be necessary to migrate TagUI from CasperJS + PhantomJS engine to Puppeteer + Node.js engine. That will require users to have Node.js development environment instead of TagUI's current form where it can be unzipped and run directly.
 
 ### API
 Automation flows can also be triggered via API URL. TagUI has an API service and runner for managing a queue of incoming requests via API. To set up, add a crontab entry on your server with the desired frequency to check and process incoming service requests. Below will check every 15 minutes and run pending flows in the queue. If there's an automation in progress, TagUI will wait for the next check instead of concurrently starting a new run.
@@ -343,6 +342,7 @@ tagui_helper.php|command line natural language parser
 tagui_helper|generated normal TagUI command to run
 tagui_helper.cmd|same as above but for Windows platform
 translate.php|translation engine for native languages
+translate.log|translation in English reference language
 transpose.php|transpose conventional datatable csv
 sleep.php|allow adding execution pause on Windows
 

@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ScappleDocument Version="1.1" ID="678FCC46-7C7E-49FB-9DC3-3C38BC6C43AB">
     <Notes>
-        <Note ID="12" FontSize="9.0" Position="222.0,73.0" Width="110.0">
+        <Note ID="12" FontSize="9.0" Position="228.077715,72.304291" Width="101.0">
             <Appearance>
                 <Alignment>Center</Alignment>
                 <Border Style="Square"></Border>
             </Appearance>
-            <String>instantly convert flow from natural language into working JavaScript web automation code
-(with live mode to test TagUI steps or JS code)</String>
+            <String>instantly convert flow from different native natural languages into working JavaScript web automation code
+(with live mode to test steps or JS code)</String>
         </Note>
         <Note ID="25" FontSize="9.0" Position="207.0,261.0" Width="113.0">
             <Appearance>
@@ -16,14 +16,14 @@
             </Appearance>
             <String>visual automation of web browser and desktop</String>
         </Note>
-        <Note ID="20" FontSize="9.0" Position="530.0,61.0" Width="119.0">
+        <Note ID="20" FontSize="9.0" Position="532.925717,54.43433" Width="114.0">
             <Appearance>
                 <Alignment>Center</Alignment>
                 <Border Style="Square"></Border>
             </Appearance>
-            <String>saved screenshots, text files, pdf, csv, execution logs, outgoing API calls and other outcomes resulting from automated actions (option to auto-upload results to hastebin.com)</String>
+            <String>saved screenshots, text files, pdf, csv, execution logs, outgoing API calls or command line calls, and other outcomes resulting from automated actions (option to auto-upload results to hastebin.com)</String>
         </Note>
-        <Note ID="14" FontSize="9.0" Position="399.0,143.0" Width="67.0">
+        <Note ID="14" FontSize="9.0" Position="408.207754,139.125776" Width="67.0">
             <Appearance>
                 <Alignment>Center</Alignment>
                 <Border Style="Square"></Border>
@@ -38,22 +38,19 @@
             </Appearance>
             <String>create automation flows by recording user actions</String>
         </Note>
-        <Note ID="10" FontSize="9.0" Position="40.0,23.0" Width="137.0">
+        <Note ID="10" FontSize="9.0" Position="12.0,19.692572" Width="158.0">
             <Appearance>
                 <Alignment>Center</Alignment>
                 <Border Style="Square"></Border>
             </Appearance>
-            <String>write manually or edit from chrome extension recording
-(flow can be a local file or
-URL to an online file)</String>
+            <String>write manually in different native natural languages or edit from chrome extension recording (flow can be a local file or URL to an online file)</String>
         </Note>
-        <Note ID="11" FontSize="9.0" Position="18.0,139.0" Width="131.0">
+        <Note ID="11" FontSize="9.0" Position="15.719799,139.395265" Width="137.0">
             <Appearance>
                 <Alignment>Center</Alignment>
                 <Border Style="Square"></Border>
             </Appearance>
-            <String>trigger flow from command line, scheduling, URL, API, email etc, using repositories 
-&amp; datatables along as inputs</String>
+            <String>trigger flow from command line, scheduling, URL, API, email etc, using optional repositories and datatables as inputs</String>
         </Note>
         <Note ID="0" FontSize="12.0" Position="155.0,154.0" Width="85.0">
             <Appearance>
@@ -69,7 +66,7 @@ URL to an online file)</String>
                 <FormatRange Bold="Yes">0,5</FormatRange>
             </Formatting>
         </Note>
-        <Note ID="1" FontSize="12.0" Position="307.0,153.0" Width="87.0">
+        <Note ID="1" FontSize="12.0" Position="315.9066,154.214028" Width="87.0">
             <Appearance>
                 <Alignment>Center</Alignment>
                 <TextColor>0.117647 0.509804 0.788235</TextColor>
@@ -97,7 +94,7 @@ URL to an online file)</String>
                 <FormatRange Bold="Yes">0,9</FormatRange>
             </Formatting>
         </Note>
-        <Note ID="3" FontSize="12.0" Position="363.0,236.0" Width="87.0">
+        <Note ID="3" FontSize="12.0" Position="353.459721,235.210891" Width="87.0">
             <Appearance>
                 <Alignment>Center</Alignment>
                 <TextColor>0.117647 0.509804 0.788235</TextColor>
@@ -111,7 +108,7 @@ URL to an online file)</String>
                 <FormatRange Bold="Yes">0,8</FormatRange>
             </Formatting>
         </Note>
-        <Note ID="4" FontSize="12.0" Position="485.0,236.0" Width="87.0">
+        <Note ID="4" FontSize="12.0" Position="475.459721,235.210891" Width="87.0">
             <Appearance>
                 <Alignment>Center</Alignment>
                 <TextColor>1.0 0.999974 0.999991</TextColor>
@@ -160,21 +157,21 @@ URL to an online file)</String>
             </Appearance>
             <String>scriptable headless (invisible) web browser similar to Safari &amp; Chrome</String>
         </Note>
-        <Note ID="16" FontSize="9.0" Position="350.0,262.0" Width="113.0">
+        <Note ID="16" FontSize="9.0" Position="340.459721,261.210891" Width="113.0">
             <Appearance>
                 <Alignment>Center</Alignment>
                 <Border Style="Square"></Border>
             </Appearance>
             <String>scriptable web browser executed on top of Firefox</String>
         </Note>
-        <Note ID="17" FontSize="9.0" Position="472.0,262.0" Width="113.0">
+        <Note ID="17" FontSize="9.0" Position="462.459721,261.210891" Width="113.0">
             <Appearance>
                 <Alignment>Center</Alignment>
                 <Border Style="Square"></Border>
             </Appearance>
             <String>work with SlimerJS for visible web automation</String>
         </Note>
-        <Note ID="19" FontSize="12.0" Position="502.0,153.0" Width="87.0">
+        <Note ID="19" FontSize="12.0" Position="504.462858,154.0" Width="87.0">
             <Appearance>
                 <Alignment>Center</Alignment>
                 <TextColor>1.0 0.999974 0.999991</TextColor>
@@ -207,7 +204,7 @@ URL to an online file)</String>
                 <TextColor>1.0 1.0 1.0</TextColor>
                 <Fill>0.314662 0.314653 0.314658</Fill>
             </Appearance>
-            <String>v2.6  </String>
+            <String>v3.0  </String>
             <Formatting>
                 <FormatRange Bold="Yes">0,6</FormatRange>
             </Formatting>
