@@ -6,16 +6,13 @@
 
 ### FEATURES
 - automate Chrome, Firefox, PhantomJS
+- visual automation of website and desktop
 - unzip and run on macOS, Linux, Windows
 - natural language with JavaScript support
-- Chrome extension for recording steps
-- object repositories / flexible datatables
-- intelligent XPath/CSS element selector
-- visual automation of website and desktop
-- live mode to try steps or code in real-time
+- write in over 20 different native languages
+- Chrome extension for recording actions
 - run by schedule, command line, API URL
-- command line assistant in natural language
-- advanced outgoing API calls to webservices
+- advanced API / command calls to services
 
 # Why This
 The goal of web automation is to reproduce cognitive interactions that you have with websites so that your laptop or server can do it for you, base on your schedule or conditions. TagUI helps you rapidly automate your repetitive or time-critical tasks - use cases include process automation, data acquisition and testing of web apps. Read on for more info or jump right into the [flow samples section](https://github.com/tebelorg/TagUI#flow-samples) to see examples of TagUI automation in natural-language-like syntax.
@@ -23,9 +20,9 @@ The goal of web automation is to reproduce cognitive interactions that you have 
 This is a full-feature and free open-source tool, so there's nothing to upgrade to or any paid subscription. To feedback suggestions or bugs, [raise an issue](https://github.com/tebelorg/TagUI/issues) or email ken@tebel.org. Originally developed by a test automation engineer to avoid writing chunks of code when automating web interactions.
 
 ### HOW IT WORKS
-TagUI converts your intentions in simple natural language into lines of working JavaScript code that perform web automation. Under the hood, it uses Chrome DevTools Protocol, CasperJS, PhantomJS & SlimerJS.
+TagUI converts your intentions in different native languages into lines of working JavaScript code that perform web automation. Under the hood, it uses Chrome DevTools Protocol, Sikuli, CasperJS, PhantomJS & SlimerJS.
 
-For example, TagUI will instantly convert the automation flow below into 100+ lines of JavaScript code and automatically perform the steps to download a report. Conditions can also be written in natural language for making decisions or checking webpage. No further backend coding or step definition is required. This makes it easy for rapid prototyping, deployment and maintenance of web automation, whether you are a developer or not.
+For example, TagUI will instantly convert the automation flow below into 100+ lines of JavaScript code and automatically perform the steps to download a report. Conditions can also be written in natural language for making decisions or checking webpage. No further backend coding or step definition is required. This makes it easy for rapid prototyping, deployment and maintenance of web automation, whether you are a developer or not. The language engine supports over 20 languages and can be modified or extended easily by users to improve accuracy or add more languages.
 
 ```
 https://www.typeform.com
@@ -36,16 +33,16 @@ click btnlogin
 download https://admin.typeform.com/form/2592751/analyze/csv to report.csv
 ```
 
-The automation flow can be triggered from scheduling, command line (in natural language), API URL, email etc. Everything happens headlessly in the background without seeing any web browser, so that you can continue using the computer or server uninterrupted. Running on a visible web browser is also supported, using Chrome or Firefox browser (see chrome or firefox option below). API calls can be made with a single line to integrate with other apps. Continuous integration with CI/CD tools is possible using CasperJS framework and TagUI's Chrome integration.
+The automation flow can be triggered from scheduling, command line (in natural language), API URL, email etc. Everything happens headlessly in the background without seeing any web browser, so that you can continue using the computer or server uninterrupted. Running on a visible web browser is also supported, using Chrome or Firefox browser (see chrome or firefox option below). API or command calls can be made with a single line to integrate with other services or apps. Continuous integration with CI/CD tools is possible using CasperJS framework and TagUI's Chrome integration.
 
 If you know JavaScript and want to be more expressive, you can even use JavaScript directly in the flow. If not, you will still enjoy friendly but powerful features such as repositories to store your reusable objects, flexible datatables for batch automation, and a Chrome extension which creates automation flows by recording your actions. For rapid prototyping, there's also an interactive live mode for trying out TagUI steps or JavaScript code in real-time. TagUI has built-in integration with Chrome / headless Chrome directly, which also works in live mode.
 
 There is automatic waiting for web elements to appear + error-checking + nesting of JavaScript code blocks. Not forgetting the option to run automation flows hosted online or auto-upload run results online for sharing. TagUI also supports visual automation of website and desktop through built-in integration with Sikuli. Instead of using element identifiers, images can be used to identify user interface elements to interact with.
 
 # Set Up
-TagUI is in v2.6 and runs on macOS, Linux, Windows ([link to release notes](https://github.com/tebelorg/TagUI/releases))
+TagUI is in ***process of updating to v3.0*** and runs on macOS, Linux, Windows ([link to release notes](https://github.com/tebelorg/TagUI/releases))
 
-Tip - for [cutting edge](https://github.com/tebelorg/TagUI/compare/v2.6.0...master) version, download [from here](https://github.com/tebelorg/TagUI/archive/master.zip) to overwrite your packaged installation
+Tip - for [cutting edge](https://github.com/tebelorg/TagUI/compare/v3.0.0...master) version, download [from here](https://github.com/tebelorg/TagUI/archive/master.zip) to overwrite your packaged installation
 
 ### PACKAGED INSTALLATION
 Easiest way to use TagUI - no setup is needed, all dependencies are packaged in
@@ -86,6 +83,7 @@ upload|upload automation flow and result to [hastebin.com](https://hastebin.com)
 report|web report for sharing of run results on webserver (default is only a text log file)
 debug|show run-time backend messages from PhantomJS for detailed tracing and logging
 quiet|run without output except for explicit output (echo / show / check / errors etc)
+speed|skip 3-second delay between datatable iterations (and skip restarting of Chrome)
 test|testing with check step test assertions for CI/CD integration (output XUnit XML file)
 baseline|output execution log and relative-path output files to a separate baseline directory
 input(s)|add your own parameter(s) to be used in your automation flow as variables p1 to p9
@@ -177,8 +175,9 @@ receive|url keyword to watch ***to*** filename to save|receive resource to file
 frame|frame name **&#124;** subframe name if any|next step or block in frame/subframe
 popup|url keyword of popup window to look for|next step or block in popup window
 { and }|use { to start block and } to end block (on new line)|define block of steps and code
-api|full url (including parameters) of api call|call api save response to api_result
-dom|javascript code for document object model|run code in dom save to dom_result
+api|full url (including parameters) of api call|call api & save response to api_result
+run|full OS-level command including parameters|run OS command & save to run_result
+dom|javascript code for document object model|run code in dom & save to dom_result
 js|javascript statements (skip auto-detection)|treat as JS code explicitly
 timeout|time in seconds before step errors out|change auto-wait timeout
 variable_name| = value (for text, put in quotes, use + to concat)|define variable variable_name
@@ -268,6 +267,8 @@ api_config = {method:'PUT', header:['Header1: value1','Header2: value2'], body:{
 ```
 For advanced API calls, you can set above api_config variable which defaults as `{method:'GET', header:[], body:{}}`. Besides GET, you can use other methods such as POST, PUT, DELETE etc. You can define multiple headers in the format `'Header_name: header_value'` and provide a payload body for PUT requests for example. You can set it as above before using the api step, or set using `api_config.method = 'PUT';` and `api_config.header[0] = 'Header1: value1';` etc. `api_config.body` will be automatically converted to JSON format for sending to API endpoint.
 
+In addition, OS-level or shell commands can be executed using run step. This can be used to call other apps or services hosted locally on the OS, instead of being hosted through webservices. To use run step, specify the full command including parameters. Execution result will be stored in `run_result`, which can be used in your automation flow.
+
 ### CHROME
 TagUI has built-in integration with Chrome web browser to run web automation in visible or headless mode. It uses a websocket connection to directly communicate automation JavaScript code and information to Chrome.
 
@@ -341,7 +342,9 @@ erina.cmd|same as above but for Windows platform
 tagui_helper.php|command line natural language parser
 tagui_helper|generated normal TagUI command to run
 tagui_helper.cmd|same as above but for Windows platform
+translate.php|translation engine for native languages
 transpose.php|transpose conventional datatable csv
+sleep.php|allow adding execution pause on Windows
 
 # Be a Force for Good
 TagUI default config does not hide identity as an automated user
