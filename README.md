@@ -7,7 +7,7 @@
 ### FEATURES
 - automate Chrome, Firefox, PhantomJS
 - visual automation of websites and desktop
-- write in 20+ native languages & JavaScript
+- write in 20+ human languages & JavaScript
 - Chrome extension for recording web actions
 - unzip and run on macOS, Linux, Windows
 - run by schedule, command line, API URL
@@ -19,7 +19,7 @@ The goal of web automation is to reproduce cognitive interactions that you have 
 Read on for more info or jump right into the [flow samples section](https://github.com/tebelorg/TagUI#flow-samples) to see examples of TagUI automation in natural-language-like syntax. This is a full-feature and free open-source tool, so there's nothing to upgrade to or any paid subscription. To feedback suggestions or bugs, [raise an issue](https://github.com/tebelorg/TagUI/issues) or email ken@tebel.org. Originally developed by a test automation engineer to avoid writing chunks of code when automating web interactions.
 
 ### HOW IT WORKS
-TagUI converts your intentions in different native languages into lines of working JavaScript code that perform web automation. Under the hood, it uses Chrome DevTools Protocol, Sikuli, CasperJS, PhantomJS & SlimerJS.
+TagUI converts your intentions in different human languages into lines of working JavaScript code that perform web automation. Under the hood, it uses Chrome DevTools Protocol, Sikuli, CasperJS, PhantomJS & SlimerJS.
 
 For example, TagUI will instantly convert the automation flow below into 100+ lines of JavaScript code and automatically perform the steps to download a report. Conditions can also be written in natural language for making decisions or checking webpage. No further backend coding or step definition is required. This makes it easy for rapid prototyping, deployment and maintenance of web automation, whether you are a developer or not. The language engine supports over 20 languages and can be modified or extended easily by users to improve accuracy or add more languages.
 
@@ -44,7 +44,7 @@ TagUI is in v3.0 and runs on macOS, Linux, Windows ([link to release notes](http
 Tip - for [cutting edge](https://github.com/tebelorg/TagUI/compare/v3.0.0...master) version, download [from here](https://github.com/tebelorg/TagUI/archive/master.zip) to overwrite your packaged installation
 
 ### PACKAGED INSTALLATION
-Easiest way to use TagUI - no setup is needed, all dependencies are packaged in
+Easiest way to use TagUI - no setup is needed, all dependencies are packaged in. (on some Windows computers, if you see 'MSVCR110.dll is missing' error, install [this from Microsoft website](https://www.microsoft.com/en-us/download/details.aspx?id=30679) - this file is required to run the PHP engine)
 
 Platform|macOS|Linux|Windows|Node.js (macOS/Linux)
 :------:|:---:|:---:|:-----:|:-------------------:
