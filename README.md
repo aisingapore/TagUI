@@ -4,6 +4,8 @@
 
 [Why This](#why-this) | [Set Up](#set-up) | [To Use](#to-use) | [Cheat Sheet](#cheat-sheet) | [Developers Reference](#developers-reference)
 
+***TagUI is now maintained by [AI Singapore (aisingapore.org)](https://www.aisingapore.org), a national initiative to build local artificial intelligence capabilities. The intention is to add AI capabilities to TagUI and releasing it under an open-source license.***
+
 ### FEATURES
 - automate Chrome, Firefox, PhantomJS
 - visual automation of websites and desktop
