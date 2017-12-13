@@ -3,7 +3,7 @@
 
 // this set of flows uses datatables to retrieve/act on info from GitHub
 // 6A - get URLs of Starrers, 6B - get contact info, 6C - email Starrers
-// for issues or questions, kindly feedback on GitHub or ken@tebel.org
+// for issues or questions, kindly feedback on GitHub or ksoh@aisingapore.org
 // see cheatsheet for steps, conditions, finding element identifiers, etc
 // https://github.com/tebelorg/TagUI#cheat-sheet
 
