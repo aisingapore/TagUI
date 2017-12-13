@@ -2,7 +2,7 @@ https://twitter.com/tebelorg
 // automation flow files start with an URL to tell TagUI where to go
 
 // this flow goes to a Twitter page and saves some profile information
-// for issues or questions, kindly feedback on GitHub or ken@tebel.org
+// for issues or questions, kindly feedback on GitHub or ksoh@aisingapore.org
 // see cheatsheet for steps, conditions, finding element identifiers, etc
 // https://github.com/tebelorg/TagUI#cheat-sheet
 
