@@ -4,7 +4,7 @@
 
 [Why This](#why-this) | [Set Up](#set-up) | [To Use](#to-use) | [Cheat Sheet](#cheat-sheet) | [Developers Reference](#developers-reference)
 
-***TagUI is now maintained by [AI Singapore (aisingapore.org)](https://www.aisingapore.org), a national initiative to build local artificial intelligence capabilities. The intention is to add AI capabilities to TagUI and releasing it under an open-source license.***
+***TagUI is now maintained by [AI Singapore (aisingapore.org)](https://www.aisingapore.org), a national initiative to build local artificial intelligence capabilities. The intention is to add AI capabilities to TagUI while keeping it open-source.***
 
 ### FEATURES
 - automate Chrome, Firefox, PhantomJS
@@ -18,7 +18,7 @@
 # Why This
 The goal of web automation is to reproduce cognitive interactions that you have with websites so that your laptop or server can do it for you, base on your schedule or conditions. TagUI helps you rapidly automate your repetitive or time-critical tasks - use cases include process automation, data acquisition and testing of web apps.
 
-Read on for more info or jump right into the [flow samples section](https://github.com/tebelorg/TagUI#flow-samples) to see examples of TagUI automation in natural-language-like syntax. This is a full-feature and free open-source tool, so there's nothing to upgrade to or any paid subscription. To feedback suggestions or bugs, [raise an issue](https://github.com/tebelorg/TagUI/issues) or email ken@tebel.org. Originally developed by a test automation engineer to avoid writing chunks of code when automating web interactions.
+Read on for more info or jump right into the [flow samples section](https://github.com/tebelorg/TagUI#flow-samples) to see examples of TagUI automation in natural-language-like syntax. This is a full-feature and free open-source tool, so there's nothing to upgrade to or any paid subscription. To feedback suggestions or bugs, [raise an issue](https://github.com/tebelorg/TagUI/issues) or email ksoh@aisingapore.org. Originally developed by a test automation engineer to avoid writing chunks of code when automating web interactions.
 
 ### HOW IT WORKS
 TagUI converts your intentions in different human languages into lines of working JavaScript code that perform web automation. Under the hood, it uses Chrome DevTools Protocol, Sikuli, CasperJS, PhantomJS & SlimerJS.
