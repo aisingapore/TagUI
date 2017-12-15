@@ -338,7 +338,7 @@ else if (strlen($input_params)>4 and strtolower(substr($input_params,-4))=='.bmp
 function call_sikuli($input_intent,$input_params) { // helper function to use sikuli visual automation
 if (!touch('tagui.sikuli/tagui_sikuli.in')) die("ERROR - cannot initialise tagui_sikuli.in\n");
 if (!touch('tagui.sikuli/tagui_sikuli.out')) die("ERROR - cannot initialise tagui_sikuli.out\n");
-return "{techo('".$input_intent."'); var fs = require('fs');\n" .
+return "{techo('".str_replace(' to snap_image()','',$input_intent)."'); var fs = require('fs');\n" .
 "if (!sikuli_step('".$input_intent."')) if (!fs.exists('".$input_params."'))\n" .
 "this.echo('ERROR - cannot find image file ".$input_params."').exit(); else\n" . 
 "this.echo('ERROR - cannot find " . $input_params." on screen').exit(); this.wait(0);}" .
@@ -498,6 +498,13 @@ else echo "ERROR - " . current_line() . " variable missing for " . $raw_intent .
 function snap_intent($raw_intent) {$twb = $GLOBALS['tagui_web_browser'];
 $params = trim(substr($raw_intent." ",1+strpos($raw_intent." "," ")));
 $param1 = trim(substr($params,0,strpos($params," to "))); $param2 = trim(substr($params,4+strpos($params," to ")));
+if (is_sikuli($param1) and (strpos($params," to ")!==false)) {
+$abs_param1 = abs_file($param1); $abs_intent = str_replace($param1,$abs_param1,$raw_intent);
+$abs_param2 = abs_file($param2); $abs_intent = str_replace($param2,$abs_param2,$abs_intent);
+return call_sikuli($abs_intent,$abs_param1);} // use sikuli visual automation as needed
+else if (is_sikuli($params) and (strpos($params," to ")==false)) {
+$abs_params = abs_file($params); $abs_intent = str_replace($params,$abs_params,$raw_intent);
+return call_sikuli($abs_intent.' to snap_image()',$abs_params);} // handle no output filename
 if ((strtolower($params) == "page") or (strtolower($param1) == "page")) {if (strpos($params," to ")!==false)
 return "{techo('".$raw_intent."');\n".$twb.".capture('".abs_file($param2)."');}".end_fi()."\n";
 else return "{techo('".$raw_intent."');\n".$twb.".capture(snap_image());}".end_fi()."\n";}

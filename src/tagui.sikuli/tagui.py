@@ -59,6 +59,28 @@ def select_intent ( raw_intent ):
 	else:
 		return 0
 
+# function for capturing screenshot
+def snap_intent ( raw_intent ):
+	params = (raw_intent + ' ')[1+(raw_intent + ' ').find(' '):].strip()
+	param1 = params[:params.find(' to ')].strip()
+	param2 = params[4+params.find(' to '):].strip()
+	print '[tagui] ACTION - snap ' + param1 + ' to ' + param2
+	if param1.endswith('page.png') or param1.endswith('page.bmp'):
+		fullscreen_layer = Screen()
+		temp_snap_file = fullscreen_layer.capture(fullscreen_layer.getBounds()).getFile()
+		import shutil
+		shutil.copy(temp_snap_file,param2)
+		return 1
+	elif exists(param1):
+		fullscreen_layer = Screen()
+		matched_element = find(param1)
+		temp_snap_file = fullscreen_layer.capture(matched_element).getFile()
+		import shutil
+		shutil.copy(temp_snap_file,param2)
+		return 1
+	else:
+		return 0
+
 # function to interpret input intent
 def get_intent ( raw_intent ):
 	if raw_intent[:4].lower() == 'tap ' or raw_intent[:6].lower() == 'click ':
@@ -69,6 +91,8 @@ def get_intent ( raw_intent ):
 		return 'type'
 	if raw_intent[:7].lower() == 'select ' or raw_intent[:7].lower() == 'choose ':
 		return 'select'
+	if raw_intent[:5].lower() == 'snap ':
+		return 'snap'
 	return 'error'
 
 # function to parse and act on intent
@@ -82,6 +106,8 @@ def parse_intent ( script_line ):
 		return type_intent(script_line)
 	elif intent_type == 'select':
 		return select_intent(script_line)
+	elif intent_type == 'snap':
+		return snap_intent(script_line)
 	else:
 		return 0 
 

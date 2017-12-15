@@ -114,7 +114,7 @@ if %tagui_baseline_mode%==false (
 	for %%i in ("!flow_file!") do set "flow_folder=%%~dpi"
 	for %%i in ("!flow_file!") do set "flow_filename=%%~nxi"
 	if not exist "!flow_folder!baseline" mkdir "!flow_folder!baseline"
-	copy "!flow_file!" "!flow_folder!baseline\." > nul
+	copy /Y "!flow_file!" "!flow_folder!baseline\." > nul
 	set "flow_file=!flow_folder!baseline\!flow_filename!"
 )
 
@@ -569,20 +569,19 @@ rem end of big loop for managing multiple data sets in datatable
 
 rem additional windows section to convert unix to windows file format
 gawk "sub(\"$\", \"\")" "%flow_file%.js" > "%flow_file%.js.tmp"
-move "%flow_file%.js.tmp" "%flow_file%.js" > nul
+move /Y "%flow_file%.js.tmp" "%flow_file%.js" > nul
 gawk "sub(\"$\", \"\")" "%flow_file%.log" > "%flow_file%.log.tmp"
-move "%flow_file%.log.tmp" "%flow_file%.log" > nul
-gawk "sub(\"$\", \"\")" "tagui.sikuli\tagui.log" > "tagui.sikuli\tagui.log.tmp"
-move "tagui.sikuli\tagui.log.tmp" "tagui.sikuli\tagui.log" > nul
+move /Y "%flow_file%.log.tmp" "%flow_file%.log" > nul
+gawk "sub(\"$\", \"\")" "tagui.sikuli\tagui.log" > "tagui.sikuli\tagui_windows.log"
 gawk "sub(\"$\", \"\")" "tagui_chrome.log" > "tagui_chrome.log.tmp"
-move "tagui_chrome.log.tmp" "tagui_chrome.log" > nul
+move /Y "tagui_chrome.log.tmp" "tagui_chrome.log" > nul
 
 rem check report option to generate html automation log
 for /f "usebackq" %%f in ('%flow_file%.log') do set file_size=%%~zf
 if %file_size% gtr 0 if %tagui_html_report%==true (
 	php -q tagui_report.php "%flow_file%"
 	gawk "sub(\"$\", \"\")" "%flow_file%.html" > "%flow_file%.html.tmp"
-	move "%flow_file%.html.tmp" "%flow_file%.html" > nul
+	move /Y "%flow_file%.html.tmp" "%flow_file%.html" > nul
 )
 
 rem check upload option to upload result to hastebin.com

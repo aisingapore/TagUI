@@ -225,6 +225,7 @@ while (sikuli_handshake !== '[0] START'); // techo('[connected to sikuli process
 // for using sikuli visual automation instead of casperjs
 function sikuli_step(sikuli_intent) {sikuli_count++;
 if (sikuli_count == 1) sikuli_handshake(); // handshake on first call
+if (sikuli_intent.indexOf('snap_image()') > -1) {sikuli_intent = sikuli_intent.replace('snap_image()',snap_image());}
 var ds; if (flow_path.indexOf('/') !== -1) ds = '/'; else ds = '\\';
 var fs = require('fs'); fs.write('tagui.sikuli'+ds+'tagui_sikuli.in','['+sikuli_count.toString()+'] '+sikuli_intent,'w');
 var sikuli_result = ''; do {sleep(500); sikuli_result = fs.read('tagui.sikuli'+ds+'tagui_sikuli.out').trim();}
@@ -778,6 +779,13 @@ function snap_intent(raw_intent) {
 var params = ((raw_intent + ' ').substr(1+(raw_intent + ' ').indexOf(' '))).trim();
 var param1 = (params.substr(0,params.indexOf(' to '))).trim();
 var param2 = (params.substr(4+params.indexOf(' to '))).trim();
+if (is_sikuli(param1) && (params.indexOf(' to ') > -1)) {
+var abs_param1 = abs_file(param1); var abs_intent = raw_intent.replace(param1,abs_param1);
+var abs_param2 = abs_file(param2); abs_intent = abs_intent.replace(param2,abs_param2);
+return call_sikuli(abs_intent,abs_param1);} // use sikuli visual automation as needed
+else if (is_sikuli(params) && (params.indexOf(' to ') == -1)) {
+var abs_params = abs_file(params); var abs_intent = raw_intent.replace(params,abs_params);
+return call_sikuli(abs_intent + ' to snap_image()',abs_params);} // handle no output filename
 if ((params.toLowerCase() == 'page') || (param1.toLowerCase() == 'page')) {
 if (params.indexOf(' to ') > -1) return "this.capture('" + abs_file(param2) + "')";
 else return "this.capture(snap_image())";}

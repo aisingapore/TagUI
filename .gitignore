@@ -41,9 +41,10 @@
 /src/tagui.sikuli/tagui_sikuli.in
 /src/tagui.sikuli/tagui_sikuli.out
 /src/tagui.sikuli/tagui.log
+/src/tagui.sikuli/tagui_windows.log
 /src/tagui.sikuli/sikulix*
 /src/tagui.sikuli/SikuliX*
-/src/tagui.sikuli/runsikulix
+/src/tagui.sikuli/runsikulix*
 
 # exclude local files for catboost integration
 /src/catboost/*
