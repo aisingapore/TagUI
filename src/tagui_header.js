@@ -215,7 +215,7 @@ while(time_now < time_end) {time_now = new Date().getTime();}}
 
 // for initialising integration with sikuli visual automation
 function sikuli_handshake() { // techo('[connecting to sikuli process]');
-var ds; if (flow_path.indexOf('/') !== -1) ds = '/'; else ds = '\\';
+var ds; if (flow_path.indexOf('/') !== -1) ds = '/'; else ds = '\\'; clear_sikuli_text();
 var fs = require('fs'); fs.write('tagui.sikuli'+ds+'tagui_sikuli.in','','w'); var sikuli_handshake = '';
 if (!fs.exists('tagui.sikuli'+ds+'tagui_sikuli.out')) fs.write('tagui.sikuli'+ds+'tagui_sikuli.out','','w');
 do {sleep(500); sikuli_handshake = fs.read('tagui.sikuli'+ds+'tagui_sikuli.out').trim();}
@@ -231,6 +231,15 @@ var fs = require('fs'); fs.write('tagui.sikuli'+ds+'tagui_sikuli.in','['+sikuli_
 var sikuli_result = ''; do {sleep(500); sikuli_result = fs.read('tagui.sikuli'+ds+'tagui_sikuli.out').trim();}
 while (sikuli_result.indexOf('['+sikuli_count.toString()+'] ') == -1);
 if (sikuli_result.indexOf('SUCCESS') !== -1) return true; else return false;}
+
+// for fetching text from sikuli optical character recognition 
+function fetch_sikuli_text() {var ds; if (flow_path.indexOf('/') !== -1) ds = '/'; else ds = '\\';
+var fs = require('fs'); if (fs.exists('tagui.sikuli'+ds+'tagui_sikuli.txt'))
+return fs.read('tagui.sikuli'+ds+'tagui_sikuli.txt').trim(); else return '';}
+
+// for clearing text from sikuli optical character recognition
+function clear_sikuli_text() {var ds; if (flow_path.indexOf('/') !== -1) ds = '/'; else ds = '\\';
+var fs = require('fs'); fs.write('tagui.sikuli'+ds+'tagui_sikuli.txt','','w');}
 
 if (chrome_id > 0) { // super large if block to load chrome related functions if chrome or headless option is used
 chrome_id = 0; // reset chrome_id from 1 back to 0 to prepare for initial call of chrome_step
@@ -641,14 +650,15 @@ function is_sikuli(input_params) { // helper function to check if input is meant
 if (input_params.length > 4 && input_params.substr(-4).toLowerCase() == '.png') return true; // support png and bmp
 else if (input_params.length > 4 && input_params.substr(-4).toLowerCase() == '.bmp') return true; else return false;}
 
-function call_sikuli(input_intent,input_params) { // helper function to use sikuli visual automation
+function call_sikuli(input_intent,input_params,other_actions) { // helper function to use sikuli visual automation
 var fs = require('fs'); // use phantomjs fs file system module to access files and directories
 fs.write('tagui.sikuli/tagui_sikuli.in', '', 'w'); fs.write('tagui.sikuli/tagui_sikuli.out', '', 'w');
 if (!fs.exists('tagui.sikuli/tagui_sikuli.in')) return "this.echo('ERROR - cannot initialise tagui_sikuli.in')";
 if (!fs.exists('tagui.sikuli/tagui_sikuli.out')) return "this.echo('ERROR - cannot initialise tagui_sikuli.out')";
+if (!other_actions) other_actions = ''; // to handle most cases where other_actions is not passed in during call
 return "var fs = require('fs'); if (!sikuli_step('"+input_intent+"')) if (!fs.exists('"+input_params+"')) " +
 "this.echo('ERROR - cannot find image file "+input_params+"'); " +
-"else this.echo('ERROR - cannot find "+input_params+" on screen');";}
+"else this.echo('ERROR - cannot find "+input_params+" on screen'); " + other_actions;}
 
 function url_intent(raw_intent) {
 if (chrome_id == 0) return "this.echo('ERROR - step only supported in live mode using Chrome browser')";
@@ -703,6 +713,9 @@ function read_intent(raw_intent) {
 var params = ((raw_intent + ' ').substr(1+(raw_intent + ' ').indexOf(' '))).trim();
 var param1 = (params.substr(0,params.indexOf(' to '))).trim();
 var param2 = (params.substr(4+params.indexOf(' to '))).trim();
+if (is_sikuli(param1) && (params.indexOf(' to ') > -1)) { // use sikuli visual automation as needed
+var abs_param1 = abs_file(param1); var abs_intent = raw_intent.replace(param1,abs_param1);
+return call_sikuli(abs_intent,abs_param1,param2 + ' = fetch_sikuli_text(); clear_sikuli_text();');}
 if ((param1.toLowerCase() == 'page') && (param2 !== '')) return param2 + " = this.getHTML()";
 if ((param1 == '') || (param2 == '')) return "this.echo('ERROR - target/variable missing for " + raw_intent + "')";
 else if (check_tx(param1)) return param2 + " =  this.fetchText(tx('" + param1 + "')).trim()";
@@ -710,6 +723,9 @@ else return "this.echo('ERROR - cannot find " + param1 + "')";}
 
 function show_intent(raw_intent) {
 var params = ((raw_intent + ' ').substr(1+(raw_intent + ' ').indexOf(' '))).trim();
+if (is_sikuli(params)) { // use sikuli visual automation as needed
+var abs_params = abs_file(params); var abs_intent = raw_intent.replace(params,abs_params);
+return call_sikuli(abs_intent,abs_params,'this.echo(fetch_sikuli_text()); clear_sikuli_text();');}
 if (params.toLowerCase() == 'page') return "this.echo('" + raw_intent + "' + ' - ' + '\\n' + this.getHTML())";
 if (params == '') return "this.echo('ERROR - target missing for " + raw_intent + "')";
 else if (check_tx(params)) return "this.echo(this.fetchText(tx('" + params + "')).trim())";else return "this.echo('ERROR - cannot find " + params + "')";}
@@ -741,6 +757,12 @@ function save_intent(raw_intent) {
 var params = ((raw_intent + ' ').substr(1+(raw_intent + ' ').indexOf(' '))).trim();
 var param1 = (params.substr(0,params.indexOf(' to '))).trim();
 var param2 = (params.substr(4+params.indexOf(' to '))).trim();
+if (is_sikuli(param1) && (params.indexOf(' to ') > -1)) { // use sikuli visual automation as needed
+var abs_param1 = abs_file(param1); var abs_intent = raw_intent.replace(param1,abs_param1);
+return call_sikuli(abs_intent,abs_param1,'save_text(\''+abs_file(param2)+'\',fetch_sikuli_text()); clear_sikuli_text();');}
+else if (is_sikuli(params) && (params.indexOf(' to ') == -1)) {
+var abs_params = abs_file(params); var abs_intent = raw_intent.replace(params,abs_params);
+return call_sikuli(abs_intent,abs_param1,'save_text(\'\',fetch_sikuli_text()); clear_sikuli_text();');}
 if ((params.toLowerCase() == 'page') || (param1.toLowerCase() == 'page')) {
 if (params.indexOf(' to ') > -1) return "save_text('" + abs_file(param2) + "',this.getHTML())";
 else return "save_text('',this.getHTML())";}

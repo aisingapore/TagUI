@@ -396,6 +396,9 @@ dom var page_title = document.title;
 // test js
 js this.echo('THIS IS JAVASCRIPT');
 
+// test vision
+vision click('/tmp/test.png')
+
 // test timeout
 timeout 4 seconds
 timeout 5.67

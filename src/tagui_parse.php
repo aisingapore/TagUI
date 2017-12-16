@@ -338,13 +338,14 @@ function is_sikuli($input_params) { // helper function to check if input is mean
 if (strlen($input_params)>4 and strtolower(substr($input_params,-4))=='.png') return true; // support png and bmp
 else if (strlen($input_params)>4 and strtolower(substr($input_params,-4))=='.bmp') return true; else return false;}
 
-function call_sikuli($input_intent,$input_params) { // helper function to use sikuli visual automation
+function call_sikuli($input_intent,$input_params,$other_actions = '') { // helper function to use sikuli visual automation
 if (!touch('tagui.sikuli/tagui_sikuli.in')) die("ERROR - cannot initialise tagui_sikuli.in\n");
 if (!touch('tagui.sikuli/tagui_sikuli.out')) die("ERROR - cannot initialise tagui_sikuli.out\n");
+if ($other_actions != '') $other_actions = "\n" . $other_actions;
 return "{techo('".str_replace(' to snap_image()','',$input_intent)."'); var fs = require('fs');\n" .
 "if (!sikuli_step('".$input_intent."')) if (!fs.exists('".$input_params."'))\n" .
 "this.echo('ERROR - cannot find image file ".$input_params."').exit(); else\n" . 
-"this.echo('ERROR - cannot find " . $input_params." on screen').exit(); this.wait(0);}" .
+"this.echo('ERROR - cannot find " . $input_params." on screen').exit(); this.wait(0);" . $other_actions. "}" .
 end_fi()."});\n\ncasper.then(function() {\n";}
 
 // set of functions to interpret steps into corresponding casperjs code
@@ -414,6 +415,9 @@ $twb.".selectOptionByValue(select_locator,'".$param2."');".end_tx($param1);}
 function read_intent($raw_intent) {$twb = $GLOBALS['tagui_web_browser'];
 $params = trim(substr($raw_intent." ",1+strpos($raw_intent." "," ")));
 $param1 = trim(substr($params,0,strpos($params," to "))); $param2 = trim(substr($params,4+strpos($params," to ")));
+if (is_sikuli($param1) and (strpos($params," to ")!==false)) { // use sikuli visual automation as needed
+$abs_param1 = abs_file($param1); $abs_intent = str_replace($param1,$abs_param1,$raw_intent);
+return call_sikuli($abs_intent,$abs_param1,$param2." = fetch_sikuli_text(); clear_sikuli_text();");}
 if ((strtolower($param1) == "page") and ($param2 != ""))
 return "{techo('".$raw_intent."');\n".$param2." = ".$twb.".getHTML();}".end_fi()."\n";
 if (($param1 == "") or ($param2 == "")) 
@@ -422,6 +426,9 @@ return "{techo('".$raw_intent."');".beg_tx($param1).$param2." = ".$twb.".fetchTe
 
 function show_intent($raw_intent) {$twb = $GLOBALS['tagui_web_browser'];
 $params = trim(substr($raw_intent." ",1+strpos($raw_intent." "," ")));
+if (is_sikuli($params)) { // use sikuli visual automation as needed
+$abs_params = abs_file($params); $abs_intent = str_replace($params,$abs_params,$raw_intent);
+return call_sikuli($abs_intent,$abs_params,"this.echo(fetch_sikuli_text()); clear_sikuli_text();");}
 if (strtolower($params) == "page") return "this.echo('".$raw_intent."' + ' - \\n' + ".$twb.".getHTML());".end_fi()."\n";
 if ($params == "") echo "ERROR - " . current_line() . " target missing for " . $raw_intent . "\n"; else
 return "{techo('".$raw_intent."');".beg_tx($params).
@@ -459,6 +466,12 @@ return "this.echo(".add_concat($params).");".end_fi()."\n";}
 function save_intent($raw_intent) {$twb = $GLOBALS['tagui_web_browser'];
 $params = trim(substr($raw_intent." ",1+strpos($raw_intent." "," ")));
 $param1 = trim(substr($params,0,strpos($params," to "))); $param2 = trim(substr($params,4+strpos($params," to ")));
+if (is_sikuli($param1) and (strpos($params," to ")!==false)) { // use sikuli visual automation as needed
+$abs_param1 = abs_file($param1); $abs_intent = str_replace($param1,$abs_param1,$raw_intent);
+return call_sikuli($abs_intent,$abs_param1,"save_text('".abs_file($param2)."',fetch_sikuli_text()); clear_sikuli_text();");}
+else if (is_sikuli($params) and (strpos($params," to ")==false)) {
+$abs_params = abs_file($params); $abs_intent = str_replace($params,$abs_params,$raw_intent);
+return call_sikuli($abs_intent,$abs_param1,"save_text('',fetch_sikuli_text()); clear_sikuli_text();");}
 if ((strtolower($params) == "page") or (strtolower($param1) == "page")) {if (strpos($params," to ")!==false)
 return "{techo('".$raw_intent."');\nsave_text('".abs_file($param2)."',".$twb.".getHTML());}".end_fi()."\n";
 else return "{techo('".$raw_intent."');\nsave_text('',".$twb.".getHTML());}".end_fi()."\n";}

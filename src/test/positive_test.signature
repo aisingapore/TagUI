@@ -95,7 +95,7 @@ else return true;}} // if '",' is not found, means end of table is reached as th
 // for translating multi-language flows (comments in translate.php)
 function translate(script_line,direction,language) {var start_keywords = 
 '|click|tap|move|hover|type|enter|select|choose|read|fetch|show|print|save|echo|dump|write|snap|table|'+
-'wait|live|download|upload|load|receive|frame|popup|timeout|api|dom|js|else if|else|if|for|while|check|';
+'wait|live|download|upload|load|receive|frame|popup|timeout|api|dom|js|vision|else if|else|if|for|while|check|';
 var to_separator_keywords = '|read|fetch|save|load|dump|write|snap|table|download|receive|for|'
 var as_separator_keywords = '|type|enter|select|choose|upload|'; var forloop_keywords = '|from|';
 var start_conditions_keywords = '|else if|if|for|while|check|'; var start_helper_keywords = '|echo|dump|write|';
@@ -242,7 +242,7 @@ while(time_now < time_end) {time_now = new Date().getTime();}}
 
 // for initialising integration with sikuli visual automation
 function sikuli_handshake() { // techo('[connecting to sikuli process]');
-var ds; if (flow_path.indexOf('/') !== -1) ds = '/'; else ds = '\\';
+var ds; if (flow_path.indexOf('/') !== -1) ds = '/'; else ds = '\\'; clear_sikuli_text();
 var fs = require('fs'); fs.write('tagui.sikuli'+ds+'tagui_sikuli.in','','w'); var sikuli_handshake = '';
 if (!fs.exists('tagui.sikuli'+ds+'tagui_sikuli.out')) fs.write('tagui.sikuli'+ds+'tagui_sikuli.out','','w');
 do {sleep(500); sikuli_handshake = fs.read('tagui.sikuli'+ds+'tagui_sikuli.out').trim();}
@@ -252,11 +252,21 @@ while (sikuli_handshake !== '[0] START'); // techo('[connected to sikuli process
 // for using sikuli visual automation instead of casperjs
 function sikuli_step(sikuli_intent) {sikuli_count++;
 if (sikuli_count == 1) sikuli_handshake(); // handshake on first call
+if (sikuli_intent.indexOf('snap_image()') > -1) {sikuli_intent = sikuli_intent.replace('snap_image()',snap_image());}
 var ds; if (flow_path.indexOf('/') !== -1) ds = '/'; else ds = '\\';
 var fs = require('fs'); fs.write('tagui.sikuli'+ds+'tagui_sikuli.in','['+sikuli_count.toString()+'] '+sikuli_intent,'w');
 var sikuli_result = ''; do {sleep(500); sikuli_result = fs.read('tagui.sikuli'+ds+'tagui_sikuli.out').trim();}
 while (sikuli_result.indexOf('['+sikuli_count.toString()+'] ') == -1);
 if (sikuli_result.indexOf('SUCCESS') !== -1) return true; else return false;}
+
+// for fetching text from sikuli optical character recognition 
+function fetch_sikuli_text() {var ds; if (flow_path.indexOf('/') !== -1) ds = '/'; else ds = '\\';
+var fs = require('fs'); if (fs.exists('tagui.sikuli'+ds+'tagui_sikuli.txt'))
+return fs.read('tagui.sikuli'+ds+'tagui_sikuli.txt').trim(); else return '';}
+
+// for clearing text from sikuli optical character recognition
+function clear_sikuli_text() {var ds; if (flow_path.indexOf('/') !== -1) ds = '/'; else ds = '\\';
+var fs = require('fs'); fs.write('tagui.sikuli'+ds+'tagui_sikuli.txt','','w');}
 
 if (chrome_id > 0) { // super large if block to load chrome related functions if chrome or headless option is used
 chrome_id = 0; // reset chrome_id from 1 back to 0 to prepare for initial call of chrome_step
@@ -551,6 +561,7 @@ case 'api': return api_intent(live_line); break;
 case 'run': return run_intent(live_line); break;
 case 'dom': return dom_intent(live_line); break;
 case 'js': return js_intent(live_line); break;
+case 'vision': return vision_intent(live_line); break;
 case 'timeout': return timeout_intent(live_line); break;
 case 'code': return code_intent(live_line); break;
 default: return "this.echo('ERROR - cannot understand step " + live_line.replace(/'/g,'\\\'') + "')";}}
@@ -586,6 +597,7 @@ if (lc_raw_intent.substr(0,4) == 'api ') return 'api';
 if (lc_raw_intent.substr(0,4) == 'run ') return 'run';
 if (lc_raw_intent.substr(0,4) == 'dom ') return 'dom';
 if (lc_raw_intent.substr(0,3) == 'js ') return 'js';
+if (lc_raw_intent.substr(0,7) == 'vision ') return 'vision';
 if (lc_raw_intent.substr(0,8) == 'timeout ') return 'timeout';
 
 // second set of conditions check for valid keywords with missing parameters
@@ -615,6 +627,7 @@ if (lc_raw_intent == 'api') return 'api';
 if (lc_raw_intent == 'run') return 'run';
 if (lc_raw_intent == 'dom') return 'dom';
 if (lc_raw_intent == 'js') return 'js';
+if (lc_raw_intent == 'vision') return 'vision';
 if (lc_raw_intent == 'timeout') return 'timeout';
 
 // final check for recognized code before returning error
@@ -664,14 +677,15 @@ function is_sikuli(input_params) { // helper function to check if input is meant
 if (input_params.length > 4 && input_params.substr(-4).toLowerCase() == '.png') return true; // support png and bmp
 else if (input_params.length > 4 && input_params.substr(-4).toLowerCase() == '.bmp') return true; else return false;}
 
-function call_sikuli(input_intent,input_params) { // helper function to use sikuli visual automation
+function call_sikuli(input_intent,input_params,other_actions) { // helper function to use sikuli visual automation
 var fs = require('fs'); // use phantomjs fs file system module to access files and directories
 fs.write('tagui.sikuli/tagui_sikuli.in', '', 'w'); fs.write('tagui.sikuli/tagui_sikuli.out', '', 'w');
 if (!fs.exists('tagui.sikuli/tagui_sikuli.in')) return "this.echo('ERROR - cannot initialise tagui_sikuli.in')";
 if (!fs.exists('tagui.sikuli/tagui_sikuli.out')) return "this.echo('ERROR - cannot initialise tagui_sikuli.out')";
+if (!other_actions) other_actions = ''; // to handle most cases where other_actions is not passed in during call
 return "var fs = require('fs'); if (!sikuli_step('"+input_intent+"')) if (!fs.exists('"+input_params+"')) " +
 "this.echo('ERROR - cannot find image file "+input_params+"'); " +
-"else this.echo('ERROR - cannot find "+input_params+" on screen');";}
+"else this.echo('ERROR - cannot find "+input_params+" on screen'); " + other_actions;}
 
 function url_intent(raw_intent) {
 if (chrome_id == 0) return "this.echo('ERROR - step only supported in live mode using Chrome browser')";
@@ -726,6 +740,9 @@ function read_intent(raw_intent) {
 var params = ((raw_intent + ' ').substr(1+(raw_intent + ' ').indexOf(' '))).trim();
 var param1 = (params.substr(0,params.indexOf(' to '))).trim();
 var param2 = (params.substr(4+params.indexOf(' to '))).trim();
+if (is_sikuli(param1) && (params.indexOf(' to ') > -1)) { // use sikuli visual automation as needed
+var abs_param1 = abs_file(param1); var abs_intent = raw_intent.replace(param1,abs_param1);
+return call_sikuli(abs_intent,abs_param1,param2 + ' = fetch_sikuli_text(); clear_sikuli_text();');}
 if ((param1.toLowerCase() == 'page') && (param2 !== '')) return param2 + " = this.getHTML()";
 if ((param1 == '') || (param2 == '')) return "this.echo('ERROR - target/variable missing for " + raw_intent + "')";
 else if (check_tx(param1)) return param2 + " =  this.fetchText(tx('" + param1 + "')).trim()";
@@ -733,6 +750,9 @@ else return "this.echo('ERROR - cannot find " + param1 + "')";}
 
 function show_intent(raw_intent) {
 var params = ((raw_intent + ' ').substr(1+(raw_intent + ' ').indexOf(' '))).trim();
+if (is_sikuli(params)) { // use sikuli visual automation as needed
+var abs_params = abs_file(params); var abs_intent = raw_intent.replace(params,abs_params);
+return call_sikuli(abs_intent,abs_params,'this.echo(fetch_sikuli_text()); clear_sikuli_text();');}
 if (params.toLowerCase() == 'page') return "this.echo('" + raw_intent + "' + ' - ' + '\\n' + this.getHTML())";
 if (params == '') return "this.echo('ERROR - target missing for " + raw_intent + "')";
 else if (check_tx(params)) return "this.echo(this.fetchText(tx('" + params + "')).trim())";else return "this.echo('ERROR - cannot find " + params + "')";}
@@ -764,6 +784,12 @@ function save_intent(raw_intent) {
 var params = ((raw_intent + ' ').substr(1+(raw_intent + ' ').indexOf(' '))).trim();
 var param1 = (params.substr(0,params.indexOf(' to '))).trim();
 var param2 = (params.substr(4+params.indexOf(' to '))).trim();
+if (is_sikuli(param1) && (params.indexOf(' to ') > -1)) { // use sikuli visual automation as needed
+var abs_param1 = abs_file(param1); var abs_intent = raw_intent.replace(param1,abs_param1);
+return call_sikuli(abs_intent,abs_param1,'save_text(\''+abs_file(param2)+'\',fetch_sikuli_text()); clear_sikuli_text();');}
+else if (is_sikuli(params) && (params.indexOf(' to ') == -1)) {
+var abs_params = abs_file(params); var abs_intent = raw_intent.replace(params,abs_params);
+return call_sikuli(abs_intent,abs_param1,'save_text(\'\',fetch_sikuli_text()); clear_sikuli_text();');}
 if ((params.toLowerCase() == 'page') || (param1.toLowerCase() == 'page')) {
 if (params.indexOf(' to ') > -1) return "save_text('" + abs_file(param2) + "',this.getHTML())";
 else return "save_text('',this.getHTML())";}
@@ -805,6 +831,13 @@ function snap_intent(raw_intent) {
 var params = ((raw_intent + ' ').substr(1+(raw_intent + ' ').indexOf(' '))).trim();
 var param1 = (params.substr(0,params.indexOf(' to '))).trim();
 var param2 = (params.substr(4+params.indexOf(' to '))).trim();
+if (is_sikuli(param1) && (params.indexOf(' to ') > -1)) {
+var abs_param1 = abs_file(param1); var abs_intent = raw_intent.replace(param1,abs_param1);
+var abs_param2 = abs_file(param2); abs_intent = abs_intent.replace(param2,abs_param2);
+return call_sikuli(abs_intent,abs_param1);} // use sikuli visual automation as needed
+else if (is_sikuli(params) && (params.indexOf(' to ') == -1)) {
+var abs_params = abs_file(params); var abs_intent = raw_intent.replace(params,abs_params);
+return call_sikuli(abs_intent + ' to snap_image()',abs_params);} // handle no output filename
 if ((params.toLowerCase() == 'page') || (param1.toLowerCase() == 'page')) {
 if (params.indexOf(' to ') > -1) return "this.capture('" + abs_file(param2) + "')";
 else return "this.capture(snap_image())";}
@@ -862,6 +895,11 @@ function js_intent(raw_intent) {
 var params = ((raw_intent + ' ').substr(1+(raw_intent + ' ').indexOf(' '))).trim();
 if (params == '') return "this.echo('ERROR - statement missing for " + raw_intent + "')";
 else return check_chrome_context(params);}
+
+function vision_intent(raw_intent) {
+var params = ((raw_intent + ' ').substr(1+(raw_intent + ' ').indexOf(' '))).trim();
+if (params == '') return "this.echo('ERROR - command missing for " + raw_intent + "')";
+else return call_sikuli(raw_intent.replace(/'/g,'\\\''),'for vision step');}
 
 function timeout_intent(raw_intent) {
 var params = ((raw_intent + ' ').substr(1+(raw_intent + ' ').indexOf(' '))).trim();
@@ -1901,6 +1939,13 @@ dom_result = this.evaluate(function(dom_json) {var page_title = document.title;}
 // test something and see what happens
 // test js
 this.echo('THIS IS JAVASCRIPT');
+// test vision
+{techo('vision click(\'/tmp/// test.png\')'); var fs = require('fs');
+if (!sikuli_step('vision click(\'/tmp/// test.png\')')) if (!fs.exists('for vision step'))
+this.echo('ERROR - cannot find image file for vision step').exit(); else
+this.echo('ERROR - cannot find for vision step on screen').exit(); this.wait(0);}});
+
+casper.then(function() {
 // test timeout
 casper.options.waitTimeout = 4000;
 casper.options.waitTimeout = 5670;

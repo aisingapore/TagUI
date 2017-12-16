@@ -12,6 +12,10 @@ tagui_count = '0'
 # prevent premature exit on unhandled exception
 setThrowException(False)
 
+# enable OCR (optical character recognition)
+Settings.OcrTextRead = True
+Settings.OcrTextSearch = True
+
 # function for tap / click step
 def tap_intent ( raw_intent ):
 	params = (raw_intent + ' ')[1+(raw_intent + ' ').find(' '):].strip()
@@ -59,6 +63,43 @@ def select_intent ( raw_intent ):
 	else:
 		return 0
 
+# function for reading OCR text
+def read_intent ( raw_intent ):
+	return text_read(raw_intent)
+
+# function for showing OCR text
+def show_intent ( raw_intent ):
+	return text_read(raw_intent)
+
+# function for saving OCR text
+def save_intent ( raw_intent ):
+	return text_read(raw_intent)
+
+# function for reading text using Tesseract OCR
+def text_read ( raw_intent ):
+	params = (raw_intent + ' ')[1+(raw_intent + ' ').find(' '):].strip()
+	param1 = params[:(params + ' ').find(' ')].strip()
+
+	print '[tagui] ACTION - ' + raw_intent
+	if param1.endswith('page.png') or param1.endswith('page.bmp'):
+		fullscreen_layer = Screen()
+		temp_text = fullscreen_layer.text()
+		import codecs
+		tagui_text = codecs.open('tagui.sikuli/tagui_sikuli.txt','w',encoding='utf8')
+		tagui_text.write(temp_text)
+		tagui_text.close()
+		return 1
+	elif exists(param1):
+		matched_element = find(param1)
+		temp_text = matched_element.text()
+		import codecs
+		tagui_text = codecs.open('tagui.sikuli/tagui_sikuli.txt','w',encoding='utf8')
+		tagui_text.write(temp_text)
+		tagui_text.close()
+		return 1
+	else:
+		return 0
+
 # function for capturing screenshot
 def snap_intent ( raw_intent ):
 	params = (raw_intent + ' ')[1+(raw_intent + ' ').find(' '):].strip()
@@ -98,6 +139,12 @@ def get_intent ( raw_intent ):
 		return 'type'
 	if raw_intent[:7].lower() == 'select ' or raw_intent[:7].lower() == 'choose ':
 		return 'select'
+	if raw_intent[:5].lower() == 'read ' or raw_intent[:6].lower() == 'fetch ':
+		return 'read'
+	if raw_intent[:5].lower() == 'show ' or raw_intent[:6].lower() == 'print ':
+		return 'show'
+	if raw_intent[:5].lower() == 'save ':
+		return 'save'
 	if raw_intent[:5].lower() == 'snap ':
 		return 'snap'
 	if raw_intent[:7].lower() == 'vision ':
@@ -115,6 +162,12 @@ def parse_intent ( script_line ):
 		return type_intent(script_line)
 	elif intent_type == 'select':
 		return select_intent(script_line)
+	elif intent_type == 'read':
+		return read_intent(script_line)
+	elif intent_type == 'show':
+		return show_intent(script_line)
+	elif intent_type == 'save':
+		return save_intent(script_line)
 	elif intent_type == 'snap':
 		return snap_intent(script_line)
 	elif intent_type == 'vision':
