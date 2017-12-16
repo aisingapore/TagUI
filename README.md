@@ -119,9 +119,9 @@ If your native language is not in the above list, you can also automate building
 Most of the language definitions are automatically self-built using Google Translate (except english.csv and chinese.csv), and would be wrong without understanding vocabulary used in UI interaction context. Native language users can update the language definition csv themselves and are welcome to submit PRs with correct words to be used. Some languages are very different from English structure (for eg, written from right to left, different order of adjective and noun) and would be impossible to use correctly in TagUI.
 
 ### VISUAL AUTOMATION
-TagUI has built-in integration with [Sikuli (base on OpenCV)](http://sikulix.com) to allow identifying web elements and desktop user interface elements for interaction. Steps that support visual automation are tap / click, hover / move, type / enter, select / choose. Simply specify an image filename (.png or .bmp format) of what to look for visually, in place of the element identifier, to use visual automation alongside your usual automation steps. Powerful stuff.
+TagUI has built-in integration with [Sikuli (base on OpenCV)](http://sikulix.com) to allow identifying web elements and desktop user interface elements for interaction. Steps that support visual automation are tap / click, hover / move, type / enter, select / choose, read / fetch, show / print, save, snap. Simply specify an image filename (.png or .bmp format) of what to look for visually, in place of the element identifier, to use visual automation alongside your usual automation steps.
 
-Sikuli is excluded from TagUI packaged installation due to complex dependencies that are handled by its installer. [Download Sikuli](http://sikulix.com/quickstart/) to tagui/src/tagui.sikuli folder and setup (choose option 1 - Pack1). Relative paths are supported for image filenames (eg pc.png, images/button.bmp). A screen (real or Xvfb) is needed for visual automation.
+Sikuli is excluded from TagUI packaged installation due to complex dependencies that are handled by its installer. [Download Sikuli](http://sikulix.com/quickstart/) to tagui/src/tagui.sikuli folder and setup (choose option 1 - Pack1 and option 3 Tesseract based OCR). Relative paths are supported for image filenames (eg pc.png, images/button.bmp). A screen (real or Xvfb) is needed for visual automation. [Tesseract OCR](https://github.com/tesseract-ocr/tesseract) (optical character recognition) is used for visually retrieving text.
 
 ![Sample Visual Automation](https://raw.githubusercontent.com/tebelorg/Tump/master/visual_flow.gif)
 
@@ -194,6 +194,7 @@ api|full url (including parameters) of api call|call api & save response to api_
 run|macOS/Linux command including parameters|run OS command & save to run_result
 dom|javascript code for document object model|run code in dom & save to dom_result
 js|javascript statements (skip auto-detection)|treat as JS code explicitly
+vision|custom visual automation commands|run custom sikuli commands
 timeout|time in seconds before step errors out|change auto-wait timeout
 variable_name| = value (for text, put in quotes, use + to concat)|define variable variable_name
 // (on new line)|user comments (ignored during execution)|add user comments
@@ -326,39 +327,59 @@ test.assertSelectorHasText(tx('header'), 'Interface automation','Check for phras
 In the event you get an error saying that it cannot understand the step for your JavaScript line, raise an issue or modify the source code ([tagui_parse.php](https://github.com/tebelorg/TagUI/blob/master/src/tagui_parse.php) is where interpretation of natural language to CasperJS JavaScript code takes place). Alternatively, use step js to explicitly declare that whatever follows on that line is JavaScript code and ensure that the line is not treated as a TagUI step.
 
 ### FILES
-Filename |Purpose
-:--------|:------
+Core Files|Purpose
+:---------|:------
 tagui|main runner for TagUI web automation
 tagui.cmd|main runner for Windows platform
+tagui_config.txt|web browser settings used for automation
+tagui_parse.php|to interpret natural language into code
+tagui_header.js|template for CasperJS / integrations code
+tagui_footer.js|template for CasperJS / integrations code
+
+Multi-Language |Purpose
+:--------------|:------
+translate.php|translation engine for native languages
+translate.log|translation in English reference language
+
+Chrome Integration |Purpose
+:------------------|:------
 tagui_chrome.php|PHP thread for Chrome integration
+tagui_chrome.log|log for Chrome websocket transactions
 tagui_chrome.in|interface in-file for Chrome integration
 tagui_chrome.out|interface out-file for Chrome integration
-tagui_chrome.log|log for Chrome websocket transactions
-tagui_config.txt|web browser settings used for automation
+
+Sikuli Integration |Purpose
+:------------------|:------
+tagui.py|interface for Sikuli visual automation
+tagui.log|log for Sikuli Python transactions
+tagui_windows.log|same as above but for Windows
+tagui_sikuli.in|interface in-file for Sikuli integration
+tagui_sikuli.out|interface out-file for Sikuli integration
+tagui_sikuli.txt|Tesseract OCR integration interface file
+
+API Service |Purpose
+:-----------|:------
 tagui_crontab|to run service request batch from crontab
-tagui_footer.js|template for CasperJS / integrations code
-tagui_header.js|template for CasperJS / integrations code
-tagui_parse.php|to interpret natural language into code
-tagui_report.php|to generate html report from text log
 tagui_runner.php|retrieving service requests from queue
 tagui_service.php|receiving service requests into queue
+tagui_service.log|log to track service requests history
 tagui_service.in|log to track incoming service requests
 tagui_service.out|log to track processed service requests
-tagui_service.log|log to track service requests history
 tagui_service.act|service request batch ready to execute
 tagui_service.run|service request batch currently running
 tagui_service.done|service request batch finished running
-tagui.py|interface for Sikuli visual automation
-tagui.log|log for Sikuli Python transactions
-tagui_sikuli.in|interface in-file for Sikuli integration
-tagui_sikuli.out|interface out-file for Sikuli integration
+
+CLI Assistant |Purpose
+:-------------|:------
 erina|natural language command line helper
 erina.cmd|same as above but for Windows platform
 tagui_helper.php|command line natural language parser
 tagui_helper|generated normal TagUI command to run
 tagui_helper.cmd|same as above but for Windows platform
-translate.php|translation engine for native languages
-translate.log|translation in English reference language
+
+Misc Files |Purpose
+:----------|:------
+tagui_report.php|to generate html report from text log
 transpose.php|transpose conventional datatable csv
 sleep.php|allow adding execution pause on Windows
 
