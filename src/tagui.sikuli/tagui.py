@@ -81,6 +81,13 @@ def snap_intent ( raw_intent ):
 	else:
 		return 0
 
+# function for sending custom commands
+def vision_intent ( raw_intent ):
+	params = (raw_intent + ' ')[1+(raw_intent + ' ').find(' '):].strip()
+	print '[tagui] ACTION - ' + params
+	exec(params)
+	return 1
+
 # function to interpret input intent
 def get_intent ( raw_intent ):
 	if raw_intent[:4].lower() == 'tap ' or raw_intent[:6].lower() == 'click ':
@@ -93,6 +100,8 @@ def get_intent ( raw_intent ):
 		return 'select'
 	if raw_intent[:5].lower() == 'snap ':
 		return 'snap'
+	if raw_intent[:7].lower() == 'vision ':
+		return 'vision'
 	return 'error'
 
 # function to parse and act on intent
@@ -108,6 +117,8 @@ def parse_intent ( script_line ):
 		return select_intent(script_line)
 	elif intent_type == 'snap':
 		return snap_intent(script_line)
+	elif intent_type == 'vision':
+		return vision_intent(script_line)
 	else:
 		return 0 
 

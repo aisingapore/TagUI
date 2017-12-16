@@ -6,7 +6,7 @@
 
 // list of keywords that are supposed to be at the start of a flow statement
 $start_keywords = '|click|tap|move|hover|type|enter|select|choose|read|fetch|show|print|save|echo|dump|write|snap|table|';
-$start_keywords.='wait|live|download|upload|load|receive|frame|popup|timeout|api|dom|js|else if|else|if|for|while|check|';
+$start_keywords.='wait|live|download|upload|load|receive|frame|popup|timeout|api|dom|js|vision|else if|else|if|for|while|check|';
 
 // list of keywords at start of flow statement for valid to and as separators
 $to_separator_keywords = '|read|fetch|save|load|dump|write|snap|table|download|receive|for|';

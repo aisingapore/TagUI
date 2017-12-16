@@ -68,7 +68,7 @@ else return true;}} // if '",' is not found, means end of table is reached as th
 // for translating multi-language flows (comments in translate.php)
 function translate(script_line,direction,language) {var start_keywords = 
 '|click|tap|move|hover|type|enter|select|choose|read|fetch|show|print|save|echo|dump|write|snap|table|'+
-'wait|live|download|upload|load|receive|frame|popup|timeout|api|dom|js|else if|else|if|for|while|check|';
+'wait|live|download|upload|load|receive|frame|popup|timeout|api|dom|js|vision|else if|else|if|for|while|check|';
 var to_separator_keywords = '|read|fetch|save|load|dump|write|snap|table|download|receive|for|'
 var as_separator_keywords = '|type|enter|select|choose|upload|'; var forloop_keywords = '|from|';
 var start_conditions_keywords = '|else if|if|for|while|check|'; var start_helper_keywords = '|echo|dump|write|';
@@ -525,6 +525,7 @@ case 'api': return api_intent(live_line); break;
 case 'run': return run_intent(live_line); break;
 case 'dom': return dom_intent(live_line); break;
 case 'js': return js_intent(live_line); break;
+case 'vision': return vision_intent(live_line); break;
 case 'timeout': return timeout_intent(live_line); break;
 case 'code': return code_intent(live_line); break;
 default: return "this.echo('ERROR - cannot understand step " + live_line.replace(/'/g,'\\\'') + "')";}}
@@ -560,6 +561,7 @@ if (lc_raw_intent.substr(0,4) == 'api ') return 'api';
 if (lc_raw_intent.substr(0,4) == 'run ') return 'run';
 if (lc_raw_intent.substr(0,4) == 'dom ') return 'dom';
 if (lc_raw_intent.substr(0,3) == 'js ') return 'js';
+if (lc_raw_intent.substr(0,7) == 'vision ') return 'vision';
 if (lc_raw_intent.substr(0,8) == 'timeout ') return 'timeout';
 
 // second set of conditions check for valid keywords with missing parameters
@@ -589,6 +591,7 @@ if (lc_raw_intent == 'api') return 'api';
 if (lc_raw_intent == 'run') return 'run';
 if (lc_raw_intent == 'dom') return 'dom';
 if (lc_raw_intent == 'js') return 'js';
+if (lc_raw_intent == 'vision') return 'vision';
 if (lc_raw_intent == 'timeout') return 'timeout';
 
 // final check for recognized code before returning error
@@ -843,6 +846,11 @@ function js_intent(raw_intent) {
 var params = ((raw_intent + ' ').substr(1+(raw_intent + ' ').indexOf(' '))).trim();
 if (params == '') return "this.echo('ERROR - statement missing for " + raw_intent + "')";
 else return check_chrome_context(params);}
+
+function vision_intent(raw_intent) {
+var params = ((raw_intent + ' ').substr(1+(raw_intent + ' ').indexOf(' '))).trim();
+if (params == '') return "this.echo('ERROR - command missing for " + raw_intent + "')";
+else return call_sikuli(raw_intent.replace(/'/g,'\\\''),'for vision step');}
 
 function timeout_intent(raw_intent) {
 var params = ((raw_intent + ' ').substr(1+(raw_intent + ' ').indexOf(' '))).trim();

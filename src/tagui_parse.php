@@ -201,6 +201,7 @@ case "api": return api_intent($script_line); break;
 case "run": return run_intent($script_line); break;
 case "dom": return dom_intent($script_line); break;
 case "js": return js_intent($script_line); break;
+case "vision": return vision_intent($script_line); break;
 case "timeout": return timeout_intent($script_line); break;
 case "code": return code_intent($script_line); break;
 default: echo "ERROR - " . current_line() . " cannot understand step " . $script_line . "\n";}}
@@ -235,6 +236,7 @@ if (substr($lc_raw_intent,0,4)=="api ") return "api";
 if (substr($lc_raw_intent,0,4)=="run ") return "run";
 if (substr($lc_raw_intent,0,4)=="dom ") return "dom";
 if (substr($lc_raw_intent,0,3)=="js ") return "js";
+if (substr($lc_raw_intent,0,7)=="vision ") return "vision";
 if (substr($lc_raw_intent,0,8)=="timeout ") return "timeout";
 
 // second set of conditions check for valid keywords with missing parameters
@@ -264,6 +266,7 @@ if ($lc_raw_intent=="api") return "api";
 if ($lc_raw_intent=="run") return "run";
 if ($lc_raw_intent=="dom") return "dom";
 if ($lc_raw_intent=="js") return "js";
+if ($lc_raw_intent=="vision") return "vision";
 if ($lc_raw_intent=="timeout") return "timeout";
 
 // final check for recognized code before returning error 
@@ -599,6 +602,12 @@ function js_intent($raw_intent) {
 $params = trim(substr($raw_intent." ",1+strpos($raw_intent." "," ")));
 if ($params == "") echo "ERROR - " . current_line() . " statement missing for " . $raw_intent . "\n";
 else return $params.end_fi()."\n";}
+
+function vision_intent($raw_intent) {
+$safe_intent = str_replace("'","\'",$raw_intent); // avoid breaking echo when single quote is used
+$params = trim(substr($raw_intent." ",1+strpos($raw_intent." "," ")));
+if ($params == "") echo "ERROR - " . current_line() . " command missing for " . $raw_intent . "\n"; else
+return call_sikuli($safe_intent,'for vision step');} // use sikuli visual automation explicitly
 
 function timeout_intent($raw_intent) {
 $params = trim(substr($raw_intent." ",1+strpos($raw_intent." "," ")));
