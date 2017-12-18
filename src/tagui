@@ -237,7 +237,7 @@ then echo "ERROR - automation aborted due to above" | tee -a "$1".log; tagui_err
 
 # start R process if integration file is created during parsing
 if [ -f "tagui_r/tagui_r.in" ]; then
-Rscript tagui_r/tagui_r.R >> tagui_r/tagui_r.log &
+Rscript tagui_r/tagui_r.R >> tagui_r/tagui_r.log 2>&1 &
 fi
 
 # start sikuli process if integration file is created during parsing
