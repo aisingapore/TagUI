@@ -201,6 +201,7 @@ case "api": return api_intent($script_line); break;
 case "run": return run_intent($script_line); break;
 case "dom": return dom_intent($script_line); break;
 case "js": return js_intent($script_line); break;
+case "r": return r_intent($script_line); break;
 case "vision": return vision_intent($script_line); break;
 case "timeout": return timeout_intent($script_line); break;
 case "code": return code_intent($script_line); break;
@@ -236,6 +237,7 @@ if (substr($lc_raw_intent,0,4)=="api ") return "api";
 if (substr($lc_raw_intent,0,4)=="run ") return "run";
 if (substr($lc_raw_intent,0,4)=="dom ") return "dom";
 if (substr($lc_raw_intent,0,3)=="js ") return "js";
+if (substr($lc_raw_intent,0,2)=="r ") return "r";
 if (substr($lc_raw_intent,0,7)=="vision ") return "vision";
 if (substr($lc_raw_intent,0,8)=="timeout ") return "timeout";
 
@@ -266,6 +268,7 @@ if ($lc_raw_intent=="api") return "api";
 if ($lc_raw_intent=="run") return "run";
 if ($lc_raw_intent=="dom") return "dom";
 if ($lc_raw_intent=="js") return "js";
+if ($lc_raw_intent=="r") return "r";
 if ($lc_raw_intent=="vision") return "vision";
 if ($lc_raw_intent=="timeout") return "timeout";
 
@@ -346,6 +349,14 @@ return "{techo('".str_replace(' to snap_image()','',$input_intent)."'); var fs =
 "if (!sikuli_step('".$input_intent."')) if (!fs.exists('".$input_params."'))\n" .
 "this.echo('ERROR - cannot find image file ".$input_params."').exit(); else\n" . 
 "this.echo('ERROR - cannot find " . $input_params." on screen').exit(); this.wait(0);" . $other_actions. "}" .
+end_fi()."});\n\ncasper.then(function() {\n";}
+
+function call_r($input_intent) { // helper function to use R integration for data analytics and machine learning
+if (!touch('tagui_r/tagui_r.in')) die("ERROR - cannot initialise tagui_r.in\n");
+if (!touch('tagui_r/tagui_r.out')) die("ERROR - cannot initialise tagui_r.out\n");
+return "{techo('".$input_intent."');\n" . "r_result = ''; if (!r_step('".$input_intent."'))\n" .
+"this.echo('ERROR - cannot execute R command(s)').exit(); this.wait(0);\n" .
+"r_result = fetch_r_text(); clear_r_text();}" .
 end_fi()."});\n\ncasper.then(function() {\n";}
 
 // set of functions to interpret steps into corresponding casperjs code
@@ -616,10 +627,16 @@ $params = trim(substr($raw_intent." ",1+strpos($raw_intent." "," ")));
 if ($params == "") echo "ERROR - " . current_line() . " statement missing for " . $raw_intent . "\n";
 else return $params.end_fi()."\n";}
 
+function r_intent($raw_intent) {
+$safe_intent = str_replace("'","\'",$raw_intent); // avoid breaking echo when single quote is used
+$params = trim(substr($raw_intent." ",1+strpos($raw_intent." "," ")));
+if ($params == "") echo "ERROR - " . current_line() . " R command(s) missing for " . $raw_intent . "\n"; else
+return call_r($safe_intent);}
+
 function vision_intent($raw_intent) {
 $safe_intent = str_replace("'","\'",$raw_intent); // avoid breaking echo when single quote is used
 $params = trim(substr($raw_intent." ",1+strpos($raw_intent." "," ")));
-if ($params == "") echo "ERROR - " . current_line() . " command missing for " . $raw_intent . "\n"; else
+if ($params == "") echo "ERROR - " . current_line() . " Sikuli command(s) missing for " . $raw_intent . "\n"; else
 return call_sikuli($safe_intent,'for vision step');} // use sikuli visual automation explicitly
 
 function timeout_intent($raw_intent) {

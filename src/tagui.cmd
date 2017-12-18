@@ -446,8 +446,15 @@ if exist "%flow_file%" (
 rem initialise log file and set permissions to protect user data
 rem skip permissions setting for windows, only done for macos and linux
 type nul > "%flow_file%.log"
+type nul > "tagui_r\tagui_r.log"
+type nul > "tagui_r\tagui_r_windows.log"
 type nul > "tagui.sikuli\tagui.log"
+type nul > "tagui.sikuli\tagui_windows.log"
 type nul > "tagui_chrome.log"
+
+rem delete R integration files if they exist
+if exist "tagui_r\tagui_r.in" del "tagui_r\tagui_r.in"
+if exist "tagui_r\tagui_r.out" del "tagui_r\tagui_r.out"
 
 rem delete sikuli visual automation integration files if they exist
 if exist "tagui.sikuli\tagui_sikuli.in" del "tagui.sikuli\tagui_sikuli.in" 
@@ -487,7 +494,7 @@ set tagui_data_set=%%n
 rem add delay between repetitions to pace out iterations
 if !tagui_data_set! neq 1 if %tagui_speed_mode%==false php -q sleep.php 3
 
-rem parse automation flow file, check for initial parse error, check sikuli and chrome, before calling casperjs
+rem parse automation flow file, check for initial parse error, check R, sikuli, chrome, before calling casperjs
 php -q tagui_parse.php "%flow_file%" | tee -a "%flow_file%.log"
 for /f "usebackq" %%f in ('%flow_file%.log') do set file_size=%%~zf
 if !file_size! gtr 0 (
@@ -496,6 +503,11 @@ if !file_size! gtr 0 (
 		set tagui_error_code=1
 		goto break_for_loop
 	)
+)
+
+rem start R process if integration file is created during parsing
+if exist "tagui_r\tagui_r.in" (
+        start /min cmd /c Rscript tagui_r\tagui_r.R 2^>^&1 ^| tee -a tagui_r\tagui_r.log
 )
 
 rem start sikuli process if integration file is created during parsing
@@ -557,6 +569,7 @@ if %tagui_test_mode%==false (
 	casperjs test "%flow_file%.js" %params%%api% --xunit="%flow_file%.xml" | tee -a "%flow_file%.log"
 )
 rem checking for existence of files is important, otherwise in loops integrations will run even without enabling
+if exist "tagui_r\tagui_r.in" echo finish > tagui_r\tagui_r.in
 if exist "tagui.sikuli\tagui_sikuli.in" echo finish > tagui.sikuli\tagui_sikuli.in
 if exist "tagui_chrome.in" echo finish > tagui_chrome.in
 
@@ -572,6 +585,7 @@ gawk "sub(\"$\", \"\")" "%flow_file%.js" > "%flow_file%.js.tmp"
 move /Y "%flow_file%.js.tmp" "%flow_file%.js" > nul
 gawk "sub(\"$\", \"\")" "%flow_file%.log" > "%flow_file%.log.tmp"
 move /Y "%flow_file%.log.tmp" "%flow_file%.log" > nul
+gawk "sub(\"$\", \"\")" "tagui_r\tagui_r.log" > "tagui_r\tagui_r_windows.log"
 gawk "sub(\"$\", \"\")" "tagui.sikuli\tagui.log" > "tagui.sikuli\tagui_windows.log"
 gawk "sub(\"$\", \"\")" "tagui_chrome.log" > "tagui_chrome.log.tmp"
 move /Y "tagui_chrome.log.tmp" "tagui_chrome.log" > nul

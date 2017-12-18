@@ -16,14 +16,17 @@ var timer_start_time = Date.now();
 // initialise default global variables
 var quiet_mode = false; var save_text_count = 0; var snap_image_count = 0;
 
-// counters for tracking messages in sikuli and chrome integrations
-var sikuli_count = 0; var chrome_id = 0;
+// counters for tracking messages in r, sikuli, chrome integrations
+var r_count = 0; var sikuli_count = 0; var chrome_id = 0;
 
 // chrome context for frame handling and targetid for popup handling
 var chrome_context = 'document'; var chrome_targetid = '';
 
 // JSON variable to pass variables into browser DOM
 var dom_json = {}; var dom_result = '';
+
+// variable for R integration execution result
+var r_result = '';
 
 // variable for advance usage of api step
 var api_config = {method:'GET', header:[], body:{}};
@@ -240,6 +243,33 @@ return fs.read('tagui.sikuli'+ds+'tagui_sikuli.txt').trim(); else return '';}
 // for clearing text from sikuli optical character recognition
 function clear_sikuli_text() {var ds; if (flow_path.indexOf('/') !== -1) ds = '/'; else ds = '\\';
 var fs = require('fs'); fs.write('tagui.sikuli'+ds+'tagui_sikuli.txt','','w');}
+
+// for initialising integration with R
+function r_handshake() { // techo('[connecting to R process]');
+var ds; if (flow_path.indexOf('/') !== -1) ds = '/'; else ds = '\\'; clear_r_text();
+var fs = require('fs'); fs.write('tagui_r'+ds+'tagui_r.in','','w'); var r_handshake = '';
+if (!fs.exists('tagui_r'+ds+'tagui_r.out')) fs.write('tagui_r'+ds+'tagui_r.out','','w');
+do {sleep(100); r_handshake = fs.read('tagui_r'+ds+'tagui_r.out').trim();}
+while (r_handshake !== '[0] START'); // techo('[connected to R process]');
+}
+
+// R integration for data analytics and machine learning
+function r_step(r_intent) {r_count++;
+if (r_count == 1) r_handshake(); // handshake on first call
+var ds; if (flow_path.indexOf('/') !== -1) ds = '/'; else ds = '\\';
+var fs = require('fs'); fs.write('tagui_r'+ds+'tagui_r.in','['+r_count.toString()+'] '+r_intent,'w');
+var r_step_result = ''; do {sleep(100); r_step_result = fs.read('tagui_r'+ds+'tagui_r.out').trim();}
+while (r_step_result.indexOf('['+r_count.toString()+'] ') == -1);
+if (r_step_result.indexOf('SUCCESS') !== -1) return true; else return false;}
+
+// for fetching text from R integration execution result
+function fetch_r_text() {var ds; if (flow_path.indexOf('/') !== -1) ds = '/'; else ds = '\\';
+var fs = require('fs'); if (fs.exists('tagui_r'+ds+'tagui_r.txt'))
+return fs.read('tagui_r'+ds+'tagui_r.txt').trim(); else return '';}
+
+// for clearing text from R integration execution result
+function clear_r_text() {var ds; if (flow_path.indexOf('/') !== -1) ds = '/'; else ds = '\\';
+var fs = require('fs'); fs.write('tagui_r'+ds+'tagui_r.txt','','w');}
 
 if (chrome_id > 0) { // super large if block to load chrome related functions if chrome or headless option is used
 chrome_id = 0; // reset chrome_id from 1 back to 0 to prepare for initial call of chrome_step
@@ -534,6 +564,7 @@ case 'api': return api_intent(live_line); break;
 case 'run': return run_intent(live_line); break;
 case 'dom': return dom_intent(live_line); break;
 case 'js': return js_intent(live_line); break;
+case 'r': return r_intent(live_line); break;
 case 'vision': return vision_intent(live_line); break;
 case 'timeout': return timeout_intent(live_line); break;
 case 'code': return code_intent(live_line); break;
@@ -570,6 +601,7 @@ if (lc_raw_intent.substr(0,4) == 'api ') return 'api';
 if (lc_raw_intent.substr(0,4) == 'run ') return 'run';
 if (lc_raw_intent.substr(0,4) == 'dom ') return 'dom';
 if (lc_raw_intent.substr(0,3) == 'js ') return 'js';
+if (lc_raw_intent.substr(0,2) == 'r ') return 'r';
 if (lc_raw_intent.substr(0,7) == 'vision ') return 'vision';
 if (lc_raw_intent.substr(0,8) == 'timeout ') return 'timeout';
 
@@ -600,6 +632,7 @@ if (lc_raw_intent == 'api') return 'api';
 if (lc_raw_intent == 'run') return 'run';
 if (lc_raw_intent == 'dom') return 'dom';
 if (lc_raw_intent == 'js') return 'js';
+if (lc_raw_intent == 'r') return 'r';
 if (lc_raw_intent == 'vision') return 'vision';
 if (lc_raw_intent == 'timeout') return 'timeout';
 
@@ -659,6 +692,13 @@ if (!other_actions) other_actions = ''; // to handle most cases where other_acti
 return "var fs = require('fs'); if (!sikuli_step('"+input_intent+"')) if (!fs.exists('"+input_params+"')) " +
 "this.echo('ERROR - cannot find image file "+input_params+"'); " +
 "else this.echo('ERROR - cannot find "+input_params+" on screen'); " + other_actions;}
+
+function call_r(input_intent) { // helper function to use R integration for data analytics and machine learning
+var fs = require('fs'); // use phantomjs fs file system module to access files and directories
+fs.write('tagui_r/tagui_r.in', '', 'w'); fs.write('tagui_r/tagui_r.out', '', 'w');
+if (!fs.exists('tagui_r/tagui_r.in')) return "this.echo('ERROR - cannot initialise tagui_r.in')";
+if (!fs.exists('tagui_r/tagui_r.out')) return "this.echo('ERROR - cannot initialise tagui_r.out')";
+return "r_result = ''; if (!r_step('"+input_intent+"')) this.echo('ERROR - cannot execute R command(s)'); else {r_result = fetch_r_text(); clear_r_text();}";}
 
 function url_intent(raw_intent) {
 if (chrome_id == 0) return "this.echo('ERROR - step only supported in live mode using Chrome browser')";
@@ -869,9 +909,14 @@ var params = ((raw_intent + ' ').substr(1+(raw_intent + ' ').indexOf(' '))).trim
 if (params == '') return "this.echo('ERROR - statement missing for " + raw_intent + "')";
 else return check_chrome_context(params);}
 
+function r_intent(raw_intent) {
+var params = ((raw_intent + ' ').substr(1+(raw_intent + ' ').indexOf(' '))).trim();
+if (params == '') return "this.echo('ERROR - R command(s) missing for " + raw_intent + "')";
+else return call_r(raw_intent.replace(/'/g,'\\\''));}
+
 function vision_intent(raw_intent) {
 var params = ((raw_intent + ' ').substr(1+(raw_intent + ' ').indexOf(' '))).trim();
-if (params == '') return "this.echo('ERROR - command missing for " + raw_intent + "')";
+if (params == '') return "this.echo('ERROR - Sikuli command(s) missing for " + raw_intent + "')";
 else return call_sikuli(raw_intent.replace(/'/g,'\\\''),'for vision step');}
 
 function timeout_intent(raw_intent) {
