@@ -12,7 +12,7 @@
 - write in 20+ human languages & JavaScript
 - Chrome extension for recording web actions
 - unzip and run on macOS, Linux, Windows
-- integration with R for big data and AI
+- R & Python integration for big data / AI
 - run by schedule, command line, API URL
 - advanced API / command calls to services
 
@@ -39,7 +39,7 @@ The automation flow can be triggered from scheduling, command line (in natural l
 
 If you know JavaScript and want to be more expressive, you can even use JavaScript directly in the flow. If not, you will still enjoy friendly but powerful features such as repositories to store your reusable objects, flexible datatables for batch automation, and a Chrome extension which creates automation flows by recording your actions. For rapid prototyping, there's also an interactive live mode for trying out TagUI steps or JavaScript code in real-time. TagUI has built-in integration with Chrome / headless Chrome directly, which also works in live mode.
 
-There is automatic waiting for web elements to appear + error-checking + nesting of JavaScript code blocks. Not forgetting the option to run automation flows hosted online or auto-upload run results online for sharing. TagUI also supports visual automation of website and desktop through built-in integration with Sikuli. Instead of using element identifiers, images can be used to identify user interface elements to interact with. TagUI has newly added integration with R for big data and machine learning abilities. R is a popular open-source software environment for statistical computing and graphics.
+There is automatic waiting for web elements to appear + error-checking + nesting of JavaScript code blocks. Not forgetting the option to run automation flows hosted online or auto-upload run results online for sharing. TagUI also supports visual automation of website and desktop through built-in integration with Sikuli. Instead of using element identifiers, images can be used to identify user interface elements to interact with. TagUI has newly added integrations with R and Python for big data and machine learning capabilities. R and Python are popular languages with many frameworks and packages in this space.
 
 # Set Up
 TagUI is in v3.0 and runs on macOS, Linux, Windows ([link to release notes](https://github.com/tebelorg/TagUI/releases))
@@ -140,6 +140,19 @@ echo r_result
 
 You can also use the `source()` command in R to run R scripts. For examples of using R for machine learning, check out this [essentials of machine learning algorithms](https://www.analyticsvidhya.com/blog/2017/09/common-machine-learning-algorithms/) article or this [guerilla guide to machine learning](https://www.kdnuggets.com/2017/05/guerrilla-guide-machine-learning-r.html) video series.
 
+### PYTHON INTEGRATION
+TagUI has built-in integration with Python v2.7 - a programming language with many popular frameworks for big data and machine learning. The py step can be used to run commands in Python and retrieve the output of those commands. To use Python integration in TagUI, first [download Python for your OS](https://www.python.org/). macOS and Linux normally come pre-installed with Python. Note that Python v3 is not backward-compatible with Python v2.7, the current and more widely used version.
+
+In your automation flow, use the py step followed by the Python commands to be executed, separated by `;`. You can then use the `print` command in Python to output the result you want to be accessible in your automation flow as `py_result` variable. For a super basic example, below steps in your TagUI automation flow will output 3.
+
+```
+py a=1;b=2
+py c=a+b
+py print c
+echo py_result
+```
+You can also use the `execfile()` command in Python to run Python scripts. For examples of using Python for machine learning, check out this [essentials of machine learning algorithms](https://www.analyticsvidhya.com/blog/2017/09/common-machine-learning-algorithms/) article or this article on [Python deep learning frameworks](https://www.kdnuggets.com/2017/02/python-deep-learning-frameworks-overview.html).
+
 ### CLI ASSISTANT
 TagUI scripts are already in natural-language-like syntax to convert to JavaScript code. What's even better is having natural-language-like syntax on the command line. Instead of typing `tagui download_bank_report june creditcard` to run the automation flow download_bank_report with parameters june creditcard, you can type `erina download my june creditcard bank report`. This may be more intuitive than recalling which automation filename you saved to run. For a demo of the CLI (command line interface) assistant in action, [see this video](https://www.youtube.com/watch?v=Sm4WNQ89gRA).
 
@@ -210,6 +223,7 @@ run|macOS/Linux command including parameters|run OS command & save to run_result
 dom|javascript code for document object model|run code in dom & save to dom_result
 js|javascript statements (skip auto-detection)|treat as JS code explicitly
 r|R statements for big data and machine learning|run R statements & save to r_result
+py|python code for big data and machine learning|run python code & save to py_result
 vision|custom visual automation commands|run custom sikuli commands
 timeout|time in seconds before step errors out|change auto-wait timeout
 variable_name| = value (for text, put in quotes, use + to concat)|define variable variable_name
@@ -381,6 +395,15 @@ tagui_r_windows.log|same as above but for Windows
 tagui_r.in|interface in-file for R integration
 tagui_r.out|interface out-file for R integration
 tagui_r.txt|integration file for storing output
+
+Python Integration |Purpose
+:------------------|:------
+tagui_py.py|interface for Python integration
+tagui_py.log|log for Python platform transactions
+tagui_py_windows.log|same as above but for Windows
+tagui_py.in|interface in-file for Python integration
+tagui_py.out|interface out-file for Python integration
+tagui_py.txt|integration file for storing output
 
 API Service |Purpose
 :-----------|:------
