@@ -202,6 +202,7 @@ case "run": return run_intent($script_line); break;
 case "dom": return dom_intent($script_line); break;
 case "js": return js_intent($script_line); break;
 case "r": return r_intent($script_line); break;
+case "py": return py_intent($script_line); break;	
 case "vision": return vision_intent($script_line); break;
 case "timeout": return timeout_intent($script_line); break;
 case "code": return code_intent($script_line); break;
@@ -238,6 +239,7 @@ if (substr($lc_raw_intent,0,4)=="run ") return "run";
 if (substr($lc_raw_intent,0,4)=="dom ") return "dom";
 if (substr($lc_raw_intent,0,3)=="js ") return "js";
 if (substr($lc_raw_intent,0,2)=="r ") return "r";
+if (substr($lc_raw_intent,0,3)=="py ") return "py";
 if (substr($lc_raw_intent,0,7)=="vision ") return "vision";
 if (substr($lc_raw_intent,0,8)=="timeout ") return "timeout";
 
@@ -269,6 +271,7 @@ if ($lc_raw_intent=="run") return "run";
 if ($lc_raw_intent=="dom") return "dom";
 if ($lc_raw_intent=="js") return "js";
 if ($lc_raw_intent=="r") return "r";
+if ($lc_raw_intent=="py") return "py";
 if ($lc_raw_intent=="vision") return "vision";
 if ($lc_raw_intent=="timeout") return "timeout";
 
@@ -357,6 +360,14 @@ if (!touch('tagui_r/tagui_r.out')) die("ERROR - cannot initialise tagui_r.out\n"
 return "{techo('".$input_intent."');\n" . "r_result = ''; if (!r_step('".$input_intent."'))\n" .
 "this.echo('ERROR - cannot execute R command(s)').exit(); this.wait(0);\n" .
 "r_result = fetch_r_text(); clear_r_text();}" .
+end_fi()."});\n\ncasper.then(function() {\n";}
+
+function call_py($input_intent) { // helper function to use Python integration for data analytics and machine learning
+if (!touch('tagui_py/tagui_py.in')) die("ERROR - cannot initialise tagui_py.in\n");
+if (!touch('tagui_py/tagui_py.out')) die("ERROR - cannot initialise tagui_py.out\n");
+return "{techo('".$input_intent."');\n" . "py_result = ''; if (!py_step('".$input_intent."'))\n" .
+"this.echo('ERROR - cannot execute Python command(s)').exit(); this.wait(0);\n" .
+"py_result = fetch_py_text(); clear_py_text();}" .
 end_fi()."});\n\ncasper.then(function() {\n";}
 
 // set of functions to interpret steps into corresponding casperjs code
@@ -632,6 +643,12 @@ $safe_intent = str_replace("'","\'",$raw_intent); // avoid breaking echo when si
 $params = trim(substr($raw_intent." ",1+strpos($raw_intent." "," ")));
 if ($params == "") echo "ERROR - " . current_line() . " R command(s) missing for " . $raw_intent . "\n"; else
 return call_r($safe_intent);}
+
+function py_intent($raw_intent) {
+$safe_intent = str_replace("'","\'",$raw_intent); // avoid breaking echo when single quote is used
+$params = trim(substr($raw_intent." ",1+strpos($raw_intent." "," ")));
+if ($params == "") echo "ERROR - " . current_line() . " Python command(s) missing for " . $raw_intent . "\n"; else
+return call_py($safe_intent);}
 
 function vision_intent($raw_intent) {
 $safe_intent = str_replace("'","\'",$raw_intent); // avoid breaking echo when single quote is used

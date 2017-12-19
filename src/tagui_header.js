@@ -16,8 +16,8 @@ var timer_start_time = Date.now();
 // initialise default global variables
 var quiet_mode = false; var save_text_count = 0; var snap_image_count = 0;
 
-// counters for tracking messages in r, sikuli, chrome integrations
-var r_count = 0; var sikuli_count = 0; var chrome_id = 0;
+// counters for tracking messages in r, python, sikuli, chrome integrations
+var r_count = 0; var py_count = 0; var sikuli_count = 0; var chrome_id = 0;
 
 // chrome context for frame handling and targetid for popup handling
 var chrome_context = 'document'; var chrome_targetid = '';
@@ -25,8 +25,8 @@ var chrome_context = 'document'; var chrome_targetid = '';
 // JSON variable to pass variables into browser DOM
 var dom_json = {}; var dom_result = '';
 
-// variable for R integration execution result
-var r_result = '';
+// variable for R and Python integration execution result
+var r_result = ''; var py_result = '';
 
 // variable for advance usage of api step
 var api_config = {method:'GET', header:[], body:{}};
@@ -270,6 +270,33 @@ return fs.read('tagui_r'+ds+'tagui_r.txt').trim(); else return '';}
 // for clearing text from R integration execution result
 function clear_r_text() {var ds; if (flow_path.indexOf('/') !== -1) ds = '/'; else ds = '\\';
 var fs = require('fs'); fs.write('tagui_r'+ds+'tagui_r.txt','','w');}
+
+// for initialising integration with Python
+function py_handshake() { // techo('[connecting to Python process]');
+var ds; if (flow_path.indexOf('/') !== -1) ds = '/'; else ds = '\\'; clear_py_text();
+var fs = require('fs'); fs.write('tagui_py'+ds+'tagui_py.in','','w'); var py_handshake = '';
+if (!fs.exists('tagui_py'+ds+'tagui_py.out')) fs.write('tagui_py'+ds+'tagui_py.out','','w');
+do {sleep(100); py_handshake = fs.read('tagui_py'+ds+'tagui_py.out').trim();}
+while (py_handshake !== '[0] START'); // techo('[connected to Python process]');
+}
+
+// Python integration for data analytics and machine learning
+function py_step(py_intent) {py_count++;
+if (py_count == 1) py_handshake(); // handshake on first call
+var ds; if (flow_path.indexOf('/') !== -1) ds = '/'; else ds = '\\';
+var fs = require('fs'); fs.write('tagui_py'+ds+'tagui_py.in','['+py_count.toString()+'] '+py_intent,'w');
+var py_step_result = ''; do {sleep(100); py_step_result = fs.read('tagui_py'+ds+'tagui_py.out').trim();}
+while (py_step_result.indexOf('['+py_count.toString()+'] ') == -1);
+if (py_step_result.indexOf('SUCCESS') !== -1) return true; else return false;}
+
+// for fetching text from Python integration execution result
+function fetch_py_text() {var ds; if (flow_path.indexOf('/') !== -1) ds = '/'; else ds = '\\';
+var fs = require('fs'); if (fs.exists('tagui_py'+ds+'tagui_py.txt'))
+return fs.read('tagui_py'+ds+'tagui_py.txt').trim(); else return '';}
+
+// for clearing text from Python integration execution result
+function clear_py_text() {var ds; if (flow_path.indexOf('/') !== -1) ds = '/'; else ds = '\\';
+var fs = require('fs'); fs.write('tagui_py'+ds+'tagui_py.txt','','w');}
 
 if (chrome_id > 0) { // super large if block to load chrome related functions if chrome or headless option is used
 chrome_id = 0; // reset chrome_id from 1 back to 0 to prepare for initial call of chrome_step
@@ -565,6 +592,7 @@ case 'run': return run_intent(live_line); break;
 case 'dom': return dom_intent(live_line); break;
 case 'js': return js_intent(live_line); break;
 case 'r': return r_intent(live_line); break;
+case 'py': return py_intent(live_line); break;
 case 'vision': return vision_intent(live_line); break;
 case 'timeout': return timeout_intent(live_line); break;
 case 'code': return code_intent(live_line); break;
@@ -602,6 +630,7 @@ if (lc_raw_intent.substr(0,4) == 'run ') return 'run';
 if (lc_raw_intent.substr(0,4) == 'dom ') return 'dom';
 if (lc_raw_intent.substr(0,3) == 'js ') return 'js';
 if (lc_raw_intent.substr(0,2) == 'r ') return 'r';
+if (lc_raw_intent.substr(0,3) == 'py ') return 'py';
 if (lc_raw_intent.substr(0,7) == 'vision ') return 'vision';
 if (lc_raw_intent.substr(0,8) == 'timeout ') return 'timeout';
 
@@ -633,6 +662,7 @@ if (lc_raw_intent == 'run') return 'run';
 if (lc_raw_intent == 'dom') return 'dom';
 if (lc_raw_intent == 'js') return 'js';
 if (lc_raw_intent == 'r') return 'r';
+if (lc_raw_intent == 'py') return 'py';
 if (lc_raw_intent == 'vision') return 'vision';
 if (lc_raw_intent == 'timeout') return 'timeout';
 
@@ -699,6 +729,13 @@ fs.write('tagui_r/tagui_r.in', '', 'w'); fs.write('tagui_r/tagui_r.out', '', 'w'
 if (!fs.exists('tagui_r/tagui_r.in')) return "this.echo('ERROR - cannot initialise tagui_r.in')";
 if (!fs.exists('tagui_r/tagui_r.out')) return "this.echo('ERROR - cannot initialise tagui_r.out')";
 return "r_result = ''; if (!r_step('"+input_intent+"')) this.echo('ERROR - cannot execute R command(s)'); else {r_result = fetch_r_text(); clear_r_text();}";}
+
+function call_py(input_intent) { // helper function to use Python integration for data analytics and machine learning
+var fs = require('fs'); // use phantomjs fs file system module to access files and directories
+fs.write('tagui_py/tagui_py.in', '', 'w'); fs.write('tagui_py/tagui_py.out', '', 'w');
+if (!fs.exists('tagui_py/tagui_py.in')) return "this.echo('ERROR - cannot initialise tagui_py.in')";
+if (!fs.exists('tagui_py/tagui_py.out')) return "this.echo('ERROR - cannot initialise tagui_py.out')";
+return "py_result = ''; if (!py_step('"+input_intent+"')) this.echo('ERROR - cannot execute Python command(s)'); else {py_result = fetch_py_text(); clear_py_text();}";}
 
 function url_intent(raw_intent) {
 if (chrome_id == 0) return "this.echo('ERROR - step only supported in live mode using Chrome browser')";
@@ -913,6 +950,11 @@ function r_intent(raw_intent) {
 var params = ((raw_intent + ' ').substr(1+(raw_intent + ' ').indexOf(' '))).trim();
 if (params == '') return "this.echo('ERROR - R command(s) missing for " + raw_intent + "')";
 else return call_r(raw_intent.replace(/'/g,'\\\''));}
+
+function py_intent(raw_intent) {
+var params = ((raw_intent + ' ').substr(1+(raw_intent + ' ').indexOf(' '))).trim();
+if (params == '') return "this.echo('ERROR - Python command(s) missing for " + raw_intent + "')";
+else return call_py(raw_intent.replace(/'/g,'\\\''));}
 
 function vision_intent(raw_intent) {
 var params = ((raw_intent + ' ').substr(1+(raw_intent + ' ').indexOf(' '))).trim();

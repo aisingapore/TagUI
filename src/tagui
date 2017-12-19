@@ -191,6 +191,8 @@ api=""; if [ -f "$1" ]; then if grep -iq "api http" "$1"; then api=" --web-secur
 echo -n "" > "$1".log; chmod 600 "$1".log
 echo -n "" > tagui_r/tagui_r.log; chmod 600 tagui_r/tagui_r.log
 echo -n "" > tagui_r/tagui_r_windows.log; chmod 600 tagui_r/tagui_r_windows.log
+echo -n "" > tagui_py/tagui_py.log; chmod 600 tagui_py/tagui_py.log
+echo -n "" > tagui_py/tagui_py_windows.log; chmod 600 tagui_py/tagui_py_windows.log
 echo -n "" > tagui.sikuli/tagui.log; chmod 600 tagui.sikuli/tagui.log
 echo -n "" > tagui.sikuli/tagui_windows.log; chmod 600 tagui.sikuli/tagui_windows.log
 echo -n "" > tagui_chrome.log; chmod 600 tagui_chrome.log
@@ -198,6 +200,10 @@ echo -n "" > tagui_chrome.log; chmod 600 tagui_chrome.log
 # delete R integration files if they exist
 if [ -f "tagui_r/tagui_r.in" ]; then rm tagui_r/tagui_r.in; fi
 if [ -f "tagui_r/tagui_r.out" ]; then rm tagui_r/tagui_r.out; fi
+
+# delete python integration files if they exist
+if [ -f "tagui_py/tagui_py.in" ]; then rm tagui_py/tagui_py.in; fi
+if [ -f "tagui_py/tagui_py.out" ]; then rm tagui_py/tagui_py.out; fi
 
 # delete sikuli visual automation integration files if they exist
 if [ -f "tagui.sikuli/tagui_sikuli.in" ]; then rm tagui.sikuli/tagui_sikuli.in; fi
@@ -230,7 +236,8 @@ do export tagui_data_set=$tagui_data_set
 # add delay between repetitions to pace out iterations
 if [ "$tagui_data_set" -ne 1 ] && [ "$tagui_speed_mode" == false ]; then sleep 3; fi
 
-# parse automation flow file, check for initial parse error, check R, sikuli, chrome, before calling casperjs
+# parse automation flow file, check for initial parse error
+# check R, python, sikuli, chrome, before calling casperjs
 php -q tagui_parse.php "$1" | tee -a "$1".log
 if [ -s "$1".log ] && [ "$tagui_data_set" -eq 1 ]
 then echo "ERROR - automation aborted due to above" | tee -a "$1".log; tagui_error_code=1; break; fi
@@ -240,9 +247,14 @@ if [ -f "tagui_r/tagui_r.in" ]; then
 Rscript tagui_r/tagui_r.R >> tagui_r/tagui_r.log 2>&1 &
 fi
 
+# start python process if integration file is created during parsing
+if [ -f "tagui_py/tagui_py.in" ]; then
+python -u tagui_py/tagui_py.py >> tagui_py/tagui_py.log 2>&1 &
+fi
+
 # start sikuli process if integration file is created during parsing
 if [ -f "tagui.sikuli/tagui_sikuli.in" ]; then echo "[starting sikuli process]" | tee -a "$1".log
-tagui.sikuli/runsikulix -r tagui.sikuli >> tagui.sikuli/tagui.log &
+tagui.sikuli/runsikulix -r tagui.sikuli >> tagui.sikuli/tagui.log 2>&1 &
 fi
 
 # start chrome processes if integration file is created during parsing
@@ -293,6 +305,7 @@ if [ "$tagui_test_mode" == false ]; then "$CASPERJS_EXECUTABLE" "$1".js $params$
 else export tagui_test_mode=true; "$CASPERJS_EXECUTABLE" test "$1".js $params$api --xunit="$1".xml | tee -a "$1".log; fi
 # checking for existence of files is important, otherwise in loops integrations will run even without enabling
 if [ -f "tagui_r/tagui_r.in" ]; then echo "finish" > tagui_r/tagui_r.in; fi
+if [ -f "tagui_py/tagui_py.in" ]; then echo "finish" > tagui_py/tagui_py.in; fi
 if [ -f "tagui.sikuli/tagui_sikuli.in" ]; then echo "finish" > tagui.sikuli/tagui_sikuli.in; fi
 if [ -f "tagui_chrome.in" ]; then echo "finish" > tagui_chrome.in; fi
 

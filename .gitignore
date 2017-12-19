@@ -44,6 +44,13 @@
 /src/tagui_r/tagui_r.log
 /src/tagui_r/tagui_r_windows.log
 
+# exclude local files for python integration
+/src/tagui_py/tagui_py.in
+/src/tagui_py/tagui_py.out
+/src/tagui_py/tagui_py.txt
+/src/tagui_py/tagui_py.log
+/src/tagui_py/tagui_py_windows.log
+
 # exclude local files for sikuli integration 
 /src/tagui.sikuli/tagui_sikuli.in
 /src/tagui.sikuli/tagui_sikuli.out
