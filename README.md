@@ -42,9 +42,9 @@ If you know JavaScript and want to be more expressive, you can even use JavaScri
 There is automatic waiting for web elements to appear + error-checking + nesting of JavaScript code blocks. Not forgetting the option to run automation flows hosted online or auto-upload run results online for sharing. TagUI also supports visual automation of website and desktop through built-in integration with Sikuli. Instead of using element identifiers, images can be used to identify user interface elements to interact with. TagUI has newly added integrations with R and Python for big data and machine learning capabilities. R and Python are popular languages with many frameworks and packages in this space.
 
 # Set Up
-TagUI is in v3.0 and runs on macOS, Linux, Windows ([link to release notes](https://github.com/tebelorg/TagUI/releases))
+TagUI is in v3.1 and runs on macOS, Linux, Windows ([link to release notes](https://github.com/tebelorg/TagUI/releases))
 
-Tip - for [cutting edge](https://github.com/tebelorg/TagUI/compare/v3.0.0...master) version, download [from here](https://github.com/tebelorg/TagUI/archive/master.zip) to overwrite your packaged installation
+Tip - for [cutting edge](https://github.com/tebelorg/TagUI/compare/v3.1.0...master) version, download [from here](https://github.com/tebelorg/TagUI/archive/master.zip) to overwrite your packaged installation
 
 ### PACKAGED INSTALLATION
 Easiest way to use TagUI - no setup is needed, all dependencies are packaged in. (on some Windows computers, if you see 'MSVCR110.dll is missing' error, install [this from Microsoft website](https://www.microsoft.com/en-us/download/details.aspx?id=30679) - this file is required to run the PHP engine)
