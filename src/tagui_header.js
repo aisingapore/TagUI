@@ -25,11 +25,14 @@ var chrome_context = 'document'; var chrome_targetid = '';
 // JSON variable to pass variables into browser DOM
 var dom_json = {}; var dom_result = '';
 
-// variable for R and Python integration execution result
-var r_result = ''; var py_result = '';
-
 // variable for advance usage of api step
 var api_config = {method:'GET', header:[], body:{}};
+
+// variables for api and run steps execution result
+var api_result = ''; var api_json = {}; var run_result = ''; var run_json = {};
+
+// variables for R and Python integration execution result
+var r_result = ''; var r_json = {}; var py_result = ''; var py_json = {};
 
 // techo function for handling quiet option
 function techo(echo_string) {if (!quiet_mode) {if (tagui_language.toLowerCase() == 'english') casper.echo(echo_string);
@@ -728,14 +731,14 @@ var fs = require('fs'); // use phantomjs fs file system module to access files a
 fs.write('tagui_r/tagui_r.in', '', 'w'); fs.write('tagui_r/tagui_r.out', '', 'w');
 if (!fs.exists('tagui_r/tagui_r.in')) return "this.echo('ERROR - cannot initialise tagui_r.in')";
 if (!fs.exists('tagui_r/tagui_r.out')) return "this.echo('ERROR - cannot initialise tagui_r.out')";
-return "r_result = ''; if (!r_step('"+input_intent+"')) this.echo('ERROR - cannot execute R command(s)'); else {r_result = fetch_r_text(); clear_r_text();}";}
+return "r_result = ''; if (!r_step('"+input_intent+"')) this.echo('ERROR - cannot execute R command(s)'); else {r_result = fetch_r_text(); clear_r_text(); try {r_json = JSON.parse(r_result);} catch(e) {r_json = JSON.parse('null');}}";}
 
 function call_py(input_intent) { // helper function to use Python integration for data analytics and machine learning
 var fs = require('fs'); // use phantomjs fs file system module to access files and directories
 fs.write('tagui_py/tagui_py.in', '', 'w'); fs.write('tagui_py/tagui_py.out', '', 'w');
 if (!fs.exists('tagui_py/tagui_py.in')) return "this.echo('ERROR - cannot initialise tagui_py.in')";
 if (!fs.exists('tagui_py/tagui_py.out')) return "this.echo('ERROR - cannot initialise tagui_py.out')";
-return "py_result = ''; if (!py_step('"+input_intent+"')) this.echo('ERROR - cannot execute Python command(s)'); else {py_result = fetch_py_text(); clear_py_text();}";}
+return "py_result = ''; if (!py_step('"+input_intent+"')) this.echo('ERROR - cannot execute Python command(s)'); else {py_result = fetch_py_text(); clear_py_text(); try {py_json = JSON.parse(py_result);} catch(e) {py_json = JSON.parse('null');}}";}
 
 function url_intent(raw_intent) {
 if (chrome_id == 0) return "this.echo('ERROR - step only supported in live mode using Chrome browser')";

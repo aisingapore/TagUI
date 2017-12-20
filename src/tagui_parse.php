@@ -359,7 +359,8 @@ if (!touch('tagui_r/tagui_r.in')) die("ERROR - cannot initialise tagui_r.in\n");
 if (!touch('tagui_r/tagui_r.out')) die("ERROR - cannot initialise tagui_r.out\n");
 return "{techo('".$input_intent."');\n" . "r_result = ''; if (!r_step('".$input_intent."'))\n" .
 "this.echo('ERROR - cannot execute R command(s)').exit(); this.wait(0);\n" .
-"r_result = fetch_r_text(); clear_r_text();}" .
+"r_result = fetch_r_text(); clear_r_text();\n" .
+"try {r_json = JSON.parse(r_result);} catch(e) {r_json = JSON.parse('null');}}" .
 end_fi()."});\n\ncasper.then(function() {\n";}
 
 function call_py($input_intent) { // helper function to use Python integration for data analytics and machine learning
@@ -367,7 +368,8 @@ if (!touch('tagui_py/tagui_py.in')) die("ERROR - cannot initialise tagui_py.in\n
 if (!touch('tagui_py/tagui_py.out')) die("ERROR - cannot initialise tagui_py.out\n");
 return "{techo('".$input_intent."');\n" . "py_result = ''; if (!py_step('".$input_intent."'))\n" .
 "this.echo('ERROR - cannot execute Python command(s)').exit(); this.wait(0);\n" .
-"py_result = fetch_py_text(); clear_py_text();}" .
+"py_result = fetch_py_text(); clear_py_text();\n" .
+"try {py_json = JSON.parse(py_result);} catch(e) {py_json = JSON.parse('null');}}" .
 end_fi()."});\n\ncasper.then(function() {\n";}
 
 // set of functions to interpret steps into corresponding casperjs code
