@@ -1060,7 +1060,9 @@ casper.waitForExec = function (command, parameters, then, onTimeout, timeout) {
         this.log('Casper.waitForExec() is going to call non executable file ' + JSON.stringify(command) + ' - maybe runs if is in PATH', "warning");
     }
 
-    var spawn = require("child_process").spawn;
+    // var spawn = require("child_process").spawn;
+    // use execFile instead to fix crash on Windows
+    var execFile = require("child_process").execFile;
     var stdout = ''; // VARIABLE TO STORE PROGRAM STDOUT
     var stderr = ''; // VARIABLE TO STORE PROGRAM STDERR
     var exitCode = null; // VARIABLE TO STORE PROGRAM EXIT CODE
@@ -1068,7 +1070,9 @@ casper.waitForExec = function (command, parameters, then, onTimeout, timeout) {
     var elapsedTime = null; // VARIABLE TO STORE PROGRAM DURATION
 
     var childStartTime = new Date().getTime();
-    var child = spawn(command, parameters);
+    // var child = spawn(command, parameters);
+    // use execFile iinstead to fix crash on Windows
+    var child = execFile(command, parameters);
     realPid = child.pid;
 
     child.stdout.on("data", function (standardOut) { // keeps stdout updated
