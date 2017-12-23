@@ -219,7 +219,7 @@ frame|frame name **&#124;** subframe name if any|next step or block in frame/sub
 popup|url keyword of popup window to look for|next step or block in popup window
 { and }|use { to start block and } to end block (on new line)|define block of steps and code
 api|full url (including parameters) of api call|call api & save response to api_result
-run|macOS/Linux command including parameters|run OS command & save to run_result
+run|OS shell command including parameters|run OS command & save to run_result
 dom|javascript code for document object model|run code in dom & save to dom_result
 js|javascript statements (skip auto-detection)|treat as JS code explicitly
 r|R statements for big data and machine learning|run R statements & save to r_result
@@ -313,7 +313,7 @@ api_config = {method:'PUT', header:['Header1: value1','Header2: value2'], body:{
 ```
 For advanced API calls, you can set above api_config variable which defaults as `{method:'GET', header:[], body:{}}`. Besides GET, you can use other methods such as POST, PUT, DELETE etc. You can define multiple headers in the format `'Header_name: header_value'` and provide a payload body for PUT requests for example. You can set it as above before using the api step, or set using `api_config.method = 'PUT';` and `api_config.header[0] = 'Header1: value1';` etc. `api_config.body` will be automatically converted to JSON format for sending to API endpoint.
 
-In addition, macOS/Linux commands can be executed using run step. This can be used to call other apps or services hosted locally on the OS, instead of being hosted through webservices. To use run step, specify the full command including parameters. Execution result will be stored in `run_result`, which can be used in your automation flow.
+In addition, macOS/Linux/Windows CLI commands can be executed using run step. This can be used to call other apps or services hosted locally on the OS, instead of being hosted through webservices. To use run step, specify the full command including parameters. Execution result will be stored in `run_result`, which can be used in your automation flow.
 
 ### CHROME
 TagUI has built-in integration with Chrome web browser to run web automation in visible or headless mode. It uses a websocket connection to directly communicate automation JavaScript code and information to Chrome.

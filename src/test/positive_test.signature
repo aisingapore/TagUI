@@ -1087,19 +1087,14 @@ casper.waitForExec = function (command, parameters, then, onTimeout, timeout) {
         this.log('Casper.waitForExec() is going to call non executable file ' + JSON.stringify(command) + ' - maybe runs if is in PATH', "warning");
     }
 
-    // var spawn = require("child_process").spawn;
-    // use execFile instead to fix crash on Windows
-    var execFile = require("child_process").execFile;
+    var spawn = require("child_process").spawn;
     var stdout = ''; // VARIABLE TO STORE PROGRAM STDOUT
     var stderr = ''; // VARIABLE TO STORE PROGRAM STDERR
     var exitCode = null; // VARIABLE TO STORE PROGRAM EXIT CODE
     var realPid = null; // VARIABLE TO STORE PROGRAM REAL PID
     var elapsedTime = null; // VARIABLE TO STORE PROGRAM DURATION
-
     var childStartTime = new Date().getTime();
-    // var child = spawn(command, parameters);
-    // use execFile iinstead to fix crash on Windows
-    var child = execFile(command, parameters);
+    var child = spawn(command, parameters);
     realPid = child.pid;
 
     child.stdout.on("data", function (standardOut) { // keeps stdout updated
@@ -1114,7 +1109,7 @@ casper.waitForExec = function (command, parameters, then, onTimeout, timeout) {
     });
 
     function __details() {
-        return {data: {command: command, parameters: parameters, pid: realPid, stdout: stdout, stderr: stderr, exitCode: exitCode, elapsedTime: elapsedTime, isChildNotFinished: child.pid }};
+        return {data: {command: command, parameters: parameters, pid: realPid, stdout: stdout, stderr: stderr, exitCode: exitCode, elapsedTime: elapsedTime, isChildNotFinished: (exitCode == null) }};
     }
     function __onTimeout(timeout, details) {
         var __onWaitTimeout = onTimeout ? onTimeout : this.options.onWaitTimeout;
@@ -1123,10 +1118,8 @@ casper.waitForExec = function (command, parameters, then, onTimeout, timeout) {
         
         killTimeout = getTimeoutAndCheckNextStepFunction(killTimeout, __onWaitTimeout, 'killAndCallOnWaitTimeout', this.options.waitTimeout, false);
         (function killAndCallOnWaitTimeout() {
-            // I don't know if it should return
-            // return this.waitFor(function isProgramKilled() { // HAVE TO ADD waitFor() TO MAKE child.on("exit"... UPDATES exitCode AND TO child.pid BE UPDATED
             this.waitFor(function isProgramKilled() { // HAVE TO ADD waitFor() TO MAKE child.on("exit"... UPDATES exitCode AND TO child.pid BE UPDATED
-                return !child.pid;
+                return (exitCode != null);
             }, function onProgramKilled() { 
                     this.log(f("waitForExec() has killed %s %s (PID %d) with %s", details.data.command, JSON.stringify(details.data.parameters), details.data.pid, signalToKill), "info");
                     // this.then(this.createStep(__onWaitTimeout, timeout, __details()));
@@ -1142,7 +1135,7 @@ casper.waitForExec = function (command, parameters, then, onTimeout, timeout) {
     }
     this.log(f("waitForExec() called %s (PID %d) with %s arguments", JSON.stringify(command), realPid, JSON.stringify(parameters)), "info");
     return this.waitFor(function isProgramFinished() {
-        return !child.pid;
+        return (exitCode != null);
     }, function onProgramFinished() {
         this.then(this.createStep(then, __details()));
     }, __onTimeout, timeout, __details());
