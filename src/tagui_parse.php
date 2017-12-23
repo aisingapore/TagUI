@@ -628,7 +628,9 @@ if ($GLOBALS['inside_frame']!=0) echo "ERROR - " . current_line() . " invalid af
 else if ($GLOBALS['inside_popup']!=0) echo "ERROR - " . current_line() . " invalid after popup - " . $raw_intent . "\n";
 else if ($params == "") echo "ERROR - " . current_line() . " command to run missing for " . $raw_intent . "\n"; else
 return "techo('".$raw_intent."');});\n\ncasper.waitForExec('".$params."', null, function(response) {\n" .
-"run_result = (response.data.stdout.trim() || response.data.stderr.trim());\nrun_json = response.data;\n";}
+"run_result = (response.data.stdout.trim() || response.data.stderr.trim()); run_json = response.data;}, function() {\n" .
+"this.echo('ERROR - command to run exceeded '+(casper.options.waitTimeout/1000).toFixed(1)+'s timeout').exit();});\n\n" .
+"casper.then(function() {\n";}
 
 function dom_intent($raw_intent) {$twb = $GLOBALS['tagui_web_browser'];
 $params = trim(substr($raw_intent." ",1+strpos($raw_intent." "," ")));
