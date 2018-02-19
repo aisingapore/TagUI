@@ -5,8 +5,12 @@ scan_period = 0.1
 import time
 
 # for redirecting output to captured string
+# try/except for python 2/3 compatibility
 import sys
-import StringIO
+try:
+	import StringIO
+except ImportError:
+	import io
 
 # counter to track current tagui python step
 tagui_count = '0'
@@ -28,24 +32,30 @@ tagui_input.close()
 
 def py_intent ( raw_intent ):
 	params = (raw_intent + ' ')[1+(raw_intent + ' ').find(' '):].strip()
-	print '[tagui] ACTION - ' + params
+	print('[tagui] ACTION - ' + params)
 	tagui_output = open('tagui_py/tagui_py.txt','w')
 	tagui_output.write('')
 	tagui_output.close()
 
 	old_stdout = sys.stdout
 	old_stderr = sys.stderr
-	temp_output = sys.stdout = sys.stderr = StringIO.StringIO()
+
+	# try/except for python 2/3 compatibility
+	try:
+		temp_output = sys.stdout = sys.stderr = StringIO.StringIO()
+	except NameError:
+		temp_output = sys.stdout = sys.stderr = io.StringIO()
+
 	exec(params,globals())
 	sys.stdout = old_stdout
 	sys.stderr = old_stderr
 	temp_result = temp_output.getvalue().strip()
-	
+
 	if temp_result != '':
-		print temp_result
+		print(temp_result)
 	tagui_output = open('tagui_py/tagui_py.txt','w')
-        tagui_output.write(temp_result)
-        tagui_output.close()
+	tagui_output.write(temp_result)
+	tagui_output.close()
 	return 1
 
 def get_intent ( raw_intent ):
@@ -61,13 +71,13 @@ def parse_intent ( script_line ):
 		return 0 
 
 # main loop to scan inputs from automation flow
-print '[tagui] START  - listening for inputs'; print
+print('[tagui] START  - listening for inputs'); print('')
 while True:
 	# scan input from run-time interface in-file
 	try:
 		tagui_input = open('tagui_py/tagui_py.in','r')
-	except IOError, OSError:
-		print '[tagui] ERROR  - cannot open tagui_py/tagui_py.in'; print
+	except (IOError, OSError):
+		print('[tagui] ERROR  - cannot open tagui_py/tagui_py.in'); print('')
 		break
 	tagui_intent = tagui_input.read().strip()
 	tagui_input.close()
@@ -93,7 +103,7 @@ while True:
 		tagui_count = temp_count
 
 	# otherwise parse and act on input intent
-	print '[tagui] INPUT  - ' + '[' + tagui_count + '] ' + tagui_intent 
+	print('[tagui] INPUT  - ' + '[' + tagui_count + '] ' + tagui_intent) 
 	intent_result_value = parse_intent(tagui_intent)
 	if intent_result_value == 1:
 		intent_result_string = 'SUCCESS'
@@ -101,14 +111,14 @@ while True:
 		intent_result_string = 'ERROR'
 
 	# save intent_result to interface out-file
-	print '[tagui] OUTPUT - ' + '[' + tagui_count + '] ' + intent_result_string; print
+	print('[tagui] OUTPUT - ' + '[' + tagui_count + '] ' + intent_result_string); print('')
 	tagui_output = open('tagui_py/tagui_py.out','w')
 	tagui_output.write('[' + tagui_count + '] ' + intent_result_string)
 	tagui_output.close()
 	time.sleep(scan_period)
 
 # write to interface out-file to signal finish listening
-print '[tagui] FINISH - stopped listening'
+print('[tagui] FINISH - stopped listening')
 tagui_output = open('tagui_py/tagui_py.out','w')
 tagui_output.write('[0] FINISH')
 tagui_output.close()
