@@ -228,6 +228,10 @@ do {sleep(500); sikuli_handshake = fs.read('tagui.sikuli'+ds+'tagui_sikuli.out')
 while (sikuli_handshake !== '[0] START'); // techo('[connected to sikuli process]');
 }
 
+// for passing dynamic inputs to sikuli visual automation
+function vision_step(vision_intent) {if (vision_intent.indexOf('vision ') !== 0)
+vision_intent = 'vision ' + vision_intent; sikuli_step(vision_intent);}
+
 // for using sikuli visual automation instead of casperjs
 function sikuli_step(sikuli_intent) {sikuli_count++;
 if (sikuli_count == 1) sikuli_handshake(); // handshake on first call
@@ -257,7 +261,7 @@ while (r_handshake !== '[0] START'); // techo('[connected to R process]');
 }
 
 // R integration for data analytics and machine learning
-function r_step(r_intent) {r_count++;
+function r_step(r_intent) {if (r_intent.indexOf('r ') !== 0) r_intent = 'r ' + r_intent; r_count++;
 if (r_count == 1) r_handshake(); // handshake on first call
 var ds; if (flow_path.indexOf('/') !== -1) ds = '/'; else ds = '\\';
 var fs = require('fs'); fs.write('tagui_r'+ds+'tagui_r.in','['+r_count.toString()+'] '+r_intent,'w');
@@ -284,7 +288,7 @@ while (py_handshake !== '[0] START'); // techo('[connected to Python process]');
 }
 
 // Python integration for data analytics and machine learning
-function py_step(py_intent) {py_count++;
+function py_step(py_intent) {if (py_intent.indexOf('py ') !== 0) py_intent = 'py ' + py_intent; py_count++;
 if (py_count == 1) py_handshake(); // handshake on first call
 var ds; if (flow_path.indexOf('/') !== -1) ds = '/'; else ds = '\\';
 var fs = require('fs'); fs.write('tagui_py'+ds+'tagui_py.in','['+py_count.toString()+'] '+py_intent,'w');
