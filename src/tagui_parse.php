@@ -33,6 +33,10 @@ $line_number = 0; // track flow line number for error message
 $test_automation = 0; // to determine casperjs script structure
 $url_provided = false; // to detect if url is provided in user-script
 
+// track begin-finish blocks for integrations eg - py, r, run, vision, js, dom
+$inside_py_block = 0; $inside_r_block = 0; $inside_run_block = 0;
+$inside_vision_block = 0; $inside_js_block = 0; $inside_dom_block = 0;
+
 // series of loops to create casperjs script from header, user flow, footer files
 
 // create header of casperjs script using tagui config and header template
@@ -209,6 +213,10 @@ case "code": return code_intent($script_line); break;
 default: echo "ERROR - " . current_line() . " cannot understand step " . $script_line . "\n";}}
 
 function get_intent($raw_intent) {$lc_raw_intent = strtolower($raw_intent); 
+if ($GLOBALS['inside_py_block'] != 0) return "py"; if ($GLOBALS['inside_r_block'] != 0) return "r";
+if ($GLOBALS['inside_run_block'] != 0) return "run"; if ($GLOBALS['inside_vision_block'] != 0) return "vision";
+if ($GLOBALS['inside_js_block'] != 0) return "js"; if ($GLOBALS['inside_dom_block'] != 0) return "dom";
+
 if ((substr($lc_raw_intent,0,7)=="http://") or (substr($lc_raw_intent,0,8)=="https://")) return "url";
 
 // first set of conditions check for valid keywords with their parameters
@@ -623,6 +631,9 @@ return "{techo('".$raw_intent."');\napi_result = call_api('".$params."');\n" .
 "try {api_json = JSON.parse(api_result);} catch(e) {api_json = JSON.parse('null');}}".end_fi()."\n";}
 
 function run_intent($raw_intent) { // waitForExec is a new block, invalid to use after frame, thus skip end_fi()
+if (strtolower($raw_intent) == "run begin") {$GLOBALS['inside_run_block'] = 1; return "";}
+else if (strtolower($raw_intent) == "run finish") {$GLOBALS['inside_run_block'] = 0; return "";}
+if ($GLOBALS['inside_run_block'] == 1) $raw_intent = "run " . $raw_intent;
 $params = trim(substr($raw_intent." ",1+strpos($raw_intent." "," ")));
 if ($GLOBALS['inside_frame']!=0) echo "ERROR - " . current_line() . " invalid after frame - " . $raw_intent . "\n";
 else if ($GLOBALS['inside_popup']!=0) echo "ERROR - " . current_line() . " invalid after popup - " . $raw_intent . "\n";
@@ -633,28 +644,43 @@ return "techo('".$raw_intent."');});\n\ncasper.waitForExec('".$params."', null, 
 "casper.then(function() {\n";}
 
 function dom_intent($raw_intent) {$twb = $GLOBALS['tagui_web_browser'];
+if (strtolower($raw_intent) == "dom begin") {$GLOBALS['inside_dom_block'] = 1; return "";}
+else if (strtolower($raw_intent) == "dom finish") {$GLOBALS['inside_dom_block'] = 0; return "";}
+if ($GLOBALS['inside_dom_block'] == 1) $raw_intent = "dom " . $raw_intent;
 $params = trim(substr($raw_intent." ",1+strpos($raw_intent." "," ")));
 if ($params == "") echo "ERROR - " . current_line() . " statement missing for " . $raw_intent . "\n";
 else return "dom_result = ".$twb.".evaluate(function(dom_json) {".$params."}, dom_json);".end_fi()."\n";}
 
 function js_intent($raw_intent) {
+if (strtolower($raw_intent) == "js begin") {$GLOBALS['inside_js_block'] = 1; return "";}
+else if (strtolower($raw_intent) == "js finish") {$GLOBALS['inside_js_block'] = 0; return "";}
+if ($GLOBALS['inside_js_block'] == 1) $raw_intent = "js " . $raw_intent;
 $params = trim(substr($raw_intent." ",1+strpos($raw_intent." "," ")));
 if ($params == "") echo "ERROR - " . current_line() . " statement missing for " . $raw_intent . "\n";
 else return $params.end_fi()."\n";}
 
 function r_intent($raw_intent) {
+if (strtolower($raw_intent) == "r begin") {$GLOBALS['inside_r_block'] = 1; return "";}
+else if (strtolower($raw_intent) == "r finish") {$GLOBALS['inside_r_block'] = 0; return "";}
+if ($GLOBALS['inside_r_block'] == 1) $raw_intent = "r " . $raw_intent;
 $safe_intent = str_replace("'","\'",$raw_intent); // avoid breaking echo when single quote is used
 $params = trim(substr($raw_intent." ",1+strpos($raw_intent." "," ")));
 if ($params == "") echo "ERROR - " . current_line() . " R command(s) missing for " . $raw_intent . "\n"; else
 return call_r($safe_intent);}
 
 function py_intent($raw_intent) {
+if (strtolower($raw_intent) == "py begin") {$GLOBALS['inside_py_block'] = 1; return "";}
+else if (strtolower($raw_intent) == "py finish") {$GLOBALS['inside_py_block'] = 0; return "";}
+if ($GLOBALS['inside_py_block'] == 1) $raw_intent = "py " . $raw_intent;
 $safe_intent = str_replace("'","\'",$raw_intent); // avoid breaking echo when single quote is used
 $params = trim(substr($raw_intent." ",1+strpos($raw_intent." "," ")));
 if ($params == "") echo "ERROR - " . current_line() . " Python command(s) missing for " . $raw_intent . "\n"; else
 return call_py($safe_intent);}
 
 function vision_intent($raw_intent) {
+if (strtolower($raw_intent) == "vision begin") {$GLOBALS['inside_vision_block'] = 1; return "";}
+else if (strtolower($raw_intent) == "vision finish") {$GLOBALS['inside_vision_block'] = 0; return "";}
+if ($GLOBALS['inside_vision_block'] == 1) $raw_intent = "vision " . $raw_intent;
 $safe_intent = str_replace("'","\'",$raw_intent); // avoid breaking echo when single quote is used
 $params = trim(substr($raw_intent." ",1+strpos($raw_intent." "," ")));
 if ($params == "") echo "ERROR - " . current_line() . " Sikuli command(s) missing for " . $raw_intent . "\n"; else

@@ -34,6 +34,10 @@ var api_result = ''; var api_json = {}; var run_result = ''; var run_json = {};
 // variables for R and Python integration execution result
 var r_result = ''; var r_json = {}; var py_result = ''; var py_json = {};
 
+// track begin-finish blocks for integrations eg - py, r, run, vision, js, dom
+var inside_py_block = 0; var inside_r_block = 0; var inside_run_block = 0;
+var inside_vision_block = 0; var inside_js_block = 0; var inside_dom_block = 0;
+
 // techo function for handling quiet option
 function techo(echo_string) {if (!quiet_mode) {if (tagui_language.toLowerCase() == 'english') casper.echo(echo_string);
 else {var translated_string = translate(echo_string,'to',tagui_language.toLowerCase()); casper.echo(translated_string);
@@ -607,6 +611,10 @@ default: return "this.echo('ERROR - cannot understand step " + live_line.replace
 
 // for live mode understanding intent of line entered
 function get_intent(raw_intent) {var lc_raw_intent = raw_intent.toLowerCase();
+if (inside_py_block !== 0) return 'py'; if (inside_r_block !== 0) return 'r';
+if (inside_run_block !== 0) return 'run'; if (inside_vision_block !== 0) return 'vision';
+if (inside_js_block !== 0) return 'js'; if (inside_dom_block !== 0) return 'dom';
+
 if (lc_raw_intent.substr(0,7) == 'http://' || lc_raw_intent.substr(0,8) == 'https://') return 'url';
 
 // first set of conditions check for valid keywords with their parameters
@@ -944,26 +952,41 @@ function run_intent(raw_intent) {
 return "this.echo('ERROR - step not supported in live mode, as run output cannot be retrieved')";}
 
 function dom_intent(raw_intent) {
+if (raw_intent.toLowerCase() == 'dom begin') {inside_dom_block = 1; return '';}
+else if (raw_intent.toLowerCase() == 'dom finish') {inside_dom_block = 0; return '';}
+if (inside_dom_block == 1) raw_intent = 'dom ' + raw_intent;
 var params = ((raw_intent + ' ').substr(1+(raw_intent + ' ').indexOf(' '))).trim();
 if (params == '') return "this.echo('ERROR - statement missing for " + raw_intent + "')";
 else return "dom_result = this.evaluate(function(dom_json) {" + params + "}, dom_json)";}
 
 function js_intent(raw_intent) {
+if (raw_intent.toLowerCase() == 'js begin') {inside_js_block = 1; return '';}
+else if (raw_intent.toLowerCase() == 'js finish') {inside_js_block = 0; return '';}
+if (inside_js_block == 1) raw_intent = 'js ' + raw_intent;
 var params = ((raw_intent + ' ').substr(1+(raw_intent + ' ').indexOf(' '))).trim();
 if (params == '') return "this.echo('ERROR - statement missing for " + raw_intent + "')";
 else return check_chrome_context(params);}
 
 function r_intent(raw_intent) {
+if (raw_intent.toLowerCase() == 'r begin') {inside_r_block = 1; return '';}
+else if (raw_intent.toLowerCase() == 'r finish') {inside_r_block = 0; return '';}
+if (inside_r_block == 1) raw_intent = 'r ' + raw_intent;
 var params = ((raw_intent + ' ').substr(1+(raw_intent + ' ').indexOf(' '))).trim();
 if (params == '') return "this.echo('ERROR - R command(s) missing for " + raw_intent + "')";
 else return call_r(raw_intent.replace(/'/g,'\\\''));}
 
 function py_intent(raw_intent) {
+if (raw_intent.toLowerCase() == 'py begin') {inside_py_block = 1; return '';}
+else if (raw_intent.toLowerCase() == 'py finish') {inside_py_block = 0; return '';}
+if (inside_py_block == 1) raw_intent = 'py ' + raw_intent;
 var params = ((raw_intent + ' ').substr(1+(raw_intent + ' ').indexOf(' '))).trim();
 if (params == '') return "this.echo('ERROR - Python command(s) missing for " + raw_intent + "')";
 else return call_py(raw_intent.replace(/'/g,'\\\''));}
 
 function vision_intent(raw_intent) {
+if (raw_intent.toLowerCase() == 'vision begin') {inside_vision_block = 1; return '';}
+else if (raw_intent.toLowerCase() == 'vision finish') {inside_vision_block = 0; return '';}
+if (inside_vision_block == 1) raw_intent = 'vision ' + raw_intent;
 var params = ((raw_intent + ' ').substr(1+(raw_intent + ' ').indexOf(' '))).trim();
 if (params == '') return "this.echo('ERROR - Sikuli command(s) missing for " + raw_intent + "')";
 else return call_sikuli(raw_intent.replace(/'/g,'\\\''),'for vision step');}
