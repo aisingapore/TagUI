@@ -49,6 +49,12 @@ while(!feof($header_file)) {fwrite($output_file,fgets($header_file));} fclose($h
 // casperjs/phantomjs do not seem to support \ for windows paths, replace with / to work
 fwrite($output_file,"var flow_path = '" . str_replace("\\","/",dirname($script)) . "';\n\n");
 
+// section to handle calling of other TagUI automation scripts for reusability
+$temp_output_file = fopen($script . '.raw','w') or die("ERROR - cannot open " . $script . '.raw' . "\n");
+while(!feof($input_file)) {fwrite($temp_output_file,expand_intent(fgets($input_file)));} fclose($input_file);
+fclose($temp_output_file); // generate temp output file of expanded intents (if any) before reopening as input
+$input_file = fopen($script . '.raw','r') or die("ERROR - cannot open " . $script . '.raw' . "\n");
+
 if (strpos(strtolower(file_get_contents('tagui_config.txt')),"var tagui_language = 'english';")!==false)
 { // main loop without translation to parse intents in flow file for conversion into javascript code
 while(!feof($input_file)) {fwrite($output_file,parse_intent(fgets($input_file)));} fclose($input_file);}
@@ -157,6 +163,17 @@ file_put_contents($script . '.js',$script_content);} // save script after restru
 // otherwise prep for normal execution by commenting out test assertions as they will kill the script
 else if ($test_automation > 0) {$script_content = file_get_contents($script . '.js'); // read generated script
 $script_content = str_replace("test.","// test.",$script_content); file_put_contents($script . '.js',$script_content);}
+
+function expand_intent($script_line) { // function to handle calling of other TagUI automation scripts for reusability
+if ((strpos(strtolower(trim($script_line)),'tagui ') === 0) or (strtolower(trim($script_line)) == 'tagui')) {
+$params = trim(substr($script_line." ",1+strpos($script_line." "," "))); if ($params == "")
+die("ERROR - filename missing for step " . trim($script_line) . "\n");
+else if (!file_exists(abs_file($params)))
+die("ERROR - file not found for step " . trim($script_line) . "\n");
+else {$expanded_intent = ""; $temp_input_file = fopen(abs_file($params),'r'); if ($temp_input_file == false)
+die("ERROR - cannot open file for step " . trim($script_line) . "\n");
+while(!feof($temp_input_file)) {$expanded_intent .= expand_intent(fgets($temp_input_file));} fclose($temp_input_file);
+return $expanded_intent;}} else return $script_line;}
 
 function current_line() {return "[LINE " . $GLOBALS['line_number'] . "]";}
 function parse_intent($script_line) {$GLOBALS['line_number']++;
