@@ -47,7 +47,7 @@ TagUI is in v3.1 and runs on macOS, Linux, Windows ([link to release notes](http
 Tip - for [cutting edge](https://github.com/tebelorg/TagUI/compare/v3.1.0...master) version, download [from here](https://github.com/tebelorg/TagUI/archive/master.zip) to overwrite your packaged installation
 
 ### PACKAGED INSTALLATION
-Easiest way to use TagUI - no setup is needed, all dependencies are packaged in. (on some Windows computers, if you see 'MSVCR110.dll is missing' error, install [this from Microsoft website](https://www.microsoft.com/en-us/download/details.aspx?id=30679) - this file is required to run the PHP engine)
+Easiest way to use TagUI - no setup is needed, in most environments all required dependencies are packaged in. Potential exceptions - On some Windows computers, if you see 'MSVCR110.dll is missing' error, install [this from Microsoft website](https://www.microsoft.com/en-us/download/details.aspx?id=30679) - this file is required to run the PHP engine. On some newer macOS versions, if you get a 'dyld: Library not loaded' error, [install OpenSSL in this way](https://github.com/kelaberetiv/TagUI/issues/86#issuecomment-372045221). For some flavours of Linux (Ubuntu for example), which do not have PHP pre-installed, google how to install PHP accordingly (Ubuntu for example, apt-get install php).
 
 Platform|macOS|Linux|Windows|Node.js (macOS/Linux)
 :------:|:---:|:---:|:-----:|:-------------------:
