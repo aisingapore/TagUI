@@ -30,6 +30,7 @@ $inside_while_loop = 0; // track if step is in while loop and avoid async wait
 $inside_frame = 0; $inside_popup = 0; // track html frame and popup step
 $for_loop_tracker = ""; // track for loop to implement IIFE pattern
 $line_number = 0; // track flow line number for error message
+$real_line_number = 0; // line number excluding comments and blank lines
 $test_automation = 0; // to determine casperjs script structure
 $url_provided = false; // to detect if url is provided in user-script
 
@@ -75,7 +76,7 @@ while(!feof($input_file)) {fwrite($output_file,parse_intent(translate_intent(fge
 
 // create footer of casperjs script using footer template and do post-processing 
 while(!feof($footer_file)) {fwrite($output_file,fgets($footer_file));} fclose($footer_file); fclose($output_file);
-chmod ($script . '.js',0600); if (!$url_provided) echo "ERROR - first line of " . $script . " not URL\n";
+chmod ($script . '.js',0600); if (!$url_provided) echo "ERROR - first line of " . $script . " not URL or comments\n";
 if ($inside_code_block != 0) echo "ERROR - number of step { does not tally with with }\n";
 
 // special handling if chrome or headless chrome is used as browser for automation
@@ -176,8 +177,8 @@ while(!feof($temp_input_file)) {$expanded_intent .= expand_intent(fgets($temp_in
 return $expanded_intent;}} else return $script_line;}
 
 function current_line() {return "[LINE " . $GLOBALS['line_number'] . "]";}
-function parse_intent($script_line) {$GLOBALS['line_number']++;
-$script_line = trim($script_line); if ($script_line=="") return "";
+function parse_intent($script_line) {$GLOBALS['line_number']++; $GLOBALS['real_line_number']++;
+$script_line = trim($script_line); if ($script_line=="") {$GLOBALS['real_line_number']--; return "";}
 
 // check existence of objects or keywords by searching for `object or keyword name`, then expand from repository
 if ((substr_count($script_line,'`') > 1) and (!(substr_count($script_line,'`') & 1))) { // check for even number of `
@@ -191,7 +192,7 @@ str_replace("`".$GLOBALS['repo_data'][$repo_check][0]."`",$GLOBALS['repo_data'][
 if (strpos($script_line,'`')!==false) echo "ERROR - ".current_line()." no repository data for ".$script_line."\n";}}
 
 // trim and check again after replacing definitions from repository
-$script_line = trim($script_line); if ($script_line=="") return "";
+$script_line = trim($script_line); if ($script_line=="") {$GLOBALS['real_line_number']--; return "";}
 
 // check intent of step for interpretation into casperjs code
 switch (get_intent($script_line)) {
@@ -317,7 +318,8 @@ if ((substr($raw_intent,0,6)=="break;") or (substr($raw_intent,0,9)=="function "
 if ((substr($raw_intent,0,7)=="casper.") or (substr($raw_intent,0,5)=="this.")) return true;
 if (substr($raw_intent,0,7)=="chrome.") return true; // chrome object for chrome integration
 if (substr($raw_intent,0,5)=="test.") {$GLOBALS['test_automation']++; return true;}
-if ((substr($raw_intent,0,2)=="//") or (substr($raw_intent,-1)==";")) return true;
+if (substr($raw_intent,0,2)=="//") {$GLOBALS['real_line_number']--; return true;} 
+if (substr($raw_intent,-1)==";") return true;
 // assume = is assignment statement, kinda acceptable as this is checked at the very end
 if (strpos($raw_intent,"=")!==false) return true; return false;}
 
@@ -408,7 +410,7 @@ if (strpos($raw_intent,"'+")!==false and strpos($raw_intent,"+'")!==false) // ch
 else {$dynamic_header = ""; $dynamic_footer = ""; // else casper.start/thenOpen can be outside casper context
 if (filter_var($raw_intent, FILTER_VALIDATE_URL) == false) // do url validation only for raw text url string
 echo "ERROR - " . current_line() . " invalid URL " . $raw_intent . "\n";}
-if ($GLOBALS['line_number'] == 1) { // use casper.start for first URL call and casper.thenOpen for subsequent calls
+if ($GLOBALS['real_line_number'] == 1) { // use casper.start for first URL call and casper.thenOpen for subsequent calls
 $GLOBALS['url_provided']=true; return $dynamic_header."casper.start('".$casper_url."', function() {\n".$chrome_call.
 "techo('".$raw_intent."' + ' - ' + ".$twb.".getTitle() + '\\n');});\n\ncasper.then(function() {\n".$dynamic_footer;}
 else return $dynamic_header."});casper.thenOpen('".$casper_url."', function() {\n".$chrome_call."techo('".
