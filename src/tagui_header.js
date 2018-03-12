@@ -414,10 +414,10 @@ if (!y) var xy = chrome.mouse.getXY(selector); else var xy = {x: selector, y: y}
 chrome.mouse.action('mouseReleased',xy.x,xy.y,'left',1);};
 
 chrome.sendKeys = function(selector,value,options) { // send key strokes to selector, options not implemented
+if (value == casper.page.event.key.Enter) value = '\r';
 if (value) {value = value.replace(/\[enter\]/g,'\r'); // to cater for [enter] passed in as part of a variable
 value = value.replace(/\r\n/g,'\r'); // change \r\n to \r which is the enter key for chrome browser
 value = value.replace(/\n/g,'\r');} // change \n to \r which is the enter key for chrome browser
-if (value == casper.page.event.key.Enter) value = '\r';
 if ((selector.toString().length >= 16) && (selector.toString().substr(0,16) == 'xpath selector: '))
 {if (selector.toString().length == 16) selector = ''; else selector = selector.toString().substring(16);
 chrome_step('Runtime.evaluate',{expression: 'document.evaluate(\''+selector+'\','+chrome_context+',null,XPathResult.ORDERED_NODE_SNAPSHOT_TYPE,null).snapshotItem(0).focus()'});}
