@@ -1,7 +1,7 @@
 https://github.com/tebelorg/Tmail
 // automation flow files start with an URL to tell TagUI where to go
 
-// this flow goes to a GitHub page and downloads the repo using 2 ways
+// this flow goes to a GitHub page and downloads the repository file
 // for issues or questions, kindly feedback on GitHub or ksoh@aisingapore.org
 // see cheatsheet for steps, conditions, finding element identifiers, etc
 // https://github.com/tebelorg/TagUI#cheat-sheet
@@ -18,23 +18,22 @@ check license_type equals to "MIT" | "Yes, repo is under MIT license." | "No, re
 // alternatively, a file can be downloaded by specifying its URL as a step in flow file
 // for eg, https://github.com/tebelorg/Tmail/archive/master.zip
 
-// for Firefox and PhantomJS mode, file can be downloaded using download or receive step
-// some websites including GitHub may detect and block automated downloads
-// so below download step may not work to download the file correctly
-
-// use download step to proactively download a file directly from an URL
-download https://github.com/tebelorg/Tmail/archive/master.zip to download.zip
-
-// use receive step for event-based download when an URL accessed contains your keyword
-receive archive/master.zip to receive.zip
-
-// as receive step is event-based, need to interact with the webpage to trigger download
 // for headless and visible Chrome, file can be downloaded with this webpage interaction
 click Clone or download
 click Download ZIP
 
 // wait for a few seconds to make sure download has time to complete
 wait 10 seconds
+
+// for Firefox and PhantomJS mode, file can be downloaded using download or receive step
+// some websites including GitHub may detect and block automated downloads
+// so download or receive step may not work to download file correctly
+
+// example of download step to proactively download a file directly by specifying an URL
+// download https://github.com/tebelorg/Tmail/archive/master.zip to download.zip
+
+// example of receive step for event-based download when an URL accessed contains your keyword
+// receive archive/master.zip to receive.zip
 
 // use api step to call api, response will be saved in api_result variable
 // variables can be used (eg from fetch or read step, files or self-declared)

@@ -167,7 +167,7 @@ Flow Sample |Purpose
 :-----------|:------
 [1_yahoo](https://github.com/tebelorg/TagUI/blob/master/src/samples/1_yahoo)|searches github on Yahoo and captures screenshot of results
 [2_twitter](https://github.com/tebelorg/TagUI/blob/master/src/samples/2_twitter)|goes to a Twitter page and saves some profile information
-[3_github](https://github.com/tebelorg/TagUI/blob/master/src/samples/3_github)|goes to a GitHub page and downloads the repo using 2 ways
+[3_github](https://github.com/tebelorg/TagUI/blob/master/src/samples/3_github)|goes to a GitHub page and downloads the repository file
 [4_conditions](https://github.com/tebelorg/TagUI/blob/master/src/samples/4_conditions)|goes through examples of using conditions in natural language
 [5_repositories](https://github.com/tebelorg/TagUI/blob/master/src/samples/5_repositories)|shows using repositories on Russian social media site VK.com
 [6_datatables](https://github.com/tebelorg/TagUI/tree/master/src/samples/6_datatables)|set of flows uses datatables to retrieve and act on GitHub info
