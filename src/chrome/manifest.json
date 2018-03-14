@@ -1,8 +1,8 @@
 {
     "manifest_version": 2,
-    "name": "TagUI Web Automation", "short_name": "TagUI Tool", "version": "3.1.0",
+    "name": "TagUI Web Automation", "short_name": "TagUI Tool", "version": "3.5.1",
     "description": "Create TagUI automation flows by recording your actions",
-    "homepage_url": "https://github.com/tebelorg/TagUI",
+    "homepage_url": "https://github.com/kelaberetiv/TagUI",
     "browser_action": {
         "default_title": "TagUI Web Automation",
         "default_popup": "control.html",
