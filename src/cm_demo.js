@@ -1,3 +1,30 @@
+/* OUTPUT CASPERJS SCRIPT FOR TAGUI FRAMEWORK ~ TEBEL.ORG */
+
+var casper = require('casper').create();
+// TagUI web automation browser settings
+// verbose style to support tester module
+
+// set default flow language
+var tagui_language = 'english';
+
+// set time in ms before error out
+casper.options.waitTimeout = 10000;
+casper.options.logLevel = 'debug';
+
+// set web browser display size
+casper.options.viewportSize = {
+width: 1366,
+height: 768
+};
+
+// settings for PhantomJS mode
+casper.options.pageSettings = {
+loadImages: true,
+loadPlugins: true,
+webSecurityEnabled: true,
+ignoreSslErrors: false,
+localToRemoteUrlAccessEnabled: false
+};
 
 // xpath for object identification
 var x = require('casper').selectXPath;
@@ -56,6 +83,17 @@ function append_text(file_name,info_text) {var ds; if (flow_path.indexOf('/') !=
 if (!file_name) {if (save_text_count==0) save_text_count++; // increment if 0, else use same count to append
 file_name = flow_path + ds + 'text' + save_text_count.toString() + '.txt';}
 var fs = require('fs'); fs.write(file_name, info_text + '\r\n', 'a');}
+
+// for saving binary information to file
+function save_binary(file_name,info_text) {var ds; if (flow_path.indexOf('/') !== -1) ds = '/'; else ds = '\\';
+if (!file_name) {save_text_count++; file_name = flow_path + ds + 'text' + save_text_count.toString() + '.txt';}
+var fs = require('fs'); fs.write(file_name, info_text, 'wb');}
+
+// for appending binary information to file
+function append_binary(file_name,info_text) {var ds; if (flow_path.indexOf('/') !== -1) ds = '/'; else ds = '\\';
+if (!file_name) {if (save_text_count==0) save_text_count++; // increment if 0, else use same count to append
+file_name = flow_path + ds + 'text' + save_text_count.toString() + '.txt';}
+var fs = require('fs'); fs.write(file_name, info_text + '\r\n', 'ab');}
 
 // for saving snapshots of website to file
 function snap_image() {var ds; if (flow_path.indexOf('/') !== -1) ds = '/'; else ds = '\\';
@@ -1037,6 +1075,18 @@ var header_value_pair = api_config.header[item].split(':'); // format is 'Header
 xhttp.setRequestHeader(header_value_pair[0].trim(),header_value_pair[1].trim());}
 xhttp.send(JSON.stringify(api_config.body)); return xhttp.responseText;}
 
+// for calling rest api url synchronously and expecting binary response
+function call_api_binary(rest_url) { // advance users can define api_config for advance calls
+// the api_config variable defaults to {method:'GET', header:[], body:{}}
+var xhttp = new XMLHttpRequest(); xhttp.open(api_config.method, rest_url, true);
+for (var item=0;item<api_config.header.length;item++) { // process headers
+if (api_config.header[item] == '') continue; // skip if header is not defined
+var header_value_pair = api_config.header[item].split(':'); // format is 'Header_name: header_value'
+xhttp.setRequestHeader(header_value_pair[0].trim(),header_value_pair[1].trim());}
+xhttp.responseType = 'arraybuffer'; xhttp.send(JSON.stringify(api_config.body));
+xhttp.onload = function(e) {if (xhttp.readyState === 4)
+{api_result = String.fromCharCode.apply(null, new Uint8Array(xhttp.response));}}}
+
 // custom function to handle dropdown option
 casper.selectOptionByValue = function(selector, valueToMatch) { // solution posted in casperjs issue #1390
 this.evaluate(function(selector, valueToMatch) {var found = false; // modified to allow xpath / css locators
@@ -1166,3 +1216,42 @@ function getTimeoutAndCheckNextStepFunction(timeout, then, methodName, defaultTi
 }
 
 // flow path for save_text and snap_image
+var flow_path = '/Users/kensoh/Cloud Drive/Marketing/Website/api/tagui/src';
+
+casper.start('http://tebel.org/index_mobile.php', function() {
+techo('http://tebel.org/index_mobile.php' + ' - ' + this.getTitle() + '\n');});
+
+casper.then(function() {
+// live
+// run pwd
+// echo run_result
+// run r --version
+// echo run_result
+// echo ''
+// echo JSON.stringify(run_json)
+// run sleep 20
+// echo run_result
+// echo JSON.stringify(run_json)
+// echo 'test'
+techo('run r --version');});
+
+casper.waitForExec('r --version', null, function(response) {run_result = '';
+run_result = (response.data.stdout.trim() || response.data.stderr.trim()); run_json = response.data;}, function() {
+this.echo('ERROR - command to run exceeded '+(casper.options.waitTimeout/1000).toFixed(1)+'s timeout').exit();});
+
+casper.then(function() {
+techo('run pwd');});
+
+casper.waitForExec('pwd', null, function(response) {run_result = '';
+run_result = (response.data.stdout.trim() || response.data.stderr.trim()); run_json = response.data;}, function() {
+this.echo('ERROR - command to run exceeded '+(casper.options.waitTimeout/1000).toFixed(1)+'s timeout').exit();});
+
+casper.then(function() {
+this.echo(run_result);
+});
+
+casper.then(function() {
+techo('\n' + this.getCurrentUrl() + ' - ' + this.getTitle());
+techo('FINISH - automation finished - ' + ((Date.now()-automation_start_time)/1000).toFixed(1) + 's\n');});
+
+casper.run();

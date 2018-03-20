@@ -1,0 +1,17 @@
+http://tebel.org/index_mobile.php
+// live
+// run pwd
+// echo run_result
+// run r --version
+// echo run_result
+// echo ''
+// echo JSON.stringify(run_json)
+// run sleep 20
+// echo run_result
+// echo JSON.stringify(run_json)
+// echo 'test'
+run begin
+r --version
+pwd
+run finish
+echo run_result

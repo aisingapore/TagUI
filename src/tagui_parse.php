@@ -646,7 +646,7 @@ return "{techo('".$raw_intent."');\ncasper.waitForPopup(/".preg_quote($params)."
 function api_intent($raw_intent) {
 $params = trim(substr($raw_intent." ",1+strpos($raw_intent." "," ")));
 if ($params == "") echo "ERROR - " . current_line() . " API URL missing for " . $raw_intent . "\n"; else
-return "{techo('".$raw_intent."');\napi_result = call_api('".$params."');\n" . 
+return "{techo('".$raw_intent."');\napi_result = ''; api_result = call_api('".$params."');\n" . 
 "try {api_json = JSON.parse(api_result);} catch(e) {api_json = JSON.parse('null');}}".end_fi()."\n";}
 
 function run_intent($raw_intent) { // waitForExec is a new block, invalid to use after frame, thus skip end_fi()
@@ -657,7 +657,7 @@ $params = trim(substr($raw_intent." ",1+strpos($raw_intent." "," ")));
 if ($GLOBALS['inside_frame']!=0) echo "ERROR - " . current_line() . " invalid after frame - " . $raw_intent . "\n";
 else if ($GLOBALS['inside_popup']!=0) echo "ERROR - " . current_line() . " invalid after popup - " . $raw_intent . "\n";
 else if ($params == "") echo "ERROR - " . current_line() . " command to run missing for " . $raw_intent . "\n"; else
-return "techo('".$raw_intent."');});\n\ncasper.waitForExec('".$params."', null, function(response) {\n" .
+return "techo('".$raw_intent."');});\n\ncasper.waitForExec('".$params."', null, function(response) {run_result = '';\n" .
 "run_result = (response.data.stdout.trim() || response.data.stderr.trim()); run_json = response.data;}, function() {\n" .
 "this.echo('ERROR - command to run exceeded '+(casper.options.waitTimeout/1000).toFixed(1)+'s timeout').exit();});\n\n" .
 "casper.then(function() {\n";}
@@ -668,7 +668,7 @@ else if (strtolower($raw_intent) == "dom finish") {$GLOBALS['inside_dom_block'] 
 if ($GLOBALS['inside_dom_block'] == 1) $raw_intent = "dom " . $raw_intent;
 $params = trim(substr($raw_intent." ",1+strpos($raw_intent." "," ")));
 if ($params == "") echo "ERROR - " . current_line() . " statement missing for " . $raw_intent . "\n";
-else return "dom_result = ".$twb.".evaluate(function(dom_json) {".$params."}, dom_json);".end_fi()."\n";}
+else return "dom_result = ''; dom_result = ".$twb.".evaluate(function(dom_json) {".$params."}, dom_json);".end_fi()."\n";}
 
 function js_intent($raw_intent) {
 if (strtolower($raw_intent) == "js begin") {$GLOBALS['inside_js_block'] = 1; return "";}

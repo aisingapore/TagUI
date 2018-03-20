@@ -1,0 +1,11 @@
+
+START - automation started - Tue Mar 20 2018 16:43:23 GMT+0800 (+08)
+http://tebel.org/index_mobile.php - Tebel.Automation
+
+run r --version
+run pwd
+/Users/kensoh/Cloud Drive/Marketing/Website/api/tagui/src
+
+http://tebel.org/index_mobile.php - Tebel.Automation
+FINISH - automation finished - 0.9s
+
