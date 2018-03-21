@@ -402,7 +402,8 @@ end_fi()."});\n\ncasper.then(function() {\n";}
 // set of functions to interpret steps into corresponding casperjs code
 function url_intent($raw_intent) {$twb = $GLOBALS['tagui_web_browser']; $casper_url = $raw_intent; $chrome_call = '';
 if ($twb == 'chrome')
-{$chrome_call = "chrome_step('Page.setDownloadBehavior',{behavior: 'allow', downloadPath: flow_path});\n";
+{$chrome_call = "chrome_step('Page.setDownloadBehavior',{behavior: 'allow', " .
+"downloadPath: flow_path.replace(/\//g,'\\\\').replace(/\\\\/g,'\\\\')});\n"; // to set path correctly for Windows
 $casper_url = 'about:blank'; $chrome_call .= "chrome_step('Page.navigate',{url: '".$raw_intent."'}); sleep(1000);\n";}
 if (strpos($raw_intent,"'+")!==false and strpos($raw_intent,"+'")!==false) // check if dynamic url is used
 // wrap step within casper context if variable (casper context) is used in url, in order to access variable
@@ -650,6 +651,7 @@ return "{techo('".$raw_intent."');\napi_result = ''; api_result = call_api('".$p
 "try {api_json = JSON.parse(api_result);} catch(e) {api_json = JSON.parse('null');}}".end_fi()."\n";}
 
 function run_intent($raw_intent) { // waitForExec is a new block, invalid to use after frame, thus skip end_fi()
+$raw_intent = str_replace('\\','\\\\',$raw_intent); // to call paths correctly for Windows
 if (strtolower($raw_intent) == "run begin") {$GLOBALS['inside_run_block'] = 1; return "";}
 else if (strtolower($raw_intent) == "run finish") {$GLOBALS['inside_run_block'] = 0; return "";}
 if ($GLOBALS['inside_run_block'] == 1) $raw_intent = "run " . $raw_intent;
@@ -658,7 +660,8 @@ if ($GLOBALS['inside_frame']!=0) echo "ERROR - " . current_line() . " invalid af
 else if ($GLOBALS['inside_popup']!=0) echo "ERROR - " . current_line() . " invalid after popup - " . $raw_intent . "\n";
 else if ($params == "") echo "ERROR - " . current_line() . " command to run missing for " . $raw_intent . "\n"; else
 return "techo('".$raw_intent."');});\n\ncasper.waitForExec('".$params."', null, function(response) {run_result = '';\n" .
-"run_result = (response.data.stdout.trim() || response.data.stderr.trim()); run_json = response.data;}, function() {\n" .
+"run_result = (response.data.stdout.trim() || response.data.stderr.trim()); " .
+"run_result = run_result.replace(/\\r\\n/g,'\\n'); run_json = response.data;}, function() {\n" .
 "this.echo('ERROR - command to run exceeded '+(casper.options.waitTimeout/1000).toFixed(1)+'s timeout').exit();});\n\n" .
 "casper.then(function() {\n";}
 
