@@ -975,7 +975,7 @@ return "this.echo('ERROR - step not supported in live mode, it is meant for tryi
 function api_intent(raw_intent) {
 var params = ((raw_intent + ' ').substr(1+(raw_intent + ' ').indexOf(' '))).trim();
 if (params == '') return "this.echo('ERROR - API URL missing for " + raw_intent + "')";
-else return "api_result = call_api('" + params + "'); " +
+else return "api_result = ''; api_result = call_api('" + params + "'); " +
 "try {api_json = JSON.parse(api_result);} catch(e) {api_json = JSON.parse('null');}";}
 
 function run_intent(raw_intent) {
@@ -987,7 +987,7 @@ else if (raw_intent.toLowerCase() == 'dom finish') {inside_dom_block = 0; return
 if (inside_dom_block == 1) raw_intent = 'dom ' + raw_intent;
 var params = ((raw_intent + ' ').substr(1+(raw_intent + ' ').indexOf(' '))).trim();
 if (params == '') return "this.echo('ERROR - statement missing for " + raw_intent + "')";
-else return "dom_result = this.evaluate(function(dom_json) {" + params + "}, dom_json)";}
+else return "dom_result = ''; dom_result = this.evaluate(function(dom_json) {" + params + "}, dom_json)";}
 
 function js_intent(raw_intent) {
 if (raw_intent.toLowerCase() == 'js begin') {inside_js_block = 1; return '';}
@@ -2044,15 +2044,15 @@ this.echo("test popup with subframe"); });});}  });} });
 casper.then(function() {
 // test api direct
 {techo('api http://www.dummytestsite.com/api?COLOR1=red&COLOR2=green&COLOR3=blue');
-api_result = call_api('http://www.dummytestsite.com/api?COLOR1=red&COLOR2=green&COLOR3=blue');
+api_result = ''; api_result = call_api('http://www.dummytestsite.com/api?COLOR1=red&COLOR2=green&COLOR3=blue');
 try {api_json = JSON.parse(api_result);} catch(e) {api_json = JSON.parse('null');}}
 // test api with variables
 var COLOR1='red'; var COLOR2='green'; var COLOR3='blue';
 {techo('api http://www.dummytestsite.com/api?COLOR1='+COLOR1+'&COLOR2='+COLOR2+'&COLOR3='+COLOR3+'');
-api_result = call_api('http://www.dummytestsite.com/api?COLOR1='+COLOR1+'&COLOR2='+COLOR2+'&COLOR3='+COLOR3+'');
+api_result = ''; api_result = call_api('http://www.dummytestsite.com/api?COLOR1='+COLOR1+'&COLOR2='+COLOR2+'&COLOR3='+COLOR3+'');
 try {api_json = JSON.parse(api_result);} catch(e) {api_json = JSON.parse('null');}}
 // test dom
-dom_result = this.evaluate(function(dom_json) {var page_title = document.title;}, dom_json);
+dom_result = ''; dom_result = this.evaluate(function(dom_json) {var page_title = document.title;}, dom_json);
 // test test
 // test something and see what happens
 // test js
