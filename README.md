@@ -270,7 +270,7 @@ email|user-email-textbox
 create account|btn btn--green btn-xl signup-btn
 type email|type \`email\` as user@gmail.com
 
-Tip - be sure to include the header row, because the first row will be assumed as header and ignored
+Tip - be sure to include the header row, because the first row will be assumed as header and ignored. If your flow file ends with extension .txt or .gui the repository file extension will be .txt.csv or .gui.csv respectively.
 
 ### DATATABLES
 - Datatables extend the power of repositories files to manage batch automation
@@ -288,7 +288,7 @@ currency-pair|USDSGD|USDJPY|EURUSD
 size|10000|1000|100000
 direction|BUY|SELL|BUY
 
-Tip - be sure to include the header row, because the first row will be assumed as header and ignored
+Tip - be sure to include the header row, because the first row will be assumed as header and ignored. If your flow file ends with extension .txt or .gui the datatable file extension will be .txt.csv or .gui.csv respectively.
 
 # Developers Reference
 TagUI is a young tool and it tries to do the task of automating web interactions very well (especially process automation). It's designed to make prototyping, deployment and maintenance of web automation easier by minimizing iteration time for each phase. If you are a Node.js developer, be sure to check out [Puppeteer project](https://github.com/GoogleChrome/puppeteer) by Google Chrome team.
