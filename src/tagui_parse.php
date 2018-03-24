@@ -48,7 +48,9 @@ while(!feof($header_file)) {fwrite($output_file,fgets($header_file));} fclose($h
 
 // save flow path in casperjs script to be used by save_text and snap_image
 // casperjs/phantomjs do not seem to support \ for windows paths, replace with / to work
-fwrite($output_file,"var flow_path = '" . str_replace("\\","/",dirname($script)) . "';\n\n");
+// below marker for appending url_intent when flow file does not start with comments or url
+$marker_for_opening_url = "var flow_path = '" . str_replace("\\","/",dirname($script)) . "';\n\n";
+fwrite($output_file,$marker_for_opening_url);
 
 // section to handle calling of other TagUI automation scripts for reusability
 $temp_output_file = fopen($script . '.raw','w') or die("ERROR - cannot open " . $script . '.raw' . "\n");
@@ -76,7 +78,11 @@ while(!feof($input_file)) {fwrite($output_file,parse_intent(translate_intent(fge
 
 // create footer of casperjs script using footer template and do post-processing 
 while(!feof($footer_file)) {fwrite($output_file,fgets($footer_file));} fclose($footer_file); fclose($output_file);
-chmod ($script . '.js',0600); if (!$url_provided) echo "ERROR - first line of " . $script . " not URL or comments\n";
+chmod ($script . '.js',0600); // append url opening block below instead of throwing error
+if (!$url_provided) { // echo "ERROR - first line of " . $script . " not URL or comments\n";
+$GLOBALS['real_line_number'] = 1; $generated_js_file_contents = file_get_contents($script . '.js');
+$generated_js_file_contents = str_replace($marker_for_opening_url, $marker_for_opening_url . 
+url_intent('about:blank'), $generated_js_file_contents); file_put_contents($script . '.js',$generated_js_file_contents);}
 if ($inside_code_block != 0) echo "ERROR - number of step { does not tally with with }\n";
 
 // special handling if chrome or headless chrome is used as browser for automation
