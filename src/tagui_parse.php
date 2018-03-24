@@ -5,7 +5,7 @@
 // check flow filename for .gui or .txt or no extension
 $script = $argv[1]; if ($script=="") die("ERROR - specify flow filename as first parameter\n");
 if (strpos(pathinfo($script, PATHINFO_BASENAME), '.') !== false) // check if file has extension
-if ((pathinfo($script, PATHINFO_EXTENSION)!="gui") and (pathinfo($script, PATHINFO_EXTENSION)!="txt"))
+if ((pathinfo($script, PATHINFO_EXTENSION)!="gui") and (pathinfo($script, PATHINFO_EXTENSION)!="txt") and (pathinfo($script, PATHINFO_EXTENSION)!="js"))
 die("ERROR - use .gui or .txt or no extension for flow filename\n");
 
 // make sure required files are available and can be opened
