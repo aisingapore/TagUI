@@ -38,19 +38,19 @@ read fullname to fullname
 read username to username
 
 // read User Email to variable if information exists
-if check_tx('//*[@itemprop="email"]')
+if present('//*[@itemprop="email"]')
 read //*[@itemprop="email"] to email
 
 // read User Website to variable if information exists
-if check_tx('//*[@itemprop="url"]')
+if present('//*[@itemprop="url"]')
 read //*[@itemprop="url"] to url
 
 // read User Location to variable if information exists
-if check_tx('//*[@itemprop="homeLocation"]')
+if present('//*[@itemprop="homeLocation"]')
 read //*[@itemprop="homeLocation"] to country
 
 // read User Biography to variable if information exists
-if check_tx('user-profile-bio')
+if present('user-profile-bio')
 read user-profile-bio to bio
 
 // show the information retrieved to screen and log file
