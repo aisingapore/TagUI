@@ -235,7 +235,7 @@ if ($GLOBALS['inside_py_block'] != 0) return "py"; if ($GLOBALS['inside_r_block'
 if ($GLOBALS['inside_run_block'] != 0) return "run"; if ($GLOBALS['inside_vision_block'] != 0) return "vision";
 if ($GLOBALS['inside_js_block'] != 0) return "js"; if ($GLOBALS['inside_dom_block'] != 0) return "dom";
 
-if ((substr($lc_raw_intent,0,7)=="http://") or (substr($lc_raw_intent,0,8)=="https://")) return "url";
+if ((substr($lc_raw_intent,0,7)=="http://") or (substr($lc_raw_intent,0,8)=="https://") or (substr($lc_raw_intent,0,11)=="about:blank")) return "url"; // recognizing about:blank as valid URL as it is part of HTML5 standard
 
 // first set of conditions check for valid keywords with their parameters
 if ((substr($lc_raw_intent,0,4)=="tap ") or (substr($lc_raw_intent,0,6)=="click ")) return "tap"; 
@@ -410,7 +410,7 @@ if (strpos($raw_intent,"'+")!==false and strpos($raw_intent,"+'")!==false) // ch
 {$dynamic_header = "\n{casper.then(function() {\n"; $dynamic_footer = "})} // end of dynamic url block\n";}
 else {$dynamic_header = ""; $dynamic_footer = ""; // else casper.start/thenOpen can be outside casper context
 if (filter_var($raw_intent, FILTER_VALIDATE_URL) == false) // do url validation only for raw text url string
-echo "ERROR - " . current_line() . " invalid URL " . $raw_intent . "\n";}
+if ($raw_intent != 'about:blank') echo "ERROR - " . current_line() . " invalid URL " . $raw_intent . "\n";}
 if ($GLOBALS['real_line_number'] == 1) { // use casper.start for first URL call and casper.thenOpen for subsequent calls
 $GLOBALS['url_provided']=true; return $dynamic_header."casper.start('".$casper_url."', function() {\n".$chrome_call.
 "techo('".$raw_intent."' + ' - ' + ".$twb.".getTitle() + '\\n');});\n\ncasper.then(function() {\n".$dynamic_footer;}
