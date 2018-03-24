@@ -2,7 +2,7 @@
 
 # TagUI
 
-[Why This](#why-this) | [Set Up](#set-up) | [To Use](#to-use) | [Cheat Sheet](#cheat-sheet) | [Developers Reference](#developers-reference)
+[Why This](#why-this) | [Set Up](#set-up) | [To Use](#to-use) | [Cheat Sheet](#cheat-sheet) | [Developers Reference](#developers-reference) | [Prezi Slides](https://prezi.com/p/f5vag20tuth8/) | [RPA Workshop](https://github.com/kelaberetiv/TagUI/blob/master/src/media/RPA%20Workshop.md)
 
 ***TagUI is now maintained by [AI Singapore (aisingapore.org)](https://www.aisingapore.org), a national initiative to build local artificial intelligence capabilities. The intention is to add AI capabilities to TagUI while keeping it open-source.***
 
