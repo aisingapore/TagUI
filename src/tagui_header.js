@@ -39,7 +39,9 @@ var inside_py_block = 0; var inside_r_block = 0; var inside_run_block = 0;
 var inside_vision_block = 0; var inside_js_block = 0; var inside_dom_block = 0;
 
 // techo function for handling quiet option
-function techo(echo_string) {if (!quiet_mode) {if (tagui_language.toLowerCase() == 'english') casper.echo(echo_string);
+function techo(echo_string) {if (!quiet_mode) { // mute about:blank, eg for desktop automation
+if ((echo_string == 'about:blank - \n') || (echo_string == '\nabout:blank - ')) casper.echo('');
+else if (tagui_language.toLowerCase() == 'english') casper.echo(echo_string);
 else {var translated_string = translate(echo_string,'to',tagui_language.toLowerCase()); casper.echo(translated_string);
 if (translated_string.indexOf('ERROR - translation engine') !== -1) casper.exit();}} return;}
 
