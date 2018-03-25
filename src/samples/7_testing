@@ -40,6 +40,10 @@ check text() contains "My Portfolio" | "page text contains My Portfolio" | "page
 // spaces between check step separator | is optional and up to you
 check count('uh-tb-') more than or equals to 6|'header menu items >= 6'|'header menu items < 6'
 
+// you can also assign to a variable for use or further processing
+count_number = count('uh-tb-')
+echo 'count_number = ' count_number
+
 // use timer() as a stopwatch to track elapsed time between calls
 start = timer()
 
@@ -58,9 +62,9 @@ check time_taken < 60 | 'step takes lesser than 60 seconds' | 'step takes more t
 // default timeout is 10 seconds in tagui_config.txt (can also be changed using timeout step)
 wait 13.57 seconds
 
-// after the delay, test the condition that the quote is Microsoft
+// after the delay, negative test case to check that the quote is APPLE
 read //*[@id="quote-header-info"]//h1 to stock_quote
-check stock_quote equals to "MICROSOFT (MSF.NX)" | 'quote is correct - ' stock_quote | 'quote is wrong - ' stock_quote
+check stock_quote equals to "APPLE" | 'quote is correct - ' stock_quote | 'quote is wrong - ' stock_quote
 
 // CasperJS will output a XUnit XML, which is compatible with continuous integration tools such as Jenkins 
 // running together with the report option outputs a web version of the test execution log for easy sharing
