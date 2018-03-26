@@ -360,13 +360,13 @@ direction|BUY|SELL|BUY
 Tip - be sure to include the header row, because the first row will be assumed as header and ignored. If your flow file ends with extension .txt or .gui the datatable file extension will be .txt.csv or .gui.csv respectively.
 
 # Developers Reference
-TagUI is a young tool and it tries to do the task of automating UI interactions very well (especially process automation). It's designed to make prototyping, deployment and maintenance of UI automation easier by minimizing iteration time for each phase. Some future ideas for TagUI is integration with AI open-source tools, advanced visual automation with Sikuli, and improved natural language processing. Also, as PhantomJS is no longer maintained, maybe in a few years it will be necessary to migrate TagUI from CasperJS + PhantomJS engine to Puppeteer + Node.js engine. That will require users to have Node.js development environment instead of TagUI's current form where it can be unzipped and run directly.
+TagUI is a young tool and it tries to do the task of automating UI interactions very well. It's designed to make prototyping, deployment and maintenance of UI automation easier by minimizing iteration time for each phase.
 
 ### API
 
 <details>
   <summary>
-    Click to show details for this section
+    Click to show how to use the API webservice that comes with TagUI and how to make complex outgoing API calls
   </summary>
   
   Automation flows can also be triggered via API URL. TagUI has an API service and runner for managing a queue of incoming requests via API. To set up, add a crontab entry on your server with the desired frequency to check and process incoming service requests. Below will check every 15 minutes and run pending flows in the queue. If there's an automation in progress, TagUI will wait for the next check instead of concurrently starting a new run.
@@ -396,7 +396,7 @@ TagUI is a young tool and it tries to do the task of automating UI interactions 
 
 <details>
   <summary>
-    Click to show details for this section
+    Click to show how TagUI has native integraton with visible and headless Chrome using DevTools Protocol
   </summary>
   
   TagUI has built-in integration with Chrome web browser to run web automation in visible or headless mode. It uses a websocket connection to directly communicate automation JavaScript code and information to Chrome.
@@ -416,7 +416,7 @@ TagUI is a young tool and it tries to do the task of automating UI interactions 
 ### TESTING
 <details>
   <summary>
-    Click to show details for this section
+    Click to show details of how TagUI can be used for test automation with integration to CI tools
   </summary>
   
   The check step allows easy testing of conditions. When the test option is used, test assertions are automatically performed for check steps. This lets CasperJS framework output a XUnit XML file, which can be used for CI/CD integration with tools such as Jenkins. Below are examples of check steps, more examples in [sample flow 7_testing](https://github.com/tebelorg/TagUI/blob/master/src/samples/7_testing).
@@ -451,7 +451,7 @@ TagUI is a young tool and it tries to do the task of automating UI interactions 
 ### FILES
 <details>
   <summary>
-    Click to show details for this section
+    Click to show details of the different files used by TagUI and their purposes
   </summary>
   
   Core Files|Purpose
