@@ -1220,106 +1220,148 @@ casper.then(function() {
 // test contain / not contain
 variable = "test variable with some text"
 if (((variable.indexOf("some text")>-1)))
-this.echo("FOUND");
+casper.then(function() {
+this.echo("FOUND")});
 if (((variable.indexOf("some text")>-1)))
-this.echo("FOUND");
+casper.then(function() {
+this.echo("FOUND")});
 if (((variable.indexOf("some text")<0)))
-this.echo("NOT FOUND");
+casper.then(function() {
+this.echo("NOT FOUND")});
 if (((variable.indexOf("some text")<0)))
-this.echo("NOT FOUND");
+casper.then(function() {
+this.echo("NOT FOUND")});
 variable = 'test variable with some text'
 if (((variable.indexOf('some text')>-1)))
-this.echo('FOUND');
+casper.then(function() {
+this.echo('FOUND')});
 if (((variable.indexOf('some text')>-1)))
-this.echo('FOUND');
+casper.then(function() {
+this.echo('FOUND')});
 if (((variable.indexOf('some text')<0)))
-this.echo('NOT FOUND');
+casper.then(function() {
+this.echo('NOT FOUND')});
 if (((variable.indexOf('some text')<0)))
-this.echo('NOT FOUND');
+casper.then(function() {
+this.echo('NOT FOUND')});
 // test equal to / not equal to
 variable = "lemon"
 if ((variable == "lemon"))
-this.echo("LEMON");
+casper.then(function() {
+this.echo("LEMON")});
 if ((variable == "lemon"))
-this.echo("LEMON");
+casper.then(function() {
+this.echo("LEMON")});
 if ((variable != "lemon"))
-this.echo("NOT LEMON");
+casper.then(function() {
+this.echo("NOT LEMON")});
 if ((variable != "lemon"))
-this.echo("NOT LEMON");
+casper.then(function() {
+this.echo("NOT LEMON")});
 if ((variable == 'lemon'))
-this.echo('LEMON');
+casper.then(function() {
+this.echo('LEMON')});
 if ((variable == 'lemon'))
-this.echo('LEMON');
+casper.then(function() {
+this.echo('LEMON')});
 if ((variable != 'lemon'))
-this.echo('NOT LEMON');
+casper.then(function() {
+this.echo('NOT LEMON')});
 if ((variable != 'lemon'))
-this.echo('NOT LEMON');
+casper.then(function() {
+this.echo('NOT LEMON')});
 variable = 12345
 if ((variable == 12345))
-this.echo("12345");
+casper.then(function() {
+this.echo("12345")});
 if ((variable == 12345))
-this.echo("12345");
+casper.then(function() {
+this.echo("12345")});
 if ((variable != 12345))
-this.echo("NOT 12345");
+casper.then(function() {
+this.echo("NOT 12345")});
 if ((variable != 12345))
-this.echo("NOT 12345");
+casper.then(function() {
+this.echo("NOT 12345")});
 // test more than / greater than / higher than
 variable = 5
 if ((variable > 3))
-this.echo("MORE THAN 3");
+casper.then(function() {
+this.echo("MORE THAN 3")});
 if ((variable > 3))
-this.echo("MORE THAN 3");
+casper.then(function() {
+this.echo("MORE THAN 3")});
 if ((variable > 3))
-this.echo("MORE THAN 3");
+casper.then(function() {
+this.echo("MORE THAN 3")});
 // test more than or equal to / greater than or equal to / higher than or equal to
 variable = 5
 if ((variable >= 5))
-this.echo("MORE THAN OR EQUAL TO 5");
+casper.then(function() {
+this.echo("MORE THAN OR EQUAL TO 5")});
 if ((variable >= 5))
-this.echo("MORE THAN OR EQUAL TO 5");
+casper.then(function() {
+this.echo("MORE THAN OR EQUAL TO 5")});
 if ((variable >= 5))
-this.echo("MORE THAN OR EQUAL TO 5");
+casper.then(function() {
+this.echo("MORE THAN OR EQUAL TO 5")});
 // test less than / lesser than / lower than
 variable = 3
 if ((variable < 5))
-this.echo("LESS THAN 5");
+casper.then(function() {
+this.echo("LESS THAN 5")});
 if ((variable < 5))
-this.echo("LESS THAN 5");
+casper.then(function() {
+this.echo("LESS THAN 5")});
 if ((variable < 5))
-this.echo("LESS THAN 5");
+casper.then(function() {
+this.echo("LESS THAN 5")});
 // test less than or equal to / lesser than or equal to / lower than or equal to
 variable = 5
 if ((variable <= 5))
-this.echo("LESS THAN OR EQUAL TO 5");
+casper.then(function() {
+this.echo("LESS THAN OR EQUAL TO 5")});
 if ((variable <= 5))
-this.echo("LESS THAN OR EQUAL TO 5");
+casper.then(function() {
+this.echo("LESS THAN OR EQUAL TO 5")});
 if ((variable <= 5))
-this.echo("LESS THAN OR EQUAL TO 5");
+casper.then(function() {
+this.echo("LESS THAN OR EQUAL TO 5")});
 // test and
 if (("apple" == "apple") && ("orange" == "orange"))
-this.echo("TRUE");
+casper.then(function() {
+this.echo("TRUE")});
 if ((5 > 3) && (3 < 4))
-this.echo("TRUE");
+casper.then(function() {
+this.echo("TRUE")});
 if ((5 > 3) && (3 < 4) && ("kiwi" == "kiwi"))
-this.echo("TRUE");
+casper.then(function() {
+this.echo("TRUE")});
 // test or
 if (('apple' == 'apple') || ('orange' == 'kiwi'))
-this.echo("TRUE");
+casper.then(function() {
+this.echo("TRUE")});
 if ((5 < 3) || (5 > 4))
-this.echo("TRUE");
+casper.then(function() {
+this.echo("TRUE")});
 if ((5 < 3) || (3 < 4) && ("kiwi" == "kiwi"))
-this.echo("TRUE");
+casper.then(function() {
+this.echo("TRUE")});
 // test combinations of conditions
 menu = "fruits and salads"
 if (((menu.indexOf('fruits')>-1)) && ((menu.indexOf("potatoes")<0)))
-this.echo("FRUITS ONLY");
+casper.then(function() {
+this.echo("FRUITS ONLY")});
 // test for
 for (n=1; n<=5; n++)
-this.echo("ITERATION "+n);
+casper.then(function() {
+this.echo("ITERATION "+n)});
 for (n=0; n<=0; n++)
-this.echo("ITERATION "+n);
+casper.then(function() {
+this.echo("ITERATION "+n)});
 for (n=6; n<=10; n++)
-this.echo("ITERATION "+n);
+casper.then(function() {
+this.echo("ITERATION "+n)});
 for (n=1; n<=5; n++)
 {techo('click element');
 casper.waitFor(function check() {return check_tx('element');},
@@ -1343,9 +1385,11 @@ function timeout() {this.echo('ERROR - cannot find element').exit();});}});
 casper.then(function() {
 // test while
 while ((2 > 3) && (3 > 4))
-this.echo("INVALID");
+casper.then(function() {
+this.echo("INVALID")});
 while ((((2 > 3) && (3 > 4))))
-this.echo("INVALID");
+casper.then(function() {
+this.echo("INVALID")});
 while ((2 > 3) && (3 > 4))
 {techo('click element');
 this.click(tx('element'));}});
@@ -1615,7 +1659,8 @@ casper.then(function() {
 casper.then(function() {
 // test if in javascript
 if (((2 < 3)))
-this.echo("TRUE");
+casper.then(function() {
+this.echo("TRUE")});
 // TEST STEPS
 // test tap / click (including sikuli visual automation)
 {techo('tap element');
@@ -1830,13 +1875,20 @@ save_text('/full_path/filename.txt',this.getHTML());}
 {techo('save page to /tmp/filename.txt');
 save_text('/tmp/filename.txt',this.getHTML());}
 // test echo
-this.echo(variable);
-this.echo('some text'+' '+'some text');
-this.echo("some text - "+variable);
-this.echo('some text - '+variable);
-this.echo("some text - "+variable);
-this.echo('some text - '+variable);
-this.echo(variable+" - some text - "+variable+" - some text "+"some text - "+variable);
+casper.then(function() {
+this.echo(variable)});
+casper.then(function() {
+this.echo('some text'+' '+'some text')});
+casper.then(function() {
+this.echo("some text - "+variable)});
+casper.then(function() {
+this.echo('some text - '+variable)});
+casper.then(function() {
+this.echo("some text - "+variable)});
+casper.then(function() {
+this.echo('some text - '+variable)});
+casper.then(function() {
+this.echo(variable+" - some text - "+variable+" - some text "+"some text - "+variable)});
 // test dump
 {techo('dump "some text - " + variable');
 save_text('',"some text - "+variable);}
@@ -2010,12 +2062,14 @@ else this.echo('eggs not lesser than 10');}
 // test frame
 {techo('frame mainframe');
 casper.withFrame('mainframe', function() {
-this.echo("test mainframe"); });} });
+casper.then(function() {
+this.echo("test mainframe")}); });} });
 
 casper.then(function() {
 {techo('frame mainframe | subframe');
 casper.withFrame('mainframe', function() {casper.withFrame('subframe', function() {
-this.echo("test subframe"); });});} });
+casper.then(function() {
+this.echo("test subframe")}); });});} });
 
 casper.then(function() {
 // test popup
@@ -2023,7 +2077,8 @@ casper.then(function() {
 casper.waitForPopup(/url_keyword/, function then() {},
 function timeout() {this.echo('ERROR - cannot find popup url_keyword').exit();});
 casper.withPopup(/url_keyword/, function() {
-this.echo("test popup"); });} });
+casper.then(function() {
+this.echo("test popup")}); });} });
 
 casper.then(function() {
 {techo('popup url_keyword');
@@ -2032,7 +2087,8 @@ function timeout() {this.echo('ERROR - cannot find popup url_keyword').exit();})
 casper.withPopup(/url_keyword/, function() {
 {techo('frame mainframe');
 casper.withFrame('mainframe', function() {
-this.echo("test popup with mainframe"); });}  });} });
+casper.then(function() {
+this.echo("test popup with mainframe")}); });}  });} });
 
 casper.then(function() {
 {techo('popup url_keyword');
@@ -2041,7 +2097,8 @@ function timeout() {this.echo('ERROR - cannot find popup url_keyword').exit();})
 casper.withPopup(/url_keyword/, function() {
 {techo('frame mainframe | subframe');
 casper.withFrame('mainframe', function() {casper.withFrame('subframe', function() {
-this.echo("test popup with subframe"); });});}  });} });
+casper.then(function() {
+this.echo("test popup with subframe")}); });});}  });} });
 
 casper.then(function() {
 // test api direct
@@ -2107,7 +2164,8 @@ else
 // start of code block
 {casper.then(function() {
 
-this.echo('footer not found');
+casper.then(function() {
+this.echo('footer not found')});
 })} // end of code block
 
 // test visible function
@@ -2116,7 +2174,8 @@ if ((visible('footer')))
 // start of code block
 {casper.then(function() {
 
-this.echo('footer is visible');
+casper.then(function() {
+this.echo('footer is visible')});
 })} // end of code block
 
 else
@@ -2124,23 +2183,31 @@ else
 // start of code block
 {casper.then(function() {
 
-this.echo('footer not visible');
+casper.then(function() {
+this.echo('footer not visible')});
 })} // end of code block
 
 // test title function
-this.echo(title());
+casper.then(function() {
+this.echo(title())});
 if (((title().indexOf('About')>-1)))
-this.echo('page title contains About');
+casper.then(function() {
+this.echo('page title contains About')});
 // test url function
-this.echo(url());
+casper.then(function() {
+this.echo(url())});
 if (((url().indexOf('org')>-1)))
-this.echo('page url contains org');
+casper.then(function() {
+this.echo('page url contains org')});
 // test text function
-this.echo(text());
+casper.then(function() {
+this.echo(text())});
 if (((text().indexOf('automation')>-1)))
-this.echo('page text contains automation');
+casper.then(function() {
+this.echo('page text contains automation')});
 // test count function
-this.echo(count('element'));
+casper.then(function() {
+this.echo(count('element'))});
 element_count = count('element')
 for (n=1; n<=element_count; n++)
 
@@ -2149,7 +2216,8 @@ for (n=1; n<=element_count; n++)
 // start of code block
 {casper.then(function() {
 
-this.echo(n);
+casper.then(function() {
+this.echo(n)});
 })} // end of code block
 })(n); // end of IIFE pattern
 });
