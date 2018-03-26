@@ -24,9 +24,6 @@ echo "Menu contains fruits. (condition and action in natural language)"
 if (menu.indexOf("fruits")>-1)
 echo "Menu contains fruits. (condition in JavaScript, action in natural language)"
 
-if (menu.indexOf("fruits")>-1)
-echo("Menu contains fruits. (condition and action in JavaScript)");
-
 if menu equals to "salads fruits sandwiches"
 echo "This is perfect."
 
