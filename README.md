@@ -2,7 +2,7 @@
 
 # TagUI
 
-[Why This](#why-this) | [Set Up](#set-up) | [To Use](#to-use) | [Cheat Sheet](#cheat-sheet) | [Developers](#developers-reference) | [Prezi Slides](https://prezi.com/p/f5vag20tuth8/) | [RPA Workshop](https://github.com/kelaberetiv/TagUI/blob/master/src/media/RPA%20Workshop.md)
+[Why This](#why-this) | [Set Up](#set-up) | [To Use](#to-use) | [Cheat Sheet](#cheat-sheet) | [Developers](#developers-reference) | [Tutorial](https://github.com/kelaberetiv/TagUI/blob/master/src/media/RPA%20Workshop.md) | [Slides](https://prezi.com/p/f5vag20tuth8/) | [Video](https://www.youtube.com/watch?v=u1x2HOV9Jmg)
 
 ***TagUI is now maintained by [AI Singapore (aisingapore.org)](https://www.aisingapore.org), a national initiative to build local artificial intelligence capabilities. The intention is to add AI capabilities to TagUI while keeping it open-source and free to use.***
 
@@ -32,7 +32,7 @@ download https://admin.typeform.com/xxx to report.csv
 
 <details>
   <summary>
-    Click here to show details for this section
+    Click to show powerful and user-friendly features of TagUI that come right out of the box
   </summary>
   
   For example, TagUI will instantly convert the automation flow above into 100+ lines of JavaScript code and automatically perform the steps to download a report. Conditions can also be written in natural language for making decisions or checking webpage. No further backend coding or step definition is required. This makes it easy for rapid prototyping, deployment and maintenance of UI automation, whether you are a developer or not. The language engine supports over 20 languages and can be modified or extended easily by users to improve accuracy or add more languages.
@@ -51,7 +51,7 @@ TagUI is in v3.1 - it unzips and runs on macOS, Linux, Windows ([link to release
 Tip - for [cutting edge](https://github.com/tebelorg/TagUI/compare/v3.1.0...master) version, download [from here](https://github.com/tebelorg/TagUI/archive/master.zip) to overwrite your packaged installation
 
 ### PACKAGED INSTALLATION
-Easiest way to use TagUI - no setup is needed, in most environments all required dependencies are packaged in. Potential exceptions - On some Windows computers, if you see 'MSVCR110.dll is missing' error, install [this from Microsoft website](https://www.microsoft.com/en-us/download/details.aspx?id=30679) - this file is required to run the PHP engine. On some newer macOS versions, if you get a 'dyld: Library not loaded' error, [install OpenSSL in this way](https://github.com/kelaberetiv/TagUI/issues/86#issuecomment-372045221). For some flavours of Linux (Ubuntu for example), which do not have PHP pre-installed, google how to install PHP accordingly (Ubuntu for example, apt-get install php).
+Easiest way to use TagUI - no setup is needed, in most environments all required dependencies are packaged in.
 
 Platform|macOS|Linux|Windows|Node.js (macOS/Linux)
 :------:|:---:|:---:|:-----:|:-------------------:
@@ -59,12 +59,19 @@ Package|[unzip and run](https://raw.githubusercontent.com/tebelorg/Tump/master/T
 
 Optional - configure web browser settings in tagui_config.txt, such as browser resolution, step timeout of 10s etc
 
-### MANUAL INSTALLATION
-Step-by-step setup if you prefer to download dependencies manually from respective websites
-
 <details>
   <summary>
-    Click here to show details for this section
+    Click to show potential exceptions that can happen in some environments and their solutions
+  </summary>
+  
+On some Windows computers, if you see 'MSVCR110.dll is missing' error, install [this from Microsoft website](https://www.microsoft.com/en-us/download/details.aspx?id=30679) - this file is required to run the PHP engine. On some newer macOS versions, if you get a 'dyld: Library not loaded' error, [install OpenSSL in this way](https://github.com/kelaberetiv/TagUI/issues/86#issuecomment-372045221). For some flavours of Linux (Ubuntu for example), which do not have PHP pre-installed, google how to install PHP accordingly (Ubuntu for example, apt-get install php).
+  
+</details>
+
+### MANUAL INSTALLATION
+<details>
+  <summary>
+    Click to show step-by-step setup if you prefer to download dependencies manually from their websites
   </summary>
   
   1. PhantomJS (headless scriptable web browser) - http://phantomjs.org
@@ -86,9 +93,11 @@ Step-by-step setup if you prefer to download dependencies manually from respecti
 - Automation flow filename can have no extension, .gui or .txt file extension
 - Objects, keywords, datatables can be defined in flow_filename.csv (optional)
 
+Tip - to run tagui from anywhere in macOS/Linux, use ln -sf /full_path/tagui/src/tagui /usr/local/bin/tagui to create symbolic link. to run tagui from anywhere in Windows, add tagui/src [folder to path](http://lmgtfy.com/?q=add+to+path+in+windows). then tagui will be accessible from any folder. if you have issue running visible automation using Firefox/SlimerJS [check this setting](https://docs.slimerjs.org/current/installation.html#using-unstable-version-or-very-old-versions-of-firefox).
+
 <details>
   <summary>
-    Click here to show details for this section
+    Click to show the command line options supported by TagUI and their purposes
   </summary>
   
   Option|Purpose
@@ -106,8 +115,6 @@ Step-by-step setup if you prefer to download dependencies manually from respecti
   baseline|output execution log and relative-path output files to a separate baseline directory
   input(s)|add your own parameter(s) to be used in your automation flow as variables p1 to p9
 
-  Tip - to run tagui from anywhere in macOS/Linux, use ln -sf /full_path/tagui/src/tagui /usr/local/bin/tagui to create symbolic link. to run tagui from anywhere in Windows, add tagui/src [folder to path](http://lmgtfy.com/?q=add+to+path+in+windows). then tagui will be accessible from any folder. if you have issue running visible automation using Firefox/SlimerJS [check this setting](https://docs.slimerjs.org/current/installation.html#using-unstable-version-or-very-old-versions-of-firefox).
-
 </details>
 
 ### BY SCHEDULING
@@ -123,7 +130,7 @@ Download from [Chrome Web Store](https://chrome.google.com/webstore/detail/tagui
 
 <details>
   <summary>
-    Click here to show details for this section
+    Click to show details about TagUI Chrome extension and what it can be used for
   </summary>
   
   TagUI Chrome extension is based on [Resurrectio tool](https://github.com/ebrehault/resurrectio) and records steps such as page navigation, clicking web elements and entering information. To start recording automation flows, click TagUI icon on your Chrome toolbar. Right-click for shortcuts to some TagUI steps, such as capturing webpage screenshot or to note down element identifier.
@@ -140,7 +147,7 @@ To run TagUI flows in native languages or output flow execution in other languag
 
 <details>
   <summary>
-    Click here to show details for this section
+    Click to show the 20+ human languages supported by TagUI and how to self-build language definitions
   </summary>
   
   Tip - as Windows Unicode support is not as straightforward as macOS/Linux, doing this in Windows may require changing system locale, using chcp command, and selecting a font to display native language correctly ([more info](http://www.walkernews.net/2013/05/19/how-to-get-windows-command-prompt-displays-chinese-characters/))
@@ -158,7 +165,7 @@ TagUI has built-in integration with [Sikuli (base on OpenCV)](http://sikulix.com
 
 <details>
   <summary>
-    Click here to show details for this section
+    Click to show where to download and install Sikuli, and a demo GIF of visual automation in action
   </summary>
   
   Sikuli is excluded from TagUI packaged installation due to complex dependencies that are handled by its installer. [Download Sikuli](http://sikulix.com/quickstart/) to tagui/src/tagui.sikuli folder and setup (choose option 1 - Pack1 and option 3 Tesseract based OCR). Relative paths are supported for image filenames (eg pc.png, images/button.bmp). A screen (real or Xvfb) is needed for visual automation. [Tesseract OCR](https://github.com/tesseract-ocr/tesseract) (optical character recognition) is used for visually retrieving text.
@@ -170,6 +177,11 @@ TagUI has built-in integration with [Sikuli (base on OpenCV)](http://sikulix.com
 ### R INTEGRATION
 TagUI has built-in integration with R - an open-source software environment for statistical computing and graphics. R can be used for big data and machine learning. The r step can be used to run commands in R and retrieve the output of those commands. To use R integration in TagUI, first [download R software for your OS](https://www.r-project.org/).
 
+<details>
+  <summary>
+    Click to show how to use r step in your automation flow to send and receive data from R frameworks
+  </summary>
+  
 In your automation flow, use the r step followed by the R commands to be executed, separated by `;`. You can then use the `cat()` command in R to output the result you want to be accessible in your automation flow as `r_result` variable. For a super basic example, below steps in your TagUI automation flow will output 3. If the result is JSON data, the JSON object `r_json` will be created for easy access to JSON data elements. If not, `r_json` will be null.
 
 ```
@@ -181,12 +193,14 @@ echo r_result
 
 You can also use the `source()` command in R to run R scripts. For examples of using R for machine learning, check out this [essentials of machine learning algorithms](https://www.analyticsvidhya.com/blog/2017/09/common-machine-learning-algorithms/) article or this [guerilla guide to machine learning](https://www.kdnuggets.com/2017/05/guerrilla-guide-machine-learning-r.html) video series.
 
+</details>
+
 ### PYTHON INTEGRATION
 TagUI has built-in integration with Python v2.7 - a programming language with many popular frameworks for big data and machine learning. The py step can be used to run commands in Python and retrieve the output of those commands. To use Python integration in TagUI, first [download Python for your OS](https://www.python.org/). macOS and Linux normally come pre-installed with Python. Note that Python v3 is not backward-compatible with Python v2.7, the current and more widely used version.
 
 <details>
   <summary>
-    Click here to show details for this section
+    Click to show how to use py step in your automation flow to send and receive data from Python frameworks
   </summary>
 
   In your automation flow, use the py step followed by the Python commands to be executed, separated by `;`. You can then use the `print` command in Python to output the result you want to be accessible in your automation flow as `py_result` variable. For a super basic example, below steps in your TagUI automation flow will output 3. If the result is JSON data, the JSON object `py_json` will be created for easy access to JSON data elements. If not, `py_json` will be null.
@@ -206,7 +220,7 @@ TagUI scripts are already in natural-language-like syntax to convert to JavaScri
 
 <details>
   <summary>
-    Click here to show details for this section
+    Click to show details on how you can rename your CLI assistant and the syntax used to invoke automations
   </summary>
   
   The commands erina (macOS/Linux) and erina.cmd (Windows) can be renamed to some other name you like. The commands can be set up in the same way as the tagui / tagui.cmd above to be accessible from any folder. The command basically interprets this general syntax `erina single-word-action fillers options/parameters fillers single-or-multi-word-context` to call run the corresponding automation flow `action_context` with `options/parameters`.
@@ -346,17 +360,13 @@ direction|BUY|SELL|BUY
 Tip - be sure to include the header row, because the first row will be assumed as header and ignored. If your flow file ends with extension .txt or .gui the datatable file extension will be .txt.csv or .gui.csv respectively.
 
 # Developers Reference
-TagUI is a young tool and it tries to do the task of automating web interactions very well (especially process automation). It's designed to make prototyping, deployment and maintenance of web automation easier by minimizing iteration time for each phase. If you are a Node.js developer, be sure to check out [Puppeteer project](https://github.com/GoogleChrome/puppeteer) by Google Chrome team.
-
-While TagUI can be used for test automation or data-scraping, there are other popular open-source tools which may be better fits for these goals. For test automation, there are very established open-source tools/frameworks with mature and supportive ecosystems. Be sure to check out what's current from resources such as this [test automation list](https://github.com/atinfo/awesome-test-automation). For data-scraping, there are various open-source projects just to [handle that very well](https://github.com/search?utf8=✓&q=topic%3Acrawler&type=Repositories).
-
-Some future ideas for TagUI is integration with AI open-source tools, advanced visual automation with Sikuli, and improved natural language processing. Also, as PhantomJS is no longer maintained, maybe in a few years it will be necessary to migrate TagUI from CasperJS + PhantomJS engine to Puppeteer + Node.js engine. That will require users to have Node.js development environment instead of TagUI's current form where it can be unzipped and run directly.
+TagUI is a young tool and it tries to do the task of automating UI interactions very well (especially process automation). It's designed to make prototyping, deployment and maintenance of UI automation easier by minimizing iteration time for each phase. Some future ideas for TagUI is integration with AI open-source tools, advanced visual automation with Sikuli, and improved natural language processing. Also, as PhantomJS is no longer maintained, maybe in a few years it will be necessary to migrate TagUI from CasperJS + PhantomJS engine to Puppeteer + Node.js engine. That will require users to have Node.js development environment instead of TagUI's current form where it can be unzipped and run directly.
 
 ### API
 
 <details>
   <summary>
-    Click here to show details for this section
+    Click to show details for this section
   </summary>
   
   Automation flows can also be triggered via API URL. TagUI has an API service and runner for managing a queue of incoming requests via API. To set up, add a crontab entry on your server with the desired frequency to check and process incoming service requests. Below will check every 15 minutes and run pending flows in the queue. If there's an automation in progress, TagUI will wait for the next check instead of concurrently starting a new run.
@@ -386,7 +396,7 @@ Some future ideas for TagUI is integration with AI open-source tools, advanced v
 
 <details>
   <summary>
-    Click here to show details for this section
+    Click to show details for this section
   </summary>
   
   TagUI has built-in integration with Chrome web browser to run web automation in visible or headless mode. It uses a websocket connection to directly communicate automation JavaScript code and information to Chrome.
@@ -406,7 +416,7 @@ Some future ideas for TagUI is integration with AI open-source tools, advanced v
 ### TESTING
 <details>
   <summary>
-    Click here to show details for this section
+    Click to show details for this section
   </summary>
   
   The check step allows easy testing of conditions. When the test option is used, test assertions are automatically performed for check steps. This lets CasperJS framework output a XUnit XML file, which can be used for CI/CD integration with tools such as Jenkins. Below are examples of check steps, more examples in [sample flow 7_testing](https://github.com/tebelorg/TagUI/blob/master/src/samples/7_testing).
@@ -441,7 +451,7 @@ Some future ideas for TagUI is integration with AI open-source tools, advanced v
 ### FILES
 <details>
   <summary>
-    Click here to show details for this section
+    Click to show details for this section
   </summary>
   
   Core Files|Purpose
@@ -520,8 +530,5 @@ Some future ideas for TagUI is integration with AI open-source tools, advanced v
 
 </details>
 
-# Be a Force for Good
-TagUI default config does not hide identity as an automated user.
-
 # License
-TagUI is open-source software released under the MIT license. Originally developed by a test automation engineer to avoid writing chunks of code when automating web interactions.
+TagUI is open-source software released under the MIT license. TagUI default config does not hide identity as an automated user. Originally developed by a test automation engineer to avoid writing chunks of code when automating web interactions.
