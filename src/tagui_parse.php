@@ -519,7 +519,7 @@ return "{techo('".$raw_intent."');\n".
 function echo_intent($raw_intent) {
 $params = trim(substr($raw_intent." ",1+strpos($raw_intent." "," ")));
 if ($params == "") echo "ERROR - " . current_line() . " text missing for " . $raw_intent . "\n"; else 
-return "casper.then(function() {\nthis.echo(".add_concat($params).")});".end_fi()."\n";}
+return "this.echo(".add_concat($params).");".end_fi()."\n";}
 
 function save_intent($raw_intent) {$twb = $GLOBALS['tagui_web_browser'];
 $params = trim(substr($raw_intent." ",1+strpos($raw_intent." "," ")));
