@@ -64,7 +64,7 @@ Optional - configure web browser settings in tagui_config.txt, such as browser r
     Click to show potential exceptions that can happen in some environments and their solutions
   </summary>
   
-On some Windows computers, if you see 'MSVCR110.dll is missing' error, install [this from Microsoft website](https://www.microsoft.com/en-us/download/details.aspx?id=30679) - this file is required to run the PHP engine. On some newer macOS versions, if you get a 'dyld: Library not loaded' error, [install OpenSSL in this way](https://github.com/kelaberetiv/TagUI/issues/86#issuecomment-372045221). For some flavours of Linux (Ubuntu for example), which do not have PHP pre-installed, google how to install PHP accordingly (Ubuntu for example, apt-get install php).
+On some Windows computers, if you see 'MSVCR110.dll is missing' error, install [this from Microsoft website](https://www.microsoft.com/en-us/download/details.aspx?id=30679) (choose vcredist_x86.exe) - this file is required to run the PHP engine. On some newer macOS versions, if you get a 'dyld: Library not loaded' error, [install OpenSSL in this way](https://github.com/kelaberetiv/TagUI/issues/86#issuecomment-372045221). For some flavours of Linux (Ubuntu for example), which do not have PHP pre-installed, google how to install PHP accordingly (Ubuntu for example, apt-get install php).
   
 </details>
 
@@ -456,7 +456,7 @@ TagUI is a young tool and it tries to do the task of automating UI interactions 
   
   Core Files|Purpose
   :---------|:------
-  tagui|main runner for TagUI web automation
+  tagui|main runner for TagUI automation
   tagui.cmd|main runner for Windows platform
   tagui_config.txt|web browser settings used for automation
   tagui_parse.php|to interpret natural language into code

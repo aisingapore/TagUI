@@ -23,7 +23,7 @@ echo test     - testing with check step test assertions for CI/CD integration ^(
 echo baseline - output execution log and relative-path output files to a separate baseline directory
 echo input^(s^) - add your own parameter^(s^) to be used in your automation flow as variables p1 to p9
 echo.
-echo TagUI is a general purpose tool for automating web interactions ~ http://tebel.org
+echo TagUI is a rapid RPA tool for automating user interactions ~ google tagui for more info
 echo.
 exit /b 1
 )
