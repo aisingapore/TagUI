@@ -4,14 +4,15 @@
 
 [Why This](#why-this) | [Set Up](#set-up) | [To Use](#to-use) | [Cheat Sheet](#cheat-sheet) | [Developers](#developers-reference) | [**Tutorial**](https://github.com/kelaberetiv/TagUI/blob/master/src/media/RPA%20Workshop.md) | [**Slides**](https://prezi.com/p/f5vag20tuth8/) | [**Video**](https://www.youtube.com/watch?v=u1x2HOV9Jmg)
 
-***TagUI is now maintained by [AI Singapore (aisingapore.org)](https://www.aisingapore.org), a national initiative to build local artificial intelligence capabilities. The intention is to add AI capabilities to TagUI while keeping it open-source and free to use.***
+***TagUI is now maintained by [AI Singapore (aisingapore.org)](https://www.aisingapore.org), a government-funded initiative to build local artificial intelligence capabilities. The intention is to add AI capabilities to TagUI while keeping it open-source and free to use. To get started, check out above hands-on tutorial, Prezi slides, or recorded video at FOSSASIA 2018.***
 
 ### FEATURES
 - automate Chrome visibly or headlessly
 - visual automation of websites and desktop
 - write in 20+ human languages & JavaScript
 - Chrome extension for recording web actions
-- R & Python integration for big data / AI / ML
+- R & Python integration for big data / AI / ML / DL
+- CLI, REST API, advanced API calls, all covered
 
 # Why This
 The goal of UI (user interface) automation is to reproduce cognitive interactions that you have with websites or your desktop, so that your computer can do it for you, base on your schedule or conditions. TagUI helps you rapidly automate your repetitive or time-critical tasks - use cases include process automation, data acquisition and testing of web apps.
