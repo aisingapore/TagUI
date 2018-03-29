@@ -1,10 +1,11 @@
 https://ca.yahoo.com
-// automation flow files start with an URL to tell TagUI where to go
+// automation flow files usually start with an URL to tell TagUI where to go
+// files can also start with // for comments, or no URL if it's not web-related
 
 // this flow searches github on Yahoo and captures screenshot of results
 // for issues or questions, kindly feedback on GitHub or ksoh@aisingapore.org
 // see cheatsheet for steps, conditions, finding element identifiers, etc
-// https://github.com/tebelorg/TagUI#cheat-sheet
+// https://github.com/kelaberetiv/TagUI#cheat-sheet
 
 // use type (or enter) step to enter some text into a webpage element
 // use show (or print) step to print text from webpage element to output
