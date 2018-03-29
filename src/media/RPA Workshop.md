@@ -1,4 +1,4 @@
-TagUI is a general purpose tool for automating user interactions. This branch of automation is commercially known as RPA (robotic process automation), and primarily aims to reproduce user interactions with computer applications - for example mouse clicks and keyboard entries.
+TagUI is a CLI tool for automating user interactions. This branch of automation is commercially known as RPA (robotic process automation), and primarily aims to reproduce user interactions with computer applications - for example mouse clicks and keyboard entries.
 
 For more information on TagUI, visit its [repository page](https://github.com/kelaberetiv/TagUI). TagUI is now maintained by [AI Singapore](https://www.aisingapore.org), a government-funded initiative to build local artificial intelligence capabilities. The intention is to add AI capabilities to TagUI while keeping it open-source and free to use.
 
@@ -51,7 +51,29 @@ cd /home/your_id/tagui/src
 
 Now try the same workflow with Chrome browser by putting chrome as option (eg tagui samples\1_yahoo chrome). **Be sure to save your work and close all your existing tabs as Chrome will be restarted to establishe connection with TagUI.** The automation will now run in the foreground instead, so you'll be able to see the navigation on Yahoo and DuckDuckGo websites. TagUI can also be run from desktop icons, scheduled tasks, or REST API calls.
 
-Tip - to run tagui from anywhere in macOS/Linux, use ln -sf /full_path/tagui/src/tagui /usr/local/bin/tagui to create symbolic link. to run tagui from anywhere in Windows, add tagui/src [folder to path](http://lmgtfy.com/?q=add+to+path+in+windows). then tagui will be accessible from any folder.
+Tip - to run tagui from anywhere in macOS/Linux, use ln -sf /full_path/tagui/src/tagui /usr/local/bin/tagui to create symbolic link. to run tagui from anywhere in Windows, add tagui/src [folder to path](http://lmgtfy.com/?q=add+to+path+in+windows). then tagui will be accessible from any folder. if you have issue running visible automation using Firefox/SlimerJS [check this setting](https://docs.slimerjs.org/current/installation.html#using-unstable-version-or-very-old-versions-of-firefox).
+
+<details>
+  <summary>
+    Click to show the command line options supported by TagUI and their purposes
+  </summary>
+  
+  Option|Purpose
+  :----:|:------
+  IMPORTANT|SAVE YOUR WORK BEFORE USING CHROME OR HEADLESS, TAGUI WILL RESTART CHROME
+  headless|run on invisible Chrome web browser instead of default PhantomJS (first install [Chrome](https://www.google.com/chrome/))
+  chrome|run on visible Chrome web browser instead of invisible PhantomJS (first install Chrome)
+  firefox|run on visible Firefox web browser instead of invisible browser (first install [Firefox](https://www.mozilla.org/en-US/firefox/new/))
+  upload|upload automation flow and result to [hastebin.com](https://hastebin.com) (expires 30 days after last view)
+  report|web report for sharing of run results on webserver (default is only a text log file)
+  debug|show run-time backend messages from PhantomJS for detailed tracing and logging
+  quiet|run without output except for explicit output (echo / show / check / errors etc)
+  speed|skip 3-second delay between datatable iterations (and skip restarting of Chrome)
+  test|testing with check step test assertions for CI/CD integration (output XUnit XML file)
+  baseline|output execution log and relative-path output files to a separate baseline directory
+  input(s)|add your own parameter(s) to be used in your automation flow as variables p1 to p9
+
+</details>
 
 ### CHROME EXTENSION (10 minutes)
 Download from [Chrome Web Store](https://chrome.google.com/webstore/detail/tagui-web-automation/egdllmehgfgjebhlkjmcnhiocfcidnjk/) to use TagUI Chrome web browser extension for recording automation flows. TagUI Chrome extension is based on [Resurrectio tool](https://github.com/ebrehault/resurrectio) and records steps such as page navigation, clicking web elements and entering information. To start recording automation flows, click TagUI icon on your Chrome toolbar. Right-click for shortcuts to some TagUI steps, such as capturing webpage screenshot or to note down element identifier.
@@ -78,16 +100,106 @@ Flow Sample |Purpose
 # [Using it (flexible)](https://github.com/kelaberetiv/TagUI#to-use)
 In this section, we'll spend some time exploring a particular feature of TagUI that you'll like to try out.
 
-### OPTION 1 - VISUAL AUTOMATION (15 minutes)
+### OPTION 1 - STEPS DESCRIPTION (15 minutes)
+- TagUI auto-waits for a webpage element to appear and interacts with it as soon as it appears
+- Element identifier can be auto-recorded using TagUI Chrome extension, or [found from web browser](https://help.surveygizmo.com/help/how-to-find-element-ids-to-use-with-javascript)
+- Identifiers help to pinpoint which webpage elements you want to interact with ([examples in flow samples](https://github.com/tebelorg/TagUI#flow-samples))
+- TagUI auto-selects provided identifier in this order - xpath, css, id, name, class, title, aria-label, text(), href
+
+<details>
+  <summary>
+    Click to show the steps that can be used in TagUI automation flows and what the steps are used for
+  </summary>
+  
+  Basic Step|Parameters (separator in bold)|Purpose
+  :---------|:-----------------------------|:------
+  http(s)://|just enter full url of webpage ('+variable+' for variable)|go to specified webpage
+  tap / click|element to click|click on an element
+  hover / move|element to hover|move cursor to element
+  type / enter|element ***as*** text ([enter] = enter, [clear] = clear field)|enter element as text
+  select / choose|element to select ***as*** option value ([clear] = clear selection)|choose dropdown option
+  read / fetch|element to read (page = webpage) ***to*** variable name|fetch element text to variable
+  show / print|element to read (page = webpage, ie raw html) |print element text to output
+  save|element (page = webpage) ***to*** optional filename|save element text to file
+  load|filename ***to*** variable name|load file content to variable
+  echo|text (in quotation marks) and variables|print text/variables to output
+  dump|text and variables ***to*** optional filename|save text/variables to file
+  write|text and variables ***to*** optional filename|append text/variables to file
+  snap|element (page = webpage) ***to*** optional filename|save screenshot to file
+  snap (pdf)|page ***to*** filename.pdf (headless Chrome / PhantomJS)|save webpage to basic pdf
+  table|element (XPath selector only) ***to*** optional filename.csv|save basic html table to csv
+
+  Tip - to use variables where text is expected, '+variable+' can be used. xpath is an expressive way to identify web elements. if you know xpath and use xpath for element identifier, use double quotes for text //\*[@title="Login"]
+
+  Pro Step|Parameters (separator in bold)|Purpose
+  :-------|:-----------------------------|:------
+  wait|optional time in seconds (default is 5 seconds)|explicitly wait for some time
+  live|try steps or code interactively in Chrome / PhantomJS|enter live mode ([Firefox not yet](https://github.com/laurentj/slimerjs/issues/639))
+  check|condition **&#124;** text if true **&#124;** text if false (text in quotes)|check condition and print result
+  upload|element (CSS selector only) ***as*** filename to upload|upload file to website
+  download|url to download ***to*** filename to save|download from url to file
+  receive|url keyword to watch ***to*** filename to save|receive resource to file
+  frame|frame name **&#124;** subframe name if any|next step or block in frame/subframe
+  popup|url keyword of popup window to look for|next step or block in popup window
+  { and }|use { to start block and } to end block (on new line)|define block of steps and code
+  api|full url (including parameters) of api call|call api & save response to api_result
+  run|OS shell command including parameters|run OS command & save to run_result
+  dom|javascript code for document object model|run code in dom & save to dom_result
+  js|javascript statements (skip auto-detection)|treat as JS code explicitly
+  r|R statements for big data and machine learning|run R statements & save to r_result
+  py|python code for big data and machine learning|run python code & save to py_result
+  vision|custom visual automation commands|run custom sikuli commands
+  timeout|time in seconds before step errors out|change auto-wait timeout
+  variable_name| = value (for text, put in quotes, use + to concat)|define variable variable_name
+  // (on new line)|user comments (ignored during execution)|add user comments
+
+  Tip - for headless and visible Chrome, file downloads can be done using normal webpage interaction or specifying the URL as a navigation flow step. for Firefox and PhantomJS, the download and receive step can be used. as TagUI default execution context is local, to run javascript on webpage dom (eg document.querySelector) use dom step. set dom_json variable to pass a variable for use in dom step. or dom_json = {tmp_number: phone, tmp_text: name} to pass multiple variables for use in dom step (dom_json.tmp_number and dom_json.tmp_text)
+
+</details>
+
+### OPTION 2 - NATIVE LANGUAGES (15 minutes)
+To run TagUI flows in native languages or output flow execution in other languages ([see demo run](https://github.com/tebelorg/TagUI/issues/68#issuecomment-344380657))
+1. set your default flow language with [tagui_language variable](https://github.com/tebelorg/TagUI/blob/master/src/tagui_config.txt) in tagui_config.txt
+2. write automation flow in native language base on [language definition .csv files](https://github.com/tebelorg/TagUI/tree/master/src/languages)
+3. optionally set tagui_language in flow to any other languages as output language
+
+<details>
+  <summary>
+    Click to show the 20+ human languages supported by TagUI and how to self-build language definitions
+  </summary>
+  
+  Tip - as Windows Unicode support is not as straightforward as macOS/Linux, doing this in Windows may require changing system locale, using chcp command, and selecting a font to display native language correctly ([more info](http://www.walkernews.net/2013/05/19/how-to-get-windows-command-prompt-displays-chinese-characters/))
+  
+  TagUI language engine supports over 20 languages and can be modified or extended easily by users to improve accuracy or add more languages. The languages are Bengali, Chinese, English, French, German, Hindi, Hungarian, Indonesian, Italian, Japanese, Korean, Polish, Portuguese, Romanian, Russian, Serbian, Spanish, Tagalog, Tamil, Thai, Vietnamese. This starting set is partly chosen base on the [list of most commonly used languages](https://www.babbel.com/en/magazine/the-10-most-spoken-languages-in-the-world), partly from the countries around where I'm from (Singapore), and partly from countries with a lot of developers.
+
+  If your native language is not in the above list, you can also automate building a new native language definition by using this language [build automation flow](https://github.com/tebelorg/TagUI/blob/master/src/languages/build) (src/languages/build) that self-builds the vocabulary set using Google Translate. To do that, update [build.csv](https://github.com/tebelorg/TagUI/blob/master/src/languages/build.csv) with the languages that you want to build and run `tagui build using chrome` in src/languages folder. Use quiet option to hide the verbose automation output. The generated files are named as their 2-character language codes to prevent overwriting existing language definitions by accident. To use the generated .csv files, rename them to their full language names. See [full list of languages possible](https://cloud.google.com/translate/docs/languages) to be generated by Google Translate.
+
+  Most of the language definitions are automatically self-built using Google Translate (except english.csv and chinese.csv), and would be wrong without understanding vocabulary used in UI interaction context. Native language users can update the language definition csv themselves and are welcome to submit PRs with correct words to be used. Some languages are very different from English structure (for eg, written from right to left, different order of adjective and noun) and would be impossible to use correctly in TagUI.
+
+</details>
+
+### OPTION 3 - VISUAL AUTOMATION (15 minutes)
 TagUI has built-in integration with [Sikuli (base on OpenCV)](http://sikulix.com) to allow identifying web elements and desktop user interface elements for interaction. Steps that support visual automation are tap / click, hover / move, type / enter, select / choose, read / fetch, show / print, save, snap. Simply specify an image filename (.png or .bmp format) of what to look for visually, in place of the element identifier, to use visual automation alongside your usual automation steps.
 
-Sikuli is excluded from TagUI packaged installation due to complex dependencies that are handled by its installer. [Download Sikuli](http://sikulix.com/quickstart/) to tagui/src/tagui.sikuli folder and setup (choose option 1 - Pack1 and option 3 Tesseract based OCR). Relative paths are supported for image filenames (eg pc.png, images/button.bmp). A screen (real or Xvfb) is needed for visual automation. [Tesseract OCR](https://github.com/tesseract-ocr/tesseract) (optical character recognition) is used for visually retrieving text.
+<details>
+  <summary>
+    Click to show where to download and install Sikuli, and a demo GIF of visual automation in action
+  </summary>
+  
+  Sikuli is excluded from TagUI packaged installation due to complex dependencies that are handled by its installer. [Download Sikuli](http://sikulix.com/quickstart/) to tagui/src/tagui.sikuli folder and setup (choose option 1 - Pack1 and option 3 Tesseract based OCR). Relative paths are supported for image filenames (eg pc.png, images/button.bmp). A screen (real or Xvfb) is needed for visual automation. [Tesseract OCR](https://github.com/tesseract-ocr/tesseract) (optical character recognition) is used for visually retrieving text.
 
-![Sample Visual Automation](https://raw.githubusercontent.com/tebelorg/Tump/master/visual_flow.gif)
+  ![Sample Visual Automation](https://raw.githubusercontent.com/tebelorg/Tump/master/visual_flow.gif)
 
-### OPTION 2 - R INTEGRATION (15 minutes)
+</details>
+
+### OPTION 4 - R INTEGRATION (15 minutes)
 TagUI has built-in integration with R - an open-source software environment for statistical computing and graphics. R can be used for big data and machine learning. The r step can be used to run commands in R and retrieve the output of those commands. To use R integration in TagUI, first [download R software for your OS](https://www.r-project.org/).
 
+<details>
+  <summary>
+    Click to show how to use r step in your automation flow to send and receive data from R frameworks
+  </summary>
+  
 In your automation flow, use the r step followed by the R commands to be executed, separated by `;`. You can then use the `cat()` command in R to output the result you want to be accessible in your automation flow as `r_result` variable. For a super basic example, below steps in your TagUI automation flow will output 3. If the result is JSON data, the JSON object `r_json` will be created for easy access to JSON data elements. If not, `r_json` will be null.
 
 ```
@@ -99,39 +211,41 @@ echo r_result
 
 You can also use the `source()` command in R to run R scripts. For examples of using R for machine learning, check out this [essentials of machine learning algorithms](https://www.analyticsvidhya.com/blog/2017/09/common-machine-learning-algorithms/) article or this [guerilla guide to machine learning](https://www.kdnuggets.com/2017/05/guerrilla-guide-machine-learning-r.html) video series.
 
-### OPTION 3 - PYTHON INTEGRATION (15 minutes)
+</details>
+
+### OPTION 5 - PYTHON INTEGRATION (15 minutes)
 TagUI has built-in integration with Python v2.7 - a programming language with many popular frameworks for big data and machine learning. The py step can be used to run commands in Python and retrieve the output of those commands. To use Python integration in TagUI, first [download Python for your OS](https://www.python.org/). macOS and Linux normally come pre-installed with Python. Note that Python v3 is not backward-compatible with Python v2.7, the current and more widely used version.
 
-In your automation flow, use the py step followed by the Python commands to be executed, separated by `;`. You can then use the `print` command in Python to output the result you want to be accessible in your automation flow as `py_result` variable. For a super basic example, below steps in your TagUI automation flow will output 3. If the result is JSON data, the JSON object `py_json` will be created for easy access to JSON data elements. If not, `py_json` will be null.
+<details>
+  <summary>
+    Click to show how to use py step in your automation flow to send and receive data from Python frameworks
+  </summary>
 
-```
-py a=1;b=2
-py c=a+b
-py print c
-echo py_result
-```
-You can also use the `execfile()` command in Python to run Python scripts. For examples of using Python for machine learning, check out this [essentials of machine learning algorithms](https://www.analyticsvidhya.com/blog/2017/09/common-machine-learning-algorithms/) article or this article on [Python deep learning frameworks](https://www.kdnuggets.com/2017/02/python-deep-learning-frameworks-overview.html).
+  In your automation flow, use the py step followed by the Python commands to be executed, separated by `;`. You can then use the `print` command in Python to output the result you want to be accessible in your automation flow as `py_result` variable. For a super basic example, below steps in your TagUI automation flow will output 3. If the result is JSON data, the JSON object `py_json` will be created for easy access to JSON data elements. If not, `py_json` will be null.
 
-### OPTION 4 - NATIVE LANGUAGES (15 minutes)
-To run TagUI flows in native languages or output flow execution in other languages ([see demo run](https://github.com/tebelorg/TagUI/issues/68#issuecomment-344380657))
-1. set your default flow language with [tagui_language variable](https://github.com/tebelorg/TagUI/blob/master/src/tagui_config.txt) in tagui_config.txt
-2. write automation flow in native language base on [language definition .csv files](https://github.com/tebelorg/TagUI/tree/master/src/languages)
-3. optionally set tagui_language in flow to any other languages as output language
+  ```
+  py a=1;b=2
+  py c=a+b
+  py print c
+  echo py_result
+  ```
+  You can also use the `execfile()` command in Python to run Python scripts. For examples of using Python for machine learning, check out this [essentials of machine learning algorithms](https://www.analyticsvidhya.com/blog/2017/09/common-machine-learning-algorithms/) article or this article on [Python deep learning frameworks](https://www.kdnuggets.com/2017/02/python-deep-learning-frameworks-overview.html).
+  
+</details>
 
-Tip - as Windows Unicode support is not as straightforward as macOS/Linux, doing this in Windows may require changing system locale, using chcp command, and selecting a font to display native language correctly ([more info](http://www.walkernews.net/2013/05/19/how-to-get-windows-command-prompt-displays-chinese-characters/))
-
-TagUI language engine supports over 20 languages and can be modified or extended easily by users to improve accuracy or add more languages. The languages are Bengali, Chinese, English, French, German, Hindi, Hungarian, Indonesian, Italian, Japanese, Korean, Polish, Portuguese, Romanian, Russian, Serbian, Spanish, Tagalog, Tamil, Thai, Vietnamese. This starting set is partly chosen base on the [list of most commonly used languages](https://www.babbel.com/en/magazine/the-10-most-spoken-languages-in-the-world), partly from the countries around where I'm from (Singapore), and partly from countries with a lot of developers.
-
-If your native language is not in the above list, you can also automate building a new native language definition by using this language [build automation flow](https://github.com/tebelorg/TagUI/blob/master/src/languages/build) (src/languages/build) that self-builds the vocabulary set using Google Translate. To do that, update [build.csv](https://github.com/tebelorg/TagUI/blob/master/src/languages/build.csv) with the languages that you want to build and run `tagui build using chrome` in src/languages folder. Use quiet option to hide the verbose automation output. The generated files are named as their 2-character language codes to prevent overwriting existing language definitions by accident. To use the generated .csv files, rename them to their full language names. See [full list of languages possible](https://cloud.google.com/translate/docs/languages) to be generated by Google Translate.
-
-Most of the language definitions are automatically self-built using Google Translate (except english.csv and chinese.csv), and would be wrong without understanding vocabulary used in UI interaction context. Native language users can update the language definition csv themselves and are welcome to submit PRs with correct words to be used. Some languages are very different from English structure (for eg, written from right to left, different order of adjective and noun) and would be impossible to use correctly in TagUI.
-
-### OPTION 5 - CLI ASSISTANT (15 minutes)
+### OPTION 6 - CLI ASSISTANT (15 minutes)
 TagUI scripts are already in natural-language-like syntax to convert to JavaScript code. What's even better is having natural-language-like syntax on the command line. Instead of typing `tagui download_bank_report june creditcard` to run the automation flow download_bank_report with parameters june creditcard, you can type `erina download my june creditcard bank report`. This may be more intuitive than recalling which automation filename you saved to run. For a demo of the CLI (command line interface) assistant in action, [see this video](https://www.youtube.com/watch?v=Sm4WNQ89gRA).
 
-The commands erina (macOS/Linux) and erina.cmd (Windows) can be renamed to some other name you like. The commands can be set up in the same way as the tagui / tagui.cmd above to be accessible from any folder. The command basically interprets this general syntax `erina single-word-action fillers options/parameters fillers single-or-multi-word-context` to call run the corresponding automation flow `action_context` with `options/parameters`.
+<details>
+  <summary>
+    Click to show details on how you can rename your CLI assistant and the syntax used to invoke automations
+  </summary>
+  
+  The commands erina (macOS/Linux) and erina.cmd (Windows) can be renamed to some other name you like. The commands can be set up in the same way as the tagui / tagui.cmd above to be accessible from any folder. The command basically interprets this general syntax `erina single-word-action fillers options/parameters fillers single-or-multi-word-context` to call run the corresponding automation flow `action_context` with `options/parameters`.
 
-Also, adding `using chrome` / `using headless` / `using firefox` at the end will let it run using the respective browsers. The default location where automation flows are searched for is in tagui/flows folder and can be changed in tagui_helper.php. Filler words (is, are, was, were, my, me) are ignored as they don't convey important information ([more design info](https://github.com/tebelorg/TagUI/issues/44#issuecomment-321108786)).
+  Also, adding `using chrome` / `using headless` / `using firefox` at the end will let it run using the respective browsers. The default location where automation flows are searched for is in tagui/flows folder and can be changed in tagui_helper.php. Filler words (is, are, was, were, my, me) are ignored as they don't convey important information ([more design info](https://github.com/tebelorg/TagUI/issues/44#issuecomment-321108786)).
+
+</details>
 
 # [Scripting Reference](https://github.com/kelaberetiv/TagUI#cheat-sheet)
 Click above link to see the list of TagUI steps and other advanced features.
