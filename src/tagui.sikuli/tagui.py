@@ -126,7 +126,7 @@ def snap_intent ( raw_intent ):
 def vision_intent ( raw_intent ):
 	params = (raw_intent + ' ')[1+(raw_intent + ' ').find(' '):].strip()
 	print '[tagui] ACTION - ' + params
-	exec(params)
+	exec(params,globals())
 	return 1
 
 # function to interpret input intent
