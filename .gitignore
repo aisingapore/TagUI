@@ -24,6 +24,7 @@
 # exclude translation temp build files
 /src/languages/build.js
 /src/languages/build.log
+/src/languages/build.raw
 
 # exclude translation engine log file
 /src/translate.log

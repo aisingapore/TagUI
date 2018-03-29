@@ -14,6 +14,8 @@ Package|[unzip and run](https://raw.githubusercontent.com/tebelorg/Tump/master/T
 
 Potential exceptions - On some Windows computers, if you see 'MSVCR110.dll is missing' error, install [this from Microsoft website](https://www.microsoft.com/en-us/download/details.aspx?id=30679) (choose vcredist_x86.exe) - this file is required to run the PHP engine. On some newer macOS versions, if you get a 'dyld: Library not loaded' error, [install OpenSSL in this way](https://github.com/kelaberetiv/TagUI/issues/86#issuecomment-372045221). For some flavours of Linux (Ubuntu for example), which do not have PHP pre-installed, google how to install PHP accordingly (Ubuntu for example, apt-get install php).
 
+Optional - configure web browser settings in tagui_config.txt, such as browser resolution, step timeout of 10s etc
+
 ![TagUI Flowchart](https://raw.githubusercontent.com/tebelorg/TagUI/master/src/media/flowchart.png)
 
 # [Using it (guided)](https://github.com/kelaberetiv/TagUI#to-use)
@@ -24,7 +26,7 @@ In this section, we'll have a guided walkthrough on running TagUI, using its Chr
 ./tagui flow_filename option(s) for macOS/Linux, tagui flow_filename option(s) for Windows
 ```
 - Flow filename (and its .csv) can be a local file or the URL of an online file
-- Automation flow filename can have no extension, .gui or .txt file extension
+- Automation flow filename can have no extension, .txt or .js or .tagui extension
 - Objects, keywords, datatables can be defined in flow_filename.csv (optional)
 
 **Windows** - unzip the tagui folder to c:\\. Open command prompt with Start Menu -> Run -> cmd and enter the following

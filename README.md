@@ -12,8 +12,8 @@
 - visual automation of websites and desktop
 - write in 20+ human languages & JavaScript
 - Chrome extension for recording web actions
-- R & Python integration for big data / AI / ML / DL
-- CLI, REST API, advanced API calls, all covered
+- R & Python integration for big data / AI / ML
+- CLI, REST API, advanced API calls covered
 
 # Why This
 The goal of UI (user interface) automation is to reproduce cognitive interactions that you have with websites or your desktop, so that your computer can do it for you, base on your schedule or conditions. TagUI helps you rapidly automate your repetitive or time-critical tasks - use cases include process automation, data acquisition and testing of web apps.
@@ -50,8 +50,6 @@ download https://admin.typeform.com/xxx to report.csv
 # Set Up
 TagUI is in v3.5 - it unzips and runs on macOS, Linux, Windows ([link to release notes](https://github.com/kelaberetiv/TagUI/releases))
 
-***Note - TagUI packaged installation is in the process of being updated from v3.1 to v3.5.***
-
 Tip - for [cutting edge](https://github.com/kelaberetiv/TagUI/compare/v3.5.0...master) version, download [from here](https://github.com/kelaberetiv/TagUI/archive/master.zip) to overwrite your packaged installation
 
 ### PACKAGED INSTALLATION
@@ -61,17 +59,10 @@ Platform|macOS|Linux|Windows|Node.js (macOS/Linux)
 :------:|:---:|:---:|:-----:|:-------------------:
 Package|[unzip and run](https://raw.githubusercontent.com/tebelorg/Tump/master/TagUI_macOS.zip)|[unzip and run](https://raw.githubusercontent.com/tebelorg/Tump/master/TagUI_Linux.zip)|[unzip and run](https://raw.githubusercontent.com/tebelorg/Tump/master/TagUI_Windows.zip)|[npm install tagui](https://www.npmjs.com/package/tagui)
 
+Potential exceptions - On some Windows computers, if you see 'MSVCR110.dll is missing' error, install [this from Microsoft website](https://www.microsoft.com/en-us/download/details.aspx?id=30679) (choose vcredist_x86.exe) - this file is required to run the PHP engine. On some newer macOS versions, if you get a 'dyld: Library not loaded' error, [install OpenSSL in this way](https://github.com/kelaberetiv/TagUI/issues/86#issuecomment-372045221). For some flavours of Linux (Ubuntu for example), which do not have PHP pre-installed, google how to install PHP accordingly (Ubuntu for example, apt-get install php).
+
 Optional - configure web browser settings in tagui_config.txt, such as browser resolution, step timeout of 10s etc
-
-<details>
-  <summary>
-    Click to show potential exceptions that can happen in some environments and their solutions
-  </summary>
-  
-  On some Windows computers, if you see 'MSVCR110.dll is missing' error, install [this from Microsoft website](https://www.microsoft.com/en-us/download/details.aspx?id=30679) (choose vcredist_x86.exe) - this file is required to run the PHP engine. On some newer macOS versions, if you get a 'dyld: Library not loaded' error, [install OpenSSL in this way](https://github.com/kelaberetiv/TagUI/issues/86#issuecomment-372045221). For some flavours of Linux (Ubuntu for example), which do not have PHP pre-installed, google how to install PHP accordingly (Ubuntu for example, apt-get install php).
-  
-</details>
-
+ 
 ### MANUAL INSTALLATION
 <details>
   <summary>
