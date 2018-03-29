@@ -1,10 +1,11 @@
 http://tebel.org/index_mobile.php
-// automation flow files start with an URL to tell TagUI where to go
+// automation flow files usually start with an URL to tell TagUI where to go
+// files can also start with // for comments, or no URL if it's not web-related
 
 // this flow shows how to use steps popup, frame, dom, js, { and } block
 // for issues or questions, kindly feedback on GitHub or ksoh@aisingapore.org
 // see cheatsheet for steps, conditions, finding element identifiers, etc
-// https://github.com/tebelorg/TagUI#cheat-sheet
+// https://github.com/kelaberetiv/TagUI#cheat-sheet
 
 // click ABOUT footer to open new popup window
 click ABOUT
