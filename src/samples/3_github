@@ -1,10 +1,11 @@
 https://github.com/tebelorg/Tmail
-// automation flow files start with an URL to tell TagUI where to go
+// automation flow files usually start with an URL to tell TagUI where to go
+// files can also start with // for comments, or no URL if it's not web-related
 
 // this flow goes to a GitHub page and downloads the repository file
 // for issues or questions, kindly feedback on GitHub or ksoh@aisingapore.org
 // see cheatsheet for steps, conditions, finding element identifiers, etc
-// https://github.com/tebelorg/TagUI#cheat-sheet
+// https://github.com/kelaberetiv/TagUI#cheat-sheet
 
 // use read (or fetch) step to fetch webpage element text to variable
 fetch (//*[@class="numbers-summary"]/li)[5] to license_type
