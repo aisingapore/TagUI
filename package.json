@@ -1,6 +1,6 @@
 {
   "name": "tagui",
-  "version": "3.1.2",
+  "version": "3.5.5",
   "description": "General purpose tool for automating web interactions",
   "keywords": [
     "tagui"
@@ -8,17 +8,17 @@
   "bin": "./src/tagui",
   "license": "MIT",
   "author": "Tebel.Automation",
-  "homepage": "https://github.com/tebelorg/TagUI",
+  "homepage": "https://github.com/kelaberetiv/TagUI",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/tebelorg/TagUI.git"
+    "url": "git+https://github.com/kelaberetiv/TagUI.git"
   },
   "bugs": {
-    "url": "https://github.com/tebelorg/TagUI/issues"
+    "url": "https://github.com/kelaberetiv/TagUI/issues"
   },
   "dependencies": {
-    "phantomjs-prebuilt": "^2.1.14",
+    "phantomjs-prebuilt": "^2.1.16",
     "casperjs": "^1.1.4",
-    "slimerjs": "^0.10.3"
+    "slimerjs": "^1.0.0"
   }
 }

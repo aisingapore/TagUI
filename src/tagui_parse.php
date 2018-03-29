@@ -2,11 +2,11 @@
 
 /* PARSER SCRIPT FOR TAGUI FRAMEWORK ~ TEBEL.ORG */
 
-// check flow filename for .gui or .txt or no extension
+// check flow filename for .tagui or .js or .txt or no extension
 $script = $argv[1]; if ($script=="") die("ERROR - specify flow filename as first parameter\n");
 if (strpos(pathinfo($script, PATHINFO_BASENAME), '.') !== false) // check if file has extension
 if ((pathinfo($script, PATHINFO_EXTENSION)!="gui") and (pathinfo($script, PATHINFO_EXTENSION)!="txt") and (pathinfo($script, PATHINFO_EXTENSION)!="js") and (pathinfo($script, PATHINFO_EXTENSION)!="tagui"))
-die("ERROR - use .tagui .gui .txt .js or no extension for flow filename\n");
+die("ERROR - use .tagui .js .txt or no extension for flow filename\n");
 
 // make sure required files are available and can be opened
 if (!file_exists($script)) die("ERROR - cannot find " . $script . "\n");
@@ -180,7 +180,7 @@ die("ERROR - file not found for step " . trim($script_line) . "\n");
 else {$expanded_intent = ""; $temp_input_file = fopen(abs_file($params),'r'); if ($temp_input_file == false)
 die("ERROR - cannot open file for step " . trim($script_line) . "\n");
 while(!feof($temp_input_file)) {$expanded_intent .= expand_intent(fgets($temp_input_file));} fclose($temp_input_file);
-return $expanded_intent;}} else return $script_line;}
+return $expanded_intent;}} else return rtrim($script_line) . "\n";}
 
 function current_line() {return "[LINE " . $GLOBALS['line_number'] . "]";}
 function parse_intent($script_line) {$GLOBALS['line_number']++; $GLOBALS['real_line_number']++;
