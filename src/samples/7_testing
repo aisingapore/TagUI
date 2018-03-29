@@ -1,10 +1,11 @@
 https://ca.finance.yahoo.com
-// automation flow files start with an URL to tell TagUI where to go
+// automation flow files usually start with an URL to tell TagUI where to go
+// files can also start with // for comments, or no URL if it's not web-related
 
 // this flow shows how to use check step assertions for CI/CD integration
 // for issues or questions, kindly feedback on GitHub or ksoh@aisingapore.org
 // see cheatsheet for steps, conditions, finding element identifiers, etc
-// https://github.com/tebelorg/TagUI#cheat-sheet
+// https://github.com/kelaberetiv/TagUI#cheat-sheet
 
 // use check step for testing of conditions (text in quotation marks, either " or ' works)
 read search-buttons to search_button_text
