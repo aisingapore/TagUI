@@ -198,13 +198,13 @@
                 <FormatRange Bold="Yes">0,6</FormatRange>
             </Formatting>
         </Note>
-        <Note ID="21" FontSize="9.0" Position="235.077715,170.385143" Width="31.0">
+        <Note ID="21" FontSize="9.0" Position="235.0,170.0" Width="31.0">
             <Appearance>
                 <Alignment>Center</Alignment>
                 <TextColor>1.0 1.0 1.0</TextColor>
                 <Fill>0.314662 0.314653 0.314658</Fill>
             </Appearance>
-            <String>v3.1  </String>
+            <String>v3.5  </String>
             <Formatting>
                 <FormatRange Bold="Yes">0,6</FormatRange>
             </Formatting>
