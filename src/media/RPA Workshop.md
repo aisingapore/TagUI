@@ -51,7 +51,29 @@ cd /home/your_id/tagui/src
 
 Now try the same workflow with Chrome browser by putting chrome as option (eg tagui samples\1_yahoo chrome). **Be sure to save your work and close all your existing tabs as Chrome will be restarted to establishe connection with TagUI.** The automation will now run in the foreground instead, so you'll be able to see the navigation on Yahoo and DuckDuckGo websites. TagUI can also be run from desktop icons, scheduled tasks, or REST API calls.
 
-Tip - to run tagui from anywhere in macOS/Linux, use ln -sf /full_path/tagui/src/tagui /usr/local/bin/tagui to create symbolic link. to run tagui from anywhere in Windows, add tagui/src [folder to path](http://lmgtfy.com/?q=add+to+path+in+windows). then tagui will be accessible from any folder.
+Tip - to run tagui from anywhere in macOS/Linux, use ln -sf /full_path/tagui/src/tagui /usr/local/bin/tagui to create symbolic link. to run tagui from anywhere in Windows, add tagui/src [folder to path](http://lmgtfy.com/?q=add+to+path+in+windows). then tagui will be accessible from any folder. if you have issue running visible automation using Firefox/SlimerJS [check this setting](https://docs.slimerjs.org/current/installation.html#using-unstable-version-or-very-old-versions-of-firefox).
+
+<details>
+  <summary>
+    Click to show the command line options supported by TagUI and their purposes
+  </summary>
+  
+  Option|Purpose
+  :----:|:------
+  IMPORTANT|SAVE YOUR WORK BEFORE USING CHROME OR HEADLESS, TAGUI WILL RESTART CHROME
+  headless|run on invisible Chrome web browser instead of default PhantomJS (first install [Chrome](https://www.google.com/chrome/))
+  chrome|run on visible Chrome web browser instead of invisible PhantomJS (first install Chrome)
+  firefox|run on visible Firefox web browser instead of invisible browser (first install [Firefox](https://www.mozilla.org/en-US/firefox/new/))
+  upload|upload automation flow and result to [hastebin.com](https://hastebin.com) (expires 30 days after last view)
+  report|web report for sharing of run results on webserver (default is only a text log file)
+  debug|show run-time backend messages from PhantomJS for detailed tracing and logging
+  quiet|run without output except for explicit output (echo / show / check / errors etc)
+  speed|skip 3-second delay between datatable iterations (and skip restarting of Chrome)
+  test|testing with check step test assertions for CI/CD integration (output XUnit XML file)
+  baseline|output execution log and relative-path output files to a separate baseline directory
+  input(s)|add your own parameter(s) to be used in your automation flow as variables p1 to p9
+
+</details>
 
 ### CHROME EXTENSION (10 minutes)
 Download from [Chrome Web Store](https://chrome.google.com/webstore/detail/tagui-web-automation/egdllmehgfgjebhlkjmcnhiocfcidnjk/) to use TagUI Chrome web browser extension for recording automation flows. TagUI Chrome extension is based on [Resurrectio tool](https://github.com/ebrehault/resurrectio) and records steps such as page navigation, clicking web elements and entering information. To start recording automation flows, click TagUI icon on your Chrome toolbar. Right-click for shortcuts to some TagUI steps, such as capturing webpage screenshot or to note down element identifier.
