@@ -1,10 +1,11 @@
 https://vk.com/kensoh
-// automation flow files start with an URL to tell TagUI where to go
+// automation flow files usually start with an URL to tell TagUI where to go
+// files can also start with // for comments, or no URL if it's not web-related
 
 // this flow shows using repositories on Russian social media site VK.com
 // for issues or questions, kindly feedback on GitHub or ksoh@aisingapore.org
 // see cheatsheet for steps, conditions, finding element identifiers, etc
-// https://github.com/tebelorg/TagUI#cheat-sheet
+// https://github.com/kelaberetiv/TagUI#cheat-sheet
 
 // please note that in these comments, the symbol ` is replaced with '
 // otherwise TagUI will try to interpret it as repository definition
