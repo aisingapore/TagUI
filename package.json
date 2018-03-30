@@ -1,13 +1,13 @@
 {
   "name": "tagui",
-  "version": "3.5.5",
-  "description": "General purpose tool for automating web interactions",
+  "version": "3.5.6",
+  "description": "RPA / CLI tool for automating user interactions",
   "keywords": [
     "tagui"
   ],
   "bin": "./src/tagui",
   "license": "MIT",
-  "author": "Tebel.Automation",
+  "author": "AI Singapore",
   "homepage": "https://github.com/kelaberetiv/TagUI",
   "repository": {
     "type": "git",
