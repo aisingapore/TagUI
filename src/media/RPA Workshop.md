@@ -53,6 +53,8 @@ cd /home/your_id/tagui/src
 
 Now try the same workflow with Chrome browser by putting chrome as option (eg tagui samples\1_yahoo chrome). **Be sure to save your work and close all your existing tabs as Chrome will be restarted to establishe connection with TagUI.** The automation will now run in the foreground instead, so you'll be able to see the navigation on Yahoo and DuckDuckGo websites. TagUI can also be run from desktop icons, scheduled tasks, or REST API calls.
 
+Tip - chrome or headless mode on Windows may trigger false positive on Symantec software, workaround is to move curl.exe from quarantine back to tagui\src\unx folder. [More details](https://github.com/kelaberetiv/TagUI/issues/111) of issue and whitelist report raised to Symantec.
+
 <details>
   <summary>
     Click to show info on automation log files, and how to run tagui from any directory
@@ -83,6 +85,8 @@ Now try the same workflow with Chrome browser by putting chrome as option (eg ta
   test|testing with check step test assertions for CI/CD integration (output XUnit XML file)
   baseline|output execution log and relative-path output files to a separate baseline directory
   input(s)|add your own parameter(s) to be used in your automation flow as variables p1 to p9
+
+  Tip - chrome or headless mode on Windows may trigger false positive on Symantec software, workaround is to move curl.exe from quarantine back to tagui\src\unx folder. [More details](https://github.com/kelaberetiv/TagUI/issues/111) of issue and whitelist report raised to Symantec.
 
 </details>
 
