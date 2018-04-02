@@ -119,8 +119,6 @@ Optional - configure web browser settings in tagui_config.txt, such as browser r
   baseline|output execution log and relative-path output files to a separate baseline directory
   input(s)|add your own parameter(s) to be used in your automation flow as variables p1 to p9
 
-  Tip - chrome or headless mode on Windows may trigger false positive on Symantec software, workaround is to move curl.exe from quarantine back to tagui\src\unx folder. [More details](https://github.com/kelaberetiv/TagUI/issues/111) of issue and whitelist report raised to Symantec.
-
 </details>
 
 ### BY SCHEDULING
