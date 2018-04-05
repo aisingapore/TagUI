@@ -3,7 +3,7 @@ TagUI is a CLI tool for automating user interactions. This branch of automation 
 For more information on TagUI, visit its [repository page](https://github.com/kelaberetiv/TagUI). TagUI is now maintained by [AI Singapore](https://www.aisingapore.org), a government-funded initiative to build local artificial intelligence capabilities. The intention is to add AI capabilities to TagUI while keeping it open-source and free to use.
 
 # [Setup](https://github.com/kelaberetiv/TagUI#set-up)
-In this section, we'll download and install TagUI on your computer.
+*In this section, we'll download and install TagUI on your computer. For Windows, unzip the tagui folder to c:\ and for macOS, unzip the tagui folder to your desktop. For Linux, unzip the tagui folder to a convenient folder on your laptop.*
 
 ### INSTALLATION (10 minutes)
 No setup is needed, in most environments all required dependencies are packaged in.
@@ -19,7 +19,7 @@ Optional - configure web browser settings in tagui_config.txt, such as browser r
 ![TagUI Flowchart](https://raw.githubusercontent.com/tebelorg/TagUI/master/src/media/flowchart.png)
 
 # [Using it (guided)](https://github.com/kelaberetiv/TagUI#to-use)
-In this section, we'll have a guided walkthrough on running TagUI, using its Chrome extension, and some examples.
+*In this section, we'll have a guided walkthrough on running TagUI, using its Chrome extension, and some examples.*
 
 ### COMMAND LINE (10 minutes)
 ```
@@ -111,7 +111,7 @@ Flow Sample |Purpose
 [9_misc](https://github.com/tebelorg/TagUI/blob/master/src/samples/9_misc)|shows how to use steps popup, frame, dom, js, { and } block
 
 # [Using it (flexible)](https://github.com/kelaberetiv/TagUI#to-use)
-In this section, we'll spend some time exploring a particular feature of TagUI that you'll like to try out.
+*In this section, we'll spend some time exploring a particular feature of TagUI that you'll like to try out.*
 
 ### OPTION 1 - STEPS DESCRIPTION (15 minutes)
 - TagUI auto-waits for a webpage element to appear and interacts with it as soon as it appears
@@ -316,7 +316,7 @@ TagUI scripts are already in natural-language-like syntax to convert to JavaScri
 </details>
 
 # [Scripting Reference](https://github.com/kelaberetiv/TagUI#cheat-sheet)
-Click above link to see the list of TagUI steps and other advanced features.
+*Click above link to see the list of TagUI steps and other advanced features.*
 
 # [Developers Reference](https://github.com/kelaberetiv/TagUI#developers-reference)
-Click above link to see information on APIs and summary of various TagUI files.
+*Click above link to see information on APIs and summary of various TagUI files.*
