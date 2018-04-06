@@ -173,7 +173,7 @@ $script_content = str_replace("test.","// test.",$script_content); file_put_cont
 
 function expand_intent($script_line) { // function to handle calling of other TagUI automation scripts for reusability
 if ((strpos(strtolower(trim($script_line)),'tagui ') === 0) or (strtolower(trim($script_line)) == 'tagui')) {
-$params = trim(substr($script_line." ",1+strpos($script_line." "," "))); if ($params == "")
+$params = trim(substr(trim($script_line)." ",1+strpos(trim($script_line)." "," "))); if ($params == "")
 die("ERROR - filename missing for step " . trim($script_line) . "\n");
 else if (!file_exists(abs_file($params)))
 die("ERROR - file not found for step " . trim($script_line) . "\n");
