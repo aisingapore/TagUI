@@ -20,7 +20,8 @@ $repo_count = 0; if (file_exists($script . '.csv')) { // load repository file fo
 $repo_file = fopen($script . '.csv','r') or die("ERROR - cannot open " . $script . '.csv' . "\n");
 while (!feof($repo_file)) {$repo_data[$repo_count] = fgetcsv($repo_file);
 if (count($repo_data[$repo_count]) == 0) die("ERROR - empty row found in " . $script . '.csv' . "\n");
-$repo_count++;} fclose($repo_file); $repo_count-=2;} //-1 for header, -1 for EOF
+$repo_count++;} fclose($repo_file); $repo_count-=1; //-1 for header, for EOF need to check flexibly using below line
+if (count($repo_data[$repo_count]) == 1) $repo_count-=1;} //-1 for EOF (Windows files don't end with newline character)
 
 $tagui_web_browser = "this"; // set the web browser to be used base on tagui_web_browser environment variable
 if ((getenv('tagui_web_browser')=='headless') or (getenv('tagui_web_browser')=='chrome')) $tagui_web_browser = 'chrome';
