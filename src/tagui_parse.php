@@ -668,11 +668,12 @@ $params = trim(substr($raw_intent." ",1+strpos($raw_intent." "," ")));
 if ($GLOBALS['inside_frame']!=0) echo "ERROR - " . current_line() . " invalid after frame - " . $raw_intent . "\n";
 else if ($GLOBALS['inside_popup']!=0) echo "ERROR - " . current_line() . " invalid after popup - " . $raw_intent . "\n";
 else if ($params == "") echo "ERROR - " . current_line() . " command to run missing for " . $raw_intent . "\n"; else
-return "techo('".$raw_intent."');});\n\ncasper.waitForExec('".$params."', null, function(response) {run_result = '';\n" .
+return "techo('".$raw_intent."');});\n\ncasper.then(function(){\n".
+"casper.waitForExec('".$params."', null, function(response) {run_result = '';\n" .
 "run_result = (response.data.stdout.trim() || response.data.stderr.trim()); " .
 "run_result = run_result.replace(/\\r\\n/g,'\\n'); run_json = response.data;}, function() {\n" .
-"this.echo('ERROR - command to run exceeded '+(casper.options.waitTimeout/1000).toFixed(1)+'s timeout').exit();});\n\n" .
-"casper.then(function() {\n";}
+"this.echo('ERROR - command to run exceeded '+(casper.options.waitTimeout/1000).toFixed(1)+'s timeout').exit();},".
+"casper.options.waitTimeout);});\n\n" . "casper.then(function() {\n";}
 
 function dom_intent($raw_intent) {$twb = $GLOBALS['tagui_web_browser'];
 if (strtolower($raw_intent) == "dom begin") {$GLOBALS['inside_dom_block'] = 1; return "";}
