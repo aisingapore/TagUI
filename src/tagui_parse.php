@@ -606,6 +606,8 @@ function wait_intent($raw_intent) { // wait is a new block, invalid to use after
 $params = trim(substr($raw_intent." ",1+strpos($raw_intent." "," "))); if ($params == "") $params = "5"; 
 if ($GLOBALS['inside_frame']!=0) echo "ERROR - " . current_line() . " invalid after frame - " . $raw_intent . "\n";
 else if ($GLOBALS['inside_popup']!=0) echo "ERROR - " . current_line() . " invalid after popup - " . $raw_intent . "\n";
+else if (strpos($params,"'+")!==false and strpos($params,"+'")!==false) // handling for dynamic time
+return "techo('".$raw_intent."');});\n\ncasper.wait((parseFloat('".$params."')*1000), function() {\n";
 else return "techo('".$raw_intent."');});\n\ncasper.wait(" . (floatval($params)*1000) . ", function() {\n";}
 
 function live_intent($raw_intent) { // live mode to interactively test tagui steps and js code (casperjs context)
