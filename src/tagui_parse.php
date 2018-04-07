@@ -334,6 +334,8 @@ function abs_file($filename) { // helper function to return absolute filename
 if ($filename == "") return ""; $flow_script = $GLOBALS['script']; // get flow filename
 if (substr($filename,0,1)=="/") return $filename; // return mac/linux absolute filename directly
 if (substr($filename,1,1)==":") return str_replace("\\","/",$filename); // return windows absolute filename directly
+if (strpos($filename,"'+")!==false and strpos($filename,"+'")!==false)
+return "'+abs_file('" . $filename . "')+'"; // throw to runtime abs_file function if dynamic filename is given
 $flow_path = str_replace("\\","/",dirname($flow_script)); // otherwise use flow script path to build absolute filename
 // above str_replace is because casperjs/phantomjs do not seem to support \ for windows paths, replace with / to work
 if (strpos($flow_path,"/")!==false) return $flow_path . '/' . $filename; else return $flow_path . '\\' . $filename;} 
