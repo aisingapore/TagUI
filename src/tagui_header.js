@@ -1085,7 +1085,7 @@ casper.waitForExec = function (command, parameters, then, onTimeout, timeout) {
 
     // add use of a escape char like '\'??? (e.g.: '/bin/bash -c {\ ls\ /\ &&\ ls\ /home\ }' becomes ['/bin/bash', '-c', '{ ls / && ls /home }']
     command = command.split(' ');
-    parameters = command.splice(-1,(command.length-1)).concat(parameters);
+    parameters = command.splice(1,(command.length-1)).concat(parameters);
     command = command[0];
     var fs = require('fs');
     if (!fs.isExecutable(command)) {
