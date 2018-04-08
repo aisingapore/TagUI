@@ -48,11 +48,28 @@ dom document.querySelector('#header p').focus()
 
 // by using return in the step, result can be returned to dom_result variable
 dom return document.querySelector('#header p').innerText
-echo 'dom_result - ' dom_result
+echo 'dom_result from 1 JavaScript statement - ' dom_result
 
 // multiple lines can be combined into a single statement before returning value
 dom document.querySelector('#header p').blur(); return document.querySelector('#header p').innerText
-echo 'dom_result - ' dom_result
+echo 'dom_result from multiple statements - ' dom_result
+
+// passing 1 or more variables to dom step can be done using dom_json variable
+// this is used instead of '+variable+' due to dom communication constraints
+// example of passing 1 variable to dom step for use in dom
+dom_json = '#header p'
+dom return document.querySelector(dom_json).innerText
+echo 'dom_result using 1 dom_json variable - ' dom_result
+
+// example of passing multiple variables to dom step for use in dom
+element1 = '#header p'
+element2 = '#footer'
+// JavaScript syntax to create object and assign variables to children
+dom_json = {element1: element1, element2: element2}
+dom return document.querySelector(dom_json.element1).innerText
+echo 'dom_result using multiple dom_json variables - ' dom_result
+dom return document.querySelector(dom_json.element2).innerText
+echo 'dom_result using multiple dom_json variables - ' dom_result
 echo ''
 
 // TagUI recognizes lines of JavaScript code automatically
