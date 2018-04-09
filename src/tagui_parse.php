@@ -222,6 +222,7 @@ case "snap": return snap_intent($script_line); break;
 case "table": return table_intent($script_line); break;
 case "wait": return wait_intent($script_line); break;
 case "live": return live_intent($script_line); break;
+case "ask": return ask_intent($script_line); break;
 case "check": return check_intent($script_line); break;
 case "test": return test_intent($script_line); break;
 case "frame": return frame_intent($script_line); break;
@@ -263,6 +264,7 @@ if (substr($lc_raw_intent,0,5)=="snap ") return "snap";
 if (substr($lc_raw_intent,0,6)=="table ") return "table";
 if (substr($lc_raw_intent,0,5)=="wait ") return "wait";
 if (substr($lc_raw_intent,0,5)=="live ") return "live";
+if (substr($lc_raw_intent,0,4)=="ask ") return "ask";
 if (substr($lc_raw_intent,0,6)=="check ") {$GLOBALS['test_automation']++; return "check";}
 if (substr($lc_raw_intent,0,5)=="test ") return "test";
 if (substr($lc_raw_intent,0,6)=="frame ") return "frame";
@@ -295,6 +297,7 @@ if ($lc_raw_intent=="snap") return "snap";
 if ($lc_raw_intent=="table") return "table";
 if ($lc_raw_intent=="wait") return "wait";
 if ($lc_raw_intent=="live") return "live";
+if ($lc_raw_intent=="ask") return "ask";
 if ($lc_raw_intent=="check") {$GLOBALS['test_automation']++; return "check";}
 if ($lc_raw_intent=="test") return "test";
 if ($lc_raw_intent=="frame") return "frame";
@@ -614,6 +617,16 @@ function live_intent($raw_intent) { // live mode to interactively test tagui ste
 return "{var live_input = ''; var sys = require('system'); sys.stdout.write('LIVE MODE - type done to quit\\n \\b');\n".
 "while (true) {live_input = sys.stdin.readLine(); // evaluate input in casperjs context until done is entered\n".
 "if (live_input.indexOf('done') == 0) break; eval(tagui_parse(live_input));}}".end_fi()."\n";}
+
+function ask_intent($raw_intent) { // ask user for input during automation and save to ask_result variable
+$raw_intent = str_replace("\'","'",$raw_intent); $raw_intent = str_replace("'","\'",$raw_intent);
+$params = trim(substr($raw_intent." ",1+strpos($raw_intent." "," ")));
+if ($params == "") echo "ERROR - " . current_line() . " prompt missing for " . $raw_intent . "\n";
+else if (getenv('tagui_web_browser')=='chrome') { // show a popup window if running on visible chrome mode
+return "{ask_result = ''; ask_result = chrome.evaluate(function() {return prompt('".$params."');});\n".
+"if (ask_result == null) ask_result = '';}".end_fi()."\n";}
+else return "{ask_result = ''; var sys = require('system'); sys.stdout.write('".$params." ');\n".
+"ask_result = sys.stdin.readLine();}".end_fi()."\n";}
 
 function check_intent($raw_intent) {
 $params = trim(substr($raw_intent." ",1+strpos($raw_intent." "," ")));

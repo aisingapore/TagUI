@@ -49,6 +49,9 @@ var r_count = 0; var py_count = 0; var sikuli_count = 0; var chrome_id = 0;
 // chrome context for frame handling and targetid for popup handling
 var chrome_context = 'document'; var chrome_targetid = '';
 
+// variable for ask step to accept user input
+var ask_result = '';
+
 // JSON variable to pass variables into browser DOM
 var dom_json = {}; var dom_result = '';
 
@@ -626,6 +629,7 @@ case 'snap': return snap_intent(live_line); break;
 case 'table': return table_intent(live_line); break;
 case 'wait': return wait_intent(live_line); break;
 case 'live': return live_intent(live_line); break;
+case 'ask': return ask_intent(live_line); break;
 case 'check': return check_intent(live_line); break;
 case 'test': return test_intent(live_line); break;
 case 'frame': return frame_intent(live_line); break;
@@ -668,6 +672,7 @@ if (lc_raw_intent.substr(0,5) == 'snap ') return 'snap';
 if (lc_raw_intent.substr(0,6) == 'table ') return 'table';
 if (lc_raw_intent.substr(0,5) == 'wait ') return 'wait';
 if (lc_raw_intent.substr(0,5) == 'live ') return 'live';
+if (lc_raw_intent.substr(0,4) == 'ask ') return 'ask';
 if (lc_raw_intent.substr(0,6) == 'check ') return 'check';
 if (lc_raw_intent.substr(0,5) == 'test ') return 'test';
 if (lc_raw_intent.substr(0,6) == 'frame ') return 'frame';
@@ -700,6 +705,7 @@ if (lc_raw_intent == 'snap') return 'snap';
 if (lc_raw_intent == 'table') return 'table';
 if (lc_raw_intent == 'wait') return 'wait';
 if (lc_raw_intent == 'live') return 'live';
+if (lc_raw_intent == 'ask') return 'ask';
 if (lc_raw_intent == 'check') return 'check';
 if (lc_raw_intent == 'test') return 'test';
 if (lc_raw_intent == 'frame') return 'frame';
@@ -961,6 +967,9 @@ return "this.echo('ERROR - waiting for some time is not relevant in live mode')"
 
 function live_intent(raw_intent) {
 return "this.echo('ERROR - you are already in live mode, type done to quit live mode')";}
+
+function ask_intent(raw_intent) {
+return "this.echo('ERROR - step is not relevant in live mode, set ask_result directly')";}
 
 function check_intent(raw_intent) {
 return "this.echo('ERROR - step not supported in live mode, there is no conditions language parser')";}
