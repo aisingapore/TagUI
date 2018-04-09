@@ -21,7 +21,7 @@ The goal of UI (user interface) automation is to reproduce cognitive interaction
 Read on for more info or jump right into the [flow samples section](https://github.com/kelaberetiv/TagUI#flow-samples) to see examples of TagUI automation in natural-language-like syntax. This is a full-feature and free open-source tool, so there's nothing to upgrade to or any paid subscription. To feedback suggestions or bugs, [raise an issue](https://github.com/kelaberetiv/TagUI/issues) or email ksoh@aisingapore.org.
 
 ### HOW IT WORKS
-TagUI converts your intentions in different human languages into lines of working JavaScript code that perform UI automation. Under the hood, it uses Chrome DevTools Protocol, Sikuli, CasperJS, PhantomJS & SlimerJS.
+TagUI converts your intentions in different human languages into lines of working JavaScript code that perform UI automation. Under the hood, it uses [Chrome DevTools Protocol](https://chromedevtools.github.io/devtools-protocol/), [Sikuli](http://sikulix.com), [CasperJS](http://casperjs.org), [PhantomJS](http://phantomjs.org) & [SlimerJS](https://slimerjs.org).
 
 ```
 https://www.typeform.com
