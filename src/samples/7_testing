@@ -65,7 +65,8 @@ wait 13.57 seconds
 
 // after the delay, negative test case to check that the quote is APPLE
 read //*[@id="quote-header-info"]//h1 to stock_quote
-check stock_quote equals to "APPLE" | 'quote is correct - ' stock_quote | 'quote is wrong - ' stock_quote
+echo 'intentional negative test case, to see if quote returned contains APPLE'
+check stock_quote contains "APPLE" | 'quote is correct - ' stock_quote | 'quote is wrong - ' stock_quote
 
 // CasperJS will output a XUnit XML, which is compatible with continuous integration tools such as Jenkins 
 // running together with the report option outputs a web version of the test execution log for easy sharing
