@@ -20,6 +20,35 @@ The goal of UI (user interface) automation is to reproduce cognitive interaction
 
 Read on for more info or jump right into the [flow samples section](https://github.com/kelaberetiv/TagUI#flow-samples) to see examples of TagUI automation in natural-language-like syntax. This is a full-feature and free open-source tool, so there's nothing to upgrade to or any paid subscription. To feedback suggestions or bugs, [raise an issue](https://github.com/kelaberetiv/TagUI/issues) or email ksoh@aisingapore.org.
 
+<details>
+  <summary>
+    Click to show differences between TagUI open-source RPA and commercial RPA software
+  </summary>
+  
+  **Key Strengths**
+  - cross-platform, works on Windows, macOS, Linux
+  - increased security as users can view source code
+  - rapid iteration cycles in improvement of features
+  - $0 to use, under Apache 2.0 open-source license
+  - easy to use, thus rapid development + deployment
+  - easy for IT policies to deploy, simply unzip and run
+  - native integration with Python and R for AI / ML / DL
+  - easy API calls to Azure / Amazon cognitive services
+
+  **Neutral Differences**
+  - scripts written in 21 human languages, not flowchart
+  - JavaScript for advanced scripting instead of C# / VB
+  - visual and OCR based automation for desktop apps
+  - open-source desktop automation integration planned
+
+  **Key Weaknesses**
+  - lack of enterprise audit, control, dashboard, reporting
+  - lack of SLA or 24/7 support team for incident-handling
+  - lack of large development teams (easily > 30 people)
+  - lack of user / developer base grown over many years
+  - lack of consultancies / partners distribution network
+</details>
+
 ### HOW IT WORKS
 TagUI converts your intentions in different human languages into lines of working JavaScript code that perform UI automation. Under the hood, it uses [Chrome DevTools Protocol](https://chromedevtools.github.io/devtools-protocol/), [Sikuli](http://sikulix.com), [CasperJS](http://casperjs.org), [PhantomJS](http://phantomjs.org) & [SlimerJS](https://slimerjs.org).
 
