@@ -1,6 +1,6 @@
 TagUI is a CLI tool for automating user interactions. This branch of automation is commercially known as RPA (robotic process automation), and primarily aims to reproduce user interactions with computer applications - for example mouse clicks and keyboard entries.
 
-For more information on TagUI, visit its [repository page](https://github.com/kelaberetiv/TagUI). TagUI is now maintained by [AI Singapore](https://www.aisingapore.org), a government-funded initiative to build local artificial intelligence capabilities. The intention is to add AI capabilities to TagUI while keeping it open-source and free to use.
+For more information on TagUI, visit its [repository page](https://github.com/kelaberetiv/TagUI). TagUI is now maintained by [AI Singapore (aisingapore.org)](https://www.aisingapore.org), a government-funded initiative to build local artificial intelligence capabilities. The intention is to add AI capabilities to TagUI while keeping it open-source and free to use.
 
 # [Setup](https://github.com/kelaberetiv/TagUI#set-up)
 *In this section, we'll download and install TagUI on your computer. For Windows, unzip the tagui folder to c:\ and for macOS, unzip the tagui folder to your desktop. For Linux, unzip the tagui folder to a convenient folder on your laptop.*
@@ -16,7 +16,7 @@ Potential exceptions - On some Windows computers, if you see 'MSVCR110.dll is mi
 
 Optional - configure web browser settings in tagui_config.txt, such as browser resolution, step timeout of 10s etc
 
-![TagUI Flowchart](https://raw.githubusercontent.com/tebelorg/TagUI/master/src/media/flowchart.png)
+![TagUI Flowchart](https://raw.githubusercontent.com/kelaberetiv/TagUI/master/src/media/flowchart.png)
 
 # [Using it (guided)](https://github.com/kelaberetiv/TagUI#to-use)
 *In this section, we'll have a guided walkthrough on running TagUI, using its Chrome extension, and some examples.*
@@ -96,19 +96,19 @@ The recording is not foolproof (for example, the underlying recording engine can
 Sample website to try out the Chrome extension - https://www.m1.com.sg/personal/mobile/plans/reserveanumber
 
 ### FLOW SAMPLES (15 minutes)
-Following automation flow samples ([tagui/src/samples folder](https://github.com/tebelorg/TagUI/tree/master/src/samples)) are included with TagUI
+Following automation flow samples ([tagui/src/samples folder](https://github.com/kelaberetiv/TagUI/tree/master/src/samples)) are included with TagUI
 
 Flow Sample |Purpose
 :-----------|:------
-[1_yahoo](https://github.com/tebelorg/TagUI/blob/master/src/samples/1_yahoo)|searches github on Yahoo and captures screenshot of results
-[2_twitter](https://github.com/tebelorg/TagUI/blob/master/src/samples/2_twitter)|goes to a Twitter page and saves some profile information
-[3_github](https://github.com/tebelorg/TagUI/blob/master/src/samples/3_github)|goes to a GitHub page and downloads the repository file
-[4_conditions](https://github.com/tebelorg/TagUI/blob/master/src/samples/4_conditions)|goes through examples of using conditions in natural language
-[5_repositories](https://github.com/tebelorg/TagUI/blob/master/src/samples/5_repositories)|shows using repositories on Russian social media site VK.com
-[6_datatables](https://github.com/tebelorg/TagUI/tree/master/src/samples/6_datatables)|set of flows uses datatables to retrieve and act on GitHub info
-[7_testing](https://github.com/tebelorg/TagUI/blob/master/src/samples/7_testing)|shows how to use check step assertions for CI/CD integration
-[8_hastebin](https://github.com/tebelorg/TagUI/blob/master/src/samples/8_hastebin)|used by upload option to upload flow result to hastebin.com
-[9_misc](https://github.com/tebelorg/TagUI/blob/master/src/samples/9_misc)|shows how to use steps popup, frame, dom, js, { and } block
+[1_yahoo](https://github.com/kelaberetiv/TagUI/blob/master/src/samples/1_yahoo)|searches github on Yahoo and captures screenshot of results
+[2_twitter](https://github.com/kelaberetiv/TagUI/blob/master/src/samples/2_twitter)|goes to a Twitter page and saves some profile information
+[3_github](https://github.com/kelaberetiv/TagUI/blob/master/src/samples/3_github)|goes to a GitHub page and downloads the repository file
+[4_conditions](https://github.com/kelaberetiv/TagUI/blob/master/src/samples/4_conditions)|goes through examples of using conditions in natural language
+[5_repositories](https://github.com/kelaberetiv/TagUI/blob/master/src/samples/5_repositories)|shows using repositories on Russian social media site VK.com
+[6_datatables](https://github.com/kelaberetiv/TagUI/tree/master/src/samples/6_datatables)|set of flows uses datatables to retrieve and act on GitHub info
+[7_testing](https://github.com/kelaberetiv/TagUI/blob/master/src/samples/7_testing)|shows how to use check step assertions for CI/CD integration
+[8_hastebin](https://github.com/kelaberetiv/TagUI/blob/master/src/samples/8_hastebin)|used by upload option to upload flow result to hastebin.com
+[9_misc](https://github.com/kelaberetiv/TagUI/blob/master/src/samples/9_misc)|shows how to use steps popup, frame, dom, js, { and } block
 
 # [Using it (flexible)](https://github.com/kelaberetiv/TagUI#to-use)
 *In this section, we'll spend some time exploring a particular feature of TagUI that you'll like to try out.*
@@ -116,7 +116,7 @@ Flow Sample |Purpose
 ### OPTION 1 - STEPS DESCRIPTION (15 minutes)
 - TagUI auto-waits for a webpage element to appear and interacts with it as soon as it appears
 - Element identifier can be auto-recorded using TagUI Chrome extension, or [found from web browser](https://help.surveygizmo.com/help/how-to-find-element-ids-to-use-with-javascript)
-- Identifiers help to pinpoint which webpage elements you want to interact with ([examples in flow samples](https://github.com/tebelorg/TagUI#flow-samples))
+- Identifiers help to pinpoint which webpage elements you want to interact with ([examples in flow samples](https://github.com/kelaberetiv/TagUI#flow-samples))
 - TagUI auto-selects provided identifier in this order - xpath, css, id, name, class, title, aria-label, text(), href
 
 <details>
