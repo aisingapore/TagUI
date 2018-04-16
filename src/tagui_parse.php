@@ -47,6 +47,14 @@ fwrite($output_file,"var casper = require('casper').create();\n"); // opening li
 while(!feof($config_file)) {fwrite($output_file,fgets($config_file));} fclose($config_file);
 while(!feof($header_file)) {fwrite($output_file,fgets($header_file));} fclose($header_file);
 
+// append custom functions file created by user if the file exists
+if (file_exists('tagui_custom.js')) {
+$custom_file = fopen('tagui_custom.js','r') or die("ERROR - cannot open tagui_custom.js" . "\n");
+while(!feof($custom_file)) {fwrite($output_file,fgets($custom_file));} fwrite($output_file,"\n"); fclose($custom_file);}
+
+// append comment on flow path variable in casperjs script
+fwrite($output_file,"// flow path for save_text and snap_image\n");
+
 // save flow path in casperjs script to be used by save_text and snap_image
 // casperjs/phantomjs do not seem to support \ for windows paths, replace with / to work
 // below marker for appending url_intent when flow file does not start with comments or url

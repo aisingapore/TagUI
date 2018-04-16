@@ -1198,4 +1198,3 @@ function getTimeoutAndCheckNextStepFunction(timeout, then, methodName, defaultTi
     return timeout;
 }
 
-// flow path for save_text and snap_image
