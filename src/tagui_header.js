@@ -585,6 +585,8 @@ live_line = live_line.trim(); if (live_line == '') return '';
 switch (get_intent(live_line)) {
 case 'url': return url_intent(live_line); break;
 case 'tap': return tap_intent(live_line); break;
+case 'rtap': return rtap_intent(live_line); break;
+case 'dtap': return dtap_intent(live_line); break;
 case 'hover': return hover_intent(live_line); break;
 case 'type': return type_intent(live_line); break;
 case 'select': return select_intent(live_line); break;
@@ -628,6 +630,8 @@ if (lc_raw_intent.substr(0,7) == 'http://' || lc_raw_intent.substr(0,8) == 'http
 
 // first set of conditions check for valid keywords with their parameters
 if ((lc_raw_intent.substr(0,4) == 'tap ') || (lc_raw_intent.substr(0,6) == 'click ')) return 'tap';
+if ((lc_raw_intent.substr(0,5) == 'rtap ') || (lc_raw_intent.substr(0,7) == 'rclick ')) return 'rtap';
+if ((lc_raw_intent.substr(0,5) == 'dtap ') || (lc_raw_intent.substr(0,7) == 'dclick ')) return 'dtap';
 if ((lc_raw_intent.substr(0,6) == 'hover ') || (lc_raw_intent.substr(0,5) == 'move ')) return 'hover';
 if ((lc_raw_intent.substr(0,5) == 'type ') || (lc_raw_intent.substr(0,6) == 'enter ')) return 'type';
 if ((lc_raw_intent.substr(0,7) == 'select ') || (lc_raw_intent.substr(0,7) == 'choose ')) return 'select';
@@ -661,6 +665,8 @@ if (lc_raw_intent.substr(0,8) == 'timeout ') return 'timeout';
 
 // second set of conditions check for valid keywords with missing parameters
 if ((lc_raw_intent == 'tap') || (lc_raw_intent == 'click')) return 'tap';
+if ((lc_raw_intent == 'rtap') || (lc_raw_intent == 'rclick')) return 'rtap';
+if ((lc_raw_intent == 'dtap') || (lc_raw_intent == 'dclick')) return 'dtap';
 if ((lc_raw_intent == 'hover') || (lc_raw_intent == 'move')) return 'hover';
 if ((lc_raw_intent == 'type') || (lc_raw_intent == 'enter')) return 'type';
 if ((lc_raw_intent == 'select') || (lc_raw_intent == 'choose')) return 'select';
@@ -773,6 +779,22 @@ if (is_sikuli(params)) {var abs_params = abs_file(params); var abs_intent = raw_
 return call_sikuli(abs_intent,abs_params);} // use sikuli visual automation as needed
 if (params == '') return "this.echo('ERROR - target missing for " + raw_intent + "')";
 else if (check_tx(params)) return "this.click(tx('" + params + "'))";
+else return "this.echo('ERROR - cannot find " + params + "')";}
+
+function rtap_intent(raw_intent) {
+var params = ((raw_intent + ' ').substr(1+(raw_intent + ' ').indexOf(' '))).trim();
+if (is_sikuli(params)) {var abs_params = abs_file(params); var abs_intent = raw_intent.replace(params,abs_params);
+return call_sikuli(abs_intent,abs_params);} // use sikuli visual automation as needed
+if (params == '') return "this.echo('ERROR - target missing for " + raw_intent + "')";
+else if (check_tx(params)) return "this.mouse.rightclick(tx('" + params + "'))";
+else return "this.echo('ERROR - cannot find " + params + "')";}
+
+function dtap_intent(raw_intent) {
+var params = ((raw_intent + ' ').substr(1+(raw_intent + ' ').indexOf(' '))).trim();
+if (is_sikuli(params)) {var abs_params = abs_file(params); var abs_intent = raw_intent.replace(params,abs_params);
+return call_sikuli(abs_intent,abs_params);} // use sikuli visual automation as needed
+if (params == '') return "this.echo('ERROR - target missing for " + raw_intent + "')";
+else if (check_tx(params)) return "this.mouse.doubleclick(tx('" + params + "'))";
 else return "this.echo('ERROR - cannot find " + params + "')";}
 
 function hover_intent(raw_intent) {
