@@ -47,10 +47,11 @@ fwrite($output_file,"var casper = require('casper').create();\n"); // opening li
 while(!feof($config_file)) {fwrite($output_file,fgets($config_file));} fclose($config_file);
 while(!feof($header_file)) {fwrite($output_file,fgets($header_file));} fclose($header_file);
 
-// append custom functions file created by user if the file exists
-if (file_exists('tagui_custom.js')) {
-$custom_file = fopen('tagui_custom.js','r') or die("ERROR - cannot open tagui_custom.js" . "\n");
-while(!feof($custom_file)) {fwrite($output_file,fgets($custom_file));} fwrite($output_file,"\n"); fclose($custom_file);}
+// append global functions file created by user if the file exists
+if (file_exists('tagui_global.js')) {
+$custom_functions_file = fopen('tagui_global.js','r') or die("ERROR - cannot open tagui_global.js" . "\n");
+while(!feof($custom_functions_file)) {fwrite($output_file,fgets($custom_functions_file));}
+fwrite($output_file,"\n"); fclose($custom_functions_file);}
 
 // append comment on flow path variable in casperjs script
 fwrite($output_file,"// flow path for save_text and snap_image\n");

@@ -21,6 +21,9 @@
 /src/samples/*.png
 /src/samples/*.txt
 
+# exclude custom global functions file
+/src/tagui_global.js
+
 # exclude translation temp build files
 /src/languages/build.js
 /src/languages/build.log
