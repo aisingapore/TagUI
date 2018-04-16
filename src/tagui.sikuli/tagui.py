@@ -25,6 +25,15 @@ def tap_intent ( raw_intent ):
 	else:
 		return 0
 
+# function for rtap / rclick step
+def rtap_intent ( raw_intent ):
+	params = (raw_intent + ' ')[1+(raw_intent + ' ').find(' '):].strip()
+	print '[tagui] ACTION - rclick ' + params
+	if exists(params):
+		return rightClick(params)
+	else:
+		return 0
+
 # function for dtap / dclick step
 def dtap_intent ( raw_intent ):
 	params = (raw_intent + ' ')[1+(raw_intent + ' ').find(' '):].strip()
@@ -142,6 +151,8 @@ def vision_intent ( raw_intent ):
 def get_intent ( raw_intent ):
 	if raw_intent[:4].lower() == 'tap ' or raw_intent[:6].lower() == 'click ':
 		return 'tap'
+	if raw_intent[:5].lower() == 'rtap ' or raw_intent[:7].lower() == 'rclick ':
+		return 'rtap'
 	if raw_intent[:5].lower() == 'dtap ' or raw_intent[:7].lower() == 'dclick ':
 		return 'dtap'
 	if raw_intent[:6].lower() == 'hover ' or raw_intent[:5].lower() == 'move ': 
@@ -167,6 +178,8 @@ def parse_intent ( script_line ):
 	intent_type = get_intent(script_line)
 	if intent_type == 'tap':
 		return tap_intent(script_line)
+	elif intent_type == 'rtap':
+		return rtap_intent(script_line)
 	elif intent_type == 'dtap':
 		return dtap_intent(script_line)
 	elif intent_type == 'hover':

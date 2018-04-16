@@ -205,6 +205,7 @@ $script_line = trim($script_line); if ($script_line=="") {$GLOBALS['real_line_nu
 switch (get_intent($script_line)) {
 case "url": return url_intent($script_line); break;
 case "tap": return tap_intent($script_line); break;
+case "rtap": return rtap_intent($script_line); break;
 case "dtap": return dtap_intent($script_line); break;
 case "hover": return hover_intent($script_line); break;
 case "type": return type_intent($script_line); break;
@@ -248,6 +249,7 @@ if ((substr($lc_raw_intent,0,7)=="http://") or (substr($lc_raw_intent,0,8)=="htt
 
 // first set of conditions check for valid keywords with their parameters
 if ((substr($lc_raw_intent,0,4)=="tap ") or (substr($lc_raw_intent,0,6)=="click ")) return "tap";
+if ((substr($lc_raw_intent,0,5)=="rtap ") or (substr($lc_raw_intent,0,7)=="rclick ")) return "rtap";
 if ((substr($lc_raw_intent,0,5)=="dtap ") or (substr($lc_raw_intent,0,7)=="dclick ")) return "dtap";
 if ((substr($lc_raw_intent,0,6)=="hover ")or(substr($lc_raw_intent,0,5)=="move ")) return "hover";
 if ((substr($lc_raw_intent,0,5)=="type ") or (substr($lc_raw_intent,0,6)=="enter ")) return "type";
@@ -282,6 +284,7 @@ if (substr($lc_raw_intent,0,8)=="timeout ") return "timeout";
 
 // second set of conditions check for valid keywords with missing parameters
 if (($lc_raw_intent=="tap") or ($lc_raw_intent=="click")) return "tap";
+if (($lc_raw_intent=="rtap") or ($lc_raw_intent=="rclick")) return "rtap";
 if (($lc_raw_intent=="dtap") or ($lc_raw_intent=="dclick")) return "dtap";
 if (($lc_raw_intent=="hover") or ($lc_raw_intent=="move")) return "hover";
 if (($lc_raw_intent=="type") or ($lc_raw_intent=="enter")) return "type";
@@ -438,6 +441,13 @@ if (is_sikuli($params)) {$abs_params = abs_file($params); $abs_intent = str_repl
 return call_sikuli($abs_intent,$abs_params);} // use sikuli visual automation as needed
 if ($params == "") echo "ERROR - " . current_line() . " target missing for " . $raw_intent . "\n"; else
 return "{techo('".$raw_intent."');".beg_tx($params).$twb.".click(tx('" . $params . "'));".end_tx($params);}
+
+function rtap_intent($raw_intent) {$twb = $GLOBALS['tagui_web_browser'];
+$params = trim(substr($raw_intent." ",1+strpos($raw_intent." "," ")));
+if (is_sikuli($params)) {$abs_params = abs_file($params); $abs_intent = str_replace($params,$abs_params,$raw_intent);
+return call_sikuli($abs_intent,$abs_params);} // use sikuli visual automation as needed
+if ($params == "") echo "ERROR - " . current_line() . " target missing for " . $raw_intent . "\n"; else
+return "{techo('".$raw_intent."');".beg_tx($params).$twb.".mouse.rightclick(tx('" . $params . "'));".end_tx($params);}
 
 function dtap_intent($raw_intent) {$twb = $GLOBALS['tagui_web_browser'];
 $params = trim(substr($raw_intent." ",1+strpos($raw_intent." "," ")));
