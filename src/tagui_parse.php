@@ -23,6 +23,15 @@ if (count($repo_data[$repo_count]) == 0) die("ERROR - empty row found in " . $sc
 $repo_count++;} fclose($repo_file); $repo_count-=1; //-1 for header, for EOF need to check flexibly using below line
 if (count($repo_data[$repo_count]) == 1) $repo_count-=1;} //-1 for EOF (Windows files don't end with newline character)
 
+if (file_exists('tagui_global.csv')) { // load global repository file if it exists for objects and keywords
+$global_repo_file = fopen('tagui_global.csv','r') or die("ERROR - cannot open " . 'tagui_global.csv' . "\n");
+$repo_count++; fgetcsv($global_repo_file); // increase repo_count to prep for read, discard header record
+while (!feof($global_repo_file)) {$repo_data[$repo_count] = fgetcsv($global_repo_file);
+if (count($repo_data[$repo_count]) == 0) die("ERROR - empty row found in " . 'tagui_global.csv' . "\n");
+if (count($repo_data[$repo_count]) != 1) // pad the empty columns when global repository is used with datatable
+{$repo_data[$repo_count] = array_pad($repo_data[$repo_count], count($repo_data[0]), $repo_data[$repo_count][1]);}
+$repo_count++;} fclose($global_repo_file); $repo_count-=1; if (count($repo_data[$repo_count]) == 1) $repo_count-=1;}
+
 $tagui_web_browser = "this"; // set the web browser to be used base on tagui_web_browser environment variable
 if ((getenv('tagui_web_browser')=='headless') or (getenv('tagui_web_browser')=='chrome')) $tagui_web_browser = 'chrome';
 
