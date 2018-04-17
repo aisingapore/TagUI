@@ -7,7 +7,7 @@
 ***TagUI is now maintained by [AI Singapore (aisingapore.org)](https://www.aisingapore.org), a government-funded initiative to build local artificial intelligence capabilities. The intention is to add AI capabilities to TagUI while keeping it open-source and free to use. To get started, check out above hands-on tutorial, Prezi slides, or recorded video at FOSSASIA 2018.***
 
 ### FEATURES
-- RPA / CLI tool for process automation
+***TagUI is a RPA / CLI tool for digital process automation***
 - automate Chrome visibly or headlessly
 - visual automation of websites and desktop
 - write in 20+ human languages & JavaScript
@@ -350,43 +350,50 @@ tagui|relative or absolute filename (see MODULES section)|run another tagui flow
 
 Tip - to use variables where text is expected, '+variable+' can be used. XPath is an expressive way to identify web elements. If you know xpath and use xpath for element identifier, use double quotes for text //\*[@title="Login"]
 
-Pro Step|Parameters (separator in bold)|Purpose
-:-------|:-----------------------------|:------
-wait|optional time in seconds (default is 5 seconds)|explicitly wait for some time
-live|try steps or code interactively in Chrome / PhantomJS|enter live mode ([Firefox not yet](https://github.com/laurentj/slimerjs/issues/639))
-check|condition **&#124;** text if true **&#124;** text if false (text in quotes)|check condition and print result
-upload|element (CSS selector only) ***as*** filename to upload|upload file to website
-download|url to download ***to*** filename to save|download from url to file
-receive|url keyword to watch ***to*** filename to save|receive resource to file
-frame|frame name **&#124;** subframe name if any|next step or block in frame/subframe
-popup|url keyword of popup window to look for|next step or block in popup window
-{ and }|use { to start block and } to end block (on new line)|define block of steps and code
-api|full url (including parameters) of api call|call api & save response to api_result
-run|OS shell command including parameters|run OS command & save to run_result
-dom|javascript code for document object model|run code in dom & save to dom_result
-js|javascript statements (skip auto-detection)|treat as JS code explicitly
-r|R statements for big data and machine learning|run R statements & save to r_result
-py|python code for big data and machine learning|run python code & save to py_result
-vision|custom visual automation commands|run custom sikuli commands
-timeout|time in seconds before step errors out|change auto-wait timeout
-variable_name| = value (for text, put in quotes, use + to concat)|define variable variable_name
-// (on new line)|user comments (ignored during execution)|add user comments
+<details>
+  <summary>
+    Click to show pro steps such as wait, live, check, api, run, dom, js, r, py, vision, code blocks and variables
+  </summary>
 
-Tip - for headless and visible Chrome, file downloads can be done using normal webpage interaction or specifying the URL as a navigation flow step. For Firefox and PhantomJS, the download and receive step can be used. As TagUI default execution context is local, to run javascript on webpage dom (eg document.querySelector) use dom step. Set dom_json variable to pass a variable for use in dom step. Or dom_json = {tmp_number: phone, tmp_text: name} to pass multiple variables for use in dom step (dom_json.tmp_number and dom_json.tmp_text).
+  Pro Step|Parameters (separator in bold)|Purpose
+  :-------|:-----------------------------|:------
+  wait|optional time in seconds (default is 5 seconds)|explicitly wait for some time
+  live|try steps or code interactively in Chrome / PhantomJS|enter live mode ([Firefox not yet](https://github.com/laurentj/slimerjs/issues/639))
+  check|condition **&#124;** text if true **&#124;** text if false (text in quotes)|check condition and print result
+  upload|element (CSS selector only) ***as*** filename to upload|upload file to website
+  download|url to download ***to*** filename to save|download from url to file
+  receive|url keyword to watch ***to*** filename to save|receive resource to file
+  frame|frame name **&#124;** subframe name if any|next step or block in frame/subframe
+  popup|url keyword of popup window to look for|next step or block in popup window
+  { and }|use { to start block and } to end block (on new line)|define block of steps and code
+  api|full url (including parameters) of api call|call api & save response to api_result
+  run|OS shell command including parameters|run OS command & save to run_result
+  dom|javascript code for document object model|run code in dom & save to dom_result
+  js|javascript statements (skip auto-detection)|treat as JS code explicitly
+  r|R statements for big data and machine learning|run R statements & save to r_result
+  py|python code for big data and machine learning|run python code & save to py_result
+  vision|custom visual automation commands|run custom sikuli commands
+  timeout|time in seconds before step errors out|change auto-wait timeout
+  variable_name| = value (for text, put in quotes, use + to concat)|define variable variable_name
+  // (on new line)|user comments (ignored during execution)|add user comments
+
+  Tip - for headless and visible Chrome, file downloads can be done using normal webpage interaction or specifying the URL as a navigation flow step. For Firefox and PhantomJS, the download and receive step can be used. As TagUI default execution context is local, to run javascript on webpage dom (eg document.querySelector) use dom step. Set dom_json variable to pass a variable for use in dom step. Or dom_json = {tmp_number: phone, tmp_text: name} to pass multiple variables for use in dom step (dom_json.tmp_number and dom_json.tmp_text).
+
+  For steps run, dom, js, r, py, vision, instead of typing the step and the command, you can use something like py begin followed by many lines of py code, and end with py finish to denote an entire code block. This saves typing the step repeatedly for a large integration code block. For steps r, py, vision, the helper functions r_step(), py_step(), vision_step() can be used to pass dynamic variables to those integrations. Below is an example for py step for passing dynamically generated varibles from TagUI to Python integration.
+
+  ```
+  phone = 1234567
+  name = 'donald duck'
+  py_step('phone = ' + phone)
+  py_step('name = "' + name + '"')
+
+  py print(name)
+  echo py_result
+  py print(phone)
+  echo py_result
+  ```
   
-For steps run, dom, js, r, py, vision, instead of typing the step and the command, you can use something like py begin followed by many lines of py code, and end with py finish to denote an entire code block. This saves typing the step repeatedly for a large integration code block. For steps r, py, vision, the helper functions r_step(), py_step(), vision_step() can be used to pass dynamic variables to those integrations. Below is an example for py step for passing dynamically generated varibles from TagUI to Python integration.
-
-```
-phone = 1234567
-name = 'donald duck'
-py_step('phone = ' + phone)
-py_step('name = "' + name + '"')
-
-py print(name)
-echo py_result
-py print(phone)
-echo py_result
-```
+</details>
 
 ### CONDITIONS EXAMPLES
 - Conditions can be expressed in natural language (optional brackets) or [JavaScript](https://www.w3schools.com/js/)
