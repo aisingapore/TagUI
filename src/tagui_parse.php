@@ -68,9 +68,16 @@ while(!feof($header_file)) {fwrite($output_file,fgets($header_file));} fclose($h
 
 // append global functions file created by user if the file exists
 if (file_exists('tagui_global.js')) {
-$custom_functions_file = fopen('tagui_global.js','r') or die("ERROR - cannot open tagui_global.js" . "\n");
-while(!feof($custom_functions_file)) {fwrite($output_file,fgets($custom_functions_file));}
-fwrite($output_file,"\n"); fclose($custom_functions_file);}
+$global_functions_file = fopen('tagui_global.js','r') or die("ERROR - cannot open tagui_global.js" . "\n");
+while(!feof($global_functions_file)) {fwrite($output_file,fgets($global_functions_file));}
+fwrite($output_file,"\n"); fclose($global_functions_file);}
+
+// append local functions file created by user if the file exists
+$local_functions_location = str_replace("\\","/",dirname($script)) . '/tagui_local.js';
+if (file_exists($local_functions_location)) {
+$local_functions_file = fopen($local_functions_location,'r') or die("ERROR - cannot open tagui_local.js" . "\n");
+while(!feof($local_functions_file)) {fwrite($output_file,fgets($local_functions_file));}
+fwrite($output_file,"\n"); fclose($local_functions_file);}
 
 // append comment on flow path variable in casperjs script
 fwrite($output_file,"// flow path for save_text and snap_image\n");
