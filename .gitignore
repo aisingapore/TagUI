@@ -24,6 +24,9 @@
 # exclude custom global functions file
 /src/tagui_global.js
 
+# exclude custom global repository file
+/src/tagui_global.csv
+
 # exclude translation temp build files
 /src/languages/build.js
 /src/languages/build.log
