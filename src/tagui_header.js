@@ -403,8 +403,7 @@ chrome.mouse.action('mousePressed',xy.x,xy.y,'left',1); chrome.mouse.action('mou
 
 chrome.mouse.doubleclick = function(selector,y) { // double press and release on center of selector or point
 if (!y) var xy = chrome.mouse.getXY(selector); else var xy = {x: selector, y: y}; // get coordinates accordingly
-chrome.mouse.action('mousePressed',xy.x,xy.y,'left',1); chrome.mouse.action('mouseReleased',xy.x,xy.y,'left',1);
-chrome.mouse.action('mousePressed',xy.x,xy.y,'left',1); chrome.mouse.action('mouseReleased',xy.x,xy.y,'left',1);};
+chrome.mouse.action('mousePressed',xy.x,xy.y,'left',2); chrome.mouse.action('mouseReleased',xy.x,xy.y,'left',2);};
 
 chrome.mouse.rightclick = function(selector,y) { // right click press and release on center of selector or point
 if (!y) var xy = chrome.mouse.getXY(selector); else var xy = {x: selector, y: y}; // get coordinates accordingly
