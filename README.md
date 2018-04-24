@@ -635,4 +635,4 @@ TagUI is a young tool and it tries to do the task of automating UI interactions 
 </details>
 
 # License
-TagUI is open-source software released under the MIT license
+TagUI is open-source software released under Apache 2.0 license
