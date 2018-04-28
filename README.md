@@ -636,5 +636,44 @@ TagUI is a young tool and it tries to do the task of automating UI interactions 
 
 </details>
 
+### SECURITY
+<details>
+  <summary>
+    Click to show details of security concerns and features of TagUI
+  </summary>
+
+  Below architecture diagram for TagUI will be used to elaborate on this topic of security.
+
+  ![TagUI Flowchart](https://raw.githubusercontent.com/kelaberetiv/TagUI/master/src/media/flowchart.png)
+
+  As TagUI and the foundation it is built on is open-source software, it means users can read the source code of TagUI and all its dependencies to check if there is a security flaw or malicious code. This is an advantage compared to using commercial software that is closed-source, as users cannot see what is the code behind the software due to lack of visibility.
+
+  For open-source software, users and developers who spot security issues will raise issues to the maintainers and work towards a fix. For commercial software, other ways such as tracking the web traffic or file system activities have to be deployed to infer on what the software is doing.
+
+  Following are links to the source code for TagUI and its open-source dependencies. You can dig through the source code for the other open-source dependencies below, or assume that security issues would have been spotted by users and fixed, as these projects are mature and have large user bases.
+
+  - TagUI - https://github.com/kelaberetiv/TagUI
+  - Sikuli - https://github.com/RaiMan/SikuliX-2014
+  - CasperJS - https://github.com/casperjs/casperjs
+  - PhantomJS - https://github.com/ariya/phantomjs
+  - SlimerJS - https://github.com/laurentj/slimerjs
+  - Python - https://github.com/python/cpython
+  - R - https://github.com/wch/r-source
+  - PHP - https://github.com/php/php-src
+
+  Following are more comments specific to TagUI for the topic of security.
+
+  - By design, TagUI does not send outgoing web traffic or send outgoing data, other than what the user is automating on, for example visiting a website. However, there is an upload option, when used, TagUI will go to an [open-source service Hastebin](https://hastebin.com/about.md) that allows uploading of information to share via URL. This sends outgoing data of the automation execution log to that website and returns an URL to user so that user can share the output of the automation with colleagues or friends.
+
+  - TagUI allows running of automation files whether they are stored locally as a file on your laptop or computer, [or if the file is an online URL](https://github.com/kelaberetiv/TagUI#command-line). This means users should be cautious to run automation from online URLs unless they are sure that the online URL is a safe source and not doing something destructive. This can be checked by accessing the URL using a web-browser to see the automation steps performed in the online automation file.
+
+  - TagUI comes with a web service, that can be used to trigger automation flows if TagUI is installed on a web-server. More details in [Developers Reference section under API](https://github.com/kelaberetiv/TagUI#api). The design minimizes security risk by not forcing users to turn on exec() for their PHP configuration. This means execution of malicious commands cannot be injected through the web-service. Instead, the web-service works by using crontab to periodically check for automation requests. Webservice execution of online flows is now disabled by default so that malicious users cannot trigger execution of a malicious flow hosted online.
+
+  - TagUI has [very powerful features](https://github.com/kelaberetiv/TagUI#steps-description), including the ability to run command line programs, Python code, R code, API calls, and ability to make changes to the local file systems. These features can become security risks if a malicious automation flow file is executed. Imagine TagUI as a tool, such as fire. In evil hands it can be used to do evil things at scale. In good hands, it can be used to solve pain points related to digital processes that are repetitive and huge in volume.
+
+  - As TagUI can replicate what a normal human user can do on the computer, TagUI is restricted and compliant to the same security policies as the normal human user would be subjected to. For example, having to use a hardware token in order to access the laptop, or user password in order to login to the computer. Or having a 2FA hardware token in order to access confidential information from a web or enterprise application.
+
+</details>
+
 # License
 TagUI is open-source software released under Apache 2.0 license
