@@ -430,7 +430,7 @@ Tip - use { and } step to define step/code blocks for powerful repetitive automa
 - To call sub-scripts, use tagui step followed by absolute or relative filename
 - For example, tagui login_crm or tagui crm.login or tagui outlook.sendmail
 
-Tip - tagui step works by expanding content of a sub-script into the flow, at the line where tagui step is used to call the sub-script. Thus variables that are accessible from the parent flow file will also be accessible from the sub-script.
+Tip - tagui step works by expanding content of a sub-script into the flow, at the line where tagui step is used to call the sub-script. Thus variables that are accessible from the parent flow file will also be accessible from the sub-script. A .raw file will be created to store expanded contents of the automation flow (useful for checking error messages).
 
 ### REPOSITORIES
 - Repositories help to make objects or steps reusable and improve readability
