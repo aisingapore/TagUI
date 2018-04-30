@@ -594,6 +594,8 @@ rem end of big loop for managing multiple data sets in datatable
 :break_for_loop
 
 rem additional windows section to convert unix to windows file format
+gawk "sub(\"$\", \"\")" "%flow_file%.raw" > "%flow_file%.raw.tmp"
+move /Y "%flow_file%.raw.tmp" "%flow_file%.raw" > nul
 gawk "sub(\"$\", \"\")" "%flow_file%.js" > "%flow_file%.js.tmp"
 move /Y "%flow_file%.js.tmp" "%flow_file%.js" > nul
 gawk "sub(\"$\", \"\")" "%flow_file%.log" > "%flow_file%.log.tmp"
