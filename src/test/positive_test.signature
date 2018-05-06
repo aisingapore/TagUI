@@ -1708,6 +1708,48 @@ this.click(tx('element'));
 } // end of code block
 });
 
+// test {} simple
+{
+
+casper.then(function() { // start of JS code
+this.echo('test');
+}); // end of JS code
+
+}
+
+{
+
+casper.then(function() {{techo('click test');
+casper.waitFor(function check() {return check_tx('test');},
+function then() {this.click(tx('test'));},
+function timeout() {this.echo('ERROR - cannot find test').exit();});}});
+
+}
+
+// test {} complex
+{
+
+casper.then(function() {{techo('click test1');
+casper.waitFor(function check() {return check_tx('test1');},
+function then() {this.click(tx('test1'));},
+function timeout() {this.echo('ERROR - cannot find test1').exit();});}});
+
+casper.then(function() {{techo('click test2');
+casper.waitFor(function check() {return check_tx('test2');},
+function then() {this.click(tx('test2'));},
+function timeout() {this.echo('ERROR - cannot find test2').exit();});}});
+
+casper.then(function() { // start of JS code
+this.echo('test');
+}); // end of JS code
+
+casper.then(function() {{techo('click test3');
+casper.waitFor(function check() {return check_tx('test3');},
+function then() {this.click(tx('test3'));},
+function timeout() {this.echo('ERROR - cannot find test3').exit();});}});
+
+}
+
 // test {} for loop simple
 casper.then(function() {for (number=1; number<=5; number++)
 (function (number) { // start of IIFE pattern
@@ -2342,13 +2384,13 @@ casper.then(function() {techo('frame mainframe');});
 casper.withFrame('mainframe', function() {
 { // start of code block
 
-} // end of code block
-});
-
-} // end of code block
-});
-
 casper.then(function() {this.echo("test popup with mainframe");});
+
+} // end of code block
+});
+
+} // end of code block
+});
 
 casper.then(function() {techo('popup url_keyword');});
 casper.waitForPopup(/url_keyword/, function then() {},
@@ -2360,13 +2402,13 @@ casper.then(function() {techo('frame mainframe | subframe');});
 casper.withFrame('mainframe', function() {casper.withFrame('subframe', function() {
 { // start of code block
 
+casper.then(function() {this.echo("test popup with subframe");});
+
 } // end of code block
 });});
 
 } // end of code block
 });
-
-casper.then(function() {this.echo("test popup with subframe");});
 
 // test api direct
 casper.then(function() {{techo('api http://www.dummytestsite.com/api?COLOR1=red&COLOR2=green&COLOR3=blue');

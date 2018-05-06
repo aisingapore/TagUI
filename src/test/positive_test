@@ -143,6 +143,22 @@ click element
 while ((2 > 3) && (3 > 4))
 click element
 
+// test {} simple
+{
+this.echo('test');
+}
+{
+click test
+}
+
+// test {} complex
+{
+click test1
+click test2
+this.echo('test');
+click test3
+}
+
 // test {} for loop simple
 for number from 1 to 5
 {
@@ -361,13 +377,13 @@ echo "test popup"
 popup url_keyword
 {
 frame mainframe
-}
 echo "test popup with mainframe"
+}
 popup url_keyword
 {
 frame mainframe | subframe
-}
 echo "test popup with subframe"
+}
 
 // test api direct
 api http://www.dummytestsite.com/api?COLOR1=red&COLOR2=green&COLOR3=blue

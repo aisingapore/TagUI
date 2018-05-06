@@ -94,7 +94,7 @@ while(!feof($input_file)) {fwrite($temp_output_file,expand_intent(fgets($input_f
 fclose($temp_output_file); // generate temp output file of expanded intents (if any) before reopening as input
 $input_file = fopen($script . '.raw','r') or die("ERROR - cannot open " . $script . '.raw' . "\n");
 
-// section do all the post-processing required on generated JavaScript file
+// section to do required pre-processing on expanded .raw flow file
 $padded_raw_flow = ""; $previous_line_is_condition = false;
 while(!feof($input_file)) {$padded_raw_flow_line = ltrim(fgets($input_file));
 // rewrite JS function definitions to work in scope within CasperJS blocks
@@ -860,6 +860,11 @@ if (substr($logic,0,1) == "}") $GLOBALS['inside_code_block']--; // assume nothin
 $code_block_header = ""; $code_block_footer = "";
 $last_delimiter_pos = strrpos($GLOBALS['code_block_tracker'],"|");
 $code_block_intent = substr($GLOBALS['code_block_tracker'],$last_delimiter_pos+1);
+
+if (($GLOBALS['inside_code_block'] > substr_count($GLOBALS['code_block_tracker'],"|")) and (substr($logic,0,1) == "{"))
+{$GLOBALS['code_block_tracker'] .= "|" . 'normal_bracket'; return $logic."\n";} // handle normal JavaScript brackets
+else if ((substr($logic,0,1) == "}") and ($code_block_intent == "normal_bracket"))
+{$GLOBALS['code_block_tracker']=substr($GLOBALS['code_block_tracker'],0,$last_delimiter_pos); return $logic."\n";}
 
 if (($code_block_intent == "if") or ($code_block_intent == "else if") or ($code_block_intent == "else")
 or ($code_block_intent == "popup") or ($code_block_intent == "frame")) {if (substr($logic,0,1) == "}")
