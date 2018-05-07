@@ -97,6 +97,21 @@ $input_file = fopen($script . '.raw','r') or die("ERROR - cannot open " . $scrip
 // section to do required pre-processing on expanded .raw flow file
 $padded_raw_flow = ""; $previous_line_is_condition = false;
 while(!feof($input_file)) {$padded_raw_flow_line = ltrim(fgets($input_file));
+// track whether line is inside integrations begin-finish code blocks
+if (strtolower(trim($padded_raw_flow_line)) == "js begin") $inside_js_block = 1;
+else if (strtolower(trim($padded_raw_flow_line)) == "js finish") $inside_js_block = 0;
+else if (strtolower(trim($padded_raw_flow_line)) == "py begin") $inside_py_block = 1;
+else if (strtolower(trim($padded_raw_flow_line)) == "py finish") $inside_py_block = 0;
+else if (strtolower(trim($padded_raw_flow_line)) == "r begin") $inside_r_block = 1; 
+else if (strtolower(trim($padded_raw_flow_line)) == "r finish") $inside_r_block = 0;
+else if (strtolower(trim($padded_raw_flow_line)) == "dom begin") $inside_dom_block = 1; 
+else if (strtolower(trim($padded_raw_flow_line)) == "dom finish") $inside_dom_block = 0;
+else if (strtolower(trim($padded_raw_flow_line)) == "run begin") $inside_run_block = 1; 
+else if (strtolower(trim($padded_raw_flow_line)) == "run finish") $inside_run_block = 0;
+else if (strtolower(trim($padded_raw_flow_line)) == "vision begin") $inside_vision_block = 1; 
+else if (strtolower(trim($padded_raw_flow_line)) == "vision finish") $inside_vision_block = 0;
+if (($inside_js_block + $inside_py_block + $inside_r_block + $inside_dom_block + $inside_run_block + $inside_vision_block)
+> 0) {$padded_raw_flow .= $padded_raw_flow_line; continue;} // auto-padding not relevant in integrations code blocks
 // rewrite JS function definitions to work in scope within CasperJS blocks
 if ((substr($padded_raw_flow_line,0,9)=="function ") or (substr($padded_raw_flow_line,0,12)=="js function "))
 if (strpos($padded_raw_flow_line,"(")!==false) {$js_function_name_startpos = strpos($padded_raw_flow_line,"function ")+9;
@@ -118,6 +133,9 @@ $previous_line_is_condition = $current_line_is_condition; // prepare for next li
 } fclose($input_file); file_put_contents($script . '.raw', $padded_raw_flow);
 // generate temp output file with padded { and } (if any) before reopening as input
 $input_file = fopen($script . '.raw','r') or die("ERROR - cannot open " . $script . '.raw' . "\n");
+// re-initialize trackers for begin-finish blocks of integrations
+$inside_py_block = 0; $inside_r_block = 0; $inside_run_block = 0;
+$inside_vision_block = 0; $inside_js_block = 0; $inside_dom_block = 0;
 
 if (strpos(strtolower(file_get_contents('tagui_config.txt')),"var tagui_language = 'english';")!==false)
 { // main loop without translation to parse intents in flow file for conversion into javascript code
