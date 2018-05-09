@@ -94,6 +94,23 @@ while(!feof($input_file)) {fwrite($temp_output_file,expand_intent(fgets($input_f
 fclose($temp_output_file); // generate temp output file of expanded intents (if any) before reopening as input
 $input_file = fopen($script . '.raw','r') or die("ERROR - cannot open " . $script . '.raw' . "\n");
 
+if (strpos(strtolower(file_get_contents('tagui_config.txt')),"var tagui_language = 'english';")==false)
+{ // section which includes translation engine for handling flows in other languages
+$temp_argv1 = $argv[1]; $temp_argv2 = $argv[2]; $temp_argv3 = $argv[3];
+$argv[1] = 'tagui_parse.php'; $argv[2] = 'from';
+$temp_tagui_config = strtolower(file_get_contents('tagui_config.txt'));
+$temp_tagui_config_start = strpos($temp_tagui_config,'var tagui_language');
+$temp_tagui_config_end = strpos($temp_tagui_config,"\n",$temp_tagui_config_start);
+$temp_tagui_config = substr($temp_tagui_config,$temp_tagui_config_start,$temp_tagui_config_end-$temp_tagui_config_start);
+$temp_tagui_config = str_replace('var tagui_language','',$temp_tagui_config);
+$temp_tagui_config = str_replace('"','',$temp_tagui_config); $temp_tagui_config = str_replace("'",'',$temp_tagui_config);
+$temp_tagui_config = str_replace('=','',$temp_tagui_config); $temp_tagui_config = str_replace(';','',$temp_tagui_config);
+$argv[3] = trim($temp_tagui_config); require 'translate.php'; // set parameters to load translation engine
+$argv[1] = $temp_argv1; $argv[2] = $temp_argv2; $argv[3] = $temp_argv3; $translated_raw_flow = "";
+while(!feof($input_file)) {$translated_raw_flow .= translate_intent(fgets($input_file));} fclose($input_file);
+file_put_contents($script . '.raw', $translated_raw_flow); // save translated output before reopening as input
+$input_file = fopen($script . '.raw','r') or die("ERROR - cannot open " . $script . '.raw' . "\n");}
+
 // section to do required pre-processing on expanded .raw flow file
 $padded_raw_flow = ""; $previous_line_is_condition = false;
 while(!feof($input_file)) {$padded_raw_flow_line = ltrim(fgets($input_file));
@@ -137,23 +154,8 @@ $input_file = fopen($script . '.raw','r') or die("ERROR - cannot open " . $scrip
 $inside_py_block = 0; $inside_r_block = 0; $inside_run_block = 0;
 $inside_vision_block = 0; $inside_js_block = 0; $inside_dom_block = 0;
 
-if (strpos(strtolower(file_get_contents('tagui_config.txt')),"var tagui_language = 'english';")!==false)
-{ // main loop without translation to parse intents in flow file for conversion into javascript code
-while(!feof($input_file)) {fwrite($output_file,parse_intent(fgets($input_file)));} fclose($input_file);}
-else { // section and main loop which includes translation engine for handling flows in other languages
-$temp_argv1 = $argv[1]; $temp_argv2 = $argv[2]; $temp_argv3 = $argv[3];
-$argv[1] = 'tagui_parse.php'; $argv[2] = 'from';
-$temp_tagui_config = strtolower(file_get_contents('tagui_config.txt'));
-$temp_tagui_config_start = strpos($temp_tagui_config,'var tagui_language');
-$temp_tagui_config_end = strpos($temp_tagui_config,"\n",$temp_tagui_config_start);
-$temp_tagui_config = substr($temp_tagui_config,$temp_tagui_config_start,$temp_tagui_config_end-$temp_tagui_config_start);
-$temp_tagui_config = str_replace('var tagui_language','',$temp_tagui_config);
-$temp_tagui_config = str_replace('"','',$temp_tagui_config); $temp_tagui_config = str_replace("'",'',$temp_tagui_config);
-$temp_tagui_config = str_replace('=','',$temp_tagui_config); $temp_tagui_config = str_replace(';','',$temp_tagui_config); 
-$argv[3] = trim($temp_tagui_config);
-require 'translate.php'; // set parameters to load translation engine
-$argv[1] = $temp_argv1; $argv[2] = $temp_argv2; $argv[3] = $temp_argv3;
-while(!feof($input_file)) {fwrite($output_file,parse_intent(translate_intent(fgets($input_file))));} fclose($input_file);}
+// main loop to parse intents in flow file for conversion into javascript code
+while(!feof($input_file)) {fwrite($output_file,parse_intent(fgets($input_file)));} fclose($input_file);
 
 // create footer of casperjs script using footer template and do post-processing 
 while(!feof($footer_file)) {fwrite($output_file,fgets($footer_file));} fclose($footer_file); fclose($output_file);
