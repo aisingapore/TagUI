@@ -398,73 +398,97 @@ Tip - to use variables where text is expected, '+variable+' can be used. XPath i
 </details>
 
 ### CONDITIONS EXAMPLES
-- Conditions can be expressed in natural language (optional brackets) or [JavaScript](https://www.w3schools.com/js/)
-- Conditions help in decision-making and taking different actions base on run-time context
-- Write text in quotation marks (either " or ' works) to differentiate text from variable names
-- { and } block is required after for / while, auto-wait disables in while loop (will hang CasperJS)
+<details>
+  <summary>
+    Click to show how conditions can be expressed in natural language (optional brackets) or JavaScript
+  </summary>
 
-Condition (in natural language)|JavaScript
-:------------------------------|:---------
-example - if day equals to "Friday"| if (day == "Friday")
-example - if menu contains "fruits"| if (menu.indexOf("fruits")>-1)
-example - if A more than B and C not equals to D | if ((A > B) && (C != D))
-example - for n from 1 to 4 | for (n=1; n<=4; n++)
-example - while cupcakes equal to 12| while (cupcakes == 12)
-contain|.indexOf("text")>-1
-not contain|.indexOf("text")\<0
-equal to|==
-not equal to|!=
-more than / greater than / higher than|>
-more than or equal to / greater than or equal to / higher than or equal to|>=
-less than / lesser than / lower than|<
-less than or equal to / lesser than or equal to / lower than or equal to|<=
-and|&&
-or|&#124;&#124;
+  - Conditions help in decision-making and taking different actions base on run-time context
+  - Write text in quotation marks (either " or ' works) to differentiate text from variable names
+  - { and } block is required after for / while, auto-wait disables in while loop (will hang CasperJS)
 
-Tip - use { and } step to define step/code blocks for powerful repetitive automation with for loop. When using contain / equal, you can write with or without s behind. You can use if present('element') to check if the element exists, before doing the step on next line. Other useful functions include visible('element'), count('element'), url(), title(), text(), timer(), which can be used in conditions and steps such as check or echo.
+  Condition (in natural language)|JavaScript
+  :------------------------------|:---------
+  example - if day equals to "Friday"| if (day == "Friday")
+  example - if menu contains "fruits"| if (menu.indexOf("fruits")>-1)
+  example - if A more than B and C not equals to D | if ((A > B) && (C != D))
+  example - for n from 1 to 4 | for (n=1; n<=4; n++)
+  example - while cupcakes equal to 12| while (cupcakes == 12)
+  contain|.indexOf("text")>-1
+  not contain|.indexOf("text")\<0
+  equal to|==
+  not equal to|!=
+  more than / greater than / higher than|>
+  more than or equal to / greater than or equal to / higher than or equal to|>=
+  less than / lesser than / lower than|<
+  less than or equal to / lesser than or equal to / lower than or equal to|<=
+  and|&&
+  or|&#124;&#124;
+
+  Tip - use { and } step to define step/code blocks for powerful repetitive automation with for loop. When using contain / equal, you can write with or without s behind. You can use if present('element') to check if the element exists, before doing the step on next line. Other useful functions include visible('element'), count('element'), url(), title(), text(), timer(), which can be used in conditions and steps such as check or echo.
+
+</details>
 
 ### MODULES
-- You can call other TagUI automation flows within an automation flow file
-- This lets you reuse and compound automation scripts to build complex flows
-- Sub-scripts can be multiple levels deep and be of any filename or extension
-- To call sub-scripts, use tagui step followed by absolute or relative filename
-- For example, tagui login_crm or tagui crm.login or tagui outlook.sendmail
+<details>
+  <summary>
+    Click to show how you can call other TagUI automation flows within an automation flow file
+  </summary>
 
-Tip - tagui step works by expanding content of a sub-script into the flow, at the line where tagui step is used to call the sub-script. Thus variables that are accessible from the parent flow file will also be accessible from the sub-script. A .raw file will be created to store expanded contents of the automation flow (useful for checking error messages).
+  - This lets you reuse and compound automation scripts to build complex flows
+  - Sub-scripts can be multiple levels deep and be of any filename or extension
+  - To call sub-scripts, use tagui step followed by absolute or relative filename
+  - For example, tagui login_crm or tagui crm.login or tagui outlook.sendmail
+
+  Tip - tagui step works by expanding content of a sub-script into the flow, at the line where tagui step is used to call the sub-script. Thus variables that are accessible from the parent flow file will also be accessible from the sub-script. A .raw file will be created to store expanded contents of the automation flow (useful for checking error messages). Alternatively, try using run step to run tagui on a flow file, so that it is run as a separate child process.
+
+</details>
 
 ### REPOSITORIES
-- Repositories help to make objects or steps reusable and improve readability
-- Save repository file with same name as your flow filename and with .csv behind
-- Repository must have 2 columns, for example below (headers up to you to name)
-- Using \`object\` in your flow replaces it with its definition (which can contain objects)
-- For example, \`type email\` becomes type user-email-textbox as user@gmail.com
+<details>
+  <summary>
+    Click to show how you can use repositories to make objects or steps reusable and improve readability
+  </summary>
 
-OBJECT|DEFINITION
-:-----|:---------
-email|user-email-textbox
-create account|btn btn--green btn-xl signup-btn
-type email|type \`email\` as user@gmail.com
+  - Save repository file with same name as your flow filename and with .csv behind
+  - Repository must have 2 columns, for example below (headers up to you to name)
+  - Using \`object\` in your flow replaces it with its definition (which can contain objects)
+  - For example, \`type email\` becomes type user-email-textbox as user@gmail.com
 
-Tip - be sure to include the header row, because the first row will be assumed as header and ignored. If your flow file ends with an extension (.txt or .js or .tagui), the repository file extension will be .txt.csv or .js.csv or .tagui.csv respectively.
+  OBJECT|DEFINITION
+  :-----|:---------
+  email|user-email-textbox
+  create account|btn btn--green btn-xl signup-btn
+  type email|type \`email\` as user@gmail.com
+
+  Tip - be sure to include the header row, because the first row will be assumed as header and ignored. If your flow file ends with an extension (.txt or .js or .tagui), the repository file extension will be .txt.csv or .js.csv or .tagui.csv respectively.
+
+</details>
 
 ### DATATABLES
-- Datatables extend the power of repositories files to manage batch automation
-- TagUI loops through each column to automate using values from different datasets
-- Eg, echo "TESTCASE - \`testname\`" in your flow shows TESTCASE - Trade USDSGD
-- Data-centric approach with rows representing data fields (usually row = test case)
-- To auto-transpose a conventional datatable, save csv as flow\_filename\_transpose.csv
+<details>
+  <summary>
+    Click to show how datatables extend the power of repositories files to manage batch automation
+  </summary>
 
-TEST TRADES|TEST #1|TEST #2|TEST #3
-:----------|:------|:------|:------
-testname|Trade USDSGD|Trade USDJPY|Trade EURUSD
-username|test_account|test_account|test_account
-password|12345678|12345678|12345678
-currency-pair|USDSGD|USDJPY|EURUSD
-size|10000|1000|100000
-direction|BUY|SELL|BUY
+  - TagUI loops through each column to automate using values from different datasets
+  - Eg, echo "TESTCASE - \`testname\`" in your flow shows TESTCASE - Trade USDSGD
+  - Data-centric approach with rows representing data fields (usually row = test case)
+  - To auto-transpose a conventional datatable, save csv as flow\_filename\_transpose.csv
 
-Tip - be sure to include the header row, because the first row will be assumed as header and ignored. If your flow file ends with an extension (.txt or .js or .tagui), the datatable file extension will be .txt.csv or .js.csv or .tagui.csv respectively.
- 
+  TEST TRADES|TEST #1|TEST #2|TEST #3
+  :----------|:------|:------|:------
+  testname|Trade USDSGD|Trade USDJPY|Trade EURUSD
+  username|test_account|test_account|test_account
+  password|12345678|12345678|12345678
+  currency-pair|USDSGD|USDJPY|EURUSD
+  size|10000|1000|100000
+  direction|BUY|SELL|BUY
+
+  Tip - be sure to include the header row, because the first row will be assumed as header and ignored. If your flow file ends with an extension (.txt or .js or .tagui), the datatable file extension will be .txt.csv or .js.csv or .tagui.csv respectively.
+
+</details>
+
 # Developers Reference
 TagUI is a young tool and it tries to do the task of automating UI interactions very well. It's designed to make prototyping, deployment and maintenance of UI automation easier by minimizing iteration time for each phase. Originally developed by a test automation engineer to avoid writing chunks of code when automating web interactions.
 
