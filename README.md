@@ -25,7 +25,7 @@ Read on for more info or jump right into the [flow samples section](https://gith
     Click to show differences between TagUI open-source RPA and commercial RPA software
   </summary>
   
-  **Key Strengths**
+  ***Key Strengths***
   - cross-platform, works on Windows, macOS, Linux
   - increased security as users can view source code
   - rapid iteration cycles in improvement of features
@@ -35,13 +35,13 @@ Read on for more info or jump right into the [flow samples section](https://gith
   - native integration with Python and R for AI / ML / DL
   - easy API calls to Azure / Amazon cognitive services
 
-  **Neutral Differences**
+  ***Neutral Differences***
   - scripts written in 21 human languages, not flowchart
   - JavaScript for advanced scripting instead of C# / VB
   - visual and OCR based automation for desktop apps
   - open-source desktop automation integration planned
 
-  **Key Weaknesses**
+  ***Key Weaknesses***
   - lack of enterprise audit, control, dashboard, reporting
   - lack of SLA or 24/7 support team for incident-handling
   - lack of large development teams (easily > 30 people)
@@ -88,7 +88,7 @@ Platform|macOS|Linux|Windows|Node.js (macOS/Linux)
 :------:|:---:|:---:|:-----:|:-------------------:
 Package|[unzip and run](https://raw.githubusercontent.com/tebelorg/Tump/master/TagUI_macOS.zip)|[unzip and run](https://raw.githubusercontent.com/tebelorg/Tump/master/TagUI_Linux.zip)|[unzip and run](https://raw.githubusercontent.com/tebelorg/Tump/master/TagUI_Windows.zip)|[npm install tagui](https://www.npmjs.com/package/tagui)
 
-Potential exceptions - On some Windows computers, if you see 'MSVCR110.dll is missing' error, install [this from Microsoft website](https://www.microsoft.com/en-us/download/details.aspx?id=30679) (choose vcredist_x86.exe) - this file is required to run the PHP engine. On some newer macOS versions, if you get a 'dyld: Library not loaded' error, [install OpenSSL in this way](https://github.com/kelaberetiv/TagUI/issues/86#issuecomment-372045221). For some flavours of Linux (Ubuntu for example), which do not have PHP pre-installed, google how to install PHP accordingly (Ubuntu for example, apt-get install php).
+***Potential exceptions*** - On some Windows computers, if you see 'MSVCR110.dll is missing' error, install [this from Microsoft website](https://www.microsoft.com/en-us/download/details.aspx?id=30679) (choose vcredist_x86.exe) - this file is required to run the PHP engine. On some newer macOS versions, if you get a 'dyld: Library not loaded' error, [install OpenSSL in this way](https://github.com/kelaberetiv/TagUI/issues/86#issuecomment-372045221). For some flavours of Linux (Ubuntu for example), which do not have PHP pre-installed, google how to install PHP accordingly (Ubuntu for example, apt-get install php).
 
 Optional - configure web browser settings in tagui_config.txt, such as browser resolution, step timeout of 10s etc
  
