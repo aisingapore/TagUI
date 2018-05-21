@@ -7,20 +7,14 @@ http://tebel.org/index_mobile.php
 // see cheatsheet for steps, conditions, finding element identifiers, etc
 // https://github.com/kelaberetiv/TagUI#cheat-sheet
 
-// click ABOUT footer to open new popup window
+// click ABOUT footer to open a new tab window
 click ABOUT
 
-// the execution context is still the original window
-// in order to interact with popup window use popup step
-// the parameter is keyword to look for in url of popup
-// after that next step, context returns to original window
-popup about_tebel
-print file-about_tebel-LC2
-
-// adding a blank line for output clarity, you can use either " or ' for text
-echo ""
-
-// if multiple steps need to be performed, use { and } blocks
+// the execution context is still at the original window
+// in order to interact with the new tab window use popup step
+// the popup step looks for a keyword in the urls within the
+// list of tabs that you have opened in this session of tagui
+// after the next step, context returns to original window
 popup about_tebel
 {
 print file-about_tebel-LC2
@@ -31,9 +25,10 @@ snap file-about_tebel-LC2
 // the usage is similar to popup step, except that the parameter is the frame name
 // if there is a subframe within the mainframe, use frame mainframe | subframe
 
-// adding a blank line for output clarity, you can use either " or ' for text
 // variables can be created using read or fetch step or manually defined
 dummy_variable = 'original'
+
+// adding a blank line for output clarity, you can use either " or ' for text
 echo ''
 echo 'returning to ' dummy_variable ' window context'
 
