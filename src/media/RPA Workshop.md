@@ -156,7 +156,7 @@ Flow Sample |Purpose
   download|url to download ***to*** filename to save|download from url to file
   receive|url keyword to watch ***to*** filename to save|receive resource to file
   frame|frame name **&#124;** subframe name if any|next step or block in frame/subframe
-  popup|url keyword of popup window to look for|next step or block in popup window
+  popup|url keyword of new tab window to look for|next step or block in new tab window
   { and }|use { to start block and } to end block (on new line)|define block of steps and code
   api|full url (including parameters) of api call|call api & save response to api_result
   run|OS shell command including parameters|run OS command & save to run_result
