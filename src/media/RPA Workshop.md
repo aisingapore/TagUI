@@ -225,7 +225,7 @@ TagUI has built-in integration with [Sikuli (base on OpenCV)](http://sikulix.com
 </details>
 
 ### OPTION 4 - R INTEGRATION (15 minutes)
-TagUI has built-in integration with R - an open-source software environment for statistical computing and graphics. R can be used for big data and machine learning. The r step can be used to run commands in R and retrieve the output of those commands. To use R integration in TagUI, first [download R software for your OS](https://www.r-project.org/).
+TagUI has built-in integration with R - an open-source software environment for statistical computing and graphics. R can be used for big data and machine learning. The r step can be used to run commands in R and retrieve the output of those commands. To use R integration in TagUI, first [download R software for your OS](https://www.r-project.org/). Be sure that Rscript command is accessible from your command prompt (added to path or symbolically linked).
 
 <details>
   <summary>
