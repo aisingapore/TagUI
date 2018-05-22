@@ -225,7 +225,7 @@ TagUI has built-in integration with [Sikuli (base on OpenCV)](http://sikulix.com
 </details>
 
 ### OPTION 4 - R INTEGRATION (15 minutes)
-TagUI has built-in integration with R - an open-source software environment for statistical computing and graphics. R can be used for big data and machine learning. The r step can be used to run commands in R and retrieve the output of those commands. To use R integration in TagUI, first [download R software for your OS](https://www.r-project.org/). Be sure that Rscript command is accessible from your command prompt (added to path or symbolically linked).
+TagUI has built-in integration with R - an open-source software environment for statistical computing and graphics. R can be used for big data and machine learning. The r step can be used to run commands in R and retrieve the output of those commands. To use R integration in TagUI, first [download R software for your OS](https://www.r-project.org/). Make sure that Rscript command is accessible from your command prompt (added to path or symbolically linked).
 
 <details>
   <summary>
@@ -266,7 +266,7 @@ TagUI has built-in integration with R - an open-source software environment for 
 </details>
 
 ### OPTION 5 - PYTHON INTEGRATION (15 minutes)
-TagUI has built-in integration with Python (works out of the box for both v2 & v3) - a programming language with many popular frameworks for big data and machine learning. The py step can be used to run commands in Python and retrieve the output of those commands. To use Python integration in TagUI, first [download Python for your OS](https://www.python.org/). macOS and Linux normally come pre-installed with Python.
+TagUI has built-in integration with Python (works out of the box for both v2 & v3) - a programming language with many popular frameworks for big data and machine learning. The py step can be used to run commands in Python and retrieve the output of those commands. To use Python integration in TagUI, first [download Python for your OS](https://www.python.org/). macOS and Linux normally come pre-installed with Python. Make sure that python command is accessible from command prompt.
 
 <details>
   <summary>
@@ -301,7 +301,7 @@ TagUI has built-in integration with Python (works out of the box for both v2 & v
   py print(phone)
   echo py_result
   ```
-  You can also use the `execfile()` command in Python to run Python scripts. For examples of using Python for machine learning, check out this [essentials of machine learning algorithms](https://www.analyticsvidhya.com/blog/2017/09/common-machine-learning-algorithms/) article or this article on [Python deep learning frameworks](https://www.kdnuggets.com/2017/02/python-deep-learning-frameworks-overview.html).
+  You can also use the `execfile()` command in Python v2.X to run Python scripts. Or use `exec(open('filename').read())` in [Python v3.X to run Python scripts](https://stackoverflow.com/questions/436198/what-is-an-alternative-to-execfile-in-python-3). For examples of using Python for machine learning, check out this [essentials of machine learning algorithms](https://www.analyticsvidhya.com/blog/2017/09/common-machine-learning-algorithms/) article or this article on [Python deep learning frameworks](https://www.kdnuggets.com/2017/02/python-deep-learning-frameworks-overview.html).
   
 </details>
 
