@@ -90,6 +90,14 @@ Tip - chrome or headless mode on Windows may trigger false positive on Symantec 
 
 </details>
 
+### BY SCHEDULING (FYI ONLY)
+To schedule an automation flow in crontab (macOS/Linux), for example at 8am daily
+```
+0 8 * * * /full_path_on_your_server/tagui flow_filename option(s)
+```
+
+Tip - for Windows, use Task Scheduler instead (search schedule from Start Menu)
+
 ### CHROME EXTENSION (10 minutes)
 Download from [Chrome Web Store](https://chrome.google.com/webstore/detail/tagui-web-automation/egdllmehgfgjebhlkjmcnhiocfcidnjk/) to use TagUI Chrome web browser extension for recording automation flows. TagUI Chrome extension is based on [Resurrectio tool](https://github.com/ebrehault/resurrectio) and records steps such as page navigation, clicking web elements and entering information. To start recording automation flows, click TagUI icon on your Chrome toolbar. Right-click for shortcuts to some TagUI steps, such as capturing webpage screenshot or to show the element identifier.
 
