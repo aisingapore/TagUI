@@ -150,6 +150,29 @@ Optional - configure web browser settings in tagui_config.txt, such as browser r
 
 </details>
 
+<details>
+  <summary>
+    Click to show how to run TagUI scripts by double-clicking as desktop icons
+  </summary>
+  
+  To do that on Windows, create a .cmd or .bat file with contents like the following, which goes to the directory where you want to run the automation, and run tagui command on the file with your specified options. You can also [associate .tagui files directly](https://www.digitaltrends.com/computing/how-to-set-default-programs-and-file-types-in-windows-10) to be opened by tagui\src\tagui.cmd command. Double-clicking the .cmd or .bat file will start automation.
+
+  ```
+  @echo off
+  c:
+  cd c:\folder
+  tagui filename quiet speed chrome
+  ```
+
+  To do that on macOS / Linux, create a file with contents like the following, which goes to the directory where you want to run the automation, and run tagui command on the file with your specified options. You will need to use the command chmod 700 on the file to give it execute permissions, so that it can be run by double-clicking on it.
+
+  ```
+  cd /Users/username/folder
+  tagui filename quiet speed chrome
+  ```
+
+</details>
+
 ### BY SCHEDULING
 To schedule an automation flow in crontab (macOS/Linux), for example at 8am daily
 ```
