@@ -286,9 +286,9 @@ if ((substr_count($script_line,'`') > 1) and (!(substr_count($script_line,'`') &
 if ($GLOBALS['repo_count'] == 0) echo "ERROR - ".current_line()." no repository data for ".$script_line."\n";
 // loop through repository data to search and replace definitions, do it twice to handle objects within keywords
 else {if (getenv('tagui_data_set')!==false) $data_set = intval(getenv('tagui_data_set')); else $data_set = 1;
-for ($repo_check = 1; $repo_check <= $GLOBALS['repo_count']; $repo_check++) $script_line = 
+for ($repo_check = 0; $repo_check <= $GLOBALS['repo_count']; $repo_check++) $script_line =
 str_replace("`".$GLOBALS['repo_data'][$repo_check][0]."`",$GLOBALS['repo_data'][$repo_check][$data_set],$script_line);
-for ($repo_check = 1; $repo_check <= $GLOBALS['repo_count']; $repo_check++) $script_line =
+for ($repo_check = 0; $repo_check <= $GLOBALS['repo_count']; $repo_check++) $script_line =
 str_replace("`".$GLOBALS['repo_data'][$repo_check][0]."`",$GLOBALS['repo_data'][$repo_check][$data_set],$script_line);
 if (strpos($script_line,'`')!==false) echo "ERROR - ".current_line()." no repository data for ".$script_line."\n";}}
 

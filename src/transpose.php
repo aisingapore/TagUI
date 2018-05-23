@@ -11,8 +11,18 @@ while (!feof($source_file)) {$csv_data[$csv_count] = fgetcsv($source_file); $csv
 // do some prep, transpose datatable and output csv file
 $csv_result = array(); $target_csv = str_replace("_transpose.csv",".csv",$source_csv);
 $target_file = fopen($target_csv,'w') or die("ERROR - cannot open " . $target_csv . " to save\n");
-foreach ($csv_data as $row => $columns) {if (is_array($columns) || is_object($columns))
-foreach ($columns as $row2 => $column2) {$csv_result[$row2][$row] = $column2;}}
+// Populate the dummy headers
+for($i=0; $i<=$csv_count; $i++) {
+  $csv_result[0][$i] = $i;
+}
+$csv_result[0][0] = "ITER_NO";
+foreach ($csv_data as $row => $columns) {
+  if (is_array($columns) || is_object($columns)) {
+    foreach ($columns as $row2 => $column2) {
+      $csv_result[$row2+1][$row] = $column2;
+    }
+  }
+}
 foreach ($csv_result as $csv_line) {fputcsv($target_file,$csv_line);} fclose($target_file);
 
 ?>
