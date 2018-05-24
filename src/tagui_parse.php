@@ -160,8 +160,9 @@ $cleaned_intent = clean_intent(fgets($input_file));
 if ($cleaned_intent == "") continue;
 $intent_type = get_intent($cleaned_intent);
 if ($intent_type == "block") {
-$safe_intent = str_replace("'","\'",$cleaned_intent); 
-$GLOBALS['block'] = $GLOBALS['block'] . $safe_intent ."\\n";}
+if ($GLOBALS['inside_py_block'] == 1 || $GLOBALS['inside_r_block'] == 1 || $GLOBALS['inside_vision_block'] == 1)
+$cleaned_intent = str_replace("'","\'", $cleaned_intent); //avoid breaking echo when single quote is used
+$GLOBALS['block'] = $GLOBALS['block'] . $cleaned_intent ."\\n";}
 else {switch($cleaned_intent) {
 //Note: need to replace \\n with single \n if the output is not being sent as string outside of casperJS.
 //\\n is needed for py, r, run, sikuli as the output multiline string needs to have \n escaped to work properly in JavaScript.
