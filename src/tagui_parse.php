@@ -164,7 +164,7 @@ $safe_intent = str_replace("'","\'",$cleaned_intent);
 $GLOBALS['block'] = $GLOBALS['block'] . $safe_intent ."\\n";}
 else {switch($cleaned_intent) {
 //Note: need to replace \\n with single \n if the output is not being sent as string outside of casperJS.
-//\\n is needed for py, r as the output multiline string needs to have \n escaped to work properly in JavaScript.
+//\\n is needed for py, r, run, sikuli as the output multiline string needs to have \n escaped to work properly in JavaScript.
 case("js finish"): {$cleaned_intent = str_replace("\\n", "\n", $GLOBALS['block']); $GLOBALS['inside_js_block'] = 0; break;}
 case("py finish"): {$cleaned_intent = $GLOBALS['block']; $GLOBALS['inside_py_block'] = 0; break;}
 case("r finish"): {$cleaned_intent = $GLOBALS['block']; $GLOBALS['inside_r_block'] = 0; break;}
