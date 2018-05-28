@@ -482,10 +482,6 @@ if not exist "%flow_file%.csv" goto no_datatable
 	for /f "tokens=* usebackq" %%c in (`gawk -F"," "{print NF}" "%flow_file%.csv" ^| sort -nu ^| head -n 1`) do set min_column=%%c
 	for /f "tokens=* usebackq" %%c in (`gawk -F"," "{print NF}" "%flow_file%.csv" ^| sort -nu ^| tail -n 1`) do set max_column=%%c
 
-rem comment off sanity check for columns consistency as cells with , will trigger false-positive
-rem	if %min_column% neq %max_column% (
-rem		echo ERROR - %flow_file%.csv has inconsistent # of columns | tee -a "%flow_file%.log"
-rem	)
 	if %min_column% lss 2 (
 		echo ERROR - %flow_file%.csv has has lesser than 2 columns | tee -a "%flow_file%.log"
 	) else (
@@ -551,13 +547,14 @@ if exist "tagui_chrome.in" (
 
 	rem check for which operating system and launch chrome accordingly
 	set chrome_started=Windows
-	set chrome_switches=--remote-debugging-port=9222 about:blank
+	set chrome_switches=--user-data-dir=chrome\tagui_user_profile --remote-debugging-port=9222 about:blank
 	if not exist "%chrome_command%" (
 		echo ERROR - cannot find Chrome at "%chrome_command%"
 		echo update chrome_command setting in tagui\src\tagui.cmd to your chrome.exe
 		exit /b 1
 	)
-	taskkill /IM chrome.exe /T /F > nul 2>&1
+	for /f "tokens=* usebackq" %%p in (`wmic process where "caption like '%%chrome.exe%%' and commandline like '%%tagui_user_profile --remote-debugging-port=9222%%'" get processid 2^>nul ^| cut -d" " -f 1 ^| sort -nur ^| head -n 1`) do set chrome_process_id=%%p
+	if not "!chrome_process_id!"=="" taskkill /PID !chrome_process_id! /T /F > nul 2>&1
 	start "" "%chrome_command%" !chrome_switches! !window_size! !headless_switch!
 
 	:scan_ws_again
@@ -587,8 +584,10 @@ if exist "tagui.sikuli\tagui_sikuli.in" echo finish > tagui.sikuli\tagui_sikuli.
 if exist "tagui_chrome.in" echo finish > tagui_chrome.in
 
 rem kill chrome processes by checking which os the processes are started on
-if not "!chrome_started!"=="" if %tagui_speed_mode%==false taskkill /IM chrome.exe /T /F > nul 2>&1
-
+if not "!chrome_started!"=="" if %tagui_speed_mode%==false (
+	for /f "tokens=* usebackq" %%p in (`wmic process where "caption like '%%chrome.exe%%' and commandline like '%%tagui_user_profile --remote-debugging-port=9222%%'" get processid 2^>nul ^| cut -d" " -f 1 ^| sort -nur ^| head -n 1`) do set chrome_process_id=%%p
+	if not "!chrome_process_id!"=="" taskkill /PID !chrome_process_id! /T /F > nul 2>&1
+)
 rem end of big loop for managing multiple data sets in datatable
 )
 :break_for_loop
