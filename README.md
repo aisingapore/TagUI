@@ -7,7 +7,7 @@
 ***TagUI is now maintained by [AI Singapore (aisingapore.org)](https://www.aisingapore.org), a government-funded initiative to build local artificial intelligence capabilities. The intention is to add AI capabilities to TagUI while keeping it open-source and free to use. To get started, check out above hands-on tutorial, Prezi slides, or recorded video at FOSSASIA 2018.***
 
 ### FEATURES
-***TagUI is a RPA / CLI tool for digital process automation***
+***TagUI is a CLI tool for digital process automation (RPA)***
 - automate Chrome visibly or headlessly
 - visual automation of websites and desktop
 - write in 20+ human languages & JavaScript

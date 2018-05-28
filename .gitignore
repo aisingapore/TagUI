@@ -48,6 +48,7 @@
 /src/tagui_service.done
 
 # exclude local files for chrome integration
+/src/chrome/tagui_user_profile
 /src/tagui_chrome.in
 /src/tagui_chrome.out
 /src/tagui_chrome.log
