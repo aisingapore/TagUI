@@ -197,6 +197,10 @@ if (casper.exists(x('//*[@href="'+locator+'"]'))) return true;
 if (casper.exists(x('//*[contains(@href,"'+locator+'")]'))) return true;
 return false;}
 
+/**
+ * Extra TagUI helper methods
+ */
+
 // friendlier name to use check_tx() in if condition in flow
 function present(element_locator) {if (!element_locator) return false; else return check_tx(element_locator);}
 
@@ -227,6 +231,44 @@ var time_elapsed = ((Date.now()-timer_start_time)/1000); timer_start_time = Date
 function sleep(ms) { // helper to add delay during loops
 var time_now = new Date().getTime(); var time_end = time_now + ms;
 while(time_now < time_end) {time_now = new Date().getTime();}}
+
+/**
+ * string cell data sanitiser, returns a CSV formatted string
+ * @param {string} cell_data
+ */
+function sanitise_csv_cell(cell_data) {
+    // Replace all double quotes with 2 double quotes
+    cell_data = cell_data.replace(/"/g, '\"\"')
+    var whitespaceCheckRegex = /\s/
+    // if cell_data has a comma, or new line, or its first or last character is a
+    // whitespace, then wrap the entire expression in double quotes
+    if (
+        cell_data.indexOf(',') >= 0
+        || cell_data.indexOf('\n') >= 0
+        || whitespaceCheckRegex.test(cell_data.charAt(0))
+        || whitespaceCheckRegex.test(cell_data.charAt(cell_data.length - 1))
+    ) {
+        cell_data = '\"' + cell_data + '\"'
+    }
+    return cell_data
+}
+
+/**
+ * Returns a CSV-formatted string that denotes a row in a CSV file
+ * @param {string[]} row_data a 1-D array of strings denoting data to
+ * encode as a CSV row
+ */
+function csv_row(row_data) {
+  // if row_data has at least 1 element, extract and sanitise first element
+  // else start_element is empty string
+  var start_element = (row_data.length > 0)
+    ? sanitise_csv_cell(row_data.shift())
+    : ''
+  // concat each row_data with a comma
+  return row_data.reduce(function(accumulator, currentValue) {
+    return accumulator + ',' + sanitise_csv_cell(currentValue)
+  }, start_element)
+}
 
 // for initialising integration with sikuli visual automation
 function sikuli_handshake() { // techo('[connecting to sikuli process]');
