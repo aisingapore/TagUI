@@ -261,7 +261,7 @@ function sanitise_csv_cell(cell_data) {
 function csv_row(row_data) {
   // if row_data has at least 1 element, extract and sanitise first element
   // else start_element is empty string
-  start_element = (row_data.length > 0)
+  var start_element = (row_data.length > 0)
     ? sanitise_csv_cell(row_data.shift())
     : ''
   // concat each row_data with a comma
