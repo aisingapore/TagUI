@@ -516,7 +516,7 @@ chrome.captureSelector = function(filename,selector) { // capture screenshot of 
 // first capture entire screen, then use casperjs / phantomjs browser to crop image base on selector dimensions
 chrome.capture(filename); var selector_rect = chrome.getRect(selector); // so that there is no extra dependency
 if (selector_rect.width > 0 && selector_rect.height > 0) // from using other libraries or creating html canvas 
-casper.thenOpen(filename, function() {casper . capture(filename, // spaces around . intentional to avoid replacing 
+casper.thenOpen(file_url(filename), function() {casper . capture(filename, // spaces around . to avoid replacing 
 {top: selector_rect.top, left: selector_rect.left, width: selector_rect.width, height: selector_rect.height});
 casper.thenOpen('about:blank');});}; // reset phantomjs browser state
 
@@ -759,6 +759,11 @@ if (raw_intent.substr(0,5) == ('test'+'.')) return true; // avoid replacement wi
 if ((raw_intent.substr(0,2) == '//') || (raw_intent.charAt(raw_intent.length-1) == ';')) return true;
 // assume = is assignment statement, kinda acceptable as this is checked at the very end
 if (raw_intent.indexOf('=') > -1) return true; return false;}
+
+function file_url(absolute_filename) { // helper function to append file:// according for opening local files
+if (!absolute_filename || absolute_filename == '') return '';
+if (absolute_filename.substr(0,1) == '/') return 'file://' + absolute_filename;
+if (absolute_filename.substr(1,1) == ':') return 'file:///' + absolute_filename; return absolute_filename;}
 
 function abs_file(filename) { // helper function to return absolute filename
 if (filename == '') return ''; // unlike tagui_parse.php not deriving path from script variable
