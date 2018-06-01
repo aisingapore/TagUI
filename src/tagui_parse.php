@@ -160,8 +160,6 @@ $cleaned_intent = clean_intent(fgets($input_file));
 if ($cleaned_intent == "") continue;
 $intent_type = get_intent($cleaned_intent);
 if ($intent_type == "block") {
-if ($GLOBALS['inside_py_block'] == 1 || $GLOBALS['inside_r_block'] == 1 || $GLOBALS['inside_vision_block'] == 1)
-$cleaned_intent = str_replace("'","\'", $cleaned_intent); //avoid breaking echo when single quote is used
 $GLOBALS['block'] = $GLOBALS['block'] . $cleaned_intent ."\\n";}
 else {switch($cleaned_intent) {
 //Note: need to replace \\n with single \n if the output is not being sent as string outside of casperJS.
@@ -360,9 +358,15 @@ default: echo "ERROR - " . current_line() . " cannot understand step " . $script
 
 function get_intent($raw_intent) {$lc_raw_intent = strtolower($raw_intent); 
 //check for a finish command and return, so we don't accidentally count it as a block intent
-if (substr($lc_raw_intent, -6) != "finish") {
+if ($lc_raw_intent == "py finish") return "py";
+if ($lc_raw_intent == "r finish") return "r";
+if ($lc_raw_intent == "run finish") return "run";
+if ($lc_raw_intent == "vision finish") return "vision"; 
+if ($lc_raw_intent == "dom finish") return "dom";
+if ($lc_raw_intent == "js finish") return "js";
+
 if ($GLOBALS['inside_py_block'] != 0 || $GLOBALS['inside_r_block'] != 0 || $GLOBALS['inside_run_block'] != 0 
-|| $GLOBALS['inside_vision_block'] != 0 || $GLOBALS['inside_js_block'] != 0 || $GLOBALS['inside_dom_block'] != 0) return "block";}
+|| $GLOBALS['inside_vision_block'] != 0 || $GLOBALS['inside_js_block'] != 0 || $GLOBALS['inside_dom_block'] != 0) return "block";
 
 if ((substr($lc_raw_intent,0,7)=="http://") or (substr($lc_raw_intent,0,8)=="https://") or (substr($lc_raw_intent,0,11)=="about:blank")) return "url"; // recognizing about:blank as valid URL as it is part of HTML5 standard
 
@@ -825,7 +829,8 @@ return "casper.then(function() {"."{techo('".$raw_intent."');\napi_result = ''; 
 function run_intent($raw_intent) {
 $raw_intent = str_replace('\\','\\\\',$raw_intent); // to call paths correctly for Windows
 if (strtolower($raw_intent) == "run begin") {$GLOBALS['inside_run_block'] = 1; $GLOBALS['block'] = "run "; return "";}
-$params = trim(substr($raw_intent." ",1+strpos($raw_intent." "," ")));
+$safe_intent = str_replace("'","\'",$raw_intent); // avoid breaking echo when single quote is used
+$params = trim(substr($safe_intent." ",1+strpos($safe_intent." "," ")));
 if ($params == "") echo "ERROR - " . current_line() . " command to run missing for " . $raw_intent . "\n"; else
 return "casper.then(function() {"."techo('".$raw_intent."');});\ncasper.then(function() {".
 "casper.waitForExec('".$params."', null, function(response) {run_result = '';\n" .
