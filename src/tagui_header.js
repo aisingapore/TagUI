@@ -771,7 +771,8 @@ if (filename.substr(0,1) == '/') return filename; // return mac/linux absolute f
 if (filename.substr(1,1) == ':') return filename.replace(/\\/g,'/'); // return windows absolute filename directly
 var tmp_flow_path = flow_path; // otherwise use flow_path defined in generated script to build absolute filename
 // above str_replace is because casperjs/phantomjs do not seem to support \ for windows paths, replace with / to work
-if (tmp_flow_path.indexOf('/') > -1) return tmp_flow_path + '/' + filename; else return tmp_flow_path + '\\' + filename;}
+if (tmp_flow_path.indexOf('/') > -1) return (tmp_flow_path + '/' + filename).replace(/\\/g,'/');
+else return tmp_flow_path + '\\' + filename;}
 
 function add_concat(source_string) { // parse string and add missing + concatenator
 if ((source_string.indexOf("'") > -1) && (source_string.indexOf('"') > -1))

@@ -441,7 +441,8 @@ if (strpos($filename,"'+")!==false and strpos($filename,"+'")!==false)
 return "'+abs_file('" . $filename . "')+'"; // throw to runtime abs_file function if dynamic filename is given
 $flow_path = str_replace("\\","/",dirname($flow_script)); // otherwise use flow script path to build absolute filename
 // above str_replace is because casperjs/phantomjs do not seem to support \ for windows paths, replace with / to work
-if (strpos($flow_path,"/")!==false) return $flow_path . '/' . $filename; else return $flow_path . '\\' . $filename;} 
+if (strpos($flow_path,"/")!==false) return str_replace("\\","/",$flow_path . '/' . $filename);
+else return $flow_path . '\\' . $filename;} 
 
 function beg_tx($locator) { // helper function to return beginning string for handling locators
 if ($GLOBALS['inside_while_loop'] == 0)
