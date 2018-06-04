@@ -481,6 +481,8 @@ set tagui_data_set_size=1
 if not exist "%flow_file%.csv" goto no_datatable
 	for /f "tokens=* usebackq" %%c in (`gawk -F"," "{print NF}" "%flow_file%.csv" ^| sort -nu ^| head -n 1`) do set min_column=%%c
 	for /f "tokens=* usebackq" %%c in (`gawk -F"," "{print NF}" "%flow_file%.csv" ^| sort -nu ^| tail -n 1`) do set max_column=%%c
+	rem below counts the first row, otherwise edge cases will break this
+	for /f "tokens=* usebackq" %%c in (`head -n 1 "%flow_file%.csv" ^| gawk -F"," "{print NF}"`) do set min_column=%%c
 
 	if %min_column% lss 2 (
 		echo ERROR - %flow_file%.csv has has lesser than 2 columns | tee -a "%flow_file%.log"
