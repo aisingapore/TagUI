@@ -16,10 +16,10 @@ $config_file = fopen('tagui_config.txt','r') or die("ERROR - cannot open tagui_c
 $header_file = fopen('tagui_header.js','r') or die("ERROR - cannot open tagui_header.js" . "\n");
 $footer_file = fopen('tagui_footer.js','r') or die("ERROR - cannot open tagui_footer.js" . "\n");
 
-$repo_count = 0; if (file_exists($script . '.csv')) { // load repository file for objects and keywords
-$repo_file = fopen($script . '.csv','r') or die("ERROR - cannot open " . $script . '.csv' . "\n");
+$repo_count = 0; if (file_exists(getenv('custom_csv_file'))) { // load repository file for objects and keywords
+$repo_file = fopen(getenv('custom_csv_file'),'r') or die("ERROR - cannot open " . getenv('custom_csv_file') . "\n");
 while (!feof($repo_file)) {$repo_data[$repo_count] = fgetcsv($repo_file);
-if (count($repo_data[$repo_count]) == 0) die("ERROR - empty row found in " . $script . '.csv' . "\n");
+if (count($repo_data[$repo_count]) == 0) die("ERROR - empty row found in " . getenv('custom_csv_file') . "\n");
 $repo_count++;} fclose($repo_file); $repo_count-=1; //-1 for header, for EOF need to check flexibly using below line
 if (count($repo_data[$repo_count]) == 1) $repo_count-=1;} //-1 for EOF (Windows files don't end with newline character)
 

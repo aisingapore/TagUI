@@ -219,14 +219,26 @@ tagui_error_code=0
 # transpose datatable csv file if file to be transposed exists
 if [ -f "$1_transpose".csv ]; then php -q transpose.php "$1_transpose".csv | tee -a "$1".log; fi
 
+custom_csv_file=$1.csv
+# check if custom csv file is provided to be used as datatable
+if [[ "$2" == *".csv" ]]; then custom_csv_file=$(cd "$(dirname "$1")"; cd "$(dirname "$2")"; pwd)/$(basename "$2"); fi
+if [[ "$3" == *".csv" ]]; then custom_csv_file=$(cd "$(dirname "$1")"; cd "$(dirname "$3")"; pwd)/$(basename "$3"); fi
+if [[ "$4" == *".csv" ]]; then custom_csv_file=$(cd "$(dirname "$1")"; cd "$(dirname "$4")"; pwd)/$(basename "$4"); fi
+if [[ "$5" == *".csv" ]]; then custom_csv_file=$(cd "$(dirname "$1")"; cd "$(dirname "$5")"; pwd)/$(basename "$5"); fi
+if [[ "$6" == *".csv" ]]; then custom_csv_file=$(cd "$(dirname "$1")"; cd "$(dirname "$6")"; pwd)/$(basename "$6"); fi
+if [[ "$7" == *".csv" ]]; then custom_csv_file=$(cd "$(dirname "$1")"; cd "$(dirname "$7")"; pwd)/$(basename "$7"); fi
+if [[ "$8" == *".csv" ]]; then custom_csv_file=$(cd "$(dirname "$1")"; cd "$(dirname "$8")"; pwd)/$(basename "$8"); fi
+if [[ "$9" == *".csv" ]]; then custom_csv_file=$(cd "$(dirname "$1")"; cd "$(dirname "$9")"; pwd)/$(basename "$9"); fi
+export custom_csv_file=$custom_csv_file
+
 # check datatable csv file for batch automation
 tagui_data_set_size=1
-if [ -f "$1".csv ]; then
-# min_column=`awk -F',' '{print NF}' "$1".csv | sort -nu | head -n 1`
-# max_column=`awk -F',' '{print NF}' "$1".csv | sort -nu | tail -n 1`
+if [ -f "$custom_csv_file" ]; then
+# min_column=`awk -F',' '{print NF}' "$custom_csv_file" | sort -nu | head -n 1`
+# max_column=`awk -F',' '{print NF}' "$custom_csv_file" | sort -nu | tail -n 1`
 # below counts the first row, otherwise edge cases will break this
-min_column=`head -n 1 "$1".csv | awk -F',' '{print NF}'`
-if [ "$min_column" -lt 2 ]; then echo "ERROR - $1.csv has lesser than 2 columns" | tee -a "$1".log
+min_column=`head -n 1 "$custom_csv_file" | awk -F',' '{print NF}'`
+if [ "$min_column" -lt 2 ]; then echo "ERROR - $custom_csv_file has lesser than 2 columns" | tee -a "$1".log
 else tagui_data_set_size="$(($min_column-1))"; fi; fi
 
 # big loop for managing multiple data sets in datatable 
