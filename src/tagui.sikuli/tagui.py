@@ -148,8 +148,7 @@ def vision_intent ( raw_intent ):
 	return 1
 	
 def visible_intent ( raw_intent ):
-	params = (raw_intent + ' ')[1+(raw_intent + ' ').find(' '):].strip()
-	print '[tagui] ACTION - check if present/visible ' + params
+	print '[tagui] ACTION - ' + raw_intent.strip()
 	if exists(params):
 		return 1
 	else:
