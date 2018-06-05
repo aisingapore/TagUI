@@ -146,6 +146,13 @@ def vision_intent ( raw_intent ):
 	print '[tagui] ACTION - ' + params
 	exec(params,globals())
 	return 1
+	
+def visible_intent ( raw_intent ):
+	print '[tagui] ACTION - ' + raw_intent.strip()
+	if exists(params):
+		return 1
+	else:
+		return 0
 
 # function to interpret input intent
 def get_intent ( raw_intent ):
@@ -171,6 +178,8 @@ def get_intent ( raw_intent ):
 		return 'snap'
 	if raw_intent[:7].lower() == 'vision ':
 		return 'vision'
+	if raw_intent[:8].lower() == 'visible ' or raw_intent[:8].lower() == 'present ':
+		return 'visible';
 	return 'error'
 
 # function to parse and act on intent
@@ -198,6 +207,8 @@ def parse_intent ( script_line ):
 		return snap_intent(script_line)
 	elif intent_type == 'vision':
 		return vision_intent(script_line)
+	elif intent_type == 'visible':
+		return visible_intent(script_line);
 	else:
 		return 0 
 

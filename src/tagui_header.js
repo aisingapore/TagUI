@@ -202,13 +202,20 @@ return false;}
  */
 
 // friendlier name to use check_tx() in if condition in flow
-function present(element_locator) {if (!element_locator) return false; else return check_tx(element_locator);}
+function present(element_locator) {if (!element_locator) return false; 
+if (is_sikuli(element_locator)) {var abs_param = abs_file(element_locator); var fs = require('fs');
+if (!fs.exists(abs_param)) {this.echo('ERROR - cannot find image file for present step').exit();}
+if (sikuli_step("present " + abs_param)) return true; else return false;}
+else return check_tx(element_locator);}
 
 // friendlier name to check element visibility using elementVisible()
 function visible(element_locator) {if (!element_locator) return false;
-var element_located = tx(element_locator); var element_visible = casper.elementVisible(element_located);
+if (is_sikuli(element_locator)) {var abs_param = abs_file(element_locator); var fs = require('fs');
+if (!fs.exists(abs_param)) {this.echo('ERROR - cannot find image file for visible step').exit();}
+if (sikuli_step("visible " + abs_param)) return true; else return false;}
+else {var element_located = tx(element_locator); var element_visible = casper.elementVisible(element_located);
 // if tx() returns x('/html') means that the element is not found, so set element_visible to false
-if (element_located.toString() == x('/html').toString()) element_visible = false; return element_visible;}
+if (element_located.toString() == x('/html').toString()) element_visible = false; return element_visible;}}
 
 // friendlier name to count elements using countElements()
 function count(element_locator) {if (!element_locator) return 0;
