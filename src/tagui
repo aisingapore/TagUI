@@ -222,8 +222,8 @@ if [ -f "$1_transpose".csv ]; then php -q transpose.php "$1_transpose".csv | tee
 # check datatable csv file for batch automation
 tagui_data_set_size=1
 if [ -f "$1".csv ]; then
-min_column=`awk -F',' '{print NF}' "$1".csv | sort -nu | head -n 1`
-max_column=`awk -F',' '{print NF}' "$1".csv | sort -nu | tail -n 1`
+# min_column=`awk -F',' '{print NF}' "$1".csv | sort -nu | head -n 1`
+# max_column=`awk -F',' '{print NF}' "$1".csv | sort -nu | tail -n 1`
 # below counts the first row, otherwise edge cases will break this
 min_column=`head -n 1 "$1".csv | awk -F',' '{print NF}'`
 if [ "$min_column" -lt 2 ]; then echo "ERROR - $1.csv has lesser than 2 columns" | tee -a "$1".log
