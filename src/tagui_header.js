@@ -202,13 +202,20 @@ return false;}
  */
 
 // friendlier name to use check_tx() in if condition in flow
-function present(element_locator) {if (!element_locator) return false; else return check_tx(element_locator);}
+function present(element_locator) {if (!element_locator) return false; 
+if (is_sikuli(element_locator)) {var abs_param = abs_file(element_locator); var fs = require('fs');
+if (!fs.exists(abs_param)) {this.echo('ERROR - cannot find image file for present step').exit();}
+if (sikuli_step("present " + abs_param)) return true; else return false;}
+else return check_tx(element_locator);}
 
 // friendlier name to check element visibility using elementVisible()
 function visible(element_locator) {if (!element_locator) return false;
-var element_located = tx(element_locator); var element_visible = casper.elementVisible(element_located);
+if (is_sikuli(element_locator)) {var abs_param = abs_file(element_locator); var fs = require('fs');
+if (!fs.exists(abs_param)) {this.echo('ERROR - cannot find image file for visible step').exit();}
+if (sikuli_step("visible " + abs_param)) return true; else return false;}
+else {var element_located = tx(element_locator); var element_visible = casper.elementVisible(element_located);
 // if tx() returns x('/html') means that the element is not found, so set element_visible to false
-if (element_located.toString() == x('/html').toString()) element_visible = false; return element_visible;}
+if (element_located.toString() == x('/html').toString()) element_visible = false; return element_visible;}}
 
 // friendlier name to count elements using countElements()
 function count(element_locator) {if (!element_locator) return 0;
@@ -516,7 +523,7 @@ chrome.captureSelector = function(filename,selector) { // capture screenshot of 
 // first capture entire screen, then use casperjs / phantomjs browser to crop image base on selector dimensions
 chrome.capture(filename); var selector_rect = chrome.getRect(selector); // so that there is no extra dependency
 if (selector_rect.width > 0 && selector_rect.height > 0) // from using other libraries or creating html canvas 
-casper.thenOpen(filename, function() {casper . capture(filename, // spaces around . intentional to avoid replacing 
+casper.thenOpen(file_url(filename), function() {casper . capture(filename, // spaces around . to avoid replacing 
 {top: selector_rect.top, left: selector_rect.left, width: selector_rect.width, height: selector_rect.height});
 casper.thenOpen('about:blank');});}; // reset phantomjs browser state
 
@@ -760,13 +767,19 @@ if ((raw_intent.substr(0,2) == '//') || (raw_intent.charAt(raw_intent.length-1) 
 // assume = is assignment statement, kinda acceptable as this is checked at the very end
 if (raw_intent.indexOf('=') > -1) return true; return false;}
 
+function file_url(absolute_filename) { // helper function to append file:// according for opening local files
+if (!absolute_filename || absolute_filename == '') return '';
+if (absolute_filename.substr(0,1) == '/') return 'file://' + absolute_filename;
+if (absolute_filename.substr(1,1) == ':') return 'file:///' + absolute_filename; return absolute_filename;}
+
 function abs_file(filename) { // helper function to return absolute filename
 if (filename == '') return ''; // unlike tagui_parse.php not deriving path from script variable
 if (filename.substr(0,1) == '/') return filename; // return mac/linux absolute filename directly
 if (filename.substr(1,1) == ':') return filename.replace(/\\/g,'/'); // return windows absolute filename directly
 var tmp_flow_path = flow_path; // otherwise use flow_path defined in generated script to build absolute filename
 // above str_replace is because casperjs/phantomjs do not seem to support \ for windows paths, replace with / to work
-if (tmp_flow_path.indexOf('/') > -1) return tmp_flow_path + '/' + filename; else return tmp_flow_path + '\\' + filename;}
+if (tmp_flow_path.indexOf('/') > -1) return (tmp_flow_path + '/' + filename).replace(/\\/g,'/');
+else return tmp_flow_path + '\\' + filename;}
 
 function add_concat(source_string) { // parse string and add missing + concatenator
 if ((source_string.indexOf("'") > -1) && (source_string.indexOf('"') > -1))
