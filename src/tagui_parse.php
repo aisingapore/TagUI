@@ -16,10 +16,10 @@ $config_file = fopen('tagui_config.txt','r') or die("ERROR - cannot open tagui_c
 $header_file = fopen('tagui_header.js','r') or die("ERROR - cannot open tagui_header.js" . "\n");
 $footer_file = fopen('tagui_footer.js','r') or die("ERROR - cannot open tagui_footer.js" . "\n");
 
-$repo_count = 0; if (file_exists($script . '.csv')) { // load repository file for objects and keywords
-$repo_file = fopen($script . '.csv','r') or die("ERROR - cannot open " . $script . '.csv' . "\n");
+$repo_count = 0; if (file_exists(getenv('custom_csv_file'))) { // load repository file for objects and keywords
+$repo_file = fopen(getenv('custom_csv_file'),'r') or die("ERROR - cannot open " . getenv('custom_csv_file') . "\n");
 while (!feof($repo_file)) {$repo_data[$repo_count] = fgetcsv($repo_file);
-if (count($repo_data[$repo_count]) == 0) die("ERROR - empty row found in " . $script . '.csv' . "\n");
+if (count($repo_data[$repo_count]) == 0) die("ERROR - empty row found in " . getenv('custom_csv_file') . "\n");
 $repo_count++;} fclose($repo_file); $repo_count-=1; //-1 for header, for EOF need to check flexibly using below line
 if (count($repo_data[$repo_count]) == 1) $repo_count-=1;} //-1 for EOF (Windows files don't end with newline character)
 
@@ -301,15 +301,33 @@ $GLOBALS['line_number']++; $GLOBALS['real_line_number']++;
 $script_line = trim($script_line); if ($script_line=="") {$GLOBALS['real_line_number']--; return "";}
 
 // check existence of objects or keywords by searching for `object or keyword name`, then expand from repository
-if ((substr_count($script_line,'`') > 1) and (!(substr_count($script_line,'`') & 1))) { // check for even number of `
-if ($GLOBALS['repo_count'] == 0) echo "ERROR - ".current_line()." no repository data for ".$script_line."\n";
-// loop through repository data to search and replace definitions, do it twice to handle objects within keywords
-else {if (getenv('tagui_data_set')!==false) $data_set = intval(getenv('tagui_data_set')); else $data_set = 1;
-for ($repo_check = 0; $repo_check <= $GLOBALS['repo_count']; $repo_check++) $script_line =
-str_replace("`".$GLOBALS['repo_data'][$repo_check][0]."`",$GLOBALS['repo_data'][$repo_check][$data_set],$script_line);
-for ($repo_check = 0; $repo_check <= $GLOBALS['repo_count']; $repo_check++) $script_line =
-str_replace("`".$GLOBALS['repo_data'][$repo_check][0]."`",$GLOBALS['repo_data'][$repo_check][$data_set],$script_line);
-if (strpos($script_line,'`')!==false) echo "ERROR - ".current_line()." no repository data for ".$script_line."\n";}}
+// check for even number of `
+if ((substr_count($script_line,'`') > 1) and (!(substr_count($script_line,'`') & 1))) {
+	if ($GLOBALS['repo_count'] == 0) {
+		echo "ERROR - ".current_line()." no repository data for ".$script_line."\n";
+	} else {
+		if (getenv('tagui_data_set')!==false) {
+			$data_set = intval(getenv('tagui_data_set'));
+		} else {
+			$data_set = 1;
+		}
+		$escaped_line_ends = ["\n" => "\\n", "\r" => "\\r"];
+		// loop through repository data to search and replace definitions, do it twice to handle objects within keywords
+		for ($repo_check = 0; $repo_check <= $GLOBALS['repo_count']; $repo_check++) {
+			$repo_keyword = "`".$GLOBALS['repo_data'][$repo_check][0]."`";
+			$repo_data_value = strtr($GLOBALS['repo_data'][$repo_check][$data_set], $escaped_line_ends);
+			$script_line = str_replace($repo_keyword, $repo_data_value, $script_line);
+		}
+		for ($repo_check = 0; $repo_check <= $GLOBALS['repo_count']; $repo_check++) {
+			$repo_keyword = "`".$GLOBALS['repo_data'][$repo_check][0]."`";
+			$repo_data_value = strtr($GLOBALS['repo_data'][$repo_check][$data_set], $escaped_line_ends);
+			$script_line = str_replace($repo_keyword, $repo_data_value, $script_line);
+		}
+		if (strpos($script_line,'`')!==false) {
+			echo "ERROR - ".current_line()." no repository data for ".$script_line."\n";
+		}
+	}
+}
 
 // trim and check again after replacing definitions from repository
 $script_line = trim($script_line); if ($script_line=="") {$GLOBALS['real_line_number']--; return "";}

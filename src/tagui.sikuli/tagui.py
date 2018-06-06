@@ -1,7 +1,8 @@
 # SIKULI INTERFACE FOR TAGUI FRAMEWORK ~ TEBEL.ORG #
 
-# timeout in seconds for finding a web element
-setAutoWaitTimeout(10)
+# timeout in seconds for finding an element
+wait_timeout = 10
+setAutoWaitTimeout(wait_timeout)
 
 # delay in seconds between scanning for inputs
 scan_period = 0.5
@@ -148,10 +149,14 @@ def vision_intent ( raw_intent ):
 	return 1
 	
 def visible_intent ( raw_intent ):
+	setAutoWaitTimeout(1)
+	params = (raw_intent + ' ')[1+(raw_intent + ' ').find(' '):].strip()
 	print '[tagui] ACTION - ' + raw_intent.strip()
 	if exists(params):
+		setAutoWaitTimeout(wait_timeout)
 		return 1
 	else:
+		setAutoWaitTimeout(wait_timeout)
 		return 0
 
 # function to interpret input intent

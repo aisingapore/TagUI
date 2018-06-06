@@ -366,8 +366,8 @@ show / print|element to read (page = webpage, ie raw html) |print element text t
 save|element (page = webpage) ***to*** optional filename|save element text to file
 load|filename ***to*** variable name|load file content to variable
 echo|text (in quotation marks) and variables|print text/variables to output
-dump|text and variables ***to*** optional filename|save text/variables to file
-write|text and variables ***to*** optional filename|append text/variables to file
+dump|text (in quotation marks) and variables ***to*** optional filename|save text/variables to file
+write|text (in quotation marks) and variables ***to*** optional filename|append text/variables to file
 snap|element (page = webpage) ***to*** optional filename|save screenshot to file
 snap (pdf)|page ***to*** filename.pdf (headless Chrome / PhantomJS)|save webpage to basic pdf
 table|element (XPath selector only) ***to*** optional filename.csv|save basic html table to csv
@@ -384,7 +384,7 @@ Tip - to use variables where text is expected, '+variable+' can be used. XPath i
   :-------|:-----------------------------|:------
   wait|optional time in seconds (default is 5 seconds)|explicitly wait for some time
   live|try steps or code interactively in Chrome / PhantomJS|enter live mode ([Firefox not yet](https://github.com/laurentj/slimerjs/issues/639))
-  check|condition **&#124;** text if true **&#124;** text if false (text in quotes)|check condition and print result
+  check|condition **&#124;** text (in quotes) if true **&#124;** text (in quotes) if false|check condition and print result
   upload|element (CSS selector only) ***as*** filename to upload|upload file to website
   download|url to download ***to*** filename to save|download from url to file
   receive|url keyword to watch ***to*** filename to save|receive resource to file

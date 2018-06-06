@@ -476,14 +476,45 @@ set tagui_error_code=0
 rem transpose datatable csv file if file to be transposed exists
 if exist "%flow_file%_transpose.csv" php -q transpose.php "%flow_file%_transpose.csv" | tee -a "%flow_file%.log"
 
+cd /d "%initial_dir%"
+set "custom_csv_file=%flow_file%.csv"
+rem check if custom csv file is provided to be used as datatable
+if "%arg2:~-4%"==".csv" (
+        set "custom_csv_file=%~dpnx2"
+)
+if "%arg3:~-4%"==".csv" (
+        set "custom_csv_file=%~dpnx3"
+)
+if "%arg4:~-4%"==".csv" (
+        set "custom_csv_file=%~dpnx4"
+)
+if "%arg5:~-4%"==".csv" (
+        set "custom_csv_file=%~dpnx5"
+)
+if "%arg6:~-4%"==".csv" (
+        set "custom_csv_file=%~dpnx6"
+)
+if "%arg7:~-4%"==".csv" (
+        set "custom_csv_file=%~dpnx7"
+)
+if "%arg8:~-4%"==".csv" (
+        set "custom_csv_file=%~dpnx8"
+)
+if "%arg9:~-4%"==".csv" (
+        set "custom_csv_file=%~dpnx9"
+)
+cd /d "%~dp0"
+
 rem check datatable csv file for batch automation
 set tagui_data_set_size=1 
-if not exist "%flow_file%.csv" goto no_datatable
-	for /f "tokens=* usebackq" %%c in (`gawk -F"," "{print NF}" "%flow_file%.csv" ^| sort -nu ^| head -n 1`) do set min_column=%%c
-	for /f "tokens=* usebackq" %%c in (`gawk -F"," "{print NF}" "%flow_file%.csv" ^| sort -nu ^| tail -n 1`) do set max_column=%%c
+if not exist "%custom_csv_file%" goto no_datatable
+	rem for /f "tokens=* usebackq" %%c in (`gawk -F"," "{print NF}" "%custom_csv_file%" ^| sort -nu ^| head -n 1`) do set min_column=%%c
+	rem for /f "tokens=* usebackq" %%c in (`gawk -F"," "{print NF}" "%custom_csv_file%" ^| sort -nu ^| tail -n 1`) do set max_column=%%c
+	rem below counts the first row, otherwise edge cases will break this
+	for /f "tokens=* usebackq" %%c in (`head -n 1 "%custom_csv_file%" ^| gawk -F"," "{print NF}"`) do set min_column=%%c
 
 	if %min_column% lss 2 (
-		echo ERROR - %flow_file%.csv has has lesser than 2 columns | tee -a "%flow_file%.log"
+		echo ERROR - %custom_csv_file% has has lesser than 2 columns | tee -a "%flow_file%.log"
 	) else (
 		set /a tagui_data_set_size=%min_column% - 1
 	)
