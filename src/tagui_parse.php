@@ -163,11 +163,10 @@ if ($intent_type == "block") {
 $GLOBALS['block'] = $GLOBALS['block'] . $cleaned_intent ."\\n";}
 else {switch($cleaned_intent) {
 //Note: need to replace \\n with single \n if the output is not being sent as string outside of casperJS.
-//\\n is needed for py, r, run, sikuli as the output multiline string needs to have \n escaped to work properly in JavaScript.
+//\\n is needed for py, r, sikuli as the output multiline string needs to have \n escaped to work properly in JavaScript.
 case("js finish"): {$cleaned_intent = str_replace("\\n", "\n", $GLOBALS['block']); $GLOBALS['inside_js_block'] = 0; break;}
 case("py finish"): {$cleaned_intent = $GLOBALS['block']; $GLOBALS['inside_py_block'] = 0; break;}
 case("r finish"): {$cleaned_intent = $GLOBALS['block']; $GLOBALS['inside_r_block'] = 0; break;}
-case("run finish"): {$cleaned_intent = $GLOBALS['block']; $GLOBALS['inside_run_block'] = 0; break;}
 case("dom finish"): {$cleaned_intent = str_replace("\\n", "\n", $GLOBALS['block']); $GLOBALS['inside_dom_block'] = 0; break;}
 case("vision finish"): {$cleaned_intent = $GLOBALS['block']; $GLOBALS['inside_vision_block'] = 0; break;}}
 $output_line = parse_intent($intent_type, $cleaned_intent);
@@ -378,13 +377,13 @@ function get_intent($raw_intent) {$lc_raw_intent = strtolower($raw_intent);
 //check for a finish command and return, so we don't accidentally count it as a block intent
 if ($lc_raw_intent == "py finish") return "py";
 if ($lc_raw_intent == "r finish") return "r";
-if ($lc_raw_intent == "run finish") return "run";
 if ($lc_raw_intent == "vision finish") return "vision"; 
 if ($lc_raw_intent == "dom finish") return "dom";
 if ($lc_raw_intent == "js finish") return "js";
 
-if ($GLOBALS['inside_py_block'] != 0 || $GLOBALS['inside_r_block'] != 0 || $GLOBALS['inside_run_block'] != 0 
-|| $GLOBALS['inside_vision_block'] != 0 || $GLOBALS['inside_js_block'] != 0 || $GLOBALS['inside_dom_block'] != 0) return "block";
+if ($GLOBALS['inside_py_block'] != 0 || $GLOBALS['inside_r_block'] != 0 || $GLOBALS['inside_vision_block'] != 0
+|| $GLOBALS['inside_js_block'] != 0 || $GLOBALS['inside_dom_block'] != 0) return "block";
+if ($GLOBALS['inside_run_block'] != 0) return "run";
 
 if ((substr($lc_raw_intent,0,7)=="http://") or (substr($lc_raw_intent,0,8)=="https://") or (substr($lc_raw_intent,0,11)=="about:blank")) return "url"; // recognizing about:blank as valid URL as it is part of HTML5 standard
 
@@ -847,11 +846,13 @@ return "casper.then(function() {"."{techo('".$raw_intent."');\napi_result = ''; 
 
 function run_intent($raw_intent) {
 $raw_intent = str_replace('\\','\\\\',$raw_intent); // to call paths correctly for Windows
-if (strtolower($raw_intent) == "run begin") {$GLOBALS['inside_run_block'] = 1; $GLOBALS['block'] = "run "; return "";}
+if (strtolower($raw_intent) == "run begin") {$GLOBALS['inside_run_block'] = 1; return "";}
+else if (strtolower($raw_intent) == "run finish") {$GLOBALS['inside_run_block'] = 0; return "";}
+if ($GLOBALS['inside_run_block'] == 1) $raw_intent = "run " . $raw_intent;
 $safe_intent = str_replace("'","\'",$raw_intent); // avoid breaking echo when single quote is used
 $params = trim(substr($safe_intent." ",1+strpos($safe_intent." "," ")));
 if ($params == "") echo "ERROR - " . current_line() . " command to run missing for " . $raw_intent . "\n"; else
-return "casper.then(function() {"."techo('".$raw_intent."');});\ncasper.then(function() {".
+return "casper.then(function() {"."techo('".$safe_intent."');});\ncasper.then(function() {".
 "casper.waitForExec('".$params."', null, function(response) {run_result = '';\n" .
 "run_result = (response.data.stdout.trim() || response.data.stderr.trim()); " .
 "run_result = run_result.replace(/\\r\\n/g,'\\n');\nrun_json = response.data;}, function() {" .
