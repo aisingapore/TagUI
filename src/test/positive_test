@@ -191,6 +191,27 @@ click test3
 number++;
 }
 
+// test for complex for and if nested loops
+a = 1
+for n from 1 to 20
+echo n
+
+for n from 1 to 20
+{
+echo n
+}
+
+for n from 1 to 20
+{
+	if (a==1)
+	{
+		for p from 21 to 40
+		{
+			echo n ' - ' p
+		}
+	}
+}
+
 // test {} for popup step
 popup about
 {
@@ -279,13 +300,24 @@ show page
 print element
 print page
 
-// test save
+// test save with different filename formats
 save element
 save element to filename.txt
+save element to tmp/filename.txt
 save element to /tmp/filename.txt
+save element to ./tmp/filename.txt
+save element to tmp\filename.txt
+save element to c:\tmp\filename.txt
+save element to .\tmp\filename.txt
+
 save page
 save page to filename.txt
+save page to tmp/filename.txt
 save page to /tmp/filename.txt
+save page to ./tmp/filename.txt
+save page to tmp\filename.txt
+save page to c:\tmp\filename.txt
+save page to .\tmp\filename.txt
 
 // test echo
 echo variable
@@ -332,6 +364,16 @@ table element to filename.csv
 table (//table)[7]
 table (//table)[7] to filename.csv
 
+// test tagui
+// can't really test as folders and files structure won't be the same
+// tagui flow_filename
+// tagui tmp/flow_filename
+// tagui /tmp/flow_filename
+// tagui ./tmp/flow_filename
+// tagui tmp\flow_filename
+// tagui c:\tmp\flow_filename
+// tagui .\tmp\flow_filename
+
 // test upload
 upload #css_selector as abc.png
 upload #css_selector as /tmp/abc.png
@@ -358,6 +400,9 @@ wait 10 sec
 wait 10 secs
 wait 10 seconds
 wait 7.5 seconds
+
+// test live
+live
 
 // test check
 check eggs lesser than 10 | "eggs lesser than 10" | "eggs not lesser than 10"
@@ -392,17 +437,105 @@ api http://www.dummytestsite.com/api?COLOR1=red&COLOR2=green&COLOR3=blue
 var COLOR1='red'; var COLOR2='green'; var COLOR3='blue';
 api http://www.dummytestsite.com/api?COLOR1='+COLOR1+'&COLOR2='+COLOR2+'&COLOR3='+COLOR3+'
 
+// test run
+run face_recognition par1 par2 par3
+run begin
+face_recognition1 par1 par2 par3
+face_recognition2 par1 par2 par3
+run finish
+
 // test dom
 dom var page_title = document.title;
-
-// test test
-// test something and see what happens
+dom begin
+var page_title = document.title;
+	var page_input = prompt('enter your title');
+		return page_title + ' ' + page_input;
+dom finish
+dom document.querySelector('#header p').focus()
 
 // test js
 js this.echo('THIS IS JAVASCRIPT');
+js begin
+   b = 1
+c = 2
+	a = b + c;
+
+	if (a == 3)
+	{
+		this.echo('YES');
+
+	}
+
+if (a != 3)
+{
+this.echo('NO');
+}
+js finish
+
+// test r
+r a=1;b=2
+r c=a+b
+r cat(c)
+echo r_result
+
+r begin
+a='1';b='2'
+d=paste(a,b,sep='')
+cat(d)
+r finish
+echo r_result
+
+r begin
+if (TRUE) {
+cat('TRUE1')
+cat('TRUE2')
+}
+r finish
+echo r_result
+
+r begin
+		if (FALSE) {
+	cat('FALSE1')
+cat('FALSE2')
+			}
+r finish
+echo r_result
+
+// test py
+py a=1;b=2
+py c=a+b
+py print(c)
+echo py_result
+
+py begin
+e='1';f='2'
+g=e+f
+print(g)
+py finish
+echo py_result
+
+py begin
+a = 1
+if a == 1:
+	print('TRUE1')
+	print('TRUE2')
+py finish
+
+	py begin
+	a = 2
+	if a == 1:
+	        print('FALSE1')
+        	print('FALSE2')
+	py finish
 
 // test vision
 vision click('/tmp/test.png')
+vision begin
+a = 1
+if a == 1:
+	click('1.png')
+	click('1.png')
+vision finish
 
 // test timeout
 timeout 4 seconds
@@ -410,9 +543,13 @@ timeout 5.67
 timeout 6
 
 // test comment
-// user comment
-//user comment
-//
+// user comment with space
+//user comment without space
+  // user comment with leading spaces
+		// user comment with leading tabs
+
+// test test
+// test something and see what happens
 
 // test url without variable
 http://www.dummytestsite.com
@@ -441,21 +578,6 @@ else
 echo 'footer not visible'
 }
 
-// test title function
-echo title()
-if title() contains 'About'
-echo 'page title contains About'
-
-// test url function
-echo url()
-if url() contains 'org'
-echo 'page url contains org'
-
-// test text function
-echo text()
-if text() contains 'automation'
-echo 'page text contains automation'
-
 // test count function
 echo count('element')
 element_count = count('element')
@@ -463,3 +585,24 @@ for n from 1 to element_count
 {
 echo n
 }
+
+// test url function
+echo url()
+if url() contains 'org'
+echo 'page url contains org'
+
+// test title function
+echo title()
+if title() contains 'About'
+echo 'page title contains About'
+
+// test text function
+echo text()
+if text() contains 'automation'
+echo 'page text contains automation'
+
+// test timer function
+start = timer()
+wait 3 seconds
+time_taken = timer()
+echo 'time taken - ' time_taken ' seconds'
