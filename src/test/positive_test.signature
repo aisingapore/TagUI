@@ -1090,7 +1090,7 @@ else if (raw_intent.toLowerCase() == 'r finish') {inside_r_block = 0; return '';
 if (inside_r_block == 1) raw_intent = 'r ' + raw_intent;
 var params = ((raw_intent + ' ').substr(1+(raw_intent + ' ').indexOf(' '))).trim();
 if (params == '') return "this.echo('ERROR - R command(s) missing for " + raw_intent + "')";
-else return call_r(raw_intent.replace(/'/g,'\\\''));}
+else return call_r(raw_intent.replace(/\\/g,'\\\\').replace(/'/g,'\\\''));}
 
 function py_intent(raw_intent) {
 if (raw_intent.toLowerCase() == 'py begin') {inside_py_block = 1; return '';}
@@ -1098,7 +1098,7 @@ else if (raw_intent.toLowerCase() == 'py finish') {inside_py_block = 0; return '
 if (inside_py_block == 1) raw_intent = 'py ' + raw_intent;
 var params = ((raw_intent + ' ').substr(1+(raw_intent + ' ').indexOf(' '))).trim();
 if (params == '') return "this.echo('ERROR - Python command(s) missing for " + raw_intent + "')";
-else return call_py(raw_intent.replace(/'/g,'\\\''));}
+else return call_py(raw_intent.replace(/\\/g,'\\\\').replace(/'/g,'\\\''));}
 
 function vision_intent(raw_intent) {
 if (raw_intent.toLowerCase() == 'vision begin') {inside_vision_block = 1; return '';}
@@ -1106,7 +1106,7 @@ else if (raw_intent.toLowerCase() == 'vision finish') {inside_vision_block = 0; 
 if (inside_vision_block == 1) raw_intent = 'vision ' + raw_intent;
 var params = ((raw_intent + ' ').substr(1+(raw_intent + ' ').indexOf(' '))).trim();
 if (params == '') return "this.echo('ERROR - Sikuli command(s) missing for " + raw_intent + "')";
-else return call_sikuli(raw_intent.replace(/'/g,'\\\''),'for vision step');}
+else return call_sikuli(raw_intent.replace(/\\/g,'\\\\').replace(/'/g,'\\\''),'for vision step');}
 
 function timeout_intent(raw_intent) {
 var params = ((raw_intent + ' ').substr(1+(raw_intent + ' ').indexOf(' '))).trim();

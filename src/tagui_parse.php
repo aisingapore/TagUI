@@ -286,20 +286,21 @@ $script_line = parse_backticks($script_line); // below check again after replaci
 $script_line = trim($script_line); if ($script_line=="") {$GLOBALS['real_line_number']--; return "";}
 // below use buffer to handle integration code blocks if inside integration code block
 $intent_type = get_intent($script_line); if ($intent_type == "integration_block") {
-$GLOBALS['integration_block_body'] = $GLOBALS['integration_block_body'] . $script_line ."\\n"; return "";}
+$GLOBALS['integration_block_body'] = $GLOBALS['integration_block_body'] . $script_line ."[END_OF_LINE]"; return "";}
 else {switch($script_line) {
 // \\n is needed for py, r, vision as multi-line string needs to have \n escaped to work in javascript
+// replacement code for [END_OF_LINE] custom token to denote line break is done at py, r, vision intents
 case "py finish":
-{$script_line = substr($GLOBALS['integration_block_body'],0,-2); $GLOBALS['inside_py_block'] = 0; break;}
+{$script_line = substr($GLOBALS['integration_block_body'],0,-13); $GLOBALS['inside_py_block'] = 0; break;}
 case "r finish":
-{$script_line = substr($GLOBALS['integration_block_body'],0,-2); $GLOBALS['inside_r_block'] = 0;
-$script_line = str_replace(";; ","; ",str_replace("\\n","; ",$GLOBALS['integration_block_body'])); break;}
+{$script_line = substr($GLOBALS['integration_block_body'],0,-13); $GLOBALS['inside_r_block'] = 0;
+$script_line = str_replace(";; ","; ",str_replace("[END_OF_LINE]","; ",$GLOBALS['integration_block_body'])); break;}
 case "vision finish":
-{$script_line = substr($GLOBALS['integration_block_body'],0,-2); $GLOBALS['inside_vision_block'] = 0; break;}
+{$script_line = substr($GLOBALS['integration_block_body'],0,-13); $GLOBALS['inside_vision_block'] = 0; break;}
 case "js finish":
-{$script_line = str_replace("\\n", "\n", $GLOBALS['integration_block_body']); $GLOBALS['inside_js_block'] = 0; break;}
+{$script_line = str_replace("[END_OF_LINE]", "\n", $GLOBALS['integration_block_body']); $GLOBALS['inside_js_block'] = 0; break;}
 case "dom finish":
-{$script_line = str_replace("\\n", "\n", $GLOBALS['integration_block_body']); $GLOBALS['inside_dom_block'] = 0; break;}}
+{$script_line = str_replace("[END_OF_LINE]", "\n", $GLOBALS['integration_block_body']); $GLOBALS['inside_dom_block'] = 0; break;}}
 return process_intent($intent_type, $script_line);}}
 
 function parse_backticks($script_line) {
@@ -857,34 +858,40 @@ return "casper.then(function() {"."techo('".$safe_intent."');});\ncasper.then(fu
 "this.echo('ERROR - command to run exceeded '+(casper.options.waitTimeout/1000).toFixed(1)+'s timeout').exit();},".
 "casper.options.waitTimeout);});\n\n";}
 
-function dom_intent($raw_intent) {$twb = $GLOBALS['tagui_web_browser'];
-if (strtolower($raw_intent) == "dom begin") {$GLOBALS['inside_dom_block'] = 1; $GLOBALS['integration_block_body'] = "dom "; return "";}
+function dom_intent($raw_intent) {$twb = $GLOBALS['tagui_web_browser']; if (strtolower($raw_intent) == "dom begin")
+{$GLOBALS['inside_dom_block'] = 1; $GLOBALS['integration_block_body'] = "dom "; return "";}
 $params = trim(substr($raw_intent." ",1+strpos($raw_intent." "," ")));
 if ($params == "") echo "ERROR - " . current_line() . " statement missing for " . $raw_intent . "\n";
 else return "casper.then(function() {"."dom_result = ''; dom_result = ".$twb.".evaluate(function(dom_json) {".$params."}, dom_json);".end_fi()."});"."\n\n";}
 
-function js_intent($raw_intent) {
-if (strtolower($raw_intent) == "js begin") {$GLOBALS['inside_js_block'] = 1; $GLOBALS['integration_block_body'] = "js "; return "";}
+function js_intent($raw_intent) {if (strtolower($raw_intent) == "js begin")
+{$GLOBALS['inside_js_block'] = 1; $GLOBALS['integration_block_body'] = "js "; return "";}
 $params = trim(substr($raw_intent." ",1+strpos($raw_intent." "," ")));
 if ($params == "") echo "ERROR - " . current_line() . " statement missing for " . $raw_intent . "\n";
 else return "casper.then(function() { // start of JS code\n".$params."\n}); // end of JS code"."\n\n";}
 
-function r_intent($raw_intent) {
-if (strtolower($raw_intent) == "r begin") {$GLOBALS['inside_r_block'] = 1; $GLOBALS['integration_block_body'] = "r "; return "";}
+function r_intent($raw_intent) {if (strtolower($raw_intent) == "r begin")
+{$GLOBALS['inside_r_block'] = 1; $GLOBALS['integration_block_body'] = "r "; return "";}
+$raw_intent = str_replace('\\','\\\\',$raw_intent); // to send \ correctly over to integration 
+$raw_intent = str_replace('[END_OF_LINE]','\\n',$raw_intent); // replace after above to prevent from escape
 $safe_intent = str_replace("'","\'",$raw_intent); // avoid breaking echo when single quote is used
 $params = trim(substr($raw_intent." ",1+strpos($raw_intent." "," ")));
 if ($params == "") echo "ERROR - " . current_line() . " R command(s) missing for " . $raw_intent . "\n"; else
 return "casper.then(function() {".call_r($safe_intent);}
 
-function py_intent($raw_intent) {
-if (strtolower($raw_intent) == "py begin") {$GLOBALS['inside_py_block'] = 1; $GLOBALS['integration_block_body'] = "py "; return "";}
+function py_intent($raw_intent) {if (strtolower($raw_intent) == "py begin")
+{$GLOBALS['inside_py_block'] = 1; $GLOBALS['integration_block_body'] = "py "; return "";}
+$raw_intent = str_replace('\\','\\\\',$raw_intent); // to send \ correctly over to integration 
+$raw_intent = str_replace('[END_OF_LINE]','\\n',$raw_intent); // replace after above to prevent from escape
 $safe_intent = str_replace("'","\'",$raw_intent); // avoid breaking echo when single quote is used
 $params = trim(substr($raw_intent." ",1+strpos($raw_intent." "," ")));
 if ($params == "") echo "ERROR - " . current_line() . " Python command(s) missing for " . $raw_intent . "\n"; else
 return "casper.then(function() {".call_py($safe_intent);}
 
-function vision_intent($raw_intent) {
-if (strtolower($raw_intent) == "vision begin") {$GLOBALS['inside_vision_block'] = 1; $GLOBALS['integration_block_body'] = "vision "; return "";}
+function vision_intent($raw_intent) {if (strtolower($raw_intent) == "vision begin")
+{$GLOBALS['inside_vision_block'] = 1; $GLOBALS['integration_block_body'] = "vision "; return "";}
+$raw_intent = str_replace('\\','\\\\',$raw_intent); // to send \ correctly over to integration
+$raw_intent = str_replace('[END_OF_LINE]','\\n',$raw_intent); // replace after above to prevent from escape
 $safe_intent = str_replace("'","\'",$raw_intent); // avoid breaking echo when single quote is used
 $params = trim(substr($raw_intent." ",1+strpos($raw_intent." "," ")));
 if ($params == "") echo "ERROR - " . current_line() . " Sikuli command(s) missing for " . $raw_intent . "\n"; else
