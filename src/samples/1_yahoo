@@ -7,6 +7,10 @@ https://ca.yahoo.com
 // see cheatsheet for steps, conditions, finding element identifiers, etc
 // https://github.com/kelaberetiv/TagUI#cheat-sheet
 
+echo 'NOTE - this sample may not work for EU users due to website changes for GDPR'
+echo 'EU users may have to modify script to first click on announcement OK button'
+echo ''
+
 // use type (or enter) step to enter some text into a webpage element
 // use show (or print) step to print text from webpage element to output
 // below steps enter text into the search box and print out the value
