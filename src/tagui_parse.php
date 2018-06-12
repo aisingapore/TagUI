@@ -114,7 +114,10 @@ $input_file = fopen($script . '.raw','r') or die("ERROR - cannot open " . $scrip
 
 // section to do required pre-processing on expanded .raw flow file
 $padded_raw_flow = ""; $previous_line_is_condition = false;
-while(!feof($input_file)) {$padded_raw_flow_line = ltrim(fgets($input_file));
+while(!feof($input_file)) {$padded_raw_flow_line = fgets($input_file);
+$indentation_tracker = str_replace(ltrim($padded_raw_flow_line),'',$padded_raw_flow_line);
+$padded_raw_flow_line = ltrim($padded_raw_flow_line);
+
 // track whether line is inside integrations begin-finish code blocks
 if (strtolower(trim($padded_raw_flow_line)) == "js begin") $inside_js_block = 1;
 else if (strtolower(trim($padded_raw_flow_line)) == "js finish") $inside_js_block = 0;
@@ -128,8 +131,12 @@ else if (strtolower(trim($padded_raw_flow_line)) == "run begin") $inside_run_blo
 else if (strtolower(trim($padded_raw_flow_line)) == "run finish") $inside_run_block = 0;
 else if (strtolower(trim($padded_raw_flow_line)) == "vision begin") $inside_vision_block = 1; 
 else if (strtolower(trim($padded_raw_flow_line)) == "vision finish") $inside_vision_block = 0;
-if (($inside_js_block + $inside_py_block + $inside_r_block + $inside_dom_block + $inside_run_block + $inside_vision_block)
-> 0) {$padded_raw_flow .= $padded_raw_flow_line; continue;} // auto-padding not relevant in integrations code blocks
+
+// auto-padding not relevant in integrations code blocks
+if (($inside_js_block + $inside_py_block + $inside_r_block + 
+$inside_dom_block + $inside_run_block + $inside_vision_block) > 0)
+{$padded_raw_flow .= $indentation_tracker . $padded_raw_flow_line; continue;}
+
 // rewrite JS function definitions to work in scope within CasperJS blocks
 if ((substr($padded_raw_flow_line,0,9)=="function ") or (substr($padded_raw_flow_line,0,12)=="js function "))
 if (strpos($padded_raw_flow_line,"(")!==false) {$js_function_name_startpos = strpos($padded_raw_flow_line,"function ")+9;
@@ -281,27 +288,14 @@ return $expanded_intent;}} else return rtrim($script_line) . "\n";}
 function current_line() {return "[LINE " . $GLOBALS['line_number'] . "]";}
 
 function parse_intent($script_line) {$GLOBALS['line_number']++; $GLOBALS['real_line_number']++;
+$indentation_tracker = str_replace(ltrim($script_line),'',$script_line); // tracking for py and vision
 $script_line = trim($script_line); if ($script_line=="") {$GLOBALS['real_line_number']--; return "";}
 $script_line = parse_backticks($script_line); // below check again after replacing repository definitions
 $script_line = trim($script_line); if ($script_line=="") {$GLOBALS['real_line_number']--; return "";}
 // below use buffer to handle integration code blocks if inside integration code block
-$intent_type = get_intent($script_line); if ($intent_type == "integration_block") {
-$GLOBALS['integration_block_body'] = $GLOBALS['integration_block_body'] . $script_line ."[END_OF_LINE]"; return "";}
-else {switch($script_line) {
-// \\n is needed for py, r, vision as multi-line string needs to have \n escaped to work in javascript
-// replacement code for [END_OF_LINE] custom token to denote line break is done at py, r, vision intents
-case "py finish":
-{$script_line = substr($GLOBALS['integration_block_body'],0,-13); $GLOBALS['inside_py_block'] = 0; break;}
-case "r finish":
-{$script_line = substr($GLOBALS['integration_block_body'],0,-13); $GLOBALS['inside_r_block'] = 0;
-$script_line = str_replace(";; ","; ",str_replace("[END_OF_LINE]","; ",$GLOBALS['integration_block_body'])); break;}
-case "vision finish":
-{$script_line = substr($GLOBALS['integration_block_body'],0,-13); $GLOBALS['inside_vision_block'] = 0; break;}
-case "js finish":
-{$script_line = str_replace("[END_OF_LINE]", "\n", $GLOBALS['integration_block_body']); $GLOBALS['inside_js_block'] = 0; break;}
-case "dom finish":
-{$script_line = str_replace("[END_OF_LINE]", "\n", $GLOBALS['integration_block_body']); $GLOBALS['inside_dom_block'] = 0; break;}}
-return process_intent($intent_type, $script_line);}}
+$intent_type = get_intent($script_line); if ($intent_type == "integration_block")
+{$GLOBALS['integration_block_body'] .= $indentation_tracker . $script_line ."[END_OF_LINE]"; return "";}
+else {$script_line = parse_closure($script_line); return process_intent($intent_type, $script_line);}}
 
 function parse_backticks($script_line) {
 // check existence of objects or keywords by searching for `object or keyword name`, then expand from repository
@@ -332,6 +326,22 @@ if ((substr_count($script_line,'`') > 1) and (!(substr_count($script_line,'`') &
 		}
 	}
 } return $script_line;}
+
+function parse_closure($script_line) {switch($script_line) {
+// \\n is needed for py, r, vision as multi-line string needs to have \n escaped to work in javascript
+// replacement code for [END_OF_LINE] custom token to denote line break is done at py, r, vision intents
+case "py finish":
+{$script_line = substr($GLOBALS['integration_block_body'],0,-13); $GLOBALS['inside_py_block'] = 0; break;}
+case "r finish":
+{$script_line = substr($GLOBALS['integration_block_body'],0,-13); $GLOBALS['inside_r_block'] = 0;
+$script_line = str_replace(";; ","; ",str_replace("[END_OF_LINE]","; ",$GLOBALS['integration_block_body'])); break;}
+case "vision finish":
+{$script_line = substr($GLOBALS['integration_block_body'],0,-13); $GLOBALS['inside_vision_block'] = 0; break;}
+case "js finish":
+{$script_line = str_replace("[END_OF_LINE]", "\n", $GLOBALS['integration_block_body']); $GLOBALS['inside_js_block'] = 0; break;}
+case "dom finish":
+{$script_line = str_replace("[END_OF_LINE]", "\n", $GLOBALS['integration_block_body']); $GLOBALS['inside_dom_block'] = 0; break;}}
+return $script_line;}
 
 function process_intent($intent_type, $script_line) {
 // check intent of step for interpretation into casperjs code

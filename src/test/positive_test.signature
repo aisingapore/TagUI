@@ -2603,8 +2603,8 @@ run_json = response.data;}, function() {this.echo('ERROR - command to run exceed
 casper.then(function() {dom_result = ''; dom_result = this.evaluate(function(dom_json) {var page_title = document.title;}, dom_json);});
 
 casper.then(function() {dom_result = ''; dom_result = this.evaluate(function(dom_json) {var page_title = document.title;
-var page_input = prompt('enter your title');
-return page_title + ' ' + page_input;}, dom_json);});
+	var page_input = prompt('enter your title');
+		return page_title + ' ' + page_input;}, dom_json);});
 
 casper.then(function() {dom_result = ''; dom_result = this.evaluate(function(dom_json) {document.querySelector('#header p').focus()}, dom_json);});
 
@@ -2613,11 +2613,11 @@ casper.then(function() { // start of JS code
 this.echo('THIS IS JAVASCRIPT');
 b = 1
 c = 2
-a = b + c;
-if (a == 3)
-{
-this.echo('YES');
-}
+	a = b + c;
+	if (a == 3)
+	{
+		this.echo('YES');
+	}
 if (a != 3)
 {
 this.echo('NO');
@@ -2661,8 +2661,8 @@ try {r_json = JSON.parse(r_result);} catch(e) {r_json = JSON.parse('null');}}});
 
 casper.then(function() {this.echo(r_result);});
 
-casper.then(function() {{techo('r if (FALSE) {; cat(\'FALSE1\'); cat(\'FALSE2\'); }; ');
-r_result = ''; if (!r_step('r if (FALSE) {; cat(\'FALSE1\'); cat(\'FALSE2\'); }; '))
+casper.then(function() {{techo('r 		if (FALSE) {; 	cat(\'FALSE1\'); cat(\'FALSE2\'); 			}; ');
+r_result = ''; if (!r_step('r 		if (FALSE) {; 	cat(\'FALSE1\'); cat(\'FALSE2\'); 			}; '))
 this.echo('ERROR - cannot execute R command(s)').exit(); this.wait(0);
 r_result = fetch_r_text(); clear_r_text();
 try {r_json = JSON.parse(r_result);} catch(e) {r_json = JSON.parse('null');}}});
@@ -2698,14 +2698,14 @@ try {py_json = JSON.parse(py_result);} catch(e) {py_json = JSON.parse('null');}}
 
 casper.then(function() {this.echo(py_result);});
 
-casper.then(function() {{techo('py a = 1\nif a == 1:\nprint(\'TRUE1\')\nprint(\'TRUE2\')');
-py_result = ''; if (!py_step('py a = 1\nif a == 1:\nprint(\'TRUE1\')\nprint(\'TRUE2\')'))
+casper.then(function() {{techo('py a = 1\nif a == 1:\n	print(\'TRUE1\')\n	print(\'TRUE2\')');
+py_result = ''; if (!py_step('py a = 1\nif a == 1:\n	print(\'TRUE1\')\n	print(\'TRUE2\')'))
 this.echo('ERROR - cannot execute Python command(s)').exit(); this.wait(0);
 py_result = fetch_py_text(); clear_py_text();
 try {py_json = JSON.parse(py_result);} catch(e) {py_json = JSON.parse('null');}}});
 
-casper.then(function() {{techo('py a = 2\nif a == 1:\nprint(\'FALSE1\')\nprint(\'FALSE2\')');
-py_result = ''; if (!py_step('py a = 2\nif a == 1:\nprint(\'FALSE1\')\nprint(\'FALSE2\')'))
+casper.then(function() {{techo('py 	a = 2\n	if a == 1:\n	        print(\'FALSE1\')\n        	print(\'FALSE2\')');
+py_result = ''; if (!py_step('py 	a = 2\n	if a == 1:\n	        print(\'FALSE1\')\n        	print(\'FALSE2\')'))
 this.echo('ERROR - cannot execute Python command(s)').exit(); this.wait(0);
 py_result = fetch_py_text(); clear_py_text();
 try {py_json = JSON.parse(py_result);} catch(e) {py_json = JSON.parse('null');}}});
@@ -2716,8 +2716,8 @@ if (!sikuli_step('vision click(\'/tmp/// test.png\')')) if (!fs.exists('for visi
 this.echo('ERROR - cannot find image file for vision step').exit(); else
 this.echo('ERROR - cannot find for vision step on screen').exit(); this.wait(0);}});
 
-casper.then(function() {{techo('vision a = 1\nif a == 1:\nclick(\'1.png\')\nclick(\'1.png\')'); var fs = require('fs');
-if (!sikuli_step('vision a = 1\nif a == 1:\nclick(\'1.png\')\nclick(\'1.png\')')) if (!fs.exists('for vision step'))
+casper.then(function() {{techo('vision a = 1\nif a == 1:\n	click(\'1.png\')\n	click(\'1.png\')'); var fs = require('fs');
+if (!sikuli_step('vision a = 1\nif a == 1:\n	click(\'1.png\')\n	click(\'1.png\')')) if (!fs.exists('for vision step'))
 this.echo('ERROR - cannot find image file for vision step').exit(); else
 this.echo('ERROR - cannot find for vision step on screen').exit(); this.wait(0);}});
 
