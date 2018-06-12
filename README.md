@@ -79,7 +79,7 @@ download https://admin.typeform.com/xxx to report.csv
 # Set Up
 TagUI is in v3.5 - it unzips and runs on macOS, Linux, Windows ([link to release notes](https://github.com/kelaberetiv/TagUI/releases))
 
-Tip - for [cutting edge](https://github.com/kelaberetiv/TagUI/compare/v3.5.0...master) version, download [from here](https://github.com/kelaberetiv/TagUI/archive/master.zip) to overwrite an existing packaged installation
+Tip - to try [cutting edge version](https://github.com/kelaberetiv/TagUI/compare/v3.5.0...master) with the latest features, [download master.zip](https://github.com/kelaberetiv/TagUI/archive/master.zip) to overwrite an existing packaged installation (be sure to manually select and move the folders & files inside master.zip's tagui/src folder to replace your existing tagui/src folder, otherwise some OSes will delete existing target folders that are missing from source folder)
 
 ### PACKAGED INSTALLATION
 Easiest way to use TagUI - no setup is needed, in most environments all required dependencies are packaged in.
