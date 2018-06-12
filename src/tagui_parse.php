@@ -113,24 +113,30 @@ file_put_contents($script . '.raw', $translated_raw_flow); // save translated ou
 $input_file = fopen($script . '.raw','r') or die("ERROR - cannot open " . $script . '.raw' . "\n");}
 
 // section to do required pre-processing on expanded .raw flow file
-$padded_raw_flow = ""; $previous_line_is_condition = false;
+$padded_raw_flow = ""; $previous_line_is_condition = false; $reference_indentation = "";
 while(!feof($input_file)) {$padded_raw_flow_line = fgets($input_file);
 $indentation_tracker = str_replace(ltrim($padded_raw_flow_line),'',$padded_raw_flow_line);
+$indentation_tracker = substr($indentation_tracker,strlen($reference_indentation));
+// above line handles py and vision blocks that begin indented (eg in if or loops)
 $padded_raw_flow_line = ltrim($padded_raw_flow_line);
 
 // track whether line is inside integrations begin-finish code blocks
 if (strtolower(trim($padded_raw_flow_line)) == "js begin") $inside_js_block = 1;
 else if (strtolower(trim($padded_raw_flow_line)) == "js finish") $inside_js_block = 0;
-else if (strtolower(trim($padded_raw_flow_line)) == "py begin") $inside_py_block = 1;
-else if (strtolower(trim($padded_raw_flow_line)) == "py finish") $inside_py_block = 0;
+else if (strtolower(trim($padded_raw_flow_line)) == "py begin")
+{$inside_py_block = 1; $reference_indentation = $indentation_tracker;}
+else if (strtolower(trim($padded_raw_flow_line)) == "py finish")
+{$inside_py_block = 0; $reference_indentation = "";} // reset reference indentation
 else if (strtolower(trim($padded_raw_flow_line)) == "r begin") $inside_r_block = 1; 
 else if (strtolower(trim($padded_raw_flow_line)) == "r finish") $inside_r_block = 0;
 else if (strtolower(trim($padded_raw_flow_line)) == "dom begin") $inside_dom_block = 1; 
 else if (strtolower(trim($padded_raw_flow_line)) == "dom finish") $inside_dom_block = 0;
 else if (strtolower(trim($padded_raw_flow_line)) == "run begin") $inside_run_block = 1; 
 else if (strtolower(trim($padded_raw_flow_line)) == "run finish") $inside_run_block = 0;
-else if (strtolower(trim($padded_raw_flow_line)) == "vision begin") $inside_vision_block = 1; 
-else if (strtolower(trim($padded_raw_flow_line)) == "vision finish") $inside_vision_block = 0;
+else if (strtolower(trim($padded_raw_flow_line)) == "vision begin")
+{$inside_vision_block = 1; $reference_indentation = $indentation_tracker;} 
+else if (strtolower(trim($padded_raw_flow_line)) == "vision finish")
+{$inside_vision_block = 0; $reference_indentation = "";} // reset reference indentation
 
 // auto-padding not relevant in integrations code blocks
 if (($inside_js_block + $inside_py_block + $inside_r_block + 

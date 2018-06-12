@@ -2704,8 +2704,8 @@ this.echo('ERROR - cannot execute Python command(s)').exit(); this.wait(0);
 py_result = fetch_py_text(); clear_py_text();
 try {py_json = JSON.parse(py_result);} catch(e) {py_json = JSON.parse('null');}}});
 
-casper.then(function() {{techo('py 	a = 2\n	if a == 1:\n	        print(\'FALSE1\')\n        	print(\'FALSE2\')');
-py_result = ''; if (!py_step('py 	a = 2\n	if a == 1:\n	        print(\'FALSE1\')\n        	print(\'FALSE2\')'))
+casper.then(function() {{techo('py a = 2\nif a == 1:\n        print(\'FALSE1\')\n       	print(\'FALSE2\')');
+py_result = ''; if (!py_step('py a = 2\nif a == 1:\n        print(\'FALSE1\')\n       	print(\'FALSE2\')'))
 this.echo('ERROR - cannot execute Python command(s)').exit(); this.wait(0);
 py_result = fetch_py_text(); clear_py_text();
 try {py_json = JSON.parse(py_result);} catch(e) {py_json = JSON.parse('null');}}});
