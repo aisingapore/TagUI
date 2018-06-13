@@ -477,7 +477,7 @@ rem transpose datatable csv file if file to be transposed exists
 if exist "%flow_file%_transpose.csv" php -q transpose.php "%flow_file%_transpose.csv" | tee -a "%flow_file%.log"
 
 cd /d "%initial_dir%"
-set "custom_csv_file=%flow_file%.csv"
+set "custom_csv_file=NO_CUSTOM_CSV_FILE"
 rem check if custom csv file is provided to be used as datatable
 if "%arg2:~-4%"==".csv" (
         set "custom_csv_file=%~dpnx2"
@@ -505,7 +505,7 @@ if "%arg9:~-4%"==".csv" (
 )
 cd /d "%~dp0"
 
-if not "%flow_file%.csv" == "%custom_csv_file%" (
+if not "NO_CUSTOM_CSV_FILE" == "%custom_csv_file%" (
 	if not exist "%custom_csv_file%" (
 		echo ERROR - cannot find %custom_csv_file%
 		exit /b 1
@@ -515,6 +515,7 @@ if not "%flow_file%.csv" == "%custom_csv_file%" (
 	set "custom_csv_file=%~dp0tagui_datatable.csv"
 	del "tagui_datatable_transpose.csv"
 )
+if "NO_CUSTOM_CSV_FILE" == "%custom_csv_file%" set "custom_csv_file=%flow_file%.csv"
 
 rem check datatable csv file for batch automation
 set tagui_data_set_size=1 
