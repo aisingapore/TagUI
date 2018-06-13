@@ -505,6 +505,17 @@ if "%arg9:~-4%"==".csv" (
 )
 cd /d "%~dp0"
 
+if not "%flow_file%.csv" == "%custom_csv_file%" (
+	if not exist "%custom_csv_file%" (
+		echo ERROR - cannot find %custom_csv_file%
+		exit /b 1
+	) 
+	copy /Y "%custom_csv_file%" "tagui_datatable_transpose.csv" > nul
+	php -q transpose.php "tagui_datatable_transpose.csv" | tee -a "%flow_file%.log"
+	set "custom_csv_file=%~dp0tagui_datatable.csv"
+	del "tagui_datatable_transpose.csv"
+)
+
 rem check datatable csv file for batch automation
 set tagui_data_set_size=1 
 if not exist "%custom_csv_file%" goto no_datatable
