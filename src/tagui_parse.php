@@ -952,12 +952,14 @@ $GLOBALS['code_block_tracker']=substr($GLOBALS['code_block_tracker'],0,$last_del
 else if (($code_block_intent == "for") and (substr($logic,0,1) == "{")) {
 $last_delimiter_pos = strrpos($GLOBALS['for_loop_tracker'],"|");
 $for_loop_variable_name = substr($GLOBALS['for_loop_tracker'],$last_delimiter_pos+1);
-$code_block_header = "(function (" . $for_loop_variable_name . ") { // start of IIFE pattern\n";}
+$code_block_header = "{(function (" . $for_loop_variable_name . ") { // start of IIFE pattern\n";}
 
 else if (($code_block_intent == "for") and (substr($logic,0,1) == "}")) {
 $last_delimiter_pos = strrpos($GLOBALS['for_loop_tracker'],"|");
 $for_loop_variable_name = substr($GLOBALS['for_loop_tracker'],$last_delimiter_pos+1);
-$code_block_footer = "})(" . $for_loop_variable_name . "); // end of IIFE pattern\n";
+$code_block_footer = "})(" . $for_loop_variable_name . "); // end of IIFE pattern\n".
+"if (for_loop_signal == '[BREAK_SIGNAL]') {for_loop_signal = ''; break;}\n".
+"else if (for_loop_signal == '[CONTINUE_SIGNAL]') {for_loop_signal = ''; continue;}}\n";
 $last_delimiter_pos = strrpos($GLOBALS['code_block_tracker'],"|");
 $GLOBALS['code_block_tracker']=substr($GLOBALS['code_block_tracker'],0,$last_delimiter_pos);
 $last_delimiter_pos = strrpos($GLOBALS['for_loop_tracker'],"|");
@@ -972,7 +974,6 @@ $GLOBALS['code_block_tracker']=substr($GLOBALS['code_block_tracker'],0,$last_del
 if (substr($logic,0,1) == "{") $logic = $code_block_header."{ // start of code block\n".substr($logic,1)."\n";
 else if (substr($logic,0,1) == "}") $logic = "} // end of code block\n".substr($logic,1)."\n".$code_block_footer."});\n";
 $logic = str_replace("\n\n","\n",$logic); // clean up empty lines from { and } processing
-
 
 // section 2 - natural language handling for conditions and loops 
 if ((substr($logic,0,3)=="if ") or (substr($logic,0,8)=="else if ")
@@ -1058,6 +1059,10 @@ if (strpos($raw_logic,"{")!==false) echo "ERROR - " . current_line() . " put { t
 // section 3 - track if next statement is going to be or still inside while loop,
 // then avoid async wait (casper.then/waitFor/timeout will hang casperjs/phantomjs??) 
 if (substr($logic,0,6)=="while ") $GLOBALS['inside_while_loop'] = 1; 
+
+// section 4 - 
+if (($logic=="break") or ($logic=="break;")) $logic = "for_loop_signal = '[BREAK_SIGNAL]'; return;";
+if (($logic=="continue") or ($logic=="continue;")) $logic = "for_loop_signal = '[CONTINUE_SIGNAL]'; return;";
 
 // return code after all the parsing and special handling
 return $logic;}

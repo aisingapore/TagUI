@@ -41,6 +41,9 @@ var r_result = ''; var r_json = {}; var py_result = ''; var py_json = {};
 var inside_py_block = 0; var inside_r_block = 0; var inside_run_block = 0;
 var inside_vision_block = 0; var inside_js_block = 0; var inside_dom_block = 0;
 
+// track for loop signals to break or continue loop
+for_loop_signal = '';
+
 // techo function for handling quiet option
 function techo(echo_string) {if (!quiet_mode) { // mute about:blank, eg for desktop automation
 if ((echo_string == 'about:blank - \n') || (echo_string == '\nabout:blank - ')) casper.echo('');
