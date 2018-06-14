@@ -217,7 +217,7 @@ To run TagUI flows in native languages or output flow execution in other languag
 </details>
 
 ### VISUAL AUTOMATION
-TagUI has built-in integration with [Sikuli (base on OpenCV)](http://sikulix.com) to allow identifying web elements and desktop user interface elements for interaction. Steps that support visual automation are tap / click, hover / move, type / enter, select / choose, read / fetch, show / print, save, snap. Simply specify an image filename (.png or .bmp format) of what to look for visually, in place of the element identifier, to use visual automation alongside your usual automation steps.
+TagUI has built-in integration with [Sikuli (base on OpenCV)](http://sikulix.com) to allow identifying web elements and desktop user interface elements for interaction. Steps that support visual automation are tap / click, hover / move, type / enter, select / choose, read / fetch, show / print, save, snap. Simply specify an image filename (.png or .bmp format) of what to look for visually, in place of the element identifier, to use visual automation alongside your usual automation steps. Also, by using vision step, you can send custom Sikuli commands to do things such as [typing complex keystroke sequences](https://github.com/kelaberetiv/TagUI/issues/155#issuecomment-397403024).
 
 <details>
   <summary>
