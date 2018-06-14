@@ -416,12 +416,24 @@ try {var ws_json = JSON.parse(ws_message); if (ws_json.result.result.value > 0)
 return ws_json.result.result.value; else return 0;}
 catch(e) {return 0;}};
 
+/* // backup of previous click implementation to experiment with Puppeteer's version
 chrome.click = function(selector) { // click by sending click event instead of mouse down/up/click, then focus on element
 if ((selector.toString().length >= 16) && (selector.toString().substr(0,16) == 'xpath selector: '))
 {if (selector.toString().length == 16) selector = ''; else selector = selector.toString().substring(16);
 chrome_step('Runtime.evaluate',{expression: 'document.evaluate(\''+selector+'\','+chrome_context+',null,XPathResult.ORDERED_NODE_SNAPSHOT_TYPE,null).snapshotItem(0).click()'}); chrome_step('Runtime.evaluate',{expression: 'document.evaluate(\''+selector+'\','+chrome_context+',null,XPathResult.ORDERED_NODE_SNAPSHOT_TYPE,null).snapshotItem(0).focus()'});}
 else {chrome_step('Runtime.evaluate',{expression: chrome_context+'.querySelector(\''+selector+'\').click()'});
-chrome_step('Runtime.evaluate',{expression: chrome_context+'.querySelector(\''+selector+'\').focus()'});}};
+chrome_step('Runtime.evaluate',{expression: chrome_context+'.querySelector(\''+selector+'\').focus()'});}}; */
+
+chrome.click = function(selector) { // click using Puppeteer's implementation - see TagUI issue #212
+chrome.scrollIntoViewIfNeeded(selector); var xy = chrome.mouse.getXY(selector);
+chrome.mouse.action('mouseMoved',xy.x,xy.y,'none',0);
+chrome.mouse.action('mousePressed',xy.x,xy.y,'left',1); chrome.mouse.action('mouseReleased',xy.x,xy.y,'left',1);}
+
+chrome.scrollIntoViewIfNeeded = function(selector) { // helper function to scroll element into view
+if ((selector.toString().length >= 16) && (selector.toString().substr(0,16) == 'xpath selector: '))
+{if (selector.toString().length == 16) selector = ''; else selector = selector.toString().substring(16);
+chrome_step('Runtime.evaluate',{expression: 'document.evaluate(\''+selector+'\','+chrome_context+',null,XPathResult.ORDERED_NODE_SNAPSHOT_TYPE,null).snapshotItem(0).scrollIntoViewIfNeeded()'});}
+else {chrome_step('Runtime.evaluate',{expression: chrome_context+'.querySelector(\''+selector+'\').scrollIntoViewIfNeeded()'});}}
 
 chrome.mouse.action = function(type,x,y,button,clickCount) { // helper function to send various mouse events
 chrome_step('Input.dispatchMouseEvent',{type: type, x: x, y: y, button: button, clickCount: clickCount});};
@@ -443,27 +455,33 @@ if (ws_json.result.result.value.width > 0 && ws_json.result.result.value.height 
 else return {left: 0, top: 0, width: 0, height: 0};} catch(e) {return {left: 0, top: 0, width: 0, height: 0};}};
 
 chrome.mouse.move = function(selector,y) { // move mouse pointer to center of specified selector or point 
-if (!y) var xy = chrome.mouse.getXY(selector); else var xy = {x: selector, y: y}; // get coordinates accordingly
+if (!y) {chrome.scrollIntoViewIfNeeded(selector); var xy = chrome.mouse.getXY(selector);}
+else var xy = {x: selector, y: y}; // get coordinates accordingly
 chrome.mouse.action('mouseMoved',xy.x,xy.y,'none',0);};
 
 chrome.mouse.click = function(selector,y) { // press and release on center of specfied selector or point
-if (!y) var xy = chrome.mouse.getXY(selector); else var xy = {x: selector, y: y}; // get coordinates accordingly
+if (!y) {chrome.scrollIntoViewIfNeeded(selector); var xy = chrome.mouse.getXY(selector);}
+else var xy = {x: selector, y: y}; // get coordinates accordingly
 chrome.mouse.action('mousePressed',xy.x,xy.y,'left',1); chrome.mouse.action('mouseReleased',xy.x,xy.y,'left',1);};
 
 chrome.mouse.doubleclick = function(selector,y) { // double press and release on center of selector or point
-if (!y) var xy = chrome.mouse.getXY(selector); else var xy = {x: selector, y: y}; // get coordinates accordingly
+if (!y) {chrome.scrollIntoViewIfNeeded(selector); var xy = chrome.mouse.getXY(selector);}
+else var xy = {x: selector, y: y}; // get coordinates accordingly
 chrome.mouse.action('mousePressed',xy.x,xy.y,'left',2); chrome.mouse.action('mouseReleased',xy.x,xy.y,'left',2);};
 
 chrome.mouse.rightclick = function(selector,y) { // right click press and release on center of selector or point
-if (!y) var xy = chrome.mouse.getXY(selector); else var xy = {x: selector, y: y}; // get coordinates accordingly
+if (!y) {chrome.scrollIntoViewIfNeeded(selector); var xy = chrome.mouse.getXY(selector);}
+else var xy = {x: selector, y: y}; // get coordinates accordingly
 chrome.mouse.action('mousePressed',xy.x,xy.y,'right',1); chrome.mouse.action('mouseReleased',xy.x,xy.y,'right',1);};
 
 chrome.mouse.down = function(selector,y) { // left press on center of specified selector or point
-if (!y) var xy = chrome.mouse.getXY(selector); else var xy = {x: selector, y: y}; // get coordinates accordingly
+if (!y) {chrome.scrollIntoViewIfNeeded(selector); var xy = chrome.mouse.getXY(selector);}
+else var xy = {x: selector, y: y}; // get coordinates accordingly
 chrome.mouse.action('mousePressed',xy.x,xy.y,'left',1);};
 
 chrome.mouse.up = function(selector,y) { // left release on center of specified selector or point
-if (!y) var xy = chrome.mouse.getXY(selector); else var xy = {x: selector, y: y}; // get coordinates accordingly
+if (!y) {chrome.scrollIntoViewIfNeeded(selector); var xy = chrome.mouse.getXY(selector);}
+else var xy = {x: selector, y: y}; // get coordinates accordingly
 chrome.mouse.action('mouseReleased',xy.x,xy.y,'left',1);};
 
 chrome.sendKeys = function(selector,value,options) { // send key strokes to selector, options not implemented
