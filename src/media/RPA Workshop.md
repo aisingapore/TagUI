@@ -8,7 +8,7 @@ For more information on TagUI, visit its [repository page](https://github.com/ke
 *In this section, we'll download and install TagUI on your computer. For Windows, unzip the tagui folder to c:\ and for macOS, unzip the tagui folder to your desktop. For Linux, unzip the tagui folder to a convenient folder on your laptop.*
 
 ### INSTALLATION (10 minutes)
-No setup is needed, in most environments all required dependencies are packaged in.
+TagUI is easy to use right away - no setup is needed, in most environments all required dependencies are packaged in. Avoid spaces in the folder path as some components of TagUI don't work well with spaces in folder and file names.
 
 Platform|macOS|Linux|Windows|Node.js (macOS/Linux)
 :------:|:---:|:---:|:-----:|:-------------------:
@@ -54,8 +54,6 @@ cd /home/your_id/tagui/src
 ```
 
 Now try the same workflow with Chrome browser by putting chrome as option (eg tagui samples\1_yahoo chrome). **Be sure to save your work and close all your existing tabs as Chrome will be restarted to establishe connection with TagUI.** The automation will now run in the foreground instead, so you'll be able to see the navigation on Yahoo and DuckDuckGo websites. TagUI can also be run from desktop icons, scheduled tasks, or REST API calls.
-
-Tip - chrome or headless mode on Windows may trigger false positive on Symantec software, workaround is to move curl.exe from quarantine back to tagui\src\unx folder. [More details](https://github.com/kelaberetiv/TagUI/issues/111) of issue and whitelist report raised to Symantec.
 
 <details>
   <summary>
@@ -247,7 +245,7 @@ TagUI has built-in integration with [Sikuli (base on OpenCV)](http://sikulix.com
     Click to show where to download and install Sikuli, and a demo GIF of visual automation in action
   </summary>
   
-  Sikuli is excluded from TagUI packaged installation due to complex dependencies that are handled by its installer. First, make sure [Java JDK v8](http://www.oracle.com/technetwork/java/javase/downloads/jdk8-downloads-2133151.html) is installed. [Download Sikuli](http://sikulix.com/quickstart/) to tagui/src/tagui.sikuli folder and setup (choose option 1 - Pack1). If you have download error messages during setup, [unzip contents of this file](https://raw.githubusercontent.com/tebelorg/Tump/master/Sikuli-1.1.3.zip) to tagui/src/tagui.sikuli folder, right-click sikulixsetup-1.1.3.jar and open or run as administrator.
+  Sikuli is excluded from TagUI packaged installation due to complex dependencies that are handled by its installer. First, make sure [Java JDK v8](http://www.oracle.com/technetwork/java/javase/downloads/jdk8-downloads-2133151.html) is installed. [Download Sikuli](http://sikulix.com/quickstart/) to tagui/src/tagui.sikuli folder and setup (choose option 1 - Pack1). If you have download error messages during setup, [unzip contents of this file](https://raw.githubusercontent.com/tebelorg/Tump/master/Sikuli-1.1.3.zip) to tagui/src/tagui.sikuli folder, right-click sikulixsetup-1.1.3.jar and open or run as administrator. On Windows, set display magnification to 100%.
 
   Relative paths are supported for image filenames (eg pc.png, images/button.bmp). A screen (real or Xvfb) is needed for visual automation. [Tesseract OCR](https://github.com/tesseract-ocr/tesseract) (optical character recognition) is used for visually retrieving text.
 
