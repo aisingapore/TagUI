@@ -16,10 +16,10 @@ $config_file = fopen('tagui_config.txt','r') or die("ERROR - cannot open tagui_c
 $header_file = fopen('tagui_header.js','r') or die("ERROR - cannot open tagui_header.js" . "\n");
 $footer_file = fopen('tagui_footer.js','r') or die("ERROR - cannot open tagui_footer.js" . "\n");
 
-$repo_count = 0; if (file_exists($script . '.csv')) { // load repository file for objects and keywords
-$repo_file = fopen($script . '.csv','r') or die("ERROR - cannot open " . $script . '.csv' . "\n");
+$repo_count = 0; if (file_exists(getenv('custom_csv_file'))) { // load repository file for objects and keywords
+$repo_file = fopen(getenv('custom_csv_file'),'r') or die("ERROR - cannot open " . getenv('custom_csv_file') . "\n");
 while (!feof($repo_file)) {$repo_data[$repo_count] = fgetcsv($repo_file);
-if (count($repo_data[$repo_count]) == 0) die("ERROR - empty row found in " . $script . '.csv' . "\n");
+if (count($repo_data[$repo_count]) == 0) die("ERROR - empty row found in " . getenv('custom_csv_file') . "\n");
 $repo_count++;} fclose($repo_file); $repo_count-=1; //-1 for header, for EOF need to check flexibly using below line
 if (count($repo_data[$repo_count]) == 1) $repo_count-=1;} //-1 for EOF (Windows files don't end with newline character)
 
@@ -47,8 +47,9 @@ if ((getenv('tagui_web_browser')=='headless') or (getenv('tagui_web_browser')=='
 
 $inside_code_block = 0; // track if step or code is inside user-defined code block
 $inside_while_loop = 0; // track if step is in while loop and avoid async wait
-$inside_frame = 0; $inside_popup = 0; // track html frame and popup step
 $for_loop_tracker = ""; // track for loop to implement IIFE pattern
+$code_block_tracker = ""; // track code blocks defined in flow
+$integration_block_body = ""; // track body of integration block
 $line_number = 0; // track flow line number for error message
 $real_line_number = 0; // line number excluding comments and blank lines
 $test_automation = 0; // to determine casperjs script structure
@@ -94,10 +95,8 @@ while(!feof($input_file)) {fwrite($temp_output_file,expand_intent(fgets($input_f
 fclose($temp_output_file); // generate temp output file of expanded intents (if any) before reopening as input
 $input_file = fopen($script . '.raw','r') or die("ERROR - cannot open " . $script . '.raw' . "\n");
 
-if (strpos(strtolower(file_get_contents('tagui_config.txt')),"var tagui_language = 'english';")!==false)
-{ // main loop without translation to parse intents in flow file for conversion into javascript code
-while(!feof($input_file)) {fwrite($output_file,parse_intent(fgets($input_file)));} fclose($input_file);}
-else { // section and main loop which includes translation engine for handling flows in other languages
+if (strpos(strtolower(file_get_contents('tagui_config.txt')),"var tagui_language = 'english';")==false)
+{ // section which includes translation engine for handling flows in other languages
 $temp_argv1 = $argv[1]; $temp_argv2 = $argv[2]; $temp_argv3 = $argv[3];
 $argv[1] = 'tagui_parse.php'; $argv[2] = 'from';
 $temp_tagui_config = strtolower(file_get_contents('tagui_config.txt'));
@@ -106,11 +105,71 @@ $temp_tagui_config_end = strpos($temp_tagui_config,"\n",$temp_tagui_config_start
 $temp_tagui_config = substr($temp_tagui_config,$temp_tagui_config_start,$temp_tagui_config_end-$temp_tagui_config_start);
 $temp_tagui_config = str_replace('var tagui_language','',$temp_tagui_config);
 $temp_tagui_config = str_replace('"','',$temp_tagui_config); $temp_tagui_config = str_replace("'",'',$temp_tagui_config);
-$temp_tagui_config = str_replace('=','',$temp_tagui_config); $temp_tagui_config = str_replace(';','',$temp_tagui_config); 
-$argv[3] = trim($temp_tagui_config);
-require 'translate.php'; // set parameters to load translation engine
-$argv[1] = $temp_argv1; $argv[2] = $temp_argv2; $argv[3] = $temp_argv3;
-while(!feof($input_file)) {fwrite($output_file,parse_intent(translate_intent(fgets($input_file))));} fclose($input_file);}
+$temp_tagui_config = str_replace('=','',$temp_tagui_config); $temp_tagui_config = str_replace(';','',$temp_tagui_config);
+$argv[3] = trim($temp_tagui_config); require 'translate.php'; // set parameters to load translation engine
+$argv[1] = $temp_argv1; $argv[2] = $temp_argv2; $argv[3] = $temp_argv3; $translated_raw_flow = "";
+while(!feof($input_file)) {$translated_raw_flow .= translate_intent(fgets($input_file));} fclose($input_file);
+file_put_contents($script . '.raw', $translated_raw_flow); // save translated output before reopening as input
+$input_file = fopen($script . '.raw','r') or die("ERROR - cannot open " . $script . '.raw' . "\n");}
+
+// section to do required pre-processing on expanded .raw flow file
+$padded_raw_flow = ""; $previous_line_is_condition = false; $reference_indentation = "";
+while(!feof($input_file)) {$padded_raw_flow_line = fgets($input_file);
+$indentation_tracker = str_replace(ltrim($padded_raw_flow_line),'',$padded_raw_flow_line);
+$indentation_tracker = substr($indentation_tracker,strlen($reference_indentation));
+// above line handles py and vision blocks that begin indented (eg in if or loops)
+$padded_raw_flow_line = ltrim($padded_raw_flow_line);
+
+// track whether line is inside integrations begin-finish code blocks
+if (strtolower(trim($padded_raw_flow_line)) == "js begin") $inside_js_block = 1;
+else if (strtolower(trim($padded_raw_flow_line)) == "js finish") $inside_js_block = 0;
+else if (strtolower(trim($padded_raw_flow_line)) == "py begin")
+{$inside_py_block = 1; $reference_indentation = $indentation_tracker;}
+else if (strtolower(trim($padded_raw_flow_line)) == "py finish")
+{$inside_py_block = 0; $reference_indentation = "";} // reset reference indentation
+else if (strtolower(trim($padded_raw_flow_line)) == "r begin") $inside_r_block = 1; 
+else if (strtolower(trim($padded_raw_flow_line)) == "r finish") $inside_r_block = 0;
+else if (strtolower(trim($padded_raw_flow_line)) == "dom begin") $inside_dom_block = 1; 
+else if (strtolower(trim($padded_raw_flow_line)) == "dom finish") $inside_dom_block = 0;
+else if (strtolower(trim($padded_raw_flow_line)) == "run begin") $inside_run_block = 1; 
+else if (strtolower(trim($padded_raw_flow_line)) == "run finish") $inside_run_block = 0;
+else if (strtolower(trim($padded_raw_flow_line)) == "vision begin")
+{$inside_vision_block = 1; $reference_indentation = $indentation_tracker;} 
+else if (strtolower(trim($padded_raw_flow_line)) == "vision finish")
+{$inside_vision_block = 0; $reference_indentation = "";} // reset reference indentation
+
+// auto-padding not relevant in integrations code blocks
+if (($inside_js_block + $inside_py_block + $inside_r_block + 
+$inside_dom_block + $inside_run_block + $inside_vision_block) > 0)
+{$padded_raw_flow .= $indentation_tracker . $padded_raw_flow_line; continue;}
+
+// rewrite JS function definitions to work in scope within CasperJS blocks
+if ((substr($padded_raw_flow_line,0,9)=="function ") or (substr($padded_raw_flow_line,0,12)=="js function "))
+if (strpos($padded_raw_flow_line,"(")!==false) {$js_function_name_startpos = strpos($padded_raw_flow_line,"function ")+9;
+$js_function_name_endpos = strpos($padded_raw_flow_line,"(",$js_function_name_startpos);
+$padded_raw_flow_line = trim(substr($padded_raw_flow_line,$js_function_name_startpos,$js_function_name_endpos -
+$js_function_name_startpos)) . ' = function ' . trim(substr($padded_raw_flow_line,$js_function_name_endpos))."\n";}
+else die("ERROR - missing brackets () for ".$padded_raw_flow_line);
+// pad { and } blocks for conditions, to keep JavaScript syntax correct
+if ((substr($padded_raw_flow_line,0,3)=="if ") or (substr($padded_raw_flow_line,0,8)=="else if ")
+or (substr($padded_raw_flow_line,0,4)=="for ") or (substr($padded_raw_flow_line,0,6)=="while ") or
+(substr($padded_raw_flow_line,0,6)=="popup ") or (substr($padded_raw_flow_line,0,6)=="frame ") or
+(trim($padded_raw_flow_line)=="else")) $current_line_is_condition = true; else $current_line_is_condition = false;
+if (($previous_line_is_condition == true) and ($current_line_is_condition == true))
+die("ERROR - for nested conditions, loops, popup, frame, set { and } explicitly\n".
+"ERROR - add { before this line and add } accordingly - ".$padded_raw_flow_line);
+if (($previous_line_is_condition == true) and (substr($padded_raw_flow_line,0,1)!="{"))
+$padded_raw_flow .= "{\n".trim($padded_raw_flow_line)."\n}\n"; else $padded_raw_flow .= $padded_raw_flow_line;
+$previous_line_is_condition = $current_line_is_condition; // prepare for next line
+} fclose($input_file); file_put_contents($script . '.raw', $padded_raw_flow);
+// generate temp output file with padded { and } (if any) before reopening as input
+$input_file = fopen($script . '.raw','r') or die("ERROR - cannot open " . $script . '.raw' . "\n");
+// re-initialize trackers for begin-finish blocks of integrations
+$inside_py_block = 0; $inside_r_block = 0; $inside_run_block = 0;
+$inside_vision_block = 0; $inside_js_block = 0; $inside_dom_block = 0;
+
+// main loop to parse intents in flow file for conversion into javascript code
+while(!feof($input_file)) {fwrite($output_file,parse_intent(fgets($input_file)));} fclose($input_file);
 
 // create footer of casperjs script using footer template and do post-processing 
 while(!feof($footer_file)) {fwrite($output_file,fgets($footer_file));} fclose($footer_file); fclose($output_file);
@@ -120,6 +179,20 @@ $GLOBALS['real_line_number'] = 1; $generated_js_file_contents = file_get_content
 $generated_js_file_contents = str_replace($marker_for_opening_url, $marker_for_opening_url . 
 url_intent('about:blank'), $generated_js_file_contents); file_put_contents($script . '.js',$generated_js_file_contents);}
 if ($inside_code_block != 0) echo "ERROR - number of step { does not tally with with }\n";
+
+// post-processing to clean up artifacts from translating human language to JavaScript
+$script_content = file_get_contents($script . '.js');
+$script_content = str_replace("});\n\ncasper.then(function() {else\n","\nelse\n\n",$script_content);
+$script_content = str_replace("});\n\ncasper.then(function() {else if ","\nelse if ",$script_content);
+$script_content = str_replace("}); // end of JS code\n\ncasper.then(function() { // start of JS code\n",
+"",$script_content); // above collapse separate js step CasperJS blocks into one continuous block
+$script_content = preg_replace('/^casper\.then\(function\(\) {{(.*) \/\/ beg_tx while loop marker/m',
+'$1',$script_content); // above regular expression replace lines having beg_tx while loop markers
+$script_content = preg_replace('/^casper\.then\(function\(\) {(.*) \/\/ end_fi while loop marker(.*)}\);/m',
+'$1$2',$script_content); // above regular expression replace lines having end_fi while loop markers
+$script_content = preg_replace('/^casper\.then\(function\(\) {(.*)\n(.*) \/\/ end_fi while loop marker(.*)}\);/m',
+"$1\n$2$3",$script_content); // above regular expression replace lines having end_fi while loop markers
+file_put_contents($script . '.js',$script_content);
 
 // special handling if chrome or headless chrome is used as browser for automation
 // replacement of this.method already happens in step intents, this is mostly to handle user inserted casperjs code 
@@ -219,25 +292,66 @@ while(!feof($temp_input_file)) {$expanded_intent .= expand_intent(fgets($temp_in
 return $expanded_intent;}} else return rtrim($script_line) . "\n";}
 
 function current_line() {return "[LINE " . $GLOBALS['line_number'] . "]";}
+
 function parse_intent($script_line) {$GLOBALS['line_number']++; $GLOBALS['real_line_number']++;
+$indentation_tracker = str_replace(ltrim($script_line),'',$script_line); // tracking for py and vision
 $script_line = trim($script_line); if ($script_line=="") {$GLOBALS['real_line_number']--; return "";}
+$script_line = parse_backticks($script_line); // below check again after replacing repository definitions
+$script_line = trim($script_line); if ($script_line=="") {$GLOBALS['real_line_number']--; return "";}
+// below use buffer to handle integration code blocks if inside integration code block
+$intent_type = get_intent($script_line); if ($intent_type == "integration_block")
+{$GLOBALS['integration_block_body'] .= $indentation_tracker . $script_line ."[END_OF_LINE]"; return "";}
+else {$script_line = parse_closure($script_line); return process_intent($intent_type, $script_line);}}
 
+function parse_backticks($script_line) {
 // check existence of objects or keywords by searching for `object or keyword name`, then expand from repository
-if ((substr_count($script_line,'`') > 1) and (!(substr_count($script_line,'`') & 1))) { // check for even number of `
-if ($GLOBALS['repo_count'] == 0) echo "ERROR - ".current_line()." no repository data for ".$script_line."\n";
-// loop through repository data to search and replace definitions, do it twice to handle objects within keywords
-else {if (getenv('tagui_data_set')!==false) $data_set = intval(getenv('tagui_data_set')); else $data_set = 1;
-for ($repo_check = 1; $repo_check <= $GLOBALS['repo_count']; $repo_check++) $script_line = 
-str_replace("`".$GLOBALS['repo_data'][$repo_check][0]."`",$GLOBALS['repo_data'][$repo_check][$data_set],$script_line);
-for ($repo_check = 1; $repo_check <= $GLOBALS['repo_count']; $repo_check++) $script_line =
-str_replace("`".$GLOBALS['repo_data'][$repo_check][0]."`",$GLOBALS['repo_data'][$repo_check][$data_set],$script_line);
-if (strpos($script_line,'`')!==false) echo "ERROR - ".current_line()." no repository data for ".$script_line."\n";}}
+// check for even number of ` to reduce false-positive because backtick syntax is supposed to be matching pairs
+if ((substr_count($script_line,'`') > 1) and (!(substr_count($script_line,'`') & 1))) {
+	if ($GLOBALS['repo_count'] == 0) {
+		echo "ERROR - ".current_line()." no repository data for ".$script_line."\n";
+	} else {
+		if (getenv('tagui_data_set')!==false) {
+			$data_set = intval(getenv('tagui_data_set'));
+		} else {
+			$data_set = 1;
+		}
+		$escaped_line_ends = ["\n" => "\\n", "\r" => "\\r"];
+		// loop through repository data to search and replace definitions, do it twice to handle objects within keywords
+		for ($repo_check = 0; $repo_check <= $GLOBALS['repo_count']; $repo_check++) {
+			$repo_keyword = "`".$GLOBALS['repo_data'][$repo_check][0]."`";
+			$repo_data_value = strtr($GLOBALS['repo_data'][$repo_check][$data_set], $escaped_line_ends);
+			$script_line = str_replace($repo_keyword, $repo_data_value, $script_line);
+		}
+		for ($repo_check = 0; $repo_check <= $GLOBALS['repo_count']; $repo_check++) {
+			$repo_keyword = "`".$GLOBALS['repo_data'][$repo_check][0]."`";
+			$repo_data_value = strtr($GLOBALS['repo_data'][$repo_check][$data_set], $escaped_line_ends);
+			$script_line = str_replace($repo_keyword, $repo_data_value, $script_line);
+		}
+		if (strpos($script_line,'`')!==false) {
+			echo "ERROR - ".current_line()." no repository data for ".$script_line."\n";
+		}
+	}
+} return $script_line;}
 
-// trim and check again after replacing definitions from repository
-$script_line = trim($script_line); if ($script_line=="") {$GLOBALS['real_line_number']--; return "";}
+function parse_closure($script_line) {switch($script_line) {
+// \\n is needed for py, r, vision as multi-line string needs to have \n escaped to work in javascript
+// replacement code for [END_OF_LINE] custom token to denote line break is done at py, r, vision intents
+case "py finish":
+{$script_line = substr($GLOBALS['integration_block_body'],0,-13); $GLOBALS['inside_py_block'] = 0; break;}
+case "r finish":
+{$script_line = substr($GLOBALS['integration_block_body'],0,-13); $GLOBALS['inside_r_block'] = 0;
+$script_line = str_replace(";; ","; ",str_replace("[END_OF_LINE]","; ",$GLOBALS['integration_block_body'])); break;}
+case "vision finish":
+{$script_line = substr($GLOBALS['integration_block_body'],0,-13); $GLOBALS['inside_vision_block'] = 0; break;}
+case "js finish":
+{$script_line = str_replace("[END_OF_LINE]", "\n", $GLOBALS['integration_block_body']); $GLOBALS['inside_js_block'] = 0; break;}
+case "dom finish":
+{$script_line = str_replace("[END_OF_LINE]", "\n", $GLOBALS['integration_block_body']); $GLOBALS['inside_dom_block'] = 0; break;}}
+return $script_line;}
 
+function process_intent($intent_type, $script_line) {
 // check intent of step for interpretation into casperjs code
-switch (get_intent($script_line)) {
+switch ($intent_type) {
 case "url": return url_intent($script_line); break;
 case "tap": return tap_intent($script_line); break;
 case "rtap": return rtap_intent($script_line); break;
@@ -276,9 +390,15 @@ case "code": return code_intent($script_line); break;
 default: echo "ERROR - " . current_line() . " cannot understand step " . $script_line . "\n";}}
 
 function get_intent($raw_intent) {$lc_raw_intent = strtolower($raw_intent); 
-if ($GLOBALS['inside_py_block'] != 0) return "py"; if ($GLOBALS['inside_r_block'] != 0) return "r";
-if ($GLOBALS['inside_run_block'] != 0) return "run"; if ($GLOBALS['inside_vision_block'] != 0) return "vision";
-if ($GLOBALS['inside_js_block'] != 0) return "js"; if ($GLOBALS['inside_dom_block'] != 0) return "dom";
+//check for a finish command and return, so we don't accidentally count it as a block intent
+if ($lc_raw_intent == "py finish") return "py"; if ($lc_raw_intent == "r finish") return "r";
+if ($lc_raw_intent == "vision finish") return "vision"; if ($lc_raw_intent == "js finish") return "js";
+if ($lc_raw_intent == "dom finish") return "dom";
+
+if ($GLOBALS['inside_py_block'] != 0 || $GLOBALS['inside_r_block'] != 0 || 
+$GLOBALS['inside_vision_block'] != 0 || $GLOBALS['inside_js_block'] != 0 || 
+$GLOBALS['inside_dom_block'] != 0) return "integration_block";
+if ($GLOBALS['inside_run_block'] != 0) return "run";
 
 if ((substr($lc_raw_intent,0,7)=="http://") or (substr($lc_raw_intent,0,8)=="https://") or (substr($lc_raw_intent,0,11)=="about:blank")) return "url"; // recognizing about:blank as valid URL as it is part of HTML5 standard
 
@@ -382,30 +502,26 @@ if (strpos($filename,"'+")!==false and strpos($filename,"+'")!==false)
 return "'+abs_file('" . $filename . "')+'"; // throw to runtime abs_file function if dynamic filename is given
 $flow_path = str_replace("\\","/",dirname($flow_script)); // otherwise use flow script path to build absolute filename
 // above str_replace is because casperjs/phantomjs do not seem to support \ for windows paths, replace with / to work
-if (strpos($flow_path,"/")!==false) return $flow_path . '/' . $filename; else return $flow_path . '\\' . $filename;} 
+if (strpos($flow_path,"/")!==false) return str_replace("\\","/",$flow_path . '/' . $filename);
+else return $flow_path . '\\' . $filename;} 
 
 function beg_tx($locator) { // helper function to return beginning string for handling locators
 if ($GLOBALS['inside_while_loop'] == 0)
-return "\ncasper.waitFor(function check() {return check_tx('".$locator."');},\nfunction then() {"; else return "\n";}
+return "\ncasper.waitFor(function check() {return check_tx('".$locator."');},\nfunction then() {";
+else return " // beg_tx while loop marker\n";}
 
 function end_tx($locator) { // helper function to return ending string for handling locators
 if ($GLOBALS['inside_while_loop'] == 0)
-return "},\nfunction timeout() {this.echo('ERROR - cannot find ".
-$locator."').exit();});}".end_fi()."});\n\ncasper.then(function() {\n";
+return "},\nfunction timeout() {this.echo('ERROR - cannot find ".$locator."').exit();});}"."});".end_fi()."\n\n";
 else if ($GLOBALS['inside_code_block']==0)
 {$GLOBALS['inside_while_loop'] = 0; // reset inside_while_loop if not inside block
 $GLOBALS['for_loop_tracker'] = ""; // reset for_loop_tracker if not inside block
-return "}});\n\ncasper.then(function() {\n";} else return "}\n";}
+return "\n";} else return "\n";}
 
-function end_fi() { $end_step = ""; // helper function to end frame_intent and popup_intent by closing parsed step block
+function end_fi() { // used to be a helper function primarily to end frame_intent by closing parsed step block
 if ($GLOBALS['inside_code_block'] == 0) $GLOBALS['inside_while_loop'] = 0; // reset inside_while_loop if not inside block
 if ($GLOBALS['inside_code_block'] == 0) $GLOBALS['for_loop_tracker'] = ""; // reset for_loop_tracker if not inside block
-if (($GLOBALS['inside_code_block'] > 0) and ($GLOBALS['for_loop_tracker'] == "") and ($GLOBALS['inside_while_loop'] == 0)) return ""; // check for code block for frame or popup then exit, don't support frame/popup code blocks within loops
-if (($GLOBALS['inside_popup'] == 1) or ($GLOBALS['inside_frame'] != 0)) $end_step = "});\n\ncasper.then(function() {";
-if ($GLOBALS['inside_popup'] == 1) {$GLOBALS['inside_popup']=0; $popup_exit = " });} ";} else $popup_exit = "";
-if ($GLOBALS['inside_frame'] == 0) {return "".$popup_exit.$end_step;} // form exit brackets for frame and popup
-else if ($GLOBALS['inside_frame'] == 1) {$GLOBALS['inside_frame']=0; return " });} ".$popup_exit.$end_step;}
-else if ($GLOBALS['inside_frame'] == 2) {$GLOBALS['inside_frame']=0; return " });});} ".$popup_exit.$end_step;}}
+if ($GLOBALS['inside_while_loop'] == 1) return " // end_fi while loop marker"; return "";}
 
 function add_concat($source_string) { // parse string and add missing + concatenator 
 if ((strpos($source_string,"'")!==false) and (strpos($source_string,"\"")!==false))
@@ -432,7 +548,7 @@ return "{techo('".str_replace(' to snap_image()','',$input_intent)."'); var fs =
 "if (!sikuli_step('".$input_intent."')) if (!fs.exists('".$input_params."'))\n" .
 "this.echo('ERROR - cannot find image file ".$input_params."').exit(); else\n" . 
 "this.echo('ERROR - cannot find " . $input_params." on screen').exit(); this.wait(0);" . $other_actions. "}" .
-end_fi()."});\n\ncasper.then(function() {\n";}
+end_fi()."});\n\n";}
 
 function call_r($input_intent) { // helper function to use R integration for data analytics and machine learning
 if (!touch('tagui_r/tagui_r.in')) die("ERROR - cannot initialise tagui_r.in\n");
@@ -441,7 +557,7 @@ return "{techo('".$input_intent."');\n" . "r_result = ''; if (!r_step('".$input_
 "this.echo('ERROR - cannot execute R command(s)').exit(); this.wait(0);\n" .
 "r_result = fetch_r_text(); clear_r_text();\n" .
 "try {r_json = JSON.parse(r_result);} catch(e) {r_json = JSON.parse('null');}}" .
-end_fi()."});\n\ncasper.then(function() {\n";}
+end_fi()."});\n\n";}
 
 function call_py($input_intent) { // helper function to use Python integration for data analytics and machine learning
 if (!touch('tagui_py/tagui_py.in')) die("ERROR - cannot initialise tagui_py.in\n");
@@ -450,7 +566,7 @@ return "{techo('".$input_intent."');\n" . "py_result = ''; if (!py_step('".$inpu
 "this.echo('ERROR - cannot execute Python command(s)').exit(); this.wait(0);\n" .
 "py_result = fetch_py_text(); clear_py_text();\n" .
 "try {py_json = JSON.parse(py_result);} catch(e) {py_json = JSON.parse('null');}}" .
-end_fi()."});\n\ncasper.then(function() {\n";}
+end_fi()."});\n\n";}
 
 // set of functions to interpret steps into corresponding casperjs code
 function url_intent($raw_intent) {$twb = $GLOBALS['tagui_web_browser']; $casper_url = $raw_intent; $chrome_call = '';
@@ -460,62 +576,62 @@ if ($twb == 'chrome') {$chrome_call = "var download_path = flow_path; // to set 
 $casper_url = 'about:blank'; $chrome_call .= "chrome_step('Page.navigate',{url: '".$raw_intent."'}); sleep(1000);\n";}
 if (strpos($raw_intent,"'+")!==false and strpos($raw_intent,"+'")!==false) // check if dynamic url is used
 // wrap step within casper context if variable (casper context) is used in url, in order to access variable
-{$dynamic_header = "\n{casper.then(function() {\n"; $dynamic_footer = "})} // end of dynamic url block\n";}
+{$dynamic_header = "casper.then(function() {"; $dynamic_footer = "}); // end of dynamic url block";}
 else {$dynamic_header = ""; $dynamic_footer = ""; // else casper.start/thenOpen can be outside casper context
 if (filter_var($raw_intent, FILTER_VALIDATE_URL) == false) // do url validation only for raw text url string
 if ($raw_intent != 'about:blank') echo "ERROR - " . current_line() . " invalid URL " . $raw_intent . "\n";}
 if ($GLOBALS['real_line_number'] == 1) { // use casper.start for first URL call and casper.thenOpen for subsequent calls
 $GLOBALS['url_provided']=true; return $dynamic_header."casper.start('".$casper_url."', function() {\n".$chrome_call.
-"techo('".$raw_intent."' + ' - ' + ".$twb.".getTitle() + '\\n');});\n\ncasper.then(function() {\n".$dynamic_footer;}
-else return $dynamic_header."});casper.thenOpen('".$casper_url."', function() {\n".$chrome_call."techo('".
-$raw_intent."' + ' - ' + ".$twb.".getTitle());});\n\ncasper.then(function() {\n".$dynamic_footer;}
+"techo('".$raw_intent."' + ' - ' + ".$twb.".getTitle() + '\\n');});".$dynamic_footer."\n\n";}
+else return $dynamic_header."casper.thenOpen('".$casper_url."', function() {\n".$chrome_call."techo('".
+$raw_intent."' + ' - ' + ".$twb.".getTitle());});".$dynamic_footer."\n\n";}
 
 function tap_intent($raw_intent) {$twb = $GLOBALS['tagui_web_browser'];
 $params = trim(substr($raw_intent." ",1+strpos($raw_intent." "," "))); 
 if (is_sikuli($params)) {$abs_params = abs_file($params); $abs_intent = str_replace($params,$abs_params,$raw_intent);
-return call_sikuli($abs_intent,$abs_params);} // use sikuli visual automation as needed
+return "casper.then(function() {".call_sikuli($abs_intent,$abs_params);} // use sikuli visual automation as needed
 if ($params == "") echo "ERROR - " . current_line() . " target missing for " . $raw_intent . "\n"; else
-return "{techo('".$raw_intent."');".beg_tx($params).$twb.".click(tx('" . $params . "'));".end_tx($params);}
+return "casper.then(function() {"."{techo('".$raw_intent."');".beg_tx($params).$twb.".click(tx('" . $params . "'));".end_tx($params);}
 
 function rtap_intent($raw_intent) {$twb = $GLOBALS['tagui_web_browser'];
 $params = trim(substr($raw_intent." ",1+strpos($raw_intent." "," ")));
 if (is_sikuli($params)) {$abs_params = abs_file($params); $abs_intent = str_replace($params,$abs_params,$raw_intent);
-return call_sikuli($abs_intent,$abs_params);} // use sikuli visual automation as needed
+return "casper.then(function() {".call_sikuli($abs_intent,$abs_params);} // use sikuli visual automation as needed
 if ($params == "") echo "ERROR - " . current_line() . " target missing for " . $raw_intent . "\n"; else
-return "{techo('".$raw_intent."');".beg_tx($params).$twb.".mouse.rightclick(tx('" . $params . "'));".end_tx($params);}
+return "casper.then(function() {"."{techo('".$raw_intent."');".beg_tx($params).$twb.".mouse.rightclick(tx('" . $params . "'));".end_tx($params);}
 
 function dtap_intent($raw_intent) {$twb = $GLOBALS['tagui_web_browser'];
 $params = trim(substr($raw_intent." ",1+strpos($raw_intent." "," ")));
 if (is_sikuli($params)) {$abs_params = abs_file($params); $abs_intent = str_replace($params,$abs_params,$raw_intent);
-return call_sikuli($abs_intent,$abs_params);} // use sikuli visual automation as needed
+return "casper.then(function() {".call_sikuli($abs_intent,$abs_params);} // use sikuli visual automation as needed
 if ($params == "") echo "ERROR - " . current_line() . " target missing for " . $raw_intent . "\n"; else
-return "{techo('".$raw_intent."');".beg_tx($params).$twb.".mouse.doubleclick(tx('" . $params . "'));".end_tx($params);}
+return "casper.then(function() {"."{techo('".$raw_intent."');".beg_tx($params).$twb.".mouse.doubleclick(tx('" . $params . "'));".end_tx($params);}
 
 function hover_intent($raw_intent) {$twb = $GLOBALS['tagui_web_browser'];
 $params = trim(substr($raw_intent." ",1+strpos($raw_intent." "," "))); 
 if (is_sikuli($params)) {$abs_params = abs_file($params); $abs_intent = str_replace($params,$abs_params,$raw_intent);
-return call_sikuli($abs_intent,$abs_params);} // use sikuli visual automation as needed
+return "casper.then(function() {".call_sikuli($abs_intent,$abs_params);} // use sikuli visual automation as needed
 if ($params == "") echo "ERROR - " . current_line() . " target missing for " . $raw_intent . "\n"; else
-return "{techo('".$raw_intent."');".beg_tx($params).$twb.".mouse.move(tx('" . $params . "'));".end_tx($params);}
+return "casper.then(function() {"."{techo('".$raw_intent."');".beg_tx($params).$twb.".mouse.move(tx('" . $params . "'));".end_tx($params);}
 
 function type_intent($raw_intent) {$twb = $GLOBALS['tagui_web_browser'];
 $params = trim(substr($raw_intent." ",1+strpos($raw_intent." "," ")));
 $param1 = trim(substr($params,0,strpos($params," as "))); $param2 = trim(substr($params,4+strpos($params," as ")));
 if (is_sikuli($param1) and $param2 != "") {
 $abs_param1 = abs_file($param1); $abs_intent = str_replace($param1,$abs_param1,$raw_intent);
-return call_sikuli($abs_intent,$abs_param1);} // use sikuli visual automation as needed
+return "casper.then(function() {".call_sikuli($abs_intent,$abs_param1);} // use sikuli visual automation as needed
 if (($param1 == "") or ($param2 == ""))
 echo "ERROR - " . current_line() . " target/text missing for " . $raw_intent . "\n"; else {
 // special handling for [clear] keyword to clear text field by doing an extra step to clear the field
 if (substr($param2,0,7)=="[clear]") {if (strlen($param2)>7) $param2 = substr($param2,7); else $param2 = "";
 $clear_field = $twb.".sendKeys(tx('".$param1."'),'',{reset: true});\n";} else $clear_field = "";
-if (strpos($param2,"[enter]")===false) return "{techo('".$raw_intent."');".beg_tx($param1).$clear_field.
-$twb.".sendKeys(tx('".$param1."'),'".$param2."');".end_tx($param1);
+if (strpos($param2,"[enter]")===false) return "casper.then(function() {"."{techo('".$raw_intent."');".
+beg_tx($param1).$clear_field.$twb.".sendKeys(tx('".$param1."'),'".$param2."');".end_tx($param1);
 else // special handling for [enter] keyword to send enter key events
 {$param2 = str_replace("[enter]","',{keepFocus: true});\n" .
 $twb.".sendKeys(tx('".$param1."'),casper.page.event.key.Enter,{keepFocus: true});\n" .
-$twb.".sendKeys(tx('".$param1."'),'",$param2); return "{techo('".$raw_intent."');".beg_tx($param1).$clear_field.
-$twb.".sendKeys(tx('".$param1."'),'".$param2."',{keepFocus: true});".end_tx($param1);}}}
+$twb.".sendKeys(tx('".$param1."'),'",$param2); return "casper.then(function() {"."{techo('".$raw_intent."');".
+beg_tx($param1).$clear_field.$twb.".sendKeys(tx('".$param1."'),'".$param2."',{keepFocus: true});".end_tx($param1);}}}
 
 function select_intent($raw_intent) {$twb = $GLOBALS['tagui_web_browser'];
 $params = trim(substr($raw_intent." ",1+strpos($raw_intent." "," ")));
@@ -523,11 +639,11 @@ $param1 = trim(substr($params,0,strpos($params," as "))); $param2 = trim(substr(
 if (is_sikuli($param1) and is_sikuli($param2)) {
 $abs_param1 = abs_file($param1); $abs_intent = str_replace($param1,$abs_param1,$raw_intent);
 $abs_param2 = abs_file($param2); $abs_intent = str_replace($param2,$abs_param2,$abs_intent);
-return call_sikuli($abs_intent,$abs_param1);} // use sikuli visual automation as needed
+return "casper.then(function() {".call_sikuli($abs_intent,$abs_param1);} // use sikuli visual automation as needed
 if (($param1 == "") or ($param2 == ""))
 echo "ERROR - " . current_line() . " target/option missing for " . $raw_intent . "\n"; else
-return "{techo('".$raw_intent."');".beg_tx($param1)."var select_locator = tx('".$param1."');\n".
-"if (is_xpath_selector(select_locator.toString().replace('xpath selector: ','')))\n".
+return "casper.then(function() {"."{techo('".$raw_intent."');".beg_tx($param1)."var select_locator = tx('".$param1."');\n"
+."if (is_xpath_selector(select_locator.toString().replace('xpath selector: ','')))\n".
 "select_locator = select_locator.toString().substring(16);\n".
 $twb.".selectOptionByValue(select_locator,'".$param2."');".end_tx($param1);}
 
@@ -536,21 +652,25 @@ $params = trim(substr($raw_intent." ",1+strpos($raw_intent." "," ")));
 $param1 = trim(substr($params,0,strpos($params," to "))); $param2 = trim(substr($params,4+strpos($params," to ")));
 if (is_sikuli($param1) and (strpos($params," to ")!==false)) { // use sikuli visual automation as needed
 $abs_param1 = abs_file($param1); $abs_intent = str_replace($param1,$abs_param1,$raw_intent);
-return call_sikuli($abs_intent,$abs_param1,$param2." = fetch_sikuli_text(); clear_sikuli_text();");}
+return "casper.then(function() {".
+call_sikuli($abs_intent,$abs_param1,$param2." = fetch_sikuli_text(); clear_sikuli_text();");}
 if ((strtolower($param1) == "page") and ($param2 != ""))
-return "{techo('".$raw_intent."');\n".$param2." = ".$twb.".getHTML();}".end_fi()."\n";
+return "casper.then(function() {"."{techo('".$raw_intent."');\n".$param2." = ".$twb.".getHTML();}".end_fi()."});"."\n\n";
 if (($param1 == "") or ($param2 == "")) 
 echo "ERROR - " . current_line() . " target/variable missing for " . $raw_intent . "\n"; else
-return "{techo('".$raw_intent."');".beg_tx($param1).$param2." = ".$twb.".fetchText(tx('".$param1."')).trim();".end_tx($param1);}
+return "casper.then(function() {".
+"{techo('".$raw_intent."');".beg_tx($param1).$param2." = ".$twb.".fetchText(tx('".$param1."')).trim();".end_tx($param1);}
 
 function show_intent($raw_intent) {$twb = $GLOBALS['tagui_web_browser'];
 $params = trim(substr($raw_intent." ",1+strpos($raw_intent." "," ")));
 if (is_sikuli($params)) { // use sikuli visual automation as needed
 $abs_params = abs_file($params); $abs_intent = str_replace($params,$abs_params,$raw_intent);
-return call_sikuli($abs_intent,$abs_params,"this.echo(fetch_sikuli_text()); clear_sikuli_text();");}
-if (strtolower($params) == "page") return "this.echo('".$raw_intent."' + ' - \\n' + ".$twb.".getHTML());".end_fi()."\n";
+return "casper.then(function() {".
+call_sikuli($abs_intent,$abs_params,"this.echo(fetch_sikuli_text()); clear_sikuli_text();");}
+if (strtolower($params) == "page") return "casper.then(function() {".
+"this.echo('".$raw_intent."' + ' - \\n' + ".$twb.".getHTML());".end_fi()."});"."\n\n";
 if ($params == "") echo "ERROR - " . current_line() . " target missing for " . $raw_intent . "\n"; else
-return "{techo('".$raw_intent."');".beg_tx($params).
+return "casper.then(function() {"."{techo('".$raw_intent."');".beg_tx($params).
 "this.echo(".$twb.".fetchText(tx('" . $params . "')).trim());".end_tx($params);}
 
 function upload_intent($raw_intent) {$twb = $GLOBALS['tagui_web_browser'];
@@ -558,7 +678,7 @@ $params = trim(substr($raw_intent." ",1+strpos($raw_intent." "," ")));
 $param1 = trim(substr($params,0,strpos($params," as "))); $param2 = trim(substr($params,4+strpos($params," as ")));
 if (($param1 == "") or ($param2 == ""))
 echo "ERROR - " . current_line() . " filename missing for " . $raw_intent . "\n"; else
-return "{techo('".$raw_intent."');".beg_tx($param1).
+return "casper.then(function() {"."{techo('".$raw_intent."');".beg_tx($param1).
 $twb.".page.uploadFile(tx('".$param1."'),'".abs_file($param2)."');".end_tx($param1);}
 
 function down_intent($raw_intent) {$twb = $GLOBALS['tagui_web_browser'];
@@ -566,39 +686,42 @@ $params = trim(substr($raw_intent." ",1+strpos($raw_intent." "," ")));
 $param1 = trim(substr($params,0,strpos($params," to "))); $param2 = trim(substr($params,4+strpos($params," to ")));
 if (($param1 == "") or ($param2 == "")) 
 echo "ERROR - " . current_line() . " url/filename missing for " . $raw_intent . "\n"; else
-return "{techo('".$raw_intent."');\n".$twb.".download('".$param1."','".abs_file($param2)."');}".end_fi()."\n";}
+return "casper.then(function() {"."{techo('".$raw_intent."');\n".$twb.".download('".$param1."','".abs_file($param2)."');}".end_fi()."});"."\n\n";}
 
 function receive_intent($raw_intent) {$twb = $GLOBALS['tagui_web_browser'];
 $params = trim(substr($raw_intent." ",1+strpos($raw_intent." "," ")));
 $param1 = trim(substr($params,0,strpos($params," to "))); $param2 = trim(substr($params,4+strpos($params," to ")));
 if (($param1 == "") or ($param2 == "")) 
 echo "ERROR - " . current_line() . " keyword/filename missing for " . $raw_intent . "\n"; else
-return "{techo('".$raw_intent."');\n".
+return "casper.then(function() {"."{techo('".$raw_intent."');\n".
 "casper.on('resource.received', function(resource) {if (resource.stage !== 'end') return;\n".
-"if (resource.url.indexOf('".$param1."') > -1) ".$twb.".download(resource.url, '".abs_file($param2)."');});}".end_fi()."\n";}
+"if (resource.url.indexOf('".$param1."') > -1) ".$twb.".download(resource.url, '".abs_file($param2)."');});}".end_fi()."});"."\n\n";}
 
 function echo_intent($raw_intent) {
 $params = trim(substr($raw_intent." ",1+strpos($raw_intent." "," ")));
 if ($params == "") echo "ERROR - " . current_line() . " text missing for " . $raw_intent . "\n"; else 
-return "this.echo(".add_concat($params).");".end_fi()."\n";}
+return "casper.then(function() {"."this.echo(".add_concat($params).");".end_fi()."});"."\n\n";}
 
 function save_intent($raw_intent) {$twb = $GLOBALS['tagui_web_browser'];
 $params = trim(substr($raw_intent." ",1+strpos($raw_intent." "," ")));
 $param1 = trim(substr($params,0,strpos($params," to "))); $param2 = trim(substr($params,4+strpos($params," to ")));
 if (is_sikuli($param1) and (strpos($params," to ")!==false)) { // use sikuli visual automation as needed
 $abs_param1 = abs_file($param1); $abs_intent = str_replace($param1,$abs_param1,$raw_intent);
-return call_sikuli($abs_intent,$abs_param1,"save_text('".abs_file($param2)."',fetch_sikuli_text()); clear_sikuli_text();");}
+return "casper.then(function() {".
+call_sikuli($abs_intent,$abs_param1,"save_text('".abs_file($param2)."',fetch_sikuli_text()); clear_sikuli_text();");}
 else if (is_sikuli($params) and (strpos($params," to ")==false)) {
 $abs_params = abs_file($params); $abs_intent = str_replace($params,$abs_params,$raw_intent);
-return call_sikuli($abs_intent,$abs_param1,"save_text('',fetch_sikuli_text()); clear_sikuli_text();");}
+return "casper.then(function() {".
+call_sikuli($abs_intent,$abs_param1,"save_text('',fetch_sikuli_text()); clear_sikuli_text();");}
 if ((strtolower($params) == "page") or (strtolower($param1) == "page")) {if (strpos($params," to ")!==false)
-return "{techo('".$raw_intent."');\nsave_text('".abs_file($param2)."',".$twb.".getHTML());}".end_fi()."\n";
-else return "{techo('".$raw_intent."');\nsave_text('',".$twb.".getHTML());}".end_fi()."\n";}
+return "casper.then(function() {".
+"{techo('".$raw_intent."');\nsave_text('".abs_file($param2)."',".$twb.".getHTML());}".end_fi()."});"."\n\n";
+else return "casper.then(function() {"."{techo('".$raw_intent."');\nsave_text('',".$twb.".getHTML());}".end_fi()."});"."\n\n";}
 if ($params == "") echo "ERROR - " . current_line() . " target missing for " . $raw_intent . "\n"; 
 else if (strpos($params," to ")!==false)
-return "{techo('".$raw_intent."');".beg_tx($param1).
+return "casper.then(function() {"."{techo('".$raw_intent."');".beg_tx($param1).
 	"save_text('".abs_file($param2)."',".$twb.".fetchText(tx('".$param1."')).trim());".end_tx($param1); else
-return "{techo('".$raw_intent."');".beg_tx($params).
+return "casper.then(function() {"."{techo('".$raw_intent."');".beg_tx($params).
 	"save_text('',".$twb.".fetchText(tx('" . $params . "')).trim());".end_tx($params);}
 
 function dump_intent($raw_intent) {
@@ -607,8 +730,10 @@ $params = trim(substr($raw_intent." ",1+strpos($raw_intent." "," ")));
 $param1 = trim(substr($params,0,strpos($params," to "))); $param2 = trim(substr($params,4+strpos($params," to ")));
 if ($params == "") echo "ERROR - " . current_line() . " variable missing for " . $raw_intent . "\n"; 
 else if (strpos($params," to ")!==false)
-return "{techo('".$safe_intent."');\nsave_text('".abs_file($param2)."',".add_concat($param1).");}".end_fi()."\n";
-else return "{techo('".$safe_intent."');\nsave_text(''," . add_concat($params) . ");}".end_fi()."\n";}
+return "casper.then(function() {".
+"{techo('".$safe_intent."');\nsave_text('".abs_file($param2)."',".add_concat($param1).");}".end_fi()."});"."\n\n";
+else return "casper.then(function() {".
+"{techo('".$safe_intent."');\nsave_text(''," . add_concat($params) . ");}".end_fi()."});"."\n\n";}
 
 function write_intent($raw_intent) {
 $safe_intent = str_replace("'","\'",$raw_intent); // avoid breaking echo below when single quote is used
@@ -616,8 +741,10 @@ $params = trim(substr($raw_intent." ",1+strpos($raw_intent." "," ")));
 $param1 = trim(substr($params,0,strpos($params," to "))); $param2 = trim(substr($params,4+strpos($params," to ")));
 if ($params == "") echo "ERROR - " . current_line() . " variable missing for " . $raw_intent . "\n";
 else if (strpos($params," to ")!==false)
-return "{techo('".$safe_intent."');\nappend_text('".abs_file($param2)."',".add_concat($param1).");}".end_fi()."\n";
-else return "{techo('".$safe_intent."');\nappend_text(''," . add_concat($params) . ");}".end_fi()."\n";}
+return "casper.then(function() {".
+"{techo('".$safe_intent."');\nappend_text('".abs_file($param2)."',".add_concat($param1).");}".end_fi()."});"."\n\n";
+else return "casper.then(function() {".
+"{techo('".$safe_intent."');\nappend_text(''," . add_concat($params) . ");}".end_fi()."});"."\n\n";}
 
 function load_intent($raw_intent) {
 $safe_intent = str_replace("'","\'",$raw_intent); // avoid breaking echo below when single quote is used
@@ -625,9 +752,9 @@ $params = trim(substr($raw_intent." ",1+strpos($raw_intent." "," ")));
 $param1 = trim(substr($params,0,strpos($params," to "))); $param2 = trim(substr($params,4+strpos($params," to ")));
 if ($params == "") echo "ERROR - " . current_line() . " filename missing for " . $raw_intent . "\n";
 else if (strpos($params," to ")!==false)
-return "{techo('".$safe_intent."');\nvar fs = require('fs'); ".$param2." = '';\n".
+return "casper.then(function() {"."{techo('".$safe_intent."');\nvar fs = require('fs'); ".$param2." = '';\n".
 	"if (fs.exists('".abs_file($param1)."'))\n".$param2." = fs.read('".abs_file($param1)."').trim();\n".
-	"else this.echo('ERROR - cannot find file ".$param1."').exit();}".end_fi()."\n";
+	"else this.echo('ERROR - cannot find file ".$param1."').exit();}".end_fi()."});"."\n\n";
 else echo "ERROR - " . current_line() . " variable missing for " . $raw_intent . "\n";}
 
 function snap_intent($raw_intent) {$twb = $GLOBALS['tagui_web_browser'];
@@ -636,18 +763,20 @@ $param1 = trim(substr($params,0,strpos($params," to "))); $param2 = trim(substr(
 if (is_sikuli($param1) and (strpos($params," to ")!==false)) {
 $abs_param1 = abs_file($param1); $abs_intent = str_replace($param1,$abs_param1,$raw_intent);
 $abs_param2 = abs_file($param2); $abs_intent = str_replace($param2,$abs_param2,$abs_intent);
-return call_sikuli($abs_intent,$abs_param1);} // use sikuli visual automation as needed
+return "casper.then(function() {".call_sikuli($abs_intent,$abs_param1);} // use sikuli visual automation as needed
 else if (is_sikuli($params) and (strpos($params," to ")==false)) {
 $abs_params = abs_file($params); $abs_intent = str_replace($params,$abs_params,$raw_intent);
-return call_sikuli($abs_intent.' to snap_image()',$abs_params);} // handle no output filename
+return "casper.then(function() {".call_sikuli($abs_intent.' to snap_image()',$abs_params);} // handle no output filename
 if ((strtolower($params) == "page") or (strtolower($param1) == "page")) {if (strpos($params," to ")!==false)
-return "{techo('".$raw_intent."');\n".$twb.".capture('".abs_file($param2)."');}".end_fi()."\n";
-else return "{techo('".$raw_intent."');\n".$twb.".capture(snap_image());}".end_fi()."\n";}
+return "casper.then(function() {".
+"{techo('".$raw_intent."');\n".$twb.".capture('".abs_file($param2)."');}".end_fi()."});"."\n\n";
+else return "casper.then(function() {".
+"{techo('".$raw_intent."');\n".$twb.".capture(snap_image());}".end_fi()."});"."\n\n";}
 if ($params == "") echo "ERROR - " . current_line() . " target missing for " . $raw_intent . "\n"; 
 else if (strpos($params," to ")!==false)
-return "{techo('".$raw_intent."');".beg_tx($param1).
+return "casper.then(function() {"."{techo('".$raw_intent."');".beg_tx($param1).
 	$twb.".captureSelector('".abs_file($param2)."',tx('".$param1."'));".end_tx($param1); else
-return "{techo('".$raw_intent."');".beg_tx($params).
+return "casper.then(function() {"."{techo('".$raw_intent."');".beg_tx($params).
 	$twb.".captureSelector(snap_image(),tx('".$params."'));".end_tx($params);}
 
 function table_intent($raw_intent) {$twb = $GLOBALS['tagui_web_browser'];
@@ -655,33 +784,36 @@ $params = trim(substr($raw_intent." ",1+strpos($raw_intent." "," ")));
 $param1 = trim(substr($params,0,strpos($params," to "))); $param2 = trim(substr($params,4+strpos($params," to ")));
 if ($params == "") echo "ERROR - " . current_line() . " target missing for " . $raw_intent . "\n";
 else if (strpos($params," to ")!==false)
-return "{techo('".$raw_intent."');".beg_tx($param1).
+return "casper.then(function() {"."{techo('".$raw_intent."');".beg_tx($param1).
 	"save_table('".abs_file($param2)."',tx('".$param1."'));".end_tx($param1); else
-return "{techo('".$raw_intent."');".beg_tx($params).
+return "casper.then(function() {"."{techo('".$raw_intent."');".beg_tx($params).
         "save_table('',tx('".$params."'));".end_tx($params);}
 
-function wait_intent($raw_intent) { // wait is a new block, invalid to use after frame, thus skip end_fi()
-$params = trim(substr($raw_intent." ",1+strpos($raw_intent." "," "))); if ($params == "") $params = "5"; 
-if ($GLOBALS['inside_frame']!=0) echo "ERROR - " . current_line() . " invalid after frame - " . $raw_intent . "\n";
-else if ($GLOBALS['inside_popup']!=0) echo "ERROR - " . current_line() . " invalid after popup - " . $raw_intent . "\n";
-else if (strpos($params,"'+")!==false and strpos($params,"+'")!==false) // handling for dynamic time
-return "techo('".$raw_intent."');});\n\ncasper.wait((parseFloat('".$params."')*1000), function() {\n";
-else return "techo('".$raw_intent."');});\n\ncasper.wait(" . (floatval($params)*1000) . ", function() {\n";}
+function wait_intent($raw_intent) {
+$params = trim(substr($raw_intent." ",1+strpos($raw_intent." "," "))); if ($params == "") $params = "5";
+if (strpos($params,"'+")!==false and strpos($params,"+'")!==false) // handling for dynamic time
+return "casper.then(function() {".
+"techo('".$raw_intent."');});\ncasper.wait((parseFloat('".$params."')*1000), function() {"."});"."\n\n";
+else return "casper.then(function() {".
+"techo('".$raw_intent."');});\ncasper.wait(" . (floatval($params)*1000) . ", function() {"."});"."\n\n";}
 
 function live_intent($raw_intent) { // live mode to interactively test tagui steps and js code (casperjs context)
-return "{var live_input = ''; var sys = require('system'); sys.stdout.write('LIVE MODE - type done to quit\\n \\b');\n".
+return "casper.then(function() {".
+"{var live_input = '';\nvar sys = require('system'); sys.stdout.write('LIVE MODE - type done to quit\\n \\b');\n".
 "while (true) {live_input = sys.stdin.readLine(); // evaluate input in casperjs context until done is entered\n".
-"if (live_input.indexOf('done') == 0) break; eval(tagui_parse(live_input));}}".end_fi()."\n";}
+"if (live_input.indexOf('done') == 0) break; eval(tagui_parse(live_input));}}".end_fi()."});"."\n\n";}
 
 function ask_intent($raw_intent) { // ask user for input during automation and save to ask_result variable
 $raw_intent = str_replace("\'","'",$raw_intent); $raw_intent = str_replace("'","\'",$raw_intent);
 $params = trim(substr($raw_intent." ",1+strpos($raw_intent." "," ")));
 if ($params == "") echo "ERROR - " . current_line() . " prompt missing for " . $raw_intent . "\n";
 else if (getenv('tagui_web_browser')=='chrome') { // show a popup window if running on visible chrome mode
-return "{ask_result = ''; ask_result = chrome.evaluate(function() {return prompt('".$params."');});\n".
-"if (ask_result == null) ask_result = '';}".end_fi()."\n";}
-else return "{ask_result = ''; var sys = require('system'); sys.stdout.write('".$params." ');\n".
-"ask_result = sys.stdin.readLine();}".end_fi()."\n";}
+return "casper.then(function() {".
+"{ask_result = ''; ask_result = chrome.evaluate(function() {\nreturn prompt('".$params."');}); ".
+"if (ask_result == null) ask_result = '';}".end_fi()."});"."\n\n";}
+else return "casper.then(function() {".
+"{ask_result = ''; var sys = require('system');\nsys.stdout.write('".$params." '); ".
+"ask_result = sys.stdin.readLine();}".end_fi()."});"."\n\n";}
 
 function check_intent($raw_intent) {
 $params = trim(substr($raw_intent." ",1+strpos($raw_intent." "," ")));
@@ -692,9 +824,9 @@ $param1 = str_replace(" JAVASCRIPT_OR ","||",$param1); // to restore back "||" t
 $param2 = str_replace(" JAVASCRIPT_OR ","||",$param2); $param3 = str_replace(" JAVASCRIPT_OR ","||",$param3);
 if (substr_count($params,"|")!=2) 
 echo "ERROR - " . current_line() . " if/true/false missing for " . $raw_intent . "\n";
-else if (getenv('tagui_test_mode') == 'true') return "{".parse_condition("if ".$param1).
-"\ntest.assert(true,".add_concat($param2).");\nelse test.assert(false,".add_concat($param3).");}".end_fi()."\n";
-else return "{".parse_condition("if ".$param1)."\nthis.echo(".add_concat($param2).");\nelse this.echo(".add_concat($param3).");}".end_fi()."\n";}
+else if (getenv('tagui_test_mode') == 'true') return "casper.then(function() {"."{".parse_condition("if ".$param1).
+"\ntest.assert(true,".add_concat($param2).");\nelse test.assert(false,".add_concat($param3).");}".end_fi()."});"."\n\n";
+else return "casper.then(function() {"."{".parse_condition("if ".$param1)."\nthis.echo(".add_concat($param2).");\nelse this.echo(".add_concat($param3).");}".end_fi()."});"."\n\n";}
 
 function test_intent($raw_intent) {
 echo "ERROR - " . current_line() . " use CasperJS tester module to professionally " . $raw_intent . "\n";
@@ -702,103 +834,99 @@ echo "ERROR - " . current_line() . " info at http://docs.casperjs.org/en/latest/
 echo "ERROR - " . current_line() . " support CSS selector or tx('selector') for XPath algo by TagUI" . "\n";}
 
 function frame_intent($raw_intent) {
-if ($GLOBALS['inside_frame'] != 0) 
-{echo "ERROR - " . current_line() . " frame called consecutively " . $raw_intent . "\n"; return;}
 $params = trim(substr($raw_intent." ",1+strpos($raw_intent." "," ")));
 $param1 = trim(substr($params,0,strpos($params,"|"))); $param2 = trim(substr($params,1+strpos($params,"|")));
 if ($params == "") echo "ERROR - " . current_line() . " name missing for " . $raw_intent . "\n"; 
-else if (strpos($params,"|")!==false) 
-{$GLOBALS['inside_frame']=2; return "{techo('".$raw_intent."');\ncasper.withFrame('".
-$param1."', function() {casper.withFrame('".$param2."', function() {\n";} else
-{$GLOBALS['inside_frame']=1; return "{techo('".$raw_intent."');\ncasper.withFrame('".$params."', function() {\n";}}
+else if (strpos($params,"|")!==false)
+{$GLOBALS['code_block_tracker'] .= "|" . 'dframe';
+return "casper.then(function() {"."techo('".$raw_intent."');});\n".
+"casper.withFrame('".$param1."', function() {casper.withFrame('".$param2."', function() {\n";} else
+{$GLOBALS['code_block_tracker'] .= "|" . 'frame';
+return "casper.then(function() {"."techo('".$raw_intent."');});\n"."casper.withFrame('".$params."', function() {\n";}}
 
 function popup_intent($raw_intent) {
-if ($GLOBALS['inside_popup'] != 0)
-{echo "ERROR - " . current_line() . " popup called consecutively " . $raw_intent . "\n"; return;}
 $params = trim(substr($raw_intent." ",1+strpos($raw_intent." "," ")));
-if ($GLOBALS['inside_frame']!=0) echo "ERROR - " . current_line() . " invalid after frame - " . $raw_intent . "\n";
-else if ($params == "") echo "ERROR - " . current_line() . " keyword missing for " . $raw_intent . "\n";
-else {$GLOBALS['inside_popup']=1; // during execution check for popup before going into popup context
-return "{techo('".$raw_intent."');\ncasper.waitForPopup(/".preg_quote($params)."/, function then() {},\n".
+if ($params == "") echo "ERROR - " . current_line() . " keyword missing for " . $raw_intent . "\n";
+else {$GLOBALS['code_block_tracker'] .= "|" . 'popup';
+return "casper.then(function() {"."techo('".$raw_intent."');"."});\n".
+"casper.waitForPopup(/".preg_quote($params)."/, function then() {},\n".
 "function timeout() {this.echo('ERROR - cannot find popup ".$params."').exit();});\n".
 "casper.withPopup(/".preg_quote($params)."/, function() {\n";}}
 
 function api_intent($raw_intent) {
 $params = trim(substr($raw_intent." ",1+strpos($raw_intent." "," ")));
 if ($params == "") echo "ERROR - " . current_line() . " API URL missing for " . $raw_intent . "\n"; else
-return "{techo('".$raw_intent."');\napi_result = ''; api_result = call_api('".$params."');\n" . 
-"try {api_json = JSON.parse(api_result);} catch(e) {api_json = JSON.parse('null');}}".end_fi()."\n";}
+return "casper.then(function() {"."{techo('".$raw_intent."');\napi_result = ''; api_result = call_api('".$params."');\n".
+"try {api_json = JSON.parse(api_result);} catch(e) {api_json = JSON.parse('null');}}".end_fi()."});"."\n\n";}
 
-function run_intent($raw_intent) { // waitForExec is a new block, invalid to use after frame, thus skip end_fi()
+function run_intent($raw_intent) {
 $raw_intent = str_replace('\\','\\\\',$raw_intent); // to call paths correctly for Windows
 if (strtolower($raw_intent) == "run begin") {$GLOBALS['inside_run_block'] = 1; return "";}
 else if (strtolower($raw_intent) == "run finish") {$GLOBALS['inside_run_block'] = 0; return "";}
 if ($GLOBALS['inside_run_block'] == 1) $raw_intent = "run " . $raw_intent;
+$safe_intent = str_replace("'","\'",$raw_intent); // avoid breaking echo when single quote is used
 $params = trim(substr($raw_intent." ",1+strpos($raw_intent." "," ")));
-if ($GLOBALS['inside_frame']!=0) echo "ERROR - " . current_line() . " invalid after frame - " . $raw_intent . "\n";
-else if ($GLOBALS['inside_popup']!=0) echo "ERROR - " . current_line() . " invalid after popup - " . $raw_intent . "\n";
-else if ($params == "") echo "ERROR - " . current_line() . " command to run missing for " . $raw_intent . "\n"; else
-return "techo('".$raw_intent."');});\n\ncasper.then(function(){\n".
+if ($params == "") echo "ERROR - " . current_line() . " command to run missing for " . $raw_intent . "\n"; else
+return "casper.then(function() {"."techo('".$safe_intent."');});\ncasper.then(function() {".
 "casper.waitForExec('".$params."', null, function(response) {run_result = '';\n" .
 "run_result = (response.data.stdout.trim() || response.data.stderr.trim()); " .
-"run_result = run_result.replace(/\\r\\n/g,'\\n'); run_json = response.data;}, function() {\n" .
+"run_result = run_result.replace(/\\r\\n/g,'\\n');\nrun_json = response.data;}, function() {" .
 "this.echo('ERROR - command to run exceeded '+(casper.options.waitTimeout/1000).toFixed(1)+'s timeout').exit();},".
-"casper.options.waitTimeout);});\n\n" . "casper.then(function() {\n";}
+"casper.options.waitTimeout);});\n\n";}
 
-function dom_intent($raw_intent) {$twb = $GLOBALS['tagui_web_browser'];
-if (strtolower($raw_intent) == "dom begin") {$GLOBALS['inside_dom_block'] = 1; return "";}
-else if (strtolower($raw_intent) == "dom finish") {$GLOBALS['inside_dom_block'] = 0; return "";}
-if ($GLOBALS['inside_dom_block'] == 1) $raw_intent = "dom " . $raw_intent;
+function dom_intent($raw_intent) {$twb = $GLOBALS['tagui_web_browser']; if (strtolower($raw_intent) == "dom begin")
+{$GLOBALS['inside_dom_block'] = 1; $GLOBALS['integration_block_body'] = "dom "; return "";}
 $params = trim(substr($raw_intent." ",1+strpos($raw_intent." "," ")));
 if ($params == "") echo "ERROR - " . current_line() . " statement missing for " . $raw_intent . "\n";
-else return "dom_result = ''; dom_result = ".$twb.".evaluate(function(dom_json) {".$params."}, dom_json);".end_fi()."\n";}
+else return "casper.then(function() {"."dom_result = ''; dom_result = ".$twb.".evaluate(function(dom_json) {".$params."}, dom_json);".end_fi()."});"."\n\n";}
 
-function js_intent($raw_intent) {
-if (strtolower($raw_intent) == "js begin") {$GLOBALS['inside_js_block'] = 1; return "";}
-else if (strtolower($raw_intent) == "js finish") {$GLOBALS['inside_js_block'] = 0; return "";}
-if ($GLOBALS['inside_js_block'] == 1) $raw_intent = "js " . $raw_intent;
+function js_intent($raw_intent) {if (strtolower($raw_intent) == "js begin")
+{$GLOBALS['inside_js_block'] = 1; $GLOBALS['integration_block_body'] = "js "; return "";}
 $params = trim(substr($raw_intent." ",1+strpos($raw_intent." "," ")));
 if ($params == "") echo "ERROR - " . current_line() . " statement missing for " . $raw_intent . "\n";
-else return $params.end_fi()."\n";}
+else return "casper.then(function() { // start of JS code\n".$params."\n}); // end of JS code"."\n\n";}
 
-function r_intent($raw_intent) {
-if (strtolower($raw_intent) == "r begin") {$GLOBALS['inside_r_block'] = 1; return "";}
-else if (strtolower($raw_intent) == "r finish") {$GLOBALS['inside_r_block'] = 0; return "";}
-if ($GLOBALS['inside_r_block'] == 1) $raw_intent = "r " . $raw_intent;
+function r_intent($raw_intent) {if (strtolower($raw_intent) == "r begin")
+{$GLOBALS['inside_r_block'] = 1; $GLOBALS['integration_block_body'] = "r "; return "";}
+$raw_intent = str_replace('\\','\\\\',$raw_intent); // to send \ correctly over to integration 
+$raw_intent = str_replace('[END_OF_LINE]','\\n',$raw_intent); // replace after above to prevent from escape
 $safe_intent = str_replace("'","\'",$raw_intent); // avoid breaking echo when single quote is used
 $params = trim(substr($raw_intent." ",1+strpos($raw_intent." "," ")));
 if ($params == "") echo "ERROR - " . current_line() . " R command(s) missing for " . $raw_intent . "\n"; else
-return call_r($safe_intent);}
+return "casper.then(function() {".call_r($safe_intent);}
 
-function py_intent($raw_intent) {
-if (strtolower($raw_intent) == "py begin") {$GLOBALS['inside_py_block'] = 1; return "";}
-else if (strtolower($raw_intent) == "py finish") {$GLOBALS['inside_py_block'] = 0; return "";}
-if ($GLOBALS['inside_py_block'] == 1) $raw_intent = "py " . $raw_intent;
+function py_intent($raw_intent) {if (strtolower($raw_intent) == "py begin")
+{$GLOBALS['inside_py_block'] = 1; $GLOBALS['integration_block_body'] = "py "; return "";}
+$raw_intent = str_replace('\\','\\\\',$raw_intent); // to send \ correctly over to integration 
+$raw_intent = str_replace('[END_OF_LINE]','\\n',$raw_intent); // replace after above to prevent from escape
 $safe_intent = str_replace("'","\'",$raw_intent); // avoid breaking echo when single quote is used
 $params = trim(substr($raw_intent." ",1+strpos($raw_intent." "," ")));
 if ($params == "") echo "ERROR - " . current_line() . " Python command(s) missing for " . $raw_intent . "\n"; else
-return call_py($safe_intent);}
+return "casper.then(function() {".call_py($safe_intent);}
 
-function vision_intent($raw_intent) {
-if (strtolower($raw_intent) == "vision begin") {$GLOBALS['inside_vision_block'] = 1; return "";}
-else if (strtolower($raw_intent) == "vision finish") {$GLOBALS['inside_vision_block'] = 0; return "";}
-if ($GLOBALS['inside_vision_block'] == 1) $raw_intent = "vision " . $raw_intent;
+function vision_intent($raw_intent) {if (strtolower($raw_intent) == "vision begin")
+{$GLOBALS['inside_vision_block'] = 1; $GLOBALS['integration_block_body'] = "vision "; return "";}
+$raw_intent = str_replace('\\','\\\\',$raw_intent); // to send \ correctly over to integration
+$raw_intent = str_replace('[END_OF_LINE]','\\n',$raw_intent); // replace after above to prevent from escape
 $safe_intent = str_replace("'","\'",$raw_intent); // avoid breaking echo when single quote is used
 $params = trim(substr($raw_intent." ",1+strpos($raw_intent." "," ")));
 if ($params == "") echo "ERROR - " . current_line() . " Sikuli command(s) missing for " . $raw_intent . "\n"; else
-return call_sikuli($safe_intent,'for vision step');} // use sikuli visual automation explicitly
+return "casper.then(function() {".call_sikuli($safe_intent,'for vision step');} // use sikuli visual automation explicitly
 
 function timeout_intent($raw_intent) {
 $params = trim(substr($raw_intent." ",1+strpos($raw_intent." "," ")));
 if ($params == "") echo "ERROR - " . current_line() . " time in seconds missing for " . $raw_intent . "\n";
-else return "casper.options.waitTimeout = " . (floatval($params)*1000) . ";" . end_fi()."\n";}
+else return "casper.then(function() {"."casper.options.waitTimeout = " . (floatval($params)*1000) . ";" . end_fi()."});"."\n\n";}
 
 function code_intent($raw_intent) {
 $params = parse_condition($raw_intent);
-// not relevant to call end_fi for condition statement, will reset for and while loop tracker prematurely
+if (substr($raw_intent,0,2)=="//") return $params."\n"; // return comments directly without casper.then wrappers
+if ((substr($raw_intent,0,1)=="{") or (substr($raw_intent,0,1)=="}")) return $params."\n"; // no wrappers for {}
 if ((substr($params,0,3)=="if ") or (substr($params,0,8)=="else if ")
-or (substr($params,0,4)=="for ") or (substr($params,0,6)=="while "))
-return $params."\n"; else return $params.end_fi()."\n";}
+or (substr($params,0,4)=="for ") or (substr($params,0,6)=="while ") or
+(trim($raw_intent)=="else")) return "casper.then(function() {".$params."\n";
+else if ($GLOBALS['inside_while_loop'] == 1) return $params."\n";
+else return "casper.then(function() { // start of JS code\n".$params."\n}); // end of JS code"."\n\n";}
 
 function parse_condition($logic) { // natural language handling for conditions
 $raw_logic = $logic; // store an original copy for use when showing error message
@@ -808,19 +936,43 @@ if (substr($logic,0,2)=="//") return $logic; // skip processing for comment
 // take only lines starting with { or } as code blocks for processing, otherwise will break many valid javascript code
 if (substr($logic,0,1) == "{") $GLOBALS['inside_code_block']++; // assume nothing on rest of the line except comment
 if (substr($logic,0,1) == "}") $GLOBALS['inside_code_block']--; // assume nothing on rest of the line except comment
-if ($GLOBALS['inside_while_loop']==0) { // while loop check as casper.then will hang while loop, recommend use for loop
-$for_loop_header = ""; $for_loop_footer = ""; // add provision to implement IIFE pattern if inside for loop code block
-if ($GLOBALS['for_loop_tracker']!="") { // otherwise the number variable used by for loop will be a wrong static number
+$code_block_header = ""; $code_block_footer = "";
+$last_delimiter_pos = strrpos($GLOBALS['code_block_tracker'],"|");
+$code_block_intent = substr($GLOBALS['code_block_tracker'],$last_delimiter_pos+1);
+
+if (($GLOBALS['inside_code_block'] > substr_count($GLOBALS['code_block_tracker'],"|")) and (substr($logic,0,1) == "{"))
+{$GLOBALS['code_block_tracker'] .= "|" . 'normal_bracket'; return $logic."\n";} // handle normal JavaScript brackets
+else if ((substr($logic,0,1) == "}") and ($code_block_intent == "normal_bracket"))
+{$GLOBALS['code_block_tracker']=substr($GLOBALS['code_block_tracker'],0,$last_delimiter_pos); return $logic."\n";}
+
+if (($code_block_intent == "if") or ($code_block_intent == "else if") or ($code_block_intent == "else")
+or ($code_block_intent == "popup") or ($code_block_intent == "frame")) {if (substr($logic,0,1) == "}")
+$GLOBALS['code_block_tracker']=substr($GLOBALS['code_block_tracker'],0,$last_delimiter_pos);}
+
+else if (($code_block_intent == "for") and (substr($logic,0,1) == "{")) {
 $last_delimiter_pos = strrpos($GLOBALS['for_loop_tracker'],"|");
 $for_loop_variable_name = substr($GLOBALS['for_loop_tracker'],$last_delimiter_pos+1);
-$for_loop_header = "\n// start of IIFE pattern\n(function (" . $for_loop_variable_name . ") {";
-$for_loop_footer = "})(" . $for_loop_variable_name . "); // end of IIFE pattern\n});\n\ncasper.then(function() {";
-// pop for_loop_tracker only if for loop count tallies with the code block count (to support if popup frame in for loop)
-if ((substr($logic,0,1) == "}") and (substr_count($GLOBALS['for_loop_tracker'],'|')==($GLOBALS['inside_code_block']+1)))
+$code_block_header = "(function (" . $for_loop_variable_name . ") { // start of IIFE pattern\n";}
+
+else if (($code_block_intent == "for") and (substr($logic,0,1) == "}")) {
+$last_delimiter_pos = strrpos($GLOBALS['for_loop_tracker'],"|");
+$for_loop_variable_name = substr($GLOBALS['for_loop_tracker'],$last_delimiter_pos+1);
+$code_block_footer = "})(" . $for_loop_variable_name . "); // end of IIFE pattern\n";
+$last_delimiter_pos = strrpos($GLOBALS['code_block_tracker'],"|");
+$GLOBALS['code_block_tracker']=substr($GLOBALS['code_block_tracker'],0,$last_delimiter_pos);
+$last_delimiter_pos = strrpos($GLOBALS['for_loop_tracker'],"|");
 $GLOBALS['for_loop_tracker']=substr($GLOBALS['for_loop_tracker'],0,$last_delimiter_pos);}
-if (substr($logic,0,1) == "{")
-$logic = $for_loop_header."\n// start of code block\n{casper.then(function() {\n".substr($logic,1);
-else if (substr($logic,0,1) == "}") $logic = "})} // end of code block\n".$for_loop_footer.substr($logic,1);}
+
+else if ($code_block_intent == "dframe") {if (substr($logic,0,1) == "}") {$code_block_footer = "});";
+$GLOBALS['code_block_tracker']=substr($GLOBALS['code_block_tracker'],0,$last_delimiter_pos);}}
+
+else if ($code_block_intent == "while") {if (substr($logic,0,1) == "}") {$GLOBALS['inside_while_loop'] = 0;
+$GLOBALS['code_block_tracker']=substr($GLOBALS['code_block_tracker'],0,$last_delimiter_pos);}}
+
+if (substr($logic,0,1) == "{") $logic = $code_block_header."{ // start of code block\n".substr($logic,1)."\n";
+else if (substr($logic,0,1) == "}") $logic = "} // end of code block\n".substr($logic,1)."\n".$code_block_footer."});\n";
+$logic = str_replace("\n\n","\n",$logic); // clean up empty lines from { and } processing
+
 
 // section 2 - natural language handling for conditions and loops 
 if ((substr($logic,0,3)=="if ") or (substr($logic,0,8)=="else if ")
@@ -885,18 +1037,26 @@ echo "ERROR - " . current_line() . " put { to next line - " . $raw_logic . "\n";
 
 // add to tracker the for loop variable name, to implement IIFE pattern if step/code blocks are used
 if (substr($logic,0,4)=="for ") { // get the variable name used in the for loop and append into tracker
+$GLOBALS['code_block_tracker'] .= "|" . 'for'; // append for loop marker to track upcoming code block
 $GLOBALS['for_loop_tracker'] .= "|" . trim(substr($logic,strpos($logic,"(")+1,strpos($logic,"=")-strpos($logic,"(")-1));}
 
 // add opening and closing brackets twice to handle no brackets, and, or cases
-if (substr($logic,0,3)=="if ") {$logic = "if ((" . trim(substr($logic,3)) . "))";
+if (substr($logic,0,3)=="if ") {
+$GLOBALS['code_block_tracker'] .= "|" . 'if'; $logic = "if ((" . trim(substr($logic,3)) . "))";
 if (strpos($raw_logic,"{")!==false) echo "ERROR - " . current_line() . " put { to next line - " . $raw_logic . "\n";}
-if (substr($logic,0,8)=="else if ") {$logic = "else if ((" . trim(substr($logic,8)) . "))";
+if (substr($logic,0,8)=="else if ") {
+$GLOBALS['code_block_tracker'] .= "|" . 'else if'; $logic = "else if ((" . trim(substr($logic,8)) . "))";
 if (strpos($raw_logic,"{")!==false) echo "ERROR - " . current_line() . " put { to next line - " . $raw_logic . "\n";}
-if (substr($logic,0,6)=="while ") {$logic = "while ((" . trim(substr($logic,6)) . "))";
+if (substr($logic,0,6)=="while ") {
+$GLOBALS['code_block_tracker'] .= "|" . 'while'; $logic = "while ((" . trim(substr($logic,6)) . "))";
 if (strpos($raw_logic,"{")!==false) echo "ERROR - " . current_line() . " put { to next line - " . $raw_logic . "\n";}}
 
+// special part for else because not in section 2 condition block
+if (trim($logic)=="else") {$GLOBALS['code_block_tracker'] .= "|" . 'else'; $logic = "else";
+if (strpos($raw_logic,"{")!==false) echo "ERROR - " . current_line() . " put { to next line - " . $raw_logic . "\n";}
+
 // section 3 - track if next statement is going to be or still inside while loop,
-// then avoid async wait (casper.then/waitFor/timeout will hang casperjs/phantomjs)   
+// then avoid async wait (casper.then/waitFor/timeout will hang casperjs/phantomjs??) 
 if (substr($logic,0,6)=="while ") $GLOBALS['inside_while_loop'] = 1; 
 
 // return code after all the parsing and special handling

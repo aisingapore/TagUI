@@ -23,7 +23,7 @@ echo test     - testing with check step test assertions for CI/CD integration ^(
 echo baseline - output execution log and relative-path output files to a separate baseline directory
 echo input^(s^) - add your own parameter^(s^) to be used in your automation flow as variables p1 to p9
 echo.
-echo TagUI is a RPA / CLI tool for automating user interactions ~ for more info, google tagui
+echo TagUI is a CLI tool for digital process automation ^(RPA^) ~ for more info, google tagui
 echo.
 exit /b 1
 )
@@ -476,18 +476,57 @@ set tagui_error_code=0
 rem transpose datatable csv file if file to be transposed exists
 if exist "%flow_file%_transpose.csv" php -q transpose.php "%flow_file%_transpose.csv" | tee -a "%flow_file%.log"
 
+cd /d "%initial_dir%"
+set "custom_csv_file=NO_CUSTOM_CSV_FILE"
+rem check if custom csv file is provided to be used as datatable
+if "%arg2:~-4%"==".csv" (
+        set "custom_csv_file=%~dpnx2"
+)
+if "%arg3:~-4%"==".csv" (
+        set "custom_csv_file=%~dpnx3"
+)
+if "%arg4:~-4%"==".csv" (
+        set "custom_csv_file=%~dpnx4"
+)
+if "%arg5:~-4%"==".csv" (
+        set "custom_csv_file=%~dpnx5"
+)
+if "%arg6:~-4%"==".csv" (
+        set "custom_csv_file=%~dpnx6"
+)
+if "%arg7:~-4%"==".csv" (
+        set "custom_csv_file=%~dpnx7"
+)
+if "%arg8:~-4%"==".csv" (
+        set "custom_csv_file=%~dpnx8"
+)
+if "%arg9:~-4%"==".csv" (
+        set "custom_csv_file=%~dpnx9"
+)
+cd /d "%~dp0"
+
+if not "NO_CUSTOM_CSV_FILE" == "%custom_csv_file%" (
+	if not exist "%custom_csv_file%" (
+		echo ERROR - cannot find %custom_csv_file%
+		exit /b 1
+	) 
+	copy /Y "%custom_csv_file%" "tagui_datatable_transpose.csv" > nul
+	php -q transpose.php "tagui_datatable_transpose.csv" | tee -a "%flow_file%.log"
+	set "custom_csv_file=%~dp0tagui_datatable.csv"
+	del "tagui_datatable_transpose.csv"
+)
+if "NO_CUSTOM_CSV_FILE" == "%custom_csv_file%" set "custom_csv_file=%flow_file%.csv"
+
 rem check datatable csv file for batch automation
 set tagui_data_set_size=1 
-if not exist "%flow_file%.csv" goto no_datatable
-	for /f "tokens=* usebackq" %%c in (`gawk -F"," "{print NF}" "%flow_file%.csv" ^| sort -nu ^| head -n 1`) do set min_column=%%c
-	for /f "tokens=* usebackq" %%c in (`gawk -F"," "{print NF}" "%flow_file%.csv" ^| sort -nu ^| tail -n 1`) do set max_column=%%c
+if not exist "%custom_csv_file%" goto no_datatable
+	rem for /f "tokens=* usebackq" %%c in (`gawk -F"," "{print NF}" "%custom_csv_file%" ^| sort -nu ^| head -n 1`) do set min_column=%%c
+	rem for /f "tokens=* usebackq" %%c in (`gawk -F"," "{print NF}" "%custom_csv_file%" ^| sort -nu ^| tail -n 1`) do set max_column=%%c
+	rem below counts the first row, otherwise edge cases will break this
+	for /f "tokens=* usebackq" %%c in (`head -n 1 "%custom_csv_file%" ^| gawk -F"," "{print NF}"`) do set min_column=%%c
 
-rem comment off sanity check for columns consistency as cells with , will trigger false-positive
-rem	if %min_column% neq %max_column% (
-rem		echo ERROR - %flow_file%.csv has inconsistent # of columns | tee -a "%flow_file%.log"
-rem	)
 	if %min_column% lss 2 (
-		echo ERROR - %flow_file%.csv has has lesser than 2 columns | tee -a "%flow_file%.log"
+		echo ERROR - %custom_csv_file% has has lesser than 2 columns | tee -a "%flow_file%.log"
 	) else (
 		set /a tagui_data_set_size=%min_column% - 1
 	)
@@ -551,13 +590,14 @@ if exist "tagui_chrome.in" (
 
 	rem check for which operating system and launch chrome accordingly
 	set chrome_started=Windows
-	set chrome_switches=--remote-debugging-port=9222 about:blank
+	set chrome_switches=--user-data-dir=chrome\tagui_user_profile --remote-debugging-port=9222 about:blank
 	if not exist "%chrome_command%" (
 		echo ERROR - cannot find Chrome at "%chrome_command%"
 		echo update chrome_command setting in tagui\src\tagui.cmd to your chrome.exe
 		exit /b 1
 	)
-	taskkill /IM chrome.exe /T /F > nul 2>&1
+	for /f "tokens=* usebackq" %%p in (`wmic process where "caption like '%%chrome.exe%%' and commandline like '%%tagui_user_profile --remote-debugging-port=9222%%'" get processid 2^>nul ^| cut -d" " -f 1 ^| sort -nur ^| head -n 1`) do set chrome_process_id=%%p
+	if not "!chrome_process_id!"=="" taskkill /PID !chrome_process_id! /T /F > nul 2>&1
 	start "" "%chrome_command%" !chrome_switches! !window_size! !headless_switch!
 
 	:scan_ws_again
@@ -587,13 +627,17 @@ if exist "tagui.sikuli\tagui_sikuli.in" echo finish > tagui.sikuli\tagui_sikuli.
 if exist "tagui_chrome.in" echo finish > tagui_chrome.in
 
 rem kill chrome processes by checking which os the processes are started on
-if not "!chrome_started!"=="" if %tagui_speed_mode%==false taskkill /IM chrome.exe /T /F > nul 2>&1
-
+if not "!chrome_started!"=="" if %tagui_speed_mode%==false (
+	for /f "tokens=* usebackq" %%p in (`wmic process where "caption like '%%chrome.exe%%' and commandline like '%%tagui_user_profile --remote-debugging-port=9222%%'" get processid 2^>nul ^| cut -d" " -f 1 ^| sort -nur ^| head -n 1`) do set chrome_process_id=%%p
+	if not "!chrome_process_id!"=="" taskkill /PID !chrome_process_id! /T /F > nul 2>&1
+)
 rem end of big loop for managing multiple data sets in datatable
 )
 :break_for_loop
 
 rem additional windows section to convert unix to windows file format
+gawk "sub(\"$\", \"\")" "%flow_file%.raw" > "%flow_file%.raw.tmp"
+move /Y "%flow_file%.raw.tmp" "%flow_file%.raw" > nul
 gawk "sub(\"$\", \"\")" "%flow_file%.js" > "%flow_file%.js.tmp"
 move /Y "%flow_file%.js.tmp" "%flow_file%.js" > nul
 gawk "sub(\"$\", \"\")" "%flow_file%.log" > "%flow_file%.log.tmp"

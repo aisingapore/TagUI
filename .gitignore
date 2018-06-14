@@ -27,6 +27,10 @@
 # exclude custom global repository file
 /src/tagui_global.csv
 
+# exclude custom datatable temp file
+/src/tagui_datatable_transpose.csv
+/src/tagui_datatable.csv
+
 # exclude translation temp build files
 /src/languages/build.js
 /src/languages/build.log
@@ -48,6 +52,7 @@
 /src/tagui_service.done
 
 # exclude local files for chrome integration
+/src/chrome/tagui_user_profile
 /src/tagui_chrome.in
 /src/tagui_chrome.out
 /src/tagui_chrome.log

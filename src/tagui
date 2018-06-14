@@ -21,7 +21,7 @@ echo "test     - testing with check step test assertions for CI/CD integration (
 echo "baseline - output execution log and relative-path output files to a separate baseline directory"
 echo "input(s) - add your own parameter(s) to be used in your automation flow as variables p1 to p9"
 echo
-echo "TagUI is a RPA / CLI tool for automating user interactions ~ for more info, google tagui"
+echo "TagUI is a CLI tool for digital process automation (RPA) ~ for more info, google tagui"
 echo
 exit 1
 fi
@@ -219,14 +219,32 @@ tagui_error_code=0
 # transpose datatable csv file if file to be transposed exists
 if [ -f "$1_transpose".csv ]; then php -q transpose.php "$1_transpose".csv | tee -a "$1".log; fi
 
+custom_csv_file=NO_CUSTOM_CSV_FILE
+# check if custom csv file is provided to be used as datatable
+if [[ "$2" == *".csv" ]]; then custom_csv_file=$(cd "$(dirname "$1")"; cd "$(dirname "$2")"; pwd)/$(basename "$2"); fi
+if [[ "$3" == *".csv" ]]; then custom_csv_file=$(cd "$(dirname "$1")"; cd "$(dirname "$3")"; pwd)/$(basename "$3"); fi
+if [[ "$4" == *".csv" ]]; then custom_csv_file=$(cd "$(dirname "$1")"; cd "$(dirname "$4")"; pwd)/$(basename "$4"); fi
+if [[ "$5" == *".csv" ]]; then custom_csv_file=$(cd "$(dirname "$1")"; cd "$(dirname "$5")"; pwd)/$(basename "$5"); fi
+if [[ "$6" == *".csv" ]]; then custom_csv_file=$(cd "$(dirname "$1")"; cd "$(dirname "$6")"; pwd)/$(basename "$6"); fi
+if [[ "$7" == *".csv" ]]; then custom_csv_file=$(cd "$(dirname "$1")"; cd "$(dirname "$7")"; pwd)/$(basename "$7"); fi
+if [[ "$8" == *".csv" ]]; then custom_csv_file=$(cd "$(dirname "$1")"; cd "$(dirname "$8")"; pwd)/$(basename "$8"); fi
+if [[ "$9" == *".csv" ]]; then custom_csv_file=$(cd "$(dirname "$1")"; cd "$(dirname "$9")"; pwd)/$(basename "$9"); fi
+if [ "NO_CUSTOM_CSV_FILE" != "$custom_csv_file" ]; then
+if ! [ -f "$custom_csv_file" ]; then echo "ERROR - cannot find $custom_csv_file"; exit 1; fi
+cp "$custom_csv_file" "tagui_datatable_transpose.csv"
+php -q transpose.php "tagui_datatable_transpose.csv" | tee -a "$1".log
+custom_csv_file="$TAGUI_DIR/tagui_datatable.csv"; rm "tagui_datatable_transpose.csv"; fi
+if [ "NO_CUSTOM_CSV_FILE" == "$custom_csv_file" ]; then custom_csv_file=$1.csv; fi
+export custom_csv_file=$custom_csv_file
+
 # check datatable csv file for batch automation
 tagui_data_set_size=1
-if [ -f "$1".csv ]; then
-min_column=`awk -F',' '{print NF}' "$1".csv | sort -nu | head -n 1`
-max_column=`awk -F',' '{print NF}' "$1".csv | sort -nu | tail -n 1`
-# comment off sanity check for columns consistency as cells with , will trigger false-positive
-# if [ "$min_column" != "$max_column" ]; then echo "ERROR - $1.csv has inconsistent # of columns" | tee -a "$1".log
-if [ "$min_column" -lt 2 ]; then echo "ERROR - $1.csv has lesser than 2 columns" | tee -a "$1".log
+if [ -f "$custom_csv_file" ]; then
+# min_column=`awk -F',' '{print NF}' "$custom_csv_file" | sort -nu | head -n 1`
+# max_column=`awk -F',' '{print NF}' "$custom_csv_file" | sort -nu | tail -n 1`
+# below counts the first row, otherwise edge cases will break this
+min_column=`head -n 1 "$custom_csv_file" | awk -F',' '{print NF}'`
+if [ "$min_column" -lt 2 ]; then echo "ERROR - $custom_csv_file has lesser than 2 columns" | tee -a "$1".log
 else tagui_data_set_size="$(($min_column-1))"; fi; fi
 
 # big loop for managing multiple data sets in datatable 
@@ -273,17 +291,21 @@ headless_switch=""; if [ "$tagui_web_browser" == "headless" ]; then headless_swi
 if [ "$tagui_data_set" -eq 1 ] || [ "$tagui_speed_mode" == false ]; then
 
 # check for which operating system and launch chrome accordingly
-chrome_started="$(uname -s)"; chrome_switches="--remote-debugging-port=9222 about:blank"
+chrome_started="$(uname -s)"; chrome_switches="--user-data-dir=chrome/tagui_user_profile --remote-debugging-port=9222 about:blank"
 if [ "$chrome_started" == "Darwin" ]; then
 if ! [ -f "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome" ]; then
 echo "ERROR - cannot find Chrome at \"/Applications/Google Chrome.app/Contents/MacOS/Google Chrome\""
 echo "Chrome is at a non-standard location on your macOS, raise an issue on TagUI GitHub page"; exit 1; fi
-pkill Google\ Chrome; /Applications/Google\ Chrome.app/Contents/MacOS/Google\ Chrome $chrome_switches $window_size $headless_switch > /dev/null 2>&1 &
+chrome_process_id="$(ps | grep remote-debugging-port=9222 | grep tagui_user_profile | sed -e 's/^[ ]*//' | cut -d' ' -f 1 | sort -nur | head -n 1)"
+if [ -n "$chrome_process_id" ]; then kill $chrome_process_id; fi
+/Applications/Google\ Chrome.app/Contents/MacOS/Google\ Chrome $chrome_switches $window_size $headless_switch > /dev/null 2>&1 &
 else
 if ! type "$chrome_command" > /dev/null; then
 echo "ERROR - cannot find Chrome command \"$chrome_command\""
 echo "update chrome_command setting in tagui/src/tagui and make sure symlink to command is created"; exit 1; fi
-pkill $chrome_command; $chrome_command $chrome_switches $window_size $headless_switch > /dev/null 2>&1 &
+chrome_process_id="$(ps | grep remote-debugging-port=9222 | grep tagui_user_profile | sed -e 's/^[ ]*//' | cut -d' ' -f 1 | sort -nur | head -n 1)"
+if [ -n "$chrome_process_id" ]; then kill $chrome_process_id; fi
+$chrome_command $chrome_switches $window_size $headless_switch > /dev/null 2>&1 &
 fi
 
 # wait until chrome is ready with websocket url for php thread
@@ -310,8 +332,13 @@ if [ -f "tagui.sikuli/tagui_sikuli.in" ]; then echo "finish" > tagui.sikuli/tagu
 if [ -f "tagui_chrome.in" ]; then echo "finish" > tagui_chrome.in; fi
 
 # kill chrome processes by checking which os the processes are started on 
-if [ "$chrome_started" == "Darwin" ] && [ "$tagui_speed_mode" == false ]; then pkill Google\ Chrome
-else if [ -n "$chrome_started" ] && [ "$tagui_speed_mode" == false ]; then pkill $chrome_command; fi; fi
+if [ "$chrome_started" == "Darwin" ] && [ "$tagui_speed_mode" == false ]; then
+chrome_process_id="$(ps | grep remote-debugging-port=9222 | grep tagui_user_profile | sed -e 's/^[ ]*//' | cut -d' ' -f 1 | sort -nur | head -n 1)"
+if [ -n "$chrome_process_id" ]; then kill $chrome_process_id; fi
+else if [ -n "$chrome_started" ] && [ "$tagui_speed_mode" == false ]; then
+chrome_process_id="$(ps | grep remote-debugging-port=9222 | grep tagui_user_profile | sed -e 's/^[ ]*//' | cut -d' ' -f 1 | sort -nur | head -n 1)"
+if [ -n "$chrome_process_id" ]; then kill $chrome_process_id; fi
+fi; fi
 
 # end of big loop for managing multiple data sets in datatable
 done

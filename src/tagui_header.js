@@ -197,14 +197,25 @@ if (casper.exists(x('//*[@href="'+locator+'"]'))) return true;
 if (casper.exists(x('//*[contains(@href,"'+locator+'")]'))) return true;
 return false;}
 
+/**
+ * Extra TagUI helper methods
+ */
+
 // friendlier name to use check_tx() in if condition in flow
-function present(element_locator) {if (!element_locator) return false; else return check_tx(element_locator);}
+function present(element_locator) {if (!element_locator) return false; 
+if (is_sikuli(element_locator)) {var abs_param = abs_file(element_locator); var fs = require('fs');
+if (!fs.exists(abs_param)) {this.echo('ERROR - cannot find image file for present step').exit();}
+if (sikuli_step("present " + abs_param)) return true; else return false;}
+else return check_tx(element_locator);}
 
 // friendlier name to check element visibility using elementVisible()
 function visible(element_locator) {if (!element_locator) return false;
-var element_located = tx(element_locator); var element_visible = casper.elementVisible(element_located);
+if (is_sikuli(element_locator)) {var abs_param = abs_file(element_locator); var fs = require('fs');
+if (!fs.exists(abs_param)) {this.echo('ERROR - cannot find image file for visible step').exit();}
+if (sikuli_step("visible " + abs_param)) return true; else return false;}
+else {var element_located = tx(element_locator); var element_visible = casper.elementVisible(element_located);
 // if tx() returns x('/html') means that the element is not found, so set element_visible to false
-if (element_located.toString() == x('/html').toString()) element_visible = false; return element_visible;}
+if (element_located.toString() == x('/html').toString()) element_visible = false; return element_visible;}}
 
 // friendlier name to count elements using countElements()
 function count(element_locator) {if (!element_locator) return 0;
@@ -227,6 +238,44 @@ var time_elapsed = ((Date.now()-timer_start_time)/1000); timer_start_time = Date
 function sleep(ms) { // helper to add delay during loops
 var time_now = new Date().getTime(); var time_end = time_now + ms;
 while(time_now < time_end) {time_now = new Date().getTime();}}
+
+/**
+ * string cell data sanitiser, returns a CSV formatted string
+ * @param {string} cell_data
+ */
+function sanitise_csv_cell(cell_data) {
+    // Replace all double quotes with 2 double quotes
+    cell_data = cell_data.replace(/"/g, '\"\"')
+    var whitespaceCheckRegex = /\s/
+    // if cell_data has a comma, or new line, or its first or last character is a
+    // whitespace, then wrap the entire expression in double quotes
+    if (
+        cell_data.indexOf(',') >= 0
+        || cell_data.indexOf('\n') >= 0
+        || whitespaceCheckRegex.test(cell_data.charAt(0))
+        || whitespaceCheckRegex.test(cell_data.charAt(cell_data.length - 1))
+    ) {
+        cell_data = '\"' + cell_data + '\"'
+    }
+    return cell_data
+}
+
+/**
+ * Returns a CSV-formatted string that denotes a row in a CSV file
+ * @param {string[]} row_data a 1-D array of strings denoting data to
+ * encode as a CSV row
+ */
+function csv_row(row_data) {
+  // if row_data has at least 1 element, extract and sanitise first element
+  // else start_element is empty string
+  var start_element = (row_data.length > 0)
+    ? sanitise_csv_cell(row_data.shift())
+    : ''
+  // concat each row_data with a comma
+  return row_data.reduce(function(accumulator, currentValue) {
+    return accumulator + ',' + sanitise_csv_cell(currentValue)
+  }, start_element)
+}
 
 // for initialising integration with sikuli visual automation
 function sikuli_handshake() { // techo('[connecting to sikuli process]');
@@ -367,12 +416,24 @@ try {var ws_json = JSON.parse(ws_message); if (ws_json.result.result.value > 0)
 return ws_json.result.result.value; else return 0;}
 catch(e) {return 0;}};
 
+/* // backup of previous click implementation to experiment with Puppeteer's version
 chrome.click = function(selector) { // click by sending click event instead of mouse down/up/click, then focus on element
 if ((selector.toString().length >= 16) && (selector.toString().substr(0,16) == 'xpath selector: '))
 {if (selector.toString().length == 16) selector = ''; else selector = selector.toString().substring(16);
 chrome_step('Runtime.evaluate',{expression: 'document.evaluate(\''+selector+'\','+chrome_context+',null,XPathResult.ORDERED_NODE_SNAPSHOT_TYPE,null).snapshotItem(0).click()'}); chrome_step('Runtime.evaluate',{expression: 'document.evaluate(\''+selector+'\','+chrome_context+',null,XPathResult.ORDERED_NODE_SNAPSHOT_TYPE,null).snapshotItem(0).focus()'});}
 else {chrome_step('Runtime.evaluate',{expression: chrome_context+'.querySelector(\''+selector+'\').click()'});
-chrome_step('Runtime.evaluate',{expression: chrome_context+'.querySelector(\''+selector+'\').focus()'});}};
+chrome_step('Runtime.evaluate',{expression: chrome_context+'.querySelector(\''+selector+'\').focus()'});}}; */
+
+chrome.click = function(selector) { // click using Puppeteer's implementation - see TagUI issue #212
+chrome.scrollIntoViewIfNeeded(selector); var xy = chrome.mouse.getXY(selector);
+chrome.mouse.action('mouseMoved',xy.x,xy.y,'none',0);
+chrome.mouse.action('mousePressed',xy.x,xy.y,'left',1); chrome.mouse.action('mouseReleased',xy.x,xy.y,'left',1);}
+
+chrome.scrollIntoViewIfNeeded = function(selector) { // helper function to scroll element into view
+if ((selector.toString().length >= 16) && (selector.toString().substr(0,16) == 'xpath selector: '))
+{if (selector.toString().length == 16) selector = ''; else selector = selector.toString().substring(16);
+chrome_step('Runtime.evaluate',{expression: 'document.evaluate(\''+selector+'\','+chrome_context+',null,XPathResult.ORDERED_NODE_SNAPSHOT_TYPE,null).snapshotItem(0).scrollIntoViewIfNeeded()'});}
+else {chrome_step('Runtime.evaluate',{expression: chrome_context+'.querySelector(\''+selector+'\').scrollIntoViewIfNeeded()'});}}
 
 chrome.mouse.action = function(type,x,y,button,clickCount) { // helper function to send various mouse events
 chrome_step('Input.dispatchMouseEvent',{type: type, x: x, y: y, button: button, clickCount: clickCount});};
@@ -394,28 +455,33 @@ if (ws_json.result.result.value.width > 0 && ws_json.result.result.value.height 
 else return {left: 0, top: 0, width: 0, height: 0};} catch(e) {return {left: 0, top: 0, width: 0, height: 0};}};
 
 chrome.mouse.move = function(selector,y) { // move mouse pointer to center of specified selector or point 
-if (!y) var xy = chrome.mouse.getXY(selector); else var xy = {x: selector, y: y}; // get coordinates accordingly
+if (!y) {chrome.scrollIntoViewIfNeeded(selector); var xy = chrome.mouse.getXY(selector);}
+else var xy = {x: selector, y: y}; // get coordinates accordingly
 chrome.mouse.action('mouseMoved',xy.x,xy.y,'none',0);};
 
 chrome.mouse.click = function(selector,y) { // press and release on center of specfied selector or point
-if (!y) var xy = chrome.mouse.getXY(selector); else var xy = {x: selector, y: y}; // get coordinates accordingly
+if (!y) {chrome.scrollIntoViewIfNeeded(selector); var xy = chrome.mouse.getXY(selector);}
+else var xy = {x: selector, y: y}; // get coordinates accordingly
 chrome.mouse.action('mousePressed',xy.x,xy.y,'left',1); chrome.mouse.action('mouseReleased',xy.x,xy.y,'left',1);};
 
 chrome.mouse.doubleclick = function(selector,y) { // double press and release on center of selector or point
-if (!y) var xy = chrome.mouse.getXY(selector); else var xy = {x: selector, y: y}; // get coordinates accordingly
-chrome.mouse.action('mousePressed',xy.x,xy.y,'left',1); chrome.mouse.action('mouseReleased',xy.x,xy.y,'left',1);
-chrome.mouse.action('mousePressed',xy.x,xy.y,'left',1); chrome.mouse.action('mouseReleased',xy.x,xy.y,'left',1);};
+if (!y) {chrome.scrollIntoViewIfNeeded(selector); var xy = chrome.mouse.getXY(selector);}
+else var xy = {x: selector, y: y}; // get coordinates accordingly
+chrome.mouse.action('mousePressed',xy.x,xy.y,'left',2); chrome.mouse.action('mouseReleased',xy.x,xy.y,'left',2);};
 
 chrome.mouse.rightclick = function(selector,y) { // right click press and release on center of selector or point
-if (!y) var xy = chrome.mouse.getXY(selector); else var xy = {x: selector, y: y}; // get coordinates accordingly
+if (!y) {chrome.scrollIntoViewIfNeeded(selector); var xy = chrome.mouse.getXY(selector);}
+else var xy = {x: selector, y: y}; // get coordinates accordingly
 chrome.mouse.action('mousePressed',xy.x,xy.y,'right',1); chrome.mouse.action('mouseReleased',xy.x,xy.y,'right',1);};
 
 chrome.mouse.down = function(selector,y) { // left press on center of specified selector or point
-if (!y) var xy = chrome.mouse.getXY(selector); else var xy = {x: selector, y: y}; // get coordinates accordingly
+if (!y) {chrome.scrollIntoViewIfNeeded(selector); var xy = chrome.mouse.getXY(selector);}
+else var xy = {x: selector, y: y}; // get coordinates accordingly
 chrome.mouse.action('mousePressed',xy.x,xy.y,'left',1);};
 
 chrome.mouse.up = function(selector,y) { // left release on center of specified selector or point
-if (!y) var xy = chrome.mouse.getXY(selector); else var xy = {x: selector, y: y}; // get coordinates accordingly
+if (!y) {chrome.scrollIntoViewIfNeeded(selector); var xy = chrome.mouse.getXY(selector);}
+else var xy = {x: selector, y: y}; // get coordinates accordingly
 chrome.mouse.action('mouseReleased',xy.x,xy.y,'left',1);};
 
 chrome.sendKeys = function(selector,value,options) { // send key strokes to selector, options not implemented
@@ -475,7 +541,7 @@ chrome.captureSelector = function(filename,selector) { // capture screenshot of 
 // first capture entire screen, then use casperjs / phantomjs browser to crop image base on selector dimensions
 chrome.capture(filename); var selector_rect = chrome.getRect(selector); // so that there is no extra dependency
 if (selector_rect.width > 0 && selector_rect.height > 0) // from using other libraries or creating html canvas 
-casper.thenOpen(filename, function() {casper . capture(filename, // spaces around . intentional to avoid replacing 
+casper.thenOpen(file_url(filename), function() {casper . capture(filename, // spaces around . to avoid replacing 
 {top: selector_rect.top, left: selector_rect.left, width: selector_rect.width, height: selector_rect.height});
 casper.thenOpen('about:blank');});}; // reset phantomjs browser state
 
@@ -719,13 +785,19 @@ if ((raw_intent.substr(0,2) == '//') || (raw_intent.charAt(raw_intent.length-1) 
 // assume = is assignment statement, kinda acceptable as this is checked at the very end
 if (raw_intent.indexOf('=') > -1) return true; return false;}
 
+function file_url(absolute_filename) { // helper function to append file:// according for opening local files
+if (!absolute_filename || absolute_filename == '') return '';
+if (absolute_filename.substr(0,1) == '/') return 'file://' + absolute_filename;
+if (absolute_filename.substr(1,1) == ':') return 'file:///' + absolute_filename; return absolute_filename;}
+
 function abs_file(filename) { // helper function to return absolute filename
 if (filename == '') return ''; // unlike tagui_parse.php not deriving path from script variable
 if (filename.substr(0,1) == '/') return filename; // return mac/linux absolute filename directly
 if (filename.substr(1,1) == ':') return filename.replace(/\\/g,'/'); // return windows absolute filename directly
 var tmp_flow_path = flow_path; // otherwise use flow_path defined in generated script to build absolute filename
 // above str_replace is because casperjs/phantomjs do not seem to support \ for windows paths, replace with / to work
-if (tmp_flow_path.indexOf('/') > -1) return tmp_flow_path + '/' + filename; else return tmp_flow_path + '\\' + filename;}
+if (tmp_flow_path.indexOf('/') > -1) return (tmp_flow_path + '/' + filename).replace(/\\/g,'/');
+else return tmp_flow_path + '\\' + filename;}
 
 function add_concat(source_string) { // parse string and add missing + concatenator
 if ((source_string.indexOf("'") > -1) && (source_string.indexOf('"') > -1))
@@ -1009,7 +1081,7 @@ else if (raw_intent.toLowerCase() == 'r finish') {inside_r_block = 0; return '';
 if (inside_r_block == 1) raw_intent = 'r ' + raw_intent;
 var params = ((raw_intent + ' ').substr(1+(raw_intent + ' ').indexOf(' '))).trim();
 if (params == '') return "this.echo('ERROR - R command(s) missing for " + raw_intent + "')";
-else return call_r(raw_intent.replace(/'/g,'\\\''));}
+else return call_r(raw_intent.replace(/\\/g,'\\\\').replace(/'/g,'\\\''));}
 
 function py_intent(raw_intent) {
 if (raw_intent.toLowerCase() == 'py begin') {inside_py_block = 1; return '';}
@@ -1017,7 +1089,7 @@ else if (raw_intent.toLowerCase() == 'py finish') {inside_py_block = 0; return '
 if (inside_py_block == 1) raw_intent = 'py ' + raw_intent;
 var params = ((raw_intent + ' ').substr(1+(raw_intent + ' ').indexOf(' '))).trim();
 if (params == '') return "this.echo('ERROR - Python command(s) missing for " + raw_intent + "')";
-else return call_py(raw_intent.replace(/'/g,'\\\''));}
+else return call_py(raw_intent.replace(/\\/g,'\\\\').replace(/'/g,'\\\''));}
 
 function vision_intent(raw_intent) {
 if (raw_intent.toLowerCase() == 'vision begin') {inside_vision_block = 1; return '';}
@@ -1025,7 +1097,7 @@ else if (raw_intent.toLowerCase() == 'vision finish') {inside_vision_block = 0; 
 if (inside_vision_block == 1) raw_intent = 'vision ' + raw_intent;
 var params = ((raw_intent + ' ').substr(1+(raw_intent + ' ').indexOf(' '))).trim();
 if (params == '') return "this.echo('ERROR - Sikuli command(s) missing for " + raw_intent + "')";
-else return call_sikuli(raw_intent.replace(/'/g,'\\\''),'for vision step');}
+else return call_sikuli(raw_intent.replace(/\\/g,'\\\\').replace(/'/g,'\\\''),'for vision step');}
 
 function timeout_intent(raw_intent) {
 var params = ((raw_intent + ' ').substr(1+(raw_intent + ' ').indexOf(' '))).trim();

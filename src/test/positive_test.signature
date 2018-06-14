@@ -224,14 +224,25 @@ if (casper.exists(x('//*[@href="'+locator+'"]'))) return true;
 if (casper.exists(x('//*[contains(@href,"'+locator+'")]'))) return true;
 return false;}
 
+/**
+ * Extra TagUI helper methods
+ */
+
 // friendlier name to use check_tx() in if condition in flow
-function present(element_locator) {if (!element_locator) return false; else return check_tx(element_locator);}
+function present(element_locator) {if (!element_locator) return false; 
+if (is_sikuli(element_locator)) {var abs_param = abs_file(element_locator); var fs = require('fs');
+if (!fs.exists(abs_param)) {this.echo('ERROR - cannot find image file for present step').exit();}
+if (sikuli_step("present " + abs_param)) return true; else return false;}
+else return check_tx(element_locator);}
 
 // friendlier name to check element visibility using elementVisible()
 function visible(element_locator) {if (!element_locator) return false;
-var element_located = tx(element_locator); var element_visible = casper.elementVisible(element_located);
+if (is_sikuli(element_locator)) {var abs_param = abs_file(element_locator); var fs = require('fs');
+if (!fs.exists(abs_param)) {this.echo('ERROR - cannot find image file for visible step').exit();}
+if (sikuli_step("visible " + abs_param)) return true; else return false;}
+else {var element_located = tx(element_locator); var element_visible = casper.elementVisible(element_located);
 // if tx() returns x('/html') means that the element is not found, so set element_visible to false
-if (element_located.toString() == x('/html').toString()) element_visible = false; return element_visible;}
+if (element_located.toString() == x('/html').toString()) element_visible = false; return element_visible;}}
 
 // friendlier name to count elements using countElements()
 function count(element_locator) {if (!element_locator) return 0;
@@ -254,6 +265,44 @@ var time_elapsed = ((Date.now()-timer_start_time)/1000); timer_start_time = Date
 function sleep(ms) { // helper to add delay during loops
 var time_now = new Date().getTime(); var time_end = time_now + ms;
 while(time_now < time_end) {time_now = new Date().getTime();}}
+
+/**
+ * string cell data sanitiser, returns a CSV formatted string
+ * @param {string} cell_data
+ */
+function sanitise_csv_cell(cell_data) {
+    // Replace all double quotes with 2 double quotes
+    cell_data = cell_data.replace(/"/g, '\"\"')
+    var whitespaceCheckRegex = /\s/
+    // if cell_data has a comma, or new line, or its first or last character is a
+    // whitespace, then wrap the entire expression in double quotes
+    if (
+        cell_data.indexOf(',') >= 0
+        || cell_data.indexOf('\n') >= 0
+        || whitespaceCheckRegex.test(cell_data.charAt(0))
+        || whitespaceCheckRegex.test(cell_data.charAt(cell_data.length - 1))
+    ) {
+        cell_data = '\"' + cell_data + '\"'
+    }
+    return cell_data
+}
+
+/**
+ * Returns a CSV-formatted string that denotes a row in a CSV file
+ * @param {string[]} row_data a 1-D array of strings denoting data to
+ * encode as a CSV row
+ */
+function csv_row(row_data) {
+  // if row_data has at least 1 element, extract and sanitise first element
+  // else start_element is empty string
+  var start_element = (row_data.length > 0)
+    ? sanitise_csv_cell(row_data.shift())
+    : ''
+  // concat each row_data with a comma
+  return row_data.reduce(function(accumulator, currentValue) {
+    return accumulator + ',' + sanitise_csv_cell(currentValue)
+  }, start_element)
+}
 
 // for initialising integration with sikuli visual automation
 function sikuli_handshake() { // techo('[connecting to sikuli process]');
@@ -394,12 +443,24 @@ try {var ws_json = JSON.parse(ws_message); if (ws_json.result.result.value > 0)
 return ws_json.result.result.value; else return 0;}
 catch(e) {return 0;}};
 
+/* // backup of previous click implementation to experiment with Puppeteer's version
 chrome.click = function(selector) { // click by sending click event instead of mouse down/up/click, then focus on element
 if ((selector.toString().length >= 16) && (selector.toString().substr(0,16) == 'xpath selector: '))
 {if (selector.toString().length == 16) selector = ''; else selector = selector.toString().substring(16);
 chrome_step('Runtime.evaluate',{expression: 'document.evaluate(\''+selector+'\','+chrome_context+',null,XPathResult.ORDERED_NODE_SNAPSHOT_TYPE,null).snapshotItem(0).click()'}); chrome_step('Runtime.evaluate',{expression: 'document.evaluate(\''+selector+'\','+chrome_context+',null,XPathResult.ORDERED_NODE_SNAPSHOT_TYPE,null).snapshotItem(0).focus()'});}
 else {chrome_step('Runtime.evaluate',{expression: chrome_context+'.querySelector(\''+selector+'\').click()'});
-chrome_step('Runtime.evaluate',{expression: chrome_context+'.querySelector(\''+selector+'\').focus()'});}};
+chrome_step('Runtime.evaluate',{expression: chrome_context+'.querySelector(\''+selector+'\').focus()'});}}; */
+
+chrome.click = function(selector) { // click using Puppeteer's implementation - see TagUI issue #212
+chrome.scrollIntoViewIfNeeded(selector); var xy = chrome.mouse.getXY(selector);
+chrome.mouse.action('mouseMoved',xy.x,xy.y,'none',0);
+chrome.mouse.action('mousePressed',xy.x,xy.y,'left',1); chrome.mouse.action('mouseReleased',xy.x,xy.y,'left',1);}
+
+chrome.scrollIntoViewIfNeeded = function(selector) { // helper function to scroll element into view
+if ((selector.toString().length >= 16) && (selector.toString().substr(0,16) == 'xpath selector: '))
+{if (selector.toString().length == 16) selector = ''; else selector = selector.toString().substring(16);
+chrome_step('Runtime.evaluate',{expression: 'document.evaluate(\''+selector+'\','+chrome_context+',null,XPathResult.ORDERED_NODE_SNAPSHOT_TYPE,null).snapshotItem(0).scrollIntoViewIfNeeded()'});}
+else {chrome_step('Runtime.evaluate',{expression: chrome_context+'.querySelector(\''+selector+'\').scrollIntoViewIfNeeded()'});}}
 
 chrome.mouse.action = function(type,x,y,button,clickCount) { // helper function to send various mouse events
 chrome_step('Input.dispatchMouseEvent',{type: type, x: x, y: y, button: button, clickCount: clickCount});};
@@ -421,28 +482,33 @@ if (ws_json.result.result.value.width > 0 && ws_json.result.result.value.height 
 else return {left: 0, top: 0, width: 0, height: 0};} catch(e) {return {left: 0, top: 0, width: 0, height: 0};}};
 
 chrome.mouse.move = function(selector,y) { // move mouse pointer to center of specified selector or point 
-if (!y) var xy = chrome.mouse.getXY(selector); else var xy = {x: selector, y: y}; // get coordinates accordingly
+if (!y) {chrome.scrollIntoViewIfNeeded(selector); var xy = chrome.mouse.getXY(selector);}
+else var xy = {x: selector, y: y}; // get coordinates accordingly
 chrome.mouse.action('mouseMoved',xy.x,xy.y,'none',0);};
 
 chrome.mouse.click = function(selector,y) { // press and release on center of specfied selector or point
-if (!y) var xy = chrome.mouse.getXY(selector); else var xy = {x: selector, y: y}; // get coordinates accordingly
+if (!y) {chrome.scrollIntoViewIfNeeded(selector); var xy = chrome.mouse.getXY(selector);}
+else var xy = {x: selector, y: y}; // get coordinates accordingly
 chrome.mouse.action('mousePressed',xy.x,xy.y,'left',1); chrome.mouse.action('mouseReleased',xy.x,xy.y,'left',1);};
 
 chrome.mouse.doubleclick = function(selector,y) { // double press and release on center of selector or point
-if (!y) var xy = chrome.mouse.getXY(selector); else var xy = {x: selector, y: y}; // get coordinates accordingly
-chrome.mouse.action('mousePressed',xy.x,xy.y,'left',1); chrome.mouse.action('mouseReleased',xy.x,xy.y,'left',1);
-chrome.mouse.action('mousePressed',xy.x,xy.y,'left',1); chrome.mouse.action('mouseReleased',xy.x,xy.y,'left',1);};
+if (!y) {chrome.scrollIntoViewIfNeeded(selector); var xy = chrome.mouse.getXY(selector);}
+else var xy = {x: selector, y: y}; // get coordinates accordingly
+chrome.mouse.action('mousePressed',xy.x,xy.y,'left',2); chrome.mouse.action('mouseReleased',xy.x,xy.y,'left',2);};
 
 chrome.mouse.rightclick = function(selector,y) { // right click press and release on center of selector or point
-if (!y) var xy = chrome.mouse.getXY(selector); else var xy = {x: selector, y: y}; // get coordinates accordingly
+if (!y) {chrome.scrollIntoViewIfNeeded(selector); var xy = chrome.mouse.getXY(selector);}
+else var xy = {x: selector, y: y}; // get coordinates accordingly
 chrome.mouse.action('mousePressed',xy.x,xy.y,'right',1); chrome.mouse.action('mouseReleased',xy.x,xy.y,'right',1);};
 
 chrome.mouse.down = function(selector,y) { // left press on center of specified selector or point
-if (!y) var xy = chrome.mouse.getXY(selector); else var xy = {x: selector, y: y}; // get coordinates accordingly
+if (!y) {chrome.scrollIntoViewIfNeeded(selector); var xy = chrome.mouse.getXY(selector);}
+else var xy = {x: selector, y: y}; // get coordinates accordingly
 chrome.mouse.action('mousePressed',xy.x,xy.y,'left',1);};
 
 chrome.mouse.up = function(selector,y) { // left release on center of specified selector or point
-if (!y) var xy = chrome.mouse.getXY(selector); else var xy = {x: selector, y: y}; // get coordinates accordingly
+if (!y) {chrome.scrollIntoViewIfNeeded(selector); var xy = chrome.mouse.getXY(selector);}
+else var xy = {x: selector, y: y}; // get coordinates accordingly
 chrome.mouse.action('mouseReleased',xy.x,xy.y,'left',1);};
 
 chrome.sendKeys = function(selector,value,options) { // send key strokes to selector, options not implemented
@@ -502,7 +568,7 @@ chrome.captureSelector = function(filename,selector) { // capture screenshot of 
 // first capture entire screen, then use casperjs / phantomjs browser to crop image base on selector dimensions
 chrome.capture(filename); var selector_rect = chrome.getRect(selector); // so that there is no extra dependency
 if (selector_rect.width > 0 && selector_rect.height > 0) // from using other libraries or creating html canvas 
-casper.thenOpen(filename, function() {casper . capture(filename, // spaces around . intentional to avoid replacing 
+casper.thenOpen(file_url(filename), function() {casper . capture(filename, // spaces around . to avoid replacing 
 {top: selector_rect.top, left: selector_rect.left, width: selector_rect.width, height: selector_rect.height});
 casper.thenOpen('about:blank');});}; // reset phantomjs browser state
 
@@ -746,13 +812,19 @@ if ((raw_intent.substr(0,2) == '//') || (raw_intent.charAt(raw_intent.length-1) 
 // assume = is assignment statement, kinda acceptable as this is checked at the very end
 if (raw_intent.indexOf('=') > -1) return true; return false;}
 
+function file_url(absolute_filename) { // helper function to append file:// according for opening local files
+if (!absolute_filename || absolute_filename == '') return '';
+if (absolute_filename.substr(0,1) == '/') return 'file://' + absolute_filename;
+if (absolute_filename.substr(1,1) == ':') return 'file:///' + absolute_filename; return absolute_filename;}
+
 function abs_file(filename) { // helper function to return absolute filename
 if (filename == '') return ''; // unlike tagui_parse.php not deriving path from script variable
 if (filename.substr(0,1) == '/') return filename; // return mac/linux absolute filename directly
 if (filename.substr(1,1) == ':') return filename.replace(/\\/g,'/'); // return windows absolute filename directly
 var tmp_flow_path = flow_path; // otherwise use flow_path defined in generated script to build absolute filename
 // above str_replace is because casperjs/phantomjs do not seem to support \ for windows paths, replace with / to work
-if (tmp_flow_path.indexOf('/') > -1) return tmp_flow_path + '/' + filename; else return tmp_flow_path + '\\' + filename;}
+if (tmp_flow_path.indexOf('/') > -1) return (tmp_flow_path + '/' + filename).replace(/\\/g,'/');
+else return tmp_flow_path + '\\' + filename;}
 
 function add_concat(source_string) { // parse string and add missing + concatenator
 if ((source_string.indexOf("'") > -1) && (source_string.indexOf('"') > -1))
@@ -1036,7 +1108,7 @@ else if (raw_intent.toLowerCase() == 'r finish') {inside_r_block = 0; return '';
 if (inside_r_block == 1) raw_intent = 'r ' + raw_intent;
 var params = ((raw_intent + ' ').substr(1+(raw_intent + ' ').indexOf(' '))).trim();
 if (params == '') return "this.echo('ERROR - R command(s) missing for " + raw_intent + "')";
-else return call_r(raw_intent.replace(/'/g,'\\\''));}
+else return call_r(raw_intent.replace(/\\/g,'\\\\').replace(/'/g,'\\\''));}
 
 function py_intent(raw_intent) {
 if (raw_intent.toLowerCase() == 'py begin') {inside_py_block = 1; return '';}
@@ -1044,7 +1116,7 @@ else if (raw_intent.toLowerCase() == 'py finish') {inside_py_block = 0; return '
 if (inside_py_block == 1) raw_intent = 'py ' + raw_intent;
 var params = ((raw_intent + ' ').substr(1+(raw_intent + ' ').indexOf(' '))).trim();
 if (params == '') return "this.echo('ERROR - Python command(s) missing for " + raw_intent + "')";
-else return call_py(raw_intent.replace(/'/g,'\\\''));}
+else return call_py(raw_intent.replace(/\\/g,'\\\\').replace(/'/g,'\\\''));}
 
 function vision_intent(raw_intent) {
 if (raw_intent.toLowerCase() == 'vision begin') {inside_vision_block = 1; return '';}
@@ -1052,7 +1124,7 @@ else if (raw_intent.toLowerCase() == 'vision finish') {inside_vision_block = 0; 
 if (inside_vision_block == 1) raw_intent = 'vision ' + raw_intent;
 var params = ((raw_intent + ' ').substr(1+(raw_intent + ' ').indexOf(' '))).trim();
 if (params == '') return "this.echo('ERROR - Sikuli command(s) missing for " + raw_intent + "')";
-else return call_sikuli(raw_intent.replace(/'/g,'\\\''),'for vision step');}
+else return call_sikuli(raw_intent.replace(/\\/g,'\\\\').replace(/'/g,'\\\''),'for vision step');}
 
 function timeout_intent(raw_intent) {
 var params = ((raw_intent + ' ').substr(1+(raw_intent + ' ').indexOf(' '))).trim();
@@ -1231,8 +1303,8 @@ var flow_path = '/full_path';
 casper.start('https://www.google.com', function() {
 techo('https://www.google.com' + ' - ' + this.getTitle() + '\n');});
 
-casper.then(function() {
 // code to auto-replace local path names in generated js file with /full_path
+casper.then(function() { // start of JS code
 var fs = require('fs');
 var js_result = fs.read('test' + fs.separator + 'positive_test' + '.js');
 var local_path = js_result.substring(js_result.indexOf("var flow_path = '") + 17);
@@ -1242,519 +1314,855 @@ fs.write('test' + fs.separator + 'positive_test' + '.js', js_result, 'w');
 fs.remove('test' + fs.separator + 'positive_test' + '.log');
 fs.remove('test' + fs.separator + 'positive_test' + '.raw');
 this.exit(); // don't actually run the steps and code, test is for language conversion
+}); // end of JS code
+
 // add a navigation step in order to exit in time and block below output from running
-});casper.thenOpen('https://ca.yahoo.com', function() {
+casper.thenOpen('https://ca.yahoo.com', function() {
 techo('https://ca.yahoo.com' + ' - ' + this.getTitle());});
 
-casper.then(function() {
 // TEST CONDITIONS
 // test contain / not contain
+casper.then(function() { // start of JS code
 variable = "test variable with some text"
-if (((variable.indexOf("some text")>-1)))
-this.echo("FOUND");
-if (((variable.indexOf("some text")>-1)))
-this.echo("FOUND");
-if (((variable.indexOf("some text")<0)))
-this.echo("NOT FOUND");
-if (((variable.indexOf("some text")<0)))
-this.echo("NOT FOUND");
+}); // end of JS code
+
+casper.then(function() {if (((variable.indexOf("some text")>-1)))
+{ // start of code block
+
+casper.then(function() {this.echo("FOUND");});
+
+} // end of code block
+});
+
+casper.then(function() {if (((variable.indexOf("some text")>-1)))
+{ // start of code block
+
+casper.then(function() {this.echo("FOUND");});
+
+} // end of code block
+});
+
+casper.then(function() {if (((variable.indexOf("some text")<0)))
+{ // start of code block
+
+casper.then(function() {this.echo("NOT FOUND");});
+
+} // end of code block
+});
+
+casper.then(function() {if (((variable.indexOf("some text")<0)))
+{ // start of code block
+
+casper.then(function() {this.echo("NOT FOUND");});
+
+} // end of code block
+});
+
+casper.then(function() { // start of JS code
 variable = 'test variable with some text'
-if (((variable.indexOf('some text')>-1)))
-this.echo('FOUND');
-if (((variable.indexOf('some text')>-1)))
-this.echo('FOUND');
-if (((variable.indexOf('some text')<0)))
-this.echo('NOT FOUND');
-if (((variable.indexOf('some text')<0)))
-this.echo('NOT FOUND');
+}); // end of JS code
+
+casper.then(function() {if (((variable.indexOf('some text')>-1)))
+{ // start of code block
+
+casper.then(function() {this.echo('FOUND');});
+
+} // end of code block
+});
+
+casper.then(function() {if (((variable.indexOf('some text')>-1)))
+{ // start of code block
+
+casper.then(function() {this.echo('FOUND');});
+
+} // end of code block
+});
+
+casper.then(function() {if (((variable.indexOf('some text')<0)))
+{ // start of code block
+
+casper.then(function() {this.echo('NOT FOUND');});
+
+} // end of code block
+});
+
+casper.then(function() {if (((variable.indexOf('some text')<0)))
+{ // start of code block
+
+casper.then(function() {this.echo('NOT FOUND');});
+
+} // end of code block
+});
+
 // test equal to / not equal to
+casper.then(function() { // start of JS code
 variable = "lemon"
-if ((variable == "lemon"))
-this.echo("LEMON");
-if ((variable == "lemon"))
-this.echo("LEMON");
-if ((variable != "lemon"))
-this.echo("NOT LEMON");
-if ((variable != "lemon"))
-this.echo("NOT LEMON");
-if ((variable == 'lemon'))
-this.echo('LEMON');
-if ((variable == 'lemon'))
-this.echo('LEMON');
-if ((variable != 'lemon'))
-this.echo('NOT LEMON');
-if ((variable != 'lemon'))
-this.echo('NOT LEMON');
+}); // end of JS code
+
+casper.then(function() {if ((variable == "lemon"))
+{ // start of code block
+
+casper.then(function() {this.echo("LEMON");});
+
+} // end of code block
+});
+
+casper.then(function() {if ((variable == "lemon"))
+{ // start of code block
+
+casper.then(function() {this.echo("LEMON");});
+
+} // end of code block
+});
+
+casper.then(function() {if ((variable != "lemon"))
+{ // start of code block
+
+casper.then(function() {this.echo("NOT LEMON");});
+
+} // end of code block
+});
+
+casper.then(function() {if ((variable != "lemon"))
+{ // start of code block
+
+casper.then(function() {this.echo("NOT LEMON");});
+
+} // end of code block
+});
+
+casper.then(function() {if ((variable == 'lemon'))
+{ // start of code block
+
+casper.then(function() {this.echo('LEMON');});
+
+} // end of code block
+});
+
+casper.then(function() {if ((variable == 'lemon'))
+{ // start of code block
+
+casper.then(function() {this.echo('LEMON');});
+
+} // end of code block
+});
+
+casper.then(function() {if ((variable != 'lemon'))
+{ // start of code block
+
+casper.then(function() {this.echo('NOT LEMON');});
+
+} // end of code block
+});
+
+casper.then(function() {if ((variable != 'lemon'))
+{ // start of code block
+
+casper.then(function() {this.echo('NOT LEMON');});
+
+} // end of code block
+});
+
+casper.then(function() { // start of JS code
 variable = 12345
-if ((variable == 12345))
-this.echo("12345");
-if ((variable == 12345))
-this.echo("12345");
-if ((variable != 12345))
-this.echo("NOT 12345");
-if ((variable != 12345))
-this.echo("NOT 12345");
+}); // end of JS code
+
+casper.then(function() {if ((variable == 12345))
+{ // start of code block
+
+casper.then(function() {this.echo("12345");});
+
+} // end of code block
+});
+
+casper.then(function() {if ((variable == 12345))
+{ // start of code block
+
+casper.then(function() {this.echo("12345");});
+
+} // end of code block
+});
+
+casper.then(function() {if ((variable != 12345))
+{ // start of code block
+
+casper.then(function() {this.echo("NOT 12345");});
+
+} // end of code block
+});
+
+casper.then(function() {if ((variable != 12345))
+{ // start of code block
+
+casper.then(function() {this.echo("NOT 12345");});
+
+} // end of code block
+});
+
 // test more than / greater than / higher than
+casper.then(function() { // start of JS code
 variable = 5
-if ((variable > 3))
-this.echo("MORE THAN 3");
-if ((variable > 3))
-this.echo("MORE THAN 3");
-if ((variable > 3))
-this.echo("MORE THAN 3");
+}); // end of JS code
+
+casper.then(function() {if ((variable > 3))
+{ // start of code block
+
+casper.then(function() {this.echo("MORE THAN 3");});
+
+} // end of code block
+});
+
+casper.then(function() {if ((variable > 3))
+{ // start of code block
+
+casper.then(function() {this.echo("MORE THAN 3");});
+
+} // end of code block
+});
+
+casper.then(function() {if ((variable > 3))
+{ // start of code block
+
+casper.then(function() {this.echo("MORE THAN 3");});
+
+} // end of code block
+});
+
 // test more than or equal to / greater than or equal to / higher than or equal to
+casper.then(function() { // start of JS code
 variable = 5
-if ((variable >= 5))
-this.echo("MORE THAN OR EQUAL TO 5");
-if ((variable >= 5))
-this.echo("MORE THAN OR EQUAL TO 5");
-if ((variable >= 5))
-this.echo("MORE THAN OR EQUAL TO 5");
+}); // end of JS code
+
+casper.then(function() {if ((variable >= 5))
+{ // start of code block
+
+casper.then(function() {this.echo("MORE THAN OR EQUAL TO 5");});
+
+} // end of code block
+});
+
+casper.then(function() {if ((variable >= 5))
+{ // start of code block
+
+casper.then(function() {this.echo("MORE THAN OR EQUAL TO 5");});
+
+} // end of code block
+});
+
+casper.then(function() {if ((variable >= 5))
+{ // start of code block
+
+casper.then(function() {this.echo("MORE THAN OR EQUAL TO 5");});
+
+} // end of code block
+});
+
 // test less than / lesser than / lower than
+casper.then(function() { // start of JS code
 variable = 3
-if ((variable < 5))
-this.echo("LESS THAN 5");
-if ((variable < 5))
-this.echo("LESS THAN 5");
-if ((variable < 5))
-this.echo("LESS THAN 5");
+}); // end of JS code
+
+casper.then(function() {if ((variable < 5))
+{ // start of code block
+
+casper.then(function() {this.echo("LESS THAN 5");});
+
+} // end of code block
+});
+
+casper.then(function() {if ((variable < 5))
+{ // start of code block
+
+casper.then(function() {this.echo("LESS THAN 5");});
+
+} // end of code block
+});
+
+casper.then(function() {if ((variable < 5))
+{ // start of code block
+
+casper.then(function() {this.echo("LESS THAN 5");});
+
+} // end of code block
+});
+
 // test less than or equal to / lesser than or equal to / lower than or equal to
+casper.then(function() { // start of JS code
 variable = 5
-if ((variable <= 5))
-this.echo("LESS THAN OR EQUAL TO 5");
-if ((variable <= 5))
-this.echo("LESS THAN OR EQUAL TO 5");
-if ((variable <= 5))
-this.echo("LESS THAN OR EQUAL TO 5");
+}); // end of JS code
+
+casper.then(function() {if ((variable <= 5))
+{ // start of code block
+
+casper.then(function() {this.echo("LESS THAN OR EQUAL TO 5");});
+
+} // end of code block
+});
+
+casper.then(function() {if ((variable <= 5))
+{ // start of code block
+
+casper.then(function() {this.echo("LESS THAN OR EQUAL TO 5");});
+
+} // end of code block
+});
+
+casper.then(function() {if ((variable <= 5))
+{ // start of code block
+
+casper.then(function() {this.echo("LESS THAN OR EQUAL TO 5");});
+
+} // end of code block
+});
+
 // test and
-if (("apple" == "apple") && ("orange" == "orange"))
-this.echo("TRUE");
-if ((5 > 3) && (3 < 4))
-this.echo("TRUE");
-if ((5 > 3) && (3 < 4) && ("kiwi" == "kiwi"))
-this.echo("TRUE");
+casper.then(function() {if (("apple" == "apple") && ("orange" == "orange"))
+{ // start of code block
+
+casper.then(function() {this.echo("TRUE");});
+
+} // end of code block
+});
+
+casper.then(function() {if ((5 > 3) && (3 < 4))
+{ // start of code block
+
+casper.then(function() {this.echo("TRUE");});
+
+} // end of code block
+});
+
+casper.then(function() {if ((5 > 3) && (3 < 4) && ("kiwi" == "kiwi"))
+{ // start of code block
+
+casper.then(function() {this.echo("TRUE");});
+
+} // end of code block
+});
+
 // test or
-if (('apple' == 'apple') || ('orange' == 'kiwi'))
-this.echo("TRUE");
-if ((5 < 3) || (5 > 4))
-this.echo("TRUE");
-if ((5 < 3) || (3 < 4) && ("kiwi" == "kiwi"))
-this.echo("TRUE");
+casper.then(function() {if (('apple' == 'apple') || ('orange' == 'kiwi'))
+{ // start of code block
+
+casper.then(function() {this.echo("TRUE");});
+
+} // end of code block
+});
+
+casper.then(function() {if ((5 < 3) || (5 > 4))
+{ // start of code block
+
+casper.then(function() {this.echo("TRUE");});
+
+} // end of code block
+});
+
+casper.then(function() {if ((5 < 3) || (3 < 4) && ("kiwi" == "kiwi"))
+{ // start of code block
+
+casper.then(function() {this.echo("TRUE");});
+
+} // end of code block
+});
+
 // test combinations of conditions
+casper.then(function() { // start of JS code
 menu = "fruits and salads"
-if (((menu.indexOf('fruits')>-1)) && ((menu.indexOf("potatoes")<0)))
-this.echo("FRUITS ONLY");
+}); // end of JS code
+
+casper.then(function() {if (((menu.indexOf('fruits')>-1)) && ((menu.indexOf("potatoes")<0)))
+{ // start of code block
+
+casper.then(function() {this.echo("FRUITS ONLY");});
+
+} // end of code block
+});
+
 // test for
-for (n=1; n<=5; n++)
-this.echo("ITERATION "+n);
-for (n=0; n<=0; n++)
-this.echo("ITERATION "+n);
-for (n=6; n<=10; n++)
-this.echo("ITERATION "+n);
-for (n=1; n<=5; n++)
-{techo('click element');
+casper.then(function() {for (n=1; n<=5; n++)
+(function (n) { // start of IIFE pattern
+{ // start of code block
+
+casper.then(function() {this.echo("ITERATION "+n);});
+
+} // end of code block
+})(n); // end of IIFE pattern
+});
+
+casper.then(function() {for (n=0; n<=0; n++)
+(function (n) { // start of IIFE pattern
+{ // start of code block
+
+casper.then(function() {this.echo("ITERATION "+n);});
+
+} // end of code block
+})(n); // end of IIFE pattern
+});
+
+casper.then(function() {for (n=6; n<=10; n++)
+(function (n) { // start of IIFE pattern
+{ // start of code block
+
+casper.then(function() {this.echo("ITERATION "+n);});
+
+} // end of code block
+})(n); // end of IIFE pattern
+});
+
+casper.then(function() {for (n=1; n<=5; n++)
+(function (n) { // start of IIFE pattern
+{ // start of code block
+
+casper.then(function() {{techo('click element');
 casper.waitFor(function check() {return check_tx('element');},
 function then() {this.click(tx('element'));},
 function timeout() {this.echo('ERROR - cannot find element').exit();});}});
 
-casper.then(function() {
-for (n=0; n<=0; n++)
-{techo('click element');
+} // end of code block
+})(n); // end of IIFE pattern
+});
+
+casper.then(function() {for (n=0; n<=0; n++)
+(function (n) { // start of IIFE pattern
+{ // start of code block
+
+casper.then(function() {{techo('click element');
 casper.waitFor(function check() {return check_tx('element');},
 function then() {this.click(tx('element'));},
 function timeout() {this.echo('ERROR - cannot find element').exit();});}});
 
-casper.then(function() {
-for (n=6; n<=10; n++)
-{techo('click element');
+} // end of code block
+})(n); // end of IIFE pattern
+});
+
+casper.then(function() {for (n=6; n<=10; n++)
+(function (n) { // start of IIFE pattern
+{ // start of code block
+
+casper.then(function() {{techo('click element');
 casper.waitFor(function check() {return check_tx('element');},
 function then() {this.click(tx('element'));},
 function timeout() {this.echo('ERROR - cannot find element').exit();});}});
 
-casper.then(function() {
+} // end of code block
+})(n); // end of IIFE pattern
+});
+
 // test while
-while ((2 > 3) && (3 > 4))
-this.echo("INVALID");
-while ((((2 > 3) && (3 > 4))))
-this.echo("INVALID");
-while ((2 > 3) && (3 > 4))
-{techo('click element');
-this.click(tx('element'));}});
+casper.then(function() {while ((2 > 3) && (3 > 4))
+{ // start of code block
 
-casper.then(function() {
-while ((((2 > 3) && (3 > 4))))
-{techo('click element');
-this.click(tx('element'));}});
+this.echo("INVALID");
 
-casper.then(function() {
+} // end of code block
+});
+
+casper.then(function() {while ((((2 > 3) && (3 > 4))))
+{ // start of code block
+
+this.echo("INVALID");
+
+} // end of code block
+});
+
+casper.then(function() {while ((2 > 3) && (3 > 4))
+{ // start of code block
+
+techo('click element');
+this.click(tx('element'));
+} // end of code block
+});
+
+casper.then(function() {while ((((2 > 3) && (3 > 4))))
+{ // start of code block
+
+techo('click element');
+this.click(tx('element'));
+} // end of code block
+});
+
 // test {} simple
+{
 
-// start of code block
-{casper.then(function() {
-
+casper.then(function() { // start of JS code
 this.echo('test');
-})} // end of code block
+}); // end of JS code
 
+}
 
-// start of code block
-{casper.then(function() {
+{
 
-{techo('click test');
+casper.then(function() {{techo('click test');
 casper.waitFor(function check() {return check_tx('test');},
 function then() {this.click(tx('test'));},
 function timeout() {this.echo('ERROR - cannot find test').exit();});}});
 
-casper.then(function() {
-})} // end of code block
+}
 
 // test {} complex
+{
 
-// start of code block
-{casper.then(function() {
-
-{techo('click test1');
+casper.then(function() {{techo('click test1');
 casper.waitFor(function check() {return check_tx('test1');},
 function then() {this.click(tx('test1'));},
 function timeout() {this.echo('ERROR - cannot find test1').exit();});}});
 
-casper.then(function() {
-{techo('click test2');
+casper.then(function() {{techo('click test2');
 casper.waitFor(function check() {return check_tx('test2');},
 function then() {this.click(tx('test2'));},
 function timeout() {this.echo('ERROR - cannot find test2').exit();});}});
 
-casper.then(function() {
+casper.then(function() { // start of JS code
 this.echo('test');
-{techo('click test3');
+}); // end of JS code
+
+casper.then(function() {{techo('click test3');
 casper.waitFor(function check() {return check_tx('test3');},
 function then() {this.click(tx('test3'));},
 function timeout() {this.echo('ERROR - cannot find test3').exit();});}});
 
-casper.then(function() {
-})} // end of code block
+}
 
 // test {} for loop simple
-for (number=1; number<=5; number++)
+casper.then(function() {for (number=1; number<=5; number++)
+(function (number) { // start of IIFE pattern
+{ // start of code block
 
-// start of IIFE pattern
-(function (number) {
-// start of code block
-{casper.then(function() {
-
-{techo('click test');
+casper.then(function() {{techo('click test');
 casper.waitFor(function check() {return check_tx('test');},
 function then() {this.click(tx('test'));},
 function timeout() {this.echo('ERROR - cannot find test').exit();});}});
 
-casper.then(function() {
-})} // end of code block
+} // end of code block
 })(number); // end of IIFE pattern
 });
 
-casper.then(function() {
 // test {} for loop complex
-for (number=1; number<=5; number++)
+casper.then(function() {for (number=1; number<=5; number++)
+(function (number) { // start of IIFE pattern
+{ // start of code block
 
-// start of IIFE pattern
-(function (number) {
-// start of code block
-{casper.then(function() {
-
-{techo('click test1');
+casper.then(function() {{techo('click test1');
 casper.waitFor(function check() {return check_tx('test1');},
 function then() {this.click(tx('test1'));},
 function timeout() {this.echo('ERROR - cannot find test1').exit();});}});
 
-casper.then(function() {
-{techo('click test2');
+casper.then(function() {{techo('click test2');
 casper.waitFor(function check() {return check_tx('test2');},
 function then() {this.click(tx('test2'));},
 function timeout() {this.echo('ERROR - cannot find test2').exit();});}});
 
-casper.then(function() {
+casper.then(function() { // start of JS code
 this.echo('test');
-{techo('click test3');
+}); // end of JS code
+
+casper.then(function() {{techo('click test3');
 casper.waitFor(function check() {return check_tx('test3');},
 function then() {this.click(tx('test3'));},
 function timeout() {this.echo('ERROR - cannot find test3').exit();});}});
 
-casper.then(function() {
-})} // end of code block
+} // end of code block
 })(number); // end of IIFE pattern
 });
 
-casper.then(function() {
 // test {} while loop simple
+casper.then(function() { // start of JS code
 number = 1
-while (((number <= 5)))
-{
-{techo('click test');
-this.click(tx('test'));}
-}
+}); // end of JS code
+
+casper.then(function() {while (((number <= 5)))
+{ // start of code block
+
+techo('click test');
+this.click(tx('test'));
+} // end of code block
+});
+
 // test {} while loop complex
-while (((number <= 5)))
-{
-{techo('click test1');
-this.click(tx('test1'));}
-{techo('click test2');
-this.click(tx('test2'));}
+casper.then(function() {while (((number <= 5)))
+{ // start of code block
+
+techo('click test1');
+this.click(tx('test1'));
+techo('click test2');
+this.click(tx('test2'));
 this.echo('test');
-{techo('click test3');
-this.click(tx('test3'));}
+techo('click test3');
+this.click(tx('test3'));
 number++;
-}
+} // end of code block
+});
+
+// test for complex for and if nested loops
+casper.then(function() { // start of JS code
+a = 1
+}); // end of JS code
+
+casper.then(function() {for (n=1; n<=20; n++)
+(function (n) { // start of IIFE pattern
+{ // start of code block
+
+casper.then(function() {this.echo(n);});
+
+} // end of code block
+})(n); // end of IIFE pattern
+});
+
+casper.then(function() {for (n=1; n<=20; n++)
+(function (n) { // start of IIFE pattern
+{ // start of code block
+
+casper.then(function() {this.echo(n);});
+
+} // end of code block
+})(n); // end of IIFE pattern
+});
+
+casper.then(function() {for (n=1; n<=20; n++)
+(function (n) { // start of IIFE pattern
+{ // start of code block
+
+casper.then(function() {if (((a==1)))
+{ // start of code block
+
+casper.then(function() {for (p=21; p<=40; p++)
+(function (p) { // start of IIFE pattern
+{ // start of code block
+
+casper.then(function() {this.echo(n+' - '+p);});
+
+} // end of code block
+})(p); // end of IIFE pattern
+});
+
+} // end of code block
+});
+
+} // end of code block
+})(n); // end of IIFE pattern
+});
+
 // test {} for popup step
-{techo('popup about');
+casper.then(function() {techo('popup about');});
 casper.waitForPopup(/about/, function then() {},
 function timeout() {this.echo('ERROR - cannot find popup about').exit();});
 casper.withPopup(/about/, function() {
+{ // start of code block
 
-// start of code block
-{casper.then(function() {
-
-{techo('click test');
+casper.then(function() {{techo('click test');
 casper.waitFor(function check() {return check_tx('test');},
 function then() {this.click(tx('test'));},
 function timeout() {this.echo('ERROR - cannot find test').exit();});}});
 
-casper.then(function() {
-})} // end of code block
- });} });
+} // end of code block
+});
 
-casper.then(function() {
-{techo('popup about');
+casper.then(function() {techo('popup about');});
 casper.waitForPopup(/about/, function then() {},
 function timeout() {this.echo('ERROR - cannot find popup about').exit();});
 casper.withPopup(/about/, function() {
+{ // start of code block
 
-// start of code block
-{casper.then(function() {
-
-{techo('click test1');
+casper.then(function() {{techo('click test1');
 casper.waitFor(function check() {return check_tx('test1');},
 function then() {this.click(tx('test1'));},
 function timeout() {this.echo('ERROR - cannot find test1').exit();});}});
 
-casper.then(function() {
-{techo('click test2');
+casper.then(function() {{techo('click test2');
 casper.waitFor(function check() {return check_tx('test2');},
 function then() {this.click(tx('test2'));},
 function timeout() {this.echo('ERROR - cannot find test2').exit();});}});
 
-casper.then(function() {
+casper.then(function() { // start of JS code
 this.echo('test');
-{techo('click test3');
+}); // end of JS code
+
+casper.then(function() {{techo('click test3');
 casper.waitFor(function check() {return check_tx('test3');},
 function then() {this.click(tx('test3'));},
 function timeout() {this.echo('ERROR - cannot find test3').exit();});}});
 
-casper.then(function() {
-})} // end of code block
- });} });
+} // end of code block
+});
 
-casper.then(function() {
 // test {} for frame step
-{techo('frame about');
+casper.then(function() {techo('frame about');});
 casper.withFrame('about', function() {
+{ // start of code block
 
-// start of code block
-{casper.then(function() {
-
-{techo('click test');
+casper.then(function() {{techo('click test');
 casper.waitFor(function check() {return check_tx('test');},
 function then() {this.click(tx('test'));},
 function timeout() {this.echo('ERROR - cannot find test').exit();});}});
 
-casper.then(function() {
-})} // end of code block
- });} });
+} // end of code block
+});
 
-casper.then(function() {
-{techo('frame about');
+casper.then(function() {techo('frame about');});
 casper.withFrame('about', function() {
+{ // start of code block
 
-// start of code block
-{casper.then(function() {
-
-{techo('click test1');
+casper.then(function() {{techo('click test1');
 casper.waitFor(function check() {return check_tx('test1');},
 function then() {this.click(tx('test1'));},
 function timeout() {this.echo('ERROR - cannot find test1').exit();});}});
 
-casper.then(function() {
-{techo('click test2');
+casper.then(function() {{techo('click test2');
 casper.waitFor(function check() {return check_tx('test2');},
 function then() {this.click(tx('test2'));},
 function timeout() {this.echo('ERROR - cannot find test2').exit();});}});
 
-casper.then(function() {
+casper.then(function() { // start of JS code
 this.echo('test');
-{techo('click test3');
+}); // end of JS code
+
+casper.then(function() {{techo('click test3');
 casper.waitFor(function check() {return check_tx('test3');},
 function then() {this.click(tx('test3'));},
 function timeout() {this.echo('ERROR - cannot find test3').exit();});}});
 
-casper.then(function() {
-})} // end of code block
- });} });
+} // end of code block
+});
 
-casper.then(function() {
-{techo('frame about | detail');
+casper.then(function() {techo('frame about | detail');});
 casper.withFrame('about', function() {casper.withFrame('detail', function() {
+{ // start of code block
 
-// start of code block
-{casper.then(function() {
-
-{techo('click test');
+casper.then(function() {{techo('click test');
 casper.waitFor(function check() {return check_tx('test');},
 function then() {this.click(tx('test'));},
 function timeout() {this.echo('ERROR - cannot find test').exit();});}});
 
-casper.then(function() {
-})} // end of code block
- });});} });
+} // end of code block
+});});
 
-casper.then(function() {
-{techo('frame about | detail');
+casper.then(function() {techo('frame about | detail');});
 casper.withFrame('about', function() {casper.withFrame('detail', function() {
+{ // start of code block
 
-// start of code block
-{casper.then(function() {
-
-{techo('click test1');
+casper.then(function() {{techo('click test1');
 casper.waitFor(function check() {return check_tx('test1');},
 function then() {this.click(tx('test1'));},
 function timeout() {this.echo('ERROR - cannot find test1').exit();});}});
 
-casper.then(function() {
-{techo('click test2');
+casper.then(function() {{techo('click test2');
 casper.waitFor(function check() {return check_tx('test2');},
 function then() {this.click(tx('test2'));},
 function timeout() {this.echo('ERROR - cannot find test2').exit();});}});
 
-casper.then(function() {
+casper.then(function() { // start of JS code
 this.echo('test');
-{techo('click test3');
+}); // end of JS code
+
+casper.then(function() {{techo('click test3');
 casper.waitFor(function check() {return check_tx('test3');},
 function then() {this.click(tx('test3'));},
 function timeout() {this.echo('ERROR - cannot find test3').exit();});}});
 
-casper.then(function() {
-})} // end of code block
- });});} });
+} // end of code block
+});});
 
-casper.then(function() {
 // test if in javascript
-if (((2 < 3)))
-this.echo("TRUE");
+casper.then(function() {if (((2 < 3)))
+{ // start of code block
+
+casper.then(function() {this.echo("TRUE");});
+
+} // end of code block
+});
+
 // TEST STEPS
 // test tap / click (including sikuli visual automation)
-{techo('tap element');
+casper.then(function() {{techo('tap element');
 casper.waitFor(function check() {return check_tx('element');},
 function then() {this.click(tx('element'));},
 function timeout() {this.echo('ERROR - cannot find element').exit();});}});
 
-casper.then(function() {
-{techo('click element');
+casper.then(function() {{techo('click element');
 casper.waitFor(function check() {return check_tx('element');},
 function then() {this.click(tx('element'));},
 function timeout() {this.echo('ERROR - cannot find element').exit();});}});
 
-casper.then(function() {
-{techo('tap /full_path/button.png'); var fs = require('fs');
+casper.then(function() {{techo('tap /full_path/button.png'); var fs = require('fs');
 if (!sikuli_step('tap /full_path/button.png')) if (!fs.exists('/full_path/button.png'))
 this.echo('ERROR - cannot find image file /full_path/button.png').exit(); else
 this.echo('ERROR - cannot find /full_path/button.png on screen').exit(); this.wait(0);}});
 
-casper.then(function() {
-{techo('click /full_path/button.bmp'); var fs = require('fs');
+casper.then(function() {{techo('click /full_path/button.bmp'); var fs = require('fs');
 if (!sikuli_step('click /full_path/button.bmp')) if (!fs.exists('/full_path/button.bmp'))
 this.echo('ERROR - cannot find image file /full_path/button.bmp').exit(); else
 this.echo('ERROR - cannot find /full_path/button.bmp on screen').exit(); this.wait(0);}});
 
-casper.then(function() {
 // test hover / move (including sikuli visual automation)
-{techo('hover element');
+casper.then(function() {{techo('hover element');
 casper.waitFor(function check() {return check_tx('element');},
 function then() {this.mouse.move(tx('element'));},
 function timeout() {this.echo('ERROR - cannot find element').exit();});}});
 
-casper.then(function() {
-{techo('move element');
+casper.then(function() {{techo('move element');
 casper.waitFor(function check() {return check_tx('element');},
 function then() {this.mouse.move(tx('element'));},
 function timeout() {this.echo('ERROR - cannot find element').exit();});}});
 
-casper.then(function() {
-{techo('hover /full_path/button.png'); var fs = require('fs');
+casper.then(function() {{techo('hover /full_path/button.png'); var fs = require('fs');
 if (!sikuli_step('hover /full_path/button.png')) if (!fs.exists('/full_path/button.png'))
 this.echo('ERROR - cannot find image file /full_path/button.png').exit(); else
 this.echo('ERROR - cannot find /full_path/button.png on screen').exit(); this.wait(0);}});
 
-casper.then(function() {
-{techo('move /full_path/button.bmp'); var fs = require('fs');
+casper.then(function() {{techo('move /full_path/button.bmp'); var fs = require('fs');
 if (!sikuli_step('move /full_path/button.bmp')) if (!fs.exists('/full_path/button.bmp'))
 this.echo('ERROR - cannot find image file /full_path/button.bmp').exit(); else
 this.echo('ERROR - cannot find /full_path/button.bmp on screen').exit(); this.wait(0);}});
 
-casper.then(function() {
 // test type / enter (including sikuli visual automation)
-{techo('type element as some text');
+casper.then(function() {{techo('type element as some text');
 casper.waitFor(function check() {return check_tx('element');},
 function then() {this.sendKeys(tx('element'),'some text');},
 function timeout() {this.echo('ERROR - cannot find element').exit();});}});
 
-casper.then(function() {
-{techo('enter element as some text');
+casper.then(function() {{techo('enter element as some text');
 casper.waitFor(function check() {return check_tx('element');},
 function then() {this.sendKeys(tx('element'),'some text');},
 function timeout() {this.echo('ERROR - cannot find element').exit();});}});
 
-casper.then(function() {
-{techo('type /full_path/textbox.png as some text'); var fs = require('fs');
+casper.then(function() {{techo('type /full_path/textbox.png as some text'); var fs = require('fs');
 if (!sikuli_step('type /full_path/textbox.png as some text')) if (!fs.exists('/full_path/textbox.png'))
 this.echo('ERROR - cannot find image file /full_path/textbox.png').exit(); else
 this.echo('ERROR - cannot find /full_path/textbox.png on screen').exit(); this.wait(0);}});
 
-casper.then(function() {
-{techo('enter /full_path/textbox.bmp as some text'); var fs = require('fs');
+casper.then(function() {{techo('enter /full_path/textbox.bmp as some text'); var fs = require('fs');
 if (!sikuli_step('enter /full_path/textbox.bmp as some text')) if (!fs.exists('/full_path/textbox.bmp'))
 this.echo('ERROR - cannot find image file /full_path/textbox.bmp').exit(); else
 this.echo('ERROR - cannot find /full_path/textbox.bmp on screen').exit(); this.wait(0);}});
 
-casper.then(function() {
 // test type / enter for [enter] and [clear] keywords
-{techo('type element as some text[enter]');
+casper.then(function() {{techo('type element as some text[enter]');
 casper.waitFor(function check() {return check_tx('element');},
 function then() {this.sendKeys(tx('element'),'some text',{keepFocus: true});
 this.sendKeys(tx('element'),casper.page.event.key.Enter,{keepFocus: true});
 this.sendKeys(tx('element'),'',{keepFocus: true});},
 function timeout() {this.echo('ERROR - cannot find element').exit();});}});
 
-casper.then(function() {
-{techo('enter element as some text[enter]');
+casper.then(function() {{techo('enter element as some text[enter]');
 casper.waitFor(function check() {return check_tx('element');},
 function then() {this.sendKeys(tx('element'),'some text',{keepFocus: true});
 this.sendKeys(tx('element'),casper.page.event.key.Enter,{keepFocus: true});
 this.sendKeys(tx('element'),'',{keepFocus: true});},
 function timeout() {this.echo('ERROR - cannot find element').exit();});}});
 
-casper.then(function() {
-{techo('type element as [clear]');
+casper.then(function() {{techo('type element as [clear]');
 casper.waitFor(function check() {return check_tx('element');},
 function then() {this.sendKeys(tx('element'),'',{reset: true});
 this.sendKeys(tx('element'),'');},
 function timeout() {this.echo('ERROR - cannot find element').exit();});}});
 
-casper.then(function() {
-{techo('enter element as [clear]');
+casper.then(function() {{techo('enter element as [clear]');
 casper.waitFor(function check() {return check_tx('element');},
 function then() {this.sendKeys(tx('element'),'',{reset: true});
 this.sendKeys(tx('element'),'');},
 function timeout() {this.echo('ERROR - cannot find element').exit();});}});
 
-casper.then(function() {
-{techo('type element as [clear]some text[enter]');
+casper.then(function() {{techo('type element as [clear]some text[enter]');
 casper.waitFor(function check() {return check_tx('element');},
 function then() {this.sendKeys(tx('element'),'',{reset: true});
 this.sendKeys(tx('element'),'some text',{keepFocus: true});
@@ -1762,8 +2170,7 @@ this.sendKeys(tx('element'),casper.page.event.key.Enter,{keepFocus: true});
 this.sendKeys(tx('element'),'',{keepFocus: true});},
 function timeout() {this.echo('ERROR - cannot find element').exit();});}});
 
-casper.then(function() {
-{techo('enter element as [clear]some text[enter]');
+casper.then(function() {{techo('enter element as [clear]some text[enter]');
 casper.waitFor(function check() {return check_tx('element');},
 function then() {this.sendKeys(tx('element'),'',{reset: true});
 this.sendKeys(tx('element'),'some text',{keepFocus: true});
@@ -1771,9 +2178,8 @@ this.sendKeys(tx('element'),casper.page.event.key.Enter,{keepFocus: true});
 this.sendKeys(tx('element'),'',{keepFocus: true});},
 function timeout() {this.echo('ERROR - cannot find element').exit();});}});
 
-casper.then(function() {
 // test select / enter (including sikuli visual automation)
-{techo('select element as option');
+casper.then(function() {{techo('select element as option');
 casper.waitFor(function check() {return check_tx('element');},
 function then() {var select_locator = tx('element');
 if (is_xpath_selector(select_locator.toString().replace('xpath selector: ','')))
@@ -1781,8 +2187,7 @@ select_locator = select_locator.toString().substring(16);
 this.selectOptionByValue(select_locator,'option');},
 function timeout() {this.echo('ERROR - cannot find element').exit();});}});
 
-casper.then(function() {
-{techo('choose element as option');
+casper.then(function() {{techo('choose element as option');
 casper.waitFor(function check() {return check_tx('element');},
 function then() {var select_locator = tx('element');
 if (is_xpath_selector(select_locator.toString().replace('xpath selector: ','')))
@@ -1790,406 +2195,678 @@ select_locator = select_locator.toString().substring(16);
 this.selectOptionByValue(select_locator,'option');},
 function timeout() {this.echo('ERROR - cannot find element').exit();});}});
 
-casper.then(function() {
-{techo('select /full_path/option_list.png as /full_path/option_item.bmp'); var fs = require('fs');
+casper.then(function() {{techo('select /full_path/option_list.png as /full_path/option_item.bmp'); var fs = require('fs');
 if (!sikuli_step('select /full_path/option_list.png as /full_path/option_item.bmp')) if (!fs.exists('/full_path/option_list.png'))
 this.echo('ERROR - cannot find image file /full_path/option_list.png').exit(); else
 this.echo('ERROR - cannot find /full_path/option_list.png on screen').exit(); this.wait(0);}});
 
-casper.then(function() {
-{techo('choose /full_path/option_list.bmp as /full_path/option_item.png'); var fs = require('fs');
+casper.then(function() {{techo('choose /full_path/option_list.bmp as /full_path/option_item.png'); var fs = require('fs');
 if (!sikuli_step('choose /full_path/option_list.bmp as /full_path/option_item.png')) if (!fs.exists('/full_path/option_list.bmp'))
 this.echo('ERROR - cannot find image file /full_path/option_list.bmp').exit(); else
 this.echo('ERROR - cannot find /full_path/option_list.bmp on screen').exit(); this.wait(0);}});
 
-casper.then(function() {
 // test read / fetch
-{techo('read element to variable');
+casper.then(function() {{techo('read element to variable');
 casper.waitFor(function check() {return check_tx('element');},
 function then() {variable = this.fetchText(tx('element')).trim();},
 function timeout() {this.echo('ERROR - cannot find element').exit();});}});
 
-casper.then(function() {
-{techo('read page to variable');
-variable = this.getHTML();}
-{techo('fetch element to variable');
+casper.then(function() {{techo('read page to variable');
+variable = this.getHTML();}});
+
+casper.then(function() {{techo('fetch element to variable');
 casper.waitFor(function check() {return check_tx('element');},
 function then() {variable = this.fetchText(tx('element')).trim();},
 function timeout() {this.echo('ERROR - cannot find element').exit();});}});
 
-casper.then(function() {
-{techo('fetch page to variable');
-variable = this.getHTML();}
+casper.then(function() {{techo('fetch page to variable');
+variable = this.getHTML();}});
+
 // test show / print
-{techo('show element');
+casper.then(function() {{techo('show element');
 casper.waitFor(function check() {return check_tx('element');},
 function then() {this.echo(this.fetchText(tx('element')).trim());},
 function timeout() {this.echo('ERROR - cannot find element').exit();});}});
 
-casper.then(function() {
-this.echo('show page' + ' - \n' + this.getHTML());
-{techo('print element');
+casper.then(function() {this.echo('show page' + ' - \n' + this.getHTML());});
+
+casper.then(function() {{techo('print element');
 casper.waitFor(function check() {return check_tx('element');},
 function then() {this.echo(this.fetchText(tx('element')).trim());},
 function timeout() {this.echo('ERROR - cannot find element').exit();});}});
 
-casper.then(function() {
-this.echo('print page' + ' - \n' + this.getHTML());
-// test save
-{techo('save element');
+casper.then(function() {this.echo('print page' + ' - \n' + this.getHTML());});
+
+// test save with different filename formats
+casper.then(function() {{techo('save element');
 casper.waitFor(function check() {return check_tx('element');},
 function then() {save_text('',this.fetchText(tx('element')).trim());},
 function timeout() {this.echo('ERROR - cannot find element').exit();});}});
 
-casper.then(function() {
-{techo('save element to filename.txt');
+casper.then(function() {{techo('save element to filename.txt');
 casper.waitFor(function check() {return check_tx('element');},
 function then() {save_text('/full_path/filename.txt',this.fetchText(tx('element')).trim());},
 function timeout() {this.echo('ERROR - cannot find element').exit();});}});
 
-casper.then(function() {
-{techo('save element to /tmp/filename.txt');
+casper.then(function() {{techo('save element to tmp/filename.txt');
+casper.waitFor(function check() {return check_tx('element');},
+function then() {save_text('/full_path/tmp/filename.txt',this.fetchText(tx('element')).trim());},
+function timeout() {this.echo('ERROR - cannot find element').exit();});}});
+
+casper.then(function() {{techo('save element to /tmp/filename.txt');
 casper.waitFor(function check() {return check_tx('element');},
 function then() {save_text('/tmp/filename.txt',this.fetchText(tx('element')).trim());},
 function timeout() {this.echo('ERROR - cannot find element').exit();});}});
 
-casper.then(function() {
-{techo('save page');
-save_text('',this.getHTML());}
-{techo('save page to filename.txt');
-save_text('/full_path/filename.txt',this.getHTML());}
-{techo('save page to /tmp/filename.txt');
-save_text('/tmp/filename.txt',this.getHTML());}
+casper.then(function() {{techo('save element to ./tmp/filename.txt');
+casper.waitFor(function check() {return check_tx('element');},
+function then() {save_text('/full_path/./tmp/filename.txt',this.fetchText(tx('element')).trim());},
+function timeout() {this.echo('ERROR - cannot find element').exit();});}});
+
+casper.then(function() {{techo('save element to tmp\filename.txt');
+casper.waitFor(function check() {return check_tx('element');},
+function then() {save_text('/full_path/tmp/filename.txt',this.fetchText(tx('element')).trim());},
+function timeout() {this.echo('ERROR - cannot find element').exit();});}});
+
+casper.then(function() {{techo('save element to c:\tmp\filename.txt');
+casper.waitFor(function check() {return check_tx('element');},
+function then() {save_text('c:/tmp/filename.txt',this.fetchText(tx('element')).trim());},
+function timeout() {this.echo('ERROR - cannot find element').exit();});}});
+
+casper.then(function() {{techo('save element to .\tmp\filename.txt');
+casper.waitFor(function check() {return check_tx('element');},
+function then() {save_text('/full_path/./tmp/filename.txt',this.fetchText(tx('element')).trim());},
+function timeout() {this.echo('ERROR - cannot find element').exit();});}});
+
+casper.then(function() {{techo('save page');
+save_text('',this.getHTML());}});
+
+casper.then(function() {{techo('save page to filename.txt');
+save_text('/full_path/filename.txt',this.getHTML());}});
+
+casper.then(function() {{techo('save page to tmp/filename.txt');
+save_text('/full_path/tmp/filename.txt',this.getHTML());}});
+
+casper.then(function() {{techo('save page to /tmp/filename.txt');
+save_text('/tmp/filename.txt',this.getHTML());}});
+
+casper.then(function() {{techo('save page to ./tmp/filename.txt');
+save_text('/full_path/./tmp/filename.txt',this.getHTML());}});
+
+casper.then(function() {{techo('save page to tmp\filename.txt');
+save_text('/full_path/tmp/filename.txt',this.getHTML());}});
+
+casper.then(function() {{techo('save page to c:\tmp\filename.txt');
+save_text('c:/tmp/filename.txt',this.getHTML());}});
+
+casper.then(function() {{techo('save page to .\tmp\filename.txt');
+save_text('/full_path/./tmp/filename.txt',this.getHTML());}});
+
 // test echo
-this.echo(variable);
-this.echo('some text'+' '+'some text');
-this.echo("some text - "+variable);
-this.echo('some text - '+variable);
-this.echo("some text - "+variable);
-this.echo('some text - '+variable);
-this.echo(variable+" - some text - "+variable+" - some text "+"some text - "+variable);
+casper.then(function() {this.echo(variable);});
+
+casper.then(function() {this.echo('some text'+' '+'some text');});
+
+casper.then(function() {this.echo("some text - "+variable);});
+
+casper.then(function() {this.echo('some text - '+variable);});
+
+casper.then(function() {this.echo("some text - "+variable);});
+
+casper.then(function() {this.echo('some text - '+variable);});
+
+casper.then(function() {this.echo(variable+" - some text - "+variable+" - some text "+"some text - "+variable);});
+
 // test dump
-{techo('dump "some text - " + variable');
-save_text('',"some text - "+variable);}
-{techo('dump \'some text - \' + variable');
-save_text('','some text - '+variable);}
-{techo('dump "some text - " + variable to filename.txt');
-save_text('/full_path/filename.txt',"some text - "+variable);}
-{techo('dump \'some text - \' + variable to filename.txt');
-save_text('/full_path/filename.txt','some text - '+variable);}
-{techo('dump "some text - " + variable to /tmp/filename.txt');
-save_text('/tmp/filename.txt',"some text - "+variable);}
-{techo('dump \'some text - \' + variable to /tmp/filename.txt');
-save_text('/tmp/filename.txt','some text - '+variable);}
-{techo('dump "some text - " variable');
-save_text('',"some text - "+variable);}
-{techo('dump \'some text - \' variable');
-save_text('','some text - '+variable);}
-{techo('dump "some text - " variable to filename.txt');
-save_text('/full_path/filename.txt',"some text - "+variable);}
-{techo('dump \'some text - \' variable to filename.txt');
-save_text('/full_path/filename.txt','some text - '+variable);}
-{techo('dump "some text - " variable to /tmp/filename.txt');
-save_text('/tmp/filename.txt',"some text - "+variable);}
-{techo('dump \'some text - \' variable to /tmp/filename.txt');
-save_text('/tmp/filename.txt','some text - '+variable);}
+casper.then(function() {{techo('dump "some text - " + variable');
+save_text('',"some text - "+variable);}});
+
+casper.then(function() {{techo('dump \'some text - \' + variable');
+save_text('','some text - '+variable);}});
+
+casper.then(function() {{techo('dump "some text - " + variable to filename.txt');
+save_text('/full_path/filename.txt',"some text - "+variable);}});
+
+casper.then(function() {{techo('dump \'some text - \' + variable to filename.txt');
+save_text('/full_path/filename.txt','some text - '+variable);}});
+
+casper.then(function() {{techo('dump "some text - " + variable to /tmp/filename.txt');
+save_text('/tmp/filename.txt',"some text - "+variable);}});
+
+casper.then(function() {{techo('dump \'some text - \' + variable to /tmp/filename.txt');
+save_text('/tmp/filename.txt','some text - '+variable);}});
+
+casper.then(function() {{techo('dump "some text - " variable');
+save_text('',"some text - "+variable);}});
+
+casper.then(function() {{techo('dump \'some text - \' variable');
+save_text('','some text - '+variable);}});
+
+casper.then(function() {{techo('dump "some text - " variable to filename.txt');
+save_text('/full_path/filename.txt',"some text - "+variable);}});
+
+casper.then(function() {{techo('dump \'some text - \' variable to filename.txt');
+save_text('/full_path/filename.txt','some text - '+variable);}});
+
+casper.then(function() {{techo('dump "some text - " variable to /tmp/filename.txt');
+save_text('/tmp/filename.txt',"some text - "+variable);}});
+
+casper.then(function() {{techo('dump \'some text - \' variable to /tmp/filename.txt');
+save_text('/tmp/filename.txt','some text - '+variable);}});
+
 // test write
-{techo('write \'abc\'');
-append_text('','abc');}
-{techo('write \'efg\'');
-append_text('','efg');}
-{techo('write \'ghi\' to filename.txt');
-append_text('/full_path/filename.txt','ghi');}
-{techo('write \'ijk\' to filename.txt');
-append_text('/full_path/filename.txt','ijk');}
+casper.then(function() {{techo('write \'abc\'');
+append_text('','abc');}});
+
+casper.then(function() {{techo('write \'efg\'');
+append_text('','efg');}});
+
+casper.then(function() {{techo('write \'ghi\' to filename.txt');
+append_text('/full_path/filename.txt','ghi');}});
+
+casper.then(function() {{techo('write \'ijk\' to filename.txt');
+append_text('/full_path/filename.txt','ijk');}});
+
 // test snap
-{techo('snap element');
+casper.then(function() {{techo('snap element');
 casper.waitFor(function check() {return check_tx('element');},
 function then() {this.captureSelector(snap_image(),tx('element'));},
 function timeout() {this.echo('ERROR - cannot find element').exit();});}});
 
-casper.then(function() {
-{techo('snap element to filename.png');
+casper.then(function() {{techo('snap element to filename.png');
 casper.waitFor(function check() {return check_tx('element');},
 function then() {this.captureSelector('/full_path/filename.png',tx('element'));},
 function timeout() {this.echo('ERROR - cannot find element').exit();});}});
 
-casper.then(function() {
-{techo('snap element to /tmp/filename.png');
+casper.then(function() {{techo('snap element to /tmp/filename.png');
 casper.waitFor(function check() {return check_tx('element');},
 function then() {this.captureSelector('/tmp/filename.png',tx('element'));},
 function timeout() {this.echo('ERROR - cannot find element').exit();});}});
 
-casper.then(function() {
-{techo('snap element to document.pdf');
+casper.then(function() {{techo('snap element to document.pdf');
 casper.waitFor(function check() {return check_tx('element');},
 function then() {this.captureSelector('/full_path/document.pdf',tx('element'));},
 function timeout() {this.echo('ERROR - cannot find element').exit();});}});
 
-casper.then(function() {
-{techo('snap page');
-this.capture(snap_image());}
-{techo('snap page to filename.png');
-this.capture('/full_path/filename.png');}
-{techo('snap page to /tmp/filename.png');
-this.capture('/tmp/filename.png');}
-{techo('snap page to document.pdf');
-this.capture('/full_path/document.pdf');}
+casper.then(function() {{techo('snap page');
+this.capture(snap_image());}});
+
+casper.then(function() {{techo('snap page to filename.png');
+this.capture('/full_path/filename.png');}});
+
+casper.then(function() {{techo('snap page to /tmp/filename.png');
+this.capture('/tmp/filename.png');}});
+
+casper.then(function() {{techo('snap page to document.pdf');
+this.capture('/full_path/document.pdf');}});
+
 // test table (no css selector)
-{techo('table element');
+casper.then(function() {{techo('table element');
 casper.waitFor(function check() {return check_tx('element');},
 function then() {save_table('',tx('element'));},
 function timeout() {this.echo('ERROR - cannot find element').exit();});}});
 
-casper.then(function() {
-{techo('table element to filename.csv');
+casper.then(function() {{techo('table element to filename.csv');
 casper.waitFor(function check() {return check_tx('element');},
 function then() {save_table('/full_path/filename.csv',tx('element'));},
 function timeout() {this.echo('ERROR - cannot find element').exit();});}});
 
-casper.then(function() {
-{techo('table (//table)[7]');
+casper.then(function() {{techo('table (//table)[7]');
 casper.waitFor(function check() {return check_tx('(//table)[7]');},
 function then() {save_table('',tx('(//table)[7]'));},
 function timeout() {this.echo('ERROR - cannot find (//table)[7]').exit();});}});
 
-casper.then(function() {
-{techo('table (//table)[7] to filename.csv');
+casper.then(function() {{techo('table (//table)[7] to filename.csv');
 casper.waitFor(function check() {return check_tx('(//table)[7]');},
 function then() {save_table('/full_path/filename.csv',tx('(//table)[7]'));},
 function timeout() {this.echo('ERROR - cannot find (//table)[7]').exit();});}});
 
-casper.then(function() {
+// test tagui
+// can't really test as folders and files structure won't be the same
+// tagui flow_filename
+// tagui tmp/flow_filename
+// tagui /tmp/flow_filename
+// tagui ./tmp/flow_filename
+// tagui tmp\flow_filename
+// tagui c:\tmp\flow_filename
+// tagui .\tmp\flow_filename
 // test upload
-{techo('upload #css_selector as abc.png');
+casper.then(function() {{techo('upload #css_selector as abc.png');
 casper.waitFor(function check() {return check_tx('#css_selector');},
 function then() {this.page.uploadFile(tx('#css_selector'),'/full_path/abc.png');},
 function timeout() {this.echo('ERROR - cannot find #css_selector').exit();});}});
 
-casper.then(function() {
-{techo('upload #css_selector as /tmp/abc.png');
+casper.then(function() {{techo('upload #css_selector as /tmp/abc.png');
 casper.waitFor(function check() {return check_tx('#css_selector');},
 function then() {this.page.uploadFile(tx('#css_selector'),'/tmp/abc.png');},
 function timeout() {this.echo('ERROR - cannot find #css_selector').exit();});}});
 
-casper.then(function() {
 // test download
-{techo('download http://www.dummytestsite.com/report/month.txt to filename.txt');
-this.download('http://www.dummytestsite.com/report/month.txt','/full_path/filename.txt');}
-{techo('download http://www.dummytestsite.com/report/month.txt to /tmp/filename.txt');
-this.download('http://www.dummytestsite.com/report/month.txt','/tmp/filename.txt');}
+casper.then(function() {{techo('download http://www.dummytestsite.com/report/month.txt to filename.txt');
+this.download('http://www.dummytestsite.com/report/month.txt','/full_path/filename.txt');}});
+
+casper.then(function() {{techo('download http://www.dummytestsite.com/report/month.txt to /tmp/filename.txt');
+this.download('http://www.dummytestsite.com/report/month.txt','/tmp/filename.txt');}});
+
 // test receive
-{techo('receive report to filename.txt');
+casper.then(function() {{techo('receive report to filename.txt');
 casper.on('resource.received', function(resource) {if (resource.stage !== 'end') return;
-if (resource.url.indexOf('report') > -1) this.download(resource.url, '/full_path/filename.txt');});}
-{techo('receive report to /tmp/filename.txt');
+if (resource.url.indexOf('report') > -1) this.download(resource.url, '/full_path/filename.txt');});}});
+
+casper.then(function() {{techo('receive report to /tmp/filename.txt');
 casper.on('resource.received', function(resource) {if (resource.stage !== 'end') return;
-if (resource.url.indexOf('report') > -1) this.download(resource.url, '/tmp/filename.txt');});}
+if (resource.url.indexOf('report') > -1) this.download(resource.url, '/tmp/filename.txt');});}});
+
 // test wait
-techo('wait');});
+casper.then(function() {techo('wait');});
+casper.wait(5000, function() {});
 
-casper.wait(5000, function() {
-techo('wait 2.5');});
+casper.then(function() {techo('wait 2.5');});
+casper.wait(2500, function() {});
 
-casper.wait(2500, function() {
-techo('wait 10.0');});
+casper.then(function() {techo('wait 10.0');});
+casper.wait(10000, function() {});
 
-casper.wait(10000, function() {
-techo('wait 10');});
+casper.then(function() {techo('wait 10');});
+casper.wait(10000, function() {});
 
-casper.wait(10000, function() {
-techo('wait 10s');});
+casper.then(function() {techo('wait 10s');});
+casper.wait(10000, function() {});
 
-casper.wait(10000, function() {
-techo('wait 10sec');});
+casper.then(function() {techo('wait 10sec');});
+casper.wait(10000, function() {});
 
-casper.wait(10000, function() {
-techo('wait 10secs');});
+casper.then(function() {techo('wait 10secs');});
+casper.wait(10000, function() {});
 
-casper.wait(10000, function() {
-techo('wait 10seconds');});
+casper.then(function() {techo('wait 10seconds');});
+casper.wait(10000, function() {});
 
-casper.wait(10000, function() {
-techo('wait 10 s');});
+casper.then(function() {techo('wait 10 s');});
+casper.wait(10000, function() {});
 
-casper.wait(10000, function() {
-techo('wait 10 sec');});
+casper.then(function() {techo('wait 10 sec');});
+casper.wait(10000, function() {});
 
-casper.wait(10000, function() {
-techo('wait 10 secs');});
+casper.then(function() {techo('wait 10 secs');});
+casper.wait(10000, function() {});
 
-casper.wait(10000, function() {
-techo('wait 10 seconds');});
+casper.then(function() {techo('wait 10 seconds');});
+casper.wait(10000, function() {});
 
-casper.wait(10000, function() {
-techo('wait 7.5 seconds');});
+casper.then(function() {techo('wait 7.5 seconds');});
+casper.wait(7500, function() {});
 
-casper.wait(7500, function() {
+// test live
+casper.then(function() {{var live_input = '';
+var sys = require('system'); sys.stdout.write('LIVE MODE - type done to quit\n \b');
+while (true) {live_input = sys.stdin.readLine(); // evaluate input in casperjs context until done is entered
+if (live_input.indexOf('done') == 0) break; eval(tagui_parse(live_input));}}});
+
 // test check
-{if ((eggs < 10))
+casper.then(function() {{if ((eggs < 10))
 this.echo("eggs lesser than 10");
-else this.echo("eggs not lesser than 10");}
-{if ((eggs < 10))
+else this.echo("eggs not lesser than 10");}});
+
+casper.then(function() {{if ((eggs < 10))
 this.echo("eggs lesser than 10");
-else this.echo("eggs not lesser than 10");}
-{if ((eggs < 10))
+else this.echo("eggs not lesser than 10");}});
+
+casper.then(function() {{if ((eggs < 10))
 this.echo('eggs lesser than 10');
-else this.echo('eggs not lesser than 10');}
-{if ((eggs < 10))
+else this.echo('eggs not lesser than 10');}});
+
+casper.then(function() {{if ((eggs < 10))
 this.echo('eggs lesser than 10');
-else this.echo('eggs not lesser than 10');}
+else this.echo('eggs not lesser than 10');}});
+
 // test frame
-{techo('frame mainframe');
+casper.then(function() {techo('frame mainframe');});
 casper.withFrame('mainframe', function() {
-this.echo("test mainframe"); });} });
+{ // start of code block
 
-casper.then(function() {
-{techo('frame mainframe | subframe');
+casper.then(function() {this.echo("test mainframe");});
+
+} // end of code block
+});
+
+casper.then(function() {techo('frame mainframe | subframe');});
 casper.withFrame('mainframe', function() {casper.withFrame('subframe', function() {
-this.echo("test subframe"); });});} });
+{ // start of code block
 
-casper.then(function() {
+casper.then(function() {this.echo("test subframe");});
+
+} // end of code block
+});});
+
 // test popup
-{techo('popup url_keyword');
+casper.then(function() {techo('popup url_keyword');});
 casper.waitForPopup(/url_keyword/, function then() {},
 function timeout() {this.echo('ERROR - cannot find popup url_keyword').exit();});
 casper.withPopup(/url_keyword/, function() {
-this.echo("test popup"); });} });
+{ // start of code block
 
-casper.then(function() {
-{techo('popup url_keyword');
+casper.then(function() {this.echo("test popup");});
+
+} // end of code block
+});
+
+casper.then(function() {techo('popup url_keyword');});
 casper.waitForPopup(/url_keyword/, function then() {},
 function timeout() {this.echo('ERROR - cannot find popup url_keyword').exit();});
 casper.withPopup(/url_keyword/, function() {
-{techo('frame mainframe');
+{ // start of code block
+
+casper.then(function() {techo('frame mainframe');});
 casper.withFrame('mainframe', function() {
-this.echo("test popup with mainframe"); });}  });} });
+{ // start of code block
 
-casper.then(function() {
-{techo('popup url_keyword');
+casper.then(function() {this.echo("test popup with mainframe");});
+
+} // end of code block
+});
+
+} // end of code block
+});
+
+casper.then(function() {techo('popup url_keyword');});
 casper.waitForPopup(/url_keyword/, function then() {},
 function timeout() {this.echo('ERROR - cannot find popup url_keyword').exit();});
 casper.withPopup(/url_keyword/, function() {
-{techo('frame mainframe | subframe');
-casper.withFrame('mainframe', function() {casper.withFrame('subframe', function() {
-this.echo("test popup with subframe"); });});}  });} });
+{ // start of code block
 
-casper.then(function() {
+casper.then(function() {techo('frame mainframe | subframe');});
+casper.withFrame('mainframe', function() {casper.withFrame('subframe', function() {
+{ // start of code block
+
+casper.then(function() {this.echo("test popup with subframe");});
+
+} // end of code block
+});});
+
+} // end of code block
+});
+
 // test api direct
-{techo('api http://www.dummytestsite.com/api?COLOR1=red&COLOR2=green&COLOR3=blue');
+casper.then(function() {{techo('api http://www.dummytestsite.com/api?COLOR1=red&COLOR2=green&COLOR3=blue');
 api_result = ''; api_result = call_api('http://www.dummytestsite.com/api?COLOR1=red&COLOR2=green&COLOR3=blue');
-try {api_json = JSON.parse(api_result);} catch(e) {api_json = JSON.parse('null');}}
+try {api_json = JSON.parse(api_result);} catch(e) {api_json = JSON.parse('null');}}});
+
 // test api with variables
+casper.then(function() { // start of JS code
 var COLOR1='red'; var COLOR2='green'; var COLOR3='blue';
-{techo('api http://www.dummytestsite.com/api?COLOR1='+COLOR1+'&COLOR2='+COLOR2+'&COLOR3='+COLOR3+'');
+}); // end of JS code
+
+casper.then(function() {{techo('api http://www.dummytestsite.com/api?COLOR1='+COLOR1+'&COLOR2='+COLOR2+'&COLOR3='+COLOR3+'');
 api_result = ''; api_result = call_api('http://www.dummytestsite.com/api?COLOR1='+COLOR1+'&COLOR2='+COLOR2+'&COLOR3='+COLOR3+'');
-try {api_json = JSON.parse(api_result);} catch(e) {api_json = JSON.parse('null');}}
+try {api_json = JSON.parse(api_result);} catch(e) {api_json = JSON.parse('null');}}});
+
+// test run
+casper.then(function() {techo('run face_recognition par1 par2 par3');});
+casper.then(function() {casper.waitForExec('face_recognition par1 par2 par3', null, function(response) {run_result = '';
+run_result = (response.data.stdout.trim() || response.data.stderr.trim()); run_result = run_result.replace(/\r\n/g,'\n');
+run_json = response.data;}, function() {this.echo('ERROR - command to run exceeded '+(casper.options.waitTimeout/1000).toFixed(1)+'s timeout').exit();},casper.options.waitTimeout);});
+
+casper.then(function() {techo('run face_recognition1 par1 par2 par3');});
+casper.then(function() {casper.waitForExec('face_recognition1 par1 par2 par3', null, function(response) {run_result = '';
+run_result = (response.data.stdout.trim() || response.data.stderr.trim()); run_result = run_result.replace(/\r\n/g,'\n');
+run_json = response.data;}, function() {this.echo('ERROR - command to run exceeded '+(casper.options.waitTimeout/1000).toFixed(1)+'s timeout').exit();},casper.options.waitTimeout);});
+
+casper.then(function() {techo('run face_recognition2 par1 par2 par3');});
+casper.then(function() {casper.waitForExec('face_recognition2 par1 par2 par3', null, function(response) {run_result = '';
+run_result = (response.data.stdout.trim() || response.data.stderr.trim()); run_result = run_result.replace(/\r\n/g,'\n');
+run_json = response.data;}, function() {this.echo('ERROR - command to run exceeded '+(casper.options.waitTimeout/1000).toFixed(1)+'s timeout').exit();},casper.options.waitTimeout);});
+
 // test dom
-dom_result = ''; dom_result = this.evaluate(function(dom_json) {var page_title = document.title;}, dom_json);
-// test test
-// test something and see what happens
+casper.then(function() {dom_result = ''; dom_result = this.evaluate(function(dom_json) {var page_title = document.title;}, dom_json);});
+
+casper.then(function() {dom_result = ''; dom_result = this.evaluate(function(dom_json) {var page_title = document.title;
+	var page_input = prompt('enter your title');
+		return page_title + ' ' + page_input;}, dom_json);});
+
+casper.then(function() {dom_result = ''; dom_result = this.evaluate(function(dom_json) {document.querySelector('#header p').focus()}, dom_json);});
+
 // test js
+casper.then(function() { // start of JS code
 this.echo('THIS IS JAVASCRIPT');
+b = 1
+c = 2
+	a = b + c;
+	if (a == 3)
+	{
+		this.echo('YES');
+	}
+if (a != 3)
+{
+this.echo('NO');
+}
+}); // end of JS code
+
+// test r
+casper.then(function() {{techo('r a=1;b=2');
+r_result = ''; if (!r_step('r a=1;b=2'))
+this.echo('ERROR - cannot execute R command(s)').exit(); this.wait(0);
+r_result = fetch_r_text(); clear_r_text();
+try {r_json = JSON.parse(r_result);} catch(e) {r_json = JSON.parse('null');}}});
+
+casper.then(function() {{techo('r c=a+b');
+r_result = ''; if (!r_step('r c=a+b'))
+this.echo('ERROR - cannot execute R command(s)').exit(); this.wait(0);
+r_result = fetch_r_text(); clear_r_text();
+try {r_json = JSON.parse(r_result);} catch(e) {r_json = JSON.parse('null');}}});
+
+casper.then(function() {{techo('r cat(c)');
+r_result = ''; if (!r_step('r cat(c)'))
+this.echo('ERROR - cannot execute R command(s)').exit(); this.wait(0);
+r_result = fetch_r_text(); clear_r_text();
+try {r_json = JSON.parse(r_result);} catch(e) {r_json = JSON.parse('null');}}});
+
+casper.then(function() {this.echo(r_result);});
+
+casper.then(function() {{techo('r a=\'1\';b=\'2\'; d=paste(a,b,sep=\'\'); cat(d); ');
+r_result = ''; if (!r_step('r a=\'1\';b=\'2\'; d=paste(a,b,sep=\'\'); cat(d); '))
+this.echo('ERROR - cannot execute R command(s)').exit(); this.wait(0);
+r_result = fetch_r_text(); clear_r_text();
+try {r_json = JSON.parse(r_result);} catch(e) {r_json = JSON.parse('null');}}});
+
+casper.then(function() {this.echo(r_result);});
+
+casper.then(function() {{techo('r if (TRUE) {; cat(\'TRUE1\'); cat(\'TRUE2\'); }; ');
+r_result = ''; if (!r_step('r if (TRUE) {; cat(\'TRUE1\'); cat(\'TRUE2\'); }; '))
+this.echo('ERROR - cannot execute R command(s)').exit(); this.wait(0);
+r_result = fetch_r_text(); clear_r_text();
+try {r_json = JSON.parse(r_result);} catch(e) {r_json = JSON.parse('null');}}});
+
+casper.then(function() {this.echo(r_result);});
+
+casper.then(function() {{techo('r 		if (FALSE) {; 	cat(\'FALSE1\'); cat(\'FALSE2\'); 			}; ');
+r_result = ''; if (!r_step('r 		if (FALSE) {; 	cat(\'FALSE1\'); cat(\'FALSE2\'); 			}; '))
+this.echo('ERROR - cannot execute R command(s)').exit(); this.wait(0);
+r_result = fetch_r_text(); clear_r_text();
+try {r_json = JSON.parse(r_result);} catch(e) {r_json = JSON.parse('null');}}});
+
+casper.then(function() {this.echo(r_result);});
+
+// test py
+casper.then(function() {{techo('py a=1;b=2');
+py_result = ''; if (!py_step('py a=1;b=2'))
+this.echo('ERROR - cannot execute Python command(s)').exit(); this.wait(0);
+py_result = fetch_py_text(); clear_py_text();
+try {py_json = JSON.parse(py_result);} catch(e) {py_json = JSON.parse('null');}}});
+
+casper.then(function() {{techo('py c=a+b');
+py_result = ''; if (!py_step('py c=a+b'))
+this.echo('ERROR - cannot execute Python command(s)').exit(); this.wait(0);
+py_result = fetch_py_text(); clear_py_text();
+try {py_json = JSON.parse(py_result);} catch(e) {py_json = JSON.parse('null');}}});
+
+casper.then(function() {{techo('py print(c)');
+py_result = ''; if (!py_step('py print(c)'))
+this.echo('ERROR - cannot execute Python command(s)').exit(); this.wait(0);
+py_result = fetch_py_text(); clear_py_text();
+try {py_json = JSON.parse(py_result);} catch(e) {py_json = JSON.parse('null');}}});
+
+casper.then(function() {this.echo(py_result);});
+
+casper.then(function() {{techo('py e=\'1\';f=\'2\'\ng=e+f\nprint(g)');
+py_result = ''; if (!py_step('py e=\'1\';f=\'2\'\ng=e+f\nprint(g)'))
+this.echo('ERROR - cannot execute Python command(s)').exit(); this.wait(0);
+py_result = fetch_py_text(); clear_py_text();
+try {py_json = JSON.parse(py_result);} catch(e) {py_json = JSON.parse('null');}}});
+
+casper.then(function() {this.echo(py_result);});
+
+casper.then(function() {{techo('py a = 1\nif a == 1:\n	print(\'TRUE1\')\n	print(\'TRUE2\')');
+py_result = ''; if (!py_step('py a = 1\nif a == 1:\n	print(\'TRUE1\')\n	print(\'TRUE2\')'))
+this.echo('ERROR - cannot execute Python command(s)').exit(); this.wait(0);
+py_result = fetch_py_text(); clear_py_text();
+try {py_json = JSON.parse(py_result);} catch(e) {py_json = JSON.parse('null');}}});
+
+casper.then(function() {{techo('py a = 2\nif a == 1:\n        print(\'FALSE1\')\n       	print(\'FALSE2\')');
+py_result = ''; if (!py_step('py a = 2\nif a == 1:\n        print(\'FALSE1\')\n       	print(\'FALSE2\')'))
+this.echo('ERROR - cannot execute Python command(s)').exit(); this.wait(0);
+py_result = fetch_py_text(); clear_py_text();
+try {py_json = JSON.parse(py_result);} catch(e) {py_json = JSON.parse('null');}}});
+
 // test vision
-{techo('vision click(\'/tmp/// test.png\')'); var fs = require('fs');
+casper.then(function() {{techo('vision click(\'/tmp/// test.png\')'); var fs = require('fs');
 if (!sikuli_step('vision click(\'/tmp/// test.png\')')) if (!fs.exists('for vision step'))
 this.echo('ERROR - cannot find image file for vision step').exit(); else
 this.echo('ERROR - cannot find for vision step on screen').exit(); this.wait(0);}});
 
-casper.then(function() {
+casper.then(function() {{techo('vision a = 1\nif a == 1:\n	click(\'1.png\')\n	click(\'1.png\')'); var fs = require('fs');
+if (!sikuli_step('vision a = 1\nif a == 1:\n	click(\'1.png\')\n	click(\'1.png\')')) if (!fs.exists('for vision step'))
+this.echo('ERROR - cannot find image file for vision step').exit(); else
+this.echo('ERROR - cannot find for vision step on screen').exit(); this.wait(0);}});
+
 // test timeout
-casper.options.waitTimeout = 4000;
-casper.options.waitTimeout = 5670;
-casper.options.waitTimeout = 6000;
+casper.then(function() {casper.options.waitTimeout = 4000;});
+
+casper.then(function() {casper.options.waitTimeout = 5670;});
+
+casper.then(function() {casper.options.waitTimeout = 6000;});
+
 // test comment
-// user comment
-//user comment
-//
+// user comment with space
+//user comment without space
+// user comment with leading spaces
+// user comment with leading tabs
+// test test
+// test something and see what happens
 // test url without variable
-});casper.thenOpen('http://www.dummytestsite.com', function() {
+casper.thenOpen('http://www.dummytestsite.com', function() {
 techo('http://www.dummytestsite.com' + ' - ' + this.getTitle());});
 
-casper.then(function() {
 // test url with variable
+casper.then(function() { // start of JS code
 target_url = "www.dummytestsite.com";
+}); // end of JS code
 
-{casper.then(function() {
-});casper.thenOpen('http://'+target_url+'', function() {
-techo('http://'+target_url+'' + ' - ' + this.getTitle());});
+casper.then(function() {casper.thenOpen('http://'+target_url+'', function() {
+techo('http://'+target_url+'' + ' - ' + this.getTitle());});}); // end of dynamic url block
 
-casper.then(function() {
-})} // end of dynamic url block
 // test present function
-if ((present('footer')))
+casper.then(function() {if ((present('footer')))
+{ // start of code block
 
-// start of code block
-{casper.then(function() {
-
-{techo('print footer');
+casper.then(function() {{techo('print footer');
 casper.waitFor(function check() {return check_tx('footer');},
 function then() {this.echo(this.fetchText(tx('footer')).trim());},
 function timeout() {this.echo('ERROR - cannot find footer').exit();});}});
 
-casper.then(function() {
-})} // end of code block
+} // end of code block
 
 else
 
-// start of code block
-{casper.then(function() {
+{ // start of code block
 
-this.echo('footer not found');
-})} // end of code block
+casper.then(function() {this.echo('footer not found');});
+
+} // end of code block
+});
 
 // test visible function
-if ((visible('footer')))
+casper.then(function() {if ((visible('footer')))
+{ // start of code block
 
-// start of code block
-{casper.then(function() {
+casper.then(function() {this.echo('footer is visible');});
 
-this.echo('footer is visible');
-})} // end of code block
+} // end of code block
 
 else
 
-// start of code block
-{casper.then(function() {
+{ // start of code block
 
-this.echo('footer not visible');
-})} // end of code block
+casper.then(function() {this.echo('footer not visible');});
 
-// test title function
-this.echo(title());
-if (((title().indexOf('About')>-1)))
-this.echo('page title contains About');
-// test url function
-this.echo(url());
-if (((url().indexOf('org')>-1)))
-this.echo('page url contains org');
-// test text function
-this.echo(text());
-if (((text().indexOf('automation')>-1)))
-this.echo('page text contains automation');
+} // end of code block
+});
+
 // test count function
-this.echo(count('element'));
+casper.then(function() {this.echo(count('element'));});
+
+casper.then(function() { // start of JS code
 element_count = count('element')
-for (n=1; n<=element_count; n++)
+}); // end of JS code
 
-// start of IIFE pattern
-(function (n) {
-// start of code block
-{casper.then(function() {
+casper.then(function() {for (n=1; n<=element_count; n++)
+(function (n) { // start of IIFE pattern
+{ // start of code block
 
-this.echo(n);
-})} // end of code block
+casper.then(function() {this.echo(n);});
+
+} // end of code block
 })(n); // end of IIFE pattern
 });
 
-casper.then(function() {
+// test url function
+casper.then(function() {this.echo(url());});
+
+casper.then(function() {if (((url().indexOf('org')>-1)))
+{ // start of code block
+
+casper.then(function() {this.echo('page url contains org');});
+
+} // end of code block
 });
 
-casper.then(function() {
-techo('\n' + this.getCurrentUrl() + ' - ' + this.getTitle());
+// test title function
+casper.then(function() {this.echo(title());});
+
+casper.then(function() {if (((title().indexOf('About')>-1)))
+{ // start of code block
+
+casper.then(function() {this.echo('page title contains About');});
+
+} // end of code block
+});
+
+// test text function
+casper.then(function() {this.echo(text());});
+
+casper.then(function() {if (((text().indexOf('automation')>-1)))
+{ // start of code block
+
+casper.then(function() {this.echo('page text contains automation');});
+
+} // end of code block
+});
+
+// test timer function
+casper.then(function() { // start of JS code
+start = timer()
+}); // end of JS code
+
+casper.then(function() {techo('wait 3 seconds');});
+casper.wait(3000, function() {});
+
+casper.then(function() { // start of JS code
+time_taken = timer()
+}); // end of JS code
+
+casper.then(function() {this.echo('time taken - '+time_taken+' seconds');});
+
+casper.then(function() {techo('\n' + this.getCurrentUrl() + ' - ' + this.getTitle());
 techo('FINISH - automation finished - ' + ((Date.now()-automation_start_time)/1000).toFixed(1) + 's\n');});
 
 casper.run();

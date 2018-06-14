@@ -1,7 +1,8 @@
 # SIKULI INTERFACE FOR TAGUI FRAMEWORK ~ TEBEL.ORG #
 
-# timeout in seconds for finding a web element
-setAutoWaitTimeout(10)
+# timeout in seconds for finding an element
+wait_timeout = 10
+setAutoWaitTimeout(wait_timeout)
 
 # delay in seconds between scanning for inputs
 scan_period = 0.5
@@ -146,6 +147,17 @@ def vision_intent ( raw_intent ):
 	print '[tagui] ACTION - ' + params
 	exec(params,globals())
 	return 1
+	
+def visible_intent ( raw_intent ):
+	setAutoWaitTimeout(1)
+	params = (raw_intent + ' ')[1+(raw_intent + ' ').find(' '):].strip()
+	print '[tagui] ACTION - ' + raw_intent.strip()
+	if exists(params):
+		setAutoWaitTimeout(wait_timeout)
+		return 1
+	else:
+		setAutoWaitTimeout(wait_timeout)
+		return 0
 
 # function to interpret input intent
 def get_intent ( raw_intent ):
@@ -171,6 +183,8 @@ def get_intent ( raw_intent ):
 		return 'snap'
 	if raw_intent[:7].lower() == 'vision ':
 		return 'vision'
+	if raw_intent[:8].lower() == 'visible ' or raw_intent[:8].lower() == 'present ':
+		return 'visible';
 	return 'error'
 
 # function to parse and act on intent
@@ -198,6 +212,8 @@ def parse_intent ( script_line ):
 		return snap_intent(script_line)
 	elif intent_type == 'vision':
 		return vision_intent(script_line)
+	elif intent_type == 'visible':
+		return visible_intent(script_line);
 	else:
 		return 0 
 
