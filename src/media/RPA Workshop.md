@@ -140,6 +140,7 @@ Flow Sample |Purpose
 [7_testing](https://github.com/kelaberetiv/TagUI/blob/master/src/samples/7_testing)|shows how to use check step assertions for CI/CD integration
 [8_hastebin](https://github.com/kelaberetiv/TagUI/blob/master/src/samples/8_hastebin)|used by upload option to upload flow result to hastebin.com
 [9_misc](https://github.com/kelaberetiv/TagUI/blob/master/src/samples/9_misc)|shows how to use steps popup, frame, dom, js, { and } block
+[a_facedetect](https://github.com/kelaberetiv/TagUI/blob/master/src/samples/a_facedetect)|uses face recognition to detect profile images on webpages
 
 # [Using it (flexible)](https://github.com/kelaberetiv/TagUI#to-use)
 *In this section, we'll spend some time exploring a particular feature of TagUI that you'll like to try out.*
