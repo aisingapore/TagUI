@@ -1,8 +1,4 @@
-***A video recording of this workshop can be found here - https://www.youtube.com/watch?v=-1M6yuiF7BQ***
-
-TagUI is a CLI tool for automating user interactions. This branch of automation is commercially known as RPA (robotic process automation), and primarily aims to reproduce user interactions with computer applications - for example mouse clicks and keyboard entries.
-
-For more information on TagUI, visit its [repository page](https://github.com/kelaberetiv/TagUI). TagUI is now maintained by [AI Singapore (aisingapore.org)](https://www.aisingapore.org), a government-funded initiative to build local artificial intelligence capabilities. The intention is to add AI capabilities to TagUI while keeping it open-source and free to use.
+TagUI is a CLI tool for digital process automation. This branch of automation is commercially known as RPA (robotic process automation), and primarily aims to reproduce user interactions with computer applications - for example mouse clicks and keyboard entries. For more information on TagUI, visit its [repository page](https://github.com/kelaberetiv/TagUI).
 
 # [Setup](https://github.com/kelaberetiv/TagUI#set-up)
 *In this section, we'll download and install TagUI on your computer. For Windows, unzip the tagui folder to c:\ and for macOS, unzip the tagui folder to your desktop. For Linux, unzip the tagui folder to a convenient folder on your laptop.*
@@ -53,7 +49,7 @@ cd /home/your_id/tagui/src
 ./tagui samples/1_yahoo
 ```
 
-Now try the same workflow with Chrome browser by putting chrome as option (eg tagui samples\1_yahoo chrome). **Be sure to save your work and close all your existing tabs as Chrome will be restarted to establishe connection with TagUI.** The automation will now run in the foreground instead, so you'll be able to see the navigation on Yahoo and DuckDuckGo websites. TagUI can also be run from desktop icons, scheduled tasks, or REST API calls.
+Now try the same workflow with Chrome browser by putting chrome as option (eg tagui samples\1_yahoo chrome). **Be sure to save your work and close all your existing tabs as Chrome will be restarted to establish connection with TagUI.** The automation will now run in the foreground instead, so you'll be able to see the navigation on Yahoo and DuckDuckGo websites. TagUI can also be run from desktop icons, scheduled tasks, or REST API calls.
 
 <details>
   <summary>
@@ -123,8 +119,6 @@ Tip - for Windows, use Task Scheduler instead (search schedule from Start Menu)
 Download from [Chrome Web Store](https://chrome.google.com/webstore/detail/tagui-web-automation/egdllmehgfgjebhlkjmcnhiocfcidnjk/) to use TagUI Chrome web browser extension for recording automation flows. TagUI Chrome extension is based on [Resurrectio tool](https://github.com/ebrehault/resurrectio) and records steps such as page navigation, clicking web elements and entering information. To start recording automation flows, click TagUI icon on your Chrome toolbar. Right-click for shortcuts to some TagUI steps, such as capturing webpage screenshot or to show the element identifier.
 
 The recording is not foolproof (for example, the underlying recording engine cannot capture frames, popup windows or tab key input). It is meant to simplify flow creation with some edits, instead of typing everything manually. [See this video](https://www.youtube.com/watch?v=bFvsc4a8hWQ) for an example of recording sequence of steps, editing for adjustments and playing back the automation.
-
-Sample website to try out the Chrome extension - https://www.m1.com.sg/personal/mobile/plans/reserveanumber
 
 ### FLOW SAMPLES (15 minutes)
 Following automation flow samples ([tagui/src/samples folder](https://github.com/kelaberetiv/TagUI/tree/master/src/samples)) are included with TagUI
