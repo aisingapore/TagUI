@@ -59,7 +59,11 @@ def type_intent ( raw_intent ):
 	param1 = params[:params.find(' as ')].strip()
 	param2 = params[4+params.find(' as '):].strip()
 	print '[tagui] ACTION - type ' + param1 + ' as ' + param2
-	if exists(param1):
+	param2 = param2.replace('[enter]','\n')
+	param2 = param2.replace('[clear]','\b')
+	if param1.endswith('page.png') or param1.endswith('page.bmp'):
+		return type(param2)
+	elif exists(param1):
 		return type(param1,param2) 
 	else:
 		return 0
