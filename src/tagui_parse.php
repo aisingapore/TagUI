@@ -958,8 +958,7 @@ else if (($code_block_intent == "for") and (substr($logic,0,1) == "}")) {
 $last_delimiter_pos = strrpos($GLOBALS['for_loop_tracker'],"|");
 $for_loop_variable_name = substr($GLOBALS['for_loop_tracker'],$last_delimiter_pos+1);
 $code_block_footer = "})(" . $for_loop_variable_name . "); // end of IIFE pattern\n".
-"if (for_loop_signal == '[BREAK_SIGNAL]') {for_loop_signal = ''; break;}\n".
-"else if (for_loop_signal == '[CONTINUE_SIGNAL]') {for_loop_signal = ''; continue;}}\n";
+"casper.then(function(){for_loop_signal = '[BREAK_SIGNAL]';});}";
 $last_delimiter_pos = strrpos($GLOBALS['code_block_tracker'],"|");
 $GLOBALS['code_block_tracker']=substr($GLOBALS['code_block_tracker'],0,$last_delimiter_pos);
 $last_delimiter_pos = strrpos($GLOBALS['for_loop_tracker'],"|");
@@ -1061,7 +1060,8 @@ if (strpos($raw_logic,"{")!==false) echo "ERROR - " . current_line() . " put { t
 if (substr($logic,0,6)=="while ") $GLOBALS['inside_while_loop'] = 1; 
 
 // section 4 - 
-if (($logic=="break") or ($logic=="break;")) $logic = "for_loop_signal = '[BREAK_SIGNAL]'; return;";
+if (($logic=="break") or ($logic=="break;"))
+$logic = "casper.bypass(teleport_distance()); return;";
 if (($logic=="continue") or ($logic=="continue;")) $logic = "for_loop_signal = '[CONTINUE_SIGNAL]'; return;";
 
 // return code after all the parsing and special handling
