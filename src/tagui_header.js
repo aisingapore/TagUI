@@ -44,7 +44,9 @@ var inside_vision_block = 0; var inside_js_block = 0; var inside_dom_block = 0;
 // determine how many casper.then steps to skip
 function teleport_distance(teleport_marker) {number_of_hops = 0; for (s = casper.steps.length-1; s >= 0; s--) {
 // casper.echo(casper.step.toString() + ' | ' + s + ' -----------\n' + casper.steps[s].toString());
-if (casper.steps[s].toString().indexOf('[BREAK_SIGNAL]['+teleport_marker+']') > -1) {number_of_hops = s; break;}};
+// if (casper.steps[s].toString().indexOf('[BREAK_SIGNAL]['+teleport_marker+']') > -1) {number_of_hops = s; break;}
+if (casper.steps[s].toString() == ("function () {for_loop_signal = '[BREAK_SIGNAL]["+teleport_marker+"]';}"))
+{number_of_hops = s; break;}}
 // casper.echo('# - '+number_of_hops);
 return (number_of_hops - casper.step);}
 
