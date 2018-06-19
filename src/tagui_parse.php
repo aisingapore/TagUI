@@ -958,7 +958,7 @@ else if (($code_block_intent == "for") and (substr($logic,0,1) == "}")) {
 $last_delimiter_pos = strrpos($GLOBALS['for_loop_tracker'],"|");
 $for_loop_variable_name = substr($GLOBALS['for_loop_tracker'],$last_delimiter_pos+1);
 $code_block_footer = "})(" . $for_loop_variable_name . "); // end of IIFE pattern\n".
-"casper.then(function(){for_loop_signal = '[BREAK_SIGNAL]';});}";
+"casper.then(function() {for_loop_signal = '[BREAK_SIGNAL][".$for_loop_variable_name."]';});}";
 $last_delimiter_pos = strrpos($GLOBALS['code_block_tracker'],"|");
 $GLOBALS['code_block_tracker']=substr($GLOBALS['code_block_tracker'],0,$last_delimiter_pos);
 $last_delimiter_pos = strrpos($GLOBALS['for_loop_tracker'],"|");
@@ -1061,7 +1061,8 @@ if (substr($logic,0,6)=="while ") $GLOBALS['inside_while_loop'] = 1;
 
 // section 4 - 
 if (($logic=="break") or ($logic=="break;"))
-$logic = "casper.bypass(teleport_distance()); return;";
+{$teleport_marker = str_replace("|","",substr($GLOBALS['for_loop_tracker'],strrpos($GLOBALS['for_loop_tracker'],"|")));
+$logic = "casper.bypass(teleport_distance('".$teleport_marker."')); return;";}
 if (($logic=="continue") or ($logic=="continue;")) $logic = "for_loop_signal = '[CONTINUE_SIGNAL]'; return;";
 
 // return code after all the parsing and special handling
