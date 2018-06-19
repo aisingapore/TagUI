@@ -192,6 +192,18 @@ Download from [Chrome Web Store](https://chrome.google.com/webstore/detail/tagui
 
 </details>
 
+### TAGUI WRITER & SCREENSHOTER
+TagUI Writer is a Windows app created by [@adegard](https://github.com/adegard) which makes it easy to write TagUI scripts. By pressing Ctrl + Left-click, a popup menu will appear with the list of TagUI steps for you to paste into your text editor. Arnaud also created a ScreenShoter app which makes it easy to capture snaphots for TagUI visual automation. [Download them here](https://github.com/adegard/tagui_scripts).
+
+<details>
+  <summary>
+    Click to show a preview of how TagUI Writer looks like (it works across different editors)
+  </summary>
+
+![TagUI Writer](https://raw.githubusercontent.com/kelaberetiv/TagUI/master/src/media/tagui_writer.png)
+
+</details>
+
 ### NATIVE LANGUAGES
 To run TagUI flows in native languages or output flow execution in other languages ([see demo run](https://github.com/kelaberetiv/TagUI/issues/68#issuecomment-344380657))
 1. set your default flow language with [tagui_language variable](https://github.com/kelaberetiv/TagUI/blob/master/src/tagui_config.txt) in tagui_config.txt
