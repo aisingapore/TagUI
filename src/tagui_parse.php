@@ -485,8 +485,8 @@ if ((substr($raw_intent,-1)=="{") or (substr($raw_intent,-1)=="}")) return true;
 if ((substr($raw_intent,0,3)=="if ") or (substr($raw_intent,0,4)=="else")) return true;
 if ((substr($raw_intent,0,4)=="for ") or (substr($raw_intent,0,6)=="while ")) return true;
 if ((substr($raw_intent,0,7)=="switch ") or (substr($raw_intent,0,5)=="case ")) return true;
-if ((substr($raw_intent,0,6)=="break;") or (substr($raw_intent,0,5)=="break")) return true;
-if ((substr($raw_intent,0,9)=="continue;") or (substr($raw_intent,0,8)=="continue")) return true;
+if ((substr($raw_intent,0,6)=="break;") or ($raw_intent=="break")) return true;
+if ((substr($raw_intent,0,9)=="continue;") or ($raw_intent=="continue")) return true;
 if ((substr($raw_intent,0,7)=="casper.") or (substr($raw_intent,0,5)=="this.")) return true;
 if (substr($raw_intent,0,7)=="chrome.") return true; // chrome object for chrome integration
 if (substr($raw_intent,0,5)=="test.") {$GLOBALS['test_automation']++; return true;}
@@ -953,7 +953,8 @@ $GLOBALS['code_block_tracker']=substr($GLOBALS['code_block_tracker'],0,$last_del
 else if (($code_block_intent == "for") and (substr($logic,0,1) == "{")) {
 $last_delimiter_pos = strrpos($GLOBALS['for_loop_tracker'],"|");
 $for_loop_variable_name = substr($GLOBALS['for_loop_tracker'],$last_delimiter_pos+1);
-$code_block_header = "{(function (" . $for_loop_variable_name . ") { // start of IIFE pattern\n";}
+$code_block_header = "{casper.then(function() {for_loop_signal = '[CONTINUE_SIGNAL][".$for_loop_variable_name."]';});\n".
+"(function (" . $for_loop_variable_name . ") { // start of IIFE pattern\n";}
 
 else if (($code_block_intent == "for") and (substr($logic,0,1) == "}")) {
 $last_delimiter_pos = strrpos($GLOBALS['for_loop_tracker'],"|");
@@ -1064,7 +1065,9 @@ if (substr($logic,0,6)=="while ") $GLOBALS['inside_while_loop'] = 1;
 if (($logic=="break") or ($logic=="break;"))
 {$teleport_marker = str_replace("|","",substr($GLOBALS['for_loop_tracker'],strrpos($GLOBALS['for_loop_tracker'],"|")));
 $logic = "casper.bypass(teleport_distance('[BREAK_SIGNAL][".$teleport_marker."]')); return;";}
-if (($logic=="continue") or ($logic=="continue;")) $logic = "for_loop_signal = '[CONTINUE_SIGNAL]'; return;";
+if (($logic=="continue") or ($logic=="continue;"))
+{$teleport_marker = str_replace("|","",substr($GLOBALS['for_loop_tracker'],strrpos($GLOBALS['for_loop_tracker'],"|")));
+$logic = "casper.bypass(teleport_distance('[CONTINUE_SIGNAL][".$teleport_marker."]')); return;";}
 
 // return code after all the parsing and special handling
 return $logic;}

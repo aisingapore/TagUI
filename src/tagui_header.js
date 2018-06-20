@@ -42,9 +42,14 @@ var inside_py_block = 0; var inside_r_block = 0; var inside_run_block = 0;
 var inside_vision_block = 0; var inside_js_block = 0; var inside_dom_block = 0;
 
 // determine how many casper.then steps to skip
-function teleport_distance(teleport_marker) {number_of_hops = 0; for (s = casper.steps.length-1; s >= 0; s--) {
+function teleport_distance(teleport_marker) {number_of_hops = 0;
+if (teleport_marker.indexOf('[BREAK_SIGNAL]') > -1) {for (s = casper.steps.length-1; s >= 0; s--) {
 if (casper.steps[s].toString() == ("function () {for_loop_signal = '"+teleport_marker+"';}"))
-{number_of_hops = s; break;}}; return (number_of_hops - casper.step);}
+{number_of_hops = s; break;}};} // search backward direction for break step
+else if (teleport_marker.indexOf('[CONTINUE_SIGNAL]') > -1) {for (s = 0; s <= casper.steps.length-1; s++) {
+if (casper.steps[s].toString() == ("function () {for_loop_signal = '"+teleport_marker+"';}"))
+{number_of_hops = s; break;}};} // search forward direction for continue step
+else return 0; if ((number_of_hops - casper.step) > 0) return (number_of_hops - casper.step); else return 0;}
 
 // techo function for handling quiet option
 function techo(echo_string) {if (!quiet_mode) { // mute about:blank, eg for desktop automation
@@ -782,8 +787,8 @@ if ((raw_intent.charAt(raw_intent.length-1) == '{') || (raw_intent.charAt(raw_in
 if ((raw_intent.substr(0,3) == 'if ') || (raw_intent.substr(0,4) == 'else')) return true;
 if ((raw_intent.substr(0,4) == 'for ') || (raw_intent.substr(0,6) == 'while ')) return true;
 if ((raw_intent.substr(0,7) == 'switch ') || (raw_intent.substr(0,5) == 'case ')) return true;
-if ((raw_intent.substr(0,6) == 'break;') || (raw_intent.substr(0,5) == 'break')) return true;
-if ((raw_intent.substr(0,9) == 'continue;') || (raw_intent.substr(0,8) == 'continue')) return true;
+if ((raw_intent.substr(0,6) == 'break;') || (raw_intent == 'break')) return true;
+if ((raw_intent.substr(0,9) == 'continue;') || (raw_intent == 'continue')) return true;
 if ((raw_intent.substr(0,7) == 'casper.') || (raw_intent.substr(0,5) == 'this.')) return true;
 if (raw_intent.substr(0,7) == 'chrome.') return true; // chrome object for chrome integration
 if (raw_intent.substr(0,5) == ('test'+'.')) return true; // avoid replacement with test option
