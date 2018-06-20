@@ -13,6 +13,9 @@ var automation_start_time = Date.now(); casper.echo('\nSTART - automation starte
 // initialise time for timer() function
 var timer_start_time = Date.now();
 
+// infinity constant for use in for loops
+var infinity = 1024;
+
 // initialise default global variables
 var quiet_mode = false; var save_text_count = 0; var snap_image_count = 0;
 

@@ -1,0 +1,5 @@
+echo infinity
+for n from 1 to infinity
+{
+echo n
+}
