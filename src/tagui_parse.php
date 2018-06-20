@@ -485,12 +485,13 @@ if ((substr($raw_intent,-1)=="{") or (substr($raw_intent,-1)=="}")) return true;
 if ((substr($raw_intent,0,3)=="if ") or (substr($raw_intent,0,4)=="else")) return true;
 if ((substr($raw_intent,0,4)=="for ") or (substr($raw_intent,0,6)=="while ")) return true;
 if ((substr($raw_intent,0,7)=="switch ") or (substr($raw_intent,0,5)=="case ")) return true;
-if ((substr($raw_intent,0,6)=="break;") or (substr($raw_intent,0,9)=="function ")) return true;
+if ((substr($raw_intent,0,6)=="break;") or (substr($raw_intent,0,5)=="break")) return true;
+if ((substr($raw_intent,0,9)=="continue;") or (substr($raw_intent,0,8)=="continue")) return true;
 if ((substr($raw_intent,0,7)=="casper.") or (substr($raw_intent,0,5)=="this.")) return true;
 if (substr($raw_intent,0,7)=="chrome.") return true; // chrome object for chrome integration
 if (substr($raw_intent,0,5)=="test.") {$GLOBALS['test_automation']++; return true;}
 if (substr($raw_intent,0,2)=="//") {$GLOBALS['real_line_number']--; return true;} 
-if (substr($raw_intent,-1)==";") return true;
+if (substr($raw_intent,-1)==";") return true; if (substr($raw_intent,0,9)=="function ") return true;
 // assume = is assignment statement, kinda acceptable as this is checked at the very end
 if (strpos($raw_intent,"=")!==false) return true; return false;}
 
@@ -957,7 +958,7 @@ $code_block_header = "{(function (" . $for_loop_variable_name . ") { // start of
 else if (($code_block_intent == "for") and (substr($logic,0,1) == "}")) {
 $last_delimiter_pos = strrpos($GLOBALS['for_loop_tracker'],"|");
 $for_loop_variable_name = substr($GLOBALS['for_loop_tracker'],$last_delimiter_pos+1);
-$code_block_footer = "})(" . $for_loop_variable_name . "); // end of IIFE pattern\n".
+$code_block_footer = "})(" . $for_loop_variable_name . "); // end of IIFE pattern, with dummy marker for break step\n".
 "casper.then(function() {for_loop_signal = '[BREAK_SIGNAL][".$for_loop_variable_name."]';});}";
 $last_delimiter_pos = strrpos($GLOBALS['code_block_tracker'],"|");
 $GLOBALS['code_block_tracker']=substr($GLOBALS['code_block_tracker'],0,$last_delimiter_pos);
@@ -1059,10 +1060,10 @@ if (strpos($raw_logic,"{")!==false) echo "ERROR - " . current_line() . " put { t
 // then avoid async wait (casper.then/waitFor/timeout will hang casperjs/phantomjs??) 
 if (substr($logic,0,6)=="while ") $GLOBALS['inside_while_loop'] = 1; 
 
-// section 4 - 
+// section 4 - to handle break and continue steps in for loops 
 if (($logic=="break") or ($logic=="break;"))
 {$teleport_marker = str_replace("|","",substr($GLOBALS['for_loop_tracker'],strrpos($GLOBALS['for_loop_tracker'],"|")));
-$logic = "casper.bypass(teleport_distance('".$teleport_marker."')); return;";}
+$logic = "casper.bypass(teleport_distance('[BREAK_SIGNAL][".$teleport_marker."]')); return;";}
 if (($logic=="continue") or ($logic=="continue;")) $logic = "for_loop_signal = '[CONTINUE_SIGNAL]'; return;";
 
 // return code after all the parsing and special handling

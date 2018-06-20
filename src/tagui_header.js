@@ -43,12 +43,8 @@ var inside_vision_block = 0; var inside_js_block = 0; var inside_dom_block = 0;
 
 // determine how many casper.then steps to skip
 function teleport_distance(teleport_marker) {number_of_hops = 0; for (s = casper.steps.length-1; s >= 0; s--) {
-// casper.echo(casper.step.toString() + ' | ' + s + ' -----------\n' + casper.steps[s].toString());
-// if (casper.steps[s].toString().indexOf('[BREAK_SIGNAL]['+teleport_marker+']') > -1) {number_of_hops = s; break;}
-if (casper.steps[s].toString() == ("function () {for_loop_signal = '[BREAK_SIGNAL]["+teleport_marker+"]';}"))
-{number_of_hops = s; break;}}
-// casper.echo('# - '+number_of_hops);
-return (number_of_hops - casper.step);}
+if (casper.steps[s].toString() == ("function () {for_loop_signal = '"+teleport_marker+"';}"))
+{number_of_hops = s; break;}}; return (number_of_hops - casper.step);}
 
 // techo function for handling quiet option
 function techo(echo_string) {if (!quiet_mode) { // mute about:blank, eg for desktop automation
@@ -786,11 +782,13 @@ if ((raw_intent.charAt(raw_intent.length-1) == '{') || (raw_intent.charAt(raw_in
 if ((raw_intent.substr(0,3) == 'if ') || (raw_intent.substr(0,4) == 'else')) return true;
 if ((raw_intent.substr(0,4) == 'for ') || (raw_intent.substr(0,6) == 'while ')) return true;
 if ((raw_intent.substr(0,7) == 'switch ') || (raw_intent.substr(0,5) == 'case ')) return true;
-if ((raw_intent.substr(0,6) == 'break;') || (raw_intent.substr(0,9) == 'function ')) return true;
+if ((raw_intent.substr(0,6) == 'break;') || (raw_intent.substr(0,5) == 'break')) return true;
+if ((raw_intent.substr(0,9) == 'continue;') || (raw_intent.substr(0,8) == 'continue')) return true;
 if ((raw_intent.substr(0,7) == 'casper.') || (raw_intent.substr(0,5) == 'this.')) return true;
 if (raw_intent.substr(0,7) == 'chrome.') return true; // chrome object for chrome integration
 if (raw_intent.substr(0,5) == ('test'+'.')) return true; // avoid replacement with test option
 if ((raw_intent.substr(0,2) == '//') || (raw_intent.charAt(raw_intent.length-1) == ';')) return true;
+if (raw_intent.substr(0,9) == 'function ') return true; // function definition
 // assume = is assignment statement, kinda acceptable as this is checked at the very end
 if (raw_intent.indexOf('=') > -1) return true; return false;}
 
