@@ -42,14 +42,17 @@ var inside_py_block = 0; var inside_r_block = 0; var inside_run_block = 0;
 var inside_vision_block = 0; var inside_js_block = 0; var inside_dom_block = 0;
 
 // determine how many casper.then steps to skip
-function teleport_distance(teleport_marker) {number_of_hops = 0;
+function teleport_distance(teleport_marker) {number_to_hop = 0;
 if (teleport_marker.indexOf('[BREAK_SIGNAL]') > -1) {for (s = casper.steps.length-1; s >= 0; s--) {
 if (casper.steps[s].toString() == ("function () {for_loop_signal = '"+teleport_marker+"';}"))
-{number_of_hops = s; break;}};} // search backward direction for break step
-else if (teleport_marker.indexOf('[CONTINUE_SIGNAL]') > -1) {for (s = 0; s <= casper.steps.length-1; s++) {
+{number_to_hop = s; break;}};} // search backward direction for break step
+else if (teleport_marker.indexOf('[CONTINUE_SIGNAL]') > -1) {for (s = casper.step; s <= casper.steps.length-1; s++) {
 if (casper.steps[s].toString() == ("function () {for_loop_signal = '"+teleport_marker+"';}"))
-{number_of_hops = s; break;}};} // search forward direction for continue step
-else return 0; if ((number_of_hops - casper.step) > 0) return (number_of_hops - casper.step); else return 0;}
+{number_to_hop = s; break;}}; // search forward direction for continue step
+if (number_to_hop == 0) {for (s = casper.steps.length-1; s >= 0; s--) {if (casper.steps[s].toString() == 
+("function () {for_loop_signal = '"+teleport_marker.replace('[CONTINUE_SIGNAL]','[BREAK_SIGNAL]')+"';}"))
+{number_to_hop = s; break;}};}} // handle as break if no step left to continue
+else return 0; if ((number_to_hop - casper.step) > 0) return (number_to_hop - casper.step); else return 0;}
 
 // techo function for handling quiet option
 function techo(echo_string) {if (!quiet_mode) { // mute about:blank, eg for desktop automation
