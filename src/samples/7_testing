@@ -53,7 +53,7 @@ echo 'count_number = ' count_number
 start = timer()
 
 // make some navigational steps, by searching for microsoft
-enter uh-search as microsoft
+type uh-search as microsoft
 click //*[@id="search-button"]
 
 // use timer() as a stopwatch to track elapsed time between calls
