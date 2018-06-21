@@ -1,6 +1,0 @@
-for n from 1 to 10
-{
-	echo n
-	if n equals to 6
-	break;
-}
