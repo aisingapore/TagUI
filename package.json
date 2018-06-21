@@ -1,7 +1,7 @@
 {
   "name": "tagui",
-  "version": "3.5.6",
-  "description": "RPA / CLI tool for automating user interactions",
+  "version": "4.0.0",
+  "description": "CLI tool for digital process automation (RPA)",
   "keywords": [
     "tagui"
   ],
