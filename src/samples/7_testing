@@ -45,6 +45,10 @@ check count('uh-tb-') more than or equals to 6|'header menu items >= 6'|'header 
 count_number = count('uh-tb-')
 echo 'count_number = ' count_number
 
+// helper functions can also be used in if conditions for decision-making
+// for eg - present(), visible(), count(), url(), title(), text(), timer()
+// csv_row() is useful for writing csv data, see HELPER FUNCTIONS in readme
+
 // use timer() as a stopwatch to track elapsed time between calls
 start = timer()
 
