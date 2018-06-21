@@ -13,6 +13,9 @@ var automation_start_time = Date.now(); casper.echo('\nSTART - automation starte
 // initialise time for timer() function
 var timer_start_time = Date.now();
 
+// infinity constant for use in for loops
+var infinity = 1024;
+
 // initialise default global variables
 var quiet_mode = false; var save_text_count = 0; var snap_image_count = 0;
 
@@ -40,6 +43,19 @@ var r_result = ''; var r_json = {}; var py_result = ''; var py_json = {};
 // track begin-finish blocks for integrations eg - py, r, run, vision, js, dom
 var inside_py_block = 0; var inside_r_block = 0; var inside_run_block = 0;
 var inside_vision_block = 0; var inside_js_block = 0; var inside_dom_block = 0;
+
+// determine how many casper.then steps to skip
+function teleport_distance(teleport_marker) {number_to_hop = 0;
+if (teleport_marker.indexOf('[BREAK_SIGNAL]') > -1) {for (s = casper.steps.length-1; s >= 0; s--) {
+if (casper.steps[s].toString() == ("function () {for_loop_signal = '"+teleport_marker+"';}"))
+{number_to_hop = s; break;}};} // search backward direction for break step
+else if (teleport_marker.indexOf('[CONTINUE_SIGNAL]') > -1) {for (s = casper.step; s <= casper.steps.length-1; s++) {
+if (casper.steps[s].toString() == ("function () {for_loop_signal = '"+teleport_marker+"';}"))
+{number_to_hop = s; break;}}; // search forward direction for continue step
+if (number_to_hop == 0) {for (s = casper.steps.length-1; s >= 0; s--) {if (casper.steps[s].toString() == 
+("function () {for_loop_signal = '"+teleport_marker.replace('[CONTINUE_SIGNAL]','[BREAK_SIGNAL]')+"';}"))
+{number_to_hop = s; break;}};}} // handle as break if no step left to continue
+else return 0; if ((number_to_hop - casper.step) > 0) return (number_to_hop - casper.step); else return 0;}
 
 // techo function for handling quiet option
 function techo(echo_string) {if (!quiet_mode) { // mute about:blank, eg for desktop automation
@@ -777,11 +793,13 @@ if ((raw_intent.charAt(raw_intent.length-1) == '{') || (raw_intent.charAt(raw_in
 if ((raw_intent.substr(0,3) == 'if ') || (raw_intent.substr(0,4) == 'else')) return true;
 if ((raw_intent.substr(0,4) == 'for ') || (raw_intent.substr(0,6) == 'while ')) return true;
 if ((raw_intent.substr(0,7) == 'switch ') || (raw_intent.substr(0,5) == 'case ')) return true;
-if ((raw_intent.substr(0,6) == 'break;') || (raw_intent.substr(0,9) == 'function ')) return true;
+if ((raw_intent.substr(0,6) == 'break;') || (raw_intent == 'break')) return true;
+if ((raw_intent.substr(0,9) == 'continue;') || (raw_intent == 'continue')) return true;
 if ((raw_intent.substr(0,7) == 'casper.') || (raw_intent.substr(0,5) == 'this.')) return true;
 if (raw_intent.substr(0,7) == 'chrome.') return true; // chrome object for chrome integration
 if (raw_intent.substr(0,5) == ('test'+'.')) return true; // avoid replacement with test option
 if ((raw_intent.substr(0,2) == '//') || (raw_intent.charAt(raw_intent.length-1) == ';')) return true;
+if (raw_intent.substr(0,9) == 'function ') return true; // function definition
 // assume = is assignment statement, kinda acceptable as this is checked at the very end
 if (raw_intent.indexOf('=') > -1) return true; return false;}
 
