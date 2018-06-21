@@ -352,6 +352,7 @@ Flow Sample |Purpose
 [8_hastebin](https://github.com/kelaberetiv/TagUI/blob/master/src/samples/8_hastebin)|used by upload option to upload flow result to hastebin.com
 [9_misc](https://github.com/kelaberetiv/TagUI/blob/master/src/samples/9_misc)|shows how to use steps popup, frame, dom, js, { and } block
 [a_facedetect](https://github.com/kelaberetiv/TagUI/blob/master/src/samples/a_facedetect)|uses face recognition to detect profile images on webpages
+[b_visualoutlook](https://github.com/kelaberetiv/TagUI/issues/113#issuecomment-378194245)|uses visual recognition for desktop MS Outlook email sending
 
 # Cheat Sheet
 ### AUTOMATION WORKFLOW
