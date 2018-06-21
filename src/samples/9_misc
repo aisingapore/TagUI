@@ -18,7 +18,7 @@ click ABOUT
 // indentation within the popup step block is optional
 popup about_tebel
 {
-	print file-about_tebel-LC2
+	show file-about_tebel-LC2
 	snap file-about_tebel-LC2
 }
 
@@ -35,7 +35,7 @@ echo ''
 echo 'returning to ' dummy_variable ' window context'
 
 // after the steps in popup context are completed, context returns to original window
-print (//*[@id="header"]//a)[1]
+show (//*[@id="header"]//a)[1]
 // above is XPath selector, an expressive way of identifying web elements
 
 // default execution context is local, webpage dom (document object model) is insulated
