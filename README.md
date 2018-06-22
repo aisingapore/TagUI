@@ -112,7 +112,7 @@ Optional - configure web browser settings in tagui_config.txt, such as browser r
 ```
 - Flow filename can be a local file or the URL of an online file
 - Filename can have no extension, .txt or .js or .tagui extension
-- See below for details on options or running tagui from any folder
+- Type tagui without parameters to see its version and options
 
 <details>
   <summary>
@@ -178,6 +178,18 @@ To schedule an automation flow in crontab (macOS/Linux), for example at 8am dail
 
 Tip - for Windows, use Task Scheduler instead (search schedule from Start Menu)
 
+### TAGUI WRITER & SCREENSHOTER
+TagUI Writer is a Windows app created by [@adegard](https://github.com/adegard) which makes it easy to write TagUI scripts. By pressing Ctrl + Left-click, a popup menu will appear with the list of TagUI steps for you to paste into your text editor. Arnaud also created a ScreenShoter app which makes it easy to capture snaphots for TagUI visual automation. [Download them here](https://github.com/adegard/tagui_scripts).
+
+<details>
+  <summary>
+    Click to show a preview of how TagUI Writer looks like (it works across different editors)
+  </summary>
+
+![TagUI Writer](https://raw.githubusercontent.com/kelaberetiv/TagUI/master/src/media/tagui_writer.png)
+
+</details>
+
 ### CHROME EXTENSION
 Download from [Chrome Web Store](https://chrome.google.com/webstore/detail/tagui-web-automation/egdllmehgfgjebhlkjmcnhiocfcidnjk/) to use TagUI Chrome web browser extension for recording automation flows.
 
@@ -189,18 +201,6 @@ Download from [Chrome Web Store](https://chrome.google.com/webstore/detail/tagui
   TagUI Chrome extension is based on [Resurrectio tool](https://github.com/ebrehault/resurrectio) and records steps such as page navigation, clicking web elements and entering information. To start recording automation flows, click TagUI icon on your Chrome toolbar. Right-click for shortcuts to some TagUI steps, such as capturing webpage screenshot or to show the element identifier.
 
   The recording is not foolproof (for example, the underlying recording engine cannot capture frames, popup windows or tab key input). It is meant to simplify flow creation with some edits, instead of typing everything manually. [See this video](https://www.youtube.com/watch?v=bFvsc4a8hWQ) for an example of recording sequence of steps, editing for adjustments and playing back the automation.
-
-</details>
-
-### TAGUI WRITER & SCREENSHOTER
-TagUI Writer is a Windows app created by [@adegard](https://github.com/adegard) which makes it easy to write TagUI scripts. By pressing Ctrl + Left-click, a popup menu will appear with the list of TagUI steps for you to paste into your text editor. Arnaud also created a ScreenShoter app which makes it easy to capture snaphots for TagUI visual automation. [Download them here](https://github.com/adegard/tagui_scripts).
-
-<details>
-  <summary>
-    Click to show a preview of how TagUI Writer looks like (it works across different editors)
-  </summary>
-
-![TagUI Writer](https://raw.githubusercontent.com/kelaberetiv/TagUI/master/src/media/tagui_writer.png)
 
 </details>
 
