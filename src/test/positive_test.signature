@@ -1,17 +1,23 @@
 /* OUTPUT CASPERJS SCRIPT FOR TAGUI FRAMEWORK ~ TEBEL.ORG */
 
 var casper = require('casper').create();
-// browser settings for casperjs (phantomjs)
+// TagUI web automation browser settings
 // verbose style to support tester module
 
+// set default flow language
+var tagui_language = 'english';
+
+// set time in ms before error out
 casper.options.waitTimeout = 10000;
 casper.options.logLevel = 'debug';
 
+// set web browser display size
 casper.options.viewportSize = {
 width: 1366,
 height: 768
 };
 
+// settings for PhantomJS mode
 casper.options.pageSettings = {
 loadImages: true,
 loadPlugins: true,
@@ -31,6 +37,9 @@ var p7 = casper.cli.raw.get(6); var p8 = casper.cli.raw.get(7); var p9 = casper.
 // save start time to measure execution time
 var automation_start_time = Date.now(); casper.echo('\nSTART - automation started - ' + Date().toLocaleString());
 
+// initialise time for timer() function
+var timer_start_time = Date.now();
+
 // initialise default global variables
 var quiet_mode = false; var save_text_count = 0; var snap_image_count = 0;
 
@@ -40,11 +49,16 @@ var sikuli_count = 0; var chrome_id = 0;
 // chrome context for frame handling and targetid for popup handling
 var chrome_context = 'document'; var chrome_targetid = '';
 
+// JSON variable to pass variables into browser DOM
+var dom_json = {}; var dom_result = '';
+
 // variable for advance usage of api step
 var api_config = {method:'GET', header:[], body:{}};
 
 // techo function for handling quiet option
-function techo(echo_string) {if (!quiet_mode) casper.echo(echo_string); return;}
+function techo(echo_string) {if (!quiet_mode) {if (tagui_language.toLowerCase() == 'english') casper.echo(echo_string);
+else {var translated_string = translate(echo_string,'to',tagui_language.toLowerCase()); casper.echo(translated_string);
+if (translated_string.indexOf('ERROR - translation engine') !== -1) casper.exit();}} return;}
 
 // for muting echo in test automation scripts
 function dummy_echo(muted_string) {return;}
@@ -54,9 +68,101 @@ function save_text(file_name,info_text) {var ds; if (flow_path.indexOf('/') !== 
 if (!file_name) {save_text_count++; file_name = flow_path + ds + 'text' + save_text_count.toString() + '.txt';}
 var fs = require('fs'); fs.write(file_name, info_text, 'w');}
 
+// for appending text information to file
+function append_text(file_name,info_text) {var ds; if (flow_path.indexOf('/') !== -1) ds = '/'; else ds = '\\';
+if (!file_name) {if (save_text_count==0) save_text_count++; // increment if 0, else use same count to append
+file_name = flow_path + ds + 'text' + save_text_count.toString() + '.txt';}
+var fs = require('fs'); fs.write(file_name, info_text + '\r\n', 'a');}
+
 // for saving snapshots of website to file
 function snap_image() {var ds; if (flow_path.indexOf('/') !== -1) ds = '/'; else ds = '\\';
 snap_image_count++; return (flow_path + ds + 'snap' + snap_image_count.toString() + '.png');}
+
+// for saving table from website to file
+function save_table(file_name,selector) {var ds; if (flow_path.indexOf('/') !== -1) ds = '/'; else ds = '\\';
+if (!file_name) {save_text_count++; file_name = flow_path + ds + 'table' + save_text_count.toString() + '.csv';}
+var row_data = ""; var table_cell = ""; var fs = require('fs'); fs.write(file_name, '', 'w'); // always reset file
+if (!casper.exists(selector) || (selector.toString().indexOf('xpath selector: ')==-1)) return false; // exit if invalid
+if (selector.toString().length == 16) selector = ''; else selector = selector.toString().substring(16); // get xpath
+for (table_row=1; table_row<=1024; table_row++) {row_data = ""; for (table_col=1; table_col<=1024; table_col++) {
+table_cell = '(((' + selector + '//tr)[' + table_row + ']//th)' + '|'; // build cell xpath selector to include
+table_cell += '((' + selector + '//tr)[' + table_row + ']//td))[' + table_col + ']'; // both td and td elements
+if (casper.exists(x(table_cell))) row_data = row_data + '","' + casper.fetchText(x(table_cell)).trim();
+else break;} // if searching for table cells (th and td) is not successful,  means end of row is reached
+if (row_data.substr(0,2) == '",') {row_data = row_data.substr(2); row_data += '"'; append_text(file_name,row_data);}
+else return true;}} // if '",' is not found, means end of table is reached as there is no cell found in row
+
+// for translating multi-language flows (comments in translate.php)
+function translate(script_line,direction,language) {var start_keywords = 
+'|click|tap|move|hover|type|enter|select|choose|read|fetch|show|print|save|echo|dump|write|snap|table|'+
+'wait|live|download|upload|load|receive|frame|popup|timeout|api|dom|js|else if|else|if|for|while|check|';
+var to_separator_keywords = '|read|fetch|save|load|dump|write|snap|table|download|receive|for|'
+var as_separator_keywords = '|type|enter|select|choose|upload|'; var forloop_keywords = '|from|';
+var start_conditions_keywords = '|else if|if|for|while|check|'; var start_helper_keywords = '|echo|dump|write|';
+var conditions_keywords = '|more than or equals to|more than or equal to|greater than or equals to|greater than or equal to|higher than or equals to|higher than or equal to|less than or equals to|less than or equal to|lesser than or equals to|lesser than or equal to|lower than or equals to|lower than or equal to|more than|greater than|higher than|less than|lesser than|lower than|not equals to|not equal to|equals to|equal to|not contains|not contain|contains|contain|and|or|';
+var helper_keywords = '|title()|url()|text()|timer()|count()|present()|visible()|';
+var seconds_keywords = '|seconds|second|'; var start_seconds_keywords = '|wait|timeout|';
+if (!script_line || script_line == '') return '';
+if (!direction || direction == '') return 'ERROR - translation engine direction parameter missing';
+if (!language || language == '') return 'ERROR - translation engine language parameter missing';
+if (script_line == '' || script_line == '\r\n' || script_line == '\n') return script_line;
+var front_script_line_return = ''; if (script_line.charAt(0) == '\n') front_script_line_return = '\n';
+var back_script_line_return = ''; if (script_line.substr(-1) == '\n') back_script_line_return = '\n';
+direction = direction.toLowerCase();
+if (direction !== 'to' && direction !== 'from') return 'ERROR - translation engine direction must be to or from'; 
+if (direction == 'from') {var column_from = 1; var column_to = 0;} else {var column_from = 0; var column_to = 1;}
+language = language.toLowerCase(); var language_count = 0;
+var ds; if (flow_path.indexOf('/') !== -1) ds = '/'; else ds = '\\';
+var language_file = 'languages' + ds + language + '.csv'; var fs = require('fs');
+if (!fs.exists(language_file)) return 'ERROR - translation engine ' + language + '.csv file missing'; else {
+var language_raw = fs.read(language_file); if (language_raw.indexOf('\r\n') !== -1)
+var language_data = language_raw.split(/\r\n/).map(function(line) {return line.split(',');});
+else var language_data = language_raw.split(/\n/).map(function(line) {return line.split(',');});
+language_count = language_data.length-1;
+if (!language_data[language_count][0] || language_data[language_count][0] == '') language_count--;}
+script_line = '[START_OF_LINE]'+script_line.trim()+'[END_OF_LINE]'; var start_word = '[NOT_ASSIGNED]';
+for (language_check = 1; language_check <= language_count; language_check++) {
+if (start_keywords.indexOf('|'+language_data[language_check][0]+'|') !== -1) {
+if (start_word !== '[NOT_ASSIGNED]') continue;
+if ((script_line.indexOf('[START_OF_LINE]'+language_data[language_check][column_from]+' ') !== -1) || 
+(script_line.indexOf('[START_OF_LINE]'+language_data[language_check][column_from]+'[END_OF_LINE]') !== -1))
+start_word = language_data[language_check][0];
+var regex = new RegExp('\\[START_OF_LINE\\]'+language_data[language_check][column_from]+' ','g');
+script_line = script_line.replace(regex,'[START_OF_LINE]'+language_data[language_check][column_to]+' ');
+var regex = new RegExp('\\[START_OF_LINE\\]'+language_data[language_check][column_from]+'\\[END_OF_LINE\\]','g');
+script_line = script_line.replace(regex,'[START_OF_LINE]'+language_data[language_check][column_to]+'[END_OF_LINE]');}
+else if (conditions_keywords.indexOf('|'+language_data[language_check][0]+'|') !== -1) {
+if (start_word == 'check') {var array_script_line = script_line.split('|');
+var regex = new RegExp(' '+language_data[language_check][column_from]+' ','g');
+array_script_line[0] = array_script_line[0].replace(regex,' '+language_data[language_check][column_to]+' ');
+script_line = array_script_line.join('|');}
+else if ((start_word !== '[NOT_ASSIGNED]') && (start_conditions_keywords.indexOf('|'+start_word+'|') !== -1))
+{var regex = new RegExp(' '+language_data[language_check][column_from]+' ','g');
+script_line = script_line.replace(regex,' '+language_data[language_check][column_to]+' ');}}
+else if (seconds_keywords.indexOf('|'+language_data[language_check][0]+'|') !== -1) {
+if ((start_word !== '[NOT_ASSIGNED]') && (start_seconds_keywords.indexOf('|'+start_word+'|') !== -1))
+{var regex = new RegExp(' '+language_data[language_check][column_from]+'\\[END_OF_LINE\\]','g');
+script_line = script_line.replace(regex,' '+language_data[language_check][column_to]+'[END_OF_LINE]');}}
+else if (forloop_keywords.indexOf('|'+language_data[language_check][0]+'|') !== -1) {
+if (start_word == 'for')
+{var regex = new RegExp(' '+language_data[language_check][column_from]+' ','g');
+script_line = script_line.replace(regex,' '+language_data[language_check][column_to]+' ');}}
+else if (language_data[language_check][0] == 'to') {
+if ((start_word !== '[NOT_ASSIGNED]') && (to_separator_keywords.indexOf('|'+start_word+'|') !== -1))
+{var regex = new RegExp(' '+language_data[language_check][column_from]+' ','g');
+script_line = script_line.replace(regex,' '+language_data[language_check][column_to]+' ');}}
+else if (language_data[language_check][0] == 'as') {
+if ((start_word !== '[NOT_ASSIGNED]') && (as_separator_keywords.indexOf('|'+start_word+'|') !== -1))
+{var regex = new RegExp(' '+language_data[language_check][column_from]+' ','g');
+script_line = script_line.replace(regex,' '+language_data[language_check][column_to]+' ');}}
+else if (helper_keywords.indexOf('|'+language_data[language_check][0]+'|') !== -1) {
+if (((start_word !== '[NOT_ASSIGNED]') && (start_conditions_keywords.indexOf('|'+start_word+'|') !== -1))
+|| ((start_word !== '[NOT_ASSIGNED]') && (start_helper_keywords.indexOf('|'+start_word+'|') !== -1))
+|| (script_line.indexOf('=') !== -1))
+{var regex = new RegExp((' '+language_data[language_check][column_from]).replace('(','\\(').replace(')',''),'g');
+script_line = script_line.replace(regex,(' '+language_data[language_check][column_to]).replace(')',''));}}}
+script_line = script_line.replace('[START_OF_LINE]','').replace('[END_OF_LINE]','');
+return front_script_line_return+script_line.trim()+back_script_line_return;}
 
 // for checking if selector is xpath selector
 function is_xpath_selector(selector) {if (selector.length == 0) return false;
@@ -103,6 +209,33 @@ if (casper.exists(x('//*[@href="'+locator+'"]'))) return true;
 if (casper.exists(x('//*[contains(@href,"'+locator+'")]'))) return true;
 return false;}
 
+// friendlier name to use check_tx() in if condition in flow
+function present(element_locator) {if (!element_locator) return false; else return check_tx(element_locator);}
+
+// friendlier name to check element visibility using elementVisible()
+function visible(element_locator) {if (!element_locator) return false;
+var element_located = tx(element_locator); var element_visible = casper.elementVisible(element_located);
+// if tx() returns x('/html') means that the element is not found, so set element_visible to false
+if (element_located.toString() == x('/html').toString()) element_visible = false; return element_visible;}
+
+// friendlier name to count elements using countElements()
+function count(element_locator) {if (!element_locator) return 0;
+var element_located = tx(element_locator); var element_count = casper.countElements(element_located);
+// if tx() returns x('/html') means that the element is not found, so set element_count to 0
+if (element_located.toString() == x('/html').toString()) element_count = 0; return element_count;}
+
+// friendlier name to get web page title using getTitle()
+function title() {return casper.getTitle();}
+
+// friendlier name to get web page url using getCurrentUrl() 
+function url() {return casper.getCurrentUrl();}
+
+// friendlier name to get web page text content using evaluate()
+function text() {return casper.evaluate(function() {return document.body.innerText || document.body.textContent;});}
+
+function timer() {// return time elapsed in seconds between calls
+var time_elapsed = ((Date.now()-timer_start_time)/1000); timer_start_time = Date.now(); return time_elapsed;}
+
 function sleep(ms) { // helper to add delay during loops
 var time_now = new Date().getTime(); var time_end = time_now + ms;
 while(time_now < time_end) {time_now = new Date().getTime();}}
@@ -112,7 +245,7 @@ function sikuli_handshake() { // techo('[connecting to sikuli process]');
 var ds; if (flow_path.indexOf('/') !== -1) ds = '/'; else ds = '\\';
 var fs = require('fs'); fs.write('tagui.sikuli'+ds+'tagui_sikuli.in','','w'); var sikuli_handshake = '';
 if (!fs.exists('tagui.sikuli'+ds+'tagui_sikuli.out')) fs.write('tagui.sikuli'+ds+'tagui_sikuli.out','','w');
-do {sleep(1000); sikuli_handshake = fs.read('tagui.sikuli'+ds+'tagui_sikuli.out').trim();}
+do {sleep(500); sikuli_handshake = fs.read('tagui.sikuli'+ds+'tagui_sikuli.out').trim();}
 while (sikuli_handshake !== '[0] START'); // techo('[connected to sikuli process]');
 }
 
@@ -121,7 +254,7 @@ function sikuli_step(sikuli_intent) {sikuli_count++;
 if (sikuli_count == 1) sikuli_handshake(); // handshake on first call
 var ds; if (flow_path.indexOf('/') !== -1) ds = '/'; else ds = '\\';
 var fs = require('fs'); fs.write('tagui.sikuli'+ds+'tagui_sikuli.in','['+sikuli_count.toString()+'] '+sikuli_intent,'w');
-var sikuli_result = ''; do {sleep(1000); sikuli_result = fs.read('tagui.sikuli'+ds+'tagui_sikuli.out').trim();}
+var sikuli_result = ''; do {sleep(500); sikuli_result = fs.read('tagui.sikuli'+ds+'tagui_sikuli.out').trim();}
 while (sikuli_result.indexOf('['+sikuli_count.toString()+'] ') == -1);
 if (sikuli_result.indexOf('SUCCESS') !== -1) return true; else return false;}
 
@@ -136,12 +269,12 @@ do {sleep(100); chrome_handshake = fs.read('tagui_chrome.out').trim();}
 while (chrome_handshake !== '[0] START'); // techo('[connected to chrome websocket]');
 }
 
-// send websocket message to chrome browser using chrome debugging protocol
+// send websocket message to chrome browser using chrome devtools protocol
 // php helper process tagui_chrome.php running to handle this concurrently
 function chrome_step(method,params) {chrome_id++;
 if (chrome_id == 1) chrome_handshake(); // handshake on first call
 var chrome_intent = JSON.stringify({'id': chrome_id, 'method': method, 'params': params});
-if (chrome_targetid !== '') chrome_intent = JSON.stringify({'id': chrome_id, 'method': 'Target.sendMessageToTarget', 'params': {'targetId': chrome_targetid, 'message': chrome_intent}}); // send as message to target if context is popup
+if (chrome_targetid !== '') chrome_intent = JSON.stringify({'id': chrome_id, 'method': 'Target.sendMessageToTarget', 'params': {'sessionId': chrome_targetid, 'message': chrome_intent}}); // send as message to target if context is popup
 var fs = require('fs'); fs.write('tagui_chrome.in','['+chrome_id.toString()+'] '+chrome_intent,'w');
 var chrome_result = ''; do {sleep(100); chrome_result = fs.read('tagui_chrome.out').trim();}
 while (chrome_result.indexOf('['+chrome_id.toString()+'] ') == -1);
@@ -159,6 +292,24 @@ var ws_message = chrome_step('Runtime.evaluate',{expression: 'document.evaluate(
 else var ws_message = chrome_step('Runtime.evaluate',{expression: chrome_context+'.querySelectorAll(\''+selector+'\').length'});
 try {var ws_json = JSON.parse(ws_message); if (ws_json.result.result.value > 0) return true; else return false;}
 catch(e) {return false;}};
+
+chrome.elementVisible = function(selector) { // same as chrome.exists, except for checking visibility
+if ((selector.toString().length >= 16) && (selector.toString().substr(0,16) == 'xpath selector: '))
+{if (selector.toString().length == 16) selector = ''; else selector = selector.toString().substring(16);
+var ws_message = chrome_step('Runtime.evaluate',{expression: 'var e = document.evaluate(\''+selector+'\','+chrome_context+',null,XPathResult.ORDERED_NODE_SNAPSHOT_TYPE,null).snapshotItem(0); var visible = false; if (!e) visible = false; else {var style = window.getComputedStyle(e); visible = style && style.display !== \'none\' && style.visibility !== \'hidden\' && style.opacity !== \'0\';}; visible'});}
+else var ws_message = chrome_step('Runtime.evaluate',{expression: 'var e = '+chrome_context+'.querySelector(\''+selector+'\'); var visible = false; if (!e) visible = false; else {var style = window.getComputedStyle(e); visible = style && style.display !== \'none\' && style.visibility !== \'hidden\' && style.opacity !== \'0\';}; visible'});
+try {var ws_json = JSON.parse(ws_message); if (ws_json.result.result.value == true)
+return ws_json.result.result.value; else return false;}
+catch(e) {return false;}};
+
+chrome.countElements = function(selector) { // same as chrome.exists, except element count is returned
+if ((selector.toString().length >= 16) && (selector.toString().substr(0,16) == 'xpath selector: '))
+{if (selector.toString().length == 16) selector = ''; else selector = selector.toString().substring(16);
+var ws_message = chrome_step('Runtime.evaluate',{expression: 'document.evaluate(\''+selector+'\','+chrome_context+',null,XPathResult.ORDERED_NODE_SNAPSHOT_TYPE,null).snapshotLength'});}
+else var ws_message = chrome_step('Runtime.evaluate',{expression: chrome_context+'.querySelectorAll(\''+selector+'\').length'});
+try {var ws_json = JSON.parse(ws_message); if (ws_json.result.result.value > 0)
+return ws_json.result.result.value; else return 0;}
+catch(e) {return 0;}};
 
 chrome.click = function(selector) { // click by sending click event instead of mouse down/up/click, then focus on element
 if ((selector.toString().length >= 16) && (selector.toString().substr(0,16) == 'xpath selector: '))
@@ -225,7 +376,7 @@ for (var character = 0, length = value.length; character < length; character++) 
 chrome_step('Input.dispatchKeyEvent',{type: 'char', text: value[character]});}};
 
 chrome.selectOptionByValue = function(selector,valueToMatch) { // select dropdown option (base on casperjs issue #1390)
-chrome.evaluate('function() {var selector = \''+selector+'\'; var valueToMatch = \''+valueToMatch+'\'; var found = false; if ((selector.indexOf(\'/\') == 0) || (selector.indexOf(\'(\') == 0)) var select = document.evaluate(selector,'+chrome_context+',null,XPathResult.ORDERED_NODE_SNAPSHOT_TYPE,null).snapshotItem(0); else var select = '+chrome_context+'.querySelector(selector); Array.prototype.forEach.call(select.children, function(opt, i) {if (!found && opt.value.indexOf(valueToMatch) !== -1) {select.selectedIndex = i; found = true;}}); var evt = document.createEvent("UIEvents"); evt.initUIEvent("change", true, true); select.dispatchEvent(evt);}');};
+chrome.evaluate('function() {var selector = \''+selector+'\'; var valueToMatch = \''+valueToMatch+'\'; var found = false; if ((selector.indexOf(\'/\') == 0) || (selector.indexOf(\'(\') == 0)) var select = document.evaluate(selector,'+chrome_context+',null,XPathResult.ORDERED_NODE_SNAPSHOT_TYPE,null).snapshotItem(0); else var select = '+chrome_context+'.querySelector(selector); if (valueToMatch == \'[clear]\') valueToMatch = \'\'; Array.prototype.forEach.call(select.children, function(opt, i) {if (!found && opt.value.indexOf(valueToMatch) !== -1) {select.selectedIndex = i; found = true;}}); var evt = document.createEvent("UIEvents"); evt.initUIEvent("change", true, true); select.dispatchEvent(evt);}');};
 
 chrome.fetchText = function(selector) { // grab text from selector following casperjs logic, but grab only first match
 if ((selector.toString().length >= 16) && (selector.toString().substr(0,16) == 'xpath selector: '))
@@ -253,9 +404,11 @@ do {c4 = str.charCodeAt(i++) & 0xff; if (c4 === 61) {return out;} c4 = BASE64_DE
 while (i < len && c4 === -1); if (c4 === -1) {break;} out += String.fromCharCode((c3 & 0x03) << 6 | c4);} return out;};
 
 chrome.capture = function(filename) { // capture screenshot of webpage to file in png/jpg/jpeg format
+// having pdf extension saves to a pdf file instead. only works in headless mode, visible mode errors out
 var format = 'png'; var quality = 80; var fromSurface = true; var screenshot_data = ''; // options not implemented
 if ((filename.substr(-3).toLowerCase() == 'jpg') || (filename.substr(-4).toLowerCase() == 'jpeg')) format = 'jpeg';
-var ws_message = chrome_step('Page.captureScreenshot',{format: format, quality: quality, fromSurface: fromSurface});
+if (filename.substr(-3).toLowerCase() == 'pdf') var ws_message = chrome_step('Page.printToPDF',{printBackground: true});
+else var ws_message = chrome_step('Page.captureScreenshot',{format: format, quality: quality, fromSurface: fromSurface});
 try {var ws_json = JSON.parse(ws_message); screenshot_data = ws_json.result.data;} catch(e) {screenshot_data = '';}
 var fs = require('fs'); fs.write(filename,chrome.decode(screenshot_data),'wb');};
 
@@ -280,18 +433,20 @@ ws_message = chrome_step('DOM.setFileInputFiles',{files: [filename], nodeId: ws_
 } catch(e) {casper.echo('ERROR - unable to upload ' + selector + ' as ' + filename);}};
 
 chrome.download = function(url,filename) { // download function for downloading url resource to file
-// casper download cannot be used for url which requires login as casperjs context is not in chrome
-// the chromium issue seems to be moving, otherwise another way may be to inject casper clientutils.js
-casper.echo('ERROR - for visible Chrome, download file directly through normal webpage interaction');
-casper.echo('ERROR - for headless Chrome, it prevents file download for now - Chromium issue 696481');};
+// casper download cannot be used for urls which requires login as casperjs engine can't access chrome
+// the chromium issue 696481 is moving well, else an alternative may be to inject casper clientutils.js 
+// TagUI by default auto-sets to allow downloads for headless Chrome (otherwise it prevents downloads)
+casper.echo('ERROR - for headless and visible Chrome, download file using normal webpage interaction');};
 
-chrome.evaluate = function(fn_statement) { // evaluate expression in browser dom context
+chrome.evaluate = function(fn_statement,eval_json) { // evaluate expression in browser dom context
 // chrome runtime.evaluate is different from casperjs evaluate, do some processing to reduce gap
-var statement = fn_statement.toString(); statement = statement.slice(statement.indexOf('{')+1,statement.lastIndexOf('}'));
-statement = statement.replace(/return /g,''); // defining as function() and return keyword is invalid for chrome
+var statement = fn_statement.toString(); if (!eval_json)
+{statement = statement.slice(statement.indexOf('{')+1,statement.lastIndexOf('}'));
+statement = statement.replace(/return /g,'');} // defining function() with return keyword is invalid for chrome
+else statement = '(' + statement + ')' + '(' + JSON.stringify(eval_json) + ')'; // unless variable is passed into fx
 var ws_message = chrome_step('Runtime.evaluate',{expression: statement}); // statements can be separated by ;
 try {var ws_json = JSON.parse(ws_message); if (ws_json.result.result.value)
-return ws_json.result.result.value; else return '';} catch(e) {return '';}};
+return ws_json.result.result.value; else return null;} catch(e) {return null;}};
 
 chrome.withFrame = function(frameInfo,then) { // replace casperjs frame for switching frame context
 var new_context = ''; if (chrome_context == 'document') new_context = 'mainframe_context';
@@ -313,10 +468,12 @@ var found_targetid = ''; var chrome_targets = []; var ws_message = chrome_step('
 try {var ws_json = JSON.parse(ws_message); if (ws_json.result.targetInfos) chrome_targets = ws_json.result.targetInfos;
 else chrome_targets = [];} catch(e) {chrome_targets = [];} // following line scan through targets to find match
 chrome_targets.forEach(function(target) {if (target.url.search(popupInfo) !== -1) found_targetid = target.targetId;});
-if (found_targetid !== '') {var ws_message = chrome_step('Target.attachToTarget',{targetId: found_targetid}); try {var ws_json = JSON.parse(ws_message); if (ws_json.result.success !== true) found_targetid = '';} catch(e) {found_targetid = ''};}
+if (found_targetid !== '') {var ws_message = chrome_step('Target.attachToTarget',{targetId: found_targetid});
+try {var ws_json = JSON.parse(ws_message); if (ws_json.result.sessionId.indexOf(found_targetid) > -1)
+found_targetid = ws_json.result.sessionId; else found_targetid = '';} catch(e) {found_targetid = ''};}
 chrome_targetid = found_targetid;}); // set chrome_targetid only after attaching to found target successfully
 casper.then(then); casper.then(function _step() {if (chrome_targetid !== '') // detach from target after running then
-{var found_targetid = chrome_targetid; chrome_targetid = ''; chrome_step('Target.detachFromTarget',{targetId: found_targetid});}});};
+{var found_targetid = chrome_targetid; chrome_targetid = ''; chrome_step('Target.detachFromTarget',{sessionId: found_targetid});}});};
 
 chrome.getHTML = function() { // get raw html of current webpage
 var ws_message = chrome_step('Runtime.evaluate',{expression: 'document.documentElement.outerHTML'});
@@ -358,7 +515,10 @@ chrome.on = function(value,statement) {casper.on(value,statement);}; // use casp
 } // end of super large if block to load chrome related functions if chrome or headless option is used
 
 // for live mode simple parsing of tagui steps into js code
-function tagui_parse(raw_input) {return parse_intent(raw_input);}
+function tagui_parse(raw_input) {if (tagui_language.toLowerCase() == 'english') return parse_intent(raw_input);
+else {var translated_string = translate(raw_input,'from',tagui_language.toLowerCase());
+if (translated_string.indexOf('ERROR - translation engine') !== -1) casper.echo(translated_string).exit();
+else return parse_intent(translated_string);}}
 
 // for live mode interpretation of step into casperjs code
 function parse_intent(live_line) {
@@ -377,7 +537,10 @@ case 'receive': return receive_intent(live_line); break;
 case 'echo': return echo_intent(live_line); break;
 case 'save': return save_intent(live_line); break;
 case 'dump': return dump_intent(live_line); break;
+case 'write': return write_intent(live_line); break;
+case 'load': return load_intent(live_line); break;
 case 'snap': return snap_intent(live_line); break;
+case 'table': return table_intent(live_line); break;
 case 'wait': return wait_intent(live_line); break;
 case 'live': return live_intent(live_line); break;
 case 'check': return check_intent(live_line); break;
@@ -385,6 +548,7 @@ case 'test': return test_intent(live_line); break;
 case 'frame': return frame_intent(live_line); break;
 case 'popup': return popup_intent(live_line); break;
 case 'api': return api_intent(live_line); break;
+case 'run': return run_intent(live_line); break;
 case 'dom': return dom_intent(live_line); break;
 case 'js': return js_intent(live_line); break;
 case 'timeout': return timeout_intent(live_line); break;
@@ -408,7 +572,10 @@ if (lc_raw_intent.substr(0,8) == 'receive ') return 'receive';
 if (lc_raw_intent.substr(0,5) == 'echo ') return 'echo';
 if (lc_raw_intent.substr(0,5) == 'save ') return 'save';
 if (lc_raw_intent.substr(0,5) == 'dump ') return 'dump';
+if (lc_raw_intent.substr(0,6) == 'write ') return 'write';
+if (lc_raw_intent.substr(0,5) == 'load ') return 'load';
 if (lc_raw_intent.substr(0,5) == 'snap ') return 'snap';
+if (lc_raw_intent.substr(0,6) == 'table ') return 'table';
 if (lc_raw_intent.substr(0,5) == 'wait ') return 'wait';
 if (lc_raw_intent.substr(0,5) == 'live ') return 'live';
 if (lc_raw_intent.substr(0,6) == 'check ') return 'check';
@@ -416,6 +583,7 @@ if (lc_raw_intent.substr(0,5) == 'test ') return 'test';
 if (lc_raw_intent.substr(0,6) == 'frame ') return 'frame';
 if (lc_raw_intent.substr(0,6) == 'popup ') return 'popup';
 if (lc_raw_intent.substr(0,4) == 'api ') return 'api';
+if (lc_raw_intent.substr(0,4) == 'run ') return 'run';
 if (lc_raw_intent.substr(0,4) == 'dom ') return 'dom';
 if (lc_raw_intent.substr(0,3) == 'js ') return 'js';
 if (lc_raw_intent.substr(0,8) == 'timeout ') return 'timeout';
@@ -433,7 +601,10 @@ if (lc_raw_intent == 'receive') return 'receive';
 if (lc_raw_intent == 'echo') return 'echo';
 if (lc_raw_intent == 'save') return 'save';
 if (lc_raw_intent == 'dump') return 'dump';
+if (lc_raw_intent == 'write') return 'write';
+if (lc_raw_intent == 'load') return 'load';
 if (lc_raw_intent == 'snap') return 'snap';
+if (lc_raw_intent == 'table') return 'table';
 if (lc_raw_intent == 'wait') return 'wait';
 if (lc_raw_intent == 'live') return 'live';
 if (lc_raw_intent == 'check') return 'check';
@@ -441,6 +612,7 @@ if (lc_raw_intent == 'test') return 'test';
 if (lc_raw_intent == 'frame') return 'frame';
 if (lc_raw_intent == 'popup') return 'popup';
 if (lc_raw_intent == 'api') return 'api';
+if (lc_raw_intent == 'run') return 'run';
 if (lc_raw_intent == 'dom') return 'dom';
 if (lc_raw_intent == 'js') return 'js';
 if (lc_raw_intent == 'timeout') return 'timeout';
@@ -461,7 +633,7 @@ if ((raw_intent.substr(0,7) == 'switch ') || (raw_intent.substr(0,5) == 'case ')
 if ((raw_intent.substr(0,6) == 'break;') || (raw_intent.substr(0,9) == 'function ')) return true;
 if ((raw_intent.substr(0,7) == 'casper.') || (raw_intent.substr(0,5) == 'this.')) return true;
 if (raw_intent.substr(0,7) == 'chrome.') return true; // chrome object for chrome integration
-if (raw_intent.substr(0,5) == 'test.') return true;
+if (raw_intent.substr(0,5) == ('test'+'.')) return true; // avoid replacement with test option
 if ((raw_intent.substr(0,2) == '//') || (raw_intent.charAt(raw_intent.length-1) == ';')) return true;
 // assume = is assignment statement, kinda acceptable as this is checked at the very end
 if (raw_intent.indexOf('=') > -1) return true; return false;}
@@ -563,7 +735,7 @@ function show_intent(raw_intent) {
 var params = ((raw_intent + ' ').substr(1+(raw_intent + ' ').indexOf(' '))).trim();
 if (params.toLowerCase() == 'page') return "this.echo('" + raw_intent + "' + ' - ' + '\\n' + this.getHTML())";
 if (params == '') return "this.echo('ERROR - target missing for " + raw_intent + "')";
-else if (check_tx(params)) return "this.echo('" + raw_intent + "' + ' - ' + this.fetchText(tx('" + params + "')).trim())";else return "this.echo('ERROR - cannot find " + params + "')";}
+else if (check_tx(params)) return "this.echo(this.fetchText(tx('" + params + "')).trim())";else return "this.echo('ERROR - cannot find " + params + "')";}
 
 function upload_intent(raw_intent) {
 var params = ((raw_intent + ' ').substr(1+(raw_intent + ' ').indexOf(' '))).trim();
@@ -611,6 +783,24 @@ else if (params.indexOf(' to ') > -1)
 return "save_text('" + abs_file(param2) + "'," + add_concat(param1) + ")"; else
 return "save_text(''," + add_concat(params) + ")";}
 
+function write_intent(raw_intent) {
+var params = ((raw_intent + ' ').substr(1+(raw_intent + ' ').indexOf(' '))).trim();
+var param1 = (params.substr(0,params.indexOf(' to '))).trim();
+var param2 = (params.substr(4+params.indexOf(' to '))).trim();
+if (params == '') return "this.echo('ERROR - variable missing for " + raw_intent + "')";
+else if (params.indexOf(' to ') > -1)
+return "append_text('" + abs_file(param2) + "'," + add_concat(param1) + ")"; else
+return "append_text(''," + add_concat(params) + ")";}
+
+function load_intent(raw_intent) {
+var params = ((raw_intent + ' ').substr(1+(raw_intent + ' ').indexOf(' '))).trim();
+var param1 = (params.substr(0,params.indexOf(' to '))).trim();
+var param2 = (params.substr(4+params.indexOf(' to '))).trim();
+if (params == '') return "this.echo('ERROR - filename missing for " + raw_intent + "')";
+else if (params.indexOf(' to ') > -1)
+return "var fs = require('fs'); " + param2 + " = ''; if (fs.exists('" + abs_file(param1) + "')) " + param2 +  " = fs.read('" + abs_file(param1) + "').trim(); else this.echo('ERROR - cannot find file " + param1 + "')"; else
+return "this.echo('ERROR - variable missing for " + raw_intent + "')";}
+
 function snap_intent(raw_intent) {
 var params = ((raw_intent + ' ').substr(1+(raw_intent + ' ').indexOf(' '))).trim();
 var param1 = (params.substr(0,params.indexOf(' to '))).trim();
@@ -623,6 +813,17 @@ else if (params.indexOf(' to ') > -1)
 {if (check_tx(param1)) return "this.captureSelector('" + abs_file(param2) + "',tx('" + param1 + "'))"; 
 else return "this.echo('ERROR - cannot find " + param1 + "')";}
 else {if (check_tx(params)) return "this.captureSelector(snap_image(),tx('" + params + "'))";
+else return "this.echo('ERROR - cannot find " + params + "')";}}
+
+function table_intent(raw_intent) {
+var params = ((raw_intent + ' ').substr(1+(raw_intent + ' ').indexOf(' '))).trim();
+var param1 = (params.substr(0,params.indexOf(' to '))).trim();
+var param2 = (params.substr(4+params.indexOf(' to '))).trim();
+if (params == '') return "this.echo('ERROR - target missing for " + raw_intent + "')";
+else if (params.indexOf(' to ') > -1)
+{if (check_tx(param1)) return "save_table('" + abs_file(param2) + "',tx('" + param1 + "'))";
+else return "this.echo('ERROR - cannot find " + param1 + "')";}
+else {if (check_tx(params)) return "save_table('',tx('" + params + "'))";
 else return "this.echo('ERROR - cannot find " + params + "')";}}
 
 function wait_intent(raw_intent) {
@@ -649,10 +850,13 @@ if (params == '') return "this.echo('ERROR - API URL missing for " + raw_intent 
 else return "api_result = call_api('" + params + "'); " +
 "try {api_json = JSON.parse(api_result);} catch(e) {api_json = JSON.parse('null');}";}
 
+function run_intent(raw_intent) {
+return "this.echo('ERROR - step not supported in live mode, as run output cannot be retrieved')";}
+
 function dom_intent(raw_intent) {
 var params = ((raw_intent + ' ').substr(1+(raw_intent + ' ').indexOf(' '))).trim();
 if (params == '') return "this.echo('ERROR - statement missing for " + raw_intent + "')";
-else return "dom_result = this.evaluate(function() {" + params + "})";}
+else return "dom_result = this.evaluate(function(dom_json) {" + params + "}, dom_json)";}
 
 function js_intent(raw_intent) {
 var params = ((raw_intent + ' ').substr(1+(raw_intent + ' ').indexOf(' '))).trim();
@@ -675,6 +879,8 @@ source_code = source_code.replace(/casper\.click/g,'chrome.click').replace(/this
 source_code = source_code.replace(/casper\.mouse/g,'chrome.mouse').replace(/this\.mouse/g,'chrome.mouse');
 source_code = source_code.replace(/casper\.sendKeys/g,'chrome.sendKeys').replace(/this\.sendKeys/g,'chrome.sendKeys');
 source_code = source_code.replace(/casper\.selectOptionByValue/g,'chrome.selectOptionByValue').replace(/this\.selectOptionByValue/g,'chrome.selectOptionByValue');
+source_code = source_code.replace(/casper\.countElements/g,'chrome.countElements').replace(/this\.countElements/g,'chrome.countElements');
+source_code = source_code.replace(/casper\.elementVisible/g,'chrome.elementVisible').replace(/this\.elementVisible/g,'chrome.elementVisible');
 source_code = source_code.replace(/casper\.fetchText/g,'chrome.fetchText').replace(/this\.fetchText/g,'chrome.fetchText');
 source_code = source_code.replace(/casper\.capture/g,'chrome.capture').replace(/this\.capture/g,'chrome.capture');
 source_code = source_code.replace(/casper\.captureSelector/g,'chrome.captureSelector').replace(/this\.captureSelector/g,'chrome.captureSelector');
@@ -705,10 +911,131 @@ casper.selectOptionByValue = function(selector, valueToMatch) { // solution post
 this.evaluate(function(selector, valueToMatch) {var found = false; // modified to allow xpath / css locators
 if ((selector.indexOf('/') == 0) || (selector.indexOf('(') == 0)) var select = __utils__.getElementByXPath(selector);
 else var select = document.querySelector(selector); // auto-select xpath or query css method to get element
+if (valueToMatch == '[clear]') valueToMatch = ''; // [clear] keyword to allow selecting empty / blank option
 Array.prototype.forEach.call(select.children, function(opt, i) { // loop through list to select option
 if (!found && opt.value.indexOf(valueToMatch) !== -1) {select.selectedIndex = i; found = true;}});
 var evt = document.createEvent("UIEvents"); // dispatch change event in case there is validation
 evt.initUIEvent("change", true, true); select.dispatchEvent(evt);}, selector, valueToMatch);};
+
+// custom function to return element visibility
+casper.elementVisible = function(selector) {return casper.visible(selector);} // use casperjs to maximize compatibility
+
+// custom function to return element count
+casper.countElements = function(selector) { // use casperjs in-built function to maximize compatibility
+var count_result = casper.evaluate(function(selector) {return __utils__.findAll(selector).length;},selector);
+try {if (count_result > 0) return count_result; else return 0;} catch(e) {return 0;}};
+
+// custom function from casperjs v1.1.5 (not yet released)
+casper.waitForExec = function (command, parameters, then, onTimeout, timeout) {
+    "use strict";
+    var killTimeout;
+    var utils = require('utils'); var f = utils.format; // custom added line from casper.js global
+    if (utils.isArray(timeout)) {
+        killTimeout = utils.isNumber(timeout[1]) ? getTimeoutAndCheckNextStepFunction(timeout[1], then, 'waitForExec', this.options.waitTimeout) : getTimeoutAndCheckNextStepFunction(timeout[0], then, 'waitForExec', this.options.waitTimeout);
+        timeout = getTimeoutAndCheckNextStepFunction(timeout[0], then, 'waitForExec', this.options.waitTimeout);
+    } else {
+        timeout = getTimeoutAndCheckNextStepFunction(timeout, then, 'waitForExec', this.options.waitTimeout);
+        killTimeout = timeout;
+    }
+
+    if ( (!utils.isString(command)) && (!utils.isArray(parameters))  ) {
+        throw new CasperError("waitForExec() needs an command string as program and parameters separated by space to run or an array of parameters. if program is falsy or not a string, it uses default system shell");
+    }
+    if (utils.isFalsy(command) || !utils.isString(command)) {
+        var system = require('system');
+        command = (system.env.SHELL || system.env.ComSpec); // SHELL for UNIX(?), ComSpec for Windows(?)
+        this.log('Casper.waitForExec()  is going to use default system shell ' + JSON.stringify(command) + ' - command is falsy or is not a string', "warning");
+    }
+    if (utils.isFalsy(parameters) || !utils.isArray(parameters)) {
+        parameters = [];
+    }
+
+    // add use of a escape char like '\'??? (e.g.: '/bin/bash -c {\ ls\ /\ &&\ ls\ /home\ }' becomes ['/bin/bash', '-c', '{ ls / && ls /home }']
+    command = command.split(' ');
+    parameters = command.splice(-1,(command.length-1)).concat(parameters);
+    command = command[0];
+    var fs = require('fs');
+    if (!fs.isExecutable(command)) {
+        this.log('Casper.waitForExec() is going to call non executable file ' + JSON.stringify(command) + ' - maybe runs if is in PATH', "warning");
+    }
+
+    var spawn = require("child_process").spawn;
+    var stdout = ''; // VARIABLE TO STORE PROGRAM STDOUT
+    var stderr = ''; // VARIABLE TO STORE PROGRAM STDERR
+    var exitCode = null; // VARIABLE TO STORE PROGRAM EXIT CODE
+    var realPid = null; // VARIABLE TO STORE PROGRAM REAL PID
+    var elapsedTime = null; // VARIABLE TO STORE PROGRAM DURATION
+
+    var childStartTime = new Date().getTime();
+    var child = spawn(command, parameters);
+    realPid = child.pid;
+
+    child.stdout.on("data", function (standardOut) { // keeps stdout updated
+        stdout += standardOut;
+    });
+    child.stderr.on("data", function (standardError) { // keeps stderr updated
+        stderr += standardError;
+    });
+    child.on("exit", function (code) {
+        elapsedTime = (new Date().getTime()) - childStartTime;
+        exitCode = code;
+    });
+
+    function __details() {
+        return {data: {command: command, parameters: parameters, pid: realPid, stdout: stdout, stderr: stderr, exitCode: exitCode, elapsedTime: elapsedTime, isChildNotFinished: child.pid }};
+    }
+    function __onTimeout(timeout, details) {
+        var __onWaitTimeout = onTimeout ? onTimeout : this.options.onWaitTimeout;
+        var signalToKill = "SIGTERM";
+        child.kill(signalToKill);
+        
+        killTimeout = getTimeoutAndCheckNextStepFunction(killTimeout, __onWaitTimeout, 'killAndCallOnWaitTimeout', this.options.waitTimeout, false);
+        (function killAndCallOnWaitTimeout() {
+            // I don't know if it should return
+            // return this.waitFor(function isProgramKilled() { // HAVE TO ADD waitFor() TO MAKE child.on("exit"... UPDATES exitCode AND TO child.pid BE UPDATED
+            this.waitFor(function isProgramKilled() { // HAVE TO ADD waitFor() TO MAKE child.on("exit"... UPDATES exitCode AND TO child.pid BE UPDATED
+                return !child.pid;
+            }, function onProgramKilled() { 
+                    this.log(f("waitForExec() has killed %s %s (PID %d) with %s", details.data.command, JSON.stringify(details.data.parameters), details.data.pid, signalToKill), "info");
+                    // this.then(this.createStep(__onWaitTimeout, timeout, __details()));
+                    __onWaitTimeout.call(this, timeout, __details());
+            }, function onProgramNotKilled() {
+                    this.log(f("waitForExec() has not killed %s %s (PID %d) with %s", details.data.command, JSON.stringify(details.data.parameters), details.data.pid, signalToKill), "warning");
+                    signalToKill = (require('system').os.name !== "windows") ? "SIGKILL" : "WM_QUIT"; // "WM_QUIT" SEEMS TO BE THE WINDOWS EQUIVALENT TO UNIX SIGKILL
+                    child.kill(signalToKill);
+                    killTimeout = 1;
+                    killAndCallOnWaitTimeout.call(this);
+            }, killTimeout);
+        }).call(this);
+    }
+    this.log(f("waitForExec() called %s (PID %d) with %s arguments", JSON.stringify(command), realPid, JSON.stringify(parameters)), "info");
+    return this.waitFor(function isProgramFinished() {
+        return !child.pid;
+    }, function onProgramFinished() {
+        this.then(this.createStep(then, __details()));
+    }, __onTimeout, timeout, __details());
+};
+
+// dependency function of casper.waitForExec in v1.1.5 (not yet released)
+function getTimeoutAndCheckNextStepFunction(timeout, then, methodName, defaultTimeout, isThenRequired) {
+    var utils = require('utils'); // custom added line from casper.js global
+    if (isThenRequired || then) {
+        var isFunction = utils.isFunction(then); // Optimization to perform "isFunction" check only once.
+
+        if (isThenRequired && !isFunction) {
+            throw new CasperError(methodName + "() needs a step function");
+        } else if (then && !isFunction) {
+            throw new CasperError(methodName + "() next step definition must be a function");
+        }
+    }
+
+    timeout = ~~timeout || ~~defaultTimeout;
+    if (timeout < 0) {
+        throw new CasperError(methodName + "() only accepts an integer >= 0 as a timeout value");
+    }
+
+    return timeout;
+}
 
 // flow path for save_text and snap_image
 var flow_path = '/full_path';
@@ -719,12 +1046,12 @@ techo('https://www.google.com' + ' - ' + this.getTitle() + '\n');});
 casper.then(function() {
 // code to auto-replace local path names in generated js file with /full_path
 var fs = require('fs');
-var js_result = fs.read('test' + fs.separator + 'positive_test.js');
+var js_result = fs.read('test' + fs.separator + 'positive_test' + '.js');
 var local_path = js_result.substring(js_result.indexOf("var flow_path = '") + 17);
 local_path = local_path.substring(0,local_path.indexOf("'"));
 var regex = new RegExp(local_path,"g"); js_result = js_result.replace(regex,"/full_path");
-fs.write('test' + fs.separator + 'positive_test.js', js_result, 'w');
-fs.remove('test' + fs.separator + 'positive_test.log');
+fs.write('test' + fs.separator + 'positive_test' + '.js', js_result, 'w');
+fs.remove('test' + fs.separator + 'positive_test' + '.log');
 this.exit(); // don't actually run the steps and code, test is for language conversion
 // add a navigation step in order to exit in time and block below output from running
 });casper.thenOpen('https://ca.yahoo.com', function() {
@@ -1305,16 +1632,16 @@ casper.then(function() {
 {techo('fetch page to variable');
 variable = this.getHTML();}
 // test show / print
-{// nothing to do on this line
+{techo('show element');
 casper.waitFor(function check() {return check_tx('element');},
-function then() {this.echo('show element' + ' - ' + this.fetchText(tx('element')).trim());},
+function then() {this.echo(this.fetchText(tx('element')).trim());},
 function timeout() {this.echo('ERROR - cannot find element').exit();});}});
 
 casper.then(function() {
 this.echo('show page' + ' - \n' + this.getHTML());
-{// nothing to do on this line
+{techo('print element');
 casper.waitFor(function check() {return check_tx('element');},
-function then() {this.echo('print element' + ' - ' + this.fetchText(tx('element')).trim());},
+function then() {this.echo(this.fetchText(tx('element')).trim());},
 function timeout() {this.echo('ERROR - cannot find element').exit();});}});
 
 casper.then(function() {
@@ -1355,28 +1682,37 @@ this.echo(variable+" - some text - "+variable+" - some text "+"some text - "+var
 // test dump
 {techo('dump "some text - " + variable');
 save_text('',"some text - "+variable);}
-{techo('dump "some text - " + variable');
-save_text('',"some text - "+variable);}
+{techo('dump \'some text - \' + variable');
+save_text('','some text - '+variable);}
 {techo('dump "some text - " + variable to filename.txt');
 save_text('/full_path/filename.txt',"some text - "+variable);}
-{techo('dump "some text - " + variable to filename.txt');
-save_text('/full_path/filename.txt',"some text - "+variable);}
+{techo('dump \'some text - \' + variable to filename.txt');
+save_text('/full_path/filename.txt','some text - '+variable);}
 {techo('dump "some text - " + variable to /tmp/filename.txt');
 save_text('/tmp/filename.txt',"some text - "+variable);}
-{techo('dump "some text - " + variable to /tmp/filename.txt');
-save_text('/tmp/filename.txt',"some text - "+variable);}
+{techo('dump \'some text - \' + variable to /tmp/filename.txt');
+save_text('/tmp/filename.txt','some text - '+variable);}
 {techo('dump "some text - " variable');
 save_text('',"some text - "+variable);}
-{techo('dump "some text - " variable');
-save_text('',"some text - "+variable);}
+{techo('dump \'some text - \' variable');
+save_text('','some text - '+variable);}
 {techo('dump "some text - " variable to filename.txt');
 save_text('/full_path/filename.txt',"some text - "+variable);}
-{techo('dump "some text - " variable to filename.txt');
-save_text('/full_path/filename.txt',"some text - "+variable);}
+{techo('dump \'some text - \' variable to filename.txt');
+save_text('/full_path/filename.txt','some text - '+variable);}
 {techo('dump "some text - " variable to /tmp/filename.txt');
 save_text('/tmp/filename.txt',"some text - "+variable);}
-{techo('dump "some text - " variable to /tmp/filename.txt');
-save_text('/tmp/filename.txt',"some text - "+variable);}
+{techo('dump \'some text - \' variable to /tmp/filename.txt');
+save_text('/tmp/filename.txt','some text - '+variable);}
+// test write
+{techo('write \'abc\'');
+append_text('','abc');}
+{techo('write \'efg\'');
+append_text('','efg');}
+{techo('write \'ghi\' to filename.txt');
+append_text('/full_path/filename.txt','ghi');}
+{techo('write \'ijk\' to filename.txt');
+append_text('/full_path/filename.txt','ijk');}
 // test snap
 {techo('snap element');
 casper.waitFor(function check() {return check_tx('element');},
@@ -1396,12 +1732,45 @@ function then() {this.captureSelector('/tmp/filename.png',tx('element'));},
 function timeout() {this.echo('ERROR - cannot find element').exit();});}});
 
 casper.then(function() {
+{techo('snap element to document.pdf');
+casper.waitFor(function check() {return check_tx('element');},
+function then() {this.captureSelector('/full_path/document.pdf',tx('element'));},
+function timeout() {this.echo('ERROR - cannot find element').exit();});}});
+
+casper.then(function() {
 {techo('snap page');
 this.capture(snap_image());}
 {techo('snap page to filename.png');
 this.capture('/full_path/filename.png');}
 {techo('snap page to /tmp/filename.png');
 this.capture('/tmp/filename.png');}
+{techo('snap page to document.pdf');
+this.capture('/full_path/document.pdf');}
+// test table (no css selector)
+{techo('table element');
+casper.waitFor(function check() {return check_tx('element');},
+function then() {save_table('',tx('element'));},
+function timeout() {this.echo('ERROR - cannot find element').exit();});}});
+
+casper.then(function() {
+{techo('table element to filename.csv');
+casper.waitFor(function check() {return check_tx('element');},
+function then() {save_table('/full_path/filename.csv',tx('element'));},
+function timeout() {this.echo('ERROR - cannot find element').exit();});}});
+
+casper.then(function() {
+{techo('table (//table)[7]');
+casper.waitFor(function check() {return check_tx('(//table)[7]');},
+function then() {save_table('',tx('(//table)[7]'));},
+function timeout() {this.echo('ERROR - cannot find (//table)[7]').exit();});}});
+
+casper.then(function() {
+{techo('table (//table)[7] to filename.csv');
+casper.waitFor(function check() {return check_tx('(//table)[7]');},
+function then() {save_table('/full_path/filename.csv',tx('(//table)[7]'));},
+function timeout() {this.echo('ERROR - cannot find (//table)[7]').exit();});}});
+
+casper.then(function() {
 // test upload
 {techo('upload #css_selector as abc.png');
 casper.waitFor(function check() {return check_tx('#css_selector');},
@@ -1527,7 +1896,7 @@ var COLOR1='red'; var COLOR2='green'; var COLOR3='blue';
 api_result = call_api('http://www.dummytestsite.com/api?COLOR1='+COLOR1+'&COLOR2='+COLOR2+'&COLOR3='+COLOR3+'');
 try {api_json = JSON.parse(api_result);} catch(e) {api_json = JSON.parse('null');}}
 // test dom
-dom_result = this.evaluate(function() {var page_title = document.title;});
+dom_result = this.evaluate(function(dom_json) {var page_title = document.title;}, dom_json);
 // test test
 // test something and see what happens
 // test js
@@ -1554,6 +1923,73 @@ techo('http://'+target_url+'' + ' - ' + this.getTitle());});
 
 casper.then(function() {
 })} // end of dynamic url block
+// test present function
+if ((present('footer')))
+
+// start of code block
+{casper.then(function() {
+
+{techo('print footer');
+casper.waitFor(function check() {return check_tx('footer');},
+function then() {this.echo(this.fetchText(tx('footer')).trim());},
+function timeout() {this.echo('ERROR - cannot find footer').exit();});}});
+
+casper.then(function() {
+})} // end of code block
+
+else
+
+// start of code block
+{casper.then(function() {
+
+this.echo('footer not found');
+})} // end of code block
+
+// test visible function
+if ((visible('footer')))
+
+// start of code block
+{casper.then(function() {
+
+this.echo('footer is visible');
+})} // end of code block
+
+else
+
+// start of code block
+{casper.then(function() {
+
+this.echo('footer not visible');
+})} // end of code block
+
+// test title function
+this.echo(title());
+if (((title().indexOf('About')>-1)))
+this.echo('page title contains About');
+// test url function
+this.echo(url());
+if (((url().indexOf('org')>-1)))
+this.echo('page url contains org');
+// test text function
+this.echo(text());
+if (((text().indexOf('automation')>-1)))
+this.echo('page text contains automation');
+// test count function
+this.echo(count('element'));
+element_count = count('element')
+for (n=1; n<=element_count; n++)
+
+// start of IIFE pattern
+(function (n) {
+// start of code block
+{casper.then(function() {
+
+this.echo(n);
+})} // end of code block
+})(n); // end of IIFE pattern
+});
+
+casper.then(function() {
 });
 
 casper.then(function() {

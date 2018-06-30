@@ -1,0 +1,77 @@
+EN,DE
+click,klicken
+tap,tippen
+move,bewegung
+hover,schweben
+type,art
+enter,eingeben
+select,wählen
+choose,wählen
+read,lesen
+fetch,holen
+show,show
+print,drucken
+save,sparen
+echo,echo
+dump,dump
+write,schreiben
+snap,schnapp
+table,tabelle
+live,leben
+download,herunterladen
+upload,hochladen
+load,belastung
+receive,erhalten
+frame,rahmen
+popup,pop-up
+wait,warte ab
+timeout,auszeit
+seconds,sekunden
+second,zweite
+api,api
+dom,dom
+js,js
+else if,sonst wenn
+else,sonst
+if,ob
+for,zum
+while,während
+check,prüfen
+more than or equals to,mehr als oder gleich
+more than or equal to,mehr als oder gleich
+greater than or equals to,größer oder gleich
+greater than or equal to,größer als oder gleich wie
+higher than or equals to,höher als oder gleich
+higher than or equal to,höher als oder gleich
+less than or equals to,kleiner als oder gleich
+less than or equal to,gleich oder kleiner als
+lesser than or equals to,kleiner oder gleich
+lesser than or equal to,kleiner oder gleich
+lower than or equals to,niedriger als oder gleich
+lower than or equal to,kleiner oder gleich
+more than,mehr als
+greater than,größer als
+higher than,höher als
+less than,weniger als
+lesser than,weniger als
+lower than,niedriger als
+not equals to,nicht gleich
+not equal to,nicht gleichzusetzen mit
+equals to,ist gleich
+equal to,gleich
+not contains,enthält nicht
+not contain,nicht enthalten
+contains,enthält
+contain,enthalten
+and,und
+or,oder
+from,von
+to,nach
+as,wie
+title(),titel()
+url(),url()
+text(),text()
+timer(),timer()
+count(),graf()
+present(),geschenk()
+visible(),sichtbar()

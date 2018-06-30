@@ -1,12 +1,12 @@
 https://www.google.com
 // code to auto-replace local path names in generated js file with /full_path
 var fs = require('fs');
-var js_result = fs.read('test' + fs.separator + 'positive_test.js');
+var js_result = fs.read('test' + fs.separator + 'positive_test' + '.js');
 var local_path = js_result.substring(js_result.indexOf("var flow_path = '") + 17);
 local_path = local_path.substring(0,local_path.indexOf("'"));
 var regex = new RegExp(local_path,"g"); js_result = js_result.replace(regex,"/full_path");
-fs.write('test' + fs.separator + 'positive_test.js', js_result, 'w');
-fs.remove('test' + fs.separator + 'positive_test.log');
+fs.write('test' + fs.separator + 'positive_test' + '.js', js_result, 'w');
+fs.remove('test' + fs.separator + 'positive_test' + '.log');
 this.exit(); // don't actually run the steps and code, test is for language conversion
 // add a navigation step in order to exit in time and block below output from running
 https://ca.yahoo.com
@@ -103,7 +103,7 @@ echo "TRUE"
 if 5 greater than 3 and 3 lesser than 4
 echo "TRUE"
 if 5 greater than 3 and 3 lesser than 4 and "kiwi" equals to "kiwi"
-echo "TRUE" 
+echo "TRUE"
 
 // test or
 if 'apple' equals to 'apple' or 'orange' equals to 'kiwi'
@@ -293,7 +293,7 @@ echo "some text - " + variable
 echo 'some text - ' + variable
 echo "some text - " variable
 echo 'some text - ' variable
-echo variable " - some text - " variable  " - some text "   "some text - "  +  variable  
+echo variable " - some text - " variable  " - some text "   "some text - "  +  variable
 
 // test dump
 dump "some text - " + variable
@@ -309,13 +309,27 @@ dump 'some text - ' variable to filename.txt
 dump "some text - " variable to /tmp/filename.txt
 dump 'some text - ' variable to /tmp/filename.txt
 
+// test write
+write 'abc'
+write 'efg'
+write 'ghi' to filename.txt
+write 'ijk' to filename.txt
+
 // test snap
 snap element
 snap element to filename.png
 snap element to /tmp/filename.png
+snap element to document.pdf
 snap page
 snap page to filename.png
 snap page to /tmp/filename.png
+snap page to document.pdf
+
+// test table (no css selector)
+table element
+table element to filename.csv
+table (//table)[7]
+table (//table)[7] to filename.csv
 
 // test upload
 upload #css_selector as abc.png
@@ -398,3 +412,46 @@ http://www.dummytestsite.com
 // test url with variable
 target_url = "www.dummytestsite.com";
 http://'+target_url+'
+
+// test present function
+if present('footer')
+{
+print footer
+}
+else
+{
+echo 'footer not found'
+}
+
+// test visible function
+if visible('footer')
+{
+echo 'footer is visible'
+}
+else
+{
+echo 'footer not visible'
+}
+
+// test title function
+echo title()
+if title() contains 'About'
+echo 'page title contains About'
+
+// test url function
+echo url()
+if url() contains 'org'
+echo 'page url contains org'
+
+// test text function
+echo text()
+if text() contains 'automation'
+echo 'page text contains automation'
+
+// test count function
+echo count('element')
+element_count = count('element')
+for n from 1 to element_count
+{
+echo n
+}

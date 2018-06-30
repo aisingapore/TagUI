@@ -1,0 +1,77 @@
+EN,TL
+click,mag-click
+tap,tapikin ang
+move,ilipat
+hover,hover
+type,uri
+enter,ipasok
+select,piliin
+choose,pumili
+read,basahin
+fetch,kunin
+show,ipakita
+print,print
+save,i-save
+echo,echo
+dump,dump
+write,isulat
+snap,snap
+table,talahanayan
+live,mabuhay
+download,i-download
+upload,mag-upload
+load,load
+receive,tumanggap
+frame,frame
+popup,popup
+wait,maghintay
+timeout,timeout
+seconds,segundo
+second,pangalawa
+api,api
+dom,dom
+js,js
+else if,ibang tao kung
+else,iba pa
+if,kung
+for,para sa
+while,habang
+check,suriin
+more than or equals to,higit sa o katumbas ng
+more than or equal to,higit sa o katumbas ng
+greater than or equals to,mas malaki kaysa sa o katumbas ng
+greater than or equal to,mas malaki kaysa sa o katumbas ng
+higher than or equals to,mas mataas kaysa o katumbas ng
+higher than or equal to,mas mataas kaysa sa o katumbas ng
+less than or equals to,mas mababa sa o katumbas ng
+less than or equal to,mas mababa sa o katumbas ng
+lesser than or equals to,mas mababa kaysa sa o katumbas ng
+lesser than or equal to,mas mababa kaysa sa o katumbas ng
+lower than or equals to,mas mababa kaysa o katumbas ng
+lower than or equal to,mas mababa kaysa sa o katumbas ng
+more than,higit sa
+greater than,mahigit sa
+higher than,mas mataas kaysa sa
+less than,mas mababa sa
+lesser than,mas mababa kaysa sa
+lower than,mas mababa sa
+not equals to,hindi katumbas ng
+not equal to,hindi katumbas ng
+equals to,katumbas ng
+equal to,katumbas ng
+not contains,hindi naglalaman
+not contain,hindi naglalaman
+contains,ay naglalaman
+contain,naglalaman ng
+and,at
+or,o
+from,mula sa
+to,sa
+as,bilang
+title(),pamagat()
+url(),url()
+text(),teksto()
+timer(),timer()
+count(),bilangin()
+present(),kasalukuyan()
+visible(),nakikita()

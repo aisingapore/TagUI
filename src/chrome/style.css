@@ -3,7 +3,7 @@ body {
   font-size: 100%;
   text-decoration: none;
   color: black; 
-  background: #ffffff;
+  background: #FFFFFF;
   width: auto;
   margin: auto;
 }
@@ -13,11 +13,12 @@ body {
 }
 
 input[type=submit], input[type=button] {
-	border: 0;
-	color: #FFFFFF;
+	border: 3px solid #1E82C9;
+	color: #1E82C9;
 	padding: 1em 1em;
-	background: #1E82C9;
+	background: #FFFFFF;
 	font-size: 1em;
+	font-weight: bold;
 	border-radius: 0em;
 	-webkit-border-radius: 0em;
 	-moz-border-radius: 0em;

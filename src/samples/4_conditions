@@ -83,3 +83,19 @@ echo "Current Product ID is - " Product_ID
 // below will not run even once as cupcakes is set to 12 earlier
 while cupcakes lesser than 12
 echo "Cupcakes lesser than 12."
+
+// using if else is possible but { and } are required to set code blocks
+// without { and } code blocks, steps interacting with elements will break
+// example does not interact with elements because facebook page might change
+
+a = 1
+if a equals to 1
+{
+// do some step(s)
+snap page
+}
+else
+{
+// do some other step(s)
+snap page
+}

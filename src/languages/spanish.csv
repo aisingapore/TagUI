@@ -1,0 +1,77 @@
+EN,ES
+click,hacer clic
+tap,grifo
+move,movimiento
+hover,flotar
+type,tipo
+enter,entrar
+select,seleccionar
+choose,escoger
+read,leer
+fetch,ha podido recuperar
+show,espectáculo
+print,impresión
+save,salvar
+echo,eco
+dump,tugurio
+write,escribir
+snap,chasquido
+table,mesa
+live,vivir
+download,descargar
+upload,subir
+load,carga
+receive,recibir
+frame,marco
+popup,surgir
+wait,espere
+timeout,se acabó el tiempo
+seconds,segundos
+second,segundo
+api,api
+dom,dom
+js,js
+else if,de lo contrario si
+else,más
+if,si
+for,para
+while,mientras
+check,comprobar
+more than or equals to,más que o igual a
+more than or equal to,más que o igual a
+greater than or equals to,mayor que o igual a
+greater than or equal to,mayor qué o igual a
+higher than or equals to,mayor que o igual a
+higher than or equal to,mayor o igual que
+less than or equals to,menor que o igual a
+less than or equal to,menos que o igual a
+lesser than or equals to,menor que o igual a
+lesser than or equal to,menor que o igual a
+lower than or equals to,menor que o igual a
+lower than or equal to,menor o igual a
+more than,mas que
+greater than,mas grande que
+higher than,más alto que
+less than,menos que
+lesser than,menor que
+lower than,más bajo que
+not equals to,no es igual a
+not equal to,no igual a
+equals to,igual a
+equal to,igual a
+not contains,no contiene
+not contain,no contiene
+contains,contiene
+contain,contiene
+and,y
+or,o
+from,de
+to,a
+as,como
+title(),título()
+url(),url()
+text(),texto()
+timer(),minutero()
+count(),contar()
+present(),presente()
+visible(),visible()

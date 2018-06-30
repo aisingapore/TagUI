@@ -33,6 +33,7 @@ EventTypes.ExplicitWait = 28;
 EventTypes.FetchElementText = 29;
 EventTypes.SelectElementOption = 30;
 EventTypes.CancelLastStep = 31;
+EventTypes.NoteDownElement = 32;
 EventTypes.Cancel = 99;
 EventTypes.MouseDown = 19;
 EventTypes.MouseUp = 20;
@@ -114,6 +115,7 @@ d[EventTypes.CheckImageSrc] = "checkImageSrc";
 d[EventTypes.PageLoad] = "pageLoad";
 d[EventTypes.ScreenShot] = "screenShot";
 d[EventTypes.ElementScreenShot] = "elementScreenShot";
+d[EventTypes.NoteDownElement] = "noteDownElement";
 d[EventTypes.MoveCursorToElement] = "moveCursorToElement";
 d[EventTypes.PrintElementText] = "printElementText";
 d[EventTypes.SaveElementText] = "saveElementText";
@@ -370,6 +372,12 @@ CasperRenderer.prototype.elementScreenShot = function(item) {
   var selector; selector = this.getControl(item);
   if (selector.charAt(0) == '#') {selector = selector.substring(1);}
   this.stmt('snap ' + selector);
+}
+
+CasperRenderer.prototype.noteDownElement = function(item) {
+  var selector; selector = this.getControl(item);
+  if (selector.charAt(0) == '#') {selector = selector.substring(1);}
+  this.stmt('// element is ' + selector);
 }
 
 CasperRenderer.prototype.moveCursorToElement = function(item) {

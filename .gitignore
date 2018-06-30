@@ -13,6 +13,13 @@
 /src/samples/8_hastebin.js
 /src/samples/8_hastebin.log
 
+# exclude translation temp build files
+/src/languages/build.js
+/src/languages/build.log
+
+# exclude translation engine log file
+/src/translate.log
+
 # exclude generated files for cli assistant
 /src/tagui_helper
 /src/tagui_helper.cmd
@@ -37,3 +44,6 @@
 /src/tagui.sikuli/sikulix*
 /src/tagui.sikuli/SikuliX*
 /src/tagui.sikuli/runsikulix
+
+# exclude local files for catboost integration
+/src/catboost/*

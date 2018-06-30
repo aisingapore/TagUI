@@ -45,8 +45,23 @@ while(!feof($header_file)) {fwrite($output_file,fgets($header_file));} fclose($h
 // casperjs/phantomjs do not seem to support \ for windows paths, replace with / to work
 fwrite($output_file,"var flow_path = '" . str_replace("\\","/",dirname($script)) . "';\n\n");
 
-// main loop to parse intents in flow file for conversion into javascript code
-while(!feof($input_file)) {fwrite($output_file,parse_intent(fgets($input_file)));} fclose($input_file);
+if (strpos(strtolower(file_get_contents('tagui_config.txt')),"var tagui_language = 'english';")!==false)
+{ // main loop without translation to parse intents in flow file for conversion into javascript code
+while(!feof($input_file)) {fwrite($output_file,parse_intent(fgets($input_file)));} fclose($input_file);}
+else { // section and main loop which includes translation engine for handling flows in other languages
+$temp_argv1 = $argv[1]; $temp_argv2 = $argv[2]; $temp_argv3 = $argv[3];
+$argv[1] = 'tagui_parse.php'; $argv[2] = 'from';
+$temp_tagui_config = strtolower(file_get_contents('tagui_config.txt'));
+$temp_tagui_config_start = strpos($temp_tagui_config,'var tagui_language');
+$temp_tagui_config_end = strpos($temp_tagui_config,"\n",$temp_tagui_config_start);
+$temp_tagui_config = substr($temp_tagui_config,$temp_tagui_config_start,$temp_tagui_config_end-$temp_tagui_config_start);
+$temp_tagui_config = str_replace('var tagui_language','',$temp_tagui_config);
+$temp_tagui_config = str_replace('"','',$temp_tagui_config); $temp_tagui_config = str_replace("'",'',$temp_tagui_config);
+$temp_tagui_config = str_replace('=','',$temp_tagui_config); $temp_tagui_config = str_replace(';','',$temp_tagui_config); 
+$argv[3] = trim($temp_tagui_config);
+require 'translate.php'; // set parameters to load translation engine
+$argv[1] = $temp_argv1; $argv[2] = $temp_argv2; $argv[3] = $temp_argv3;
+while(!feof($input_file)) {fwrite($output_file,parse_intent(translate_intent(fgets($input_file))));} fclose($input_file);}
 
 // create footer of casperjs script using footer template and do post-processing 
 while(!feof($footer_file)) {fwrite($output_file,fgets($footer_file));} fclose($footer_file); fclose($output_file);
@@ -68,6 +83,12 @@ $script_content = str_replace("this.sendKeys","chrome.sendKeys",$script_content)
 // for selectOptionByValue check for '(' in order to only overwrite calls and not the custom defined function
 $script_content = str_replace("casper.selectOptionByValue(","chrome.selectOptionByValue(",$script_content); // select
 $script_content = str_replace("this.selectOptionByValue(","chrome.selectOptionByValue(",$script_content); // select
+// for countElements check for '(' in order to only overwrite calls and not the custom function casper.countElements()
+$script_content = str_replace("casper.countElements(","chrome.countElements(",$script_content); // count elements
+$script_content = str_replace("this.countElements(","chrome.countElements(",$script_content); // count elements
+// for elementVisible check for '(' in order to only overwrite calls and not the custom function casper.elementVisible()
+$script_content = str_replace("casper.elementVisible(","chrome.elementVisible(",$script_content); // check element visible
+$script_content = str_replace("this.elementVisible(","chrome.elementVisible(",$script_content); // check element visible
 $script_content = str_replace("casper.fetchText","chrome.fetchText",$script_content); // change fetchText method to chrome
 $script_content = str_replace("this.fetchText","chrome.fetchText",$script_content); // change this.fetchText call as well
 $script_content = str_replace("casper.capture","chrome.capture",$script_content); // change capture method to chrome
@@ -83,7 +104,7 @@ $script_content = str_replace("casper.evaluate","chrome.evaluate",$script_conten
 $script_content = str_replace("this.evaluate","chrome.evaluate",$script_content); // change this.evaluate call as well
 $script_content = str_replace("casper.withFrame","chrome.withFrame",$script_content); // change withFrame method to chrome
 $script_content = str_replace("this.withFrame","chrome.withFrame",$script_content); // change this.withFrame call as well
-$script_content = str_replace("casper.waitForPopup","chrome.waitForPopup",$script_content); // change waitForPopup methodi
+$script_content = str_replace("casper.waitForPopup","chrome.waitForPopup",$script_content); // change waitForPopup method
 $script_content = str_replace("this.waitForPopup","chrome.waitForPopup",$script_content); // change this.waitForPopup call
 $script_content = str_replace("casper.withPopup","chrome.withPopup",$script_content); // change withPopup method to chrome
 $script_content = str_replace("this.withPopup","chrome.withPopup",$script_content); // change this.withPopup call as well
@@ -116,8 +137,10 @@ if (getenv('tagui_test_mode') == 'true') {$script_content = file_get_contents($s
 $script_content = str_replace("casper.echo('\\nSTART - automation started - ","casper.echo('",$script_content); // date
 $script_content = str_replace("techo('FINISH - automation","dummy_echo('FINISH - test",$script_content); // silent
 $script_content = str_replace("this.echo(","test.comment(",$script_content); // change echo to test comment
-$script_content = str_replace("if (!quiet_mode) casper.echo(echo_string);",
-"if (!quiet_mode) casper.test.comment(echo_string);",$script_content); // change echo to test comment in techo
+$script_content = str_replace("test.comment('ERROR","test.fail('ERROR",$script_content); // error comment to fail
+// change echo to test comment in techo to show output correctly as test comments
+$script_content = str_replace("casper.echo(echo_string);","casper.test.comment(echo_string);",$script_content);
+$script_content = str_replace("casper.echo(translated_string);","casper.test.comment(translated_string);",$script_content);
 $script_content = str_replace("\\n'","'",str_replace("'\\n","'",$script_content)); // compact test output
 // casperjs testing does not allow creation of casper object as it is already created by test engine
 $script_content = str_replace("var casper = require(","// var casper = require(",$script_content);
@@ -164,7 +187,10 @@ case "receive": return receive_intent($script_line); break;
 case "echo": return echo_intent($script_line); break;
 case "save": return save_intent($script_line); break;
 case "dump": return dump_intent($script_line); break;
+case "write": return write_intent($script_line); break;
+case "load": return load_intent($script_line); break;
 case "snap": return snap_intent($script_line); break;
+case "table": return table_intent($script_line); break;
 case "wait": return wait_intent($script_line); break;
 case "live": return live_intent($script_line); break;
 case "check": return check_intent($script_line); break;
@@ -172,6 +198,7 @@ case "test": return test_intent($script_line); break;
 case "frame": return frame_intent($script_line); break;
 case "popup": return popup_intent($script_line); break;
 case "api": return api_intent($script_line); break;
+case "run": return run_intent($script_line); break;
 case "dom": return dom_intent($script_line); break;
 case "js": return js_intent($script_line); break;
 case "timeout": return timeout_intent($script_line); break;
@@ -194,14 +221,18 @@ if (substr($lc_raw_intent,0,8)=="receive ") return "receive";
 if (substr($lc_raw_intent,0,5)=="echo ") return "echo";
 if (substr($lc_raw_intent,0,5)=="save ") return "save";
 if (substr($lc_raw_intent,0,5)=="dump ") return "dump";
+if (substr($lc_raw_intent,0,6)=="write ") return "write";
+if (substr($lc_raw_intent,0,5)=="load ") return "load";
 if (substr($lc_raw_intent,0,5)=="snap ") return "snap";
+if (substr($lc_raw_intent,0,6)=="table ") return "table";
 if (substr($lc_raw_intent,0,5)=="wait ") return "wait";
 if (substr($lc_raw_intent,0,5)=="live ") return "live";
-if (substr($lc_raw_intent,0,6)=="check ") return "check";
+if (substr($lc_raw_intent,0,6)=="check ") {$GLOBALS['test_automation']++; return "check";}
 if (substr($lc_raw_intent,0,5)=="test ") return "test";
 if (substr($lc_raw_intent,0,6)=="frame ") return "frame";
 if (substr($lc_raw_intent,0,6)=="popup ") return "popup";
 if (substr($lc_raw_intent,0,4)=="api ") return "api";
+if (substr($lc_raw_intent,0,4)=="run ") return "run";
 if (substr($lc_raw_intent,0,4)=="dom ") return "dom";
 if (substr($lc_raw_intent,0,3)=="js ") return "js";
 if (substr($lc_raw_intent,0,8)=="timeout ") return "timeout";
@@ -219,14 +250,18 @@ if ($lc_raw_intent=="receive") return "receive";
 if ($lc_raw_intent=="echo") return "echo";
 if ($lc_raw_intent=="save") return "save";
 if ($lc_raw_intent=="dump") return "dump";
+if ($lc_raw_intent=="write") return "write";
+if ($lc_raw_intent=="load") return "load";
 if ($lc_raw_intent=="snap") return "snap";
+if ($lc_raw_intent=="table") return "table";
 if ($lc_raw_intent=="wait") return "wait";
 if ($lc_raw_intent=="live") return "live";
-if ($lc_raw_intent=="check") return "check";
+if ($lc_raw_intent=="check") {$GLOBALS['test_automation']++; return "check";}
 if ($lc_raw_intent=="test") return "test";
 if ($lc_raw_intent=="frame") return "frame";
 if ($lc_raw_intent=="popup") return "popup";
 if ($lc_raw_intent=="api") return "api";
+if ($lc_raw_intent=="run") return "run";
 if ($lc_raw_intent=="dom") return "dom";
 if ($lc_raw_intent=="js") return "js";
 if ($lc_raw_intent=="timeout") return "timeout";
@@ -312,7 +347,8 @@ end_fi()."});\n\ncasper.then(function() {\n";}
 // set of functions to interpret steps into corresponding casperjs code
 function url_intent($raw_intent) {$twb = $GLOBALS['tagui_web_browser']; $casper_url = $raw_intent; $chrome_call = '';
 if ($twb == 'chrome')
-{$casper_url = 'about:blank'; $chrome_call = "chrome_step('Page.navigate',{url: '".$raw_intent."'}); sleep(1000);\n";}
+{$chrome_call = "chrome_step('Page.setDownloadBehavior',{behavior: 'allow', downloadPath: flow_path});\n";
+$casper_url = 'about:blank'; $chrome_call .= "chrome_step('Page.navigate',{url: '".$raw_intent."'}); sleep(1000);\n";}
 if (strpos($raw_intent,"'+")!==false and strpos($raw_intent,"+'")!==false) // check if dynamic url is used
 // wrap step within casper context if variable (casper context) is used in url, in order to access variable
 {$dynamic_header = "\n{casper.then(function() {\n"; $dynamic_footer = "})} // end of dynamic url block\n";}
@@ -385,8 +421,8 @@ function show_intent($raw_intent) {$twb = $GLOBALS['tagui_web_browser'];
 $params = trim(substr($raw_intent." ",1+strpos($raw_intent." "," ")));
 if (strtolower($params) == "page") return "this.echo('".$raw_intent."' + ' - \\n' + ".$twb.".getHTML());".end_fi()."\n";
 if ($params == "") echo "ERROR - " . current_line() . " target missing for " . $raw_intent . "\n"; else
-return "{// nothing to do on this line".beg_tx($params).
-"this.echo('".$raw_intent."' + ' - ' + ".$twb.".fetchText(tx('" . $params . "')).trim());".end_tx($params);}
+return "{techo('".$raw_intent."');".beg_tx($params).
+"this.echo(".$twb.".fetchText(tx('" . $params . "')).trim());".end_tx($params);}
 
 function upload_intent($raw_intent) {$twb = $GLOBALS['tagui_web_browser'];
 $params = trim(substr($raw_intent." ",1+strpos($raw_intent." "," ")));
@@ -431,13 +467,33 @@ return "{techo('".$raw_intent."');".beg_tx($params).
 	"save_text('',".$twb.".fetchText(tx('" . $params . "')).trim());".end_tx($params);}
 
 function dump_intent($raw_intent) {
-$raw_intent = str_replace("'","\"",$raw_intent); // avoid breaking echo below when single quote is used
+$safe_intent = str_replace("'","\'",$raw_intent); // avoid breaking echo below when single quote is used
 $params = trim(substr($raw_intent." ",1+strpos($raw_intent." "," ")));
 $param1 = trim(substr($params,0,strpos($params," to "))); $param2 = trim(substr($params,4+strpos($params," to ")));
 if ($params == "") echo "ERROR - " . current_line() . " variable missing for " . $raw_intent . "\n"; 
 else if (strpos($params," to ")!==false)
-return "{techo('".$raw_intent."');\nsave_text('".abs_file($param2)."',".add_concat($param1).");}".end_fi()."\n";
-else return "{techo('".$raw_intent."');\nsave_text(''," . add_concat($params) . ");}".end_fi()."\n";}
+return "{techo('".$safe_intent."');\nsave_text('".abs_file($param2)."',".add_concat($param1).");}".end_fi()."\n";
+else return "{techo('".$safe_intent."');\nsave_text(''," . add_concat($params) . ");}".end_fi()."\n";}
+
+function write_intent($raw_intent) {
+$safe_intent = str_replace("'","\'",$raw_intent); // avoid breaking echo below when single quote is used
+$params = trim(substr($raw_intent." ",1+strpos($raw_intent." "," ")));
+$param1 = trim(substr($params,0,strpos($params," to "))); $param2 = trim(substr($params,4+strpos($params," to ")));
+if ($params == "") echo "ERROR - " . current_line() . " variable missing for " . $raw_intent . "\n";
+else if (strpos($params," to ")!==false)
+return "{techo('".$safe_intent."');\nappend_text('".abs_file($param2)."',".add_concat($param1).");}".end_fi()."\n";
+else return "{techo('".$safe_intent."');\nappend_text(''," . add_concat($params) . ");}".end_fi()."\n";}
+
+function load_intent($raw_intent) {
+$safe_intent = str_replace("'","\'",$raw_intent); // avoid breaking echo below when single quote is used
+$params = trim(substr($raw_intent." ",1+strpos($raw_intent." "," ")));
+$param1 = trim(substr($params,0,strpos($params," to "))); $param2 = trim(substr($params,4+strpos($params," to ")));
+if ($params == "") echo "ERROR - " . current_line() . " filename missing for " . $raw_intent . "\n";
+else if (strpos($params," to ")!==false)
+return "{techo('".$safe_intent."');\nvar fs = require('fs'); ".$param2." = '';\n".
+	"if (fs.exists('".abs_file($param1)."'))\n".$param2." = fs.read('".abs_file($param1)."').trim();\n".
+	"else this.echo('ERROR - cannot find file ".$param1."').exit();}".end_fi()."\n";
+else echo "ERROR - " . current_line() . " variable missing for " . $raw_intent . "\n";}
 
 function snap_intent($raw_intent) {$twb = $GLOBALS['tagui_web_browser'];
 $params = trim(substr($raw_intent." ",1+strpos($raw_intent." "," ")));
@@ -451,6 +507,16 @@ return "{techo('".$raw_intent."');".beg_tx($param1).
 	$twb.".captureSelector('".abs_file($param2)."',tx('".$param1."'));".end_tx($param1); else
 return "{techo('".$raw_intent."');".beg_tx($params).
 	$twb.".captureSelector(snap_image(),tx('".$params."'));".end_tx($params);}
+
+function table_intent($raw_intent) {$twb = $GLOBALS['tagui_web_browser'];
+$params = trim(substr($raw_intent." ",1+strpos($raw_intent." "," ")));
+$param1 = trim(substr($params,0,strpos($params," to "))); $param2 = trim(substr($params,4+strpos($params," to ")));
+if ($params == "") echo "ERROR - " . current_line() . " target missing for " . $raw_intent . "\n";
+else if (strpos($params," to ")!==false)
+return "{techo('".$raw_intent."');".beg_tx($param1).
+	"save_table('".abs_file($param2)."',tx('".$param1."'));".end_tx($param1); else
+return "{techo('".$raw_intent."');".beg_tx($params).
+        "save_table('',tx('".$params."'));".end_tx($params);}
 
 function wait_intent($raw_intent) { // wait is a new block, invalid to use after frame, thus skip end_fi()
 $params = trim(substr($raw_intent." ",1+strpos($raw_intent." "," "))); if ($params == "") $params = "5"; 
@@ -471,8 +537,10 @@ $param3 = trim(substr($param2,1+strpos($param2,"|"))); $param2 = trim(substr($pa
 $param1 = str_replace(" JAVASCRIPT_OR ","||",$param1); // to restore back "||" that were replaced
 $param2 = str_replace(" JAVASCRIPT_OR ","||",$param2); $param3 = str_replace(" JAVASCRIPT_OR ","||",$param3);
 if (substr_count($params,"|")!=2) 
-echo "ERROR - " . current_line() . " if/true/false missing for " . $raw_intent . "\n"; else
-return "{".parse_condition("if ".$param1)."\nthis.echo(".$param2.");\nelse this.echo(".$param3.");}".end_fi()."\n";}
+echo "ERROR - " . current_line() . " if/true/false missing for " . $raw_intent . "\n";
+else if (getenv('tagui_test_mode') == 'true') return "{".parse_condition("if ".$param1).
+"\ntest.assert(true,".add_concat($param2).");\nelse test.assert(false,".add_concat($param3).");}".end_fi()."\n";
+else return "{".parse_condition("if ".$param1)."\nthis.echo(".add_concat($param2).");\nelse this.echo(".add_concat($param3).");}".end_fi()."\n";}
 
 function test_intent($raw_intent) {
 echo "ERROR - " . current_line() . " use CasperJS tester module to professionally " . $raw_intent . "\n";
@@ -507,10 +575,18 @@ if ($params == "") echo "ERROR - " . current_line() . " API URL missing for " . 
 return "{techo('".$raw_intent."');\napi_result = call_api('".$params."');\n" . 
 "try {api_json = JSON.parse(api_result);} catch(e) {api_json = JSON.parse('null');}}".end_fi()."\n";}
 
+function run_intent($raw_intent) { // waitForExec is a new block, invalid to use after frame, thus skip end_fi()
+$params = trim(substr($raw_intent." ",1+strpos($raw_intent." "," ")));
+if ($GLOBALS['inside_frame']!=0) echo "ERROR - " . current_line() . " invalid after frame - " . $raw_intent . "\n";
+else if ($GLOBALS['inside_popup']!=0) echo "ERROR - " . current_line() . " invalid after popup - " . $raw_intent . "\n";
+else if ($params == "") echo "ERROR - " . current_line() . " command to run missing for " . $raw_intent . "\n"; else
+return "techo('".$raw_intent."');});\n\ncasper.waitForExec('".$params."', null, function(response) {\n" .
+"run_result = (response.data.stdout.trim() || response.data.stderr.trim());\nrun_json = response.data;\n";}
+
 function dom_intent($raw_intent) {$twb = $GLOBALS['tagui_web_browser'];
 $params = trim(substr($raw_intent." ",1+strpos($raw_intent." "," ")));
 if ($params == "") echo "ERROR - " . current_line() . " statement missing for " . $raw_intent . "\n";
-else return "dom_result = ".$twb.".evaluate(function() {".$params."});".end_fi()."\n";}
+else return "dom_result = ".$twb.".evaluate(function(dom_json) {".$params."}, dom_json);".end_fi()."\n";}
 
 function js_intent($raw_intent) {
 $params = trim(substr($raw_intent." ",1+strpos($raw_intent." "," ")));
@@ -544,7 +620,9 @@ $last_delimiter_pos = strrpos($GLOBALS['for_loop_tracker'],"|");
 $for_loop_variable_name = substr($GLOBALS['for_loop_tracker'],$last_delimiter_pos+1);
 $for_loop_header = "\n// start of IIFE pattern\n(function (" . $for_loop_variable_name . ") {";
 $for_loop_footer = "})(" . $for_loop_variable_name . "); // end of IIFE pattern\n});\n\ncasper.then(function() {";
-if (substr($logic,0,1) == "}") $GLOBALS['for_loop_tracker']=substr($GLOBALS['for_loop_tracker'],0,$last_delimiter_pos);}
+// pop for_loop_tracker only if for loop count tallies with the code block count (to support if popup frame in for loop)
+if ((substr($logic,0,1) == "}") and (substr_count($GLOBALS['for_loop_tracker'],'|')==($GLOBALS['inside_code_block']+1)))
+$GLOBALS['for_loop_tracker']=substr($GLOBALS['for_loop_tracker'],0,$last_delimiter_pos);}
 if (substr($logic,0,1) == "{")
 $logic = $for_loop_header."\n// start of code block\n{casper.then(function() {\n".substr($logic,1);
 else if (substr($logic,0,1) == "}") $logic = "})} // end of code block\n".$for_loop_footer.substr($logic,1);}
@@ -598,6 +676,8 @@ $logic = str_replace(" and ",") && (",$logic); $logic = str_replace(" or ",") ||
 
 // special handling to manage for loop in natural language 
 if ((substr($logic,0,4)=="for ") and (strpos($logic,";")==false)) { // no ; means in natural language
+if (strpos($raw_logic,"count(")!==false)
+echo "ERROR - " . current_line() . " assign count() to variable before using - " . $raw_logic . "\n";
 $logic = str_replace("(","",$logic); $logic = str_replace(")","",$logic); // remove brackets if present
 $logic = str_replace("   "," ",$logic); $logic = str_replace("  "," ",$logic); // remove typo extra spaces
 $token = explode(" ",$logic); // split into tokens for loop in natural language, eg - for cupcake from 1 to 4
@@ -610,7 +690,7 @@ echo "ERROR - " . current_line() . " put { to next line - " . $raw_logic . "\n";
 
 // add to tracker the for loop variable name, to implement IIFE pattern if step/code blocks are used
 if (substr($logic,0,4)=="for ") { // get the variable name used in the for loop and append into tracker
-$GLOBALS['for_loop_tracker'] .= "|" . (substr($logic,strpos($logic,"(")+1,strpos($logic,"=")-strpos($logic,"(")-1));}
+$GLOBALS['for_loop_tracker'] .= "|" . trim(substr($logic,strpos($logic,"(")+1,strpos($logic,"=")-strpos($logic,"(")-1));}
 
 // add opening and closing brackets twice to handle no brackets, and, or cases
 if (substr($logic,0,3)=="if ") {$logic = "if ((" . trim(substr($logic,3)) . "))";

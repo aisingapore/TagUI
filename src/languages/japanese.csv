@@ -1,0 +1,77 @@
+EN,JA
+click,クリック
+tap,タップ
+move,動く
+hover,ホバー
+type,タイプ
+enter,入る
+select,選択する
+choose,選択する
+read,読む
+fetch,フェッチ
+show,ショー
+print,印刷する
+save,セーブ
+echo,エコー
+dump,ダンプ
+write,書きます
+snap,スナップ
+table,表
+live,ライブ
+download,ダウンロード
+upload,アップロード
+load,負荷
+receive,受け取る
+frame,フレーム
+popup,現れる
+wait,待つ
+timeout,タイムアウト
+seconds,秒
+second,二番
+api,api
+dom,dom
+js,js
+else if,else if
+else,else
+if,if
+for,ために
+while,while
+check,チェック
+more than or equals to,以上または等しい
+more than or equal to,以上
+greater than or equals to,より大きいか等しい
+greater than or equal to,以上
+higher than or equals to,より高いか等しい
+higher than or equal to,以上
+less than or equals to,より小さいか等しい
+less than or equal to,以下
+lesser than or equals to,より小さいか等しい
+lesser than or equal to,より小さいか等しい
+lower than or equals to,より小さいか等しい
+lower than or equal to,より小さいか等しい
+more than,より多い
+greater than,より大きい
+higher than,よりも高い
+less than,未満
+lesser than,より小さい
+lower than,より低い
+not equals to,等しくない
+not equal to,等しいではない
+equals to,等しい
+equal to,に等しい
+not contains,含まれていない
+not contain,含まれていない
+contains,含まれる
+contain,含む
+and,そして
+or,または
+from,から
+to,に
+as,として
+title(),タイトル（）
+url(),url（）
+text(),テキスト（）
+timer(),タイマー（）
+count(),カウント（）
+present(),プレゼント（）
+visible(),visible（）

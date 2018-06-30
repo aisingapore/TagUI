@@ -1,0 +1,77 @@
+EN,BN
+click,ক্লিক
+tap,টোকা
+move,পদক্ষেপ
+hover,বাতাসে ভাসিতে থাকা
+type,আদর্শ
+enter,প্রবেশ করান
+select,নির্বাচন করা
+choose,পছন্দ
+read,পড়া
+fetch,আনা
+show,প্রদর্শনী
+print,ছাপা
+save,রক্ষা
+echo,প্রতিধ্বনি
+dump,মনমরা ভাব
+write,লেখা
+snap,ক্ষুদ্র তালা
+table,টেবিল
+live,জীবিত
+download,ডাউনলোড
+upload,আপলোড
+load,বোঝা
+receive,গ্রহণ করা
+frame,ফ্রেম
+popup,পপআপ
+wait,অপেক্ষা করুন
+timeout,সময় শেষ
+seconds,সেকেন্ড
+second,দ্বিতীয়
+api,api
+dom,dom
+js,js
+else if,অন্যথায় যদি
+else,আর
+if,যদি
+for,জন্য
+while,যখন
+check,চেক
+more than or equals to,এর চেয়ে বেশি বা সমান
+more than or equal to,এর চেয়ে বেশি বা সমান
+greater than or equals to,এর থেকে বড় বা সমান
+greater than or equal to,এর চেয়ে বড় বা সমান
+higher than or equals to,বেশী বা সমান যাও
+higher than or equal to,এর চেয়ে বেশি বা সমান
+less than or equals to,কম বা তার সমান
+less than or equal to,অপেক্ষাকৃত ছোট বা সমান
+lesser than or equals to,কম বা তুলনায় সমান
+lesser than or equal to,কম বা এর সমান
+lower than or equals to,কম বা এর সমান
+lower than or equal to,কম বা এর সমান
+more than,অধিক
+greater than,অপেক্ষা বৃহত্তর
+higher than,তুলনায় বেশী
+less than,কম তুলনায়
+lesser than,তুলনায় কম
+lower than,ক্ষুদ্রতর
+not equals to,সমান নয়
+not equal to,সমান নয়
+equals to,সমান সমান
+equal to,সমান
+not contains,অন্তর্ভুক্ত নেই
+not contain,অন্তর্ভুক্ত না
+contains,রয়েছে
+contain,ধারণ করা
+and,এবং
+or,অথবা
+from,থেকে
+to,থেকে
+as,যেমন
+title(),খেতাব()
+url(),url()
+text(),টেক্সট()
+timer(),টাইমার()
+count(),গণনা()
+present(),বর্তমানে()
+visible(),প্রোফাইল()

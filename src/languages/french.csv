@@ -1,0 +1,77 @@
+EN,FR
+click,cliquez
+tap,cliquez
+move,robinet
+hover,flotter
+type,type
+enter,entrer
+select,sélectionner
+choose,choisir
+read,lis
+fetch,chercher
+show,montrer
+print,impression
+save,enregistrer
+echo,écho
+dump,déverser
+write,écrire
+snap,casser
+table,table
+live,vivre
+download,télécharger
+upload,télécharger
+load,charge
+receive,recevoir
+frame,cadre
+popup,apparaitre
+wait,attendez
+timeout,temps libre
+seconds,secondes
+second,seconde
+api,api
+dom,dom
+js,js
+else if,d'autre si
+else,autre
+if,si
+for,pour
+while,tandis que
+check,vérifier
+more than or equals to,plus ou égal à
+more than or equal to,plus que ou égal à
+greater than or equals to,supérieur ou égal à
+greater than or equal to,plus grand ou égal à
+higher than or equals to,supérieur ou égal à
+higher than or equal to,supérieur ou égal à
+less than or equals to,inférieur ou égal à
+less than or equal to,inférieur ou égal à
+lesser than or equals to,inférieur ou égal à
+lesser than or equal to,inférieur ou égal à
+lower than or equals to,inférieur ou égal à
+lower than or equal to,inférieur ou égal à
+more than,plus que
+greater than,plus grand que
+higher than,plus haut que
+less than,moins que
+lesser than,moindre que
+lower than,plus bas que
+not equals to,n'est pas égal à
+not equal to,pas égal à
+equals to,est égal à
+equal to,égal à
+not contains,ne contient pas
+not contain,contient pas de
+contains,contient
+contain,contenir
+and,et
+or,ou
+from,de
+to,à
+as,comme
+title(),titre()
+url(),url()
+text(),texte()
+timer(),minuteur()
+count(),compter()
+present(),présent()
+visible(),visible()

@@ -1,0 +1,77 @@
+EN,EN
+click,click
+tap,tap
+move,move
+hover,hover
+type,type
+enter,enter
+select,select
+choose,choose
+read,read
+fetch,fetch
+show,show
+print,print
+save,save
+echo,echo
+dump,dump
+write,write
+snap,snap
+table,table
+live,live
+download,download
+upload,upload
+load,load
+receive,receive
+frame,frame
+popup,popup
+wait,wait
+timeout,timeout
+seconds,seconds
+second,second
+api,api
+dom,dom
+js,js
+else if,else if
+else,else
+if,if
+for,for
+while,while
+check,check
+more than or equals to,more than or equals to
+more than or equal to,more than or equal to
+greater than or equals to,greater than or equals to
+greater than or equal to,greater than or equal to
+higher than or equals to,higher than or equals to
+higher than or equal to,higher than or equal to
+less than or equals to,less than or equals to
+less than or equal to,less than or equal to
+lesser than or equals to,lesser than or equals to
+lesser than or equal to,lesser than or equal to
+lower than or equals to,lower than or equals to
+lower than or equal to,lower than or equal to
+more than,more than
+greater than,greater than
+higher than,higher than
+less than,less than
+lesser than,lesser than
+lower than,lower than
+not equals to,not equals to
+not equal to,not equal to
+equals to,equals to
+equal to,equal to
+not contains,not contains
+not contain,not contain
+contains,contains
+contain,contain
+and,and
+or,or
+from,from
+to,to
+as,as
+title(),title()
+url(),url()
+text(),text()
+timer(),timer()
+count(),count()
+present(),present()
+visible(),visible()

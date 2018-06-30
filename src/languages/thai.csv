@@ -1,0 +1,77 @@
+EN,TH
+click,คลิก
+tap,แตะเบา ๆ
+move,ย้าย
+hover,โฉบ
+type,ชนิด
+enter,เข้าสู่
+select,เลือก
+choose,เลือก
+read,อ่าน
+fetch,นำมา
+show,แสดง
+print,พิมพ์
+save,ประหยัด
+echo,เสียงสะท้อน
+dump,เท
+write,เขียน
+snap,ตะครุบ
+table,ตาราง
+live,มีชีวิต
+download,ดาวน์โหลด
+upload,อัปโหลด
+load,ภาระ
+receive,รับ
+frame,กรอบ
+popup,ป๊อปอัพ
+wait,รอ
+timeout,หมดเวลา
+seconds,วินาที
+second,ที่สอง
+api,api
+dom,dom
+js,js
+else if,อื่นถ้า
+else,อื่น
+if,ถ้า
+for,สำหรับ
+while,ในขณะที่
+check,ตรวจสอบ
+more than or equals to,มากกว่าหรือเท่ากับ
+more than or equal to,มากกว่าหรือเท่ากับ
+greater than or equals to,ใหญ่กว่าหรือเท่ากับ
+greater than or equal to,มากกว่าหรือเท่ากับ
+higher than or equals to,สูงกว่าหรือเท่ากับ
+higher than or equal to,สูงกว่าหรือเท่ากับ
+less than or equals to,น้อยกว่าหรือเท่ากับ
+less than or equal to,น้อยกว่าหรือเท่ากับ
+lesser than or equals to,น้อยกว่าหรือเท่ากับ
+lesser than or equal to,น้อยกว่าหรือเท่ากับ
+lower than or equals to,ต่ำกว่าหรือเท่ากับ
+lower than or equal to,ต่ำกว่าหรือเท่ากับ
+more than,มากกว่า
+greater than,มากกว่า
+higher than,สูงกว่า
+less than,น้อยกว่า
+lesser than,น้อยกว่า
+lower than,ต่ำกว่า
+not equals to,ไม่เท่ากับ
+not equal to,ไม่เท่ากับ
+equals to,เท่ากับ
+equal to,เท่ากับ
+not contains,ไม่มี
+not contain,ไม่ประกอบด้วย
+contains,มี
+contain,บรรจุ
+and,และ
+or,หรือ
+from,จาก
+to,ไปยัง
+as,เช่น
+title(),หัวข้อ()
+url(),url()
+text(),ข้อความ()
+timer(),จับเวลา()
+count(),นับ()
+present(),นำเสนอ()
+visible(),สามารถมองเห็นได้()

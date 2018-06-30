@@ -45,4 +45,14 @@ save ProfileHeaderCard-screennameLink
 
 // saved texts are automatically named textXXXX.txt
 // unless you provide a filename for the saved text
-save ProfileHeaderCard-screennameLink to profile_id.txt 
+save ProfileHeaderCard-screennameLink to profile_id.txt
+
+// write step appends to file instead of overwriting file (eg dump step)
+write 'line 1' to text_test.txt
+line_number = 2
+write 'line ' line_number to text_test.txt
+
+// load step loads file content into specified variable
+load text_test.txt to file_content
+echo 'showing file content of text_test.txt'
+echo file_content

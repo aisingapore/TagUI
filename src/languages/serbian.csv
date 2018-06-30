@@ -1,0 +1,77 @@
+EN,SR
+click,кликните
+tap,славина
+move,потез
+hover,лебдети
+type,тип
+enter,унесите
+select,изаберите
+choose,изаберите
+read,читати
+fetch,донеси
+show,схов
+print,принт
+save,сачувати
+echo,одјек
+dump,депонија
+write,пиши
+snap,снап
+table,сто
+live,живи
+download,преузимање
+upload,отпремити
+load,оптерећење
+receive,примити
+frame,рам
+popup,попуп
+wait,чекати
+timeout,пауза у утакмици
+seconds,секунде
+second,друго
+api,api
+dom,dom
+js,js
+else if,друго ако
+else,друго
+if,ако
+for,за
+while,док
+check,провери
+more than or equals to,више него једнако
+more than or equal to,више или једнако
+greater than or equals to,веће или једнако
+greater than or equal to,већи или једнак
+higher than or equals to,више или једнако
+higher than or equal to,веће или једнако
+less than or equals to,мање или једнако
+less than or equal to,мање или једнако
+lesser than or equals to,мање или једнако
+lesser than or equal to,мањи или једнаки
+lower than or equals to,нижа или једнака
+lower than or equal to,мањи или једнаки
+more than,више од
+greater than,веће од
+higher than,већи од
+less than,мање од
+lesser than,мање од
+lower than,ниже од
+not equals to,није једнако
+not equal to,није једнако
+equals to,једнако
+equal to,једнако
+not contains,не садржи
+not contain,не садржи
+contains,садржи
+contain,садржати
+and,и
+or,или
+from,од
+to,до
+as,као
+title(),титле()
+url(),урл()
+text(),тект()
+timer(),тајмер()
+count(),цоунт()
+present(),поклон()
+visible(),висибле()

@@ -8,7 +8,7 @@ rem enable windows for loop advanced flow control
 setlocal enableextensions enabledelayedexpansion
 
 if "%~1"=="" (
-echo tagui v2.3: use following syntax and below options to run - tagui flow_filename option^(s^)
+echo tagui v3.0: use following syntax and below options to run - tagui flow_filename option^(s^)
 echo.
 echo IMPORTANT: SAVE YOUR WORK BEFORE USING CHROME OR HEADLESS, TAGUI WILL RESTART CHROME
 echo headless - run on invisible Chrome web browser instead of default PhantomJS ^(first install Chrome^)
@@ -18,7 +18,8 @@ echo upload   - upload automation flow and result to hastebin.com ^(expires 30 d
 echo report   - web report for sharing of run results on webserver ^(default is only a text log file^)
 echo debug    - show run-time backend messages from PhantomJS for detailed tracing and logging
 echo quiet    - run without output except for explicit output ^(echo / show / check / errors etc^)
-echo test     - professional testing using CasperJS assertions ^(TagUI smart tx^('selector'^) usable^)
+echo speed    - skip 3-second delay between datatable iterations ^(and skip restarting of Chrome^)
+echo test     - testing with check step test assertions for CI/CD integration ^(output XUnit XML file^)
 echo baseline - output execution log and relative-path output files to a separate baseline directory
 echo input^(s^) - add your own parameter^(s^) to be used in your automation flow as variables p1 to p9
 echo.
@@ -396,6 +397,41 @@ if "%arg9%"=="upload" (
 	set tagui_upload_result=true
 )
 
+set tagui_speed_mode=false
+rem check speed parameter to skip delay and chrome restart between iterations
+if "%arg2%"=="speed" (
+	set arg2=
+	set tagui_speed_mode=true
+)
+if "%arg3%"=="speed" (
+	set arg3=
+	set tagui_speed_mode=true
+)
+if "%arg4%"=="speed" (
+	set arg4=
+	set tagui_speed_mode=true
+)
+if "%arg5%"=="speed" (
+	set arg5=
+	set tagui_speed_mode=true
+)
+if "%arg6%"=="speed" (
+	set arg6=
+	set tagui_speed_mode=true
+)
+if "%arg7%"=="speed" (
+	set arg7=
+	set tagui_speed_mode=true
+)
+if "%arg8%"=="speed" (
+	set arg8=
+	set tagui_speed_mode=true
+)
+if "%arg9%"=="speed" (
+	set arg9=
+	set tagui_speed_mode=true
+)
+
 rem concatenate parameters in order to fix issue when calling casperjs test
 rem $1 left out - filenames with spaces have issue when casperjs $params
 set params=%arg2% %arg3% %arg4% %arg5% %arg6% %arg7% %arg8% %arg9%
@@ -424,15 +460,20 @@ if exist "tagui_chrome.out" del "tagui_chrome.out"
 rem default exit code 0 to mean no error parsing automation flow file
 set tagui_error_code=0
 
+rem transpose datatable csv file if file to be transposed exists
+if exist "%flow_file%_transpose.csv" php -q transpose.php "%flow_file%_transpose.csv" | tee -a "%flow_file%.log"
+
 rem check datatable csv file for batch automation
 set tagui_data_set_size=1 
 if not exist "%flow_file%.csv" goto no_datatable
 	for /f "tokens=* usebackq" %%c in (`gawk -F"," "{print NF}" "%flow_file%.csv" ^| sort -nu ^| head -n 1`) do set min_column=%%c
 	for /f "tokens=* usebackq" %%c in (`gawk -F"," "{print NF}" "%flow_file%.csv" ^| sort -nu ^| tail -n 1`) do set max_column=%%c
-	
-	if %min_column% neq %max_column% (
-		echo ERROR - %flow_file%.csv has inconsistent # of columns | tee -a "%flow_file%.log"
-	) else if %min_column% lss 2 (
+
+rem comment off sanity check for columns consistency as cells with , will trigger false-positive
+rem	if %min_column% neq %max_column% (
+rem		echo ERROR - %flow_file%.csv has inconsistent # of columns | tee -a "%flow_file%.log"
+rem	)
+	if %min_column% lss 2 (
 		echo ERROR - %flow_file%.csv has has lesser than 2 columns | tee -a "%flow_file%.log"
 	) else (
 		set /a tagui_data_set_size=%min_column% - 1
@@ -442,6 +483,9 @@ if not exist "%flow_file%.csv" goto no_datatable
 rem big loop for managing multiple data sets in datatable
 for /l %%n in (1,1,%tagui_data_set_size%) do (
 set tagui_data_set=%%n
+
+rem add delay between repetitions to pace out iterations
+if !tagui_data_set! neq 1 if %tagui_speed_mode%==false php -q sleep.php 3
 
 rem parse automation flow file, check for initial parse error, check sikuli and chrome, before calling casperjs
 php -q tagui_parse.php "%flow_file%" | tee -a "%flow_file%.log"
@@ -475,6 +519,12 @@ if exist "tagui_chrome.in" (
 	set headless_switch=
 	if "%tagui_web_browser%"=="headless" set headless_switch=--headless --disable-gpu
 
+	rem skip restarting chrome in speed mode and resuse 1st websocket url	
+	set or_result=F
+	if !tagui_data_set! equ 1 set or_result=T
+	if %tagui_speed_mode%==false set or_result=T
+	if "!or_result!"=="T" (
+
 	rem check for which operating system and launch chrome accordingly
 	set chrome_started=Windows
 	set chrome_switches=--remote-debugging-port=9222 about:blank
@@ -490,6 +540,9 @@ if exist "tagui_chrome.in" (
 	rem wait until chrome is ready with websocket url for php thread
 	for /f "tokens=* usebackq" %%u in (`curl -s localhost:9222/json ^| grep -A 1 "\"url\": \"about:blank\"" ^| grep webSocketDebuggerUrl ^| cut -d" " -f 5`) do set ws_url=%%u
 	if "!ws_url!"=="" goto scan_ws_again
+
+	rem end of if block for restarting chrome process
+	)
 
 	rem launch php process to manage chrome websocket communications
 	start /min cmd /c php -q tagui_chrome.php !ws_url! ^| tee -a tagui_chrome.log
@@ -508,7 +561,7 @@ if exist "tagui.sikuli\tagui_sikuli.in" echo finish > tagui.sikuli\tagui_sikuli.
 if exist "tagui_chrome.in" echo finish > tagui_chrome.in
 
 rem kill chrome processes by checking which os the processes are started on
-if not "!chrome_started!"=="" taskkill /IM chrome.exe /T /F > nul 2>&1
+if not "!chrome_started!"=="" if %tagui_speed_mode%==false taskkill /IM chrome.exe /T /F > nul 2>&1
 
 rem end of big loop for managing multiple data sets in datatable
 )
