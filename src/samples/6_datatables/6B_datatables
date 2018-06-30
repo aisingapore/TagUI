@@ -10,19 +10,20 @@
 
 // CONTEXT - When TagUI beta was released, someone shared to Hacker News
 // and GitHub stars for the project jumped from 2 to 1.5k in a week or so.
-// I used this to send an one-time thank you email to all TagUI starrers,
+// I used this to send a one-time thank you email to all TagUI starrers,
 // but had since stopped using this as it is unsolicited and feels spammy.
 
-// datatables extend the power of repositories files to manage batch automation
-// datatable has 2 or more columns, for example below (headers up to you to name)
-// data-centric approach with rows representing data fields (usually row = test case)
-// TagUI loops through each column to automate using values from different datasets
+// when running TagUI, specify datatable csv to use, eg tagui 6B_datatables url_data.csv
+// TagUI loops through each row to run automation using the data from different rows
 // for example, echo "URL - `user_url`" in your flow shows URL - https://github.com/s0b0lev
+// echo '`[iteration]`' can be used in your flow to show the current iteration number
+// a file tagui_datatable.csv will be created in tagui/src folder for TagUI internal use
 
-// contents of 6B_datatables.csv // with 3 random Telegram GitHub userids as learning examples
-// file in this format can be from flow 6A using JavaScript, or using Excel transpose function
-// 6B_GETCONTACT,#1,#2,#3
-// user_url,https://github.com/s0b0lev,https://github.com/zongUMR,https://github.com/jkmartindale
+// contents of url_data.csv // with 3 random Telegram GitHub userids as learning examples
+// #,user_url
+// 1,https://github.com/s0b0lev
+// 2,https://github.com/zongUMR
+// 3,https://github.com/jkmartindale
 
 // now here's the actual flow, it goes to their profile URLs and grabs their contact information
 

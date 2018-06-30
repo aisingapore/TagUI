@@ -8,9 +8,8 @@ rem enable windows for loop advanced flow control
 setlocal enableextensions enabledelayedexpansion
 
 if "%~1"=="" (
-echo tagui v3.5: use following syntax and below options to run - tagui flow_filename option^(s^)
+echo tagui v4.0: use following syntax and below options to run - tagui flow_filename option^(s^)
 echo.
-echo IMPORTANT: SAVE YOUR WORK BEFORE USING CHROME OR HEADLESS, TAGUI WILL RESTART CHROME
 echo headless - run on invisible Chrome web browser instead of default PhantomJS ^(first install Chrome^)
 echo chrome   - run on visible Chrome web browser instead of invisible PhantomJS ^(first install Chrome^)
 echo firefox  - run on visible Firefox web browser instead of invisible browser ^(first install Firefox^)
@@ -22,6 +21,7 @@ echo speed    - skip 3-second delay between datatable iterations ^(and skip rest
 echo test     - testing with check step test assertions for CI/CD integration ^(output XUnit XML file^)
 echo baseline - output execution log and relative-path output files to a separate baseline directory
 echo input^(s^) - add your own parameter^(s^) to be used in your automation flow as variables p1 to p9
+echo data.csv - specify a csv file to be used as the datatable for batch automation of many records
 echo.
 echo TagUI is a CLI tool for digital process automation ^(RPA^) ~ for more info, google tagui
 echo.

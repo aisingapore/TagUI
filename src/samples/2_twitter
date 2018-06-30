@@ -7,7 +7,7 @@ https://twitter.com/tebelorg
 // see cheatsheet for steps, conditions, finding element identifiers, etc
 // https://github.com/kelaberetiv/TagUI#cheat-sheet
 
-// use hover (or move) step to hover cursor over a webpage element
+// use hover step to hover cursor over a webpage element
 // below step hovers over profile image to test a pop-up label
 hover ProfileAvatar
 
@@ -16,9 +16,9 @@ hover ProfileAvatar
 // wait 7.5 seconds or 3s or 5sec or 10 secs will work 
 wait 2.5
 
-// use read (or fetch) step to fetch webpage element text to variable 
+// use read step to fetch webpage element text to variable 
 read ProfileHeaderCard-nameLink to profile_name
-fetch ProfileHeaderCard-screennameLink to profile_id
+read ProfileHeaderCard-screennameLink to profile_id
 
 // use echo step to print text (in quotation marks) and variables to output
 echo "Profile Name - " profile_name " (using double quotes for text)"

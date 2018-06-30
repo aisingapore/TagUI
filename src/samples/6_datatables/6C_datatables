@@ -10,21 +10,20 @@ https://medium.com/tebelorg
 
 // CONTEXT - When TagUI beta was released, someone shared to Hacker News
 // and GitHub stars for the project jumped from 2 to 1.5k in a week or so.
-// I used this to send an one-time thank you email to all TagUI starrers,
+// I used this to send a one-time thank you email to all TagUI starrers,
 // but had since stopped using this as it is unsolicited and feels spammy.
 
-// datatables extend the power of repositories files to manage batch automation
-// datatable has 2 or more columns, for example below (headers up to you to name)
-// data-centric approach with rows representing data fields (usually row = test case)
-// TagUI loops through each column to automate using values from different datasets
+// when running TagUI, specify datatable csv to use, eg tagui 6C_datatables user_data.csv
+// TagUI loops through each row to run automation using the data from different rows
 // for example, echo "GitHub ID - `GITHUB_ID`" in your flow shows GitHub ID - ironman
+// echo '`[iteration]`' can be used in your flow to show the current iteration number
+// a file tagui_datatable.csv will be created in tagui/src folder for TagUI internal use
 
-// contents of 6C_datatables.csv 
-// file in this format can be from flow 6B using JavaScript, or using Excel transpose function
-// TLE may also be useful to do this programmatically (another open-source project from TA)
-// 6C_SENDMAIL,#1,#2,#3
-// GITHUB_ID,ironman,batman,superman
-// USER_EMAIL,tony@stark.org,bruce@wayne.org,clarke@kent.org
+// contents of user_data.csv
+// #,GITHUB_ID,USER_EMAIL
+// 1,ironman,tony@stark.org
+// 2,batman,bruce@wayne.org
+// 3,superman,clarke@kent.org 
 
 // now here's the actual flow, it uses part of the information from 6B to email using API
 

@@ -15,25 +15,27 @@ click ABOUT
 // the popup step looks for a keyword in the urls within the
 // list of tabs that you have opened in this session of tagui
 // after the next step, context returns to original window
+// indentation within the popup step block is optional
 popup about_tebel
 {
-print file-about_tebel-LC2
-snap file-about_tebel-LC2
+	show file-about_tebel-LC2
+	snap file-about_tebel-LC2
 }
 
 // for frame step it is used to access webpage implemented as a frame within another webpage
 // the usage is similar to popup step, except that the parameter is the frame name
 // if there is a subframe within the mainframe, use frame mainframe | subframe
 
-// variables can be created using read or fetch step or manually defined
+// variables can be created using read step or manually defined
 dummy_variable = 'original'
+dummy_number = 123456789
 
 // adding a blank line for output clarity, you can use either " or ' for text
 echo ''
 echo 'returning to ' dummy_variable ' window context'
 
 // after the steps in popup context are completed, context returns to original window
-print (//*[@id="header"]//a)[1]
+show (//*[@id="header"]//a)[1]
 // above is XPath selector, an expressive way of identifying web elements
 
 // default execution context is local, webpage dom (document object model) is insulated
@@ -79,18 +81,6 @@ echo ''
 // the step { and } helps to define step/code block to group step/code together
 // earlier above it has been used for the popup step, it can also be used for frame step
 
-// after for condition, or while condition, using { and } is required
-// even if there is only 1 automation step or 1 line of JavaScript code
-// TagUI will pick up the { and } to convert to properly nested CasperJS blocks
-// so that the for loop variable can be accessed and used correctly in the loop
-
-// avoid using while loop, auto-wait disables in while loop as it will hang CasperJS
-// without auto-wait, situations where website needs time to react will not work
-// while loop also might create an infinite loop if condition to exit never happens
-
-// using for loop, there is auto-wait and powerful repetitive automation can be done
-// for loops can also be nested, remember to use { and } to denote step/code blocks
-
 // go to another web page with a table to practice for loop
 https://github.com/tebelorg/TLE
 
@@ -101,10 +91,10 @@ echo 'test_string - ' test_string
 // for loop can be expressed in natural language or JavaScript
 for column from 1 to 6
 {
-// '+variable_name+' can be used where text is expected
-show (//table)[3]//td['+column+']
-// JavaScript code can also be used in the loop
-test_string = "DEF";
+	// '+variable_name+' can be used where text is expected
+	show (//table)[3]//td['+column+']
+	// JavaScript code can also be used in the loop
+	test_string = "DEF";
 }
 
 echo 'test_string - ' test_string

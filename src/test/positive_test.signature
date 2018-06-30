@@ -40,6 +40,9 @@ var automation_start_time = Date.now(); casper.echo('\nSTART - automation starte
 // initialise time for timer() function
 var timer_start_time = Date.now();
 
+// infinity constant for use in for loops
+var infinity = 1024;
+
 // initialise default global variables
 var quiet_mode = false; var save_text_count = 0; var snap_image_count = 0;
 
@@ -67,6 +70,19 @@ var r_result = ''; var r_json = {}; var py_result = ''; var py_json = {};
 // track begin-finish blocks for integrations eg - py, r, run, vision, js, dom
 var inside_py_block = 0; var inside_r_block = 0; var inside_run_block = 0;
 var inside_vision_block = 0; var inside_js_block = 0; var inside_dom_block = 0;
+
+// determine how many casper.then steps to skip
+function teleport_distance(teleport_marker) {number_to_hop = 0;
+if (teleport_marker.indexOf('[BREAK_SIGNAL]') > -1) {for (s = casper.steps.length-1; s >= 0; s--) {
+if (casper.steps[s].toString() == ("function () {for_loop_signal = '"+teleport_marker+"';}"))
+{number_to_hop = s; break;}};} // search backward direction for break step
+else if (teleport_marker.indexOf('[CONTINUE_SIGNAL]') > -1) {for (s = casper.step; s <= casper.steps.length-1; s++) {
+if (casper.steps[s].toString() == ("function () {for_loop_signal = '"+teleport_marker+"';}"))
+{number_to_hop = s; break;}}; // search forward direction for continue step
+if (number_to_hop == 0) {for (s = casper.steps.length-1; s >= 0; s--) {if (casper.steps[s].toString() == 
+("function () {for_loop_signal = '"+teleport_marker.replace('[CONTINUE_SIGNAL]','[BREAK_SIGNAL]')+"';}"))
+{number_to_hop = s; break;}};}} // handle as break if no step left to continue
+else return 0; if ((number_to_hop - casper.step) > 0) return (number_to_hop - casper.step); else return 0;}
 
 // techo function for handling quiet option
 function techo(echo_string) {if (!quiet_mode) { // mute about:blank, eg for desktop automation
@@ -804,11 +820,13 @@ if ((raw_intent.charAt(raw_intent.length-1) == '{') || (raw_intent.charAt(raw_in
 if ((raw_intent.substr(0,3) == 'if ') || (raw_intent.substr(0,4) == 'else')) return true;
 if ((raw_intent.substr(0,4) == 'for ') || (raw_intent.substr(0,6) == 'while ')) return true;
 if ((raw_intent.substr(0,7) == 'switch ') || (raw_intent.substr(0,5) == 'case ')) return true;
-if ((raw_intent.substr(0,6) == 'break;') || (raw_intent.substr(0,9) == 'function ')) return true;
+if ((raw_intent.substr(0,6) == 'break;') || (raw_intent == 'break')) return true;
+if ((raw_intent.substr(0,9) == 'continue;') || (raw_intent == 'continue')) return true;
 if ((raw_intent.substr(0,7) == 'casper.') || (raw_intent.substr(0,5) == 'this.')) return true;
 if (raw_intent.substr(0,7) == 'chrome.') return true; // chrome object for chrome integration
 if (raw_intent.substr(0,5) == ('test'+'.')) return true; // avoid replacement with test option
 if ((raw_intent.substr(0,2) == '//') || (raw_intent.charAt(raw_intent.length-1) == ';')) return true;
+if (raw_intent.substr(0,9) == 'function ') return true; // function definition
 // assume = is assignment statement, kinda acceptable as this is checked at the very end
 if (raw_intent.indexOf('=') > -1) return true; return false;}
 
@@ -1680,36 +1698,40 @@ casper.then(function() {this.echo("FRUITS ONLY");});
 
 // test for
 casper.then(function() {for (n=1; n<=5; n++)
+{casper.then(function() {for_loop_signal = '[CONTINUE_SIGNAL][n]';});
 (function (n) { // start of IIFE pattern
 { // start of code block
 
 casper.then(function() {this.echo("ITERATION "+n);});
 
 } // end of code block
-})(n); // end of IIFE pattern
-});
+})(n); // end of IIFE pattern, with dummy marker for break step
+casper.then(function() {for_loop_signal = '[BREAK_SIGNAL][n]';});}});
 
 casper.then(function() {for (n=0; n<=0; n++)
+{casper.then(function() {for_loop_signal = '[CONTINUE_SIGNAL][n]';});
 (function (n) { // start of IIFE pattern
 { // start of code block
 
 casper.then(function() {this.echo("ITERATION "+n);});
 
 } // end of code block
-})(n); // end of IIFE pattern
-});
+})(n); // end of IIFE pattern, with dummy marker for break step
+casper.then(function() {for_loop_signal = '[BREAK_SIGNAL][n]';});}});
 
 casper.then(function() {for (n=6; n<=10; n++)
+{casper.then(function() {for_loop_signal = '[CONTINUE_SIGNAL][n]';});
 (function (n) { // start of IIFE pattern
 { // start of code block
 
 casper.then(function() {this.echo("ITERATION "+n);});
 
 } // end of code block
-})(n); // end of IIFE pattern
-});
+})(n); // end of IIFE pattern, with dummy marker for break step
+casper.then(function() {for_loop_signal = '[BREAK_SIGNAL][n]';});}});
 
 casper.then(function() {for (n=1; n<=5; n++)
+{casper.then(function() {for_loop_signal = '[CONTINUE_SIGNAL][n]';});
 (function (n) { // start of IIFE pattern
 { // start of code block
 
@@ -1719,10 +1741,11 @@ function then() {this.click(tx('element'));},
 function timeout() {this.echo('ERROR - cannot find element').exit();});}});
 
 } // end of code block
-})(n); // end of IIFE pattern
-});
+})(n); // end of IIFE pattern, with dummy marker for break step
+casper.then(function() {for_loop_signal = '[BREAK_SIGNAL][n]';});}});
 
 casper.then(function() {for (n=0; n<=0; n++)
+{casper.then(function() {for_loop_signal = '[CONTINUE_SIGNAL][n]';});
 (function (n) { // start of IIFE pattern
 { // start of code block
 
@@ -1732,10 +1755,11 @@ function then() {this.click(tx('element'));},
 function timeout() {this.echo('ERROR - cannot find element').exit();});}});
 
 } // end of code block
-})(n); // end of IIFE pattern
-});
+})(n); // end of IIFE pattern, with dummy marker for break step
+casper.then(function() {for_loop_signal = '[BREAK_SIGNAL][n]';});}});
 
 casper.then(function() {for (n=6; n<=10; n++)
+{casper.then(function() {for_loop_signal = '[CONTINUE_SIGNAL][n]';});
 (function (n) { // start of IIFE pattern
 { // start of code block
 
@@ -1745,8 +1769,8 @@ function then() {this.click(tx('element'));},
 function timeout() {this.echo('ERROR - cannot find element').exit();});}});
 
 } // end of code block
-})(n); // end of IIFE pattern
-});
+})(n); // end of IIFE pattern, with dummy marker for break step
+casper.then(function() {for_loop_signal = '[BREAK_SIGNAL][n]';});}});
 
 // test while
 casper.then(function() {while ((2 > 3) && (3 > 4))
@@ -1825,6 +1849,7 @@ function timeout() {this.echo('ERROR - cannot find test3').exit();});}});
 
 // test {} for loop simple
 casper.then(function() {for (number=1; number<=5; number++)
+{casper.then(function() {for_loop_signal = '[CONTINUE_SIGNAL][number]';});
 (function (number) { // start of IIFE pattern
 { // start of code block
 
@@ -1834,11 +1859,12 @@ function then() {this.click(tx('test'));},
 function timeout() {this.echo('ERROR - cannot find test').exit();});}});
 
 } // end of code block
-})(number); // end of IIFE pattern
-});
+})(number); // end of IIFE pattern, with dummy marker for break step
+casper.then(function() {for_loop_signal = '[BREAK_SIGNAL][number]';});}});
 
 // test {} for loop complex
 casper.then(function() {for (number=1; number<=5; number++)
+{casper.then(function() {for_loop_signal = '[CONTINUE_SIGNAL][number]';});
 (function (number) { // start of IIFE pattern
 { // start of code block
 
@@ -1862,8 +1888,8 @@ function then() {this.click(tx('test3'));},
 function timeout() {this.echo('ERROR - cannot find test3').exit();});}});
 
 } // end of code block
-})(number); // end of IIFE pattern
-});
+})(number); // end of IIFE pattern, with dummy marker for break step
+casper.then(function() {for_loop_signal = '[BREAK_SIGNAL][number]';});}});
 
 // test {} while loop simple
 casper.then(function() { // start of JS code
@@ -1899,26 +1925,29 @@ a = 1
 }); // end of JS code
 
 casper.then(function() {for (n=1; n<=20; n++)
+{casper.then(function() {for_loop_signal = '[CONTINUE_SIGNAL][n]';});
 (function (n) { // start of IIFE pattern
 { // start of code block
 
 casper.then(function() {this.echo(n);});
 
 } // end of code block
-})(n); // end of IIFE pattern
-});
+})(n); // end of IIFE pattern, with dummy marker for break step
+casper.then(function() {for_loop_signal = '[BREAK_SIGNAL][n]';});}});
 
 casper.then(function() {for (n=1; n<=20; n++)
+{casper.then(function() {for_loop_signal = '[CONTINUE_SIGNAL][n]';});
 (function (n) { // start of IIFE pattern
 { // start of code block
 
 casper.then(function() {this.echo(n);});
 
 } // end of code block
-})(n); // end of IIFE pattern
-});
+})(n); // end of IIFE pattern, with dummy marker for break step
+casper.then(function() {for_loop_signal = '[BREAK_SIGNAL][n]';});}});
 
 casper.then(function() {for (n=1; n<=20; n++)
+{casper.then(function() {for_loop_signal = '[CONTINUE_SIGNAL][n]';});
 (function (n) { // start of IIFE pattern
 { // start of code block
 
@@ -1926,21 +1955,22 @@ casper.then(function() {if (((a==1)))
 { // start of code block
 
 casper.then(function() {for (p=21; p<=40; p++)
+{casper.then(function() {for_loop_signal = '[CONTINUE_SIGNAL][p]';});
 (function (p) { // start of IIFE pattern
 { // start of code block
 
 casper.then(function() {this.echo(n+' - '+p);});
 
 } // end of code block
-})(p); // end of IIFE pattern
-});
+})(p); // end of IIFE pattern, with dummy marker for break step
+casper.then(function() {for_loop_signal = '[BREAK_SIGNAL][p]';});}});
 
 } // end of code block
 });
 
 } // end of code block
-})(n); // end of IIFE pattern
-});
+})(n); // end of IIFE pattern, with dummy marker for break step
+casper.then(function() {for_loop_signal = '[BREAK_SIGNAL][n]';});}});
 
 // test {} for popup step
 casper.then(function() {techo('popup about');});
@@ -2810,14 +2840,15 @@ element_count = count('element')
 }); // end of JS code
 
 casper.then(function() {for (n=1; n<=element_count; n++)
+{casper.then(function() {for_loop_signal = '[CONTINUE_SIGNAL][n]';});
 (function (n) { // start of IIFE pattern
 { // start of code block
 
 casper.then(function() {this.echo(n);});
 
 } // end of code block
-})(n); // end of IIFE pattern
-});
+})(n); // end of IIFE pattern, with dummy marker for break step
+casper.then(function() {for_loop_signal = '[BREAK_SIGNAL][n]';});}});
 
 // test url function
 casper.then(function() {this.echo(url());});
@@ -2865,6 +2896,127 @@ time_taken = timer()
 }); // end of JS code
 
 casper.then(function() {this.echo('time taken - '+time_taken+' seconds');});
+
+// test infinity constant (set to 1024)
+casper.then(function() {this.echo(infinity);});
+
+casper.then(function() {for (n=1; n<=infinity; n++)
+{casper.then(function() {for_loop_signal = '[CONTINUE_SIGNAL][n]';});
+(function (n) { // start of IIFE pattern
+{ // start of code block
+
+casper.then(function() {this.echo(n);});
+
+} // end of code block
+})(n); // end of IIFE pattern, with dummy marker for break step
+casper.then(function() {for_loop_signal = '[BREAK_SIGNAL][n]';});}});
+
+// test break and continue in for loops
+casper.then(function() {for (n=1; n<=10; n++)
+{casper.then(function() {for_loop_signal = '[CONTINUE_SIGNAL][n]';});
+(function (n) { // start of IIFE pattern
+{ // start of code block
+
+casper.then(function() {this.echo(n);});
+
+casper.then(function() {if ((n == 6))
+{ // start of code block
+
+casper.then(function() {for (k=80; k<=85; k++)
+{casper.then(function() {for_loop_signal = '[CONTINUE_SIGNAL][k]';});
+(function (k) { // start of IIFE pattern
+{ // start of code block
+
+casper.then(function() { // start of JS code
+casper.bypass(teleport_distance('[CONTINUE_SIGNAL][k]')); return;
+}); // end of JS code
+
+casper.then(function() {this.echo(k);});
+
+casper.then(function() {if ((k == 83))
+{ // start of code block
+
+casper.then(function() { // start of JS code
+casper.bypass(teleport_distance('[BREAK_SIGNAL][k]')); return;
+}); // end of JS code
+
+} // end of code block
+});
+
+} // end of code block
+})(k); // end of IIFE pattern, with dummy marker for break step
+casper.then(function() {for_loop_signal = '[BREAK_SIGNAL][k]';});}});
+
+} // end of code block
+});
+
+} // end of code block
+})(n); // end of IIFE pattern, with dummy marker for break step
+casper.then(function() {for_loop_signal = '[BREAK_SIGNAL][n]';});}});
+
+casper.then(function() {for (cde=1; cde<=5; cde++)
+{casper.then(function() {for_loop_signal = '[CONTINUE_SIGNAL][cde]';});
+(function (cde) { // start of IIFE pattern
+{ // start of code block
+
+casper.then(function() {this.echo("cde "+cde);});
+
+casper.then(function() {if ((cde == 3))
+{ // start of code block
+
+casper.then(function() { // start of JS code
+casper.bypass(teleport_distance('[CONTINUE_SIGNAL][cde]')); return;
+}); // end of JS code
+
+} // end of code block
+});
+
+} // end of code block
+})(cde); // end of IIFE pattern, with dummy marker for break step
+casper.then(function() {for_loop_signal = '[BREAK_SIGNAL][cde]';});}});
+
+casper.then(function() {for (abc=1; abc<=5; abc++)
+{casper.then(function() {for_loop_signal = '[CONTINUE_SIGNAL][abc]';});
+(function (abc) { // start of IIFE pattern
+{ // start of code block
+
+casper.then(function() {if ((abc == 3))
+{ // start of code block
+
+casper.then(function() { // start of JS code
+casper.bypass(teleport_distance('[CONTINUE_SIGNAL][abc]')); return;
+}); // end of JS code
+
+} // end of code block
+});
+
+casper.then(function() {this.echo("abc "+abc);});
+
+} // end of code block
+})(abc); // end of IIFE pattern, with dummy marker for break step
+casper.then(function() {for_loop_signal = '[BREAK_SIGNAL][abc]';});}});
+
+casper.then(function() {for (n=30; n<=35; n++)
+{casper.then(function() {for_loop_signal = '[CONTINUE_SIGNAL][n]';});
+(function (n) { // start of IIFE pattern
+{ // start of code block
+
+casper.then(function() {this.echo(n);});
+
+} // end of code block
+})(n); // end of IIFE pattern, with dummy marker for break step
+casper.then(function() {for_loop_signal = '[BREAK_SIGNAL][n]';});}});
+
+casper.then(function() {for (k=20; k<=25; k++)
+{casper.then(function() {for_loop_signal = '[CONTINUE_SIGNAL][k]';});
+(function (k) { // start of IIFE pattern
+{ // start of code block
+
+casper.then(function() {this.echo(k);});
+
+} // end of code block
+})(k); // end of IIFE pattern, with dummy marker for break step
+casper.then(function() {for_loop_signal = '[BREAK_SIGNAL][k]';});}});
 
 casper.then(function() {techo('\n' + this.getCurrentUrl() + ' - ' + this.getTitle());
 techo('FINISH - automation finished - ' + ((Date.now()-automation_start_time)/1000).toFixed(1) + 's\n');});
