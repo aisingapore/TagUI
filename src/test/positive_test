@@ -524,8 +524,8 @@ py finish
 	py begin
 	a = 2
 	if a == 1:
-	        print('FALSE1')
-        	print('FALSE2')
+		print('FALSE1')
+		print('FALSE2')
 	py finish
 
 // test vision

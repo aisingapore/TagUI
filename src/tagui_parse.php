@@ -813,7 +813,7 @@ return "casper.then(function() {".
 "{ask_result = ''; ask_result = chrome.evaluate(function() {\nreturn prompt('".$params."');}); ".
 "if (ask_result == null) ask_result = '';}".end_fi()."});"."\n\n";}
 else return "casper.then(function() {".
-"{ask_result = ''; var sys = require('system');\nsys.stdout.write('".$params." '); ".
+"{ask_result = ''; var sys = require('system');\nthis.echo('".$params." '); ".
 "ask_result = sys.stdin.readLine();}".end_fi()."});"."\n\n";}
 
 function check_intent($raw_intent) {
