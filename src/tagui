@@ -6,7 +6,7 @@ chrome_command="google-chrome"
 
 if [ -z "$1" ]
 then
-echo "tagui v4.0: use following syntax and below options to run ./tagui flow_filename option(s)"
+echo "tagui v4.0.2: use following syntax and below options to run ./tagui flow_filename option(s)"
 echo
 echo "headless - run on invisible Chrome web browser instead of default PhantomJS (first install Chrome)"
 echo "chrome   - run on visible Chrome web browser instead of invisible PhantomJS (first install Chrome)"
@@ -184,9 +184,6 @@ if [ "$9" = "speed" ]; then set -- "${@:1:8}"; tagui_speed_mode=true; fi
 # $1 left out - filenames with spaces have issue when casperjs $params
 params="$2"" ""$3"" ""$4"" ""$5"" ""$6"" ""$7"" ""$8"" ""$9"
 
-# check if api call is made in automation flow file to set appropriate setting for phantomjs to work
-api=""; if [ -f "$1" ]; then if grep -iq "api http" "$1"; then api=" --web-security=false"; fi; fi
-
 # initialise log files and set permissions to protect user data
 echo -n "" > "$1".log; chmod 600 "$1".log
 echo -n "" > tagui_r/tagui_r.log; chmod 600 tagui_r/tagui_r.log
@@ -259,6 +256,9 @@ if [ "$tagui_data_set" -ne 1 ] && [ "$tagui_speed_mode" == false ]; then sleep 3
 php -q tagui_parse.php "$1" | tee -a "$1".log
 if [ -s "$1".log ] && [ "$tagui_data_set" -eq 1 ]
 then echo "ERROR - automation aborted due to above" | tee -a "$1".log; tagui_error_code=1; break; fi
+
+# check if api call is made in generated js file to set appropriate setting for phantomjs to work
+api=""; if [ -f "$1".js ]; then if grep -iq "api http" "$1".js; then api=" --web-security=false"; fi; fi
 
 # start R process if integration file is created during parsing
 if [ -f "tagui_r/tagui_r.in" ]; then

@@ -8,7 +8,7 @@ rem enable windows for loop advanced flow control
 setlocal enableextensions enabledelayedexpansion
 
 if "%~1"=="" (
-echo tagui v4.0: use following syntax and below options to run - tagui flow_filename option^(s^)
+echo tagui v4.0.2: use following syntax and below options to run - tagui flow_filename option^(s^)
 echo.
 echo headless - run on invisible Chrome web browser instead of default PhantomJS ^(first install Chrome^)
 echo chrome   - run on visible Chrome web browser instead of invisible PhantomJS ^(first install Chrome^)
@@ -436,13 +436,6 @@ rem concatenate parameters in order to fix issue when calling casperjs test
 rem $1 left out - filenames with spaces have issue when casperjs $params
 set params=%arg2% %arg3% %arg4% %arg5% %arg6% %arg7% %arg8% %arg9%
 
-rem check if api call is made in automation flow file to set appropriate setting for phantomjs to work
-set api=
-if exist "%flow_file%" (
-	find /i /c "api http" "%flow_file%" > nul
-	if not errorlevel 1 set api= --web-security=false
-)
-
 rem initialise log file and set permissions to protect user data
 rem skip permissions setting for windows, only done for macos and linux
 type nul > "%flow_file%.log"
@@ -549,6 +542,13 @@ if !file_size! gtr 0 (
 		set tagui_error_code=1
 		goto break_for_loop
 	)
+)
+
+rem check if api call is made in generated js file to set appropriate setting for phantomjs to work
+set api=
+if exist "%flow_file%.js" (
+	find /i /c "api http" "%flow_file%.js" > nul
+	if not errorlevel 1 set api= --web-security=false
 )
 
 rem start R process if integration file is created during parsing
