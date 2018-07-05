@@ -1,16 +1,27 @@
+
 ***TagUI is a CLI tool for digital process automation. This branch of automation is commercially known as RPA (robotic process automation), and primarily aims to reproduce user interactions with computer applications - for example mouse clicks and keyboard entries. For more information on TagUI, visit its [repository page](https://github.com/kelaberetiv/TagUI).***
 
 # [Setup](https://github.com/kelaberetiv/TagUI#set-up)
-*In this section, we'll download and install TagUI on your computer. For Windows, unzip the tagui folder to c:\ and for macOS, unzip the tagui folder to your desktop. For Linux, unzip the tagui folder to a convenient folder on your laptop.*
+*In this section, we'll download and install TagUI on your computer.*
 
 ### INSTALLATION (10 minutes)
-TagUI is easy to use right away - no setup is needed, in most environments all required dependencies are packaged in. Avoid spaces in the folder path as some components of TagUI don't work well with spaces in folder and file names.
+TagUI is easy to use right away - no setup is needed, in most environments all required dependencies are packaged in. 
 
 Platform|macOS|Linux|Windows|Node.js (macOS/Linux)
 :------:|:---:|:---:|:-----:|:-------------------:
 Package|[unzip and run](https://raw.githubusercontent.com/tebelorg/Tump/master/TagUI_macOS.zip)|[unzip and run](https://raw.githubusercontent.com/tebelorg/Tump/master/TagUI_Linux.zip)|[unzip and run](https://raw.githubusercontent.com/tebelorg/Tump/master/TagUI_Windows.zip)|[npm install tagui](https://www.npmjs.com/package/tagui)
 
-***Potential exceptions*** - On some Windows computers, if you see 'MSVCR110.dll is missing' error, install [this from Microsoft website](https://www.microsoft.com/en-us/download/details.aspx?id=30679) (choose vcredist_x86.exe) - this file is required to run the PHP engine. On some newer macOS versions, if you get a 'dyld: Library not loaded' error, [install OpenSSL in this way](https://github.com/kelaberetiv/TagUI/issues/86#issuecomment-372045221). For some flavours of Linux (Ubuntu for example), which do not have PHP pre-installed, google how to install PHP accordingly (Ubuntu for example, apt-get install php).
+> Warning! Avoid spaces in the folder path as some components of TagUI don't work well with spaces in folder and file names.
+
+Recommended locations to unzip to:
+- Windows: C:\
+- Mac: Desktop
+- Linux: Any convenient folder, such as /home/your_id
+
+***Troubleshooting*** 
+- For Windows computers, if you see 'MSVCR110.dll is missing' error, install [this from Microsoft website](https://www.microsoft.com/en-us/download/details.aspx?id=30679) (choose vcredist_x86.exe) - this file is required to run the PHP engine. 
+- For some newer macOS versions, if you get a 'dyld: Library not loaded' error, [install OpenSSL in this way](https://github.com/kelaberetiv/TagUI/issues/86#issuecomment-372045221). 
+- For some flavours of Linux (Ubuntu for example), which do not have PHP pre-installed, google how to install PHP accordingly (Ubuntu for example, apt-get install php).
 
 Optional - configure web browser settings in tagui_config.txt, such as browser resolution, step timeout of 10s etc
 
@@ -20,14 +31,16 @@ Optional - configure web browser settings in tagui_config.txt, such as browser r
 *In this section, we'll have a guided walkthrough on running TagUI, using its Chrome extension, and some examples.*
 
 ### COMMAND LINE (10 minutes)
-```
-./tagui flow_filename option(s) for macOS/Linux, tagui flow_filename option(s) for Windows
-```
+
+**Using TagUI**
+`./tagui flow_filename option(s)` for macOS/Linux 
+`tagui flow_filename option(s)` for Windows
+
 - Flow filename can be a local file or the URL of an online file
 - Filename can have no extension, .txt or .js or .tagui extension
 - Type tagui without parameters to see its version and options
 
-Following steps will run a script to perform a search on Yahoo website and capture a screenshot of the results.
+The following example will run a script to perform a search on Yahoo website and capture a screenshot of the results.
 
 **Windows** - unzip the tagui folder to c:\\. Open command prompt with Start Menu -> Run -> cmd and enter the following
 
@@ -51,7 +64,7 @@ cd /home/your_id/tagui/src
 ./tagui samples/1_yahoo
 ```
 
-Now try the same workflow with Chrome browser by putting chrome as option (eg tagui samples\1_yahoo chrome). The automation will now run in the foreground instead, so you'll be able to see the navigation on Yahoo and DuckDuckGo websites. TagUI can also be run from desktop icons, scheduled tasks, or REST API calls.
+Now, you can try the same automation script with Chrome browser by putting chrome as option by entering `tagui samples\1_yahoo chrome`. The automation will now run in the foreground instead, so you'll be able to see the navigation on Yahoo and DuckDuckGo websites. TagUI can also be run from desktop icons, scheduled tasks, or REST API calls.
 
 <details>
   <summary>
@@ -118,7 +131,7 @@ To schedule an automation flow in crontab (macOS/Linux), for example at 8am dail
 Tip - for Windows, use Task Scheduler instead (search schedule from Start Menu)
 
 ### TAGUI WRITER & SCREENSHOTER
-TagUI Writer is a Windows app created by [@adegard](https://github.com/adegard) which makes it easy to write TagUI scripts. By pressing Ctrl + Left-click, a popup menu will appear with the list of TagUI steps for you to paste into your text editor. Arnaud also created a ScreenShoter app which makes it easy to capture snaphots for TagUI visual automation. [Download them here](https://github.com/adegard/tagui_scripts).
+TagUI Writer is a Windows app created by [@adegard](https://github.com/adegard) which makes it easy to write TagUI scripts. By pressing Ctrl + Left-click, a popup menu will appear with the list of TagUI steps for you to paste into your text editor. Arnaud also created a ScreenShoter app which makes it easy to capture snapshots for TagUI visual automation. [Download them here](https://github.com/adegard/tagui_scripts).
 
 <details>
   <summary>
@@ -130,12 +143,20 @@ TagUI Writer is a Windows app created by [@adegard](https://github.com/adegard) 
 </details>
 
 ### CHROME EXTENSION (10 minutes)
-Download from [Chrome Web Store](https://chrome.google.com/webstore/detail/tagui-web-automation/egdllmehgfgjebhlkjmcnhiocfcidnjk/) to use TagUI Chrome web browser extension for recording automation flows. TagUI Chrome extension is based on [Resurrectio tool](https://github.com/ebrehault/resurrectio) and records steps such as page navigation, clicking web elements and entering information. To start recording automation flows, click TagUI icon on your Chrome toolbar. Right-click for shortcuts to some TagUI steps, such as capturing webpage screenshot or to show the element identifier.
+Download from [Chrome Web Store](https://chrome.google.com/webstore/detail/tagui-web-automation/egdllmehgfgjebhlkjmcnhiocfcidnjk/) to use TagUI Chrome web browser extension for recording automation flows. TagUI Chrome extension is based on [Resurrectio tool](https://github.com/ebrehault/resurrectio) and records steps such as page navigation, clicking web elements and entering information.	 
+
+To start recording automation flows:
+1. Go to the website you want to start the automation at.
+2. Click the TagUI icon, followed by the Start button.
+3. Carry out the steps you want to automate.
+4. Click the TagUI icon, followed by the stop, then export buttons to view the generated TagUI script.
+
+> While recording the steps, you can right click to bring up a menu for steps such as capturing webpage screenshot or to show the element identifier.
 
 The recording is not foolproof (for example, the underlying recording engine cannot capture frames, popup windows or tab key input). It is meant to simplify flow creation with some edits, instead of typing everything manually. [See this video](https://www.youtube.com/watch?v=bFvsc4a8hWQ) for an example of recording sequence of steps, editing for adjustments and playing back the automation.
 
 ### FLOW SAMPLES (15 minutes)
-Following automation flow samples ([tagui/src/samples folder](https://github.com/kelaberetiv/TagUI/tree/master/src/samples)) are included with TagUI
+Following automation flow samples ([tagui/src/samples folder](https://github.com/kelaberetiv/TagUI/tree/master/src/samples)) are included with TagUI, inside the /samples folder.
 
 Flow Sample |Purpose
 :-----------|:------
@@ -252,16 +273,25 @@ To run TagUI flows in native languages or output flow execution in other languag
 </details>
 
 ### OPTION 3 - VISUAL AUTOMATION (15 minutes)
-TagUI has built-in integration with [Sikuli (base on OpenCV)](http://sikulix.com) to allow identifying web elements and desktop user interface elements for interaction. Steps that support visual automation are click, hover, type, select, read, show, save, snap. Simply specify an image filename (.png or .bmp format) of what to look for visually, in place of the element identifier, to use visual automation alongside your usual automation steps. Also, by using vision step, you can send custom Sikuli commands to do things such as [typing complex keystroke sequences](https://github.com/kelaberetiv/TagUI/issues/155#issuecomment-397403024).
+TagUI has built-in integration with [Sikuli (base on OpenCV)](http://sikulix.com) to allow identifying web elements and desktop user interface elements for interaction. Steps that support visual automation are click, hover, type, select, read, show, save, snap. 
 
 <details>
   <summary>
     Click to show where to download and install Sikuli, additional usage details and a demo GIF
   </summary>
   
-  Sikuli is excluded from TagUI packaged installation due to complex dependencies that are handled by its installer. First, make sure [Java JDK v8](http://www.oracle.com/technetwork/java/javase/downloads/jdk8-downloads-2133151.html) is installed. [Download Sikuli](http://sikulix.com/quickstart/) to tagui/src/tagui.sikuli folder and setup (choose option 1 - Pack1). If you have download error messages during setup, [unzip contents of this file](https://raw.githubusercontent.com/tebelorg/Tump/master/Sikuli-1.1.3.zip) to tagui/src/tagui.sikuli folder, right-click sikulixsetup-1.1.3.jar and open or run as administrator. On Windows, make sure display magnification is set to 100%.
+  Sikuli is excluded from TagUI packaged installation due to complex dependencies that are handled by its installer. Steps to install:
+  1. Make sure [Java JDK v8](http://www.oracle.com/technetwork/java/javase/downloads/jdk8-downloads-2133151.html) is installed.
+  2.  [Download Sikuli](http://sikulix.com/quickstart/) to tagui/src/tagui.sikuli folder and setup (choose option 1 - Pack1) 
+  3. On Windows, make sure display magnification is set to 100%.
+> If you have download error messages during setup, [unzip contents of this file](https://raw.githubusercontent.com/tebelorg/Tump/master/Sikuli-1.1.3.zip) to tagui/src/tagui.sikuli folder, right-click sikulixsetup-1.1.3.jar and run as administrator.
 
-  To type onto the screen instead of a particular element, use `type page.png as text` or `type page.bmp as text`. To do a snapshot or an OCR of the whole screen, use `page.png` or `page.bmp` as the element identifier for steps snap or read respectively. The usual helper functions visible() / present() can also be used to check whether an image is visible on the screen. Relative paths are supported for image filenames (eg pc.png, images/button.bmp). A screen (real or Xvfb) is needed for visual automation. [Tesseract OCR](https://github.com/tesseract-ocr/tesseract) (optical character recognition) is used for visually retrieving text.
+To use visual automation, simply specify an image file (in .png or .bmp format) for what to look for visually in place of the element identifier. 
+> Important! The element that corresponds to the image must be visible on the screen for visual automation to succeed. If it is blocked by another window for example, the automation will be unable to find the element. 
+
+  To type onto the screen instead of a particular element, use `type page.png as text` or `type page.bmp as text`. To do a snapshot or an OCR of the whole screen, use `page.png` or `page.bmp` as the element identifier for steps snap or read respectively. The usual helper functions visible() / present() can also be used to check whether an image is visible on the screen. Relative paths are supported for image filenames (eg pc.png, images/button.bmp).
+   A screen (real or Xvfb) is needed for visual automation. [Tesseract OCR](https://github.com/tesseract-ocr/tesseract) (optical character recognition) is used for visually retrieving text. 
+   Also, by using vision step, you can send custom Sikuli commands to do things such as [typing complex keystroke sequences](https://github.com/kelaberetiv/TagUI/issues/155#issuecomment-397403024).
 
   ![Sample Visual Automation](https://raw.githubusercontent.com/tebelorg/Tump/master/visual_flow.gif)
 
