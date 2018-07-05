@@ -18,7 +18,7 @@ Recommended locations to unzip to:
 - Mac: Desktop
 - Linux: Any convenient folder, such as /home/your_id
 
-***Troubleshooting*** 
+**Troubleshooting**
 - For Windows computers, if you see 'MSVCR110.dll is missing' error, install [this from Microsoft website](https://www.microsoft.com/en-us/download/details.aspx?id=30679) (choose vcredist_x86.exe) - this file is required to run the PHP engine. 
 - For some newer macOS versions, if you get a 'dyld: Library not loaded' error, [install OpenSSL in this way](https://github.com/kelaberetiv/TagUI/issues/86#issuecomment-372045221). 
 - For some flavours of Linux (Ubuntu for example), which do not have PHP pre-installed, google how to install PHP accordingly (Ubuntu for example, apt-get install php).
@@ -32,10 +32,10 @@ Optional - configure web browser settings in tagui_config.txt, such as browser r
 
 ### COMMAND LINE (10 minutes)
 
-**Using TagUI**
-`./tagui flow_filename option(s)` for macOS/Linux 
-`tagui flow_filename option(s)` for Windows
+**Using TagUI**  
 
+`./tagui flow_filename option(s)` for macOS/Linux  
+`tagui flow_filename option(s)` for Windows  
 - Flow filename can be a local file or the URL of an online file
 - Filename can have no extension, .txt or .js or .tagui extension
 - Type tagui without parameters to see its version and options
@@ -64,7 +64,9 @@ cd /home/your_id/tagui/src
 ./tagui samples/1_yahoo
 ```
 
-Now, you can try the same automation script with Chrome browser by putting chrome as option by entering `tagui samples\1_yahoo chrome`. The automation will now run in the foreground instead, so you'll be able to see the navigation on Yahoo and DuckDuckGo websites. TagUI can also be run from desktop icons, scheduled tasks, or REST API calls.
+Now, you can try the same automation script with Chrome browser by putting chrome as option by entering `tagui samples\1_yahoo chrome`. The automation will now run in the foreground instead, so you'll be able to see the navigation on Yahoo and DuckDuckGo websites. 
+
+TagUI can also be run from desktop icons, scheduled tasks, or REST API calls.
 
 <details>
   <summary>
@@ -122,13 +124,19 @@ Now, you can try the same automation script with Chrome browser by putting chrom
 
 </details>
 
-### BY SCHEDULING
+
+<details>
+  <summary>
+    Click to show how to run TagUI scripts on a set schedule
+  </summary>
+  
 To schedule an automation flow in crontab (macOS/Linux), for example at 8am daily
 ```
 0 8 * * * /full_path_on_your_server/tagui flow_filename option(s)
 ```
 
 Tip - for Windows, use Task Scheduler instead (search schedule from Start Menu)
+</details>
 
 ### TAGUI WRITER & SCREENSHOTER
 TagUI Writer is a Windows app created by [@adegard](https://github.com/adegard) which makes it easy to write TagUI scripts. By pressing Ctrl + Left-click, a popup menu will appear with the list of TagUI steps for you to paste into your text editor. Arnaud also created a ScreenShoter app which makes it easy to capture snapshots for TagUI visual automation. [Download them here](https://github.com/adegard/tagui_scripts).
@@ -280,7 +288,9 @@ TagUI has built-in integration with [Sikuli (base on OpenCV)](http://sikulix.com
     Click to show where to download and install Sikuli, additional usage details and a demo GIF
   </summary>
   
-  Sikuli is excluded from TagUI packaged installation due to complex dependencies that are handled by its installer. Steps to install:
+  Sikuli is excluded from TagUI packaged installation due to complex dependencies that are handled by its installer. 
+  
+  **How to install**
   1. Make sure [Java JDK v8](http://www.oracle.com/technetwork/java/javase/downloads/jdk8-downloads-2133151.html) is installed.
   2.  [Download Sikuli](http://sikulix.com/quickstart/) to tagui/src/tagui.sikuli folder and setup (choose option 1 - Pack1) 
   3. On Windows, make sure display magnification is set to 100%.
