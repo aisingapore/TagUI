@@ -8,7 +8,7 @@ rem enable windows for loop advanced flow control
 setlocal enableextensions enabledelayedexpansion
 
 if "%~1"=="" (
-echo tagui v4.0.2: use following syntax and below options to run - tagui flow_filename option^(s^)
+echo tagui v4.0.3: use following syntax and below options to run - tagui flow_filename option^(s^)
 echo.
 echo headless - run on invisible Chrome web browser instead of default PhantomJS ^(first install Chrome^)
 echo chrome   - run on visible Chrome web browser instead of invisible PhantomJS ^(first install Chrome^)
@@ -616,9 +616,9 @@ rem end of if block to start chrome processes
 
 rem check if test mode is enabled and run casperjs accordingly, before sending finish signal if integrations are active
 if %tagui_test_mode%==false (
-	casperjs "%flow_file%.js" %params%%api% | tee -a "%flow_file%.log"
+	casperjs "%flow_file%.js" %params%!api! | tee -a "%flow_file%.log"
 ) else (
-	casperjs test "%flow_file%.js" %params%%api% --xunit="%flow_file%.xml" | tee -a "%flow_file%.log"
+	casperjs test "%flow_file%.js" %params%!api! --xunit="%flow_file%.xml" | tee -a "%flow_file%.log"
 )
 rem checking for existence of files is important, otherwise in loops integrations will run even without enabling
 if exist "tagui_r\tagui_r.in" echo finish > tagui_r\tagui_r.in
