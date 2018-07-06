@@ -250,9 +250,10 @@ TagUI has built-in integration with [Sikuli (base on OpenCV)](http://sikulix.com
 
 **How to install**
 1. Make sure [Java JDK v8](http://www.oracle.com/technetwork/java/javase/downloads/jdk8-downloads-2133151.html) is installed (entering `java -version` returns your Java version)
-2. [Unzip contents of this file](https://raw.githubusercontent.com/tebelorg/Tump/master/Sikuli-1.1.3.zip) to tagui/src/tagui.sikuli folder (so that sikulixsetup-1.1.3.jar is there)
-3. Right-click sikulixsetup-1.1.3.jar to run as administrator and setup (choose option 1 - Pack1)
-4. On Windows, make sure display magnification is set to 100% for visual recognition to work
+2. After Java is installed, you will have to restart your command prompt or terminal to use it
+3. [Unzip contents of this file](https://raw.githubusercontent.com/tebelorg/Tump/master/Sikuli-1.1.3.zip) to tagui/src/tagui.sikuli folder (so that sikulixsetup-1.1.3.jar is there)
+4. Right-click sikulixsetup-1.1.3.jar to run as administrator and setup (choose option 1 - Pack1)
+5. On Windows, make sure display magnification is set to 100% for visual recognition to work
 
 To use visual automation, simply specify an image file (in .png or .bmp format) to look for in place of the element identifier. 
 > Important! The element that corresponds to the image must be visible on the screen for visual automation to succeed. If it is blocked by another window for example, the automation will be unable to find the element. 
