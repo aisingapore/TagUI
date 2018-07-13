@@ -96,10 +96,10 @@ TagUI can also be run from desktop icons, scheduled tasks, or REST API calls.
   After each automation run, a .log file will be created to store output of the execution, a .js file is the generated JavaScript file, a .raw is the expanded flow after reading in any module sub-scripts that are called in that flow. These files are for user reference purpose and can be helpful in debugging or troubleshooting the automation flow.
 
   To run tagui from anywhere:
-  - For MacOS/Linux, use ln -sf /full_path/tagui/src/tagui /usr/local/bin/tagui to create symbolic link. 
-  - For Windows, add tagui/src [folder to path](http://lmgtfy.com/?q=add+to+path+in+windows). 
+  - For MacOS/Linux, use ln -sf /full_path/tagui/src/tagui /usr/local/bin/tagui to create symbolic link 
+  - For Windows, add tagui/src [folder to path](http://lmgtfy.com/?q=add+to+path+in+windows), then tagui will be accessible from any folder
  
- Then tagui will be accessible from any folder. If you have issue running visible automation using Firefox/SlimerJS [check this setting](https://docs.slimerjs.org/current/installation.html#using-unstable-version-or-very-old-versions-of-firefox).
+  If you have issue running visible automation using Firefox/SlimerJS [check this setting](https://docs.slimerjs.org/current/installation.html#using-unstable-version-or-very-old-versions-of-firefox).
   
 </details>
 
@@ -161,6 +161,11 @@ The recording is not foolproof (for example, the underlying recording engine can
 
 # [Using it (advanced)](https://github.com/kelaberetiv/TagUI#cheat-sheet)
 *In this section, we'll spend some time exploring core features of TagUI.*
+
+### FIND XPATH OF WEB ELEMENT
+- In Chrome browser, right-click on the element, click Inspect, right-click on HTML code block, then -
+
+![TagUI Flowchart](https://raw.githubusercontent.com/kelaberetiv/TagUI/master/src/media/find_xpath.png)
 
 ### STEPS DESCRIPTION
 - TagUI auto-waits for a webpage element to appear and interacts with it as soon as it appears
@@ -250,7 +255,7 @@ TagUI has built-in integration with [Sikuli (base on OpenCV)](http://sikulix.com
 To use visual automation, simply specify an image file (in .png or .bmp format) to look for in place of the element identifier. 
 > Important! The element that corresponds to the image must be visible on the screen for visual automation to succeed. If it is blocked by another window for example, the automation will be unable to find the element. 
 
-To type onto the screen instead of a particular element, use `type page.png as text` or `type page.bmp as text`. To do a snapshot or an OCR of the whole screen, use `page.png` or `page.bmp` as the element identifier for steps snap or read respectively. The usual helper functions visible() / present() can also be used to check whether an image is visible on the screen. Relative paths are supported for image filenames (eg pc.png, images/button.bmp).
+To type onto the screen instead of a particular element, use `type page.png as text` or `type page.bmp as text`. To do a snapshot or an OCR of the whole screen, use `page.png` or `page.bmp` as the element identifier for steps snap / read. The usual helper functions visible() / present() can also be used to check whether an image is visible on the screen. Relative paths are supported for image filenames (eg pc.png, images/button.bmp).
  A screen (real or Xvfb) is needed for visual automation. [Tesseract OCR](https://github.com/tesseract-ocr/tesseract) (optical character recognition) is used for visually retrieving text. 
  Also, by using vision step, you can send custom Sikuli commands to do things such as [typing complex keystroke sequences](https://github.com/kelaberetiv/TagUI/issues/155#issuecomment-397403024).
 
