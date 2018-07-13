@@ -542,7 +542,7 @@ Tip - to use variables where text is expected, '+variable+' can be used. XPath i
   </summary>
 
   - Below are helper functions which can be used in your steps or code like a variable
-  - You can define your own JavaScript functions in tagui_local.js and tagui_global.js
+  - You can define your own JS functions in tagui_local.js / tagui_global.js ([see eg](https://github.com/kelaberetiv/TagUI/issues/236#issuecomment-403188526))
   - TagUI will look for a local function file tagui_local.js in the same folder of flow
   - TagUI will also look for a global function file tagui_global.js in tagui/src folder
   - Local definitions take precedence over global definitions (same for repositories)
