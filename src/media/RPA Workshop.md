@@ -29,8 +29,6 @@ Package|[unzip and run](https://raw.githubusercontent.com/tebelorg/Tump/master/T
 
 ### COMMAND LINE
 
-**Running TagUI**
-
 `tagui flow_filename option(s)` for Windows   
 `./tagui flow_filename option(s)` for macOS/Linux   
 - Flow filename can be a local file or the URL of an online file
@@ -128,19 +126,13 @@ TagUI can also be run from desktop icons, scheduled tasks, or REST API calls.
 
 </details>
 
-
-<details>
-  <summary>
-    Click to show how to run TagUI scripts on a recurring day & time schedule
-  </summary>
-  
+### BY SCHEDULING
 To schedule an automation flow in crontab (macOS/Linux), for example at 8am daily
 ```
 0 8 * * * /full_path_on_your_server/tagui flow_filename option(s)
 ```
 
 Tip - for Windows, use Task Scheduler instead (search schedule from Start Menu)
-</details>
 
 ### TAGUI WRITER & SCREENSHOTER
 TagUI Writer is a Windows app created by [@adegard](https://github.com/adegard) which makes it easy to write TagUI scripts. By pressing Ctrl + Left-click, a popup menu will appear with the list of TagUI steps for you to paste into your text editor. Arnaud also created a ScreenShoter app which makes it easy to capture snapshots for TagUI visual automation. To dowload, [click here](https://github.com/adegard/tagui_scripts).
