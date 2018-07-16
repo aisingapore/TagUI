@@ -2631,6 +2631,10 @@ casper.then(function() {{techo('api http://www.dummytestsite.com/api?COLOR1='+CO
 api_result = ''; api_result = call_api('http://www.dummytestsite.com/api?COLOR1='+COLOR1+'&COLOR2='+COLOR2+'&COLOR3='+COLOR3+'');
 try {api_json = JSON.parse(api_result);} catch(e) {api_json = JSON.parse('null');}}});
 
+casper.then(function() {{techo('api http://www.dummytestsite.com/api?COLOR1='+COLOR1+'&COLOR2='+COLOR2+'&COLOR3='+COLOR3+'');
+api_result = ''; api_result = call_api('http://www.dummytestsite.com/api?COLOR1='+COLOR1+'&COLOR2='+COLOR2+'&COLOR3='+COLOR3+'');
+try {api_json = JSON.parse(api_result);} catch(e) {api_json = JSON.parse('null');}}});
+
 // test run
 casper.then(function() {techo('run face_recognition par1 par2 par3');});
 casper.then(function() {casper.waitForExec('face_recognition par1 par2 par3', null, function(response) {run_result = '';
@@ -2794,6 +2798,48 @@ target_url = "www.dummytestsite.com";
 
 casper.then(function() {casper.thenOpen('http://'+target_url+'', function() {
 techo('http://'+target_url+'' + ' - ' + this.getTitle());});}); // end of dynamic url block
+
+casper.then(function() {casper.thenOpen('http://'+target_url+'', function() {
+techo('http://'+target_url+'' + ' - ' + this.getTitle());});}); // end of dynamic url block
+
+// test use of variable
+// old way for '+variable+' backward compatibility
+casper.then(function() { // start of JS code
+locator = 'email_button'
+}); // end of JS code
+
+casper.then(function() {{techo('click '+locator+'');
+casper.waitFor(function check() {return check_tx(''+locator+'');},
+function then() {this.click(tx(''+locator+''));},
+function timeout() {this.echo('ERROR - cannot find '+locator+'').exit();});}});
+
+casper.then(function() { // start of JS code
+number = 5
+}); // end of JS code
+
+casper.then(function() {{techo('click (//*[@id="test"])['+variable+']');
+casper.waitFor(function check() {return check_tx('(//*[@id="test"])['+variable+']');},
+function then() {this.click(tx('(//*[@id="test"])['+variable+']'));},
+function timeout() {this.echo('ERROR - cannot find (//*[@id="test"])['+variable+']').exit();});}});
+
+// new way of using '+variable+' to denote variable
+casper.then(function() { // start of JS code
+locator = 'email_button'
+}); // end of JS code
+
+casper.then(function() {{techo('click '+locator+'');
+casper.waitFor(function check() {return check_tx(''+locator+'');},
+function then() {this.click(tx(''+locator+''));},
+function timeout() {this.echo('ERROR - cannot find '+locator+'').exit();});}});
+
+casper.then(function() { // start of JS code
+number = 5
+}); // end of JS code
+
+casper.then(function() {{techo('click (//*[@id="test"])['+variable+']');
+casper.waitFor(function check() {return check_tx('(//*[@id="test"])['+variable+']');},
+function then() {this.click(tx('(//*[@id="test"])['+variable+']'));},
+function timeout() {this.echo('ERROR - cannot find (//*[@id="test"])['+variable+']').exit();});}});
 
 // test present function
 casper.then(function() {if ((present('footer')))
