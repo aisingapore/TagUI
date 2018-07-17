@@ -638,7 +638,7 @@ TagUI is a young tool and it tries to do the task of automating UI interactions 
 
 <details>
   <summary>
-    Click to show how to use the API webservice that comes with TagUI and how to make complex outgoing API calls
+    Click to show how to use API webservice that comes with TagUI and how to make complex outgoing API calls
   </summary>
   
   Automation flows can also be triggered via API URL. TagUI has an API service and runner for managing a queue of incoming requests via API. To set up, add a crontab entry on your server with the desired frequency to check and process incoming service requests. Below will check every 15 minutes and run pending flows in the queue. If there's an automation in progress, TagUI will wait for the next check instead of concurrently starting a new run.
@@ -646,7 +646,7 @@ TagUI is a young tool and it tries to do the task of automating UI interactions 
   0,15,30,45 * * * * /full_path_on_your_server/tagui_crontab
   ```
 
-  To call an automation flow from your application or web browser, use below API syntax. Custom input(s) supported. The default folder to look for flow_filename would be in tagui/src folder. Automation flows can also be triggered from emails using the API. For email integration, [check out Tmail](https://github.com/tebelorg/Tmail). It's an open-source mailbot to act on incoming emails or perform mass emailing; it also delivers emails by API. Emails with run-time variables can be sent directly from your flow with a single line (see flow sample 6C_datatables). If you have data transformation in your process pipeline [check out TLE](https://github.com/tebelorg/TLE), which can help with converting data.
+  To call an automation flow from your application or web browser, use below API syntax. Custom input(s) supported. The default folder to look for flow_filename would be in tagui/src folder. Automation flows can also be triggered from emails using the API. For email integration, [check out Tmail](https://github.com/tebelorg/Tmail). It's an open-source mailbot to act on incoming emails or perform mass emailing; it also delivers emails by API. Emails with run-time variables can be sent directly from your flow with a single line (see flow sample 6C_datatables). For sending SMS, you can use api step to send through SMS-sending services, or host your own from your webserver using services like Skebby ([see this example](https://github.com/adegard/SMS-Marketing) from [@adegard](https://github.com/adegard)). If you have data transformation in your process pipeline [check out TLE](https://github.com/tebelorg/TLE), which can help with converting data.
   ```
   your_website_url/tagui_service.php?SETTINGS="flow_filename option(s)"
   ```
