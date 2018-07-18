@@ -95,7 +95,7 @@ TagUI can also be run from desktop icons, scheduled tasks, or REST API calls.
   
   After each automation run, a .log file will be created to store output of the execution, a .js file is the generated JavaScript file, a .raw is the expanded flow after reading in any module sub-scripts that are called in that flow. These files are for user reference purpose and can be helpful in debugging or troubleshooting the automation flow.
 
-  To run tagui from anywhere:
+  **To run tagui from anywhere**
   - For MacOS/Linux, use ln -sf /full_path/tagui/src/tagui /usr/local/bin/tagui to create symbolic link 
   - For Windows, add tagui/src [folder to path](http://lmgtfy.com/?q=add+to+path+in+windows), then tagui will be accessible from any folder
  
@@ -230,7 +230,7 @@ live|try steps or code interactively for Chrome / visual automation|enter live m
 
   As TagUI default execution context is local, to run javascript on webpage dom (eg document.querySelector) use dom step. Set dom_json variable to pass a variable for use in dom step. Or dom_json = {tmp_number: phone, tmp_text: name} to pass multiple variables for use in dom step (dom_json.tmp_number and dom_json.tmp_text).
 
-  For steps run, dom, js, r, py, vision, instead of typing the step and the command, you can use something like py begin followed by many lines of py code, and end with py finish to denote an entire code block. This saves typing the step repeatedly for a large integration code block. Indentation of Python code within py begin-finish and vision begin-finish blocks is supported, for example in conditions or loops.
+  > For steps run, dom, js, r, py, vision, instead of typing the step and the command, you can use something like py begin followed by many lines of py code, and end with py finish to denote an entire code block. This saves typing the step repeatedly for a large integration code block. Indentation of Python code within py begin-finish and vision begin-finish blocks is supported, for example in conditions or loops.
 
   For steps r, py, vision, the helper functions r_step(), py_step(), vision_step() can be used to pass dynamic variables to those integrations. Below is an example for py step for passing dynamically generated varibles from TagUI to Python integration.
 
@@ -266,3 +266,6 @@ To type onto the screen instead of a particular element, use `type page.png as t
  Also, by using vision step, you can send custom Sikuli commands to do things such as [typing complex keystroke sequences](https://github.com/kelaberetiv/TagUI/issues/155#issuecomment-397403024).
 
 ![Sample Visual Automation](https://raw.githubusercontent.com/tebelorg/Tump/master/visual_flow.gif)
+
+# [Further Resources](https://github.com/kelaberetiv/TagUI)
+*For more info and documentation on TagUI, visit its [repository page](https://github.com/kelaberetiv/TagUI).*
