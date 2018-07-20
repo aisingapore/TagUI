@@ -6,7 +6,7 @@ chrome_command="google-chrome"
 
 if [ -z "$1" ]
 then
-echo "tagui v4.0.3: use following syntax and below options to run ./tagui flow_filename option(s)"
+echo "tagui v4.0.5: use following syntax and below options to run ./tagui flow_filename option(s)"
 echo
 echo "headless - run on invisible Chrome web browser instead of default PhantomJS (first install Chrome)"
 echo "chrome   - run on visible Chrome web browser instead of invisible PhantomJS (first install Chrome)"
@@ -272,7 +272,7 @@ fi
 
 # start sikuli process if integration file is created during parsing
 if [ -f "tagui.sikuli/tagui_sikuli.in" ]; then echo "[starting sikuli process]" | tee -a "$1".log
-tagui.sikuli/runsikulix -r tagui.sikuli >> tagui.sikuli/tagui.log 2>&1 &
+tagui.sikuli/runsikulix -r tagui.sikuli -d 3 >> tagui.sikuli/tagui.log 2>&1 &
 fi
 
 # start chrome processes if integration file is created during parsing

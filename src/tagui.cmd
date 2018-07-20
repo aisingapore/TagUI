@@ -8,7 +8,7 @@ rem enable windows for loop advanced flow control
 setlocal enableextensions enabledelayedexpansion
 
 if "%~1"=="" (
-echo tagui v4.0.3: use following syntax and below options to run - tagui flow_filename option^(s^)
+echo tagui v4.0.5: use following syntax and below options to run - tagui flow_filename option^(s^)
 echo.
 echo headless - run on invisible Chrome web browser instead of default PhantomJS ^(first install Chrome^)
 echo chrome   - run on visible Chrome web browser instead of invisible PhantomJS ^(first install Chrome^)
@@ -564,7 +564,7 @@ if exist "tagui_py\tagui_py.in" (
 rem start sikuli process if integration file is created during parsing
 if exist "tagui.sikuli\tagui_sikuli.in" (
 	echo [starting sikuli process] | tee -a "%flow_file%.log"
-	start /min cmd /c tagui.sikuli\runsikulix -r tagui.sikuli 2^>^&1 ^| tee -a tagui.sikuli\tagui.log
+	start /min cmd /c tagui.sikuli\runsikulix -r tagui.sikuli -d 3 2^>^&1 ^| tee -a tagui.sikuli\tagui.log
 )
 
 rem start chrome processes if integration file is created during parsing

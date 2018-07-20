@@ -1,12 +1,12 @@
 {
   "name": "tagui",
-  "version": "4.0.1",
+  "version": "4.0.5",
   "description": "CLI tool for digital process automation (RPA)",
   "keywords": [
     "tagui"
   ],
   "bin": "./src/tagui",
-  "license": "MIT",
+  "license": "Apache-2.0",
   "author": "AI Singapore",
   "homepage": "https://github.com/kelaberetiv/TagUI",
   "repository": {
