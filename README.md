@@ -291,13 +291,14 @@ TagUI has built-in integration with [Sikuli (base on OpenCV)](http://sikulix.com
   5. Click yes to the pop-up dialog boxes during installation to use the unzipped setup files
   6. On Windows, set display magnification to recommended %, if it does not work then 100%
   7. On Windows, if TagUI just hangs there, see if it is due to [this issue and try the solution](https://github.com/kelaberetiv/TagUI/issues/229)
+  8. On macOS, if can't find image on screen, may be due to [how the image was captured](https://github.com/kelaberetiv/TagUI/issues/240#issuecomment-405030276)
 
   To use visual automation, simply specify an image file (in .png or .bmp format) to look for in place of the element identifier. 
   > Important! The element that corresponds to the image must be visible on the screen for visual automation to succeed. If it is blocked by another window for example, the automation will be unable to find the element. 
 
   To type onto the screen instead of a particular element, use `type page.png as text` or `type page.bmp as text`. To do a snapshot or an OCR of the whole screen, use `page.png` or `page.bmp` as the element identifier for steps snap / read. The usual helper functions visible() / present() can also be used to check whether an image is visible on the screen. Relative paths are supported for image filenames (eg pc.png, images/button.bmp).
    A screen (real or Xvfb) is needed for visual automation. [Tesseract OCR](https://github.com/tesseract-ocr/tesseract) (optical character recognition) is used for visually retrieving text. 
-   Also, by using vision step, you can send custom Sikuli commands to do things such as [typing complex keystroke sequences](https://github.com/kelaberetiv/TagUI/issues/155#issuecomment-397403024).
+   Also, by using vision step, you can send [custom Sikuli commands](http://sikulix-2014.readthedocs.io/en/latest/genindex.html) to do things such as [typing complex keystroke sequences](https://github.com/kelaberetiv/TagUI/issues/155#issuecomment-397403024).
 
   ![Sample Visual Automation](https://raw.githubusercontent.com/tebelorg/Tump/master/visual_flow.gif)
 
