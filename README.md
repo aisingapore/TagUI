@@ -737,11 +737,15 @@ TagUI is a young tool and it tries to do the task of automating UI interactions 
   tagui_parse.php|to interpret natural language into code
   tagui_header.js|template for CasperJS / integrations code
   tagui_footer.js|template for CasperJS / integrations code
+  test/positive_test|TagUI's interpretation positive test cases
+  test/positive_test.signature|.js signature for positive test cases
 
   Multi-Language |Purpose
   :--------------|:------
   translate.php|translation engine for native languages
   translate.log|translation in English reference language
+  languages/build|script to self-build language definitions
+  languages/build.csv|default languages to be self-built
 
   Chrome Integration |Purpose
   :------------------|:------
@@ -799,9 +803,17 @@ TagUI is a young tool and it tries to do the task of automating UI interactions 
 
   Misc Files |Purpose
   :----------|:------
+  tagui_datatable.csv|temporary datatable internal representation
+  transpose.php|transpose conventional datatable csv file
   tagui_report.php|to generate html report from text log
-  transpose.php|transpose conventional datatable csv
   sleep.php|allow adding execution pause on Windows
+
+  User-defined Files |Purpose
+  :------------------|:------
+  tagui_local.csv|local repository (put in same folder as flow)
+  tagui_global.csv|global repository (put in tagui/src folder)
+  tagui_local.js|local functions (put in same folder as flow)
+  tagui_global.js|global functions (put in tagui/src folder)
 
 </details>
 
