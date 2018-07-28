@@ -118,8 +118,8 @@ Package|[unzip and run](https://raw.githubusercontent.com/tebelorg/Tump/master/T
 - Filename can have no extension, .txt or .js or .tagui extension
 - Type tagui without parameters to see its version and options
 
-> if your command prompt or terminal font size is too small, you can set it to much larger font sizes for easier reading
-> the following example will run a script to perform a search on Yahoo website and capture a screenshot of the results
+> If your command prompt or terminal font size is too small, you can set it to much larger font sizes for easier reading.
+> The following example will run a script to perform a search on Yahoo website and capture a screenshot of the results.
 
 **Windows** - unzip the tagui folder to c:\\. Open command prompt with Start Menu -> type run -> type cmd and enter
 
@@ -801,8 +801,8 @@ TagUI is a young tool and it tries to do the task of automating UI interactions 
   tagui_helper|generated normal TagUI command to run
   tagui_helper.cmd|same as above but for Windows platform
 
-  Misc Files |Purpose
-  :----------|:------
+  Miscellaneous Files |Purpose
+  :-------------------|:------
   tagui_datatable.csv|temporary datatable internal representation
   transpose.php|transpose conventional datatable csv file
   tagui_report.php|to generate html report from text log

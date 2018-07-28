@@ -644,6 +644,8 @@ gawk "sub(\"$\", \"\")" "%flow_file%.log" > "%flow_file%.log.tmp"
 move /Y "%flow_file%.log.tmp" "%flow_file%.log" > nul
 gawk "sub(\"$\", \"\")" "tagui_chrome.log" > "tagui_chrome.log.tmp"
 move /Y "tagui_chrome.log.tmp" "tagui_chrome.log" > nul
+rem keep non-windows logs to help debug integrations when needed
+rem and prevent file-still-locked issues while processes are exiting
 gawk "sub(\"$\", \"\")" "tagui_r\tagui_r.log" > "tagui_r\tagui_r_windows.log"
 gawk "sub(\"$\", \"\")" "tagui_py\tagui_py.log" > "tagui_py\tagui_py_windows.log"
 gawk "sub(\"$\", \"\")" "tagui.sikuli\tagui.log" > "tagui.sikuli\tagui_windows.log"

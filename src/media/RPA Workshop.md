@@ -30,8 +30,8 @@ Package|[unzip and run](https://raw.githubusercontent.com/tebelorg/Tump/master/T
 - Filename can have no extension, .txt or .js or .tagui extension
 - Type tagui without parameters to see its version and options
 
-> if your command prompt or terminal font size is too small, you can set it to much larger font sizes for easier reading
-> the following example will run a script to perform a search on Yahoo website and capture a screenshot of the results
+> If your command prompt or terminal font size is too small, you can set it to much larger font sizes for easier reading.
+> The following example will run a script to perform a search on Yahoo website and capture a screenshot of the results.
 
 **Windows** - unzip the tagui folder to c:\\. Open command prompt with Start Menu -> type run -> type cmd and enter
 
@@ -137,14 +137,7 @@ To schedule an automation flow with crontab (macOS/Linux), for example at 8am da
 ### TAGUI WRITER & SCREENSHOTER
 TagUI Writer is a Windows app created by [@adegard](https://github.com/adegard) which makes it easy to write TagUI scripts. By pressing Ctrl + Left-click, a popup menu will appear with the list of TagUI steps for you to paste into your text editor. Arnaud also created a ScreenShoter app which makes it easy to capture snapshots for TagUI visual automation. To dowload, [click here](https://github.com/adegard/tagui_scripts).
 
-<details>
-  <summary>
-    Click to show a preview of how TagUI Writer looks like (it works across different editors)
-  </summary>
-
 ![TagUI Writer](https://raw.githubusercontent.com/kelaberetiv/TagUI/master/src/media/tagui_writer.png)
-
-</details>
 
 ### CHROME EXTENSION
 Download from [Chrome Web Store](https://chrome.google.com/webstore/detail/tagui-web-automation/egdllmehgfgjebhlkjmcnhiocfcidnjk/) to use TagUI Chrome web browser extension for recording automation flows. TagUI Chrome extension records steps such as page navigation, clicking web elements and entering information.	 
