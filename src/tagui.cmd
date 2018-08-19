@@ -8,7 +8,7 @@ rem enable windows for loop advanced flow control
 setlocal enableextensions enabledelayedexpansion
 
 if "%~1"=="" (
-echo tagui v4.0: use following syntax and below options to run - tagui flow_filename option^(s^)
+echo tagui v4.1.0: use following syntax and below options to run - tagui flow_filename option^(s^)
 echo.
 echo headless - run on invisible Chrome web browser instead of default PhantomJS ^(first install Chrome^)
 echo chrome   - run on visible Chrome web browser instead of invisible PhantomJS ^(first install Chrome^)
@@ -436,13 +436,6 @@ rem concatenate parameters in order to fix issue when calling casperjs test
 rem $1 left out - filenames with spaces have issue when casperjs $params
 set params=%arg2% %arg3% %arg4% %arg5% %arg6% %arg7% %arg8% %arg9%
 
-rem check if api call is made in automation flow file to set appropriate setting for phantomjs to work
-set api=
-if exist "%flow_file%" (
-	find /i /c "api http" "%flow_file%" > nul
-	if not errorlevel 1 set api= --web-security=false
-)
-
 rem initialise log file and set permissions to protect user data
 rem skip permissions setting for windows, only done for macos and linux
 type nul > "%flow_file%.log"
@@ -551,6 +544,13 @@ if !file_size! gtr 0 (
 	)
 )
 
+rem check if api call is made in generated js file to set appropriate setting for phantomjs to work
+set api=
+if exist "%flow_file%.js" (
+	find /i /c "api http" "%flow_file%.js" > nul
+	if not errorlevel 1 set api= --web-security=false
+)
+
 rem start R process if integration file is created during parsing
 if exist "tagui_r\tagui_r.in" (
         start /min cmd /c Rscript tagui_r\tagui_r.R 2^>^&1 ^| tee -a tagui_r\tagui_r.log
@@ -564,7 +564,7 @@ if exist "tagui_py\tagui_py.in" (
 rem start sikuli process if integration file is created during parsing
 if exist "tagui.sikuli\tagui_sikuli.in" (
 	echo [starting sikuli process] | tee -a "%flow_file%.log"
-	start /min cmd /c tagui.sikuli\runsikulix -r tagui.sikuli 2^>^&1 ^| tee -a tagui.sikuli\tagui.log
+	start /min cmd /c tagui.sikuli\runsikulix -r tagui.sikuli -d 3 2^>^&1 ^| tee -a tagui.sikuli\tagui.log
 )
 
 rem start chrome processes if integration file is created during parsing
@@ -616,9 +616,9 @@ rem end of if block to start chrome processes
 
 rem check if test mode is enabled and run casperjs accordingly, before sending finish signal if integrations are active
 if %tagui_test_mode%==false (
-	casperjs "%flow_file%.js" %params%%api% | tee -a "%flow_file%.log"
+	casperjs "%flow_file%.js" %params%!api! | tee -a "%flow_file%.log"
 ) else (
-	casperjs test "%flow_file%.js" %params%%api% --xunit="%flow_file%.xml" | tee -a "%flow_file%.log"
+	casperjs test "%flow_file%.js" %params%!api! --xunit="%flow_file%.xml" | tee -a "%flow_file%.log"
 )
 rem checking for existence of files is important, otherwise in loops integrations will run even without enabling
 if exist "tagui_r\tagui_r.in" echo finish > tagui_r\tagui_r.in
@@ -644,6 +644,8 @@ gawk "sub(\"$\", \"\")" "%flow_file%.log" > "%flow_file%.log.tmp"
 move /Y "%flow_file%.log.tmp" "%flow_file%.log" > nul
 gawk "sub(\"$\", \"\")" "tagui_chrome.log" > "tagui_chrome.log.tmp"
 move /Y "tagui_chrome.log.tmp" "tagui_chrome.log" > nul
+rem keep non-windows logs to help debug integrations when needed
+rem and prevent file-still-locked issues while processes are exiting
 gawk "sub(\"$\", \"\")" "tagui_r\tagui_r.log" > "tagui_r\tagui_r_windows.log"
 gawk "sub(\"$\", \"\")" "tagui_py\tagui_py.log" > "tagui_py\tagui_py_windows.log"
 gawk "sub(\"$\", \"\")" "tagui.sikuli\tagui.log" > "tagui.sikuli\tagui_windows.log"

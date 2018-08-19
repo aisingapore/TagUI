@@ -1,35 +1,39 @@
-***TagUI is a CLI tool for digital process automation. This branch of automation is commercially known as RPA (robotic process automation), and primarily aims to reproduce user interactions with computer applications - for example mouse clicks and keyboard entries. For more information on TagUI, visit its [repository page](https://github.com/kelaberetiv/TagUI).***
+
+**TagUI is a CLI tool for digital process automation. This branch of automation is commercially known as RPA (robotic process automation), and primarily aims to reproduce user interactions with computer applications - for example mouse clicks and keyboard entries. For more info and documentation on TagUI, visit its [repository page](https://github.com/kelaberetiv/TagUI).**
 
 # [Setup](https://github.com/kelaberetiv/TagUI#set-up)
-*In this section, we'll download and install TagUI on your computer. For Windows, unzip the tagui folder to c:\ and for macOS, unzip the tagui folder to your desktop. For Linux, unzip the tagui folder to a convenient folder on your laptop.*
+*In this section, we'll download and install TagUI on your computer - it works on Windows, macOS, Linux.*
 
-### INSTALLATION (10 minutes)
-TagUI is easy to use right away - no setup is needed, in most environments all required dependencies are packaged in. Avoid spaces in the folder path as some components of TagUI don't work well with spaces in folder and file names.
+TagUI is easy to use right away - no setup is needed, in most environments all required dependencies are packaged in
 
 Platform|macOS|Linux|Windows|Node.js (macOS/Linux)
 :------:|:---:|:---:|:-----:|:-------------------:
 Package|[unzip and run](https://raw.githubusercontent.com/tebelorg/Tump/master/TagUI_macOS.zip)|[unzip and run](https://raw.githubusercontent.com/tebelorg/Tump/master/TagUI_Linux.zip)|[unzip and run](https://raw.githubusercontent.com/tebelorg/Tump/master/TagUI_Windows.zip)|[npm install tagui](https://www.npmjs.com/package/tagui)
 
-***Potential exceptions*** - On some Windows computers, if you see 'MSVCR110.dll is missing' error, install [this from Microsoft website](https://www.microsoft.com/en-us/download/details.aspx?id=30679) (choose vcredist_x86.exe) - this file is required to run the PHP engine. On some newer macOS versions, if you get a 'dyld: Library not loaded' error, [install OpenSSL in this way](https://github.com/kelaberetiv/TagUI/issues/86#issuecomment-372045221). For some flavours of Linux (Ubuntu for example), which do not have PHP pre-installed, google how to install PHP accordingly (Ubuntu for example, apt-get install php).
+> avoid spaces in the folder path as some components of TagUI don't work well with spaces in folder and file names
 
-Optional - configure web browser settings in tagui_config.txt, such as browser resolution, step timeout of 10s etc
+**Recommended locations to unzip to**
+- Windows - c:\
+- macOS - desktop
+- Linux - /home/your_id
 
-![TagUI Flowchart](https://raw.githubusercontent.com/kelaberetiv/TagUI/master/src/media/flowchart.png)
+> optional - configure web browser settings in tagui_config.txt, such as browser resolution, step timeout of 10s etc
 
-# [Using it (guided)](https://github.com/kelaberetiv/TagUI#to-use)
+# [Using it (overview)](https://github.com/kelaberetiv/TagUI#to-use)
 *In this section, we'll have a guided walkthrough on running TagUI, using its Chrome extension, and some examples.*
 
-### COMMAND LINE (10 minutes)
-```
-./tagui flow_filename option(s) for macOS/Linux, tagui flow_filename option(s) for Windows
-```
+### COMMAND LINE
+
+`tagui flow_filename option(s)` for Windows   
+`./tagui flow_filename option(s)` for macOS/Linux   
 - Flow filename can be a local file or the URL of an online file
 - Filename can have no extension, .txt or .js or .tagui extension
 - Type tagui without parameters to see its version and options
 
-Following steps will run a script to perform a search on Yahoo website and capture a screenshot of the results.
+> If your command prompt or terminal font size is too small, you can set it to much larger font sizes for easier reading.
+> The following example will run a script to perform a search on Yahoo website and capture a screenshot of the results.
 
-**Windows** - unzip the tagui folder to c:\\. Open command prompt with Start Menu -> Run -> cmd and enter the following
+**Windows** - unzip the tagui folder to c:\\. Open command prompt with Start Menu -> type run -> type cmd and enter
 
 ```
 c:
@@ -37,21 +41,30 @@ cd c:\tagui\src
 tagui samples\1_yahoo
 ```
 
-**macOS** - unzip the tagui folder to your desktop. Open terminal from Apps -> Utilities -> Terminal and enter the following
+**macOS** - unzip the tagui folder to your desktop. Open terminal from Apps -> Utilities -> Terminal and enter commands
 
 ```
 cd /Users/your_id/Desktop/tagui/src
 ./tagui samples/1_yahoo
 ```
 
-**Linux** - unzip the tagui folder to a convenient folder on your laptop for example /home/your_id and enter the following
+**Linux** - unzip the tagui folder to a convenient folder on your laptop for example /home/your_id and enter commands
 
 ```
 cd /home/your_id/tagui/src
 ./tagui samples/1_yahoo
 ```
 
-Now try the same workflow with Chrome browser by putting chrome as option (eg tagui samples\1_yahoo chrome). The automation will now run in the foreground instead, so you'll be able to see the navigation on Yahoo and DuckDuckGo websites. TagUI can also be run from desktop icons, scheduled tasks, or REST API calls.
+> if the script works successfully, you will notice five .png files - congratulations, you have run your first TagUI script!
+
+**Troubleshooting potential exceptions**
+- For Windows computers, if you see 'MSVCR110.dll is missing' error, install [this from Microsoft website](https://www.microsoft.com/en-us/download/details.aspx?id=30679) (choose vcredist_x86.exe) - this file is required to run the Windows PHP engine packaged with TagUI.
+- For some newer macOS versions, if you get a 'dyld: Library not loaded' error, [install OpenSSL in this way](https://github.com/kelaberetiv/TagUI/issues/86#issuecomment-372045221).
+- For some flavours of Linux (Ubuntu for example), which do not have PHP pre-installed, google how to install PHP accordingly (eg Ubuntu, apt-get install php). Most Linux distributions would already come with PHP.
+
+Now, you can try the same automation script with Chrome browser by running with chrome option (for Windows enter `tagui samples\1_yahoo chrome`, for macOS/Linux enter `./tagui samples/1_yahoo chrome`). The automation will now run in the foreground instead, so you'll be able to see the navigation on Yahoo and DuckDuckGo websites.
+
+TagUI can also be run from desktop icons, scheduled tasks, or REST API calls.
 
 <details>
   <summary>
@@ -82,7 +95,11 @@ Now try the same workflow with Chrome browser by putting chrome as option (eg ta
   
   After each automation run, a .log file will be created to store output of the execution, a .js file is the generated JavaScript file, a .raw is the expanded flow after reading in any module sub-scripts that are called in that flow. These files are for user reference purpose and can be helpful in debugging or troubleshooting the automation flow.
 
-  Tip - to run tagui from anywhere in macOS/Linux, use ln -sf /full_path/tagui/src/tagui /usr/local/bin/tagui to create symbolic link. To run tagui from anywhere in Windows, add tagui/src [folder to path](http://lmgtfy.com/?q=add+to+path+in+windows). Then tagui will be accessible from any folder. If you have issue running visible automation using Firefox/SlimerJS [check this setting](https://docs.slimerjs.org/current/installation.html#using-unstable-version-or-very-old-versions-of-firefox).
+  **To run tagui from anywhere**
+  - For MacOS/Linux, use ln -sf /full_path/tagui/src/tagui /usr/local/bin/tagui to create symbolic link 
+  - For Windows, add tagui/src [folder to path](http://lmgtfy.com/?q=add+to+path+in+windows), then tagui will be accessible from any folder
+ 
+  If you have issue running visible automation using Firefox/SlimerJS [check this setting](https://docs.slimerjs.org/current/installation.html#using-unstable-version-or-very-old-versions-of-firefox).
   
 </details>
 
@@ -110,85 +127,73 @@ Now try the same workflow with Chrome browser by putting chrome as option (eg ta
 </details>
 
 ### BY SCHEDULING
-To schedule an automation flow in crontab (macOS/Linux), for example at 8am daily
+To schedule an automation flow with crontab (macOS/Linux), for example at 8am daily
 ```
 0 8 * * * /full_path_on_your_server/tagui flow_filename option(s)
 ```
 
-Tip - for Windows, use Task Scheduler instead (search schedule from Start Menu)
+**Tip** - for Windows, use Task Scheduler (search schedule from Start Menu) or [Z-Cron freeware](https://www.z-cron.com)
 
 ### TAGUI WRITER & SCREENSHOTER
-TagUI Writer is a Windows app created by [@adegard](https://github.com/adegard) which makes it easy to write TagUI scripts. By pressing Ctrl + Left-click, a popup menu will appear with the list of TagUI steps for you to paste into your text editor. Arnaud also created a ScreenShoter app which makes it easy to capture snaphots for TagUI visual automation. [Download them here](https://github.com/adegard/tagui_scripts).
-
-<details>
-  <summary>
-    Click to show a preview of how TagUI Writer looks like (it works across different editors)
-  </summary>
+TagUI Writer is a Windows app created by [@adegard](https://github.com/adegard) which makes it easy to write TagUI scripts. By pressing Ctrl + Left-click, a popup menu will appear with the list of TagUI steps for you to paste into your text editor. Arnaud also created a ScreenShoter app which makes it easy to capture snapshots for TagUI visual automation. To dowload, [click here](https://github.com/adegard/tagui_scripts).
 
 ![TagUI Writer](https://raw.githubusercontent.com/kelaberetiv/TagUI/master/src/media/tagui_writer.png)
 
-</details>
+### CHROME EXTENSION
+Download from [Chrome Web Store](https://chrome.google.com/webstore/detail/tagui-web-automation/egdllmehgfgjebhlkjmcnhiocfcidnjk/) to use TagUI Chrome web browser extension for recording automation flows. TagUI Chrome extension records steps such as page navigation, clicking web elements and entering information.	 
 
-### CHROME EXTENSION (10 minutes)
-Download from [Chrome Web Store](https://chrome.google.com/webstore/detail/tagui-web-automation/egdllmehgfgjebhlkjmcnhiocfcidnjk/) to use TagUI Chrome web browser extension for recording automation flows. TagUI Chrome extension is based on [Resurrectio tool](https://github.com/ebrehault/resurrectio) and records steps such as page navigation, clicking web elements and entering information. To start recording automation flows, click TagUI icon on your Chrome toolbar. Right-click for shortcuts to some TagUI steps, such as capturing webpage screenshot or to show the element identifier.
+**To start recording automation flows**
+1. Go to the website URL you want to start the automation at
+2. Click the TagUI icon, followed by the Start button
+3. Carry out the steps you want to automate
+4. Click the TagUI icon, followed by the Stop, then Export buttons to view the generated TagUI script
+
+> while recording the steps, you can right click to bring up a menu for steps such as showing the element identifier
 
 The recording is not foolproof (for example, the underlying recording engine cannot capture frames, popup windows or tab key input). It is meant to simplify flow creation with some edits, instead of typing everything manually. [See this video](https://www.youtube.com/watch?v=bFvsc4a8hWQ) for an example of recording sequence of steps, editing for adjustments and playing back the automation.
 
-### FLOW SAMPLES (15 minutes)
-Following automation flow samples ([tagui/src/samples folder](https://github.com/kelaberetiv/TagUI/tree/master/src/samples)) are included with TagUI
+# [Using it (advanced)](https://github.com/kelaberetiv/TagUI#cheat-sheet)
+*In this section, we'll spend some time exploring core features of TagUI.*
 
-Flow Sample |Purpose
-:-----------|:------
-[1_yahoo](https://github.com/kelaberetiv/TagUI/blob/master/src/samples/1_yahoo)|searches github on Yahoo and captures screenshot of results
-[2_twitter](https://github.com/kelaberetiv/TagUI/blob/master/src/samples/2_twitter)|goes to a Twitter page and saves some profile information
-[3_github](https://github.com/kelaberetiv/TagUI/blob/master/src/samples/3_github)|goes to a GitHub page and downloads the repository file
-[4_conditions](https://github.com/kelaberetiv/TagUI/blob/master/src/samples/4_conditions)|goes through examples of using conditions in natural language
-[5_repositories](https://github.com/kelaberetiv/TagUI/blob/master/src/samples/5_repositories)|shows using repositories on Russian social media site VK.com
-[6_datatables](https://github.com/kelaberetiv/TagUI/tree/master/src/samples/6_datatables)|set of flows uses datatables to retrieve and act on GitHub info
-[7_testing](https://github.com/kelaberetiv/TagUI/blob/master/src/samples/7_testing)|shows how to use check step assertions for CI/CD integration
-[8_hastebin](https://github.com/kelaberetiv/TagUI/blob/master/src/samples/8_hastebin)|used by upload option to upload flow result to hastebin.com
-[9_misc](https://github.com/kelaberetiv/TagUI/blob/master/src/samples/9_misc)|shows how to use steps popup, frame, dom, js, { and } block
-[a_facedetect](https://github.com/kelaberetiv/TagUI/blob/master/src/samples/a_facedetect)|uses face recognition to detect profile images on webpages
-[b_visualoutlook](https://github.com/kelaberetiv/TagUI/issues/113#issuecomment-378194245)|uses visual recognition for desktop MS Outlook email sending
-[c_chinese_flow](https://github.com/kelaberetiv/TagUI/blob/master/src/samples/c_chineseflow)|run flow in other languages (first, change src/tagui_config.txt)
+### FIND XPATH OF WEB ELEMENT
+- In Chrome browser, right-click on the element, click Inspect, right-click on HTML code block, then
 
-# [Using it (flexible)](https://github.com/kelaberetiv/TagUI#to-use)
-*In this section, we'll spend some time exploring a particular feature of TagUI that you'll like to try out.*
+![TagUI Flowchart](https://raw.githubusercontent.com/kelaberetiv/TagUI/master/src/media/find_xpath.png)
 
-### OPTION 1 - STEPS DESCRIPTION (15 minutes)
+### STEPS DESCRIPTION
 - TagUI auto-waits for a webpage element to appear and interacts with it as soon as it appears
-- Element identifier can be auto-recorded using TagUI Chrome extension, or [found from web browser](https://help.surveygizmo.com/help/how-to-find-element-ids-to-use-with-javascript)
+- Element identifier can be auto-recorded using TagUI Chrome extension, or [found from web browser](https://github.com/kelaberetiv/TagUI/blob/master/src/media/RPA%20Workshop.md#find-xpath-of-web-element)
 - Identifiers help to pinpoint which webpage elements you want to interact with ([examples in flow samples](https://github.com/kelaberetiv/TagUI#flow-samples))
 - TagUI auto-selects provided identifier in this order - xpath, css, id, name, class, title, aria-label, text(), href
 
+Basic Step|Parameters (separator in bold)|Purpose
+:---------|:-----------------------------|:------
+http(s)://|just enter full url of webpage (\`variable\` for variable)|go to specified webpage
+click|element to click|click on an element
+rclick|element to right-click|right-click on an element
+dclick|element to double-click|double-click on an element
+hover|element to hover|move cursor to element
+type|element ***as*** text ([enter] = enter, [clear] = clear field)|enter element as text
+select|element to select ***as*** option value ([clear] = clear selection)|choose dropdown option
+read|element to read (page = webpage) ***to*** variable name|fetch element text to variable
+show|element to read (page = webpage, ie raw html) |print element text to output
+save|element (page = webpage) ***to*** optional filename|save element text to file
+load|filename ***to*** variable name|load file content to variable
+echo|text (in quotation marks) and variables|print text/variables to output
+dump|text (in quotation marks) and variables ***to*** optional filename|save text/variables to file
+write|text (in quotation marks) and variables ***to*** optional filename|append text/variables to file
+variable_name| = value (for text, put in quotes, use + to concat)|define variable variable_name
+// (on new line)|user comments (ignored during execution)|add user comments
+tagui|relative or absolute filename (see MODULES section)|run another tagui flow
+ask|question or instruction for user (reply stored in ask_result)|ask user for input
+live|try steps or code interactively for Chrome / visual automation|enter live mode ([Firefox not yet](https://github.com/laurentj/slimerjs/issues/639))
+
+**Tip** - to use variables where text is expected, \`variable\` can be used. XPath is an expressive way to identify web elements. If you know xpath and use xpath for element identifier, use double quotes for text //\*[@title="Login"]
+
 <details>
   <summary>
-    Click to show the steps that can be used in TagUI automation flows and what the steps are used for
+    Click to show pro steps such as snap, table, wait, check, api, run, dom, js, r, py, vision, code blocks
   </summary>
-  
-  Basic Step|Parameters (separator in bold)|Purpose
-  :---------|:-----------------------------|:------
-  http(s)://|just enter full url of webpage ('+variable+' for variable)|go to specified webpage
-  click|element to click|click on an element
-  rclick|element to right-click|right-click on an element
-  dclick|element to double-click|double-click on an element
-  hover|element to hover|move cursor to element
-  type|element ***as*** text ([enter] = enter, [clear] = clear field)|enter element as text
-  select|element to select ***as*** option value ([clear] = clear selection)|choose dropdown option
-  read|element to read (page = webpage) ***to*** variable name|fetch element text to variable
-  show|element to read (page = webpage, ie raw html) |print element text to output
-  save|element (page = webpage) ***to*** optional filename|save element text to file
-  load|filename ***to*** variable name|load file content to variable
-  echo|text (in quotation marks) and variables|print text/variables to output
-  dump|text (in quotation marks) and variables ***to*** optional filename|save text/variables to file
-  write|text (in quotation marks) and variables ***to*** optional filename|append text/variables to file
-  variable_name| = value (for text, put in quotes, use + to concat)|define variable variable_name
-  // (on new line)|user comments (ignored during execution)|add user comments
-  tagui|relative or absolute filename (see MODULES section)|run another tagui flow
-  ask|question or instruction for user (reply stored in ask_result)|ask user for input
-  live|try steps or code interactively for Chrome / visual automation|enter live mode ([Firefox not yet](https://github.com/laurentj/slimerjs/issues/639))
-
-  Tip - to use variables where text is expected, '+variable+' can be used. XPath is an expressive way to identify web elements. If you know xpath and use xpath for element identifier, use double quotes for text //\*[@title="Login"]
 
   Pro Step|Parameters (separator in bold)|Purpose
   :-------|:-----------------------------|:------
@@ -212,9 +217,15 @@ Flow Sample |Purpose
   vision|custom visual automation commands|run custom sikuli commands
   timeout|time in seconds before step errors out|change auto-wait timeout
 
-  Tip - for headless and visible Chrome, file downloads can be done using normal webpage interaction or specifying the URL as a navigation flow step. For Firefox and PhantomJS, the download and receive step can be used. As TagUI default execution context is local, to run javascript on webpage dom (eg document.querySelector) use dom step. Set dom_json variable to pass a variable for use in dom step. Or dom_json = {tmp_number: phone, tmp_text: name} to pass multiple variables for use in dom step (dom_json.tmp_number and dom_json.tmp_text). On Windows, snap step requires display magnification to be set at 100% to work properly.
+  **Tip** - for headless and visible Chrome, file downloads can be done using normal webpage interaction or specifying the URL as a navigation flow step. For Firefox and PhantomJS, the download and receive step can be used.
 
-  For steps run, dom, js, r, py, vision, instead of typing the step and the command, you can use something like py begin followed by many lines of py code, and end with py finish to denote an entire code block. This saves typing the step repeatedly for a large integration code block. For steps r, py, vision, the helper functions r_step(), py_step(), vision_step() can be used to pass dynamic variables to those integrations. Below is an example for py step for passing dynamically generated varibles from TagUI to Python integration. Indentation of Python code within py begin-finish and vision begin-finish blocks is supported, for example in conditions or loops.
+  > on Windows, snap step requires display magnification to be set at 100% to work properly
+
+  As TagUI default execution context is local, to run javascript on webpage dom (eg document.querySelector) use dom step. Set dom_json variable to pass a variable for use in dom step. Or dom_json = {tmp_number: phone, tmp_text: name} to pass multiple variables for use in dom step (dom_json.tmp_number and dom_json.tmp_text).
+
+  > For steps run, dom, js, r, py, vision, instead of typing the step and the command, you can use something like py begin followed by many lines of py code, and end with py finish to denote an entire code block. This saves typing the step repeatedly for a large integration code block. Indentation of Python code within py begin-finish and vision begin-finish blocks is supported, for example in conditions or loops.
+
+  For steps r, py, vision, the helper functions r_step(), py_step(), vision_step() can be used to pass dynamic variables to those integrations. Below is an example for py step for passing dynamically generated varibles from TagUI to Python integration.
 
   ```
   phone = 1234567
@@ -227,144 +238,30 @@ Flow Sample |Purpose
   py print(phone)
   echo py_result
   ```
-
-</details>
-
-### OPTION 2 - NATIVE LANGUAGES (15 minutes)
-To run TagUI flows in native languages or output flow execution in other languages ([see demo run](https://github.com/kelaberetiv/TagUI/issues/68#issuecomment-344380657))
-1. set your default flow language with [tagui_language variable](https://github.com/kelaberetiv/TagUI/blob/master/src/tagui_config.txt) in tagui_config.txt
-2. write automation flow in native language base on [language definition .csv files](https://github.com/kelaberetiv/TagUI/tree/master/src/languages)
-3. optionally set tagui_language in flow to any other languages as output language
-
-<details>
-  <summary>
-    Click to show the 20+ human languages supported by TagUI and how to self-build language definitions
-  </summary>
-  
-  Tip - as Windows Unicode support is not as straightforward as macOS/Linux, doing this in Windows may require changing system locale, using chcp command, and selecting a font to display native language correctly ([more info](http://www.walkernews.net/2013/05/19/how-to-get-windows-command-prompt-displays-chinese-characters/))
-  
-  TagUI language engine supports over 20 languages and can be modified or extended easily by users to improve accuracy or add more languages. The languages are Bengali, Chinese, English, French, German, Hindi, Hungarian, Indonesian, Italian, Japanese, Korean, Polish, Portuguese, Romanian, Russian, Serbian, Spanish, Tagalog, Tamil, Thai, Vietnamese. This starting set is partly chosen base on the [list of most commonly used languages](https://www.babbel.com/en/magazine/the-10-most-spoken-languages-in-the-world), partly from the countries around where I'm from (Singapore), and partly from countries with a lot of developers.
-
-  If your native language is not in the above list, you can also automate building a new native language definition by using this language [build automation flow](https://github.com/kelaberetiv/TagUI/blob/master/src/languages/build) (src/languages/build) that self-builds the vocabulary set using Google Translate. To do that, update [build.csv](https://github.com/kelaberetiv/TagUI/blob/master/src/languages/build.csv) with the languages that you want to build and run `tagui build using chrome` in src/languages folder. Use quiet option to hide the verbose automation output. The generated files are named as their 2-character language codes to prevent overwriting existing language definitions by accident. To use the generated .csv files, rename them to their full language names. See [full list of languages possible](https://cloud.google.com/translate/docs/languages) to be generated by Google Translate.
-
-  Most of the language definitions are automatically self-built using Google Translate (except english.csv and chinese.csv), and would be wrong without understanding vocabulary used in UI interaction context. Native language users can update the language definition csv themselves and are welcome to submit PRs with correct words to be used. Some languages are very different from English structure (for eg, written from right to left, different order of adjective and noun) and would be impossible to use correctly in TagUI.
-
-</details>
-
-### OPTION 3 - VISUAL AUTOMATION (15 minutes)
-TagUI has built-in integration with [Sikuli (base on OpenCV)](http://sikulix.com) to allow identifying web elements and desktop user interface elements for interaction. Steps that support visual automation are click, hover, type, select, read, show, save, snap. Simply specify an image filename (.png or .bmp format) of what to look for visually, in place of the element identifier, to use visual automation alongside your usual automation steps. Also, by using vision step, you can send custom Sikuli commands to do things such as [typing complex keystroke sequences](https://github.com/kelaberetiv/TagUI/issues/155#issuecomment-397403024).
-
-<details>
-  <summary>
-    Click to show where to download and install Sikuli, additional usage details and a demo GIF
-  </summary>
-  
-  Sikuli is excluded from TagUI packaged installation due to complex dependencies that are handled by its installer. First, make sure [Java JDK v8](http://www.oracle.com/technetwork/java/javase/downloads/jdk8-downloads-2133151.html) is installed. [Download Sikuli](http://sikulix.com/quickstart/) to tagui/src/tagui.sikuli folder and setup (choose option 1 - Pack1). If you have download error messages during setup, [unzip contents of this file](https://raw.githubusercontent.com/tebelorg/Tump/master/Sikuli-1.1.3.zip) to tagui/src/tagui.sikuli folder, right-click sikulixsetup-1.1.3.jar and open or run as administrator. On Windows, make sure display magnification is set to 100%.
-
-  To type onto the screen instead of a particular element, use `type page.png as text` or `type page.bmp as text`. To do a snapshot or an OCR of the whole screen, use `page.png` or `page.bmp` as the element identifier for steps snap or read respectively. The usual helper functions visible() / present() can also be used to check whether an image is visible on the screen. Relative paths are supported for image filenames (eg pc.png, images/button.bmp). A screen (real or Xvfb) is needed for visual automation. [Tesseract OCR](https://github.com/tesseract-ocr/tesseract) (optical character recognition) is used for visually retrieving text.
-
-  ![Sample Visual Automation](https://raw.githubusercontent.com/tebelorg/Tump/master/visual_flow.gif)
-
-</details>
-
-### OPTION 4 - PYTHON INTEGRATION (15 minutes)
-TagUI has built-in integration with Python (works out of the box for both v2 & v3) - a programming language with many popular frameworks for big data and machine learning. The py step can be used to run commands in Python and retrieve the output of those commands. To use Python integration in TagUI, first [download Python for your OS](https://www.python.org/). macOS and Linux normally come pre-installed with Python. Make sure that python command is accessible from command prompt.
-
-<details>
-  <summary>
-    Click to show how to use py step in your automation flow to send and receive data from Python frameworks
-  </summary>
-
-  In your automation flow, use the py step followed by the Python commands to be executed, separated by `;`. You can then use the `print` command in Python to output the result you want to be accessible in your automation flow as `py_result` variable. For a super basic example, below steps in your TagUI automation flow will output 3. If the result is JSON data, the JSON object `py_json` will be created for easy access to JSON data elements. If not, `py_json` will be null.
-
-  ```
-  // using py step to denote Python code, and getting back output from py_result
-  py a=1;b=2
-  py c=a+b
-  py print(c)
-  echo py_result
-  
-  // alternatively, you can use py begin and py finish to denote a Python code block
-  // indentation of Python code is also supported, for example in conditions or loops
-  py begin
-  a=1;b=2
-  c=a+b
-  print(c)
-  py finish
-  echo py_result
-  
-  // an example of passing dynamically generated variables to Python integraton
-  phone = 1234567
-  name = 'donald duck'
-  py_step('phone = ' + phone)
-  py_step('name = "' + name + '"')
-
-  py print(name)
-  echo py_result
-  py print(phone)
-  echo py_result
-  ```
-  You can also use the `execfile()` command in Python v2.X to run Python scripts. Or use `exec(open('filename').read())` in [Python v3.X to run Python scripts](https://stackoverflow.com/questions/436198/what-is-an-alternative-to-execfile-in-python-3). For examples of using Python for machine learning, check out this [essentials of machine learning algorithms](https://www.analyticsvidhya.com/blog/2017/09/common-machine-learning-algorithms/) article or this article on [Python deep learning frameworks](https://www.kdnuggets.com/2017/02/python-deep-learning-frameworks-overview.html).
   
 </details>
 
-### OPTION 5 - R INTEGRATION (15 minutes)
-TagUI has built-in integration with R - an open-source software environment for statistical computing and graphics. R can be used for big data and machine learning. The r step can be used to run commands in R and retrieve the output of those commands. To use R integration in TagUI, first [download R software for your OS](https://www.r-project.org/). Make sure that Rscript command is accessible from your command prompt (added to path or symbolically linked).
+###  VISUAL AUTOMATION
+TagUI has built-in integration with [Sikuli (base on OpenCV)](http://sikulix.com) to allow identifying web elements and desktop user interface elements for interaction. Steps that support visual automation are click, hover, type, select, read, show, save, snap. Sikuli is excluded from TagUI packaged installation due to complex dependencies that are handled by its installer.
 
-<details>
-  <summary>
-    Click to show how to use r step in your automation flow to send and receive data from R frameworks
-  </summary>
-  
-  In your automation flow, use the r step followed by the R commands to be executed, separated by `;`. You can then use the `cat()` command in R to output the result you want to be accessible in your automation flow as `r_result` variable. For a super basic example, below steps in your TagUI automation flow will output 3. If the result is JSON data, the JSON object `r_json` will be created for easy access to JSON data elements. If not, `r_json` will be null.
-  
-  ```
-  // using r step to denote R code, and getting back output from r_result
-  r a=1;b=2
-  r c=a+b
-  r cat(c)
-  echo r_result
-  
-  // alternatively, you can use r begin and r finish to denote a R code block
-  r begin
-  a=1;b=2
-  c=a+b
-  cat(c)
-  r finish
-  echo r_result
-  
-  // an example of passing dynamically generated variables to R integraton
-  phone = 1234567
-  name = 'donald duck'
-  r_step('phone = ' + phone)
-  r_step('name = "' + name + '"')
+**How to install computer vision**
+1. Make sure [Java JDK v8](http://www.oracle.com/technetwork/java/javase/downloads/jdk8-downloads-2133151.html) is installed (entering `java -version` returns your Java version)
+2. After Java is installed, you will have to restart your command prompt or terminal to use it
+3. [Unzip contents of this file](https://raw.githubusercontent.com/tebelorg/Tump/master/Sikuli-1.1.3.zip) to tagui/src/tagui.sikuli folder (so that sikulixsetup-1.1.3.jar is there)
+4. Right-click sikulixsetup-1.1.3.jar to run as administrator and setup (choose option 1 - Pack1)
+5. Click yes to the pop-up dialog boxes during installation to use the unzipped setup files
+6. On Windows, set display magnification to recommended %, if it does not work then 100%
+7. On Windows, if TagUI just hangs there, see if it is due to [this issue and try the solution](https://github.com/kelaberetiv/TagUI/issues/229)
+8. On macOS, if can't find image on screen, may be due to [how the image was captured](https://github.com/kelaberetiv/TagUI/issues/240#issuecomment-405030276)
 
-  r cat(name)
-  echo r_result
-  r cat(phone)
-  echo r_result
-  ```
+To use visual automation, simply specify an image file (in .png or .bmp format) to look for in place of the element identifier. 
+> Important! The element that corresponds to the image must be visible on the screen for visual automation to succeed. If it is blocked by another window for example, the automation will be unable to find the element. 
 
-  You can also use the `source()` command in R to run R scripts. For examples of using R for machine learning, check out this [essentials of machine learning algorithms](https://www.analyticsvidhya.com/blog/2017/09/common-machine-learning-algorithms/) article or this [guerilla guide to machine learning](https://www.kdnuggets.com/2017/05/guerrilla-guide-machine-learning-r.html) video series.
+To type onto the screen instead of a particular element, use `type page.png as text` or `type page.bmp as text`. To do a snapshot or an OCR of the whole screen, use `page.png` or `page.bmp` as the element identifier for steps snap / read. The usual helper functions visible() / present() can also be used to check whether an image is visible on the screen. Relative paths are supported for image filenames (eg pc.png, images/button.bmp).
+ A screen (real or Xvfb) is needed for visual automation. [Tesseract OCR](https://github.com/tesseract-ocr/tesseract) (optical character recognition) is used for visually retrieving text. 
+ Also, by using vision step, you can send [custom Sikuli commands](http://sikulix-2014.readthedocs.io/en/latest/genindex.html) to do things such as [typing complex keystroke sequences](https://github.com/kelaberetiv/TagUI/issues/155#issuecomment-397403024).
 
-</details>
+![Sample Visual Automation](https://raw.githubusercontent.com/tebelorg/Tump/master/visual_flow.gif)
 
-### OPTION 6 - CLI ASSISTANT (15 minutes)
-TagUI scripts are already in natural-language-like syntax to convert to JavaScript code. What's even better is having natural-language-like syntax on the command line. Instead of typing `tagui download_bank_report june creditcard` to run the automation flow download_bank_report with parameters june creditcard, you can type `erina download my june creditcard bank report`. This may be more intuitive than recalling which automation filename you saved to run. For a demo of the CLI (command line interface) assistant in action, [see this video](https://www.youtube.com/watch?v=Sm4WNQ89gRA).
-
-<details>
-  <summary>
-    Click to show details on how you can rename your CLI assistant and the syntax used to invoke automations
-  </summary>
-  
-  The commands erina (macOS/Linux) and erina.cmd (Windows) can be renamed to some other name you like. The commands can be set up in the same way as the tagui / tagui.cmd above to be accessible from any folder. The command basically interprets this general syntax `erina single-word-action fillers options/parameters fillers single-or-multi-word-context` to call run the corresponding automation flow `action_context` with `options/parameters`.
-
-  Also, adding `using chrome` / `using headless` / `using firefox` at the end will let it run using the respective browsers. The default location where automation flows are searched for is in tagui/flows folder and can be changed in tagui_helper.php. Filler words (is, are, was, were, my, me) are ignored as they don't convey important information ([more design info](https://github.com/kelaberetiv/TagUI/issues/44#issuecomment-321108786)).
-
-</details>
-
-# [Scripting Reference](https://github.com/kelaberetiv/TagUI#cheat-sheet)
-*Click above link to see the list of TagUI steps and other advanced features.*
-
-# [Developers Reference](https://github.com/kelaberetiv/TagUI#developers-reference)
-*Click above link to see information on APIs and summary of various TagUI files.*
+# [Further Resources](https://github.com/kelaberetiv/TagUI)
+*For more info and documentation on TagUI, visit its [repository page](https://github.com/kelaberetiv/TagUI).*

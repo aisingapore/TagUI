@@ -308,7 +308,7 @@ function parse_backticks($script_line) {
 // check for even number of ` to reduce false-positive because backtick syntax is supposed to be matching pairs
 if ((substr_count($script_line,'`') > 1) and (!(substr_count($script_line,'`') & 1))) {
 	if ($GLOBALS['repo_count'] == 0) {
-		echo "ERROR - ".current_line()." no repository data for ".$script_line."\n";
+		$script_line = parse_variables($script_line);
 	} else {
 		if (getenv('tagui_data_set')!==false) {
 			$data_set = intval(getenv('tagui_data_set'));
@@ -328,8 +328,17 @@ if ((substr_count($script_line,'`') > 1) and (!(substr_count($script_line,'`') &
 			$script_line = str_replace($repo_keyword, $repo_data_value, $script_line);
 		}
 		if (strpos($script_line,'`')!==false) {
-			echo "ERROR - ".current_line()." no repository data for ".$script_line."\n";
+			$script_line = parse_variables($script_line);
 		}
+	}
+} return $script_line;}
+
+function parse_variables($script_line) { // `variable` --> '+variable+'
+$quote_token = "'+"; // token to alternate replacements for '+variable+'
+for ($char_counter = 0; $char_counter < strlen($script_line); $char_counter++) {
+	if (substr($script_line,$char_counter,1) == "`") {
+		$script_line = substr_replace($script_line,$quote_token,$char_counter,1);
+		if ($quote_token == "'+") $quote_token = "+'"; else $quote_token = "'+";
 	}
 } return $script_line;}
 
@@ -813,7 +822,7 @@ return "casper.then(function() {".
 "{ask_result = ''; ask_result = chrome.evaluate(function() {\nreturn prompt('".$params."');}); ".
 "if (ask_result == null) ask_result = '';}".end_fi()."});"."\n\n";}
 else return "casper.then(function() {".
-"{ask_result = ''; var sys = require('system');\nsys.stdout.write('".$params." '); ".
+"{ask_result = ''; var sys = require('system');\nthis.echo('".$params." '); ".
 "ask_result = sys.stdin.readLine();}".end_fi()."});"."\n\n";}
 
 function check_intent($raw_intent) {

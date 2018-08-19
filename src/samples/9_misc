@@ -52,7 +52,7 @@ dom document.querySelector('#header p').blur(); return document.querySelector('#
 echo 'dom_result from multiple statements - ' dom_result
 
 // passing 1 or more variables to dom step can be done using dom_json variable
-// this is used instead of '+variable+' due to dom communication constraints
+// this is used instead of `variable` due to dom communication constraints
 // example of passing 1 variable to dom step for use in dom
 dom_json = '#header p'
 dom return document.querySelector(dom_json).innerText
@@ -91,8 +91,8 @@ echo 'test_string - ' test_string
 // for loop can be expressed in natural language or JavaScript
 for column from 1 to 6
 {
-	// '+variable_name+' can be used where text is expected
-	show (//table)[3]//td['+column+']
+	// `variable_name` can be used where text is expected
+	show (//table)[3]//td[`column`]
 	// JavaScript code can also be used in the loop
 	test_string = "DEF";
 }

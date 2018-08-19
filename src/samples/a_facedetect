@@ -18,7 +18,7 @@ number_of_frgnd_images = count(image_criteria_1)
 for n from 1 to number_of_frgnd_images
 {
 	current_image = '('+image_criteria_1+')['+n+']'
-	snap '+current_image+' to '+profile_name+'/'+n+'.png
+	snap `current_image` to `profile_name`/`n`.png
 }
 
 // extract base on background image presentation
@@ -27,7 +27,7 @@ number_of_bkgnd_images = count(image_criteria_2)
 for n from 1 to number_of_bkgnd_images
 {
 	current_image = '('+image_criteria_2+')['+n+']'
-	snap '+current_image+' to '+profile_name+'/'+(n+number_of_frgnd_images)+'.png
+	snap `current_image` to `profile_name`/`(n+number_of_frgnd_images)`.png
 }
 
 // use face detection deep-learning model from
@@ -44,9 +44,9 @@ for n from 1 to total_number_of_images
 	// 2 different flavours to run face detection inferencing
 	// flavour 1 - command line version to send image filenames
 	// face_recognition library offers command line execution
-	// run face_detection '+flow_path+'/'+profile_name+'/'+n+'.png
+	// run face_detection `flow_path`/`profile_name`/`n`.png
 
-        // flavour 2 -  python version to run inferencing in python
+	// flavour 2 -  python version to run inferencing in python
 	// send image filename variable from tagui to python process
 	// before running python code to detect faces and return result
 	run_result = ""
