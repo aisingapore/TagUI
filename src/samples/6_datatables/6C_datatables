@@ -39,7 +39,7 @@ echo github_id " - " user_email
 this.echo('api your_website_url/mailer.php?APIKEY=unique_key&SUBJECT=Hi @'+github_id+'&SENDTO='+user_email+'&SENDFROM=Your Name <your_email@gmail.com>&MESSAGE=Your message line 1.<br><br>Your message line 2.');
 
 // how api step is used to send email with 1 line, in this case using Tmail (another open-source project from TA)
-// api your_website_url/mailer.php?APIKEY=unique_key&SUBJECT=Hi @'+github_id+'&SENDTO='+user_email+'&SENDFROM=Your Name <your_email@gmail.com>&MESSAGE=Your message line 1.<br><br>Your message line 2.
+// api your_website_url/mailer.php?APIKEY=unique_key&SUBJECT=Hi @`github_id`&SENDTO=`user_email`&SENDFROM=Your Name <your_email@gmail.com>&MESSAGE=Your message line 1.<br><br>Your message line 2.
 
 // response and result from the api call will be printed to screen and log, below is sample response from Tmail
 // OK - Hi @ironman mail sent successfully to tony@stark.org

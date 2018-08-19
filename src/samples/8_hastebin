@@ -23,7 +23,7 @@ combined_data = combined_data.replace(/[\x0E-\x1F]/g,'');
 combined_data = combined_data.replace(/[\x80-\xFE]/g,'');
 
 // type data + save data + retrieve raw text url
-type //textarea as '+combined_data+'
+type //textarea as `combined_data`
 click save function button-picture enabled
 click raw function button-picture enabled
 echo 'UPLOADED URL - ' this.getCurrentUrl() + '\n'

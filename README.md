@@ -74,9 +74,9 @@ download https://admin.typeform.com/xxx to report.csv
 </details>
   
 # Set Up
-TagUI is in v4.0 - it unzips and runs on macOS, Linux, Windows ([link to release notes](https://github.com/kelaberetiv/TagUI/releases))
+TagUI is in v4.1 - it unzips and runs on macOS, Linux, Windows ([link to release notes](https://github.com/kelaberetiv/TagUI/releases))
 
-**Tip** - to try [cutting edge version](https://github.com/kelaberetiv/TagUI/compare/v4.0.0...master) with the latest features, [download master.zip](https://github.com/kelaberetiv/TagUI/archive/master.zip) to overwrite an existing packaged installation (be sure to manually select and move the folders & files inside master.zip's TagUI-master/src folder to replace your existing tagui/src folder, otherwise some OSes will delete existing target folders that are missing from source folder)
+**Tip** - to try [cutting edge version](https://github.com/kelaberetiv/TagUI/compare/v4.1.0...master) with the latest features, [download master.zip](https://github.com/kelaberetiv/TagUI/archive/master.zip) to overwrite an existing packaged installation (be sure to manually select and move the folders & files inside master.zip's TagUI-master/src folder to replace your existing tagui/src folder, otherwise some OSes will delete existing target folders that are missing from source folder)
 
 ### PACKAGED INSTALLATION
 TagUI is easy to use right away - no setup is needed, in most environments all required dependencies are packaged in
@@ -437,7 +437,7 @@ Flow Sample |Purpose
 
 Basic Step|Parameters (separator in bold)|Purpose
 :---------|:-----------------------------|:------
-http(s)://|just enter full url of webpage ('+variable+' for variable)|go to specified webpage
+http(s)://|just enter full url of webpage (\`variable\` for variable)|go to specified webpage
 click|element to click|click on an element
 rclick|element to right-click|right-click on an element
 dclick|element to double-click|double-click on an element
@@ -457,7 +457,7 @@ tagui|relative or absolute filename (see MODULES section)|run another tagui flow
 ask|question or instruction for user (reply stored in ask_result)|ask user for input
 live|try steps or code interactively for Chrome / visual automation|enter live mode ([Firefox not yet](https://github.com/laurentj/slimerjs/issues/639))
 
-**Tip** - to use variables where text is expected, '+variable+' can be used. XPath is an expressive way to identify web elements. If you know xpath and use xpath for element identifier, use double quotes for text //\*[@title="Login"]
+**Tip** - to use variables where text is expected, \`variable\` can be used. XPath is an expressive way to identify web elements. If you know xpath and use xpath for element identifier, use double quotes for text //\*[@title="Login"]
 
 <details>
   <summary>

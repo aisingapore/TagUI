@@ -168,7 +168,7 @@ The recording is not foolproof (for example, the underlying recording engine can
 
 Basic Step|Parameters (separator in bold)|Purpose
 :---------|:-----------------------------|:------
-http(s)://|just enter full url of webpage ('+variable+' for variable)|go to specified webpage
+http(s)://|just enter full url of webpage (\`variable\` for variable)|go to specified webpage
 click|element to click|click on an element
 rclick|element to right-click|right-click on an element
 dclick|element to double-click|double-click on an element
@@ -188,7 +188,7 @@ tagui|relative or absolute filename (see MODULES section)|run another tagui flow
 ask|question or instruction for user (reply stored in ask_result)|ask user for input
 live|try steps or code interactively for Chrome / visual automation|enter live mode ([Firefox not yet](https://github.com/laurentj/slimerjs/issues/639))
 
-**Tip** - to use variables where text is expected, '+variable+' can be used. XPath is an expressive way to identify web elements. If you know xpath and use xpath for element identifier, use double quotes for text //\*[@title="Login"]
+**Tip** - to use variables where text is expected, \`variable\` can be used. XPath is an expressive way to identify web elements. If you know xpath and use xpath for element identifier, use double quotes for text //\*[@title="Login"]
 
 <details>
   <summary>
