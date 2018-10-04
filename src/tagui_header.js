@@ -610,7 +610,7 @@ try {var ws_json = JSON.parse(ws_message); if (ws_json.result.targetInfos) chrom
 else chrome_targets = [];} catch(e) {chrome_targets = [];} // following line scan through targets to find match
 chrome_targets.forEach(function(target) {if (target.url.search(popupInfo) !== -1) found_targetid = target.targetId;});
 if (found_targetid !== '') {var ws_message = chrome_step('Target.attachToTarget',{targetId: found_targetid});
-try {var ws_json = JSON.parse(ws_message); if (ws_json.result.sessionId.indexOf(found_targetid) > -1)
+try {var ws_json = JSON.parse(ws_message); if (ws_json.result.sessionId !== '')
 found_targetid = ws_json.result.sessionId; else found_targetid = '';} catch(e) {found_targetid = ''};}
 chrome_targetid = found_targetid;}); // set chrome_targetid only after attaching to found target successfully
 casper.then(then); casper.then(function _step() {if (chrome_targetid !== '') // detach from target after running then
