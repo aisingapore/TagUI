@@ -18,6 +18,7 @@ $footer_file = fopen('tagui_footer.js','r') or die("ERROR - cannot open tagui_fo
 
 $repo_count = 0; if (file_exists(getenv('custom_csv_file'))) { // load repository file for objects and keywords
 $repo_file = fopen(getenv('custom_csv_file'),'r') or die("ERROR - cannot open " . getenv('custom_csv_file') . "\n");
+fgetcsv($repo_file); // discard header record without incrementing counter
 while (!feof($repo_file)) {$repo_data[$repo_count] = fgetcsv($repo_file);
 if (count($repo_data[$repo_count]) == 0) die("ERROR - empty row found in " . getenv('custom_csv_file') . "\n");
 $repo_count++;} fclose($repo_file); $repo_count-=1; //-1 for header, for EOF need to check flexibly using below line
@@ -26,7 +27,7 @@ if (count($repo_data[$repo_count]) == 1) $repo_count-=1;} //-1 for EOF (Windows 
 $local_repo_location = str_replace("\\","/",dirname($script)) . '/tagui_local.csv';
 if (file_exists($local_repo_location)) { // load local repository file if it exists for objects and keywords
 $local_repo_file = fopen($local_repo_location,'r') or die("ERROR - cannot open " . 'tagui_local.csv' . "\n");
-$repo_count++; fgetcsv($local_repo_file); // increase repo_count to prep for read, discard header record
+fgetcsv($local_repo_file); // discard header record without incrementing counter
 while (!feof($local_repo_file)) {$repo_data[$repo_count] = fgetcsv($local_repo_file);
 if (count($repo_data[$repo_count]) == 0) die("ERROR - empty row found in " . 'tagui_local.csv' . "\n");
 if (count($repo_data[$repo_count]) != 1) // pad the empty columns when local repository is used with datatable
@@ -35,7 +36,7 @@ $repo_count++;} fclose($local_repo_file); $repo_count-=1; if (count($repo_data[$
 
 if (file_exists('tagui_global.csv')) { // load global repository file if it exists for objects and keywords
 $global_repo_file = fopen('tagui_global.csv','r') or die("ERROR - cannot open " . 'tagui_global.csv' . "\n");
-$repo_count++; fgetcsv($global_repo_file); // increase repo_count to prep for read, discard header record
+fgetcsv($global_repo_file); // discard header record without incrementing counter
 while (!feof($global_repo_file)) {$repo_data[$repo_count] = fgetcsv($global_repo_file);
 if (count($repo_data[$repo_count]) == 0) die("ERROR - empty row found in " . 'tagui_global.csv' . "\n");
 if (count($repo_data[$repo_count]) != 1) // pad the empty columns when global repository is used with datatable
@@ -803,9 +804,9 @@ function wait_intent($raw_intent) {
 $params = trim(substr($raw_intent." ",1+strpos($raw_intent." "," "))); if ($params == "") $params = "5";
 if (strpos($params,"'+")!==false and strpos($params,"+'")!==false) // handling for dynamic time
 return "casper.then(function() {".
-"techo('".$raw_intent."');});\ncasper.wait((parseFloat('".$params."')*1000), function() {"."});"."\n\n";
+"techo('".$raw_intent."');});\ncasper.then(function() {casper.wait((parseFloat('".$params."')*1000), function() {"."});});"."\n\n";
 else return "casper.then(function() {".
-"techo('".$raw_intent."');});\ncasper.wait(" . (floatval($params)*1000) . ", function() {"."});"."\n\n";}
+"techo('".$raw_intent."');});\ncasper.then(function() {casper.wait(" . (floatval($params)*1000) . ", function() {"."});});"."\n\n";}
 
 function live_intent($raw_intent) { // live mode to interactively test tagui steps and js code (casperjs context)
 return "casper.then(function() {".
