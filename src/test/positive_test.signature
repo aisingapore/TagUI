@@ -1315,7 +1315,6 @@ function getTimeoutAndCheckNextStepFunction(timeout, then, methodName, defaultTi
     return timeout;
 }
 
-
 // flow path for save_text and snap_image
 var flow_path = '/full_path';
 
@@ -2490,43 +2489,43 @@ if (resource.url.indexOf('report') > -1) this.download(resource.url, '/tmp/filen
 
 // test wait
 casper.then(function() {techo('wait');});
-casper.wait(5000, function() {});
+casper.then(function() {casper.wait(5000, function() {});});
 
 casper.then(function() {techo('wait 2.5');});
-casper.wait(2500, function() {});
+casper.then(function() {casper.wait(2500, function() {});});
 
 casper.then(function() {techo('wait 10.0');});
-casper.wait(10000, function() {});
+casper.then(function() {casper.wait(10000, function() {});});
 
 casper.then(function() {techo('wait 10');});
-casper.wait(10000, function() {});
+casper.then(function() {casper.wait(10000, function() {});});
 
 casper.then(function() {techo('wait 10s');});
-casper.wait(10000, function() {});
+casper.then(function() {casper.wait(10000, function() {});});
 
 casper.then(function() {techo('wait 10sec');});
-casper.wait(10000, function() {});
+casper.then(function() {casper.wait(10000, function() {});});
 
 casper.then(function() {techo('wait 10secs');});
-casper.wait(10000, function() {});
+casper.then(function() {casper.wait(10000, function() {});});
 
 casper.then(function() {techo('wait 10seconds');});
-casper.wait(10000, function() {});
+casper.then(function() {casper.wait(10000, function() {});});
 
 casper.then(function() {techo('wait 10 s');});
-casper.wait(10000, function() {});
+casper.then(function() {casper.wait(10000, function() {});});
 
 casper.then(function() {techo('wait 10 sec');});
-casper.wait(10000, function() {});
+casper.then(function() {casper.wait(10000, function() {});});
 
 casper.then(function() {techo('wait 10 secs');});
-casper.wait(10000, function() {});
+casper.then(function() {casper.wait(10000, function() {});});
 
 casper.then(function() {techo('wait 10 seconds');});
-casper.wait(10000, function() {});
+casper.then(function() {casper.wait(10000, function() {});});
 
 casper.then(function() {techo('wait 7.5 seconds');});
-casper.wait(7500, function() {});
+casper.then(function() {casper.wait(7500, function() {});});
 
 // test live
 casper.then(function() {{var live_input = '';
@@ -2936,7 +2935,7 @@ start = timer()
 }); // end of JS code
 
 casper.then(function() {techo('wait 3 seconds');});
-casper.wait(3000, function() {});
+casper.then(function() {casper.wait(3000, function() {});});
 
 casper.then(function() { // start of JS code
 time_taken = timer()
