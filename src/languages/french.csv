@@ -1,38 +1,38 @@
 EN,FR
-click,cliquez
-tap,cliquez
-move,robinet
+click,cliquer
+tap,tapper
+move,deplacer
 hover,flotter
 type,type
 enter,entrer
 select,sélectionner
 choose,choisir
-read,lis
+read,lire
 fetch,chercher
 show,montrer
-print,impression
+print,imprimer
 save,enregistrer
 echo,écho
 dump,déverser
 write,écrire
-snap,casser
+snap,enclencher
 table,table
 live,vivre
 download,télécharger
-upload,télécharger
+upload,charger
 load,charge
 receive,recevoir
-frame,cadre
+frame,cadrer
 popup,apparaitre
-wait,attendez
-timeout,temps libre
+wait,attendre
+timeout,délai
 seconds,secondes
 second,seconde
 api,api
 dom,dom
 js,js
-else if,d'autre si
-else,autre
+else if,sinon si
+else,sinon
 if,si
 for,pour
 while,tandis que
@@ -53,7 +53,7 @@ more than,plus que
 greater than,plus grand que
 higher than,plus haut que
 less than,moins que
-lesser than,moindre que
+lesser than,inférieures à
 lower than,plus bas que
 not equals to,n'est pas égal à
 not equal to,pas égal à
