@@ -227,10 +227,10 @@ TagUI Writer is a Windows app created by [@adegard](https://github.com/adegard) 
 
 <details>
   <summary>
-    Click to show a preview of how TagUI Writer looks like (it works across different editors)
+    Click to show a preview of how TagUI Editor can be used to edit and run TagUI scripts
   </summary>
 
-![TagUI Writer](https://raw.githubusercontent.com/kelaberetiv/TagUI/master/src/media/tagui_writer.png)
+![TagUI Editor](https://raw.githubusercontent.com/adegard/tagui_scripts/master/TagUI_Editor.gif)
 
 </details>
 
