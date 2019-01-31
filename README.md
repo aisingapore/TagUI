@@ -222,15 +222,15 @@ To schedule an automation flow with crontab (macOS/Linux), for example at 8am da
 
 **Tip** - for Windows, use Task Scheduler (search schedule from Start Menu) or [Z-Cron freeware](https://www.z-cron.com)
 
-### TAGUI WRITER & SCREENSHOTER
-TagUI Writer is a Windows app created by [@adegard](https://github.com/adegard) which makes it easy to write TagUI scripts. By pressing Ctrl + Left-click, a popup menu will appear with the list of TagUI steps for you to paste into your text editor. Arnaud also created a ScreenShoter app which makes it easy to capture snapshots for TagUI visual automation. To dowload, [click here](https://github.com/adegard/tagui_scripts).
+### TAGUI WRITER, SCREENSHOTER & EDITOR
+TagUI Writer is a Windows app created by [@adegard](https://github.com/adegard) which makes it easy to write TagUI scripts. By pressing Ctrl + Left-click, a popup menu will appear with the list of TagUI steps for you to paste into your text editor. Arnaud also created a ScreenShoter app which makes it easy to capture snapshots for TagUI visual automation. Lastly, TagUI Editor allows you to edit and run TagUI scripts via AutoHotKey. To download, [click here](https://github.com/adegard/tagui_scripts).
 
 <details>
   <summary>
-    Click to show a preview of how TagUI Writer looks like (it works across different editors)
+    Click to show a preview of how TagUI Editor can be used to edit and run TagUI scripts
   </summary>
 
-![TagUI Writer](https://raw.githubusercontent.com/kelaberetiv/TagUI/master/src/media/tagui_writer.png)
+![TagUI Editor](https://raw.githubusercontent.com/adegard/tagui_scripts/master/TagUI_Editor.gif)
 
 </details>
 
