@@ -811,7 +811,8 @@ function live_intent($raw_intent) { // live mode to interactively test tagui ste
 return "casper.then(function() {".
 "{var live_input = '';\nvar sys = require('system'); sys.stdout.write('LIVE MODE - type done to quit\\n \\b');\n".
 "while (true) {live_input = sys.stdin.readLine(); // evaluate input in casperjs context until done is entered\n".
-"if (live_input.indexOf('done') == 0) break; eval(tagui_parse(live_input));}}".end_fi()."});"."\n\n";}
+"if (live_input.indexOf('done') == 0) break; try {eval(tagui_parse(live_input));}
+catch(e) {this.echo('ERROR - ' + e.message.charAt(0).toLowerCase() + e.message.slice(1));}}}".end_fi()."});"."\n\n";}
 
 function ask_intent($raw_intent) { // ask user for input during automation and save to ask_result variable
 $raw_intent = str_replace("\'","'",$raw_intent); $raw_intent = str_replace("'","\'",$raw_intent);
