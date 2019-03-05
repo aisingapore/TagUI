@@ -618,7 +618,7 @@ rem check if test mode is enabled and run casperjs accordingly, before sending f
 if %tagui_test_mode%==false (
 	casperjs "%flow_file%.js" %params%!api! | tee -a "%flow_file%.log"
 ) else (
-	casperjs test "%flow_file%.js" %params%!api! --xunit="%flow_file%.xml" | tee -a "%flow_file%.log"
+	casperjs test "%flow_file%.js" !api! --xunit="%flow_file%.xml" | tee -a "%flow_file%.log"
 )
 rem checking for existence of files is important, otherwise in loops integrations will run even without enabling
 if exist "tagui_r\tagui_r.in" echo finish > tagui_r\tagui_r.in
