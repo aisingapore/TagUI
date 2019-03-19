@@ -324,7 +324,7 @@ fi
 
 # check if test mode is enabled and run casperjs accordingly, before sending finish signal if integrations are active
 if [ "$tagui_test_mode" == false ]; then "$CASPERJS_EXECUTABLE" "$1".js $params$api | tee -a "$1".log
-else export tagui_test_mode=true; "$CASPERJS_EXECUTABLE" test "$1".js $params$api --xunit="$1".xml | tee -a "$1".log; fi
+else export tagui_test_mode=true; "$CASPERJS_EXECUTABLE" test "$1".js $api --xunit="$1".xml | tee -a "$1".log; fi
 # checking for existence of files is important, otherwise in loops integrations will run even without enabling
 if [ -f "tagui_r/tagui_r.in" ]; then echo "finish" > tagui_r/tagui_r.in; fi
 if [ -f "tagui_py/tagui_py.in" ]; then echo "finish" > tagui_py/tagui_py.in; fi
