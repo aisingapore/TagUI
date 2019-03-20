@@ -1,23 +1,26 @@
 https://vk.com/kensoh
-// automation flow files start with an URL to tell TagUI where to go
+// automation flow files usually start with an URL to tell TagUI where to go
+// files can also start with // for comments, or no URL if it's not web-related
 
 // this flow shows using repositories on Russian social media site VK.com
-// for issues or questions, kindly feedback on GitHub or ken@tebel.org
+// for issues or questions, kindly feedback on GitHub or ksoh@aisingapore.org
 // see cheatsheet for steps, conditions, finding element identifiers, etc
-// https://github.com/tebelorg/TagUI#cheat-sheet
+// https://github.com/kelaberetiv/TagUI#cheat-sheet
 
 // please note that in these comments, the symbol ` is replaced with '
 // otherwise TagUI will try to interpret it as repository definition
 
 // repositories help to make objects or steps reusable and improve readability
-// save repository file with same name as your flow filename and with .csv behind
-// repository must have 2 columns, for example below (headers up to you to name)
+// TagUI will look for a local repository file tagui_local.csv in the same folder of flow
+// TagUI will also look for a global repository file tagui_global.csv in tagui/src folder
+// repositories can be used with csv datatable, which is specified as TagUI run option
+
 // using 'object' in your flow replaces it with its definition (which can contain objects)
 // for example during execution, 'click link' becomes click //*[@id="profile_full"]//a
 // if you have watched Inception movie, this is inception level 2 (capped at max 2 for now)
 // don't worry about mistakes, TagUI is usually able to tell you which line has what error
 
-// contents of 5_repositories.csv
+// contents of tagui_local.csv
 // OBJECT,DEFINITION
 // email,quick_email
 // password,quick_pass
@@ -28,8 +31,8 @@ https://vk.com/kensoh
 // facebook_link,//*[@id="profile_full"]//a
 
 // enough intro, let's go for it
-enter `email` as `user_email`
-enter `password` as `user_password`
+type `email` as `user_email`
+type `password` as `user_password`
 
 // but we are not going to click Sign up and spam VK
 // so let's use some more repository features and go to FB
