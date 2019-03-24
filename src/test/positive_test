@@ -622,6 +622,16 @@ wait 3 seconds
 time_taken = timer()
 echo 'time taken - ' time_taken ' seconds'
 
+// test mouse_xy, mouse_x, mouse_y functions
+xy = mouse_xy()
+x = mouse_x()
+y = mouse_y()
+x = x + 100
+x = x - 100
+y = y + 100
+y = y - 100
+echo xy ' - ' x ',' y
+
 // test infinity constant (set to 1024)
 echo infinity
 for n from 1 to infinity
