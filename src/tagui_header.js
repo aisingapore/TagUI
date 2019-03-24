@@ -248,12 +248,29 @@ function url() {return casper.getCurrentUrl();}
 // friendlier name to get web page text content using evaluate()
 function text() {return casper.evaluate(function() {return document.body.innerText || document.body.textContent;});}
 
-function timer() {// return time elapsed in seconds between calls
+function timer() { // return time elapsed in seconds between calls
 var time_elapsed = ((Date.now()-timer_start_time)/1000); timer_start_time = Date.now(); return time_elapsed;}
 
 function sleep(ms) { // helper to add delay during loops
 var time_now = new Date().getTime(); var time_end = time_now + ms;
 while(time_now < time_end) {time_now = new Date().getTime();}}
+
+// return x,y coordinates of mouse cursor as string '(x,y)'
+mouse_xy = function() { // use this function declaration style for sikuli detection in tagui_parse.php
+sikuli_step('vision xy_mouseLocation = Env.getMouseLocation(); ' + 
+'xy_x = xy_mouseLocation.getX(); xy_y = xy_mouseLocation.getY(); ' + 
+"output_sikuli_text('(' + str(xy_x) + ',' + str(xy_y) + ')');");
+var xy_result = fetch_sikuli_text(); clear_sikuli_text(); return xy_result;}
+
+// return x coordinate of mouse cursor as integer number
+mouse_x = function() { // use this function declaration style for sikuli detection in tagui_parse.php
+sikuli_step('vision xy_mouseLocation = Env.getMouseLocation(); output_sikuli_text(str(xy_mouseLocation.getX()));');
+var x_result = parseInt(fetch_sikuli_text()); clear_sikuli_text(); return x_result;}
+
+// return y coordinate of mouse cursor as integer number
+mouse_y = function() { // use this function declaration style for sikuli detection in tagui_parse.php
+sikuli_step('vision xy_mouseLocation = Env.getMouseLocation(); output_sikuli_text(str(xy_mouseLocation.getY()));');
+var y_result = parseInt(fetch_sikuli_text()); clear_sikuli_text(); return y_result;}
 
 /**
  * string cell data sanitiser, returns a CSV formatted string

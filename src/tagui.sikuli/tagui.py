@@ -17,6 +17,13 @@ setThrowException(False)
 Settings.OcrTextRead = True
 Settings.OcrTextSearch = True
 
+# function to output sikuli text to tagui
+def output_sikuli_text ( output_text ):
+	import codecs
+	tagui_text = codecs.open('tagui.sikuli/tagui_sikuli.txt','w',encoding='utf8')
+	tagui_text.write(output_text)
+	tagui_text.close()
+
 # function for tap / click step
 def tap_intent ( raw_intent ):
 	params = (raw_intent + ' ')[1+(raw_intent + ' ').find(' '):].strip()
@@ -107,18 +114,12 @@ def text_read ( raw_intent ):
 	if param1.endswith('page.png') or param1.endswith('page.bmp'):
 		fullscreen_layer = Screen()
 		temp_text = fullscreen_layer.text()
-		import codecs
-		tagui_text = codecs.open('tagui.sikuli/tagui_sikuli.txt','w',encoding='utf8')
-		tagui_text.write(temp_text)
-		tagui_text.close()
+		output_sikuli_text(temp_text)
 		return 1
 	elif exists(param1):
 		matched_element = find(param1)
 		temp_text = matched_element.text()
-		import codecs
-		tagui_text = codecs.open('tagui.sikuli/tagui_sikuli.txt','w',encoding='utf8')
-		tagui_text.write(temp_text)
-		tagui_text.close()
+		output_sikuli_text(temp_text)
 		return 1
 	else:
 		return 0

@@ -275,12 +275,29 @@ function url() {return casper.getCurrentUrl();}
 // friendlier name to get web page text content using evaluate()
 function text() {return casper.evaluate(function() {return document.body.innerText || document.body.textContent;});}
 
-function timer() {// return time elapsed in seconds between calls
+function timer() { // return time elapsed in seconds between calls
 var time_elapsed = ((Date.now()-timer_start_time)/1000); timer_start_time = Date.now(); return time_elapsed;}
 
 function sleep(ms) { // helper to add delay during loops
 var time_now = new Date().getTime(); var time_end = time_now + ms;
 while(time_now < time_end) {time_now = new Date().getTime();}}
+
+// return x,y coordinates of mouse cursor as string '(x,y)'
+mouse_xy = function() { // use this function declaration style for sikuli detection in tagui_parse.php
+sikuli_step('vision xy_mouseLocation = Env.getMouseLocation(); ' + 
+'xy_x = xy_mouseLocation.getX(); xy_y = xy_mouseLocation.getY(); ' + 
+"output_sikuli_text('(' + str(xy_x) + ',' + str(xy_y) + ')');");
+var xy_result = fetch_sikuli_text(); clear_sikuli_text(); return xy_result;}
+
+// return x coordinate of mouse cursor as integer number
+mouse_x = function() { // use this function declaration style for sikuli detection in tagui_parse.php
+sikuli_step('vision xy_mouseLocation = Env.getMouseLocation(); output_sikuli_text(str(xy_mouseLocation.getX()));');
+var x_result = parseInt(fetch_sikuli_text()); clear_sikuli_text(); return x_result;}
+
+// return y coordinate of mouse cursor as integer number
+mouse_y = function() { // use this function declaration style for sikuli detection in tagui_parse.php
+sikuli_step('vision xy_mouseLocation = Env.getMouseLocation(); output_sikuli_text(str(xy_mouseLocation.getY()));');
+var y_result = parseInt(fetch_sikuli_text()); clear_sikuli_text(); return y_result;}
 
 /**
  * string cell data sanitiser, returns a CSV formatted string
@@ -1153,7 +1170,7 @@ var params = ((raw_intent + ' ').substr(1+(raw_intent + ' ').indexOf(' '))).trim
 if (params == '') return "this.echo('ERROR - Sikuli command(s) missing for " + raw_intent + "')";
 else return call_sikuli(raw_intent.replace(/\\/g,'\\\\').replace(/'/g,'\\\''),'for vision step');}
 
-function timeout_intent(raw_intent) { // code to support dynamic variables not applicable
+function timeout_intent(raw_intent) {raw_intent = eval("'" + raw_intent + "'"); // support dynamic variables
 var params = ((raw_intent + ' ').substr(1+(raw_intent + ' ').indexOf(' '))).trim();
 if (params == '') return "this.echo('ERROR - time in seconds missing for " + raw_intent + "')";
 else return check_chrome_context("casper.options.waitTimeout = " + (parseFloat(params)*1000).toString() + ";");}
@@ -2952,6 +2969,19 @@ time_taken = timer()
 }); // end of JS code
 
 casper.then(function() {this.echo('time taken - '+time_taken+' seconds');});
+
+// test mouse_xy, mouse_x, mouse_y functions
+casper.then(function() { // start of JS code
+xy = mouse_xy()
+x = mouse_x()
+y = mouse_y()
+x = x + 100
+x = x - 100
+y = y + 100
+y = y - 100
+}); // end of JS code
+
+casper.then(function() {this.echo(xy+' - '+x+','+y);});
 
 // test infinity constant (set to 1024)
 casper.then(function() {this.echo(infinity);});

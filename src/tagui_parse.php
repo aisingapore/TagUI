@@ -252,6 +252,12 @@ file_put_contents($script . '.js',$script_content); // below initialise chrome i
 if (!touch('tagui_chrome.in')) die("ERROR - cannot initialise tagui_chrome.in\n");
 if (!touch('tagui_chrome.out')) die("ERROR - cannot initialise tagui_chrome.out\n");}
 
+// if mouse_xy(), mouse_x(), mouse_y() helper functions are used, invoke sikuli visual automation
+if ((strpos($script_content,'mouse_xy()')!==false) or 
+(strpos($script_content,'mouse_x()')!==false) or (strpos($script_content,'mouse_y()')!==false)) {
+if (!touch('tagui.sikuli/tagui_sikuli.in')) die("ERROR - cannot initialise tagui_sikuli.in\n");
+if (!touch('tagui.sikuli/tagui_sikuli.out')) die("ERROR - cannot initialise tagui_sikuli.out\n");}
+
 // check quiet parameter to run flow quietly by only showing explicit output
 if (getenv('tagui_quiet_mode') == 'true') {$script_content = file_get_contents($script . '.js'); // read generated script
 $script_content = str_replace("var quiet_mode = false;","var quiet_mode = true;",$script_content); // set quiet_mode
