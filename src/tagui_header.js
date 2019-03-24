@@ -1126,7 +1126,7 @@ var params = ((raw_intent + ' ').substr(1+(raw_intent + ' ').indexOf(' '))).trim
 if (params == '') return "this.echo('ERROR - Sikuli command(s) missing for " + raw_intent + "')";
 else return call_sikuli(raw_intent.replace(/\\/g,'\\\\').replace(/'/g,'\\\''),'for vision step');}
 
-function timeout_intent(raw_intent) { // code to support dynamic variables not applicable
+function timeout_intent(raw_intent) {raw_intent = eval("'" + raw_intent + "'"); // support dynamic variables
 var params = ((raw_intent + ' ').substr(1+(raw_intent + ' ').indexOf(' '))).trim();
 if (params == '') return "this.echo('ERROR - time in seconds missing for " + raw_intent + "')";
 else return check_chrome_context("casper.options.waitTimeout = " + (parseFloat(params)*1000).toString() + ";");}
