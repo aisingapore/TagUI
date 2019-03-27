@@ -261,18 +261,24 @@ tap element
 click element
 tap button.png
 click button.bmp
+tap (100,200)
+click (200,400)
 
 // test hover / move (including sikuli visual automation)
 hover element
 move element
 hover button.png
 move button.bmp
+hover (100,200)
+move (200,400)
 
 // test type / enter (including sikuli visual automation)
 type element as some text
 enter element as some text
 type textbox.png as some text
 enter textbox.bmp as some text
+type (100,200) as some text
+enter (200,400) as some text
 
 // test type / enter for [enter] and [clear] keywords
 type element as some text[enter]
@@ -287,6 +293,9 @@ select element as option
 choose element as option
 select option_list.png as option_item.bmp
 choose option_list.bmp as option_item.png
+select (100,200) as (200,400)
+choose textbox.bmp as (200,400)
+select (100,200) as sometext.png
 
 // test read / fetch
 read element to variable
