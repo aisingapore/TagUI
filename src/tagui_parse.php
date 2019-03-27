@@ -516,6 +516,7 @@ if (substr($filename,0,1)=="/") return $filename; // return mac/linux absolute f
 if (substr($filename,1,1)==":") return str_replace("\\","/",$filename); // return windows absolute filename directly
 if (strpos($filename,"'+")!==false and strpos($filename,"+'")!==false)
 return "'+abs_file('" . $filename . "')+'"; // throw to runtime abs_file function if dynamic filename is given
+if (is_coordinates($filename)) return $filename; // to handle when sikuli (x,y) coordinates locator is provided
 $flow_path = str_replace("\\","/",dirname($flow_script)); // otherwise use flow script path to build absolute filename
 // above str_replace is because casperjs/phantomjs do not seem to support \ for windows paths, replace with / to work
 if (strpos($flow_path,"/")!==false) return str_replace("\\","/",$flow_path . '/' . $filename);
@@ -552,9 +553,15 @@ $source_string = str_replace("+++++","+",$source_string); $source_string = str_r
 $source_string = str_replace("+++","+",$source_string); $source_string = str_replace("++","+",$source_string);
 return $source_string;} // replacing multiple variations of + to handle user typos of double spaces etc 
 
+function is_coordinates($input_params) { // helper function to check if string is (x,y) coordinates
+if (strlen($input_params)>4 and substr($input_params,0,1)=='(' and substr($input_params,-1)==')' 
+and substr_count($input_params,',')==1 and ((strpos($input_params,"'+")!==false and strpos($input_params,"+'")!==false) 
+or !preg_match('/[a-zA-Z]/',$input_params))) return true; else return false;}
+
 function is_sikuli($input_params) { // helper function to check if input is meant for sikuli visual automation
 if (strlen($input_params)>4 and strtolower(substr($input_params,-4))=='.png') return true; // support png and bmp
-else if (strlen($input_params)>4 and strtolower(substr($input_params,-4))=='.bmp') return true; else return false;}
+else if (strlen($input_params)>4 and strtolower(substr($input_params,-4))=='.bmp') return true;
+else if (is_coordinates($input_params)) return true; else return false;}
 
 function call_sikuli($input_intent,$input_params,$other_actions = '') { // helper function to use sikuli visual automation
 if (!touch('tagui.sikuli/tagui_sikuli.in')) die("ERROR - cannot initialise tagui_sikuli.in\n");

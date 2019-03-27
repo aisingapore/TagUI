@@ -17,6 +17,21 @@ setThrowException(False)
 Settings.OcrTextRead = True
 Settings.OcrTextSearch = True
 
+# helper function to detect coordinates locator
+def is_coordinates ( input_locator ):
+	if input_locator[:1] == '(' and input_locator[-1:] == ')' and input_locator.count(',') == 1:
+		return True
+	else:
+		return False
+
+# helper function to return x coordinate from (x,y)
+def x_coordinate ( input_locator ):
+	return int(input_locator[1:input_locator.find(',')])
+
+# helper function to return y coordinate from (x,y)
+def y_coordinate ( input_locator ):
+        return int(input_locator[input_locator.find(',')+1:-1])
+
 # function to output sikuli text to tagui
 def output_sikuli_text ( output_text ):
 	import codecs
@@ -28,7 +43,9 @@ def output_sikuli_text ( output_text ):
 def tap_intent ( raw_intent ):
 	params = (raw_intent + ' ')[1+(raw_intent + ' ').find(' '):].strip()
 	print '[tagui] ACTION - click ' + params
-	if exists(params):
+	if is_coordinates(params):
+		return click(Location(x_coordinate(params),y_coordinate(params)))
+	elif exists(params):
 		return click(params)
 	else:
 		return 0
@@ -37,7 +54,9 @@ def tap_intent ( raw_intent ):
 def rtap_intent ( raw_intent ):
 	params = (raw_intent + ' ')[1+(raw_intent + ' ').find(' '):].strip()
 	print '[tagui] ACTION - rclick ' + params
-	if exists(params):
+	if is_coordinates(params):
+		return rightClick(Location(x_coordinate(params),y_coordinate(params)))
+	elif exists(params):
 		return rightClick(params)
 	else:
 		return 0
@@ -46,7 +65,9 @@ def rtap_intent ( raw_intent ):
 def dtap_intent ( raw_intent ):
 	params = (raw_intent + ' ')[1+(raw_intent + ' ').find(' '):].strip()
 	print '[tagui] ACTION - dclick ' + params
-	if exists(params):
+	if is_coordinates(params):
+		return doubleClick(Location(x_coordinate(params),y_coordinate(params)))
+	elif exists(params):
 		return doubleClick(params)
 	else:
 		return 0
@@ -55,7 +76,9 @@ def dtap_intent ( raw_intent ):
 def hover_intent ( raw_intent ):
 	params = (raw_intent + ' ')[1+(raw_intent + ' ').find(' '):].strip()
 	print '[tagui] ACTION - hover ' + params
-	if exists(params):
+	if is_coordinates(params):
+		return hover(Location(x_coordinate(params),y_coordinate(params)))
+	elif exists(params):
 		return hover(params)
 	else:
 		return 0
@@ -70,6 +93,8 @@ def type_intent ( raw_intent ):
 	param2 = param2.replace('[clear]','\b')
 	if param1.endswith('page.png') or param1.endswith('page.bmp'):
 		return type(param2)
+	elif is_coordinates(param1):
+		return type(Location(x_coordinate(param1),y_coordinate(param1)),param2)
 	elif exists(param1):
 		return type(param1,param2) 
 	else:
@@ -81,12 +106,26 @@ def select_intent ( raw_intent ):
 	param1 = params[:params.find(' as ')].strip()
 	param2 = params[4+params.find(' as '):].strip()
 	print '[tagui] ACTION - click ' + param1
-	if exists(param1):
+	if is_coordinates(param1):
+		if click(Location(x_coordinate(param1),y_coordinate(param1))) == 0:
+			return 0
+		else:
+			print '[tagui] ACTION - click ' + param2
+			if is_coordinates(param2):
+				return click(Location(x_coordinate(param2),y_coordinate(param2)))
+			elif exists(param2):
+				return click(param2)
+			else:
+				return 0
+ 
+	elif exists(param1):
 		if click(param1) == 0:
 			return 0
 		else:
 			print '[tagui] ACTION - click ' + param2
-			if exists(param2):
+			if is_coordinates(param2):
+				return click(Location(x_coordinate(param2),y_coordinate(param2)))
+			elif exists(param2):
 				return click(param2)
 			else:
 				return 0

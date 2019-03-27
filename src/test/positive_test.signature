@@ -865,6 +865,7 @@ function abs_file(filename) { // helper function to return absolute filename
 if (filename == '') return ''; // unlike tagui_parse.php not deriving path from script variable
 if (filename.substr(0,1) == '/') return filename; // return mac/linux absolute filename directly
 if (filename.substr(1,1) == ':') return filename.replace(/\\/g,'/'); // return windows absolute filename directly
+if (is_coordinates(filename)) return filename; // to handle when sikuli (x,y) coordinates locator is provided
 var tmp_flow_path = flow_path; // otherwise use flow_path defined in generated script to build absolute filename
 // above str_replace is because casperjs/phantomjs do not seem to support \ for windows paths, replace with / to work
 if (tmp_flow_path.indexOf('/') > -1) return (tmp_flow_path + '/' + filename).replace(/\\/g,'/');
@@ -884,9 +885,14 @@ source_string = source_string.replace(/\+\+\+\+\+/g,'+'); source_string = source
 source_string = source_string.replace(/\+\+\+/g,'+'); source_string = source_string.replace(/\+\+/g,'+');
 return source_string;} // replacing multiple variations of + to handle user typos of double spaces etc
 
+function is_coordinates(input_params) { // helper function to check if string is (x,y) coordinates
+if ((input_params.length > 4) && (input_params.substr(0,1) == '(') && (input_params.substr(-1) == ')') 
+&& (input_params.split(',').length == 2) && (!input_params.match(/[a-z]/i))) return true; else return false;}
+
 function is_sikuli(input_params) { // helper function to check if input is meant for sikuli visual automation
 if (input_params.length > 4 && input_params.substr(-4).toLowerCase() == '.png') return true; // support png and bmp
-else if (input_params.length > 4 && input_params.substr(-4).toLowerCase() == '.bmp') return true; else return false;}
+else if (input_params.length > 4 && input_params.substr(-4).toLowerCase() == '.bmp') return true;
+else if (is_coordinates(input_params)) return true; else return false;}
 
 function call_sikuli(input_intent,input_params,other_actions) { // helper function to use sikuli visual automation
 var fs = require('fs'); // use phantomjs fs file system module to access files and directories
@@ -2149,6 +2155,16 @@ if (!sikuli_step('click /full_path/button.bmp')) if (!fs.exists('/full_path/butt
 this.echo('ERROR - cannot find image file /full_path/button.bmp').exit(); else
 this.echo('ERROR - cannot find /full_path/button.bmp on screen').exit(); this.wait(0);}});
 
+casper.then(function() {{techo('tap (100,200)'); var fs = require('fs');
+if (!sikuli_step('tap (100,200)')) if (!fs.exists('(100,200)'))
+this.echo('ERROR - cannot find image file (100,200)').exit(); else
+this.echo('ERROR - cannot find (100,200) on screen').exit(); this.wait(0);}});
+
+casper.then(function() {{techo('click (200,400)'); var fs = require('fs');
+if (!sikuli_step('click (200,400)')) if (!fs.exists('(200,400)'))
+this.echo('ERROR - cannot find image file (200,400)').exit(); else
+this.echo('ERROR - cannot find (200,400) on screen').exit(); this.wait(0);}});
+
 // test hover / move (including sikuli visual automation)
 casper.then(function() {{techo('hover element');
 casper.waitFor(function check() {return check_tx('element');},
@@ -2170,6 +2186,16 @@ if (!sikuli_step('move /full_path/button.bmp')) if (!fs.exists('/full_path/butto
 this.echo('ERROR - cannot find image file /full_path/button.bmp').exit(); else
 this.echo('ERROR - cannot find /full_path/button.bmp on screen').exit(); this.wait(0);}});
 
+casper.then(function() {{techo('hover (100,200)'); var fs = require('fs');
+if (!sikuli_step('hover (100,200)')) if (!fs.exists('(100,200)'))
+this.echo('ERROR - cannot find image file (100,200)').exit(); else
+this.echo('ERROR - cannot find (100,200) on screen').exit(); this.wait(0);}});
+
+casper.then(function() {{techo('move (200,400)'); var fs = require('fs');
+if (!sikuli_step('move (200,400)')) if (!fs.exists('(200,400)'))
+this.echo('ERROR - cannot find image file (200,400)').exit(); else
+this.echo('ERROR - cannot find (200,400) on screen').exit(); this.wait(0);}});
+
 // test type / enter (including sikuli visual automation)
 casper.then(function() {{techo('type element as some text');
 casper.waitFor(function check() {return check_tx('element');},
@@ -2190,6 +2216,16 @@ casper.then(function() {{techo('enter /full_path/textbox.bmp as some text'); var
 if (!sikuli_step('enter /full_path/textbox.bmp as some text')) if (!fs.exists('/full_path/textbox.bmp'))
 this.echo('ERROR - cannot find image file /full_path/textbox.bmp').exit(); else
 this.echo('ERROR - cannot find /full_path/textbox.bmp on screen').exit(); this.wait(0);}});
+
+casper.then(function() {{techo('type (100,200) as some text'); var fs = require('fs');
+if (!sikuli_step('type (100,200) as some text')) if (!fs.exists('(100,200)'))
+this.echo('ERROR - cannot find image file (100,200)').exit(); else
+this.echo('ERROR - cannot find (100,200) on screen').exit(); this.wait(0);}});
+
+casper.then(function() {{techo('enter (200,400) as some text'); var fs = require('fs');
+if (!sikuli_step('enter (200,400) as some text')) if (!fs.exists('(200,400)'))
+this.echo('ERROR - cannot find image file (200,400)').exit(); else
+this.echo('ERROR - cannot find (200,400) on screen').exit(); this.wait(0);}});
 
 // test type / enter for [enter] and [clear] keywords
 casper.then(function() {{techo('type element as some text[enter]');
@@ -2260,6 +2296,21 @@ casper.then(function() {{techo('choose /full_path/option_list.bmp as /full_path/
 if (!sikuli_step('choose /full_path/option_list.bmp as /full_path/option_item.png')) if (!fs.exists('/full_path/option_list.bmp'))
 this.echo('ERROR - cannot find image file /full_path/option_list.bmp').exit(); else
 this.echo('ERROR - cannot find /full_path/option_list.bmp on screen').exit(); this.wait(0);}});
+
+casper.then(function() {{techo('select (100,200) as (200,400)'); var fs = require('fs');
+if (!sikuli_step('select (100,200) as (200,400)')) if (!fs.exists('(100,200)'))
+this.echo('ERROR - cannot find image file (100,200)').exit(); else
+this.echo('ERROR - cannot find (100,200) on screen').exit(); this.wait(0);}});
+
+casper.then(function() {{techo('choose /full_path/textbox.bmp as (200,400)'); var fs = require('fs');
+if (!sikuli_step('choose /full_path/textbox.bmp as (200,400)')) if (!fs.exists('/full_path/textbox.bmp'))
+this.echo('ERROR - cannot find image file /full_path/textbox.bmp').exit(); else
+this.echo('ERROR - cannot find /full_path/textbox.bmp on screen').exit(); this.wait(0);}});
+
+casper.then(function() {{techo('select (100,200) as /full_path/sometext.png'); var fs = require('fs');
+if (!sikuli_step('select (100,200) as /full_path/sometext.png')) if (!fs.exists('(100,200)'))
+this.echo('ERROR - cannot find image file (100,200)').exit(); else
+this.echo('ERROR - cannot find (100,200) on screen').exit(); this.wait(0);}});
 
 // test read / fetch
 casper.then(function() {{techo('read element to variable');

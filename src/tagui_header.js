@@ -838,6 +838,7 @@ function abs_file(filename) { // helper function to return absolute filename
 if (filename == '') return ''; // unlike tagui_parse.php not deriving path from script variable
 if (filename.substr(0,1) == '/') return filename; // return mac/linux absolute filename directly
 if (filename.substr(1,1) == ':') return filename.replace(/\\/g,'/'); // return windows absolute filename directly
+if (is_coordinates(filename)) return filename; // to handle when sikuli (x,y) coordinates locator is provided
 var tmp_flow_path = flow_path; // otherwise use flow_path defined in generated script to build absolute filename
 // above str_replace is because casperjs/phantomjs do not seem to support \ for windows paths, replace with / to work
 if (tmp_flow_path.indexOf('/') > -1) return (tmp_flow_path + '/' + filename).replace(/\\/g,'/');
@@ -857,9 +858,14 @@ source_string = source_string.replace(/\+\+\+\+\+/g,'+'); source_string = source
 source_string = source_string.replace(/\+\+\+/g,'+'); source_string = source_string.replace(/\+\+/g,'+');
 return source_string;} // replacing multiple variations of + to handle user typos of double spaces etc
 
+function is_coordinates(input_params) { // helper function to check if string is (x,y) coordinates
+if ((input_params.length > 4) && (input_params.substr(0,1) == '(') && (input_params.substr(-1) == ')') 
+&& (input_params.split(',').length == 2) && (!input_params.match(/[a-z]/i))) return true; else return false;}
+
 function is_sikuli(input_params) { // helper function to check if input is meant for sikuli visual automation
 if (input_params.length > 4 && input_params.substr(-4).toLowerCase() == '.png') return true; // support png and bmp
-else if (input_params.length > 4 && input_params.substr(-4).toLowerCase() == '.bmp') return true; else return false;}
+else if (input_params.length > 4 && input_params.substr(-4).toLowerCase() == '.bmp') return true;
+else if (is_coordinates(input_params)) return true; else return false;}
 
 function call_sikuli(input_intent,input_params,other_actions) { // helper function to use sikuli visual automation
 var fs = require('fs'); // use phantomjs fs file system module to access files and directories
