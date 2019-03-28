@@ -413,6 +413,10 @@ wait 7.5 seconds
 // test live
 live
 
+// test mouse
+mouse down
+mouse up
+
 // test check
 check eggs lesser than 10 | "eggs lesser than 10" | "eggs not lesser than 10"
 check eggs lesser than 10|"eggs lesser than 10"|"eggs not lesser than 10"

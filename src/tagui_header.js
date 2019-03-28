@@ -706,6 +706,7 @@ case 'table': return table_intent(live_line); break;
 case 'wait': return wait_intent(live_line); break;
 case 'live': return live_intent(live_line); break;
 case 'ask': return ask_intent(live_line); break;
+case 'mouse': return mouse_intent(live_line); break;
 case 'check': return check_intent(live_line); break;
 case 'test': return test_intent(live_line); break;
 case 'frame': return frame_intent(live_line); break;
@@ -758,6 +759,7 @@ if (lc_raw_intent.substr(0,6) == 'table ') return 'table';
 if (lc_raw_intent.substr(0,5) == 'wait ') return 'wait';
 if (lc_raw_intent.substr(0,5) == 'live ') return 'live';
 if (lc_raw_intent.substr(0,4) == 'ask ') return 'ask';
+if (lc_raw_intent.substr(0,6) == 'mouse ') return 'mouse';
 if (lc_raw_intent.substr(0,6) == 'check ') return 'check';
 if (lc_raw_intent.substr(0,5) == 'test ') return 'test';
 if (lc_raw_intent.substr(0,6) == 'frame ') return 'frame';
@@ -793,6 +795,7 @@ if (lc_raw_intent == 'table') return 'table';
 if (lc_raw_intent == 'wait') return 'wait';
 if (lc_raw_intent == 'live') return 'live';
 if (lc_raw_intent == 'ask') return 'ask';
+if (lc_raw_intent == 'mouse') return 'mouse';
 if (lc_raw_intent == 'check') return 'check';
 if (lc_raw_intent == 'test') return 'test';
 if (lc_raw_intent == 'frame') return 'frame';
@@ -1087,6 +1090,13 @@ return "this.echo('ERROR - you are already in live mode, type done to quit live 
 
 function ask_intent(raw_intent) {raw_intent = eval("'" + raw_intent + "'"); // support dynamic variables
 return "this.echo('ERROR - step is not relevant in live mode, set ask_result directly')";}
+
+function mouse_intent(raw_intent) {raw_intent = eval("'" + raw_intent + "'"); // support dynamic variables
+var params = ((raw_intent + ' ').substr(1+(raw_intent + ' ').indexOf(' '))).trim();
+if (params == '') return "this.echo('ERROR - up / down missing for " + raw_intent + "')";
+else if (params.toLowerCase() == 'down') return call_sikuli(raw_intent,'down');
+else if (params.toLowerCase() == 'up') return call_sikuli(raw_intent,'up');
+else return "this.echo('ERROR - cannot understand step " + raw_intent + "')";}
 
 function check_intent(raw_intent) {raw_intent = eval("'" + raw_intent + "'"); // support dynamic variables
 return "this.echo('ERROR - step not supported in live mode, there is no conditions language parser')";}

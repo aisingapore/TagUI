@@ -185,6 +185,21 @@ def snap_intent ( raw_intent ):
 	else:
 		return 0
 
+# function for low-level mouse control
+def mouse_intent ( raw_intent ):
+	params = (raw_intent + ' ')[1+(raw_intent + ' ').find(' '):].strip()
+	print '[tagui] ACTION - mouse ' + params
+	if params.lower() == 'down':
+		hover(Location(Env.getMouseLocation().getX(),Env.getMouseLocation().getY()))
+		mouseDown(Button.LEFT)
+		return 1
+	elif params.lower() == 'up':
+		hover(Location(Env.getMouseLocation().getX(),Env.getMouseLocation().getY()))
+		mouseUp(Button.LEFT)
+		return 1
+	else:
+		return 0
+
 # function for sending custom commands
 def vision_intent ( raw_intent ):
 	params = (raw_intent + ' ')[1+(raw_intent + ' ').find(' '):].strip()
@@ -225,6 +240,8 @@ def get_intent ( raw_intent ):
 		return 'save'
 	if raw_intent[:5].lower() == 'snap ':
 		return 'snap'
+	if raw_intent[:6].lower() == 'mouse ':
+		return 'mouse'
 	if raw_intent[:7].lower() == 'vision ':
 		return 'vision'
 	if raw_intent[:8].lower() == 'visible ' or raw_intent[:8].lower() == 'present ':
@@ -254,6 +271,8 @@ def parse_intent ( script_line ):
 		return save_intent(script_line)
 	elif intent_type == 'snap':
 		return snap_intent(script_line)
+	elif intent_type == 'mouse':
+		return mouse_intent(script_line)
 	elif intent_type == 'vision':
 		return vision_intent(script_line)
 	elif intent_type == 'visible':
