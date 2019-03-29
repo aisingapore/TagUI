@@ -733,6 +733,7 @@ case 'table': return table_intent(live_line); break;
 case 'wait': return wait_intent(live_line); break;
 case 'live': return live_intent(live_line); break;
 case 'ask': return ask_intent(live_line); break;
+case 'keyboard': return keyboard_intent(live_line); break;
 case 'mouse': return mouse_intent(live_line); break;
 case 'check': return check_intent(live_line); break;
 case 'test': return test_intent(live_line); break;
@@ -786,6 +787,7 @@ if (lc_raw_intent.substr(0,6) == 'table ') return 'table';
 if (lc_raw_intent.substr(0,5) == 'wait ') return 'wait';
 if (lc_raw_intent.substr(0,5) == 'live ') return 'live';
 if (lc_raw_intent.substr(0,4) == 'ask ') return 'ask';
+if (lc_raw_intent.substr(0,9) == 'keyboard ') return 'keyboard';
 if (lc_raw_intent.substr(0,6) == 'mouse ') return 'mouse';
 if (lc_raw_intent.substr(0,6) == 'check ') return 'check';
 if (lc_raw_intent.substr(0,5) == 'test ') return 'test';
@@ -822,6 +824,7 @@ if (lc_raw_intent == 'table') return 'table';
 if (lc_raw_intent == 'wait') return 'wait';
 if (lc_raw_intent == 'live') return 'live';
 if (lc_raw_intent == 'ask') return 'ask';
+if (lc_raw_intent == 'keyboard') return 'keyboard';
 if (lc_raw_intent == 'mouse') return 'mouse';
 if (lc_raw_intent == 'check') return 'check';
 if (lc_raw_intent == 'test') return 'test';
@@ -1117,6 +1120,11 @@ return "this.echo('ERROR - you are already in live mode, type done to quit live 
 
 function ask_intent(raw_intent) {raw_intent = eval("'" + raw_intent + "'"); // support dynamic variables
 return "this.echo('ERROR - step is not relevant in live mode, set ask_result directly')";}
+
+function keyboard_intent(raw_intent) {raw_intent = eval("'" + raw_intent + "'"); // support dynamic variables
+var params = ((raw_intent + ' ').substr(1+(raw_intent + ' ').indexOf(' '))).trim();
+if (params == '') return "this.echo('ERROR - keys to type missing for " + raw_intent + "')";
+else return call_sikuli(raw_intent,params);}
 
 function mouse_intent(raw_intent) {raw_intent = eval("'" + raw_intent + "'"); // support dynamic variables
 var params = ((raw_intent + ' ').substr(1+(raw_intent + ' ').indexOf(' '))).trim();
@@ -2620,6 +2628,72 @@ var sys = require('system'); sys.stdout.write('LIVE MODE - type done to quit\n \
 while (true) {live_input = sys.stdin.readLine(); // evaluate input in casperjs context until done is entered
 if (live_input.indexOf('done') == 0) break; try {eval(tagui_parse(live_input));}
 catch(e) {this.echo('ERROR - ' + e.message.charAt(0).toLowerCase() + e.message.slice(1));}}}});
+
+// test keyboard
+casper.then(function() {{techo('keyboard ls -lrt[enter]'); var fs = require('fs');
+if (!sikuli_step('keyboard ls -lrt[enter]')) if (!fs.exists('ls -lrt[enter]'))
+this.echo('ERROR - cannot find image file ls -lrt[enter]').exit(); else
+this.echo('ERROR - cannot find ls -lrt[enter] on screen').exit(); this.wait(0);}});
+
+casper.then(function() {{techo('keyboard ls -lrt[ENTER]'); var fs = require('fs');
+if (!sikuli_step('keyboard ls -lrt[ENTER]')) if (!fs.exists('ls -lrt[ENTER]'))
+this.echo('ERROR - cannot find image file ls -lrt[ENTER]').exit(); else
+this.echo('ERROR - cannot find ls -lrt[ENTER] on screen').exit(); this.wait(0);}});
+
+casper.then(function() {{techo('keyboard [pageup]'); var fs = require('fs');
+if (!sikuli_step('keyboard [pageup]')) if (!fs.exists('[pageup]'))
+this.echo('ERROR - cannot find image file [pageup]').exit(); else
+this.echo('ERROR - cannot find [pageup] on screen').exit(); this.wait(0);}});
+
+casper.then(function() {{techo('keyboard [PAGEDOWN]'); var fs = require('fs');
+if (!sikuli_step('keyboard [PAGEDOWN]')) if (!fs.exists('[PAGEDOWN]'))
+this.echo('ERROR - cannot find image file [PAGEDOWN]').exit(); else
+this.echo('ERROR - cannot find [PAGEDOWN] on screen').exit(); this.wait(0);}});
+
+casper.then(function() {{techo('keyboard 123[enter]456[ENTER]'); var fs = require('fs');
+if (!sikuli_step('keyboard 123[enter]456[ENTER]')) if (!fs.exists('123[enter]456[ENTER]'))
+this.echo('ERROR - cannot find image file 123[enter]456[ENTER]').exit(); else
+this.echo('ERROR - cannot find 123[enter]456[ENTER] on screen').exit(); this.wait(0);}});
+
+casper.then(function() {{techo('keyboard [home]'); var fs = require('fs');
+if (!sikuli_step('keyboard [home]')) if (!fs.exists('[home]'))
+this.echo('ERROR - cannot find image file [home]').exit(); else
+this.echo('ERROR - cannot find [home] on screen').exit(); this.wait(0);}});
+
+casper.then(function() {{techo('keyboard [end]'); var fs = require('fs');
+if (!sikuli_step('keyboard [end]')) if (!fs.exists('[end]'))
+this.echo('ERROR - cannot find image file [end]').exit(); else
+this.echo('ERROR - cannot find [end] on screen').exit(); this.wait(0);}});
+
+casper.then(function() {{techo('keyboard [ctrl][home]'); var fs = require('fs');
+if (!sikuli_step('keyboard [ctrl][home]')) if (!fs.exists('[ctrl][home]'))
+this.echo('ERROR - cannot find image file [ctrl][home]').exit(); else
+this.echo('ERROR - cannot find [ctrl][home] on screen').exit(); this.wait(0);}});
+
+casper.then(function() {{techo('keyboard [ctrl][end]'); var fs = require('fs');
+if (!sikuli_step('keyboard [ctrl][end]')) if (!fs.exists('[ctrl][end]'))
+this.echo('ERROR - cannot find image file [ctrl][end]').exit(); else
+this.echo('ERROR - cannot find [ctrl][end] on screen').exit(); this.wait(0);}});
+
+casper.then(function() {{techo('keyboard [win]'); var fs = require('fs');
+if (!sikuli_step('keyboard [win]')) if (!fs.exists('[win]'))
+this.echo('ERROR - cannot find image file [win]').exit(); else
+this.echo('ERROR - cannot find [win] on screen').exit(); this.wait(0);}});
+
+casper.then(function() {{techo('keyboard e[win]'); var fs = require('fs');
+if (!sikuli_step('keyboard e[win]')) if (!fs.exists('e[win]'))
+this.echo('ERROR - cannot find image file e[win]').exit(); else
+this.echo('ERROR - cannot find e[win] on screen').exit(); this.wait(0);}});
+
+casper.then(function() {{techo('keyboard [win]e'); var fs = require('fs');
+if (!sikuli_step('keyboard [win]e')) if (!fs.exists('[win]e'))
+this.echo('ERROR - cannot find image file [win]e').exit(); else
+this.echo('ERROR - cannot find [win]e on screen').exit(); this.wait(0);}});
+
+casper.then(function() {{techo('keyboard [cmd][space]'); var fs = require('fs');
+if (!sikuli_step('keyboard [cmd][space]')) if (!fs.exists('[cmd][space]'))
+this.echo('ERROR - cannot find image file [cmd][space]').exit(); else
+this.echo('ERROR - cannot find [cmd][space] on screen').exit(); this.wait(0);}});
 
 // test mouse
 casper.then(function() {{techo('mouse down'); var fs = require('fs');

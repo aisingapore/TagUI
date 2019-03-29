@@ -413,6 +413,21 @@ wait 7.5 seconds
 // test live
 live
 
+// test keyboard
+keyboard ls -lrt[enter]
+keyboard ls -lrt[ENTER]
+keyboard [pageup]
+keyboard [PAGEDOWN]
+keyboard 123[enter]456[ENTER]
+keyboard [home]
+keyboard [end]
+keyboard [ctrl][home]
+keyboard [ctrl][end]
+keyboard [win]
+keyboard e[win]
+keyboard [win]e
+keyboard [cmd][space]
+
 // test mouse
 mouse down
 mouse up

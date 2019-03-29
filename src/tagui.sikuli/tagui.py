@@ -32,6 +32,72 @@ def x_coordinate ( input_locator ):
 def y_coordinate ( input_locator ):
         return int(input_locator[input_locator.find(',')+1:-1])
 
+# function to map modifier keys to unicode for use in type()
+def modifiers_map ( input_keys ):
+	modifier_keys = 0
+	if '[shift]' in input_keys or '[SHIFT]' in input_keys: modifier_keys = modifier_keys + KeyModifier.SHIFT
+	if '[ctrl]' in input_keys or '[CTRL]' in input_keys: modifier_keys = modifier_keys + KeyModifier.CTRL
+	if '[alt]' in input_keys or '[ALT]' in input_keys: modifier_keys = modifier_keys + KeyModifier.ALT
+	if '[meta]' in input_keys or '[META]' in input_keys: modifier_keys = modifier_keys + KeyModifier.META
+	if '[cmd]' in input_keys or '[CMD]' in input_keys: modifier_keys = modifier_keys + KeyModifier.CMD
+	if '[win]' in input_keys or '[WIN]' in input_keys: modifier_keys = modifier_keys + KeyModifier.WIN
+	return modifier_keys
+
+# function to map special keys to unicode for use in type()
+def keyboard_map ( input_keys ):
+	input_keys = input_keys.replace('[clear]','\b').replace('[CLEAR]','\b')
+	input_keys = input_keys.replace('[space]',' ').replace('[SPACE]',' ')
+	input_keys = input_keys.replace('[enter]','\n').replace('[ENTER]','\n')
+	input_keys = input_keys.replace('[backspace]','\b').replace('[BACKSPACE]','\b')
+	input_keys = input_keys.replace('[tab]','\t').replace('[TAB]','\t')
+	input_keys = input_keys.replace('[esc]',u'\u001b').replace('[ESC]',u'\u001b')
+	input_keys = input_keys.replace('[up]',u'\ue000').replace('[UP]',u'\ue000')
+	input_keys = input_keys.replace('[right]',u'\ue001').replace('[RIGHT]',u'\ue001')
+	input_keys = input_keys.replace('[down]',u'\ue002').replace('[DOWN]',u'\ue002')
+	input_keys = input_keys.replace('[left]',u'\ue003').replace('[LEFT]',u'\ue003')
+	input_keys = input_keys.replace('[pageup]',u'\ue004').replace('[PAGEUP]',u'\ue004')
+	input_keys = input_keys.replace('[pagedown]',u'\ue005').replace('[PAGEDOWN]',u'\ue005')
+	input_keys = input_keys.replace('[delete]',u'\ue006').replace('[DELETE]',u'\ue006')
+	input_keys = input_keys.replace('[end]',u'\ue007').replace('[END]',u'\ue007')
+	input_keys = input_keys.replace('[home]',u'\ue008').replace('[HOME]',u'\ue008')
+	input_keys = input_keys.replace('[insert]',u'\ue009').replace('[INSERT]',u'\ue009')
+	input_keys = input_keys.replace('[f1]',u'\ue011').replace('[F1]',u'\ue011')
+	input_keys = input_keys.replace('[f2]',u'\ue012').replace('[F2]',u'\ue012')
+	input_keys = input_keys.replace('[f3]',u'\ue013').replace('[F3]',u'\ue013')
+	input_keys = input_keys.replace('[f4]',u'\ue014').replace('[F4]',u'\ue014')
+	input_keys = input_keys.replace('[f5]',u'\ue015').replace('[F5]',u'\ue015')
+	input_keys = input_keys.replace('[f6]',u'\ue016').replace('[F6]',u'\ue016')
+	input_keys = input_keys.replace('[f7]',u'\ue017').replace('[F7]',u'\ue017')
+	input_keys = input_keys.replace('[f8]',u'\ue018').replace('[F8]',u'\ue018')
+	input_keys = input_keys.replace('[f9]',u'\ue019').replace('[F9]',u'\ue019')
+	input_keys = input_keys.replace('[f10]',u'\ue01A').replace('[F10]',u'\ue01A')
+	input_keys = input_keys.replace('[f11]',u'\ue01B').replace('[F11]',u'\ue01B')
+	input_keys = input_keys.replace('[f12]',u'\ue01C').replace('[F12]',u'\ue01C')
+	input_keys = input_keys.replace('[f13]',u'\ue01D').replace('[F13]',u'\ue01D')
+	input_keys = input_keys.replace('[f14]',u'\ue01E').replace('[F14]',u'\ue01E')
+	input_keys = input_keys.replace('[f15]',u'\ue01F').replace('[F15]',u'\ue01F')
+	input_keys = input_keys.replace('[printscreen]',u'\ue024').replace('[PRINTSCREEN]',u'\ue024')
+	input_keys = input_keys.replace('[scrolllock]',u'\ue025').replace('[SCROLLLOCK]',u'\ue025')
+	input_keys = input_keys.replace('[pause]',u'\ue026').replace('[PAUSE]',u'\ue026')
+	input_keys = input_keys.replace('[capslock]',u'\ue027').replace('[CAPSLOCK]',u'\ue027')
+	input_keys = input_keys.replace('[numlock]',u'\ue03B').replace('[NUMLOCK]',u'\ue03B')
+
+	# if modifier key is the only input, treat as a keystroke instead of a modifier
+	if input_keys == '[shift]' or input_keys == '[SHIFT]': input_keys = u'\ue020'
+	elif input_keys == '[ctrl]' or input_keys == '[CTRL]': input_keys = u'\ue021'
+	elif input_keys == '[alt]' or input_keys == '[ALT]': input_keys = u'\ue022'
+	elif input_keys == '[meta]' or input_keys == '[META]': input_keys = u'\ue023'
+	elif input_keys == '[cmd]' or input_keys == '[CMD]': input_keys = u'\ue023'
+	elif input_keys == '[win]' or input_keys == '[WIN]': input_keys = u'\ue042'
+
+	input_keys = input_keys.replace('[shift]','').replace('[SHIFT]','')
+	input_keys = input_keys.replace('[ctrl]','').replace('[CTRL]','')
+	input_keys = input_keys.replace('[alt]','').replace('[ALT]','')
+	input_keys = input_keys.replace('[meta]','').replace('[META]','')
+	input_keys = input_keys.replace('[cmd]','').replace('[CMD]','')
+	input_keys = input_keys.replace('[win]','').replace('[WIN]','')
+	return input_keys
+
 # function to output sikuli text to tagui
 def output_sikuli_text ( output_text ):
 	import codecs
@@ -89,14 +155,23 @@ def type_intent ( raw_intent ):
 	param1 = params[:params.find(' as ')].strip()
 	param2 = params[4+params.find(' as '):].strip()
 	print '[tagui] ACTION - type ' + param1 + ' as ' + param2
-	param2 = param2.replace('[enter]','\n')
-	param2 = param2.replace('[clear]','\b')
+	modifier_keys = modifiers_map(param2)
+	param2 = keyboard_map(param2)
 	if param1.endswith('page.png') or param1.endswith('page.bmp'):
-		return type(param2)
+		if modifier_keys == 0:
+			return type(param2)
+		else:
+			return type(param2,modifier_keys)
 	elif is_coordinates(param1):
-		return type(Location(x_coordinate(param1),y_coordinate(param1)),param2)
+		if modifier_keys == 0:
+			return type(Location(x_coordinate(param1),y_coordinate(param1)),param2)
+		else:
+			return type(Location(x_coordinate(param1),y_coordinate(param1)),param2,modifier_keys)
 	elif exists(param1):
-		return type(param1,param2) 
+		if modifier_keys == 0:
+			return type(param1,param2)
+		else:
+			return type(param1,param2,modifier_keys)
 	else:
 		return 0
 
@@ -185,6 +260,17 @@ def snap_intent ( raw_intent ):
 	else:
 		return 0
 
+# function for low-level keyboard control
+def keyboard_intent ( raw_intent ):
+	params = (raw_intent + ' ')[1+(raw_intent + ' ').find(' '):].strip()
+	print '[tagui] ACTION - keyboard ' + params
+	modifier_keys = modifiers_map(params)
+	params = keyboard_map(params)
+	if modifier_keys == 0:
+		return type(params)
+	else:
+		return type(params,modifier_keys)
+
 # function for low-level mouse control
 def mouse_intent ( raw_intent ):
 	params = (raw_intent + ' ')[1+(raw_intent + ' ').find(' '):].strip()
@@ -240,6 +326,8 @@ def get_intent ( raw_intent ):
 		return 'save'
 	if raw_intent[:5].lower() == 'snap ':
 		return 'snap'
+	if raw_intent[:9].lower() == 'keyboard ':
+		return 'keyboard'
 	if raw_intent[:6].lower() == 'mouse ':
 		return 'mouse'
 	if raw_intent[:7].lower() == 'vision ':
@@ -271,6 +359,8 @@ def parse_intent ( script_line ):
 		return save_intent(script_line)
 	elif intent_type == 'snap':
 		return snap_intent(script_line)
+	elif intent_type == 'keyboard':
+		return keyboard_intent(script_line)
 	elif intent_type == 'mouse':
 		return mouse_intent(script_line)
 	elif intent_type == 'vision':
