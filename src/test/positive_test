@@ -7,6 +7,7 @@ local_path = local_path.substring(0,local_path.indexOf("'"));
 var regex = new RegExp(local_path,"g"); js_result = js_result.replace(regex,"/full_path");
 fs.write('test' + fs.separator + 'positive_test' + '.js', js_result, 'w');
 fs.remove('test' + fs.separator + 'positive_test' + '.log');
+fs.remove('test' + fs.separator + 'positive_test' + '.raw');
 this.exit(); // don't actually run the steps and code, test is for language conversion
 // add a navigation step in order to exit in time and block below output from running
 https://ca.yahoo.com
@@ -190,6 +191,27 @@ click test3
 number++;
 }
 
+// test for complex for and if nested loops
+a = 1
+for n from 1 to 20
+echo n
+
+for n from 1 to 20
+{
+echo n
+}
+
+for n from 1 to 20
+{
+	if (a==1)
+	{
+		for p from 21 to 40
+		{
+			echo n ' - ' p
+		}
+	}
+}
+
 // test {} for popup step
 popup about
 {
@@ -239,18 +261,24 @@ tap element
 click element
 tap button.png
 click button.bmp
+tap (100,200)
+click (200,400)
 
 // test hover / move (including sikuli visual automation)
 hover element
 move element
 hover button.png
 move button.bmp
+hover (100,200)
+move (200,400)
 
 // test type / enter (including sikuli visual automation)
 type element as some text
 enter element as some text
 type textbox.png as some text
 enter textbox.bmp as some text
+type (100,200) as some text
+enter (200,400) as some text
 
 // test type / enter for [enter] and [clear] keywords
 type element as some text[enter]
@@ -265,6 +293,9 @@ select element as option
 choose element as option
 select option_list.png as option_item.bmp
 choose option_list.bmp as option_item.png
+select (100,200) as (200,400)
+choose textbox.bmp as (200,400)
+select (100,200) as sometext.png
 
 // test read / fetch
 read element to variable
@@ -278,13 +309,24 @@ show page
 print element
 print page
 
-// test save
+// test save with different filename formats
 save element
 save element to filename.txt
+save element to tmp/filename.txt
 save element to /tmp/filename.txt
+save element to ./tmp/filename.txt
+save element to tmp\filename.txt
+save element to c:\tmp\filename.txt
+save element to .\tmp\filename.txt
+
 save page
 save page to filename.txt
+save page to tmp/filename.txt
 save page to /tmp/filename.txt
+save page to ./tmp/filename.txt
+save page to tmp\filename.txt
+save page to c:\tmp\filename.txt
+save page to .\tmp\filename.txt
 
 // test echo
 echo variable
@@ -331,6 +373,16 @@ table element to filename.csv
 table (//table)[7]
 table (//table)[7] to filename.csv
 
+// test tagui
+// can't really test as folders and files structure won't be the same
+// tagui flow_filename
+// tagui tmp/flow_filename
+// tagui /tmp/flow_filename
+// tagui ./tmp/flow_filename
+// tagui tmp\flow_filename
+// tagui c:\tmp\flow_filename
+// tagui .\tmp\flow_filename
+
 // test upload
 upload #css_selector as abc.png
 upload #css_selector as /tmp/abc.png
@@ -358,6 +410,28 @@ wait 10 secs
 wait 10 seconds
 wait 7.5 seconds
 
+// test live
+live
+
+// test keyboard
+keyboard ls -lrt[enter]
+keyboard ls -lrt[ENTER]
+keyboard [pageup]
+keyboard [PAGEDOWN]
+keyboard 123[enter]456[ENTER]
+keyboard [home]
+keyboard [end]
+keyboard [ctrl][home]
+keyboard [ctrl][end]
+keyboard [win]
+keyboard e[win]
+keyboard [win]e
+keyboard [cmd][space]
+
+// test mouse
+mouse down
+mouse up
+
 // test check
 check eggs lesser than 10 | "eggs lesser than 10" | "eggs not lesser than 10"
 check eggs lesser than 10|"eggs lesser than 10"|"eggs not lesser than 10"
@@ -374,11 +448,15 @@ echo "test subframe"
 popup url_keyword
 echo "test popup"
 popup url_keyword
+{
 frame mainframe
 echo "test popup with mainframe"
+}
 popup url_keyword
+{
 frame mainframe | subframe
 echo "test popup with subframe"
+}
 
 // test api direct
 api http://www.dummytestsite.com/api?COLOR1=red&COLOR2=green&COLOR3=blue
@@ -386,15 +464,107 @@ api http://www.dummytestsite.com/api?COLOR1=red&COLOR2=green&COLOR3=blue
 // test api with variables
 var COLOR1='red'; var COLOR2='green'; var COLOR3='blue';
 api http://www.dummytestsite.com/api?COLOR1='+COLOR1+'&COLOR2='+COLOR2+'&COLOR3='+COLOR3+'
+api http://www.dummytestsite.com/api?COLOR1=`COLOR1`&COLOR2=`COLOR2`&COLOR3=`COLOR3`
+
+// test run
+run face_recognition par1 par2 par3
+run begin
+face_recognition1 par1 par2 par3
+face_recognition2 par1 par2 par3
+run finish
 
 // test dom
 dom var page_title = document.title;
-
-// test test
-// test something and see what happens
+dom begin
+var page_title = document.title;
+	var page_input = prompt('enter your title');
+		return page_title + ' ' + page_input;
+dom finish
+dom document.querySelector('#header p').focus()
 
 // test js
 js this.echo('THIS IS JAVASCRIPT');
+js begin
+   b = 1
+c = 2
+	a = b + c;
+
+	if (a == 3)
+	{
+		this.echo('YES');
+
+	}
+
+if (a != 3)
+{
+this.echo('NO');
+}
+js finish
+
+// test r
+r a=1;b=2
+r c=a+b
+r cat(c)
+echo r_result
+
+r begin
+a='1';b='2'
+d=paste(a,b,sep='')
+cat(d)
+r finish
+echo r_result
+
+r begin
+if (TRUE) {
+cat('TRUE1')
+cat('TRUE2')
+}
+r finish
+echo r_result
+
+r begin
+		if (FALSE) {
+	cat('FALSE1')
+cat('FALSE2')
+			}
+r finish
+echo r_result
+
+// test py
+py a=1;b=2
+py c=a+b
+py print(c)
+echo py_result
+
+py begin
+e='1';f='2'
+g=e+f
+print(g)
+py finish
+echo py_result
+
+py begin
+a = 1
+if a == 1:
+	print('TRUE1')
+	print('TRUE2')
+py finish
+
+	py begin
+	a = 2
+	if a == 1:
+		print('FALSE1')
+		print('FALSE2')
+	py finish
+
+// test vision
+vision click('/tmp/test.png')
+vision begin
+a = 1
+if a == 1:
+	click('1.png')
+	click('1.png')
+vision finish
 
 // test timeout
 timeout 4 seconds
@@ -402,9 +572,13 @@ timeout 5.67
 timeout 6
 
 // test comment
-// user comment
-//user comment
-//
+// user comment with space
+//user comment without space
+  // user comment with leading spaces
+		// user comment with leading tabs
+
+// test test
+// test something and see what happens
 
 // test url without variable
 http://www.dummytestsite.com
@@ -412,6 +586,20 @@ http://www.dummytestsite.com
 // test url with variable
 target_url = "www.dummytestsite.com";
 http://'+target_url+'
+http://`target_url`
+
+// test use of variable
+// old way for '+variable+' backward compatibility 
+locator = 'email_button'
+click '+locator+'
+number = 5
+click (//*[@id="test"])['+variable+']
+
+// new way of using `variable` to denote variable
+locator = 'email_button'
+click `locator`
+number = 5
+click (//*[@id="test"])[`variable`]
 
 // test present function
 if present('footer')
@@ -433,21 +621,6 @@ else
 echo 'footer not visible'
 }
 
-// test title function
-echo title()
-if title() contains 'About'
-echo 'page title contains About'
-
-// test url function
-echo url()
-if url() contains 'org'
-echo 'page url contains org'
-
-// test text function
-echo text()
-if text() contains 'automation'
-echo 'page text contains automation'
-
 // test count function
 echo count('element')
 element_count = count('element')
@@ -455,3 +628,84 @@ for n from 1 to element_count
 {
 echo n
 }
+
+// test url function
+echo url()
+if url() contains 'org'
+echo 'page url contains org'
+
+// test title function
+echo title()
+if title() contains 'About'
+echo 'page title contains About'
+
+// test text function
+echo text()
+if text() contains 'automation'
+echo 'page text contains automation'
+
+// test timer function
+start = timer()
+wait 3 seconds
+time_taken = timer()
+echo 'time taken - ' time_taken ' seconds'
+
+// test mouse_xy, mouse_x, mouse_y functions
+xy = mouse_xy()
+x = mouse_x()
+y = mouse_y()
+x = x + 100
+x = x - 100
+y = y + 100
+y = y - 100
+echo xy ' - ' x ',' y
+
+// test infinity constant (set to 1024)
+echo infinity
+for n from 1 to infinity
+{
+echo n
+}
+
+// test break and continue in for loops
+for n from 1 to 10
+{
+	echo n
+	if n equals to 6
+	{
+		for k from 80 to 85
+		{
+			continue
+			echo k
+			if k equals to 83
+			{
+				break;
+			}
+		}
+	}
+}
+
+for cde from 1 to 5
+{
+	echo "cde " + cde
+	if cde equals to 3
+	continue;
+}
+
+for abc from 1 to 5
+{
+	if abc equals to 3
+	continue
+	echo "abc " + abc
+}
+
+for n from 30 to 35
+{
+	echo n
+}
+
+for k from 20 to 25
+{
+	echo k
+}
+

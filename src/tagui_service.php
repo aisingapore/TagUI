@@ -27,6 +27,10 @@ else
 	else if (substr($service_settings,-1)=="\"") die("ERROR - no opening \" in SETTINGS parameter" . "\n");
 	else if (substr($service_settings,-1)=="'") die("ERROR - no opening ' in SETTINGS parameter" . "\n");
 
+	// following line disables by default webservice execution of online flows
+	else if ((strpos($service_settings,'http:')!== false) or (strpos($service_settings,'https:')!== false))
+	die("ERROR - webservice execution of online flow disabled by default" . "\n");
+
 	// perform some sanity check to filter shell escaping characters for code injection
 	if ((strpos($service_settings,'|')!== false) or (strpos($service_settings,';')!== false)
 	or (strpos($service_settings,'&')!== false) or (strpos($service_settings,'>')!== false))

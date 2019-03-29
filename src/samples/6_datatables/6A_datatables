@@ -1,26 +1,29 @@
 https://github.com/telegramdesktop/tdesktop/stargazers?page=`page_no`
-// automation flow files start with an URL to tell TagUI where to go
+// automation flow files usually start with an URL to tell TagUI where to go
+// files can also start with // for comments, or no URL if it's not web-related
 
 // this set of flows uses datatables to retrieve/act on info from GitHub
 // 6A - get URLs of Starrers, 6B - get contact info, 6C - email Starrers
-// for issues or questions, kindly feedback on GitHub or ken@tebel.org
+// for issues or questions, kindly feedback on GitHub or ksoh@aisingapore.org
 // see cheatsheet for steps, conditions, finding element identifiers, etc
-// https://github.com/tebelorg/TagUI#cheat-sheet
+// https://github.com/kelaberetiv/TagUI#cheat-sheet
 
 // CONTEXT - When TagUI beta was released, someone shared to Hacker News
 // and GitHub stars for the project jumped from 2 to 1.5k in a week or so.
-// I used this to send an one-time thank you email to all TagUI starrers,
+// I used this to send a one-time thank you email to all TagUI starrers,
 // but had since stopped using this as it is unsolicited and feels spammy.
 
-// datatables extend the power of repositories files to manage batch automation
-// datatable has 2 or more columns, for example below (headers up to you to name)
-// data-centric approach with rows representing data fields (usually row = test case)
-// TagUI loops through each column to automate using values from different datasets
+// when running TagUI, specify datatable csv to use, eg tagui 6A_datatables page_data.csv
+// TagUI loops through each row to run automation using the data from different rows
 // for example, echo "PAGE NUMBER - `page_no`" in your flow shows PAGE NUMBER - 1
+// echo '`[iteration]`' can be used in your flow to show the current iteration number
+// a file tagui_datatable.csv will be created in tagui/src folder for TagUI internal use
 
-// contents of 6A_datatables.csv
-// 6A_GETURL,#1,#2,#3
-// page_no,1,2,3
+// contents of page_data.csv
+// #,page_no
+// 1,1
+// 2,2
+// 3,3
 
 // now here's the actual flow, it grabs URLs of first 3 pages of Telegram Starrers 
 
