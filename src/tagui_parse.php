@@ -389,6 +389,7 @@ case "table": return table_intent($script_line); break;
 case "wait": return wait_intent($script_line); break;
 case "live": return live_intent($script_line); break;
 case "ask": return ask_intent($script_line); break;
+case "keyboard": return keyboard_intent($script_line); break;
 case "mouse": return mouse_intent($script_line); break;
 case "check": return check_intent($script_line); break;
 case "test": return test_intent($script_line); break;
@@ -440,6 +441,7 @@ if (substr($lc_raw_intent,0,6)=="table ") return "table";
 if (substr($lc_raw_intent,0,5)=="wait ") return "wait";
 if (substr($lc_raw_intent,0,5)=="live ") return "live";
 if (substr($lc_raw_intent,0,4)=="ask ") return "ask";
+if (substr($lc_raw_intent,0,9)=="keyboard ") return "keyboard";
 if (substr($lc_raw_intent,0,6)=="mouse ") return "mouse";
 if (substr($lc_raw_intent,0,6)=="check ") {$GLOBALS['test_automation']++; return "check";}
 if (substr($lc_raw_intent,0,5)=="test ") return "test";
@@ -476,6 +478,7 @@ if ($lc_raw_intent=="table") return "table";
 if ($lc_raw_intent=="wait") return "wait";
 if ($lc_raw_intent=="live") return "live";
 if ($lc_raw_intent=="ask") return "ask";
+if ($lc_raw_intent=="keyboard") return "keyboard";
 if ($lc_raw_intent=="mouse") return "mouse";
 if ($lc_raw_intent=="check") {$GLOBALS['test_automation']++; return "check";}
 if ($lc_raw_intent=="test") return "test";
@@ -841,6 +844,11 @@ return "casper.then(function() {".
 else return "casper.then(function() {".
 "{ask_result = ''; var sys = require('system');\nthis.echo('".$params." '); ".
 "ask_result = sys.stdin.readLine();}".end_fi()."});"."\n\n";}
+
+function keyboard_intent($raw_intent) {
+$params = trim(substr($raw_intent." ",1+strpos($raw_intent." "," ")));
+if ($params == "") echo "ERROR - " . current_line() . " keys to type missing for " . $raw_intent . "\n";
+return "casper.then(function() {".call_sikuli($raw_intent,$params);}
 
 function mouse_intent($raw_intent) {
 $params = trim(substr($raw_intent." ",1+strpos($raw_intent." "," ")));
