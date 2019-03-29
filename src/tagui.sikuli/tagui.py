@@ -167,9 +167,6 @@ def type_intent ( raw_intent ):
 			return type(Location(x_coordinate(param1),y_coordinate(param1)),param2)
 		else:
 			return type(Location(x_coordinate(param1),y_coordinate(param1)),param2,modifier_keys)
-		return type(param2)
-	elif is_coordinates(param1):
-		return type(Location(x_coordinate(param1),y_coordinate(param1)),param2)
 	elif exists(param1):
 		if modifier_keys == 0:
 			return type(param1,param2)
@@ -274,7 +271,7 @@ def keyboard_intent ( raw_intent ):
 	else:
 		return type(params,modifier_keys)
 
-  # function for low-level mouse control
+# function for low-level mouse control
 def mouse_intent ( raw_intent ):
 	params = (raw_intent + ' ')[1+(raw_intent + ' ').find(' '):].strip()
 	print '[tagui] ACTION - mouse ' + params
