@@ -17,6 +17,8 @@ dump,ダンプ
 write,上書き保存する
 snap,スクリーンショット
 table,表
+mouse,マウス
+keyboard,キーボード
 live,ライブ
 download,ダウンロード
 upload,アップロード
@@ -75,3 +77,6 @@ timer(),タイマー（）
 count(),カウント（）
 present(),プレゼント（）
 visible(),visible（）
+mouse_xy(),マウス_xy()
+mouse_x(),マウス_x()
+mouse_y(),マウス_y()

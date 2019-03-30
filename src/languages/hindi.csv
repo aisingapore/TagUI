@@ -17,6 +17,8 @@ dump,ढेर
 write,लिखना
 snap,स्नैप
 table,तालिका
+mouse,माउस
+keyboard,कीबोर्ड
 live,जीना
 download,डाउनलोड
 upload,अपलोड
@@ -75,3 +77,6 @@ timer(),टाइमर()
 count(),गिनती()
 present(),वर्तमान()
 visible(),दृश्य()
+mouse_xy(),माउस_xy()
+mouse_x(),माउस_x()
+mouse_y(),माउस_y()

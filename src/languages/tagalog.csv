@@ -17,6 +17,8 @@ dump,dump
 write,isulat
 snap,snap
 table,talahanayan
+mouse,daga
+keyboard,teklado
 live,mabuhay
 download,i-download
 upload,mag-upload
@@ -75,3 +77,6 @@ timer(),timer()
 count(),bilangin()
 present(),kasalukuyan()
 visible(),nakikita()
+mouse_xy(),daga_xy()
+mouse_x(),daga_x()
+mouse_y(),daga_y()

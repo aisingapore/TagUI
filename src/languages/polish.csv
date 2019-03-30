@@ -17,6 +17,8 @@ dump,wysypisko
 write,pisać
 snap,kłapnięcie
 table,stół
+mouse,mysz
+keyboard,klawiatura
 live,relacja na żywo
 download,pobieranie
 upload,przekazać plik
@@ -75,3 +77,6 @@ timer(),regulator czasowy()
 count(),liczyć()
 present(),teraźniejszość()
 visible(),widoczny()
+mouse_xy(),mysz_xy()
+mouse_x(),mysz_x()
+mouse_y(),mysz_y()

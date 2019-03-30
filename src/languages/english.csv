@@ -17,6 +17,8 @@ dump,dump
 write,write
 snap,snap
 table,table
+mouse,mouse
+keyboard,keyboard
 live,live
 download,download
 upload,upload
@@ -76,3 +78,6 @@ timer(),timer()
 count(),count()
 present(),present()
 visible(),visible()
+mouse_xy(),mouse_xy()
+mouse_x(),mouse_x()
+mouse_y(),mouse_y()

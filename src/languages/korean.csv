@@ -17,6 +17,8 @@ dump,덤프
 write,쓰다
 snap,스냅
 table,표
+mouse,마우스 
+keyboard,건반
 live,살고 있다
 download,다운로드
 upload,업로드
@@ -75,3 +77,6 @@ timer(),시간제 노동자()
 count(),카운트()
 present(),선물()
 visible(),명백한()
+mouse_xy(),마우스_xy() 
+mouse_x(),마우스_x() 
+mouse_y(),마우스_y() 
