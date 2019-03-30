@@ -1,0 +1,74 @@
+http://www6.cityu.edu.hk/stfprofile/kaytan.htm
+// automation flow files usually start with an URL to tell TagUI where to go
+// files can also start with // for comments, or no URL if it's not web-related
+
+// this flow uses face recognition to detect profile images on webpages
+// for issues or questions, kindly feedback on GitHub or ksoh@aisingapore.org
+// see cheatsheet for steps, conditions, finding element identifiers, etc
+// https://github.com/kelaberetiv/TagUI#cheat-sheet
+
+// form filename from name
+profile_name = 'Tan Kay Chen'
+profile_name = profile_name.trim().toLowerCase();
+profile_name = profile_name.replace(/ /g,"_");
+
+// extract base on common image file extensions
+image_criteria_1 = '//*[contains(@src,".png") or contains(@src,".jpeg") or contains(@src,".jpg")]'
+number_of_frgnd_images = count(image_criteria_1)
+for n from 1 to number_of_frgnd_images
+{
+	current_image = '('+image_criteria_1+')['+n+']'
+	snap `current_image` to `profile_name`/`n`.png
+}
+
+// extract base on background image presentation
+image_criteria_2 = '//*[contains(@style,"background-image")]'; 
+number_of_bkgnd_images = count(image_criteria_2)
+for n from 1 to number_of_bkgnd_images
+{
+	current_image = '('+image_criteria_2+')['+n+']'
+	snap `current_image` to `profile_name`/`(n+number_of_frgnd_images)`.png
+}
+
+// use face detection deep-learning model from
+// https://github.com/ageitgey/face_recognition
+// first install it following instructions there
+
+total_number_of_images = number_of_bkgnd_images + number_of_frgnd_images
+// face_counter to track how many images found containing faces
+// to handle case where there are more than one image with faces
+face_counter = 1
+
+for n from 1 to total_number_of_images
+{
+	// 2 different flavours to run face detection inferencing
+	// flavour 1 - command line version to send image filenames
+	// face_recognition library offers command line execution
+	// run face_detection `flow_path`/`profile_name`/`n`.png
+
+	// flavour 2 -  python version to run inferencing in python
+	// send image filename variable from tagui to python process
+	// before running python code to detect faces and return result
+	run_result = ""
+	py_step('image_file = "'+flow_path+'/'+profile_name+'/'+n+'.png"')
+	py begin
+	import face_recognition
+	image = face_recognition.load_image_file(image_file)
+	face_locations = face_recognition.face_locations(image)
+	print(len(face_locations))
+	py finish
+	if py_result equals to 1
+	run_result = "face is found"
+
+        // if face is found, copy to main folder
+        if run_result not equals to ""
+        {
+		fs = require('fs'); target_file = flow_path+'/'+profile_name+'-'+face_counter+'.png';
+		if (fs.exists(target_file))
+		{
+			fs.remove(target_file);
+		}
+		fs.copy(flow_path+'/'+profile_name+'/'+n+'.png',flow_path+'/'+profile_name+'-'+face_counter+'.png');
+                face_counter = face_counter + 1
+        }
+}

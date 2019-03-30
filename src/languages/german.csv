@@ -1,31 +1,33 @@
 EN,DE
 click,klicken
 tap,tippen
-move,bewegung
-hover,schweben
-type,art
+move,bewegen
+hover,darüber bewegen
+type,eingeben
 enter,eingeben
 select,wählen
 choose,wählen
 read,lesen
 fetch,holen
-show,show
+show,anzeigen
 print,drucken
-save,sparen
+save,speichern
 echo,echo
 dump,dump
 write,schreiben
 snap,schnapp
 table,tabelle
-live,leben
+mouse,maus
+keyboard,tastatur
+live,aktuell
 download,herunterladen
 upload,hochladen
-load,belastung
+load,laden
 receive,erhalten
 frame,rahmen
 popup,pop-up
-wait,warte ab
-timeout,auszeit
+wait,warte
+timeout,timeout
 seconds,sekunden
 second,zweite
 api,api
@@ -35,7 +37,7 @@ else if,sonst wenn
 else,sonst
 if,ob
 for,zum
-while,während
+while,solange
 check,prüfen
 more than or equals to,mehr als oder gleich
 more than or equal to,mehr als oder gleich
@@ -71,7 +73,10 @@ as,wie
 title(),titel()
 url(),url()
 text(),text()
-timer(),timer()
-count(),graf()
-present(),geschenk()
+timer(),stoppuhr()
+count(),anzahl()
+present(),vorhanden()
 visible(),sichtbar()
+mouse_xy(),maus_xy()
+mouse_x(),maus_x()
+mouse_y(),maus_y()

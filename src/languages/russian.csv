@@ -17,6 +17,8 @@ dump,свалка
 write,записывать
 snap,щелчок
 table,таблица
+mouse,мышь
+keyboard,клавиатура
 live,жить
 download,скачать
 upload,загружать
@@ -75,3 +77,6 @@ timer(),таймер()
 count(),кол-()
 present(),настоящее время()
 visible(),видимый()
+mouse_xy(),мышь_xy()
+mouse_x(),мышь_x()
+mouse_y(),мышь_y()

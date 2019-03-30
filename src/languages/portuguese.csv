@@ -17,6 +17,8 @@ dump,despejar
 write,escreva
 snap,snap
 table,mesa
+mouse,rato
+keyboard,teclado
 live,viver
 download,baixar
 upload,envio
@@ -75,3 +77,6 @@ timer(),cronômetro()
 count(),contagem()
 present(),presente()
 visible(),visível()
+mouse_xy(),rato_xy()
+mouse_x(),rato_x()
+mouse_y(),rato_y()

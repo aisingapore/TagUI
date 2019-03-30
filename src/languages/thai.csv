@@ -17,6 +17,8 @@ dump,เท
 write,เขียน
 snap,ตะครุบ
 table,ตาราง
+mouse,เม้าส์
+keyboard,แป้นพิมพ์
 live,มีชีวิต
 download,ดาวน์โหลด
 upload,อัปโหลด
@@ -75,3 +77,6 @@ timer(),จับเวลา()
 count(),นับ()
 present(),นำเสนอ()
 visible(),สามารถมองเห็นได้()
+mouse_xy(),เม้าส์_xy()
+mouse_x(),เม้าส์_x()
+mouse_y(),เม้าส์_y()

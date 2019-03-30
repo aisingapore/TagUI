@@ -299,6 +299,7 @@ TestRecorder.EventTypes.FetchElementText = 29;
 TestRecorder.EventTypes.SelectElementOption = 30;
 TestRecorder.EventTypes.CancelLastStep = 31;
 TestRecorder.EventTypes.NoteDownElement = 32;
+TestRecorder.EventTypes.InspectElement = 33;
 TestRecorder.EventTypes.Cancel = 99;
 TestRecorder.EventTypes.MouseDown = 19;
 TestRecorder.EventTypes.MouseUp = 20;
@@ -478,6 +479,10 @@ TestRecorder.ElementScreenShotEvent = function() {
     this.type = TestRecorder.EventTypes.ElementScreenShot;
 }
 
+TestRecorder.InspectElement = function() {
+    this.type = TestRecorder.EventTypes.InspectElement;
+}
+
 TestRecorder.NoteDownElement = function() {
     this.type = TestRecorder.EventTypes.NoteDownElement;
 }
@@ -622,6 +627,7 @@ TestRecorder.ContextMenu.prototype.build = function(t, x, y) {
 //        menu.appendChild(this.item("Screenshot", this.doScreenShot));
 //    }
 
+    menu.appendChild(this.item("Inspect element", this.doInspectElement));
     menu.appendChild(this.item("Note down element", this.doNoteDownElement));
     menu.appendChild(this.item("Move cursor to element", this.doMoveCursorToElement));
     menu.appendChild(this.item("Fetch element text", this.doFetchElementText));
@@ -744,6 +750,18 @@ TestRecorder.ContextMenu.prototype.doElementScreenShot = function() {
     var et = TestRecorder.EventTypes;
     var e = new TestRecorder.ElementEvent(et.ElementScreenShot, t);
     contextmenu.record(e);
+}
+
+TestRecorder.ContextMenu.prototype.doInspectElement = function() {
+    var t = contextmenu.target;
+    var et = TestRecorder.EventTypes;
+    var e = new TestRecorder.ElementEvent(et.InspectElement, t);
+    contextmenu.record(e);
+  
+    // pop-up to show identifier of element inspected
+    var inspected_selector = e.info.selector;
+    if (inspected_selector.charAt(0) == '#') {inspected_selector = inspected_selector.substring(1);}
+    alert("The identifier for this element is ▹\n\n" + inspected_selector);
 }
 
 TestRecorder.ContextMenu.prototype.doNoteDownElement = function() {
