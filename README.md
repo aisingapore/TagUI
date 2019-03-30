@@ -330,7 +330,7 @@ TagUI has built-in integration with Python (works out of the box for both v2 & v
   py finish
   echo py_result
   
-  // an example of passing dynamically generated variables to Python integraton
+  // an example of passing dynamically generated variables to Python integration
   phone = 1234567
   name = 'donald duck'
   py_step('phone = ' + phone)
@@ -370,7 +370,7 @@ TagUI has built-in integration with R - an open-source software environment for 
   r finish
   echo r_result
   
-  // an example of passing dynamically generated variables to R integraton
+  // an example of passing dynamically generated variables to R integration
   phone = 1234567
   name = 'donald duck'
   r_step('phone = ' + phone)
@@ -671,7 +671,7 @@ TagUI is a young tool and it tries to do the task of automating UI interactions 
 
 <details>
   <summary>
-    Click to show how TagUI has native integraton with visible and headless Chrome using DevTools Protocol
+    Click to show how TagUI has native integration with visible and headless Chrome using DevTools Protocol
   </summary>
   
   TagUI has built-in integration with Chrome web browser to run web automation in visible or headless mode. It uses a websocket connection to directly communicate automation JavaScript code and information to Chrome.

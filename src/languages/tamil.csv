@@ -17,6 +17,8 @@ dump,டம்ப்
 write,எழுத
 snap,நொடியில்
 table,மேசை
+mouse,சுட்டி
+keyboard,விசைப்பலகை
 live,வாழ
 download,பதிவிறக்க
 upload,பதிவேற்ற
@@ -75,3 +77,6 @@ timer(),டைமர்()
 count(),எண்ண()
 present(),தற்போது()
 visible(),புலப்படும்()
+mouse_xy(),சுட்டி_xy()
+mouse_x(),சுட்டி_x()
+mouse_y(),சுட்டி_y()

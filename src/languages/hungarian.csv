@@ -17,6 +17,8 @@ dump,lerak
 write,ír
 snap,snap
 table,asztal
+mouse,egér
+keyboard,billentyűzet
 live,élő
 download,letöltés
 upload,feltölt
@@ -75,3 +77,6 @@ timer(),időzítő()
 count(),számol()
 present(),ajándék()
 visible(),látható()
+mouse_xy(),egér_xy()
+mouse_x(),egér_x()
+mouse_y(),egér_y()

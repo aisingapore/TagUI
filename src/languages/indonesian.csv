@@ -17,6 +17,8 @@ dump,membuang
 write,menulis
 snap,jepret
 table,meja
+mouse,mouse
+keyboard,keyboard
 live,hidup
 download,download
 upload,upload
@@ -75,3 +77,6 @@ timer(),timer()
 count(),menghitung()
 present(),menyajikan()
 visible(),terlihat()
+mouse_xy(),mouse_xy()
+mouse_x(),mouse_x()
+mouse_y(),mouse_y()

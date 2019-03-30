@@ -17,6 +17,8 @@ dump,dump
 write,schreiben
 snap,schnapp
 table,tabelle
+mouse,maus
+keyboard,tastatur
 live,aktuell
 download,herunterladen
 upload,hochladen
@@ -75,3 +77,6 @@ timer(),stoppuhr()
 count(),anzahl()
 present(),vorhanden()
 visible(),sichtbar()
+mouse_xy(),maus_xy()
+mouse_x(),maus_x()
+mouse_y(),maus_y()

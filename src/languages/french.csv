@@ -17,6 +17,8 @@ dump,déverser
 write,écrire
 snap,enclencher
 table,table
+mouse,souris
+keyboard,clavier
 live,vivre
 download,télécharger
 upload,charger
@@ -75,3 +77,6 @@ timer(),minuteur()
 count(),compter()
 present(),présent()
 visible(),visible()
+mouse_xy(),souris_xy()
+mouse_x(),souris_x()
+mouse_y(),souris_y()
