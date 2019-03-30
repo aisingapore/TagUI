@@ -1,6 +1,6 @@
 
 // xpath for object identification
-var x = require('casper').selectXPath;
+var xps666 = require('casper').selectXPath;
 
 // assign parameters to p1-p9 variables
 var p1 = casper.cli.raw.get(0); var p2 = casper.cli.raw.get(1); var p3 = casper.cli.raw.get(2);
@@ -91,7 +91,7 @@ if (selector.toString().length == 16) selector = ''; else selector = selector.to
 for (table_row=1; table_row<=1024; table_row++) {row_data = ""; for (table_col=1; table_col<=1024; table_col++) {
 table_cell = '(((' + selector + '//tr)[' + table_row + ']//th)' + '|'; // build cell xpath selector to include
 table_cell += '((' + selector + '//tr)[' + table_row + ']//td))[' + table_col + ']'; // both td and td elements
-if (casper.exists(x(table_cell))) row_data = row_data + '","' + casper.fetchText(x(table_cell)).trim();
+if (casper.exists(xps666(table_cell))) row_data = row_data + '","' + casper.fetchText(xps666(table_cell)).trim();
 else break;} // if searching for table cells (th and td) is not successful,  means end of row is reached
 if (row_data.substr(0,2) == '",') {row_data = row_data.substr(2); row_data += '"'; append_text(file_name,row_data);}
 else return true;}} // if '",' is not found, means end of table is reached as there is no cell found in row
@@ -104,7 +104,7 @@ var to_separator_keywords = '|read|fetch|save|load|dump|write|snap|table|downloa
 var as_separator_keywords = '|type|enter|select|choose|upload|'; var forloop_keywords = '|from|';
 var start_conditions_keywords = '|else if|if|for|while|check|'; var start_helper_keywords = '|echo|dump|write|';
 var conditions_keywords = '|more than or equals to|more than or equal to|greater than or equals to|greater than or equal to|higher than or equals to|higher than or equal to|less than or equals to|less than or equal to|lesser than or equals to|lesser than or equal to|lower than or equals to|lower than or equal to|more than|greater than|higher than|less than|lesser than|lower than|not equals to|not equal to|equals to|equal to|not contains|not contain|contains|contain|and|or|';
-var helper_keywords = '|title()|url()|text()|timer()|count()|present()|visible()|mouse_xy()|mouse_x()|mouse_y()|';
+var helper_keywords = '|title()|url()|text()|timer()|count()|present()|visible()|mouse_'+'xy()|mouse_'+'x()|mouse_'+'y()|'; // break up mouse_ helper functions to avoid mistaken triggering by tagui_parse.php as sikuli process needed
 var seconds_keywords = '|seconds|second|'; var start_seconds_keywords = '|wait|timeout|';
 if (!script_line || script_line == '') return '';
 if (!direction || direction == '') return 'ERROR - translation engine direction parameter missing';
@@ -173,44 +173,44 @@ function is_xpath_selector(selector) {if (selector.length == 0) return false;
 if ((selector.indexOf('/') == 0) || (selector.indexOf('(') == 0)) return true; return false;}
 
 // for finding best match for given locator
-function tx(locator) {if (is_xpath_selector(locator)) return x(locator);
+function tx(locator) {if (is_xpath_selector(locator)) return xps666(locator);
 if (casper.exists(locator)) return locator; // check for css locator
 // first check for exact match then check for containing string
-if (casper.exists(x('//*[@id="'+locator+'"]'))) return x('//*[@id="'+locator+'"]');
-if (casper.exists(x('//*[contains(@id,"'+locator+'")]'))) return x('//*[contains(@id,"'+locator+'")]');
-if (casper.exists(x('//*[@name="'+locator+'"]'))) return x('//*[@name="'+locator+'"]');
-if (casper.exists(x('//*[contains(@name,"'+locator+'")]'))) return x('//*[contains(@name,"'+locator+'")]');
-if (casper.exists(x('//*[@class="'+locator+'"]'))) return x('//*[@class="'+locator+'"]');
-if (casper.exists(x('//*[contains(@class,"'+locator+'")]'))) return x('//*[contains(@class,"'+locator+'")]');
-if (casper.exists(x('//*[@title="'+locator+'"]'))) return x('//*[@title="'+locator+'"]');
-if (casper.exists(x('//*[contains(@title,"'+locator+'")]'))) return x('//*[contains(@title,"'+locator+'")]');
-if (casper.exists(x('//*[@aria-label="'+locator+'"]'))) return x('//*[@aria-label="'+locator+'"]');
-if (casper.exists(x('//*[contains(@aria-label,"'+locator+'")]'))) return x('//*[contains(@aria-label,"'+locator+'")]');
-if (casper.exists(x('//*[text()="'+locator+'"]'))) return x('//*[text()="'+locator+'"]');
-if (casper.exists(x('//*[contains(text(),"'+locator+'")]'))) return x('//*[contains(text(),"'+locator+'")]');
-if (casper.exists(x('//*[@href="'+locator+'"]'))) return x('//*[@href="'+locator+'"]');
-if (casper.exists(x('//*[contains(@href,"'+locator+'")]'))) return x('//*[contains(@href,"'+locator+'")]');
-return x('/html');}
+if (casper.exists(xps666('//*[@id="'+locator+'"]'))) return xps666('//*[@id="'+locator+'"]');
+if (casper.exists(xps666('//*[contains(@id,"'+locator+'")]'))) return xps666('//*[contains(@id,"'+locator+'")]');
+if (casper.exists(xps666('//*[@name="'+locator+'"]'))) return xps666('//*[@name="'+locator+'"]');
+if (casper.exists(xps666('//*[contains(@name,"'+locator+'")]'))) return xps666('//*[contains(@name,"'+locator+'")]');
+if (casper.exists(xps666('//*[@class="'+locator+'"]'))) return xps666('//*[@class="'+locator+'"]');
+if (casper.exists(xps666('//*[contains(@class,"'+locator+'")]'))) return xps666('//*[contains(@class,"'+locator+'")]');
+if (casper.exists(xps666('//*[@title="'+locator+'"]'))) return xps666('//*[@title="'+locator+'"]');
+if (casper.exists(xps666('//*[contains(@title,"'+locator+'")]'))) return xps666('//*[contains(@title,"'+locator+'")]');
+if (casper.exists(xps666('//*[@aria-label="'+locator+'"]'))) return xps666('//*[@aria-label="'+locator+'"]');
+if (casper.exists(xps666('//*[contains(@aria-label,"'+locator+'")]'))) return xps666('//*[contains(@aria-label,"'+locator+'")]');
+if (casper.exists(xps666('//*[text()="'+locator+'"]'))) return xps666('//*[text()="'+locator+'"]');
+if (casper.exists(xps666('//*[contains(text(),"'+locator+'")]'))) return xps666('//*[contains(text(),"'+locator+'")]');
+if (casper.exists(xps666('//*[@href="'+locator+'"]'))) return xps666('//*[@href="'+locator+'"]');
+if (casper.exists(xps666('//*[contains(@href,"'+locator+'")]'))) return xps666('//*[contains(@href,"'+locator+'")]');
+return xps666('/html');}
 
 // for checking if given locator is found
 function check_tx(locator) {if (is_xpath_selector(locator))
-{if (casper.exists(x(locator))) return true; else return false;}
+{if (casper.exists(xps666(locator))) return true; else return false;}
 if (casper.exists(locator)) return true; // check for css locator
 // first check for exact match then check for containing string
-if (casper.exists(x('//*[@id="'+locator+'"]'))) return true;
-if (casper.exists(x('//*[contains(@id,"'+locator+'")]'))) return true;
-if (casper.exists(x('//*[@name="'+locator+'"]'))) return true;
-if (casper.exists(x('//*[contains(@name,"'+locator+'")]'))) return true;
-if (casper.exists(x('//*[@class="'+locator+'"]'))) return true;
-if (casper.exists(x('//*[contains(@class,"'+locator+'")]'))) return true;
-if (casper.exists(x('//*[@title="'+locator+'"]'))) return true;
-if (casper.exists(x('//*[contains(@title,"'+locator+'")]'))) return true;
-if (casper.exists(x('//*[@aria-label="'+locator+'"]'))) return true;
-if (casper.exists(x('//*[contains(@aria-label,"'+locator+'")]'))) return true;
-if (casper.exists(x('//*[text()="'+locator+'"]'))) return true;
-if (casper.exists(x('//*[contains(text(),"'+locator+'")]'))) return true;
-if (casper.exists(x('//*[@href="'+locator+'"]'))) return true;
-if (casper.exists(x('//*[contains(@href,"'+locator+'")]'))) return true;
+if (casper.exists(xps666('//*[@id="'+locator+'"]'))) return true;
+if (casper.exists(xps666('//*[contains(@id,"'+locator+'")]'))) return true;
+if (casper.exists(xps666('//*[@name="'+locator+'"]'))) return true;
+if (casper.exists(xps666('//*[contains(@name,"'+locator+'")]'))) return true;
+if (casper.exists(xps666('//*[@class="'+locator+'"]'))) return true;
+if (casper.exists(xps666('//*[contains(@class,"'+locator+'")]'))) return true;
+if (casper.exists(xps666('//*[@title="'+locator+'"]'))) return true;
+if (casper.exists(xps666('//*[contains(@title,"'+locator+'")]'))) return true;
+if (casper.exists(xps666('//*[@aria-label="'+locator+'"]'))) return true;
+if (casper.exists(xps666('//*[contains(@aria-label,"'+locator+'")]'))) return true;
+if (casper.exists(xps666('//*[text()="'+locator+'"]'))) return true;
+if (casper.exists(xps666('//*[contains(text(),"'+locator+'")]'))) return true;
+if (casper.exists(xps666('//*[@href="'+locator+'"]'))) return true;
+if (casper.exists(xps666('//*[contains(@href,"'+locator+'")]'))) return true;
 return false;}
 
 /**
@@ -230,14 +230,14 @@ if (is_sikuli(element_locator)) {var abs_param = abs_file(element_locator); var 
 if (!fs.exists(abs_param)) {this.echo('ERROR - cannot find image file for visible step').exit();}
 if (sikuli_step("visible " + abs_param)) return true; else return false;}
 else {var element_located = tx(element_locator); var element_visible = casper.elementVisible(element_located);
-// if tx() returns x('/html') means that the element is not found, so set element_visible to false
-if (element_located.toString() == x('/html').toString()) element_visible = false; return element_visible;}}
+// if tx() returns xps666('/html') means that the element is not found, so set element_visible to false
+if (element_located.toString() == xps666('/html').toString()) element_visible = false; return element_visible;}}
 
 // friendlier name to count elements using countElements()
 function count(element_locator) {if (!element_locator) return 0;
 var element_located = tx(element_locator); var element_count = casper.countElements(element_located);
-// if tx() returns x('/html') means that the element is not found, so set element_count to 0
-if (element_located.toString() == x('/html').toString()) element_count = 0; return element_count;}
+// if tx() returns xps666('/html') means that the element is not found, so set element_count to 0
+if (element_located.toString() == xps666('/html').toString()) element_count = 0; return element_count;}
 
 // friendlier name to get web page title using getTitle()
 function title() {return casper.getTitle();}
