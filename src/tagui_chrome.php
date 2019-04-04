@@ -53,7 +53,10 @@ else if (strpos($tagui_intent,'Target.attachToTarget') !== false) $intent_result
 else if (strpos($tagui_intent,'Target.detachFromTarget') !== false) $intent_result_string = trim($client->receive());
 
 // ignore irrelevant DOM.setChildNodes events received when using DOM.querySelector to get NodeId for upload step
-while (strpos($intent_result_string,"DOM.setChildNodes") !== false) {$intent_result_string = trim($client->receive());}
+// and ignore irrelevant DOM.attributeModified events received after using DOM.setFileInputFiles in upload step
+while ((strpos($intent_result_string,"DOM.setChildNodes") !== false) or 
+(strpos($intent_result_string,"DOM.attributeModified") !== false))
+{$intent_result_string = trim($client->receive());}
 
 // save intent_result to interface out-file
 echo "[tagui] OUTPUT - \n" . "[" . $tagui_count . "] " . $intent_result_string . "\n\n";
