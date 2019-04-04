@@ -615,6 +615,8 @@ ws_json = JSON.parse(ws_message);
 ws_message = chrome_step('DOM.querySelector',{nodeId: ws_json.result.root.nodeId, selector: selector});
 ws_json = JSON.parse(ws_message);
 ws_message = chrome_step('DOM.setFileInputFiles',{files: [filename], nodeId: ws_json.result.nodeId});
+ws_json = JSON.parse(ws_message);
+ws_message = chrome_step('DOM.disable'); // disable invoked DOM agent from running and firing events
 } catch(e) {casper.echo('ERROR - unable to upload ' + selector + ' as ' + filename);}};
 
 chrome.download = function(url,filename) { // download function for downloading url resource to file
