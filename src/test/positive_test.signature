@@ -891,6 +891,9 @@ source_string = source_string.replace(/\+\+\+\+\+/g,'+'); source_string = source
 source_string = source_string.replace(/\+\+\+/g,'+'); source_string = source_string.replace(/\+\+/g,'+');
 return source_string;} // replacing multiple variations of + to handle user typos of double spaces etc
 
+function escape_bs(input_string) { // helper function to escape backslash characters
+return input_string.replace(/\\/g,'\\\\');}
+
 function is_coordinates(input_params) { // helper function to check if string is (x,y) coordinates
 if ((input_params.length > 4) && (input_params.substr(0,1) == '(') && (input_params.substr(-1) == ')') 
 && (input_params.split(',').length == 2) && (!input_params.match(/[a-z]/i))) return true; else return false;}
@@ -924,11 +927,11 @@ if (!fs.exists('tagui_py/tagui_py.in')) return "this.echo('ERROR - cannot initia
 if (!fs.exists('tagui_py/tagui_py.out')) return "this.echo('ERROR - cannot initialise tagui_py.out')";
 return "py_result = ''; if (!py_step('"+input_intent+"')) this.echo('ERROR - cannot execute Python command(s)'); else {py_result = fetch_py_text(); clear_py_text(); try {py_json = JSON.parse(py_result);} catch(e) {py_json = JSON.parse('null');}}";}
 
-function url_intent(raw_intent) {raw_intent = eval("'" + raw_intent + "'"); // support dynamic variables
+function url_intent(raw_intent) {raw_intent = eval("'" + escape_bs(raw_intent) + "'"); // support dynamic variables
 if (chrome_id == 0) return "this.echo('ERROR - step only supported in live mode using Chrome browser')";
 else return "this.evaluate(function() {window.location.href = \"" + raw_intent + "\"})";}
 
-function tap_intent(raw_intent) {raw_intent = eval("'" + raw_intent + "'"); // support dynamic variables
+function tap_intent(raw_intent) {raw_intent = eval("'" + escape_bs(raw_intent) + "'"); // support dynamic variables
 var params = ((raw_intent + ' ').substr(1+(raw_intent + ' ').indexOf(' '))).trim();
 if (is_sikuli(params)) {var abs_params = abs_file(params); var abs_intent = raw_intent.replace(params,abs_params);
 return call_sikuli(abs_intent,abs_params);} // use sikuli visual automation as needed
@@ -936,7 +939,7 @@ if (params == '') return "this.echo('ERROR - target missing for " + raw_intent +
 else if (check_tx(params)) return "this.click(tx('" + params + "'))";
 else return "this.echo('ERROR - cannot find " + params + "')";}
 
-function rtap_intent(raw_intent) {raw_intent = eval("'" + raw_intent + "'"); // support dynamic variables
+function rtap_intent(raw_intent) {raw_intent = eval("'" + escape_bs(raw_intent) + "'"); // support dynamic variables
 var params = ((raw_intent + ' ').substr(1+(raw_intent + ' ').indexOf(' '))).trim();
 if (is_sikuli(params)) {var abs_params = abs_file(params); var abs_intent = raw_intent.replace(params,abs_params);
 return call_sikuli(abs_intent,abs_params);} // use sikuli visual automation as needed
@@ -944,7 +947,7 @@ if (params == '') return "this.echo('ERROR - target missing for " + raw_intent +
 else if (check_tx(params)) return "this.mouse.rightclick(tx('" + params + "'))";
 else return "this.echo('ERROR - cannot find " + params + "')";}
 
-function dtap_intent(raw_intent) {raw_intent = eval("'" + raw_intent + "'"); // support dynamic variables
+function dtap_intent(raw_intent) {raw_intent = eval("'" + escape_bs(raw_intent) + "'"); // support dynamic variables
 var params = ((raw_intent + ' ').substr(1+(raw_intent + ' ').indexOf(' '))).trim();
 if (is_sikuli(params)) {var abs_params = abs_file(params); var abs_intent = raw_intent.replace(params,abs_params);
 return call_sikuli(abs_intent,abs_params);} // use sikuli visual automation as needed
@@ -952,7 +955,7 @@ if (params == '') return "this.echo('ERROR - target missing for " + raw_intent +
 else if (check_tx(params)) return "this.mouse.doubleclick(tx('" + params + "'))";
 else return "this.echo('ERROR - cannot find " + params + "')";}
 
-function hover_intent(raw_intent) {raw_intent = eval("'" + raw_intent + "'"); // support dynamic variables
+function hover_intent(raw_intent) {raw_intent = eval("'" + escape_bs(raw_intent) + "'"); // support dynamic variables
 var params = ((raw_intent + ' ').substr(1+(raw_intent + ' ').indexOf(' '))).trim();
 if (is_sikuli(params)) {var abs_params = abs_file(params); var abs_intent = raw_intent.replace(params,abs_params);
 return call_sikuli(abs_intent,abs_params);} // use sikuli visual automation as needed
@@ -960,7 +963,7 @@ if (params == '') return "this.echo('ERROR - target missing for " + raw_intent +
 else if (check_tx(params)) return "this.mouse.move(tx('" + params + "'))";
 else return "this.echo('ERROR - cannot find " + params + "')";}
 
-function type_intent(raw_intent) {raw_intent = eval("'" + raw_intent + "'"); // support dynamic variables
+function type_intent(raw_intent) {raw_intent = eval("'" + escape_bs(raw_intent) + "'"); // support dynamic variables
 var params = ((raw_intent + ' ').substr(1+(raw_intent + ' ').indexOf(' '))).trim();
 var param1 = (params.substr(0,params.indexOf(' as '))).trim();
 var param2 = (params.substr(4+params.indexOf(' as '))).trim();
@@ -977,7 +980,7 @@ else // special handling to send enter key events
 return clear_field + "this.sendKeys(tx('" + param1 + "'),'" + param2 + "',{keepFocus: true});";}}
 else return "this.echo('ERROR - cannot find " + param1 + "')";}
 
-function select_intent(raw_intent) {raw_intent = eval("'" + raw_intent + "'"); // support dynamic variables
+function select_intent(raw_intent) {raw_intent = eval("'" + escape_bs(raw_intent) + "'"); // support dynamic variables
 var params = ((raw_intent + ' ').substr(1+(raw_intent + ' ').indexOf(' '))).trim();
 var param1 = (params.substr(0,params.indexOf(' as '))).trim();
 var param2 = (params.substr(4+params.indexOf(' as '))).trim();
@@ -989,7 +992,7 @@ if ((param1 == '') || (param2 == '')) return "this.echo('ERROR - target/option m
 else if (check_tx(param1)) return "var select_locator = tx('" + param1 + "'); if (is_xpath_selector(select_locator.toString().replace('xpath selector: ',''))) select_locator = select_locator.toString().substring(16); this.selectOptionByValue(select_locator,'" + param2 + "');";
 else return "this.echo('ERROR - cannot find " + param1 + "')";}
 
-function read_intent(raw_intent) {raw_intent = eval("'" + raw_intent + "'"); // support dynamic variables
+function read_intent(raw_intent) {raw_intent = eval("'" + escape_bs(raw_intent) + "'"); // support dynamic variables
 var params = ((raw_intent + ' ').substr(1+(raw_intent + ' ').indexOf(' '))).trim();
 var param1 = (params.substr(0,params.indexOf(' to '))).trim();
 var param2 = (params.substr(4+params.indexOf(' to '))).trim();
@@ -1001,7 +1004,7 @@ if ((param1 == '') || (param2 == '')) return "this.echo('ERROR - target/variable
 else if (check_tx(param1)) return param2 + " =  this.fetchText(tx('" + param1 + "')).trim()";
 else return "this.echo('ERROR - cannot find " + param1 + "')";}
 
-function show_intent(raw_intent) {raw_intent = eval("'" + raw_intent + "'"); // support dynamic variables
+function show_intent(raw_intent) {raw_intent = eval("'" + escape_bs(raw_intent) + "'"); // support dynamic variables
 var params = ((raw_intent + ' ').substr(1+(raw_intent + ' ').indexOf(' '))).trim();
 if (is_sikuli(params)) { // use sikuli visual automation as needed
 var abs_params = abs_file(params); var abs_intent = raw_intent.replace(params,abs_params);
@@ -1010,7 +1013,7 @@ if (params.toLowerCase() == 'page') return "this.echo('" + raw_intent + "' + ' -
 if (params == '') return "this.echo('ERROR - target missing for " + raw_intent + "')";
 else if (check_tx(params)) return "this.echo(this.fetchText(tx('" + params + "')).trim())";else return "this.echo('ERROR - cannot find " + params + "')";}
 
-function upload_intent(raw_intent) {raw_intent = eval("'" + raw_intent + "'"); // support dynamic variables
+function upload_intent(raw_intent) {raw_intent = eval("'" + escape_bs(raw_intent) + "'"); // support dynamic variables
 var params = ((raw_intent + ' ').substr(1+(raw_intent + ' ').indexOf(' '))).trim();
 var param1 = (params.substr(0,params.indexOf(' as '))).trim();
 var param2 = (params.substr(4+params.indexOf(' as '))).trim();
@@ -1018,14 +1021,14 @@ if ((param1 == '') || (param2 == '')) return "this.echo('ERROR - filename missin
 else if (check_tx(param1)) return "this.page.uploadFile(tx('" + param1 + "'),'" + abs_file(param2) + "')";
 else return "this.echo('ERROR - cannot find " + param1 + "')";}
 
-function down_intent(raw_intent) {raw_intent = eval("'" + raw_intent + "'"); // support dynamic variables
+function down_intent(raw_intent) {raw_intent = eval("'" + escape_bs(raw_intent) + "'"); // support dynamic variables
 var params = ((raw_intent + ' ').substr(1+(raw_intent + ' ').indexOf(' '))).trim();
 var param1 = (params.substr(0,params.indexOf(' to '))).trim();
 var param2 = (params.substr(4+params.indexOf(' to '))).trim();
 if ((param1 == '') || (param2 == '')) return "this.echo('ERROR - url/filename missing for " + raw_intent + "')";
 else return "this.download('" + param1 + "','" + abs_file(param2) + "')";}
 
-function receive_intent(raw_intent) {raw_intent = eval("'" + raw_intent + "'"); // support dynamic variables
+function receive_intent(raw_intent) {raw_intent = eval("'" + escape_bs(raw_intent) + "'"); // support dynamic variables
 return "this.echo('ERROR - step not supported in live mode, it requires creating CasperJS event')";}
 
 function echo_intent(raw_intent) { // code to support dynamic variables not applicable
@@ -1033,7 +1036,7 @@ var params = ((raw_intent + ' ').substr(1+(raw_intent + ' ').indexOf(' '))).trim
 if (params == '') return "this.echo('ERROR - text missing for " + raw_intent + "')";
 else return "this.echo(" + add_concat(params) + ")";}
 
-function save_intent(raw_intent) {raw_intent = eval("'" + raw_intent + "'"); // support dynamic variables
+function save_intent(raw_intent) {raw_intent = eval("'" + escape_bs(raw_intent) + "'"); // support dynamic variables
 var params = ((raw_intent + ' ').substr(1+(raw_intent + ' ').indexOf(' '))).trim();
 var param1 = (params.substr(0,params.indexOf(' to '))).trim();
 var param2 = (params.substr(4+params.indexOf(' to '))).trim();
@@ -1080,7 +1083,7 @@ else if (params.indexOf(' to ') > -1)
 return "var fs = require('fs'); " + param2 + " = ''; if (fs.exists('" + abs_file(param1) + "')) " + param2 +  " = fs.read('" + abs_file(param1) + "').trim(); else this.echo('ERROR - cannot find file " + param1 + "')"; else
 return "this.echo('ERROR - variable missing for " + raw_intent + "')";}
 
-function snap_intent(raw_intent) {raw_intent = eval("'" + raw_intent + "'"); // support dynamic variables
+function snap_intent(raw_intent) {raw_intent = eval("'" + escape_bs(raw_intent) + "'"); // support dynamic variables
 var params = ((raw_intent + ' ').substr(1+(raw_intent + ' ').indexOf(' '))).trim();
 var param1 = (params.substr(0,params.indexOf(' to '))).trim();
 var param2 = (params.substr(4+params.indexOf(' to '))).trim();
@@ -1101,7 +1104,7 @@ else return "this.echo('ERROR - cannot find " + param1 + "')";}
 else {if (check_tx(params)) return "this.captureSelector(snap_image(),tx('" + params + "'))";
 else return "this.echo('ERROR - cannot find " + params + "')";}}
 
-function table_intent(raw_intent) {raw_intent = eval("'" + raw_intent + "'"); // support dynamic variables
+function table_intent(raw_intent) {raw_intent = eval("'" + escape_bs(raw_intent) + "'"); // support dynamic variables
 var params = ((raw_intent + ' ').substr(1+(raw_intent + ' ').indexOf(' '))).trim();
 var param1 = (params.substr(0,params.indexOf(' to '))).trim();
 var param2 = (params.substr(4+params.indexOf(' to '))).trim();
@@ -1112,46 +1115,46 @@ else return "this.echo('ERROR - cannot find " + param1 + "')";}
 else {if (check_tx(params)) return "save_table('',tx('" + params + "'))";
 else return "this.echo('ERROR - cannot find " + params + "')";}}
 
-function wait_intent(raw_intent) {raw_intent = eval("'" + raw_intent + "'"); // support dynamic variables
+function wait_intent(raw_intent) {raw_intent = eval("'" + escape_bs(raw_intent) + "'"); // support dynamic variables
 return "this.echo('ERROR - waiting for some time is not relevant in live mode')";}
 
-function live_intent(raw_intent) {raw_intent = eval("'" + raw_intent + "'"); // support dynamic variables
+function live_intent(raw_intent) {raw_intent = eval("'" + escape_bs(raw_intent) + "'"); // support dynamic variables
 return "this.echo('ERROR - you are already in live mode, type done to quit live mode')";}
 
-function ask_intent(raw_intent) {raw_intent = eval("'" + raw_intent + "'"); // support dynamic variables
+function ask_intent(raw_intent) {raw_intent = eval("'" + escape_bs(raw_intent) + "'"); // support dynamic variables
 return "this.echo('ERROR - step is not relevant in live mode, set ask_result directly')";}
 
-function keyboard_intent(raw_intent) {raw_intent = eval("'" + raw_intent + "'"); // support dynamic variables
+function keyboard_intent(raw_intent) {raw_intent = eval("'" + escape_bs(raw_intent) + "'"); // support dynamic variables
 var params = ((raw_intent + ' ').substr(1+(raw_intent + ' ').indexOf(' '))).trim();
 if (params == '') return "this.echo('ERROR - keys to type missing for " + raw_intent + "')";
 else return call_sikuli(raw_intent,params);}
 
-function mouse_intent(raw_intent) {raw_intent = eval("'" + raw_intent + "'"); // support dynamic variables
+function mouse_intent(raw_intent) {raw_intent = eval("'" + escape_bs(raw_intent) + "'"); // support dynamic variables
 var params = ((raw_intent + ' ').substr(1+(raw_intent + ' ').indexOf(' '))).trim();
 if (params == '') return "this.echo('ERROR - up / down missing for " + raw_intent + "')";
 else if (params.toLowerCase() == 'down') return call_sikuli(raw_intent,'down');
 else if (params.toLowerCase() == 'up') return call_sikuli(raw_intent,'up');
 else return "this.echo('ERROR - cannot understand step " + raw_intent + "')";}
 
-function check_intent(raw_intent) {raw_intent = eval("'" + raw_intent + "'"); // support dynamic variables
+function check_intent(raw_intent) {raw_intent = eval("'" + escape_bs(raw_intent) + "'"); // support dynamic variables
 return "this.echo('ERROR - step not supported in live mode, there is no conditions language parser')";}
 
-function test_intent(raw_intent) {raw_intent = eval("'" + raw_intent + "'"); // support dynamic variables
+function test_intent(raw_intent) {raw_intent = eval("'" + escape_bs(raw_intent) + "'"); // support dynamic variables
 return "this.echo('ERROR - use CasperJS tester module to professionally " + raw_intent + "\\nERROR - info at http://docs.casperjs.org/en/latest/modules/tester.html\\nERROR - support CSS selector or tx(\\'selector\\') for XPath algo by TagUI')";}
 
-function frame_intent(raw_intent) {raw_intent = eval("'" + raw_intent + "'"); // support dynamic variables
+function frame_intent(raw_intent) {raw_intent = eval("'" + escape_bs(raw_intent) + "'"); // support dynamic variables
 return "this.echo('ERROR - step not supported in live mode, it is meant for trying single steps')";}
 
-function popup_intent(raw_intent) {raw_intent = eval("'" + raw_intent + "'"); // support dynamic variables
+function popup_intent(raw_intent) {raw_intent = eval("'" + escape_bs(raw_intent) + "'"); // support dynamic variables
 return "this.echo('ERROR - step not supported in live mode, it is meant for trying single steps')";}
 
-function api_intent(raw_intent) {raw_intent = eval("'" + raw_intent + "'"); // support dynamic variables
+function api_intent(raw_intent) {raw_intent = eval("'" + escape_bs(raw_intent) + "'"); // support dynamic variables
 var params = ((raw_intent + ' ').substr(1+(raw_intent + ' ').indexOf(' '))).trim();
 if (params == '') return "this.echo('ERROR - API URL missing for " + raw_intent + "')";
 else return "api_result = ''; api_result = call_api('" + params + "'); " +
 "try {api_json = JSON.parse(api_result);} catch(e) {api_json = JSON.parse('null');}";}
 
-function run_intent(raw_intent) {raw_intent = eval("'" + raw_intent + "'"); // support dynamic variables
+function run_intent(raw_intent) {raw_intent = eval("'" + escape_bs(raw_intent) + "'"); // support dynamic variables
 return "this.echo('ERROR - step not supported in live mode, as run output cannot be retrieved')";}
 
 function dom_intent(raw_intent) { // code to support dynamic variables not applicable
@@ -1194,7 +1197,7 @@ var params = ((raw_intent + ' ').substr(1+(raw_intent + ' ').indexOf(' '))).trim
 if (params == '') return "this.echo('ERROR - Sikuli command(s) missing for " + raw_intent + "')";
 else return call_sikuli(raw_intent.replace(/\\/g,'\\\\').replace(/'/g,'\\\''),'for vision step');}
 
-function timeout_intent(raw_intent) {raw_intent = eval("'" + raw_intent + "'"); // support dynamic variables
+function timeout_intent(raw_intent) {raw_intent = eval("'" + escape_bs(raw_intent) + "'"); // support dynamic variables
 var params = ((raw_intent + ' ').substr(1+(raw_intent + ' ').indexOf(' '))).trim();
 if (params == '') return "this.echo('ERROR - time in seconds missing for " + raw_intent + "')";
 else return check_chrome_context("casper.options.waitTimeout = " + (parseFloat(params)*1000).toString() + ";");}
