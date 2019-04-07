@@ -31,6 +31,9 @@
 /src/tagui_datatable_transpose.csv
 /src/tagui_datatable.csv
 
+# exclude audit report csv file
+/src/tagui_report.csv
+
 # exclude translation temp build files
 /src/languages/build.js
 /src/languages/build.log
