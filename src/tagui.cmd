@@ -10,20 +10,20 @@ setlocal enableextensions enabledelayedexpansion
 if "%~1"=="" (
 echo tagui v4.1.0: use following syntax and below options to run - tagui flow_filename option^(s^)
 echo.
-echo headless - run on invisible Chrome web browser instead of default PhantomJS ^(first install Chrome^)
 echo chrome   - run on visible Chrome web browser instead of invisible PhantomJS ^(first install Chrome^)
+echo headless - run on invisible Chrome web browser instead of default PhantomJS ^(first install Chrome^)
 echo firefox  - run on visible Firefox web browser instead of invisible browser ^(first install Firefox^)
+echo report   - track run result in tagui\src\tagui_report.csv and save html log of automation execution
 echo upload   - upload automation flow and result to hastebin.com ^(expires 30 days after last view^)
-echo report   - web report for sharing of run results on webserver ^(default is only a text log file^)
-echo debug    - show run-time backend messages from PhantomJS for detailed tracing and logging
-echo quiet    - run without output except for explicit output ^(echo / show / check / errors etc^)
 echo speed    - skip 3-second delay between datatable iterations ^(and skip restarting of Chrome^)
+echo quiet    - run without output except for explicit output ^(echo / show / check / errors etc^)
+echo debug    - show run-time backend messages from PhantomJS mode for detailed tracing and logging
 echo test     - testing with check step test assertions for CI/CD integration ^(output XUnit XML file^)
 echo baseline - output execution log and relative-path output files to a separate baseline directory
 echo input^(s^) - add your own parameter^(s^) to be used in your automation flow as variables p1 to p9
 echo data.csv - specify a csv file to be used as the datatable for batch automation of many records
 echo.
-echo TagUI is a CLI tool for digital process automation ^(RPA^) ~ for more info, google tagui
+echo TagUI is a command-line tool for digital process automation ^(RPA^) - for more info, google tagui
 echo.
 exit /b 1
 )
