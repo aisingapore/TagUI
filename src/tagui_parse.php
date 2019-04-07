@@ -852,7 +852,7 @@ return "casper.then(function() {".call_sikuli($raw_intent,$params);}
 
 function mouse_intent($raw_intent) {
 $params = trim(substr($raw_intent." ",1+strpos($raw_intent." "," ")));
-if ($params == "") echo "ERROR - " . current_line() . " up / down missing for " . $raw_intent . "\n";
+if ($params == "") echo "ERROR - " . current_line() . " down / up missing for " . $raw_intent . "\n";
 else if (strtolower($params) == "down") return "casper.then(function() {".call_sikuli($raw_intent,"down");
 else if (strtolower($params) == "up") return "casper.then(function() {".call_sikuli($raw_intent,"up");
 else echo "ERROR - " . current_line() . " cannot understand step " . $raw_intent . "\n";}
