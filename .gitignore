@@ -5,6 +5,7 @@
 # exclude folders for packaged installation
 /src/casperjs/*
 /src/phantomjs/*
+/src/sikulix/*
 /src/slimerjs/*
 /src/php/*
 /src/unx/*
