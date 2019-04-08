@@ -35,6 +35,9 @@
 # exclude audit report csv file
 /src/tagui_report.csv
 
+# exclude tagui_no_logging flag
+/src/tagui_no_logging
+
 # exclude translation temp build files
 /src/languages/build.js
 /src/languages/build.log

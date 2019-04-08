@@ -667,6 +667,13 @@ rem set flow_file to blank or the variable will break that tagui call
 	tagui samples\8_hastebin quiet "!tmp_flow_file!"
 )
 
+rem remove logs if tagui_no_logging exists
+if exist "tagui_no_logging" (
+	if exist "%flow_file%.raw" del "%flow_file%.raw"
+	if exist "%flow_file%.log" del "%flow_file%.log" 
+	if exist "%flow_file%.js" del "%flow_file%.js"
+)
+
 rem change back to initial directory where tagui is called
 cd /d "%initial_dir%"
 
