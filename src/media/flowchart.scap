@@ -6,7 +6,8 @@
                 <Alignment>Center</Alignment>
                 <Border Style="Square"></Border>
             </Appearance>
-            <String>instantly convert flow from different native natural languages into working JavaScript web automation code
+            <String>instantly convert flow from different native natural languages into working JavaScript
+UI automation code
 (with live mode to test steps or JS code)</String>
         </Note>
         <Note ID="25" FontSize="9.0" Position="267.0,260.0" Width="128.0">
@@ -204,7 +205,7 @@
                 <TextColor>1.0 1.0 1.0</TextColor>
                 <Fill>0.314662 0.314653 0.314658</Fill>
             </Appearance>
-            <String>v4.0  </String>
+            <String>v5.0  </String>
             <Formatting>
                 <FormatRange Bold="Yes">0,6</FormatRange>
             </Formatting>

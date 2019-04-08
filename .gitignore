@@ -5,6 +5,7 @@
 # exclude folders for packaged installation
 /src/casperjs/*
 /src/phantomjs/*
+/src/sikulix/*
 /src/slimerjs/*
 /src/php/*
 /src/unx/*
@@ -33,6 +34,9 @@
 
 # exclude audit report csv file
 /src/tagui_report.csv
+
+# exclude tagui_no_logging flag
+/src/tagui_no_logging
 
 # exclude translation temp build files
 /src/languages/build.js

@@ -629,12 +629,12 @@ TestRecorder.ContextMenu.prototype.build = function(t, x, y) {
 
     menu.appendChild(this.item("Inspect element", this.doInspectElement));
     menu.appendChild(this.item("Note down element", this.doNoteDownElement));
-    menu.appendChild(this.item("Move cursor to element", this.doMoveCursorToElement));
-    menu.appendChild(this.item("Fetch element text", this.doFetchElementText));
-    menu.appendChild(this.item("Print element text", this.doPrintElementText));
+    menu.appendChild(this.item("Read element text", this.doFetchElementText));
+    menu.appendChild(this.item("Show element text", this.doPrintElementText));
     menu.appendChild(this.item("Save element text", this.doSaveElementText));
     menu.appendChild(this.item("Save webpage screenshot", this.doScreenShot));
     menu.appendChild(this.item("Save element screenshot", this.doElementScreenShot));
+    menu.appendChild(this.item("Hover cursor at element", this.doMoveCursorToElement));
     menu.appendChild(this.item("Wait for a few seconds", this.doExplicitWait));
     menu.appendChild(this.item("Close shortcuts menu", this.cancel));
 //    menu.appendChild(this.item("Cancel the last step", this.doCancelLastStep));

@@ -8,7 +8,7 @@ rem enable windows for loop advanced flow control
 setlocal enableextensions enabledelayedexpansion
 
 if "%~1"=="" (
-echo tagui v4.1.0: use following syntax and below options to run - tagui flow_filename option^(s^)
+echo tagui v5.0.0: use following options and this syntax to run - tagui flow_filename option^(s^)
 echo.
 echo chrome   - run on visible Chrome web browser instead of invisible PhantomJS ^(first install Chrome^)
 echo headless - run on invisible Chrome web browser instead of default PhantomJS ^(first install Chrome^)
@@ -563,8 +563,8 @@ if exist "tagui_py\tagui_py.in" (
 
 rem start sikuli process if integration file is created during parsing
 if exist "tagui.sikuli\tagui_sikuli.in" (
-	echo [starting sikuli process] | tee -a "%flow_file%.log"
-	start /min cmd /c tagui.sikuli\runsikulix -r tagui.sikuli -d 3 2^>^&1 ^| tee -a tagui.sikuli\tagui.log
+	rem echo [starting sikuli process] | tee -a "%flow_file%.log"
+	start /min cmd /c java -jar sikulix\sikulix.jar -r tagui.sikuli -d 3 2^>^&1 ^| tee -a tagui.sikuli\tagui.log
 )
 
 rem start chrome processes if integration file is created during parsing
@@ -665,6 +665,13 @@ rem set flow_file to blank or the variable will break that tagui call
 	set "tmp_flow_file=%flow_file%"
 	set flow_file=
 	tagui samples\8_hastebin quiet "!tmp_flow_file!"
+)
+
+rem remove logs if tagui_no_logging exists
+if exist "tagui_no_logging" (
+	if exist "%flow_file%.raw" del "%flow_file%.raw"
+	if exist "%flow_file%.log" del "%flow_file%.log" 
+	if exist "%flow_file%.js" del "%flow_file%.js"
 )
 
 rem change back to initial directory where tagui is called
