@@ -90,7 +90,7 @@ TagUI is in v5.0 - it unzips and runs on macOS, Linux, Windows ([link to release
 
 ### PACKAGED INSTALLATION
 - TagUI is easy to use right away, in most environments all dependencies are packaged in
-- To use [visual automation](https://github.com/kelaberetiv/TagUI#visual-automation) on desktop or browser, be sure to have Java v8 or greater installed
+- To use [visual automation](https://github.com/kelaberetiv/TagUI#visual-automation) on desktop or browser, be sure to have Java JDK v8 (64-bit) or later
 
 Platform|macOS|Linux|Windows|Node.js (macOS/Linux)
 :------:|:---:|:---:|:-----:|:-------------------:
@@ -269,14 +269,14 @@ Download from [Chrome Web Store](https://chrome.google.com/webstore/detail/tagui
 </details>
 
 ### VISUAL AUTOMATION
-TagUI has built-in integration with [SikuliX (base on OpenCV)](http://sikulix.com) to allow visually identifying the web elements and desktop UI (user interface) elements for interaction by providing their images or (x,y) coordinates. Applicable steps are click, hover, type, select, read, show, save, snap, keyboard, mouse. To use visual automation, Java v8 or greater is required.
+TagUI has built-in integration with [SikuliX (base on OpenCV)](http://sikulix.com) to allow visually identifying the web elements and desktop UI (user interface) elements for interaction by providing their images or (x,y) coordinates. Applicable steps are click, hover, type, select, read, show, save, snap, keyboard, mouse. To use visual automation, Java JDK v8 (64-bit) or later is required.
 
 <details>
   <summary>
     Click to show how to download and check for Java, how to use visual automation, and a demo video
   </summary>
   
-  1. Check that [Java JDK](http://www.oracle.com/technetwork/java/javase/downloads/jdk8-downloads-2133151.html) is installed (entering `java -version` returns your Java version)
+  1. Check that [Java JDK (64-bit)](http://www.oracle.com/technetwork/java/javase/downloads/jdk8-downloads-2133151.html) is installed (entering `java -version` returns your Java version)
   2. After Java is installed, you will have to restart your command prompt or terminal to use it
   3. On Windows, set display magnification to recommended %, if it doesn't work then 100%
   4. On Windows, if TagUI just hangs there, see if it's due to [this issue and try the solution](https://github.com/kelaberetiv/TagUI/issues/229)
