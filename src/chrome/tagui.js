@@ -359,7 +359,7 @@ CasperRenderer.prototype.keypress = function(item) {
   var text = item.text.replace(/\r\n/g,'[enter]').replace(/\r/g, '[enter]').replace(/\n/g, '[enter]');
   var selector; selector = this.getControl(item);
   if (selector.charAt(0) == '#') {selector = selector.substring(1);}
-  this.stmt('enter ' + selector + ' as ' + text);
+  this.stmt('type ' + selector + ' as ' + text);
 }
 
 CasperRenderer.prototype.submit = function(item) {
@@ -388,13 +388,13 @@ CasperRenderer.prototype.noteDownElement = function(item) {
 CasperRenderer.prototype.moveCursorToElement = function(item) {
   var selector; selector = this.getControl(item);
   if (selector.charAt(0) == '#') {selector = selector.substring(1);}
-  this.stmt('move ' + selector);
+  this.stmt('hover ' + selector);
 }
 
 CasperRenderer.prototype.fetchElementText = function(item) {
   var selector; selector = this.getControl(item);
   if (selector.charAt(0) == '#') {selector = selector.substring(1);}
-  this.stmt('fetch ' + selector + ' to variable');
+  this.stmt('read ' + selector + ' to variable');
 }
 
 CasperRenderer.prototype.selectElementOption = function(item) {
@@ -410,7 +410,7 @@ CasperRenderer.prototype.cancelLastStep = function(item) {
 CasperRenderer.prototype.printElementText = function(item) {
   var selector; selector = this.getControl(item);
   if (selector.charAt(0) == '#') {selector = selector.substring(1);}
-  this.stmt('print ' + selector);
+  this.stmt('show ' + selector);
 }
 
 CasperRenderer.prototype.saveElementText = function(item) {
