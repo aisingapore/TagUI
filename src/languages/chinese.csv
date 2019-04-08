@@ -17,6 +17,8 @@ dump,转储
 write,写入
 snap,快照
 table,表格
+mouse,滑鼠
+keyboard,键盘
 live,互动
 download,下载
 upload,上载
@@ -31,6 +33,7 @@ second,秒
 api,api
 dom,dom
 js,js
+vision,视觉
 else if,否则如果
 else,否则
 if,如果
@@ -75,3 +78,6 @@ timer(),计时()
 count(),计数()
 present(),存在()
 visible(),可见()
+mouse_xy(),滑鼠_xy()
+mouse_x(),滑鼠_x()
+mouse_y(),滑鼠_y()

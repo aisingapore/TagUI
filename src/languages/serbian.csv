@@ -17,6 +17,8 @@ dump,депонија
 write,пиши
 snap,снап
 table,сто
+mouse,миш
+keyboard,тастатура
 live,живи
 download,преузимање
 upload,отпремити
@@ -75,3 +77,6 @@ timer(),тајмер()
 count(),цоунт()
 present(),поклон()
 visible(),висибле()
+mouse_xy(),миш_xy()
+mouse_x(),миш_x()
+mouse_y(),миш_y()

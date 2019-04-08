@@ -17,6 +17,8 @@ dump,cumulo di rifiuti
 write,scrivi
 snap,schiocco
 table,tavolo
+mouse,topo
+keyboard,tastiera
 live,vivere
 download,scaricare
 upload,caricare
@@ -75,3 +77,6 @@ timer(),timer()
 count(),contare()
 present(),presente()
 visible(),visibile()
+mouse_xy(),topo_xy()
+mouse_x(),topo_x()
+mouse_y(),topo_y()

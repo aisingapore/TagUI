@@ -17,6 +17,8 @@ dump,đổ
 write,viết
 snap,chụp nhanh
 table,bàn
+mouse,chuột
+keyboard,bàn phím
 live,trực tiếp
 download,tải về
 upload,tải lên
@@ -75,3 +77,6 @@ timer(),hẹn giờ()
 count(),đếm()
 present(),hiện tại()
 visible(),có thể nhìn thấy()
+mouse_xy(),chuột_xy()
+mouse_x(),chuột_x()
+mouse_y(),chuột_y()

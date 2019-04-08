@@ -17,6 +17,8 @@ dump,depozit
 write,scrie
 snap,agrafă
 table,masa
+mouse,mouse
+keyboard,tastatura
 live,trăi
 download,descarca
 upload,încărcați
@@ -75,3 +77,6 @@ timer(),cronometru()
 count(),numara()
 present(),prezent()
 visible(),vizibil()
+mouse_xy(),mouse_xy()
+mouse_x(),mouse_x()
+mouse_y(),mouse_y()

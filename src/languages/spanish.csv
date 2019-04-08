@@ -17,6 +17,8 @@ dump,tugurio
 write,escribir
 snap,chasquido
 table,mesa
+mouse,ratón
+keyboard,teclado
 live,vivir
 download,descargar
 upload,subir
@@ -75,3 +77,6 @@ timer(),minutero()
 count(),contar()
 present(),presente()
 visible(),visible()
+mouse_xy(),ratón_xy()
+mouse_x(),ratón_x()
+mouse_y(),ratón_y()
