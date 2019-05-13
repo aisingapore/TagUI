@@ -857,6 +857,10 @@ else if (strtolower($params) == "down") return "casper.then(function() {".call_s
 else if (strtolower($params) == "up") return "casper.then(function() {".call_sikuli($raw_intent,"up");
 else echo "ERROR - " . current_line() . " cannot understand step " . $raw_intent . "\n";}
 
+// helper function as check_intent() adds an if block that immediately closes without going through closure handling
+function check_intent_clear_injected_if_block() {$last_delimiter_pos = strrpos($GLOBALS['code_block_tracker'],"|");
+$GLOBALS['code_block_tracker']=substr($GLOBALS['code_block_tracker'],0,$last_delimiter_pos); return "";}
+
 function check_intent($raw_intent) {
 $params = trim(substr($raw_intent." ",1+strpos($raw_intent." "," ")));
 $params = str_replace("||"," JAVASCRIPT_OR ",$params); // to handle conflict with "|" delimiter 
@@ -867,8 +871,10 @@ $param2 = str_replace(" JAVASCRIPT_OR ","||",$param2); $param3 = str_replace(" J
 if (substr_count($params,"|")!=2) 
 echo "ERROR - " . current_line() . " if/true/false missing for " . $raw_intent . "\n";
 else if (getenv('tagui_test_mode') == 'true') return "casper.then(function() {"."{".parse_condition("if ".$param1).
-"\ntest.assert(true,".add_concat($param2).");\nelse test.assert(false,".add_concat($param3).");}".end_fi()."});"."\n\n";
-else return "casper.then(function() {"."{".parse_condition("if ".$param1)."\nthis.echo(".add_concat($param2).");\nelse this.echo(".add_concat($param3).");}".end_fi()."});"."\n\n";}
+"\ntest.assert(true,".add_concat($param2).");\nelse test.assert(false,".add_concat($param3).");}".
+check_intent_clear_injected_if_block().end_fi()."});"."\n\n";
+else return "casper.then(function() {"."{".parse_condition("if ".$param1)."\nthis.echo(".add_concat($param2).
+");\nelse this.echo(".add_concat($param3).");}".check_intent_clear_injected_if_block().end_fi()."});"."\n\n";}
 
 function test_intent($raw_intent) {
 echo "ERROR - " . current_line() . " use CasperJS tester module to professionally " . $raw_intent . "\n";

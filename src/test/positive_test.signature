@@ -2733,6 +2733,33 @@ casper.then(function() {{if ((eggs < 10))
 this.echo('eggs lesser than 10');
 else this.echo('eggs not lesser than 10');}});
 
+// test check within for loop
+casper.then(function() {for (n=1; n<=10; n++)
+{casper.then(function() {for_loop_signal = '[CONTINUE_SIGNAL][n]';});
+(function (n) { // start of IIFE pattern
+{ // start of code block
+
+casper.then(function() {{if ((eggs < 10))
+this.echo("eggs lesser than 10");
+else this.echo("eggs not lesser than 10");}});
+
+} // end of code block
+})(n); // end of IIFE pattern, with dummy marker for break step
+casper.then(function() {for_loop_signal = '[BREAK_SIGNAL][n]';});}});
+
+casper.then(function() {for (n=1; n<=10; n++)
+{casper.then(function() {for_loop_signal = '[CONTINUE_SIGNAL][n]';});
+(function (n) { // start of IIFE pattern
+{ // start of code block
+
+casper.then(function() {{if ((eggs < 10))
+this.echo("eggs lesser than 10");
+else this.echo("eggs not lesser than 10");}});
+
+} // end of code block
+})(n); // end of IIFE pattern, with dummy marker for break step
+casper.then(function() {for_loop_signal = '[BREAK_SIGNAL][n]';});}});
+
 // test frame
 casper.then(function() {techo('frame mainframe');});
 casper.withFrame('mainframe', function() {

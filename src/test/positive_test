@@ -438,6 +438,15 @@ check eggs lesser than 10|"eggs lesser than 10"|"eggs not lesser than 10"
 check eggs lesser than 10 | 'eggs lesser than 10' | 'eggs not lesser than 10'
 check eggs lesser than 10|'eggs lesser than 10'|'eggs not lesser than 10'
 
+// test check within for loop
+for n from 1 to 10
+check eggs lesser than 10 | "eggs lesser than 10" | "eggs not lesser than 10"
+
+for n from 1 to 10
+{
+check eggs lesser than 10 | "eggs lesser than 10" | "eggs not lesser than 10"
+}
+
 // test frame
 frame mainframe
 echo "test mainframe"
