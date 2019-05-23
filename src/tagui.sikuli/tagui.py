@@ -24,9 +24,18 @@ def is_coordinates ( input_locator ):
 	else:
 		return False
 
+# helper function to detect target offset 
+def is_targetoffset( input_locator ):
+	if input_locator.split('.')[-1].find('targetOffset') == 0:
+		return True
+	else:
+		return False
+
+def get_image_path( input_locator ):
+	return input_locator[:input_locator.find('.targetOffset(')]
 # helper function to return x coordinate from (x,y)
 def x_coordinate ( input_locator ):
-	return int(input_locator[1:input_locator.find(',')])
+	return int(input_locator[input_locator.find('(')+1:input_locator.find(',')])
 
 # helper function to return y coordinate from (x,y)
 def y_coordinate ( input_locator ):
@@ -111,6 +120,8 @@ def tap_intent ( raw_intent ):
 	print '[tagui] ACTION - click ' + params
 	if is_coordinates(params):
 		return click(Location(x_coordinate(params),y_coordinate(params)))
+	elif is_targetoffset(params):
+		 return click(Pattern(get_image_path(params)).targetOffset(x_coordinate(params),y_coordinate(params)))
 	elif exists(params):
 		return click(params)
 	else:
@@ -122,6 +133,8 @@ def rtap_intent ( raw_intent ):
 	print '[tagui] ACTION - rclick ' + params
 	if is_coordinates(params):
 		return rightClick(Location(x_coordinate(params),y_coordinate(params)))
+	elif is_targetoffset(params):
+		 return rightClick(Pattern(get_image_path(params)).targetOffset(x_coordinate(params),y_coordinate(params)))
 	elif exists(params):
 		return rightClick(params)
 	else:
@@ -133,6 +146,8 @@ def dtap_intent ( raw_intent ):
 	print '[tagui] ACTION - dclick ' + params
 	if is_coordinates(params):
 		return doubleClick(Location(x_coordinate(params),y_coordinate(params)))
+	elif is_targetoffset(params):
+		 return doubleClick(Pattern(get_image_path(params)).targetOffset(x_coordinate(params),y_coordinate(params)))
 	elif exists(params):
 		return doubleClick(params)
 	else:
@@ -144,6 +159,8 @@ def hover_intent ( raw_intent ):
 	print '[tagui] ACTION - hover ' + params
 	if is_coordinates(params):
 		return hover(Location(x_coordinate(params),y_coordinate(params)))
+	elif is_targetoffset(params):
+		 return hover(Pattern(get_image_path(params)).targetOffset(x_coordinate(params),y_coordinate(params)))
 	elif exists(params):
 		return hover(params)
 	else:
@@ -153,6 +170,7 @@ def hover_intent ( raw_intent ):
 def type_intent ( raw_intent ):
 	params = (raw_intent + ' ')[1+(raw_intent + ' ').find(' '):].strip()
 	param1 = params[:params.find(' as ')].strip()
+
 	param2 = params[4+params.find(' as '):].strip()
 	print '[tagui] ACTION - type ' + param1 + ' as ' + param2
 	modifier_keys = modifiers_map(param2)
@@ -167,6 +185,11 @@ def type_intent ( raw_intent ):
 			return type(Location(x_coordinate(param1),y_coordinate(param1)),param2)
 		else:
 			return type(Location(x_coordinate(param1),y_coordinate(param1)),param2,modifier_keys)
+	elif is_targetoffset(param1):
+		if modifier_keys == 0:
+		 	return type(Pattern(get_image_path(param1)).targetOffset(x_coordinate(param1),y_coordinate(param1)),param2)
+		else:
+			return type(Pattern(get_image_path(param1)).targetOffset(x_coordinate(param1),y_coordinate(param1)),param2,modifier_keys)
 	elif exists(param1):
 		if modifier_keys == 0:
 			return type(param1,param2)
@@ -192,7 +215,17 @@ def select_intent ( raw_intent ):
 				return click(param2)
 			else:
 				return 0
- 
+	elif is_targetoffset(param1):
+		if click(Pattern(get_image_path(param1)).targetOffset(x_coordinate(param1),y_coordinate(param1))) == 0:
+			return 0
+		else:
+			print '[tagui] ACTION - click ' + param2
+			if is_targetoffset(param2):
+				return click(Pattern(get_image_path(param2)).targetOffset(x_coordinate(param2),y_coordinate(param2)))
+			elif exists(param2):
+				return click(param2)
+			else:
+				return 0
 	elif exists(param1):
 		if click(param1) == 0:
 			return 0
@@ -200,6 +233,8 @@ def select_intent ( raw_intent ):
 			print '[tagui] ACTION - click ' + param2
 			if is_coordinates(param2):
 				return click(Location(x_coordinate(param2),y_coordinate(param2)))
+			elif is_targetoffset(param2):
+				return click(Pattern(get_image_path(param2)).targetOffset(x_coordinate(param2),y_coordinate(param2)))
 			elif exists(param2):
 				return click(param2)
 			else:

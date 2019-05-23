@@ -564,10 +564,15 @@ if (strlen($input_params)>4 and substr($input_params,0,1)=='(' and substr($input
 and substr_count($input_params,',')==1 and ((strpos($input_params,"'+")!==false and strpos($input_params,"+'")!==false) 
 or !preg_match('/[a-zA-Z]/',$input_params))) return true; else return false;}
 
+function is_targetoffset($input_params){
+  if(preg_match('/.targetOffset\(-?\d+\,-?\d+\)/',$input_params)) return true;else return false;
+}
+
 function is_sikuli($input_params) { // helper function to check if input is meant for sikuli visual automation
 if (strlen($input_params)>4 and strtolower(substr($input_params,-4))=='.png') return true; // support png and bmp
 else if (strlen($input_params)>4 and strtolower(substr($input_params,-4))=='.bmp') return true;
-else if (is_coordinates($input_params)) return true; else return false;}
+else if (is_coordinates($input_params)) return true;
+else if(is_targetoffset($input_params)) return true; else return false;}
 
 function call_sikuli($input_intent,$input_params,$other_actions = '') { // helper function to use sikuli visual automation
 if (!touch('tagui.sikuli/tagui_sikuli.in')) die("ERROR - cannot initialise tagui_sikuli.in\n");
@@ -859,8 +864,8 @@ else echo "ERROR - " . current_line() . " cannot understand step " . $raw_intent
 
 // helper function as check_intent() adds an if block that immediately closes without going through closure handling
 function check_intent_clear_injected_if_block() {$last_delimiter_pos = strrpos($GLOBALS['code_block_tracker'],"|");
-$GLOBALS['code_block_tracker']=substr($GLOBALS['code_block_tracker'],0,$last_delimiter_pos); return "";}
-
+	$GLOBALS['code_block_tracker']=substr($GLOBALS['code_block_tracker'],0,$last_delimiter_pos); return "";}
+	
 function check_intent($raw_intent) {
 $params = trim(substr($raw_intent." ",1+strpos($raw_intent." "," ")));
 $params = str_replace("||"," JAVASCRIPT_OR ",$params); // to handle conflict with "|" delimiter 
@@ -871,10 +876,10 @@ $param2 = str_replace(" JAVASCRIPT_OR ","||",$param2); $param3 = str_replace(" J
 if (substr_count($params,"|")!=2) 
 echo "ERROR - " . current_line() . " if/true/false missing for " . $raw_intent . "\n";
 else if (getenv('tagui_test_mode') == 'true') return "casper.then(function() {"."{".parse_condition("if ".$param1).
-"\ntest.assert(true,".add_concat($param2).");\nelse test.assert(false,".add_concat($param3).");}".
-check_intent_clear_injected_if_block().end_fi()."});"."\n\n";
-else return "casper.then(function() {"."{".parse_condition("if ".$param1)."\nthis.echo(".add_concat($param2).
-");\nelse this.echo(".add_concat($param3).");}".check_intent_clear_injected_if_block().end_fi()."});"."\n\n";}
+	"\ntest.assert(true,".add_concat($param2).");\nelse test.assert(false,".add_concat($param3).");}".
+	check_intent_clear_injected_if_block().end_fi()."});"."\n\n";
+	else return "casper.then(function() {"."{".parse_condition("if ".$param1)."\nthis.echo(".add_concat($param2).
+	");\nelse this.echo(".add_concat($param3).");}".check_intent_clear_injected_if_block().end_fi()."});"."\n\n";}
 
 function test_intent($raw_intent) {
 echo "ERROR - " . current_line() . " use CasperJS tester module to professionally " . $raw_intent . "\n";

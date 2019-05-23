@@ -873,10 +873,15 @@ function is_coordinates(input_params) { // helper function to check if string is
 if ((input_params.length > 4) && (input_params.substr(0,1) == '(') && (input_params.substr(-1) == ')') 
 && (input_params.split(',').length == 2) && (!input_params.match(/[a-z]/i))) return true; else return false;}
 
+function is_targetoffset(input_params){ // helper function to check if string is .targetOffset(x,y) 
+  if(input_params.match(new RegExp(/.targetOffset\(-?\d+\,-?\d+\)/g))) return true; else return false;
+}
+
 function is_sikuli(input_params) { // helper function to check if input is meant for sikuli visual automation
 if (input_params.length > 4 && input_params.substr(-4).toLowerCase() == '.png') return true; // support png and bmp
 else if (input_params.length > 4 && input_params.substr(-4).toLowerCase() == '.bmp') return true;
-else if (is_coordinates(input_params)) return true; else return false;}
+else if (is_coordinates(input_params)) return true;
+else if(is_targetoffset(input_params)) return true; else return false;}
 
 function call_sikuli(input_intent,input_params,other_actions) { // helper function to use sikuli visual automation
 var fs = require('fs'); // use phantomjs fs file system module to access files and directories
