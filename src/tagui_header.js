@@ -342,6 +342,11 @@ return fs.read('tagui.sikuli'+ds+'tagui_sikuli.txt').trim(); else return '';}
 function clear_sikuli_text() {var ds; if (flow_path.indexOf('/') !== -1) ds = '/'; else ds = '\\';
 var fs = require('fs'); fs.write('tagui.sikuli'+ds+'tagui_sikuli.txt','','w');}
 
+// for setting timeout in sikuli when looking for ui element
+function sikuli_timeout(time_in_seconds) {var ds; if (flow_path.indexOf('/') !== -1) ds = '/'; else ds = '\\';
+var fs = require('fs'); if (fs.exists('tagui.sikuli'+ds+'tagui_sikuli.in'))
+sikuli_step('vision setAutoWaitTimeout(' + time_in_seconds.toString() + ')');}
+
 // for initialising integration with R
 function r_handshake() { // techo('[connecting to R process]');
 var ds; if (flow_path.indexOf('/') !== -1) ds = '/'; else ds = '\\'; clear_r_text();
@@ -1175,7 +1180,7 @@ else return call_sikuli(raw_intent.replace(/\\/g,'\\\\').replace(/'/g,'\\\''),'f
 function timeout_intent(raw_intent) {raw_intent = eval("'" + escape_bs(raw_intent) + "'"); // support dynamic variables
 var params = ((raw_intent + ' ').substr(1+(raw_intent + ' ').indexOf(' '))).trim();
 if (params == '') return "this.echo('ERROR - time in seconds missing for " + raw_intent + "')";
-else return check_chrome_context("casper.options.waitTimeout = " + (parseFloat(params)*1000).toString() + ";");}
+else return check_chrome_context("casper.options.waitTimeout = " + (parseFloat(params)*1000).toString() + "; sikuli_timeout(" + parseFloat(params).toString() + ");");}
 
 function code_intent(raw_intent) { // code to support dynamic variables not applicable
 return check_chrome_context(raw_intent);}

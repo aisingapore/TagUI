@@ -964,7 +964,8 @@ return "casper.then(function() {".call_sikuli($safe_intent,'for vision step');} 
 function timeout_intent($raw_intent) {
 $params = trim(substr($raw_intent." ",1+strpos($raw_intent." "," ")));
 if ($params == "") echo "ERROR - " . current_line() . " time in seconds missing for " . $raw_intent . "\n";
-else return "casper.then(function() {"."casper.options.waitTimeout = " . (floatval($params)*1000) . ";" . end_fi()."});"."\n\n";}
+else return "casper.then(function() {"."casper.options.waitTimeout = " . (floatval($params)*1000) . 
+"; sikuli_timeout(" . floatval($params) . ");" . end_fi()."});"."\n\n";}
 
 function code_intent($raw_intent) {
 $params = parse_condition($raw_intent);
