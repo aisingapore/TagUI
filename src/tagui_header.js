@@ -220,14 +220,14 @@ return false;}
 // friendlier name to use check_tx() in if condition in flow
 function present(element_locator) {if (!element_locator) return false; 
 if (is_sikuli(element_locator)) {var abs_param = abs_file(element_locator); var fs = require('fs');
-if (!fs.exists(abs_param)) {this.echo('ERROR - cannot find image file for present step').exit();}
+if (!fs.exists(abs_param)) {casper.echo('ERROR - cannot find image file for present step').exit();}
 if (sikuli_step("present " + abs_param)) return true; else return false;}
 else return check_tx(element_locator);}
 
 // friendlier name to check element visibility using elementVisible()
 function visible(element_locator) {if (!element_locator) return false;
 if (is_sikuli(element_locator)) {var abs_param = abs_file(element_locator); var fs = require('fs');
-if (!fs.exists(abs_param)) {this.echo('ERROR - cannot find image file for visible step').exit();}
+if (!fs.exists(abs_param)) {casper.echo('ERROR - cannot find image file for visible step').exit();}
 if (sikuli_step("visible " + abs_param)) return true; else return false;}
 else {var element_located = tx(element_locator); var element_visible = casper.elementVisible(element_located);
 // if tx() returns xps666('/html') means that the element is not found, so set element_visible to false
@@ -345,7 +345,8 @@ var fs = require('fs'); fs.write('tagui.sikuli'+ds+'tagui_sikuli.txt','','w');}
 // for setting timeout in sikuli when looking for ui element
 function sikuli_timeout(time_in_seconds) {var ds; if (flow_path.indexOf('/') !== -1) ds = '/'; else ds = '\\';
 var fs = require('fs'); if (fs.exists('tagui.sikuli'+ds+'tagui_sikuli.in'))
-sikuli_step('vision setAutoWaitTimeout(' + time_in_seconds.toString() + ')');}
+sikuli_step('vision setAutoWaitTimeout(' + time_in_seconds.toString() + ')');
+sikuli_step('vision wait_timeout = ' + time_in_seconds.toString());}
 
 // for initialising integration with R
 function r_handshake() { // techo('[connecting to R process]');
