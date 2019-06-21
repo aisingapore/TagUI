@@ -877,7 +877,8 @@ return input_string.replace(/\\/g,'\\\\');}
 
 function is_coordinates(input_params) { // helper function to check if string is (x,y) coordinates
 if ((input_params.length > 4) && (input_params.substr(0,1) == '(') && (input_params.substr(-1) == ')') 
-&& (input_params.split(',').length == 2) && (!input_params.match(/[a-z]/i))) return true; else return false;}
+&& (input_params.split(',').length == 2 || input_params.split(',').length == 3) 
+&& (!input_params.match(/[a-z]/i))) return true; else return false;}
 
 function is_sikuli(input_params) { // helper function to check if input is meant for sikuli visual automation
 if (input_params.length > 4 && input_params.substr(-4).toLowerCase() == '.png') return true; // support png and bmp

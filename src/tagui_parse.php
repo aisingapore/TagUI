@@ -561,7 +561,8 @@ return $source_string;} // replacing multiple variations of + to handle user typ
 
 function is_coordinates($input_params) { // helper function to check if string is (x,y) coordinates
 if (strlen($input_params)>4 and substr($input_params,0,1)=='(' and substr($input_params,-1)==')' 
-and substr_count($input_params,',')==1 and ((strpos($input_params,"'+")!==false and strpos($input_params,"+'")!==false) 
+and (substr_count($input_params,',')==1 or substr_count($input_params,',')==2) 
+and ((strpos($input_params,"'+")!==false and strpos($input_params,"+'")!==false) 
 or !preg_match('/[a-zA-Z]/',$input_params))) return true; else return false;}
 
 function is_sikuli($input_params) { // helper function to check if input is meant for sikuli visual automation
