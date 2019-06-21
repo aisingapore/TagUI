@@ -19,7 +19,7 @@ Settings.OcrTextSearch = True
 
 # helper function to detect coordinates locator
 def is_coordinates ( input_locator ):
-	if input_locator[:1] == '(' and input_locator[-1:] == ')' and input_locator.count(',') == 1:
+	if input_locator[:1] == '(' and input_locator[-1:] == ')' and input_locator.count(',') in [1,2]:
 		return True
 	else:
 		return False
@@ -31,6 +31,19 @@ def x_coordinate ( input_locator ):
 # helper function to return y coordinate from (x,y)
 def y_coordinate ( input_locator ):
         return int(input_locator[input_locator.find(',')+1:-1])
+
+# helper function to return Region from (x1,y1),(x2,y2)
+def define_region( input_locator ):
+	input_tokens = input_locator.split(',')
+	region_x1_coordinate = int(input_tokens[0].replace('(',''))
+	region_y1_coordinate = int(input_tokens[1].split('-')[0].replace(')',''))
+	region_x2_coordinate = int(input_tokens[1].split('-')[1].replace('(',''))
+	region_y2_coordinate = int(input_tokens[2].replace(')',''))
+	region_width = abs(region_x2_coordinate - region_x1_coordinate)
+	region_height = abs(region_y2_coordinate - region_y1_coordinate)
+	region_origin_x = min(region_x1_coordinate,region_x2_coordinate)
+	region_origin_y = min(region_y1_coordinate,region_y2_coordinate)
+	return Region(region_origin_x,region_origin_y,region_width,region_height)
 
 # function to map modifier keys to unicode for use in type()
 def modifiers_map ( input_keys ):
@@ -222,10 +235,15 @@ def save_intent ( raw_intent ):
 # function for reading text using Tesseract OCR
 def text_read ( raw_intent ):
 	params = (raw_intent + ' ')[1+(raw_intent + ' ').find(' '):].strip()
-	param1 = params[:(params + ' ').find(' ')].strip()
+	param1 = params.split(' to ')[0].strip()
 
 	print '[tagui] ACTION - ' + raw_intent
-	if param1.endswith('page.png') or param1.endswith('page.bmp'):
+	if is_coordinates(param1):
+		region_layer = define_region(param1)
+		temp_text = region_layer.text()
+		output_sikuli_text(temp_text)
+		return 1
+	elif param1.endswith('page.png') or param1.endswith('page.bmp'):
 		fullscreen_layer = Screen()
 		temp_text = fullscreen_layer.text()
 		output_sikuli_text(temp_text)
@@ -244,7 +262,14 @@ def snap_intent ( raw_intent ):
 	param1 = params[:params.find(' to ')].strip()
 	param2 = params[4+params.find(' to '):].strip()
 	print '[tagui] ACTION - snap ' + param1 + ' to ' + param2
-	if param1.endswith('page.png') or param1.endswith('page.bmp'):
+	if is_coordinates(param1):
+		fullscreen_layer = Screen()
+		region_layer = define_region(param1)
+		temp_snap_file = fullscreen_layer.capture(region_layer).getFile()
+		import shutil
+		shutil.copy(temp_snap_file,param2)
+		return 1
+	elif param1.endswith('page.png') or param1.endswith('page.bmp'):
 		fullscreen_layer = Screen()
 		temp_snap_file = fullscreen_layer.capture(fullscreen_layer.getBounds()).getFile()
 		import shutil
