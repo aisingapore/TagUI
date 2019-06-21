@@ -576,13 +576,24 @@ else var ws_message = chrome_step('Page.captureScreenshot',{format: format, qual
 try {var ws_json = JSON.parse(ws_message); screenshot_data = ws_json.result.data;} catch(e) {screenshot_data = '';}
 var fs = require('fs'); fs.write(filename,chrome.decode(screenshot_data),'wb');};
 
+/* // backup of previous captureSelector implementation to use Page.captureScreenshot with clipping directly
 chrome.captureSelector = function(filename,selector) { // capture screenshot of selector to png/jpg/jpeg format
 // first capture entire screen, then use casperjs / phantomjs browser to crop image base on selector dimensions
 chrome.capture(filename); var selector_rect = chrome.getRect(selector); // so that there is no extra dependency
 if (selector_rect.width > 0 && selector_rect.height > 0) // from using other libraries or creating html canvas 
 casper.thenOpen(file_url(filename), function() {casper . capture(filename, // spaces around . to avoid replacing 
 {top: selector_rect.top, left: selector_rect.left, width: selector_rect.width, height: selector_rect.height});
-casper.thenOpen('about:blank');});}; // reset phantomjs browser state
+casper.thenOpen('about:blank');});}; // reset phantomjs browser state */
+
+chrome.captureSelector = function(filename,selector) { // capture screenshot of selector to png/jpg/jpeg format
+var selector_rect = chrome.getRect(selector); if (selector_rect.width > 0 && selector_rect.height > 0)
+{var format = 'png'; var quality = 80; var fromSurface = true; var screenshot_data = ''; // options not implemented
+if ((filename.substr(-3).toLowerCase() == 'jpg') || (filename.substr(-4).toLowerCase() == 'jpeg')) format = 'jpeg';
+var clip = {x:selector_rect.left, y:selector_rect.top, width:selector_rect.width, height:selector_rect.height, scale:1};
+var ws_message = 
+chrome_step('Page.captureScreenshot',{format: format, quality: quality, clip: clip, fromSurface: fromSurface});
+try {var ws_json = JSON.parse(ws_message); screenshot_data = ws_json.result.data;} catch(e) {screenshot_data = '';}
+var fs = require('fs'); fs.write(filename,chrome.decode(screenshot_data),'wb');}}
 
 chrome.upload = function(selector,filename) { // upload function to upload file to provided selector
 if ((selector.toString().length >= 16) && (selector.toString().substr(0,16) == 'xpath selector: '))
