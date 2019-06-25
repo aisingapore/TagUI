@@ -883,8 +883,9 @@ source_string = source_string.replace(/\+\+\+\+\+/g,'+'); source_string = source
 source_string = source_string.replace(/\+\+\+/g,'+'); source_string = source_string.replace(/\+\+/g,'+');
 return source_string;} // replacing multiple variations of + to handle user typos of double spaces etc
 
-function escape_bs(input_string) { // helper function to escape backslash characters
-return input_string.replace(/\\/g,'\\\\');}
+function escape_bs(input_string) { // helper function to escape backslash characters and friends
+escaped_string = input_string.replace(/\\/g,'\\\\').replace(/\'/g,'\\\'').replace(/\n/g,'\\n').replace(/\r/g,'\\r');
+return escaped_string.replace(/\t/g,'\\t').replace(/\f/g,'\\f').replace(/\v/g,'\\v').replace(/\"/g,'\\\"');}
 
 function is_coordinates(input_params) { // helper function to check if string is (x,y) coordinates
 if ((input_params.length > 4) && (input_params.substr(0,1) == '(') && (input_params.substr(-1) == ')') 
