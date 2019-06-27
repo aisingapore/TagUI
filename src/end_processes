@@ -1,10 +1,59 @@
 #!/usr/bin/env bash
-# TO KILL INTEGRATION PROCESSES IF CTRL+C WAS USED TO QUIT TAGUI PREMATURELY ~ TEBEL.ORG #
+# TO MANUALLY KILL TAGUI PROCESSES, EG IF CTRL+C WAS USED TO QUIT TAGUI ~ TEBEL.ORG #
 
-# checking for existence of files before sending finish signal is important
-# otherwise for ongoing tagui iterations, all integrations will be invoked
+# aggressive failsafe for tagui and friends that have not exited gracefully
+# works by scanning processes for tagui keywords and killing them one by one
 
-if [ -f "tagui_r/tagui_r.in" ]; then echo "finish" > tagui_r/tagui_r.in; fi
-if [ -f "tagui_py/tagui_py.in" ]; then echo "finish" > tagui_py/tagui_py.in; fi
-if [ -f "tagui.sikuli/tagui_sikuli.in" ]; then echo "finish" > tagui.sikuli/tagui_sikuli.in; fi
-if [ -f "tagui_chrome.in" ]; then echo "finish" > tagui_chrome.in; fi
+while true; do
+    php_process_id="$(ps -x | grep tagui_chrome\.php | grep -v 'grep tagui_chrome\.php' | sed -e 's/^[ ]*//' | cut -d' ' -f 1 | sort -nur | head -n 1)"
+    if [ -n "$php_process_id" ]; then
+        kill $php_process_id > /dev/null 2>&1
+    else
+        break
+    fi
+done
+
+while true; do
+    chrome_process_id="$(ps -x | grep remote-debugging-port=9222 | grep tagui_user_profile | sed -e 's/^[ ]*//' | cut -d' ' -f 1 | sort -nur | head -n 1)"
+    if [ -n "$chrome_process_id" ]; then
+        kill $chrome_process_id > /dev/null 2>&1
+    else
+        break
+    fi
+done
+
+while true; do
+    sikuli_process_id="$(ps -x | grep tagui\.sikuli | grep -v 'grep tagui\.sikuli'| sed -e 's/^[ ]*//' | cut -d' ' -f 1 | sort -nur | head -n 1)"
+    if [ -n "$sikuli_process_id" ]; then
+        kill $sikuli_process_id > /dev/null 2>&1
+    else
+        break
+    fi
+done
+
+while true; do
+    python_process_id="$(ps -x | grep tagui_py\.py | grep -v 'grep tagui_py\.py'| sed -e 's/^[ ]*//' | cut -d' ' -f 1 | sort -nur | head -n 1)"
+    if [ -n "$python_process_id" ]; then
+        kill $python_process_id > /dev/null 2>&1
+    else
+        break
+    fi
+done
+
+while true; do
+    r_process_id="$(ps -x | grep tagui_r\.R | grep -v 'grep tagui_r\.R'| sed -e 's/^[ ]*//' | cut -d' ' -f 1 | sort -nur | head -n 1)"
+    if [ -n "$r_process_id" ]; then
+        kill $r_process_id > /dev/null 2>&1
+    else
+        break
+    fi
+done
+
+while true; do
+    tagui_process_id="$(ps -x | grep /tagui/src | grep -v 'grep /tagui/src'| sed -e 's/^[ ]*//' | cut -d' ' -f 1 | sort -nur | head -n 1)"
+    if [ -n "$tagui_process_id" ]; then
+        kill $tagui_process_id > /dev/null 2>&1
+    else
+        break
+    fi
+done
