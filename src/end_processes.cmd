@@ -22,21 +22,21 @@ if not "%chrome_process_id%"=="" (
 )
 
 :repeat_kill_sikuli
-for /f "tokens=* usebackq" %%p in (`wmic process where "commandline like '%%tagui.sikuli%%'" get processid 2^>nul ^| cut -d" " -f 1 ^| sort -nur ^| head -n 1`) do set sikuli_process_id=%%p
+for /f "tokens=* usebackq" %%p in (`wmic process where "commandline like '%%tagui.sikuli%%' and not caption like '%%wmic%%' and not caption like '%%cmd.exe%%'" get processid 2^>nul ^| cut -d" " -f 1 ^| sort -nur ^| head -n 1`) do set sikuli_process_id=%%p
 if not "%sikuli_process_id%"=="" (
     taskkill /PID %sikuli_process_id% /T /F > nul 2>&1
     goto repeat_kill_sikuli
 )
 
 :repeat_kill_python
-for /f "tokens=* usebackq" %%p in (`wmic process where "commandline like '%%tagui_py.py%%'" get processid 2^>nul ^| cut -d" " -f 1 ^| sort -nur ^| head -n 1`) do set python_process_id=%%p
+for /f "tokens=* usebackq" %%p in (`wmic process where "commandline like '%%tagui_py.py%%' and not caption like '%%wmic%%' and not caption like '%%cmd.exe%%'" get processid 2^>nul ^| cut -d" " -f 1 ^| sort -nur ^| head -n 1`) do set python_process_id=%%p
 if not "%python_process_id%"=="" (
     taskkill /PID %python_process_id% /T /F > nul 2>&1
     goto repeat_kill_python
 )
 
 :repeat_kill_r
-for /f "tokens=* usebackq" %%p in (`wmic process where "commandline like '%%tagui_r.R%%'" get processid 2^>nul ^| cut -d" " -f 1 ^| sort -nur ^| head -n 1`) do set r_process_id=%%p
+for /f "tokens=* usebackq" %%p in (`wmic process where "commandline like '%%tagui_r.R%%' and not caption like '%%wmic%%' and not caption like '%%cmd.exe%%'" get processid 2^>nul ^| cut -d" " -f 1 ^| sort -nur ^| head -n 1`) do set r_process_id=%%p
 if not "%r_process_id%"=="" (
     taskkill /PID %r_process_id% /T /F > nul 2>&1
     goto repeat_kill_r
