@@ -1,10 +1,50 @@
 @echo off
-rem # TO KILL INTEGRATION PROCESSES IF CTRL+C WAS USED TO QUIT TAGUI PREMATURELY ~ TEBEL.ORG #
+rem # TO MANUALLY KILL TAGUI PROCESSES, EG IF CTRL+C WAS USED TO QUIT TAGUI ~ TEBEL.ORG #
 
-rem checking for existence of files before sending finish signal is important
-rem otherwise for ongoing tagui iterations, all integrations will be invoked
+rem aggressive failsafe for tagui and friends that have not exited gracefully
+rem works by scanning processes for tagui keywords and killing them one by one
 
-if exist "tagui_r\tagui_r.in" echo finish > tagui_r\tagui_r.in
-if exist "tagui_py\tagui_py.in" echo finish > tagui_py\tagui_py.in
-if exist "tagui.sikuli\tagui_sikuli.in" echo finish > tagui.sikuli\tagui_sikuli.in
-if exist "tagui_chrome.in" echo finish > tagui_chrome.in
+rem set path to unix utilities for windows command prompt
+if exist "%~dp0unx\gawk.exe" set "path=%~dp0unx;%path%"
+
+:repeat_kill_php
+for /f "tokens=* usebackq" %%p in (`wmic process where "caption like '%%php.exe%%' and commandline like '%%tagui_chrome.php%%'" get processid 2^>nul ^| cut -d" " -f 1 ^| sort -nur ^| head -n 1`) do set php_process_id=%%p
+if not "%php_process_id%"=="" (
+    taskkill /PID %php_process_id% /T /F > nul 2>&1
+    goto repeat_kill_php
+)
+
+:repeat_kill_chrome
+for /f "tokens=* usebackq" %%p in (`wmic process where "caption like '%%chrome.exe%%' and commandline like '%%tagui_user_profile --remote-debugging-port=9222%%'" get processid 2^>nul ^| cut -d" " -f 1 ^| sort -nur ^| head -n 1`) do set chrome_process_id=%%p
+if not "%chrome_process_id%"=="" (
+    taskkill /PID %chrome_process_id% /T /F > nul 2>&1
+    goto repeat_kill_chrome
+)
+
+:repeat_kill_sikuli
+for /f "tokens=* usebackq" %%p in (`wmic process where "commandline like '%%tagui.sikuli%%'" get processid 2^>nul ^| cut -d" " -f 1 ^| sort -nur ^| head -n 1`) do set sikuli_process_id=%%p
+if not "%sikuli_process_id%"=="" (
+    taskkill /PID %sikuli_process_id% /T /F > nul 2>&1
+    goto repeat_kill_sikuli
+)
+
+:repeat_kill_python
+for /f "tokens=* usebackq" %%p in (`wmic process where "commandline like '%%tagui_py.py%%'" get processid 2^>nul ^| cut -d" " -f 1 ^| sort -nur ^| head -n 1`) do set python_process_id=%%p
+if not "%python_process_id%"=="" (
+    taskkill /PID %python_process_id% /T /F > nul 2>&1
+    goto repeat_kill_python
+)
+
+:repeat_kill_r
+for /f "tokens=* usebackq" %%p in (`wmic process where "commandline like '%%tagui_r.R%%'" get processid 2^>nul ^| cut -d" " -f 1 ^| sort -nur ^| head -n 1`) do set r_process_id=%%p
+if not "%r_process_id%"=="" (
+    taskkill /PID %r_process_id% /T /F > nul 2>&1
+    goto repeat_kill_r
+)
+
+:repeat_kill_tagui
+for /f "tokens=* usebackq" %%p in (`wmic process where "executablepath like '%%\\tagui\\src\\%%' and not caption like '%%cut.exe%%' and not caption like '%%sort.exe%%' and not caption like '%%head.exe%%'" get processid 2^>nul ^| cut -d" " -f 1 ^| sort -nur ^| head -n 1`) do set tagui_process_id=%%p
+if not "%tagui_process_id%"=="" (
+    taskkill /PID %tagui_process_id% /T /F > nul 2>&1
+    goto repeat_kill_tagui
+)
