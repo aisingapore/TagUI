@@ -5,7 +5,7 @@
 # works by scanning processes for tagui keywords and killing them one by one
 
 while true; do
-    php_process_id="$(ps -x | grep tagui_chrome\.php | grep -v 'grep tagui_chrome\.php' | sed -e 's/^[ ]*//' | cut -d' ' -f 1 | sort -nur | head -n 1)"
+    php_process_id="$(ps x | grep tagui_chrome\.php | grep -v 'grep tagui_chrome\.php' | sed -e 's/^[ ]*//' | cut -d' ' -f 1 | sort -nur | head -n 1)"
     if [ -n "$php_process_id" ]; then
         kill $php_process_id > /dev/null 2>&1
     else
@@ -14,7 +14,7 @@ while true; do
 done
 
 while true; do
-    chrome_process_id="$(ps -x | grep remote-debugging-port=9222 | grep tagui_user_profile | sed -e 's/^[ ]*//' | cut -d' ' -f 1 | sort -nur | head -n 1)"
+    chrome_process_id="$(ps x | grep remote-debugging-port=9222 | grep tagui_user_profile | sed -e 's/^[ ]*//' | cut -d' ' -f 1 | sort -nur | head -n 1)"
     if [ -n "$chrome_process_id" ]; then
         kill $chrome_process_id > /dev/null 2>&1
     else
@@ -23,7 +23,7 @@ while true; do
 done
 
 while true; do
-    sikuli_process_id="$(ps -x | grep tagui\.sikuli | grep -v 'grep tagui\.sikuli' | sed -e 's/^[ ]*//' | cut -d' ' -f 1 | sort -nur | head -n 1)"
+    sikuli_process_id="$(ps x | grep tagui\.sikuli | grep -v 'grep tagui\.sikuli' | sed -e 's/^[ ]*//' | cut -d' ' -f 1 | sort -nur | head -n 1)"
     if [ -n "$sikuli_process_id" ]; then
         kill $sikuli_process_id > /dev/null 2>&1
     else
@@ -32,7 +32,7 @@ while true; do
 done
 
 while true; do
-    python_process_id="$(ps -x | grep tagui_py\.py | grep -v 'grep tagui_py\.py' | sed -e 's/^[ ]*//' | cut -d' ' -f 1 | sort -nur | head -n 1)"
+    python_process_id="$(ps x | grep tagui_py\.py | grep -v 'grep tagui_py\.py' | sed -e 's/^[ ]*//' | cut -d' ' -f 1 | sort -nur | head -n 1)"
     if [ -n "$python_process_id" ]; then
         kill $python_process_id > /dev/null 2>&1
     else
@@ -41,7 +41,7 @@ while true; do
 done
 
 while true; do
-    r_process_id="$(ps -x | grep tagui_r\.R | grep -v 'grep tagui_r\.R' | sed -e 's/^[ ]*//' | cut -d' ' -f 1 | sort -nur | head -n 1)"
+    r_process_id="$(ps x | grep tagui_r\.R | grep -v 'grep tagui_r\.R' | sed -e 's/^[ ]*//' | cut -d' ' -f 1 | sort -nur | head -n 1)"
     if [ -n "$r_process_id" ]; then
         kill $r_process_id > /dev/null 2>&1
     else
@@ -50,7 +50,7 @@ while true; do
 done
 
 while true; do
-    tagui_process_id="$(ps -x | grep tagui/src | grep -v 'grep tagui/src' | grep -v 'end_processes' | sed -e 's/^[ ]*//' | cut -d' ' -f 1 | sort -nur | head -n 1)"
+    tagui_process_id="$(ps x | grep tagui/src/ | grep -v 'grep tagui/src/' | grep -v 'end_processes' | sed -e 's/^[ ]*//' | cut -d' ' -f 1 | sort -nur | head -n 1)"
     if [ -n "$tagui_process_id" ]; then
         kill $tagui_process_id > /dev/null 2>&1
     else
