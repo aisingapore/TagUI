@@ -297,14 +297,14 @@ if [ "$chrome_started" == "Darwin" ]; then
 if ! [ -f "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome" ]; then
 echo "ERROR - cannot find Chrome at \"/Applications/Google Chrome.app/Contents/MacOS/Google Chrome\""
 echo "Chrome is at a non-standard location on your macOS, raise an issue on TagUI GitHub page"; exit 1; fi
-chrome_process_id="$(ps -x | grep remote-debugging-port=9222 | grep tagui_user_profile | sed -e 's/^[ ]*//' | cut -d' ' -f 1 | sort -nur | head -n 1)"
+chrome_process_id="$(ps x | grep remote-debugging-port=9222 | grep tagui_user_profile | sed -e 's/^[ ]*//' | cut -d' ' -f 1 | sort -nur | head -n 1)"
 if [ -n "$chrome_process_id" ]; then kill $chrome_process_id; fi
 /Applications/Google\ Chrome.app/Contents/MacOS/Google\ Chrome $chrome_switches $window_size $headless_switch > /dev/null 2>&1 &
 else
 if ! type "$chrome_command" > /dev/null; then
 echo "ERROR - cannot find Chrome command \"$chrome_command\""
 echo "update chrome_command setting in tagui/src/tagui and make sure symlink to command is created"; exit 1; fi
-chrome_process_id="$(ps -x | grep remote-debugging-port=9222 | grep tagui_user_profile | sed -e 's/^[ ]*//' | cut -d' ' -f 1 | sort -nur | head -n 1)"
+chrome_process_id="$(ps x | grep remote-debugging-port=9222 | grep tagui_user_profile | sed -e 's/^[ ]*//' | cut -d' ' -f 1 | sort -nur | head -n 1)"
 if [ -n "$chrome_process_id" ]; then kill $chrome_process_id; fi
 $chrome_command $chrome_switches $window_size $headless_switch > /dev/null 2>&1 &
 fi
@@ -334,10 +334,10 @@ if [ -f "tagui_chrome.in" ]; then echo "finish" > tagui_chrome.in; fi
 
 # kill chrome processes by checking which os the processes are started on 
 if [ "$chrome_started" == "Darwin" ] && [ "$tagui_speed_mode" == false ]; then
-chrome_process_id="$(ps -x | grep remote-debugging-port=9222 | grep tagui_user_profile | sed -e 's/^[ ]*//' | cut -d' ' -f 1 | sort -nur | head -n 1)"
+chrome_process_id="$(ps x | grep remote-debugging-port=9222 | grep tagui_user_profile | sed -e 's/^[ ]*//' | cut -d' ' -f 1 | sort -nur | head -n 1)"
 if [ -n "$chrome_process_id" ]; then kill $chrome_process_id; fi
 else if [ -n "$chrome_started" ] && [ "$tagui_speed_mode" == false ]; then
-chrome_process_id="$(ps -x | grep remote-debugging-port=9222 | grep tagui_user_profile | sed -e 's/^[ ]*//' | cut -d' ' -f 1 | sort -nur | head -n 1)"
+chrome_process_id="$(ps x | grep remote-debugging-port=9222 | grep tagui_user_profile | sed -e 's/^[ ]*//' | cut -d' ' -f 1 | sort -nur | head -n 1)"
 if [ -n "$chrome_process_id" ]; then kill $chrome_process_id; fi
 fi; fi
 
