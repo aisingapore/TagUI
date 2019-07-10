@@ -2,16 +2,16 @@
 
 # TagUI
 
-[Why This](#why-this) | [Set Up](#set-up) | [To Use](#to-use) | [Cheat Sheet](#cheat-sheet) | [Developers](#developers-reference) | [**Tutorial**](https://github.com/kelaberetiv/TagUI/blob/master/src/media/RPA%20Workshop.md) | [**Slides**](https://prezi.com/p/f5vag20tuth8/) | [**Video**](https://www.youtube.com/watch?v=hzE4tKlzzg4)
+[**Why This**](#why-this)&ensp;|&ensp;[**Set Up**](#set-up)&ensp;|&ensp;[**To Use**](#to-use)&ensp;|&ensp;[**Cheat Sheet**](#cheat-sheet)&ensp;|&ensp;[**Developers**](#developers-reference)&ensp;|&ensp;[**Credits**](#credits)&ensp;|&ensp;[**Tutorial**](https://github.com/kelaberetiv/TagUI/blob/master/src/media/RPA%20Workshop.md)&ensp;|&ensp;[**Slides**](https://prezi.com/p/f5vag20tuth8/)&ensp;|&ensp;[**Video**](https://www.youtube.com/watch?v=hzE4tKlzzg4)
 
 **TagUI is a command-line tool for digital process automation (RPA). It's maintained by [AI Singapore](https://www.aisingapore.org), a government-funded initiative to build local artificial intelligence capabilities. To start, click above tutorial, slides, or video links.**
 
 ### FEATURES
-- automate Chrome visibly or headlessly
+- automate Chrome in visible / invisible mode
 - visual automation of websites and desktop
 - write in 20+ human languages & JavaScript
 - Chrome extension for recording web actions
-- R & Python integration for big data / AI / ML
+- Python & R integration for big data / AI / ML
 
 # Why This
 The goal of UI (user interface) automation is to reproduce cognitive interactions that you have with websites or your desktop, so that your computer can do it for you, base on your schedule or conditions. TagUI helps you rapidly automate repetitive or time-critical tasks - use cases include digital process automation, data acquisition and testing.
@@ -25,12 +25,10 @@ Read on for more info or jump right to the [flow samples section](https://github
   
   **Key Strengths**
   - cross-platform, works on Windows, macOS, Linux
-  - increased security as users can view source code
   - $0 to use, under Apache 2.0 open-source license
   - easy to use, thus rapid development + deployment
   - easy for IT policies to deploy, simply unzip and run
   - native integration with Python and R for AI / ML / DL
-  - easy API calls to Azure / Amazon cognitive services
 
   **Neutral Differences**
   - scripts written in 21 human languages, not flowchart
@@ -46,7 +44,7 @@ Read on for more info or jump right to the [flow samples section](https://github
 </details>
 
 ### HOW IT WORKS
-TagUI converts your intentions from various human languages to lines of working JavaScript code that perform UI automation. Under the hood, it uses [Chrome DevTools Protocol](https://chromedevtools.github.io/devtools-protocol/), [SikuliX](http://sikulix.com), [CasperJS](http://casperjs.org), [PhantomJS](http://phantomjs.org) & [SlimerJS](https://slimerjs.org).
+TagUI converts your intentions from over 20 human languages to lines of working JavaScript code that perform UI automation. Under the hood, it uses [Chrome DevTools Protocol](https://chromedevtools.github.io/devtools-protocol/), [SikuliX](http://sikulix.com), [CasperJS](http://casperjs.org), [PhantomJS](http://phantomjs.org) & [SlimerJS](https://slimerjs.org).
 
 ```
 // sample TagUI flow to log into Typeform and download a survey report
@@ -172,7 +170,7 @@ TagUI can also be run from desktop icons, scheduled tasks, or REST API calls.
 
 <details>
   <summary>
-    Click to show the command line options for TagUI tool and their purposes
+    Click to show the command line options for TagUI tool and their purposes (eg chrome, headless, report)
   </summary>
   
   Option|Purpose
@@ -194,7 +192,7 @@ TagUI can also be run from desktop icons, scheduled tasks, or REST API calls.
 
 <details>
   <summary>
-    Click to show info on automation logs, and how to run tagui from any directory
+    Click to show info on automation logs (.log, .js, .raw), and how to run tagui from any directory
   </summary>
 
   After each automation run, a .log file will be created to store output of the execution, a .js file is the generated JavaScript file, a .raw is the expanded flow after reading in any module sub-scripts that are called in that flow. These files are for user reference purpose and can be helpful in debugging or troubleshooting the automation flow. To turn off creation of these files, put an empty file tagui_no_logging in tagui/src folder.
@@ -234,7 +232,27 @@ To schedule an automation flow with crontab (macOS/Linux), for example at 8am da
 0 8 * * * /full_path_on_your_server/tagui flow_filename option(s)
 ```
 
-**Tip** - for Windows, use Task Scheduler (search schedule from Start Menu) or [Z-Cron freeware](https://www.z-cron.com)
+For Windows, use Task Scheduler (search schedule from Start Menu) or [Z-Cron freeware](https://www.z-cron.com)
+
+### CHROME EXTENSION
+Download from [Chrome Web Store](https://chrome.google.com/webstore/detail/tagui-web-automation/egdllmehgfgjebhlkjmcnhiocfcidnjk/) to use TagUI Chrome web browser extension for recording automation flows. TagUI Chrome extension records steps such as page navigation, clicking web elements and entering information.
+
+<details>
+  <summary>
+    Click to show details on TagUI Chrome extension (based on https://github.com/ebrehault/resurrectio)
+  </summary>
+  
+  **To start recording automation flows**
+  1. Go to the website URL you want to start the automation at
+  2. Click the TagUI icon, followed by the Start button
+  3. Carry out the steps you want to automate
+  4. Click the TagUI icon, followed by the Stop, then Export buttons to view the generated TagUI script
+
+  > while recording the steps, you can right click to bring up a menu for steps such as showing the element identifier
+
+  The recording isn't foolproof (for example, the underlying recording engine cannot capture frames, popup windows or tab key input). It's meant to simplify flow creation with some edits, instead of typing everything manually. [See this video](https://www.youtube.com/watch?v=bFvsc4a8hWQ) for an example of recording a sequence of steps, editing for adjustments and playing back the automation.
+
+</details>
 
 ### NATIVE LANGUAGES
 To run TagUI flows in human languages or output flow execution in other languages ([see demo run](https://github.com/kelaberetiv/TagUI/issues/68#issuecomment-344380657))
@@ -257,32 +275,12 @@ To run TagUI flows in human languages or output flow execution in other language
 
 </details>
 
-### CHROME EXTENSION
-Download from [Chrome Web Store](https://chrome.google.com/webstore/detail/tagui-web-automation/egdllmehgfgjebhlkjmcnhiocfcidnjk/) to use TagUI Chrome web browser extension for recording automation flows. TagUI Chrome extension records steps such as page navigation, clicking web elements and entering information.
-
-<details>
-  <summary>
-    Click to show details on TagUI Chrome extension (based on https://github.com/ebrehault/resurrectio)
-  </summary>
-  
-  **To start recording automation flows**
-  1. Go to the website URL you want to start the automation at
-  2. Click the TagUI icon, followed by the Start button
-  3. Carry out the steps you want to automate
-  4. Click the TagUI icon, followed by the Stop, then Export buttons to view the generated TagUI script
-
-  > while recording the steps, you can right click to bring up a menu for steps such as showing the element identifier
-
-  The recording isn't foolproof (for example, the underlying recording engine cannot capture frames, popup windows or tab key input). It's meant to simplify flow creation with some edits, instead of typing everything manually. [See this video](https://www.youtube.com/watch?v=bFvsc4a8hWQ) for an example of recording a sequence of steps, editing for adjustments and playing back the automation.
-
-</details>
-
 ### VISUAL AUTOMATION
 TagUI has built-in integration with [SikuliX (base on OpenCV)](http://sikulix.com) to allow visually identifying the web elements and desktop UI (user interface) elements for interaction by providing their images or (x,y) coordinates. Applicable steps are click, hover, type, select, read, show, save, snap, keyboard, mouse. To use visual automation, Java JDK v8 (64-bit) or later is needed.
 
 <details>
   <summary>
-    Click to show how to download and check for Java, how to use visual automation, and a demo video
+    Click to show how to download and check for Java, how to use visual automation & OCR, and a demo video
   </summary>
   
   1. Check that [Java JDK (64-bit)](http://www.oracle.com/technetwork/java/javase/downloads/jdk8-downloads-2133151.html) is installed (entering `java -version` returns your Java version)
@@ -481,7 +479,7 @@ live|try steps or code interactively for Chrome / visual automation|enter live m
 
 <details>
   <summary>
-    Click to show pro steps such as tagui, keyboard, mouse, table, wait, check, api, run, dom, js, r, py, vision, code blocks
+    Click to show pro steps - tagui, keyboard, mouse, table, wait, check, upload, api, run, dom, js, r, py, vision, timeout
   </summary>
 
   Pro Step|Parameters (separator in bold)|Purpose
@@ -534,7 +532,7 @@ live|try steps or code interactively for Chrome / visual automation|enter live m
 ### CONDITIONS EXAMPLES
 <details>
   <summary>
-    Click to show how conditions can be expressed in natural language (optional brackets) or JavaScript
+    Click to show how conditions and loops can be expressed in natural language (optional brackets) or JavaScript
   </summary>
 
   - Conditions help in decision-making and taking different actions base on run-time context
@@ -568,7 +566,7 @@ live|try steps or code interactively for Chrome / visual automation|enter live m
 ### HELPER FUNCTIONS
 <details>
   <summary>
-    Click to show csv_row(), present(), visible(), count(), url(), title(), text(), timer(), mouse_xy(), mouse_x(), mouse_y()
+    Click to show csv_row(), present(), visible(), count(), url(), title(), text(), timer(), mouse_xy(), custom functions
   </summary>
 
   - Below are helper functions which can be used in your steps or code like a variable
@@ -616,7 +614,7 @@ live|try steps or code interactively for Chrome / visual automation|enter live m
 ### MODULES
 <details>
   <summary>
-    Click to show how you can call other TagUI automation flows within an automation flow file
+    Click to show how you can use tagui step to call other TagUI automation flows within an automation flow file
   </summary>
 
   - You can reuse and combine automation scripts to build complex flows
@@ -632,7 +630,7 @@ live|try steps or code interactively for Chrome / visual automation|enter live m
 ### REPOSITORIES
 <details>
   <summary>
-    Click to show how you can use repositories to make objects reusable and improve readability
+    Click to show how you can use repositories csv to make objects reusable and improve readability
   </summary>
 
   - Repository csv files have 2 columns, for example below (headers up to you to name)
@@ -691,7 +689,7 @@ live|try steps or code interactively for Chrome / visual automation|enter live m
 </details>
 
 # Developers Reference
-TagUI excels in automating user-interface interactions. It's designed to make prototyping, deployment and maintenance of UI automation easier by minimizing iteration time for each phase. Originally developed by a test automation engineer to be liberated from writing chunks of repetitive code when automating web interactions.
+TagUI excels in automating user-interface interactions. It's designed to make prototyping, deployment and maintenance of UI automation easier by minimizing iteration time for each phase. Originally developed by a frustrated test automation engineer, to maximize automation code output with minimal coding efforts when automating web interactions.
 
 ### API
 
