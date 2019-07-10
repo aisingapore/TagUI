@@ -148,7 +148,7 @@ Download from [Chrome Web Store](https://chrome.google.com/webstore/detail/tagui
 The recording isn't foolproof (for example, the underlying recording engine cannot capture frames, popup windows or tab key input). It's meant to simplify flow creation with some edits, instead of typing everything manually. [See this video](https://www.youtube.com/watch?v=bFvsc4a8hWQ) for an example of recording a sequence of steps, editing for adjustments and playing back the automation.
 
 # [Using it (advanced)](https://github.com/kelaberetiv/TagUI#cheat-sheet)
-*In this section, we'll spend some time exploring core features of TagUI.*
+*In this section, we'll explore TagUI core features, such as Chrome browser automation, visual automation & OCR.*
 
 ### FIND XPATH OF WEB ELEMENT
 - In Chrome browser, right-click on the element, click Inspect, right-click on HTML code block, then
