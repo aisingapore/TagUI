@@ -1,5 +1,5 @@
 
-**TagUI is a command-line tool for digital process automation. This branch of automation is commercially known as RPA (robotic process automation), and aims to reproduce user interactions with computer applications - for example mouse clicks and keyboard entries. For more info and documentation, visit TagUI [repository page](https://github.com/kelaberetiv/TagUI).**
+*TagUI is a command-line tool for digital process automation. This branch of automation is commercially known as RPA (robotic process automation). RPA aims to reproduce user interactions with computer applications, for example mouse clicks and keyboard entries. For more info and documentation, refer to [TagUI home page](https://github.com/kelaberetiv/TagUI).*
 
 # [Setup](https://github.com/kelaberetiv/TagUI#set-up)
 *In this section, we'll download and install TagUI on your computer - it works on Windows, macOS, Linux.*
@@ -70,7 +70,7 @@ TagUI can also be run from desktop icons, scheduled tasks, or REST API calls.
 
 <details>
   <summary>
-    Click to show the command line options for TagUI tool and their purposes
+    Click to show the command line options for TagUI tool and their purposes (eg chrome, headless, report)
   </summary>
   
   Option|Purpose
@@ -92,7 +92,7 @@ TagUI can also be run from desktop icons, scheduled tasks, or REST API calls.
 
 <details>
   <summary>
-    Click to show info on automation logs, and how to run tagui from any directory
+    Click to show info on automation logs (.log, .js, .raw), and how to run tagui from any directory
   </summary>
 
   After each automation run, a .log file will be created to store output of the execution, a .js file is the generated JavaScript file, a .raw is the expanded flow after reading in any module sub-scripts that are called in that flow. These files are for user reference purpose and can be helpful in debugging or troubleshooting the automation flow. To turn off creation of these files, put an empty file tagui_no_logging in tagui/src folder.
@@ -132,7 +132,7 @@ To schedule an automation flow with crontab (macOS/Linux), for example at 8am da
 0 8 * * * /full_path_on_your_server/tagui flow_filename option(s)
 ```
 
-**Tip** - for Windows, use Task Scheduler (search schedule from Start Menu) or [Z-Cron freeware](https://www.z-cron.com)
+For Windows, use Task Scheduler (search schedule from Start Menu) or [Z-Cron freeware](https://www.z-cron.com)
 
 ### CHROME EXTENSION
 Download from [Chrome Web Store](https://chrome.google.com/webstore/detail/tagui-web-automation/egdllmehgfgjebhlkjmcnhiocfcidnjk/) to use TagUI Chrome web browser extension for recording automation flows. TagUI Chrome extension records steps such as page navigation, clicking web elements and entering information. 
@@ -148,7 +148,7 @@ Download from [Chrome Web Store](https://chrome.google.com/webstore/detail/tagui
 The recording isn't foolproof (for example, the underlying recording engine cannot capture frames, popup windows or tab key input). It's meant to simplify flow creation with some edits, instead of typing everything manually. [See this video](https://www.youtube.com/watch?v=bFvsc4a8hWQ) for an example of recording a sequence of steps, editing for adjustments and playing back the automation.
 
 # [Using it (advanced)](https://github.com/kelaberetiv/TagUI#cheat-sheet)
-*In this section, we'll spend some time exploring core features of TagUI.*
+*In this section, we'll explore TagUI core features, such as Chrome browser automation, visual automation & OCR.*
 
 ### FIND XPATH OF WEB ELEMENT
 - In Chrome browser, right-click on the element, click Inspect, right-click on HTML code block, then
@@ -188,7 +188,7 @@ live|try steps or code interactively for Chrome / visual automation|enter live m
 
 <details>
   <summary>
-    Click to show pro steps such as tagui, keyboard, mouse, table, wait, check, api, run, dom, js, r, py, vision, code blocks
+    Click to show pro steps - tagui, keyboard, mouse, table, wait, check, upload, api, run, dom, js, r, py, vision, timeout
   </summary>
 
   Pro Step|Parameters (separator in bold)|Purpose
@@ -263,4 +263,4 @@ To type onto the screen instead of a particular element, use `keyboard text` or 
 The keyboard and mouse steps, as well as helper functions mouse_xy(), mouse_x(), mouse_y(), can be used to do complex UI interactions. A screen (real or Xvfb) is needed for visual automation. [Tesseract OCR](https://github.com/tesseract-ocr/tesseract) (optical character recognition) is used for visually retrieving text. Also, by using vision step, you can send [custom SikuliX commands](http://sikulix-2014.readthedocs.io/en/latest/genindex.html) to do things that are not covered by TagUI.
 
 # [Further Resources](https://github.com/kelaberetiv/TagUI)
-*For more info and documentation on TagUI, visit its [repository page](https://github.com/kelaberetiv/TagUI).*
+*For more info and documentation on TagUI, visit its [home page](https://github.com/kelaberetiv/TagUI).*
