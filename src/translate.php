@@ -2,6 +2,12 @@
 
 /* MULTI-LANGUAGE TRANSLATION SCRIPT FOR TAGUI FRAMEWORK ~ TEBEL.ORG */
 
+// Q1. Why is formatting for this file so messed up? - it's created on the road
+// If you want to know more - https://github.com/kelaberetiv/TagUI/issues/490
+
+// Q2. Is there a beautified version for easier viewing or editing? - yes snapshot below
+// https://github.com/kelaberetiv/TagUI/blob/master/src/media/snapshots/translate.md
+
 // english is used as reference language, define keywords for contextual translation
 
 // list of keywords that are supposed to be at the start of a flow statement

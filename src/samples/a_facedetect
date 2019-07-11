@@ -60,15 +60,15 @@ for n from 1 to total_number_of_images
 	if py_result equals to 1
 	run_result = "face is found"
 
-        // if face is found, copy to main folder
-        if run_result not equals to ""
-        {
+	// if face is found, copy to main folder
+	if run_result not equals to ""
+	{
 		fs = require('fs'); target_file = flow_path+'/'+profile_name+'-'+face_counter+'.png';
 		if (fs.exists(target_file))
 		{
 			fs.remove(target_file);
 		}
 		fs.copy(flow_path+'/'+profile_name+'/'+n+'.png',flow_path+'/'+profile_name+'-'+face_counter+'.png');
-                face_counter = face_counter + 1
-        }
+		face_counter = face_counter + 1
+	}
 }
