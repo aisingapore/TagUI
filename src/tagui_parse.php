@@ -2,6 +2,12 @@
 
 /* PARSER SCRIPT FOR TAGUI FRAMEWORK ~ TEBEL.ORG */
 
+// Q1. Why is formatting for this file so messed up? - it's created on the road
+// If you want to know more - https://github.com/kelaberetiv/TagUI/issues/490
+
+// Q2. Is there a beautified version for easier viewing or editing? - yes snapshot below
+// https://github.com/kelaberetiv/TagUI/blob/master/src/media/snapshots/tagui_parse.md
+
 // check flow filename for .tagui or .js or .txt or no extension
 $script = $argv[1]; if ($script=="") die("ERROR - specify flow filename as first parameter\n");
 if (strpos(pathinfo($script, PATHINFO_BASENAME), '.') !== false) // check if file has extension

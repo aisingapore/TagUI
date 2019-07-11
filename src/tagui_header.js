@@ -1,4 +1,10 @@
 
+// Q1. Why is formatting for this file so messed up? - it's created on the road
+// If you want to know more - https://github.com/kelaberetiv/TagUI/issues/490
+
+// Q2. Is there a beautified version for easier viewing or editing? - yes snapshot below
+// https://github.com/kelaberetiv/TagUI/blob/master/src/media/snapshots/tagui_header.md
+
 // xpath for object identification
 var xps666 = require('casper').selectXPath;
 

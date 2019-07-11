@@ -21,12 +21,12 @@ dump 'EN,' ic.toUpperCase() '\r\n' to '+ic.toLowerCase()+'.csv
 // loop and process array
 for number from 1 to vocab_array.length-2
 {
-https://translate.google.com.sg/#en/'+ic+'/'+vocab_array[number]+'
-// time delay to slow down translation speed, adjust accordingly
-wait 1 second
-read result_box to translation
-echo vocab_array[number] ' - ' translation.toLowerCase().replace(' (','(')
-write vocab_array[number] ',' translation.toLowerCase().replace(' (','(') to '+ic.toLowerCase()+'.csv
+	https://translate.google.com.sg/#en/'+ic+'/'+vocab_array[number]+'
+	// time delay to slow down translation speed, adjust accordingly
+	wait 1 second
+	read result_box to translation
+	echo vocab_array[number] ' - ' translation.toLowerCase().replace(' (','(')
+	write vocab_array[number] ',' translation.toLowerCase().replace(' (','(') to '+ic.toLowerCase()+'.csv
 }
 
 //show info (useful when quiet option is used)
