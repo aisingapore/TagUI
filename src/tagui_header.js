@@ -351,8 +351,8 @@ var fs = require('fs'); fs.write('tagui.sikuli'+ds+'tagui_sikuli.txt','','w');}
 // for setting timeout in sikuli when looking for ui element
 function sikuli_timeout(time_in_seconds) {var ds; if (flow_path.indexOf('/') !== -1) ds = '/'; else ds = '\\';
 var fs = require('fs'); if (fs.exists('tagui.sikuli'+ds+'tagui_sikuli.in'))
-sikuli_step('vision setAutoWaitTimeout(' + time_in_seconds.toString() + ')');
-sikuli_step('vision wait_timeout = ' + time_in_seconds.toString());}
+{sikuli_step('vision setAutoWaitTimeout(' + time_in_seconds.toString() + ')');
+sikuli_step('vision wait_timeout = ' + time_in_seconds.toString());}}
 
 // for initialising integration with R
 function r_handshake() { // techo('[connecting to R process]');

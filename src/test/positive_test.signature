@@ -26,6 +26,12 @@ ignoreSslErrors: false,
 localToRemoteUrlAccessEnabled: false
 };
 
+// Q1. Why is formatting for this file so messed up? - it's created on the road
+// If you want to know more - https://github.com/kelaberetiv/TagUI/issues/490
+
+// Q2. Is there a beautified version for easier viewing or editing? - yes snapshot below
+// https://github.com/kelaberetiv/TagUI/blob/master/src/media/snapshots/tagui_header.md
+
 // xpath for object identification
 var xps666 = require('casper').selectXPath;
 
@@ -372,8 +378,8 @@ var fs = require('fs'); fs.write('tagui.sikuli'+ds+'tagui_sikuli.txt','','w');}
 // for setting timeout in sikuli when looking for ui element
 function sikuli_timeout(time_in_seconds) {var ds; if (flow_path.indexOf('/') !== -1) ds = '/'; else ds = '\\';
 var fs = require('fs'); if (fs.exists('tagui.sikuli'+ds+'tagui_sikuli.in'))
-sikuli_step('vision setAutoWaitTimeout(' + time_in_seconds.toString() + ')');
-sikuli_step('vision wait_timeout = ' + time_in_seconds.toString());}
+{sikuli_step('vision setAutoWaitTimeout(' + time_in_seconds.toString() + ')');
+sikuli_step('vision wait_timeout = ' + time_in_seconds.toString());}}
 
 // for initialising integration with R
 function r_handshake() { // techo('[connecting to R process]');
