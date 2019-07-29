@@ -658,18 +658,6 @@ chrome_targetid = found_targetid;}); // set chrome_targetid only after attaching
 casper.then(then); casper.then(function _step() {if (chrome_targetid !== '') // detach from target after running then
 {var found_targetid = chrome_targetid; chrome_targetid = ''; chrome_step('Target.detachFromTarget',{sessionId: found_targetid});}});};
 
-chrome.getAttributeValue = function(selector, attribute_name) { 
-	
-	if ((selector.toString().length >= 16) && (selector.toString().substr(0,16) == 'xpath selector: '))
-	{if (selector.toString().length == 16) selector = ''; else selector = selector.toString().substring(16);
-		var ws_message = chrome_step('Runtime.evaluate',{expression: 'document.evaluate(\''+selector+'\','+chrome_context+',null,XPathResult.ORDERED_NODE_SNAPSHOT_TYPE,null).snapshotItem(0).getAttribute(\''+attribute_name+'\') || \'\''});}
-	else 	
-		var ws_message = chrome_step('Runtime.evaluate',{expression: chrome_context+'.querySelector(\''+selector+'\').getAttribute(\''+attribute_name+'\') || \'\''});
-	
-	try {var ws_json = JSON.parse(ws_message); if (ws_json.result.result.value)
-	return ws_json.result.result.value; else return '';} catch(e) {return '';}
-}
-
 chrome.getHTML = function() { // get raw html of current webpage
 var ws_message = chrome_step('Runtime.evaluate',{expression: 'document.documentElement.outerHTML'});
 try {var ws_json = JSON.parse(ws_message); if (ws_json.result.result.value)
@@ -758,7 +746,6 @@ case 'py': return py_intent(live_line); break;
 case 'vision': return vision_intent(live_line); break;
 case 'timeout': return timeout_intent(live_line); break;
 case 'code': return code_intent(live_line); break;
-case 'attribute':return attribute_intent(live_line); break;
 default: return "this.echo('ERROR - cannot understand step " + live_line.replace(/'/g,'\\\'') + "')";}}
 
 function parse_variables(script_line) { // `variable` --> '+variable+'
@@ -812,7 +799,6 @@ if (lc_raw_intent.substr(0,2) == 'r ') return 'r';
 if (lc_raw_intent.substr(0,3) == 'py ') return 'py';
 if (lc_raw_intent.substr(0,7) == 'vision ') return 'vision';
 if (lc_raw_intent.substr(0,8) == 'timeout ') return 'timeout';
-if (substr($lc_raw_intent,0,10)=="attribute ") return "attribute";
 
 // second set of conditions check for valid keywords with missing parameters
 if ((lc_raw_intent == 'tap') || (lc_raw_intent == 'click')) return 'tap';
@@ -850,7 +836,6 @@ if (lc_raw_intent == 'r') return 'r';
 if (lc_raw_intent == 'py') return 'py';
 if (lc_raw_intent == 'vision') return 'vision';
 if (lc_raw_intent == 'timeout') return 'timeout';
-if (lc_raw_intent == 'attribute') return 'attribute';
 
 // final check for recognized code before returning error
 if (is_code(raw_intent)) return 'code'; else return 'error';}
@@ -1138,10 +1123,6 @@ return "this.echo('ERROR - you are already in live mode, type done to quit live 
 
 function ask_intent(raw_intent) {raw_intent = eval("'" + escape_bs(raw_intent) + "'"); // support dynamic variables
 return "this.echo('ERROR - step is not relevant in live mode, set ask_result directly')";}
-
-function attribute_intent(raw_intent) {
-	return "this.echo('Currently Not Implemented')";
-}
 
 function keyboard_intent(raw_intent) {raw_intent = eval("'" + escape_bs(raw_intent) + "'"); // support dynamic variables
 var params = ((raw_intent + ' ').substr(1+(raw_intent + ' ').indexOf(' '))).trim();
