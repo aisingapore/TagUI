@@ -410,7 +410,6 @@ case "py": return py_intent($script_line); break;
 case "vision": return vision_intent($script_line); break;
 case "timeout": return timeout_intent($script_line); break;
 case "code": return code_intent($script_line); break;
-case "attribute": return attribute_intent($script_line); break;
 default: echo "ERROR - " . current_line() . " cannot understand step " . $script_line . "\n";}}
 
 function get_intent($raw_intent) {$lc_raw_intent = strtolower($raw_intent); 
@@ -462,7 +461,6 @@ if (substr($lc_raw_intent,0,2)=="r ") return "r";
 if (substr($lc_raw_intent,0,3)=="py ") return "py";
 if (substr($lc_raw_intent,0,7)=="vision ") return "vision";
 if (substr($lc_raw_intent,0,8)=="timeout ") return "timeout";
-if (substr($lc_raw_intent,0,10)=="attribute ") return "timeout";
 
 // second set of conditions check for valid keywords with missing parameters
 if (($lc_raw_intent=="tap") or ($lc_raw_intent=="click")) return "tap";
@@ -500,7 +498,6 @@ if ($lc_raw_intent=="r") return "r";
 if ($lc_raw_intent=="py") return "py";
 if ($lc_raw_intent=="vision") return "vision";
 if ($lc_raw_intent=="timeout") return "timeout";
-if ($lc_raw_intent=="attribute") return "attribute";
 
 // final check for recognized code before returning error 
 if (is_code($raw_intent)) return "code"; else return "error";}
@@ -1129,24 +1126,5 @@ $logic = "casper.bypass(teleport_distance('[CONTINUE_SIGNAL][".$teleport_marker.
 
 // return code after all the parsing and special handling
 return $logic;}
-
-function attribute_intent($raw_intent){
-	// attribute locator | attribute_name to variable_name
-	$params = trim(substr($raw_intent.' ',strpos($raw_intent,' ')));
-	$param1 = trim(substr($params, 0, strpos($params, ' to ')));
-	
-	$param2 = trim(substr($param1, 0, strpos($param1, ' |')));
-	$param3 = trim(substr($param1, 1+strpos($param1, '|')));
-	
-	$param4 = trim(substr($params, 2+strpos($params, 'to')));
-	
-	if($param4 == "")
-		$param4 = "attr_val";
-	
-	if (($param2 == "") or ($param3 == ""))
-		echo "ERROR - " . current_line() . " element/attribute missing for " . $raw_intent . "\n"; 
-	else
-		return "casper.then(function(){techo('".$raw_intent."'); \n $param4 = chrome.getAttributeValue('$param2', '$param3');}) \n";
-}
 
 ?>
