@@ -749,11 +749,13 @@ case 'code': return code_intent(live_line); break;
 default: return "this.echo('ERROR - cannot understand step " + live_line.replace(/'/g,'\\\'') + "')";}}
 
 function parse_variables(script_line) { // `variable` --> '+variable+'
-quote_token = "'+"; // token to alternate replacements for '+variable+'
+// use "[SINGLE_QUOTE_FOR_VARIABLE_HANDLING]" instead of "'" to prevent escaping ' in escape_bs()
+quote_token = "[SINGLE_QUOTE_FOR_VARIABLE_HANDLING]+"; // token to alternate replacements for '+variable+'
 for (char_counter = 0; char_counter < script_line.length; char_counter++) {
 if (script_line.charAt(char_counter) == "`") {
 script_line = script_line.substr(0,char_counter) + quote_token + script_line.substr(char_counter+1);
-if (quote_token == "'+") quote_token = "+'"; else quote_token = "'+";}} return script_line;}
+if (quote_token == "[SINGLE_QUOTE_FOR_VARIABLE_HANDLING]+") quote_token = "+[SINGLE_QUOTE_FOR_VARIABLE_HANDLING]";
+else quote_token = "[SINGLE_QUOTE_FOR_VARIABLE_HANDLING]+";}} return script_line;}
 
 // for live mode understanding intent of line entered
 function get_intent(raw_intent) {var lc_raw_intent = raw_intent.toLowerCase();
@@ -891,7 +893,8 @@ return source_string;} // replacing multiple variations of + to handle user typo
 
 function escape_bs(input_string) { // helper function to escape backslash characters and friends
 escaped_string = input_string.replace(/\\/g,'\\\\').replace(/\'/g,'\\\'').replace(/\n/g,'\\n').replace(/\r/g,'\\r');
-return escaped_string.replace(/\t/g,'\\t').replace(/\f/g,'\\f').replace(/\v/g,'\\v').replace(/\"/g,'\\\"');}
+escaped_string = escaped_string.replace(/\t/g,'\\t').replace(/\f/g,'\\f').replace(/\v/g,'\\v').replace(/\"/g,'\\\"');
+return escaped_string.replace(/\[SINGLE_QUOTE_FOR_VARIABLE_HANDLING\]/g,'\'');}
 
 function is_coordinates(input_params) { // helper function to check if string is (x,y) coordinates
 if ((input_params.length > 4) && (input_params.substr(0,1) == '(') && (input_params.substr(-1) == ')') 
