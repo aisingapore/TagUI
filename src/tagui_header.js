@@ -31,6 +31,10 @@ var r_count = 0; var py_count = 0; var sikuli_count = 0; var chrome_id = 0;
 // chrome context for frame handling and targetid for popup handling
 var chrome_context = 'document'; var chrome_targetid = '';
 
+// variables to track frame offset if current context is within a frame
+var frame_step_offset_x = 0; var frame_step_offset_y = 0;
+var original_frame_step_offset_x = 0; var original_frame_step_offset_y = 0;
+
 // variable for ask step to accept user input
 var ask_result = '';
 
@@ -489,15 +493,21 @@ if ((selector.toString().length >= 16) && (selector.toString().substr(0,16) == '
 var ws_message = chrome_step('Runtime.evaluate',{expression: 'var result_bounds = document.evaluate(\''+selector+'\','+chrome_context+',null,XPathResult.ORDERED_NODE_SNAPSHOT_TYPE,null).snapshotItem(0).getBoundingClientRect(); var result_xy = {x: Math.round(result_bounds.left + result_bounds.width / 2), y: Math.round(result_bounds.top + result_bounds.height / 2)}; result_xy', returnByValue: true});}
 else var ws_message = chrome_step('Runtime.evaluate',{expression: 'var result_bounds = '+chrome_context+'.querySelector(\''+selector+'\').getBoundingClientRect(); var result_xy = {x: Math.round(result_bounds.left + result_bounds.width / 2), y: Math.round(result_bounds.top + result_bounds.height / 2)}; result_xy', returnByValue: true});
 try {var ws_json = JSON.parse(ws_message); if (ws_json.result.result.value.x > 0 && ws_json.result.result.value.y > 0)
-return ws_json.result.result.value; else return {x: 0, y: 0};} catch(e) {return {x: 0, y: 0};}};
+{if (chrome_context !== 'document') {ws_json.result.result.value.x += frame_step_offset_x; // add offset if in frame
+ws_json.result.result.value.y += frame_step_offset_y;}; return ws_json.result.result.value;} else
+{if (chrome_context !== 'document') return {x: frame_step_offset_x, y: frame_step_offset_y};
+else return {x: 0, y: 0};}} catch(e) {return {x: 0, y: 0};}};
 
 chrome.getRect = function(selector) { // helper function to get rectangle boundary coordinates of selector
 if ((selector.toString().length >= 16) && (selector.toString().substr(0,16) == 'xpath selector: '))
 {if (selector.toString().length == 16) selector = ''; else selector = selector.toString().substring(16);
 var ws_message = chrome_step('Runtime.evaluate',{expression: 'var result_bounds = document.evaluate(\''+selector+'\','+chrome_context+',null,XPathResult.ORDERED_NODE_SNAPSHOT_TYPE,null).snapshotItem(0).getBoundingClientRect(); var result_rect = {top: Math.round(result_bounds.top), left: Math.round(result_bounds.left), width: Math.round(result_bounds.width), height: Math.round(result_bounds.height)}; result_rect', returnByValue: true});}
 else var ws_message = chrome_step('Runtime.evaluate',{expression: 'var result_bounds = '+chrome_context+'.querySelector(\''+selector+'\').getBoundingClientRect(); var result_rect = {top: Math.round(result_bounds.top), left: Math.round(result_bounds.left), width: Math.round(result_bounds.width), height: Math.round(result_bounds.height)}; result_rect', returnByValue: true}); try {var ws_json = JSON.parse(ws_message); // check if width and height are valid before returning coordinates
-if (ws_json.result.result.value.width > 0 && ws_json.result.result.value.height > 0) return ws_json.result.result.value;
-else return {left: 0, top: 0, width: 0, height: 0};} catch(e) {return {left: 0, top: 0, width: 0, height: 0};}};
+if (ws_json.result.result.value.width > 0 && ws_json.result.result.value.height > 0)
+{if (chrome_context !== 'document') {ws_json.result.result.value.left += frame_step_offset_x; // add offset if in frame
+ws_json.result.result.value.top += frame_step_offset_y;}; return ws_json.result.result.value;} else
+{if (chrome_context !== 'document') return {left: frame_step_offset_x, top: frame_step_offset_y, width: 0, height: 0};
+else return {left: 0, top: 0, width: 0, height: 0};}} catch(e) {return {left: 0, top: 0, width: 0, height: 0};}};
 
 chrome.mouse.move = function(selector,y) { // move mouse pointer to center of specified selector or point 
 if (!y) {chrome.scrollIntoViewIfNeeded(selector); var xy = chrome.mouse.getXY(selector);}
@@ -633,9 +643,17 @@ return ws_json.result.result.value; else return null;} catch(e) {return null;}};
 
 chrome.withFrame = function(frameInfo,then) { // replace casperjs frame for switching frame context
 var new_context = ''; if (chrome_context == 'document') new_context = 'mainframe_context';
-else if (chrome_context == 'mainframe_context') new_context = 'subframe_context';
-casper.then(function _step() {chrome_step('Runtime.evaluate',{expression: new_context+' = document.evaluate(\'(//frame|//iframe)[@name="'+frameInfo+'" or @id="'+frameInfo+'"]\','+chrome_context+',null,XPathResult.ORDERED_NODE_SNAPSHOT_TYPE,null).snapshotItem(0).contentDocument'}); chrome_context = new_context;}); // set mainframe_context/subframe_context in dom
-casper.then(then); casper.then(function _step() {if (chrome_context == 'subframe_context') {chrome_step('Runtime.evaluate',{expression: 'subframe_context = null'}); chrome_context = 'mainframe_context';} else if (chrome_context == 'mainframe_context') {chrome_step('Runtime.evaluate',{expression: 'mainframe_context = null'}); chrome_context = 'document';}});};
+else if (chrome_context == 'mainframe_context') new_context = 'subframe_context'; // below backup original offset
+original_frame_step_offset_x = frame_step_offset_x; original_frame_step_offset_y = frame_step_offset_y;
+casper.then(function _step() { // track frame (x,y) offset so that steps within frame work correctly
+var frame_rect = chrome.getRect(xps666('(//frame|//iframe)[@name="'+frameInfo+'" or @id="'+frameInfo+'"]'));
+frame_step_offset_x = frame_rect.left; frame_step_offset_y = frame_rect.top; // set offset before entering frame
+chrome_step('Runtime.evaluate',{expression: new_context+' = document.evaluate(\'(//frame|//iframe)[@name="'+frameInfo+'" or @id="'+frameInfo+'"]\','+chrome_context+',null,XPathResult.ORDERED_NODE_SNAPSHOT_TYPE,null).snapshotItem(0).contentDocument'}); chrome_context = new_context;}); // set mainframe_context/subframe_context in dom
+casper.then(then); casper.then(function _step() {if (chrome_context == 'subframe_context') {
+chrome_step('Runtime.evaluate',{expression: 'subframe_context = null'}); chrome_context = 'mainframe_context';
+frame_step_offset_x = original_frame_step_offset_x; frame_step_offset_y = original_frame_step_offset_y;}
+else if (chrome_context == 'mainframe_context') {chrome_step('Runtime.evaluate',{expression: 'mainframe_context = null'});
+chrome_context = 'document'; frame_step_offset_x = 0; frame_step_offset_y = 0;}});}; // reset offset after exit mainframe
 
 chrome.waitForPopup = function(popupInfo,then,onTimeout) { // replace casperjs waitforpopup for checking popup window
 casper.waitFor(function check() { // use similar logic as chrome withpopup to scan through list of browser targets
