@@ -258,8 +258,8 @@ file_put_contents($script . '.js',$script_content); // below initialise chrome i
 if (!touch('tagui_chrome.in')) die("ERROR - cannot initialise tagui_chrome.in\n");
 if (!touch('tagui_chrome.out')) die("ERROR - cannot initialise tagui_chrome.out\n");}
 
-// if mouse_xy(), mouse_x(), mouse_y() helper functions are used, invoke sikuli visual automation
-if ((strpos($script_content,'mouse_xy()')!==false) or 
+// if clipboard(), mouse_xy(), mouse_x(), mouse_y() helper functions are used, invoke sikuli visual automation
+if ((strpos($script_content,'clipboard(')!==false) or (strpos($script_content,'mouse_xy()')!==false) or 
 (strpos($script_content,'mouse_x()')!==false) or (strpos($script_content,'mouse_y()')!==false)) {
 if (!touch('tagui.sikuli/tagui_sikuli.in')) die("ERROR - cannot initialise tagui_sikuli.in\n");
 if (!touch('tagui.sikuli/tagui_sikuli.out')) die("ERROR - cannot initialise tagui_sikuli.out\n");}

@@ -282,6 +282,13 @@ mouse_y = function() { // use this function declaration style for sikuli detecti
 sikuli_step('vision xy_mouseLocation = Env.getMouseLocation(); output_sikuli_text(str(xy_mouseLocation.getY()));');
 var y_result = parseInt(fetch_sikuli_text()); clear_sikuli_text(); return y_result;}
 
+// get text from clipboard or set text to clipboard
+clipboard = function(clipboard_text) { // use this function declaration style for sikuli detection in tagui_parse.php
+if (!clipboard_text) {sikuli_step('vision output_sikuli_text(App.getClipboard())');
+var clipboard_result = fetch_sikuli_text(); clear_sikuli_text(); return clipboard_result;}
+else {vision_step('clipboard_text = "' + escape_bs(clipboard_text) + '"'); // escape_bs() for \n \t etc
+sikuli_step('vision App.setClipboard(clipboard_text)');}}
+
 /**
  * string cell data sanitiser, returns a CSV formatted string
  * @param {string} cell_data
