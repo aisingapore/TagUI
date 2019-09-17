@@ -8,22 +8,22 @@ rem enable windows for loop advanced flow control
 setlocal enableextensions enabledelayedexpansion
 
 if "%~1"=="" (
-echo tagui v3.0: use following syntax and below options to run - tagui flow_filename option^(s^)
+echo tagui v5.6: use following options and this syntax to run - tagui flow_filename option^(s^)
 echo.
-echo IMPORTANT: SAVE YOUR WORK BEFORE USING CHROME OR HEADLESS, TAGUI WILL RESTART CHROME
-echo headless - run on invisible Chrome web browser instead of default PhantomJS ^(first install Chrome^)
 echo chrome   - run on visible Chrome web browser instead of invisible PhantomJS ^(first install Chrome^)
+echo headless - run on invisible Chrome web browser instead of default PhantomJS ^(first install Chrome^)
 echo firefox  - run on visible Firefox web browser instead of invisible browser ^(first install Firefox^)
+echo report   - track run result in tagui\src\tagui_report.csv and save html log of automation execution
 echo upload   - upload automation flow and result to hastebin.com ^(expires 30 days after last view^)
-echo report   - web report for sharing of run results on webserver ^(default is only a text log file^)
-echo debug    - show run-time backend messages from PhantomJS for detailed tracing and logging
-echo quiet    - run without output except for explicit output ^(echo / show / check / errors etc^)
 echo speed    - skip 3-second delay between datatable iterations ^(and skip restarting of Chrome^)
+echo quiet    - run without output except for explicit output ^(echo / show / check / errors etc^)
+echo debug    - show run-time backend messages from PhantomJS mode for detailed tracing and logging
 echo test     - testing with check step test assertions for CI/CD integration ^(output XUnit XML file^)
 echo baseline - output execution log and relative-path output files to a separate baseline directory
 echo input^(s^) - add your own parameter^(s^) to be used in your automation flow as variables p1 to p9
+echo data.csv - specify a csv file to be used as the datatable for batch automation of many records
 echo.
-echo TagUI is a general purpose tool for automating web interactions ~ http://tebel.org
+echo TagUI is a command-line tool for digital process automation ^(RPA^) - for more info, google tagui
 echo.
 exit /b 1
 )
@@ -114,7 +114,7 @@ if %tagui_baseline_mode%==false (
 	for %%i in ("!flow_file!") do set "flow_folder=%%~dpi"
 	for %%i in ("!flow_file!") do set "flow_filename=%%~nxi"
 	if not exist "!flow_folder!baseline" mkdir "!flow_folder!baseline"
-	copy "!flow_file!" "!flow_folder!baseline\." > nul
+	copy /Y "!flow_file!" "!flow_folder!baseline\." > nul
 	set "flow_file=!flow_folder!baseline\!flow_filename!"
 )
 
@@ -436,18 +436,24 @@ rem concatenate parameters in order to fix issue when calling casperjs test
 rem $1 left out - filenames with spaces have issue when casperjs $params
 set params=%arg2% %arg3% %arg4% %arg5% %arg6% %arg7% %arg8% %arg9%
 
-rem check if api call is made in automation flow file to set appropriate setting for phantomjs to work
-set api=
-if exist "%flow_file%" (
-	find /i /c "api http" "%flow_file%" > nul
-	if not errorlevel 1 set api= --web-security=false
-)
-
 rem initialise log file and set permissions to protect user data
 rem skip permissions setting for windows, only done for macos and linux
 type nul > "%flow_file%.log"
+type nul > "tagui_r\tagui_r.log"
+type nul > "tagui_r\tagui_r_windows.log"
+type nul > "tagui_py\tagui_py.log"
+type nul > "tagui_py\tagui_py_windows.log"
 type nul > "tagui.sikuli\tagui.log"
+type nul > "tagui.sikuli\tagui_windows.log"
 type nul > "tagui_chrome.log"
+
+rem delete R integration files if they exist
+if exist "tagui_r\tagui_r.in" del "tagui_r\tagui_r.in"
+if exist "tagui_r\tagui_r.out" del "tagui_r\tagui_r.out"
+
+rem delete python integration files if they exist
+if exist "tagui_py\tagui_py.in" del "tagui_py\tagui_py.in"
+if exist "tagui_py\tagui_py.out" del "tagui_py\tagui_py.out"
 
 rem delete sikuli visual automation integration files if they exist
 if exist "tagui.sikuli\tagui_sikuli.in" del "tagui.sikuli\tagui_sikuli.in" 
@@ -463,18 +469,57 @@ set tagui_error_code=0
 rem transpose datatable csv file if file to be transposed exists
 if exist "%flow_file%_transpose.csv" php -q transpose.php "%flow_file%_transpose.csv" | tee -a "%flow_file%.log"
 
+cd /d "%initial_dir%"
+set "custom_csv_file=NO_CUSTOM_CSV_FILE"
+rem check if custom csv file is provided to be used as datatable
+if "%arg2:~-4%"==".csv" (
+        set "custom_csv_file=%~dpnx2"
+)
+if "%arg3:~-4%"==".csv" (
+        set "custom_csv_file=%~dpnx3"
+)
+if "%arg4:~-4%"==".csv" (
+        set "custom_csv_file=%~dpnx4"
+)
+if "%arg5:~-4%"==".csv" (
+        set "custom_csv_file=%~dpnx5"
+)
+if "%arg6:~-4%"==".csv" (
+        set "custom_csv_file=%~dpnx6"
+)
+if "%arg7:~-4%"==".csv" (
+        set "custom_csv_file=%~dpnx7"
+)
+if "%arg8:~-4%"==".csv" (
+        set "custom_csv_file=%~dpnx8"
+)
+if "%arg9:~-4%"==".csv" (
+        set "custom_csv_file=%~dpnx9"
+)
+cd /d "%~dp0"
+
+if not "NO_CUSTOM_CSV_FILE" == "%custom_csv_file%" (
+	if not exist "%custom_csv_file%" (
+		echo ERROR - cannot find %custom_csv_file%
+		exit /b 1
+	) 
+	copy /Y "%custom_csv_file%" "tagui_datatable_transpose.csv" > nul
+	php -q transpose.php "tagui_datatable_transpose.csv" | tee -a "%flow_file%.log"
+	set "custom_csv_file=%~dp0tagui_datatable.csv"
+	del "tagui_datatable_transpose.csv"
+)
+if "NO_CUSTOM_CSV_FILE" == "%custom_csv_file%" set "custom_csv_file=%flow_file%.csv"
+
 rem check datatable csv file for batch automation
 set tagui_data_set_size=1 
-if not exist "%flow_file%.csv" goto no_datatable
-	for /f "tokens=* usebackq" %%c in (`gawk -F"," "{print NF}" "%flow_file%.csv" ^| sort -nu ^| head -n 1`) do set min_column=%%c
-	for /f "tokens=* usebackq" %%c in (`gawk -F"," "{print NF}" "%flow_file%.csv" ^| sort -nu ^| tail -n 1`) do set max_column=%%c
+if not exist "%custom_csv_file%" goto no_datatable
+	rem for /f "tokens=* usebackq" %%c in (`gawk -F"," "{print NF}" "%custom_csv_file%" ^| sort -nu ^| head -n 1`) do set min_column=%%c
+	rem for /f "tokens=* usebackq" %%c in (`gawk -F"," "{print NF}" "%custom_csv_file%" ^| sort -nu ^| tail -n 1`) do set max_column=%%c
+	rem below counts the first row, otherwise edge cases will break this
+	for /f "tokens=* usebackq" %%c in (`head -n 1 "%custom_csv_file%" ^| gawk -F"," "{print NF}"`) do set min_column=%%c
 
-rem comment off sanity check for columns consistency as cells with , will trigger false-positive
-rem	if %min_column% neq %max_column% (
-rem		echo ERROR - %flow_file%.csv has inconsistent # of columns | tee -a "%flow_file%.log"
-rem	)
 	if %min_column% lss 2 (
-		echo ERROR - %flow_file%.csv has has lesser than 2 columns | tee -a "%flow_file%.log"
+		echo ERROR - %custom_csv_file% has has lesser than 2 columns | tee -a "%flow_file%.log"
 	) else (
 		set /a tagui_data_set_size=%min_column% - 1
 	)
@@ -487,7 +532,8 @@ set tagui_data_set=%%n
 rem add delay between repetitions to pace out iterations
 if !tagui_data_set! neq 1 if %tagui_speed_mode%==false php -q sleep.php 3
 
-rem parse automation flow file, check for initial parse error, check sikuli and chrome, before calling casperjs
+rem parse automation flow file, check for initial parse error
+rem check R, python, sikuli, chrome, before calling casperjs
 php -q tagui_parse.php "%flow_file%" | tee -a "%flow_file%.log"
 for /f "usebackq" %%f in ('%flow_file%.log') do set file_size=%%~zf
 if !file_size! gtr 0 (
@@ -498,10 +544,27 @@ if !file_size! gtr 0 (
 	)
 )
 
+rem check if api call is made in generated js file to set appropriate setting for phantomjs to work
+set api=
+if exist "%flow_file%.js" (
+	find /i /c "api http" "%flow_file%.js" > nul
+	if not errorlevel 1 set api= --web-security=false
+)
+
+rem start R process if integration file is created during parsing
+if exist "tagui_r\tagui_r.in" (
+        start /min cmd /c Rscript tagui_r\tagui_r.R 2^>^&1 ^| tee -a tagui_r\tagui_r.log
+)
+
+rem start python process if integration file is created during parsing
+if exist "tagui_py\tagui_py.in" (
+        start /min cmd /c python -u tagui_py\tagui_py.py 2^>^&1 ^| tee -a tagui_py\tagui_py.log
+)
+
 rem start sikuli process if integration file is created during parsing
 if exist "tagui.sikuli\tagui_sikuli.in" (
-	echo [starting sikuli process] | tee -a "%flow_file%.log"
-	start /min cmd /c tagui.sikuli\runsikulix -r tagui.sikuli ^| tee -a tagui.sikuli\tagui.log
+	rem echo [starting sikuli process] | tee -a "%flow_file%.log"
+	start /min cmd /c java -jar sikulix\sikulix.jar -r tagui.sikuli -d 3 2^>^&1 ^| tee -a tagui.sikuli\tagui.log
 )
 
 rem start chrome processes if integration file is created during parsing
@@ -527,13 +590,14 @@ if exist "tagui_chrome.in" (
 
 	rem check for which operating system and launch chrome accordingly
 	set chrome_started=Windows
-	set chrome_switches=--remote-debugging-port=9222 about:blank
+	set chrome_switches=--user-data-dir=chrome\tagui_user_profile --remote-debugging-port=9222 about:blank
 	if not exist "%chrome_command%" (
 		echo ERROR - cannot find Chrome at "%chrome_command%"
 		echo update chrome_command setting in tagui\src\tagui.cmd to your chrome.exe
 		exit /b 1
 	)
-	taskkill /IM chrome.exe /T /F > nul 2>&1
+	for /f "tokens=* usebackq" %%p in (`wmic process where "caption like '%%chrome.exe%%' and commandline like '%%tagui_user_profile --remote-debugging-port=9222%%'" get processid 2^>nul ^| cut -d" " -f 1 ^| sort -nur ^| head -n 1`) do set chrome_process_id=%%p
+	if not "!chrome_process_id!"=="" taskkill /PID !chrome_process_id! /T /F > nul 2>&1
 	start "" "%chrome_command%" !chrome_switches! !window_size! !headless_switch!
 
 	:scan_ws_again
@@ -552,37 +616,46 @@ rem end of if block to start chrome processes
 
 rem check if test mode is enabled and run casperjs accordingly, before sending finish signal if integrations are active
 if %tagui_test_mode%==false (
-	casperjs "%flow_file%.js" %params%%api% | tee -a "%flow_file%.log"
+	casperjs "%flow_file%.js" %params%!api! | tee -a "%flow_file%.log"
 ) else (
-	casperjs test "%flow_file%.js" %params%%api% --xunit="%flow_file%.xml" | tee -a "%flow_file%.log"
+	casperjs test "%flow_file%.js" !api! --xunit="%flow_file%.xml" | tee -a "%flow_file%.log"
 )
 rem checking for existence of files is important, otherwise in loops integrations will run even without enabling
+if exist "tagui_r\tagui_r.in" echo finish > tagui_r\tagui_r.in
+if exist "tagui_py\tagui_py.in" echo finish > tagui_py\tagui_py.in
 if exist "tagui.sikuli\tagui_sikuli.in" echo finish > tagui.sikuli\tagui_sikuli.in
 if exist "tagui_chrome.in" echo finish > tagui_chrome.in
 
 rem kill chrome processes by checking which os the processes are started on
-if not "!chrome_started!"=="" if %tagui_speed_mode%==false taskkill /IM chrome.exe /T /F > nul 2>&1
-
+if not "!chrome_started!"=="" if %tagui_speed_mode%==false (
+	for /f "tokens=* usebackq" %%p in (`wmic process where "caption like '%%chrome.exe%%' and commandline like '%%tagui_user_profile --remote-debugging-port=9222%%'" get processid 2^>nul ^| cut -d" " -f 1 ^| sort -nur ^| head -n 1`) do set chrome_process_id=%%p
+	if not "!chrome_process_id!"=="" taskkill /PID !chrome_process_id! /T /F > nul 2>&1
+)
 rem end of big loop for managing multiple data sets in datatable
 )
 :break_for_loop
 
 rem additional windows section to convert unix to windows file format
+gawk "sub(\"$\", \"\")" "%flow_file%.raw" > "%flow_file%.raw.tmp"
+move /Y "%flow_file%.raw.tmp" "%flow_file%.raw" > nul
 gawk "sub(\"$\", \"\")" "%flow_file%.js" > "%flow_file%.js.tmp"
-move "%flow_file%.js.tmp" "%flow_file%.js" > nul
+move /Y "%flow_file%.js.tmp" "%flow_file%.js" > nul
 gawk "sub(\"$\", \"\")" "%flow_file%.log" > "%flow_file%.log.tmp"
-move "%flow_file%.log.tmp" "%flow_file%.log" > nul
-gawk "sub(\"$\", \"\")" "tagui.sikuli\tagui.log" > "tagui.sikuli\tagui.log.tmp"
-move "tagui.sikuli\tagui.log.tmp" "tagui.sikuli\tagui.log" > nul
+move /Y "%flow_file%.log.tmp" "%flow_file%.log" > nul
 gawk "sub(\"$\", \"\")" "tagui_chrome.log" > "tagui_chrome.log.tmp"
-move "tagui_chrome.log.tmp" "tagui_chrome.log" > nul
+move /Y "tagui_chrome.log.tmp" "tagui_chrome.log" > nul
+rem keep non-windows logs to help debug integrations when needed
+rem and prevent file-still-locked issues while processes are exiting
+gawk "sub(\"$\", \"\")" "tagui_r\tagui_r.log" > "tagui_r\tagui_r_windows.log"
+gawk "sub(\"$\", \"\")" "tagui_py\tagui_py.log" > "tagui_py\tagui_py_windows.log"
+gawk "sub(\"$\", \"\")" "tagui.sikuli\tagui.log" > "tagui.sikuli\tagui_windows.log"
 
 rem check report option to generate html automation log
 for /f "usebackq" %%f in ('%flow_file%.log') do set file_size=%%~zf
 if %file_size% gtr 0 if %tagui_html_report%==true (
 	php -q tagui_report.php "%flow_file%"
 	gawk "sub(\"$\", \"\")" "%flow_file%.html" > "%flow_file%.html.tmp"
-	move "%flow_file%.html.tmp" "%flow_file%.html" > nul
+	move /Y "%flow_file%.html.tmp" "%flow_file%.html" > nul
 )
 
 rem check upload option to upload result to hastebin.com
@@ -592,6 +665,13 @@ rem set flow_file to blank or the variable will break that tagui call
 	set "tmp_flow_file=%flow_file%"
 	set flow_file=
 	tagui samples\8_hastebin quiet "!tmp_flow_file!"
+)
+
+rem remove logs if tagui_no_logging exists
+if exist "tagui_no_logging" (
+	if exist "%flow_file%.raw" del "%flow_file%.raw"
+	if exist "%flow_file%.log" del "%flow_file%.log" 
+	if exist "%flow_file%.js" del "%flow_file%.js"
 )
 
 rem change back to initial directory where tagui is called

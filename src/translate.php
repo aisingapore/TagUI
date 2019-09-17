@@ -2,11 +2,17 @@
 
 /* MULTI-LANGUAGE TRANSLATION SCRIPT FOR TAGUI FRAMEWORK ~ TEBEL.ORG */
 
+// Q1. Why is formatting for this file so messed up? - it's created on the road
+// If you want to know more - https://github.com/kelaberetiv/TagUI/issues/490
+
+// Q2. Is there a beautified version for easier viewing or editing? - yes snapshot below
+// https://github.com/kelaberetiv/TagUI/blob/master/src/media/snapshots/translate.md
+
 // english is used as reference language, define keywords for contextual translation
 
 // list of keywords that are supposed to be at the start of a flow statement
-$start_keywords = '|click|tap|move|hover|type|enter|select|choose|read|fetch|show|print|save|echo|dump|write|snap|table|';
-$start_keywords.='wait|live|download|upload|load|receive|frame|popup|timeout|api|dom|js|else if|else|if|for|while|check|';
+$start_keywords = '|click|tap|move|hover|type|enter|select|choose|read|fetch|show|print|save|echo|dump|write|snap|table|mouse|keyboard|';
+$start_keywords.='wait|live|download|upload|load|receive|frame|popup|timeout|api|dom|js|vision|else if|else|if|for|while|check|';
 
 // list of keywords at start of flow statement for valid to and as separators
 $to_separator_keywords = '|read|fetch|save|load|dump|write|snap|table|download|receive|for|';
@@ -22,7 +28,7 @@ $start_conditions_keywords = '|else if|if|for|while|check|';
 $conditions_keywords = '|more than or equals to|more than or equal to|greater than or equals to|greater than or equal to|higher than or equals to|higher than or equal to|less than or equals to|less than or equal to|lesser than or equals to|lesser than or equal to|lower than or equals to|lower than or equal to|more than|greater than|higher than|less than|lesser than|lower than|not equals to|not equal to|equals to|equal to|not contains|not contain|contains|contain|and|or|';
 
 // list of helper functions that are supposed to happen in conditions, some steps, or assignments
-$helper_keywords = '|title()|url()|text()|timer()|count()|present()|visible()|';
+$helper_keywords = '|title()|url()|text()|timer()|count()|present()|visible()|mouse_xy()|mouse_x()|mouse_y()|';
 $start_helper_keywords = '|echo|dump|write|'; // other steps not relevant / safe to include
 
 // list of seconds keywords that are supposed to happen after wait and timeout steps

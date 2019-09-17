@@ -17,6 +17,8 @@ dump,মনমরা ভাব
 write,লেখা
 snap,ক্ষুদ্র তালা
 table,টেবিল
+mouse,মাউস
+keyboard,কীবোর্ড
 live,জীবিত
 download,ডাউনলোড
 upload,আপলোড
@@ -75,3 +77,6 @@ timer(),টাইমার()
 count(),গণনা()
 present(),বর্তমানে()
 visible(),প্রোফাইল()
+mouse_xy(),মাউস_xy()
+mouse_x(),মাউস_x()
+mouse_y(),মাউস_y()

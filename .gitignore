@@ -5,6 +5,7 @@
 # exclude folders for packaged installation
 /src/casperjs/*
 /src/phantomjs/*
+/src/sikulix/*
 /src/slimerjs/*
 /src/php/*
 /src/unx/*
@@ -12,10 +13,35 @@
 # exclude generated files for hastebin upload
 /src/samples/8_hastebin.js
 /src/samples/8_hastebin.log
+/src/samples/8_hastebin.raw
+
+# exclude generated files for sample flows
+/src/samples/*.js
+/src/samples/*.log
+/src/samples/*.raw
+/src/samples/*.png
+/src/samples/*.txt
+
+# exclude custom global functions file
+/src/tagui_global.js
+
+# exclude custom global repository file
+/src/tagui_global.csv
+
+# exclude custom datatable temp file
+/src/tagui_datatable_transpose.csv
+/src/tagui_datatable.csv
+
+# exclude audit report csv file
+/src/tagui_report.csv
+
+# exclude tagui_no_logging flag
+/src/tagui_no_logging
 
 # exclude translation temp build files
 /src/languages/build.js
 /src/languages/build.log
+/src/languages/build.raw
 
 # exclude translation engine log file
 /src/translate.log
@@ -33,17 +59,34 @@
 /src/tagui_service.done
 
 # exclude local files for chrome integration
+/src/chrome/tagui_user_profile
 /src/tagui_chrome.in
 /src/tagui_chrome.out
 /src/tagui_chrome.log
 
+# exclude local files for R integration
+/src/tagui_r/tagui_r.in
+/src/tagui_r/tagui_r.out
+/src/tagui_r/tagui_r.txt
+/src/tagui_r/tagui_r.log
+/src/tagui_r/tagui_r_windows.log
+
+# exclude local files for python integration
+/src/tagui_py/tagui_py.in
+/src/tagui_py/tagui_py.out
+/src/tagui_py/tagui_py.txt
+/src/tagui_py/tagui_py.log
+/src/tagui_py/tagui_py_windows.log
+
 # exclude local files for sikuli integration 
 /src/tagui.sikuli/tagui_sikuli.in
 /src/tagui.sikuli/tagui_sikuli.out
+/src/tagui.sikuli/tagui_sikuli.txt
 /src/tagui.sikuli/tagui.log
+/src/tagui.sikuli/tagui_windows.log
 /src/tagui.sikuli/sikulix*
 /src/tagui.sikuli/SikuliX*
-/src/tagui.sikuli/runsikulix
+/src/tagui.sikuli/runsikulix*
 
 # exclude local files for catboost integration
 /src/catboost/*

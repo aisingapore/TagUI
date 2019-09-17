@@ -1,13 +1,14 @@
-https://www.facebook.com/tebelorg/
-// automation flow files start with an URL to tell TagUI where to go
+https://www.google.com.sg
+// automation flow files usually start with an URL to tell TagUI where to go
+// files can also start with // for comments, or no URL if it's not web-related
 
 // this flow goes through examples of using conditions in natural language
-// for issues or questions, kindly feedback on GitHub or ken@tebel.org
+// for issues or questions, kindly feedback on GitHub or ksoh@aisingapore.org
 // see cheatsheet for steps, conditions, finding element identifiers, etc
-// https://github.com/tebelorg/TagUI#cheat-sheet
+// https://github.com/kelaberetiv/TagUI#cheat-sheet
 
 // conditions involve comparing of variables and values to determine what to do next
-// variables can be from read / fetch step, or self-declared / from files using JavaScript
+// variables can be defined from read step, or self-declared / from files using JavaScript
 // write text in quotation marks (either " or ' works) to differentiate from variable names
 
 // declare some variables for use in this sample flow, text in quotation marks
@@ -23,9 +24,6 @@ echo "Menu contains fruits. (condition and action in natural language)"
 
 if (menu.indexOf("fruits")>-1)
 echo "Menu contains fruits. (condition in JavaScript, action in natural language)"
-
-if (menu.indexOf("fruits")>-1)
-this.echo("Menu contains fruits. (condition and action in JavaScript)");
 
 if menu equals to "salads fruits sandwiches"
 echo "This is perfect."
@@ -77,25 +75,46 @@ snap page
 for Product_ID from 2 to 5
 echo "Current Product ID is - " Product_ID
 
-// while condition is tricky and do not encourage using it
-// unless you are sure the condition will break at some point
+// while condition is tricky and deprecated in TagUI v4.0
+// to loop 'indefinitely' use this - for n from 1 to infinity
+// this loops 1024 times as infinity variable is pre-set to 1024
+// complex nested loops with if blocks inside are supported
+// indentation or no indentation both work in loops
 
-// below will not run even once as cupcakes is set to 12 earlier
-while cupcakes lesser than 12
-echo "Cupcakes lesser than 12."
+// use break to break out of the immediate loop
+for n from 1 to infinity
+{
+	echo n
 
-// using if else is possible but { and } are required to set code blocks
-// without { and } code blocks, steps interacting with elements will break
+	if n greater than or equals to 5
+	break
+}
+
+// use continue to continue to the next iteration
+for n from 1 to 5
+{
+if n equals to 3
+continue
+
+echo n
+}
+
+// example of using if, else if, else to decide what to do base on conditions
 // example does not interact with elements because facebook page might change
 
 a = 1
 if a equals to 1
 {
-// do some step(s)
-snap page
+	// do some step(s)
+	snap page
+}
+else if a equals to 2
+{
+	// do some other step(s)
+	snap page
 }
 else
 {
-// do some other step(s)
-snap page
+	// do some other steps(s)
+	snap page
 }
