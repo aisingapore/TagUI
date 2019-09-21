@@ -8,7 +8,7 @@ rem enable windows for loop advanced flow control
 setlocal enableextensions enabledelayedexpansion
 
 if "%~1"=="" (
-echo tagui v5.6: use following options and this syntax to run - tagui flow_filename option^(s^)
+echo tagui v5.7: use following options and this syntax to run - tagui flow_filename option^(s^)
 echo.
 echo chrome   - run on visible Chrome web browser instead of invisible PhantomJS ^(first install Chrome^)
 echo headless - run on invisible Chrome web browser instead of default PhantomJS ^(first install Chrome^)
