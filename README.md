@@ -166,7 +166,7 @@ cd /home/your_id/tagui/src
   
 Now, you can try the same automation script with Chrome browser by running with chrome option (for Windows enter `tagui samples\1_yahoo chrome`, for macOS/Linux enter `./tagui samples/1_yahoo chrome`). The automation will now run in the foreground instead, so you'll be able to see the navigation on Yahoo and DuckDuckGo websites.
 
->Make sure TagUI's Chrome browser is set to 100% zoom - as TagUI mimicks the user mouse-clicks at the (x,y) coordinates of web elements, using a different zoom level will cause clicks to be triggered at wrong locations
+>Make sure TagUI's Chrome browser is set to 100% zoom - as TagUI mimics the user mouse-clicks at the (x,y) coordinates of web elements, using a different zoom level will cause clicks to be triggered at wrong locations
 
 TagUI can also be run from desktop icons, scheduled tasks, or REST API calls.
 
