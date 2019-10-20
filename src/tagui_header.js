@@ -563,7 +563,7 @@ for (var character = 0, length = value.length; character < length; character++) 
 chrome_step('Input.dispatchKeyEvent',{type: 'char', text: value[character]});}};
 
 chrome.selectOptionByValue = function(selector,valueToMatch) { // select dropdown option (base on casperjs issue #1390)
-chrome.evaluate('function() {var selector = \''+selector+'\'; var valueToMatch = \''+valueToMatch+'\'; var found = false; if ((selector.indexOf(\'/\') == 0) || (selector.indexOf(\'(\') == 0)) var select = document.evaluate(selector,'+chrome_context+',null,XPathResult.ORDERED_NODE_SNAPSHOT_TYPE,null).snapshotItem(0); else var select = '+chrome_context+'.querySelector(selector); if (valueToMatch == \'[clear]\') valueToMatch = \'\'; Array.prototype.forEach.call(select.children, function(opt, i) {if (!found && opt.value.indexOf(valueToMatch) !== -1) {select.selectedIndex = i; found = true;}}); var evt = document.createEvent("UIEvents"); evt.initUIEvent("change", true, true); select.dispatchEvent(evt);}');};
+chrome.evaluate('function() {var selector = \''+selector+'\'; var valueToMatch = \''+valueToMatch+'\'; var found = false; if ((selector.indexOf(\'/\') == 0) || (selector.indexOf(\'(\') == 0)) var select = document.evaluate(selector,'+chrome_context+',null,XPathResult.ORDERED_NODE_SNAPSHOT_TYPE,null).snapshotItem(0); else var select = '+chrome_context+'.querySelector(selector); if (valueToMatch == \'[clear]\') valueToMatch = \'\'; Array.prototype.forEach.call(select.children, function(opt, i) {if (!found && opt.value == valueToMatch) {select.selectedIndex = i; found = true;}}); var evt = document.createEvent("UIEvents"); evt.initUIEvent("change", true, true); select.dispatchEvent(evt);}');};
 
 chrome.fetchText = function(selector) { // grab text from selector following casperjs logic, but grab only first match
 if ((selector.toString().length >= 16) && (selector.toString().substr(0,16) == 'xpath selector: '))
@@ -1275,7 +1275,7 @@ if ((selector.indexOf('/') == 0) || (selector.indexOf('(') == 0)) var select = _
 else var select = document.querySelector(selector); // auto-select xpath or query css method to get element
 if (valueToMatch == '[clear]') valueToMatch = ''; // [clear] keyword to allow selecting empty / blank option
 Array.prototype.forEach.call(select.children, function(opt, i) { // loop through list to select option
-if (!found && opt.value.indexOf(valueToMatch) !== -1) {select.selectedIndex = i; found = true;}});
+if (!found && opt.value == valueToMatch) {select.selectedIndex = i; found = true;}});
 var evt = document.createEvent("UIEvents"); // dispatch change event in case there is validation
 evt.initUIEvent("change", true, true); select.dispatchEvent(evt);}, selector, valueToMatch);};
 
