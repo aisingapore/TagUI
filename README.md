@@ -159,7 +159,7 @@ cd /home/your_id/tagui/src
 > if the script works successfully, you will notice five .png files - congratulations, you have run your first TagUI script!
 
 **Troubleshooting potential exceptions**
-- For Windows computers, if you see 'MSVCR110.dll is missing' error, install [this from Microsoft website](https://www.microsoft.com/en-us/download/details.aspx?id=30679) (choose vcredist_x86.exe) - this file is required to run the Windows PHP engine packaged with TagUI.
+- For Windows computers, if you see 'MSVCR110.dll is missing' error, install [this from Microsoft website](https://www.microsoft.com/en-us/download/details.aspx?id=30679) (choose vcredist_x86.exe) - this file is required to run the Windows PHP engine packaged with TagUI. Some IT policies restrict TagUI from writing to c:\tagui and working properly, in that case please unzip to user desktop folder.
 - For some newer macOS versions, if you get a 'dyld: Library not loaded' error, [install OpenSSL in this way](https://github.com/kelaberetiv/TagUI/issues/86#issuecomment-372045221). macOS Catalina update has introduced tighter security controls, see solutions for the [PhantomJS](https://github.com/kelaberetiv/TagUI/issues/601) and [Java popups](https://github.com/kelaberetiv/TagUI/issues/598).
 - For some flavours of Linux (Ubuntu for example), which do not have PHP pre-installed, google how to install PHP accordingly (eg Ubuntu, apt-get install php). Most Linux distributions would already come with PHP.
 - For Firefox automation, download an [older version here](https://ftp.mozilla.org/pub/firefox/releases/59.0/) (SlimerJS doesn't work with Firefox v60 onwards).
