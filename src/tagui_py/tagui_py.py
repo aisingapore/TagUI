@@ -46,10 +46,15 @@ def py_intent ( raw_intent ):
 	except NameError:
 		temp_output = sys.stdout = sys.stderr = io.StringIO()
 
-	exec(params,globals())
+	# try/except for user sending invalid Python code
+	try:
+		exec(params,globals())
+		temp_result = temp_output.getvalue().strip()
+	except Exception as e:
+		temp_result = str(e)
+
 	sys.stdout = old_stdout
 	sys.stderr = old_stderr
-	temp_result = temp_output.getvalue().strip()
 
 	if temp_result != '':
 		print(temp_result)
