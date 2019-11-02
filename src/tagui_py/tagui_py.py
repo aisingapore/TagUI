@@ -51,7 +51,7 @@ def py_intent ( raw_intent ):
 		exec(params,globals())
 		temp_result = temp_output.getvalue().strip()
 	except Exception as e:
-		temp_result = str(e)
+		temp_result = 'ERROR - ' + str(e)
 
 	sys.stdout = old_stdout
 	sys.stderr = old_stderr
