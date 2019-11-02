@@ -243,7 +243,7 @@ live|try steps or code interactively for Chrome / visual automation|enter live m
 ###  VISUAL AUTOMATION
 TagUI has built-in integration with [SikuliX (base on OpenCV)](http://sikulix.com) to allow visually identifying the web elements and desktop UI (user interface) elements for interaction by providing their images or (x,y) coordinates. Applicable steps are click, hover, type, select, read, show, save, snap, keyboard, mouse. To use visual automation, Java JDK v8 (64-bit) or later is needed.
 
-1. Check that [Java JDK (64-bit)](http://www.oracle.com/technetwork/java/javase/downloads/jdk8-downloads-2133151.html) is installed (entering `java -version` returns your Java version)
+1. Check that [Java JDK (64-bit)](https://aws.amazon.com/corretto) is installed (entering `java -version` returns your Java version)
 2. After Java is installed, you will have to restart your command prompt or terminal to use it
 3. On Windows, set display magnification to recommended %, if it doesn't work then 100%
 4. On Windows, if TagUI just hangs there, see if it's due to [this issue and try the solution](https://github.com/kelaberetiv/TagUI/issues/229)
