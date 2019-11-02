@@ -292,10 +292,12 @@ TagUI has built-in integration with [SikuliX (base on OpenCV)](http://sikulix.co
   5. On macOS, if can't find image on screen, may be due to [how the image was captured](https://github.com/kelaberetiv/TagUI/issues/240#issuecomment-405030276)
   6. On Linux, requires installing and setting up dependencies by following [this guide](https://sikulix-2014.readthedocs.io/en/latest/newslinux.html#version-1-1-4-special-for-linux-people)
 
-  >Important note - the element that corresponds to the image must be visible on the screen for visual automation to succeed. If it's blocked by another window for example, the automation will be unable to find the element.
+  **Tip** - the first time visual automation is run, the SikuliX engine may need to initialise Jython. Run again to use.
 
   To use visual automation, simply specify an image (in .png or .bmp format) to visually look for in place of the element identifier. Relative paths are supported for image filenames (eg pc.png, images/button.bmp). Alternatively, you can specify the (x,y) coordinates of the element that you want to interact with.
 
+  >Important note - the element that corresponds to the image must be visible on the screen for visual automation to succeed. If it's blocked by another window for example, the automation will be unable to find the element.
+  
   ![Sample Visual Automation](https://raw.githubusercontent.com/tebelorg/Tump/master/visual_flow.gif)
 
   To type onto the screen instead of a particular element, use `keyboard text` or `keyboard [modifiers]text` ([examples](https://github.com/kelaberetiv/TagUI/issues/370)). To do a snapshot or an OCR of the whole screen, use `page.png` or `page.bmp` as the element identifier for steps snap / read. The usual helper functions visible() / present() can also be used to check whether an image is visible on the screen.
@@ -922,3 +924,4 @@ TagUI excels in automating user-interface interactions. It's designed to make pr
 
 # License
 TagUI is open-source software released under Apache 2.0 license
+
