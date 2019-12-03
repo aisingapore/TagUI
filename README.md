@@ -4,7 +4,7 @@
 
 [**Why This**](#why-this)&ensp;|&ensp;[**Set Up**](#set-up)&ensp;|&ensp;[**To Use**](#to-use)&ensp;|&ensp;[**Cheat Sheet**](#cheat-sheet)&ensp;|&ensp;[**Developers**](#developers-reference)&ensp;|&ensp;[**Credits**](#credits)&ensp;|&ensp;[**Tutorial**](https://github.com/kelaberetiv/TagUI/blob/master/src/media/RPA%20Workshop.md)&ensp;|&ensp;[**Slides**](https://prezi.com/p/f5vag20tuth8/)&ensp;|&ensp;[**Video**](https://www.youtube.com/watch?v=hzE4tKlzzg4)
 
-**TagUI is a command-line tool for digital process automation (RPA). It's maintained by [AI Singapore](https://www.aisingapore.org), a government-funded initiative to build local artificial intelligence capabilities. To start, click above tutorial, slides, or video links.**
+**TagUI is a command-line tool for digital process automation (RPA).**
 
 ### FEATURES
 - automate Chrome in visible / invisible mode
