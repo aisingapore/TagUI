@@ -235,15 +235,22 @@ For Windows, use Task Scheduler (search schedule from Start Menu) or something l
 
 ### CHROME EXTENSION
 Download from [Chrome Web Store](https://chrome.google.com/webstore/detail/tagui-web-automation/egdllmehgfgjebhlkjmcnhiocfcidnjk/) to use TagUI Chrome web browser extension for recording automation flows. TagUI Chrome extension records steps such as page navigation, clicking web elements and entering information.
-  
-After installing the Chrome extenstion, to start recording automation flows
-1. Go to the website URL you want to start the automation at
-2. Click the TagUI icon, followed by Start button
-3. Carry out the steps you want to automate
-4. Click the TagUI icon, followed by Stop button
-5. Click Export button to view generated TagUI script
 
-While recording the steps, you can right-click to bring up a menu for steps such as showing the element identifier. The recording isn't foolproof (for example, the underlying recording engine cannot capture frames, popup windows or tab key input). It's meant to simplify flow creation with some edits, instead of typing everything manually. [See this video](https://www.youtube.com/watch?v=bFvsc4a8hWQ) for an example of recording a sequence of steps, editing for adjustments and playing back the automation.
+<details>
+  <summary>
+    Click to show details on TagUI Chrome extension - based on https://github.com/ebrehault/resurrectio
+  </summary>
+  
+  After installing the Chrome extenstion, to start recording automation flows
+  1. Go to the website URL you want to start the automation at
+  2. Click the TagUI icon, followed by Start button
+  3. Carry out the steps you want to automate
+  4. Click the TagUI icon, followed by Stop button
+  5. Click Export button to view generated TagUI script
+
+  While recording the steps, you can right-click to bring up a menu for steps such as showing the element identifier. The recording isn't foolproof (for example, the underlying recording engine cannot capture frames, popup windows or tab key input). It's meant to simplify flow creation with some edits, instead of typing everything manually. [See this video](https://www.youtube.com/watch?v=bFvsc4a8hWQ) for an example of recording a sequence of steps, editing for adjustments and playing back the automation.
+
+</details>
 
 ### NATIVE LANGUAGES
 To run TagUI flows in human languages or output flow execution in other languages ([see demo run](https://github.com/kelaberetiv/TagUI/issues/68#issuecomment-344380657))
