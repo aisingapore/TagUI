@@ -9,7 +9,7 @@
 
 Platform|macOS|Linux|Windows|Node.js (macOS/Linux)
 :------:|:---:|:---:|:-----:|:-------------------:
-Package|[unzip and run](https://github.com/tebelorg/Tump/releases/download/v1.0.0/TagUI_macOS.zip)|[unzip and run](https://github.com/tebelorg/Tump/releases/download/v1.0.0/TagUI_Linux.zip)|[unzip and run](https://github.com/tebelorg/Tump/releases/download/v1.0.0/TagUI_Windows.zip)|[npm install tagui](https://www.npmjs.com/package/tagui)
+Package|[unzip and run](https://github.com/kelaberetiv/TagUI/releases/download/v5.11.0/TagUI_macOS.zip)|[unzip and run](https://github.com/kelaberetiv/TagUI/releases/download/v5.11.0/TagUI_Linux.zip)|[unzip and run](https://github.com/kelaberetiv/TagUI/releases/download/v5.11.0/TagUI_Windows.zip)|[npm install tagui](https://www.npmjs.com/package/tagui)
 
 Recommended locations to unzip to
 - Windows - c:\ or desktop
@@ -57,6 +57,7 @@ If the script works successfully, you will notice 5 .png files - congratulations
 - For Windows computers, if you see 'MSVCR110.dll is missing' error, install [this from Microsoft website](https://www.microsoft.com/en-us/download/details.aspx?id=30679) (choose vcredist_x86.exe) - this file is required to run the Windows PHP engine packaged with TagUI. Some IT policies restrict TagUI from writing to c:\tagui and working properly, in that case please unzip to user desktop folder.
 - For newer macOS versions, if you get a 'dyld: Library not loaded' error, [install OpenSSL in this way](https://github.com/kelaberetiv/TagUI/issues/86). macOS Catalina update has introduced tighter security controls, see solutions for the [PhantomJS](https://github.com/kelaberetiv/TagUI/issues/601) and [Java popups](https://github.com/kelaberetiv/TagUI/issues/598).
 - For some flavours of Linux (Ubuntu for example) which do not have PHP pre-installed, google how to install PHP accordingly (eg Ubuntu, apt-get install php). Most Linux distributions would already come with PHP.
+- If you Ctrl+C to break a TagUI automation, you can use tagui/src/end_processes command (for macOS/Linux) or end_processes.cmd (for Windows) to kill any dead processes of TagUI integrations (Chrome, SikuliX, Python etc)
 
 **Troubleshoot browser-specific exceptions**
 - Google Chrome browser has to be installed by user before trying to automate Chrome browser. TagUI creates a separate Chrome browser user profile for use in automation, it is stored in tagui\src\chrome\tagui_user_profile.
@@ -229,17 +230,19 @@ TagUI has built-in integration with [SikuliX (base on OpenCV)](http://sikulix.co
 
 **Tip** - the first time visual automation is run, the SikuliX engine will need to initialise Jython. Run again to use.
 
-To use visual automation, simply specify an image (in .png or .bmp format) to visually look for in place of the element identifier. Relative paths are supported for image filenames (eg pc.png, images/button.bmp). Alternatively, you can specify the (x,y) coordinates of the element that you want to interact with.
-
-Important note - the element that corresponds to the image must be visible on the screen for visual automation to succeed. If it's blocked by another window for example, the automation will be unable to find the element.
-
+To use visual automation, simply specify an image (in .png or .bmp format) to visually look for in place of the element identifier. Relative paths are supported for image filenames (eg pc.png, images/button.bmp). Note that the element that corresponds to the image must be visible on the screen for visual automation to succeed. If it's blocked by another window for example, the automation will be unable to find the element.
+  
+Alternatively, you can specify the (x,y) coordinates of the element that you want to interact with.
+  
 ![Sample Visual Automation](https://raw.githubusercontent.com/tebelorg/Tump/master/visual_flow.gif)
 
 To type onto the screen instead of a particular element, use `keyboard text` or `keyboard [modifiers]text` ([examples](https://github.com/kelaberetiv/TagUI/issues/370)). To do a snapshot or an OCR of the whole screen, use `page.png` or `page.bmp` as the element identifier for steps snap / read. The usual helper functions visible() / present() can also be used to check whether an image is visible on the screen.
 
-Transparency (0% opacity) is supported in .png images, for eg using an image of an UI element with transparent background to enable clicking on an UI element that appears on different backgrounds on different occasions. Another example is an image of the window or frame (PDF viewer, MS Word, textbox etc) with the center content of the image set as transparent. This allows using read, show, save, snap steps to perform OCR and save snapshots for application windows, containers, frames, textboxes with varying content.
-
 The keyboard and mouse steps, as well as helper functions mouse_xy(), mouse_x(), mouse_y(), can be used to do complex UI interactions. A screen (real or Xvfb) is needed for visual automation. [Tesseract OCR](https://github.com/tesseract-ocr/tesseract) (optical character recognition) is used for visually retrieving text. Also, by using vision step, you can send [custom SikuliX commands](http://sikulix-2014.readthedocs.io/en/latest/genindex.html) to do things that are not covered by TagUI.
+  
+Transparency (0% opacity) is supported in .png images, for eg using an image of an UI element with transparent background to enable clicking on an UI element that appears on different backgrounds on different occasions.
+  
+Another example is an image of the window or frame (PDF viewer, MS Word, textbox etc) with the center content of the image set as transparent. This allows using read, show, save, snap steps to perform OCR and save snapshots for application windows, containers, frames, textboxes with varying content. Also for these steps, (x1,y1)-(x2,y2) can be used as the identifier to define the region of interest on the screen to perform OCR or capture snapshot.
 
 # [Further Resources](https://github.com/kelaberetiv/TagUI)
 *For more info and documentation on TagUI, visit its [home page](https://github.com/kelaberetiv/TagUI).*
