@@ -199,15 +199,15 @@ UI automation code
                 <FormatRange Bold="Yes">0,6</FormatRange>
             </Formatting>
         </Note>
-        <Note ID="21" FontSize="9.0" Position="235.0,170.0" Width="31.0">
+        <Note ID="21" FontSize="9.0" Position="232.5,170.0" Width="36.0">
             <Appearance>
                 <Alignment>Center</Alignment>
                 <TextColor>1.0 1.0 1.0</TextColor>
                 <Fill>0.314662 0.314653 0.314658</Fill>
             </Appearance>
-            <String>v5.0  </String>
+            <String>v5.11  </String>
             <Formatting>
-                <FormatRange Bold="Yes">0,6</FormatRange>
+                <FormatRange Bold="Yes">0,7</FormatRange>
             </Formatting>
         </Note>
         <Note ID="27" FontSize="12.0" Position="186.0,30.0" Width="87.0">
@@ -301,5 +301,5 @@ UI automation code
         <DefaultFont>Helvetica</DefaultFont>
         <DefaultTextColor>0.0 0.0 0.0</DefaultTextColor>
     </UISettings>
-    <PrintSettings PaperSize="595.199987,841.799988" LeftMargin="72.0" RightMargin="72.0" TopMargin="90.0" BottomMargin="90.0" PaperType="iso-a4" Orientation="Portrait" HorizontalPagination="Clip" VerticalPagination="Auto" ScaleFactor="1.0" HorizontallyCentered="Yes" VerticallyCentered="Yes" Collates="Yes" PagesAcross="1" PagesDown="1"></PrintSettings>
+    <PrintSettings PaperSize="595.200012,841.799988" LeftMargin="72.0" RightMargin="72.0" TopMargin="90.0" BottomMargin="90.0" PaperType="iso-a4" Orientation="Portrait" HorizontalPagination="Clip" VerticalPagination="Auto" ScaleFactor="1.0" HorizontallyCentered="Yes" VerticallyCentered="Yes" Collates="Yes" PagesAcross="1" PagesDown="1"></PrintSettings>
 </ScappleDocument>

@@ -32,7 +32,7 @@ def x_coordinate ( input_locator ):
 def y_coordinate ( input_locator ):
         return int(input_locator[input_locator.find(',')+1:-1])
 
-# helper function to return Region from (x1,y1),(x2,y2)
+# helper function to return Region from (x1,y1)-(x2,y2)
 def define_region( input_locator ):
 	input_tokens = input_locator.split(',')
 	region_x1_coordinate = int(input_tokens[0].replace('(',''))

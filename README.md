@@ -83,7 +83,7 @@ type (800,400) as user@gmail.com
 </details>
   
 # Set Up
-TagUI is in v5.0 - it unzips and runs directly on Windows, macOS, Linux ([link to release notes](https://github.com/kelaberetiv/TagUI/releases))
+TagUI is in v5.11 - it unzips and runs directly on Windows, macOS, Linux ([link to release notes](https://github.com/kelaberetiv/TagUI/releases))
 
 ### PACKAGED INSTALLATION
 - TagUI is easy to use right away, in most environments all dependencies are already packaged in
@@ -91,7 +91,7 @@ TagUI is in v5.0 - it unzips and runs directly on Windows, macOS, Linux ([link t
 
 Platform|macOS|Linux|Windows|Node.js (macOS/Linux)
 :------:|:---:|:---:|:-----:|:-------------------:
-Package|[unzip and run](https://github.com/tebelorg/Tump/releases/download/v1.0.0/TagUI_macOS.zip)|[unzip and run](https://github.com/tebelorg/Tump/releases/download/v1.0.0/TagUI_Linux.zip)|[unzip and run](https://github.com/tebelorg/Tump/releases/download/v1.0.0/TagUI_Windows.zip)|[npm install tagui](https://www.npmjs.com/package/tagui)
+Package|[unzip and run](https://github.com/kelaberetiv/TagUI/releases/download/v5.11.0/TagUI_macOS.zip)|[unzip and run](https://github.com/kelaberetiv/TagUI/releases/download/v5.11.0/TagUI_Linux.zip)|[unzip and run](https://github.com/kelaberetiv/TagUI/releases/download/v5.11.0/TagUI_Windows.zip)|[npm install tagui](https://www.npmjs.com/package/tagui)
 
 Recommended locations to unzip to
 - Windows - c:\ or desktop
@@ -156,6 +156,7 @@ If the script works successfully, you will notice 5 .png files - congratulations
 - For Windows computers, if you see 'MSVCR110.dll is missing' error, install [this from Microsoft website](https://www.microsoft.com/en-us/download/details.aspx?id=30679) (choose vcredist_x86.exe) - this file is required to run the Windows PHP engine packaged with TagUI. Some IT policies restrict TagUI from writing to c:\tagui and working properly, in that case please unzip to user desktop folder.
 - For newer macOS versions, if you get a 'dyld: Library not loaded' error, [install OpenSSL in this way](https://github.com/kelaberetiv/TagUI/issues/86). macOS Catalina update has introduced tighter security controls, see solutions for the [PhantomJS](https://github.com/kelaberetiv/TagUI/issues/601) and [Java popups](https://github.com/kelaberetiv/TagUI/issues/598).
 - For some flavours of Linux (Ubuntu for example) which do not have PHP pre-installed, google how to install PHP accordingly (eg Ubuntu, apt-get install php). Most Linux distributions would already come with PHP.
+- If you Ctrl+C to break a TagUI automation, you can use tagui/src/end_processes command (for macOS/Linux) or end_processes.cmd (for Windows) to kill any dead processes of TagUI integrations (Chrome, SikuliX, Python etc)
 
 **Troubleshoot browser-specific exceptions**
 - Google Chrome browser has to be installed by user before trying to automate Chrome browser. TagUI creates a separate Chrome browser user profile for use in automation, it is stored in tagui\src\chrome\tagui_user_profile.
@@ -289,18 +290,20 @@ TagUI has built-in integration with [SikuliX (base on OpenCV)](http://sikulix.co
 
   **Tip** - the first time visual automation is run, the SikuliX engine will need to initialise Jython. Run again to use.
 
-  To use visual automation, simply specify an image (in .png or .bmp format) to visually look for in place of the element identifier. Relative paths are supported for image filenames (eg pc.png, images/button.bmp). Alternatively, you can specify the (x,y) coordinates of the element that you want to interact with.
+  To use visual automation, simply specify an image (in .png or .bmp format) to visually look for in place of the element identifier. Relative paths are supported for image filenames (eg pc.png, images/button.bmp). Note that the element that corresponds to the image must be visible on the screen for visual automation to succeed. If it's blocked by another window for example, the automation will be unable to find the element.
   
-  Important note - the element that corresponds to the image must be visible on the screen for visual automation to succeed. If it's blocked by another window for example, the automation will be unable to find the element.
+  Alternatively, you can specify the (x,y) coordinates of the element that you want to interact with.
   
   ![Sample Visual Automation](https://raw.githubusercontent.com/tebelorg/Tump/master/visual_flow.gif)
 
   To type onto the screen instead of a particular element, use `keyboard text` or `keyboard [modifiers]text` ([examples](https://github.com/kelaberetiv/TagUI/issues/370)). To do a snapshot or an OCR of the whole screen, use `page.png` or `page.bmp` as the element identifier for steps snap / read. The usual helper functions visible() / present() can also be used to check whether an image is visible on the screen.
 
-  Transparency (0% opacity) is supported in .png images, for eg using an image of an UI element with transparent background to enable clicking on an UI element that appears on different backgrounds on different occasions. Another example is an image of the window or frame (PDF viewer, MS Word, textbox etc) with the center content of the image set as transparent. This allows using read, show, save, snap steps to perform OCR and save snapshots for application windows, containers, frames, textboxes with varying content.
-
   The keyboard and mouse steps, as well as helper functions mouse_xy(), mouse_x(), mouse_y(), can be used to do complex UI interactions. A screen (real or Xvfb) is needed for visual automation. [Tesseract OCR](https://github.com/tesseract-ocr/tesseract) (optical character recognition) is used for visually retrieving text. Also, by using vision step, you can send [custom SikuliX commands](http://sikulix-2014.readthedocs.io/en/latest/genindex.html) to do things that are not covered by TagUI.
-
+  
+  Transparency (0% opacity) is supported in .png images, for eg using an image of an UI element with transparent background to enable clicking on an UI element that appears on different backgrounds on different occasions.
+  
+  Another example is an image of the window or frame (PDF viewer, MS Word, textbox etc) with the center content of the image set as transparent. This allows using read, show, save, snap steps to perform OCR and save snapshots for application windows, containers, frames, textboxes with varying content. Also for these steps, (x1,y1)-(x2,y2) can be used as the identifier to define the region of interest on the screen to perform OCR or capture snapshot.
+  
 </details>
 
 ### PYTHON INTEGRATION
@@ -545,7 +548,7 @@ live|try steps or code interactively for Chrome / visual automation|enter live m
 ### HELPER FUNCTIONS
 <details>
   <summary>
-    Click to show csv_row(), present(), visible(), count(), url(), title(), text(), timer(), mouse_xy(), custom functions
+    Click to show csv_row(), present(), visible(), count(), clipboard(), url(), title(), text(), timer(), mouse_xy() functions
   </summary>
 
   - Below are helper functions which can be used in your steps or code like a variable
@@ -560,6 +563,8 @@ live|try steps or code interactively for Chrome / visual automation|enter live m
   present('element')|return true or false whether element identifier specified is present
   visible('element')|return true or false whether element identifier specified is visible
   count('element')|return number of elements matching element identifier specified
+  clipboard('text')|put text to clipboard (eg to paste text quickly with keyboard step)
+  clipboard()|return clipboard text (eg to access text copied with keyboard step)
   url()|return page url of current web page
   title()|return page title of current web page
   text()|return text content of current web page
@@ -568,7 +573,7 @@ live|try steps or code interactively for Chrome / visual automation|enter live m
   mouse_x()|return x coordinate as integer number, for eg 200
   mouse_y()|return y coordinate as integer number, for eg 200
 
-  csv_row() is very useful for organising lots of data gathered during the automation to be written into csv output file -
+  csv_row() is useful for organising lots of data gathered during automation to be written into csv output file -
   
   ```
   // example of using csv_row() function to save data as CSV file
@@ -577,6 +582,23 @@ live|try steps or code interactively for Chrome / visual automation|enter live m
   read details_element to details
   item_info = [name, price, details]
   write csv_row(item_info) to product_list.csv
+  ```
+  
+  clipboard() is useful for accessing text on the clipboard or putting text there (for eg to paste text quickly) -
+  
+  ```
+  // example of using clipboard() to retrieve text contents from PDF file
+  dclick pdf_document.png
+  wait 3 seconds
+  keyboard [ctrl]a
+  keyboard [ctrl]c
+  text_contents = clipboard()
+  
+  // example of using clipboard('text') to type text quickly by pasting it
+  text_to_type = 'long string of text to be entered into UI element'
+  click my_life_story_textbox
+  js clipboard(text_to_type) or clipboard(text_to_type);
+  keyboard [ctrl]v
   ```
   
   mouse_xy(), mouse_x(), mouse_y() require visual automation and can be used to interact with UI (user-interface) elements on the screen by specifying their (x,y) coordinates, for eg below clicking to the right of an UI element by 200 pixels -
@@ -838,6 +860,8 @@ TagUI excels in automating user-interface interactions. It's designed to make pr
 
   Miscellaneous Files |Purpose
   :-------------------|:------
+  end_processes|kill all processes of TagUI and integrations
+  end_processes.cmd|same as above but for Windows platform
   tagui_datatable.csv|temporary datatable internal representation
   transpose.php|transpose conventional datatable csv file
   tagui_report.php|to track run results and keep html logs
