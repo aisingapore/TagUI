@@ -14,7 +14,7 @@ while true; do
 done
 
 while true; do
-    chrome_process_id="$(ps x | grep remote-debugging-port=9222 | grep tagui_user_profile | sed -e 's/^[ ]*//' | cut -d' ' -f 1 | sort -nur | head -n 1)"
+    chrome_process_id="$(ps x | grep remote-debugging-port=9222 | grep tagui_user_profile | grep window-size | sed -e 's/^[ ]*//' | cut -d' ' -f 1 | sort -nur | head -n 1)"
     if [ -n "$chrome_process_id" ]; then
         kill $chrome_process_id > /dev/null 2>&1
     else
