@@ -126,8 +126,6 @@ Avoid spaces in the folder path as some components of TagUI don't work well with
 - Filename can have no extension, .txt or .js or .tagui extension
 - Type tagui without parameters to see its version and options
 
-By default, log files (.log .raw .js) are created after running. To switch off, put an empty file tagui_no_logging in tagui/src folder. If your command prompt or terminal font size is too small, you can set it to much larger font sizes for easier reading. Below example runs a script to search on Yahoo website and capture screenshots of the results.
-
 **Windows** - unzip the tagui folder to c:\\. Open command prompt with Start Menu -> type run -> type cmd and enter
 
 ```
@@ -191,6 +189,8 @@ If the script works successfully, you will notice 5 .png files - congratulations
   <summary>
     Click to show info on automation logs (.log, .js, .raw), and how to run tagui from any directory
   </summary>
+
+  To create log files create an empty file `tagui_logging` in tagui/src folder. If your command prompt or terminal font size is too small, you can set it to much larger font sizes for easier reading. Below example runs a script to search on Yahoo website and capture screenshots of the results.
 
   After each automation run, a .log file will be created to store output of the execution, a .js file is the generated JavaScript file, a .raw is the expanded flow after reading in any module sub-scripts that are called in that flow.
   
