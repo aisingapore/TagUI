@@ -350,8 +350,8 @@ if [ -s "$1".log ] && [ "$tagui_html_report" == true ]; then php -q tagui_report
 # check upload option to upload result to hastebin.com
 if [ -s "$1".log ] && [ "$tagui_upload_result" == true ]; then ./tagui samples/8_hastebin quiet "$1"; fi
 
-# remove logs if tagui_no_logging exists
-if [ -f tagui_no_logging ]; then
+# remove logs if tagui_logging doesn't exist
+if [ ! -f tagui_logging ]; then
 if [ -f "$1".raw ]; then rm "$1".raw; fi
 if [ -f "$1".log ]; then rm "$1".log; fi
 if [ -f "$1".js ]; then rm "$1".js; fi
