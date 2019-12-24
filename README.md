@@ -190,7 +190,7 @@ If the script works successfully, you will notice 5 .png files - congratulations
     Click to show info on automation logs (.log, .js, .raw), and how to run tagui from any directory
   </summary>
 
-  To create log files create an empty file `tagui_logging` in tagui/src folder. If your command prompt or terminal font size is too small, you can set it to much larger font sizes for easier reading. Below example runs a script to search on Yahoo website and capture screenshots of the results.
+  To create log files create an empty file `tagui_logging` in tagui/src folder.
 
   After each automation run, a .log file will be created to store output of the execution, a .js file is the generated JavaScript file, a .raw is the expanded flow after reading in any module sub-scripts that are called in that flow.
   
