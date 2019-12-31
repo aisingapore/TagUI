@@ -234,6 +234,10 @@ if (!fs.exists(abs_param)) {casper.echo('ERROR - cannot find image file for pres
 if (sikuli_step("present " + abs_param)) return true; else return false;}
 else return check_tx(element_locator);}
 
+// present() function that waits until timeout before returning result
+function exist(element_identifier) {var exist_timeout = Date.now() + casper.options.waitTimeout;
+while (Date.now() < exist_timeout) {if (present(element_identifier)) return true; else sleep(100);}; return false;}
+
 // friendlier name to check element visibility using elementVisible()
 function visible(element_locator) {if (!element_locator) return false;
 if (is_sikuli(element_locator)) {var abs_param = abs_file(element_locator); var fs = require('fs');
