@@ -552,18 +552,20 @@ if ($GLOBALS['inside_code_block'] == 0) $GLOBALS['inside_while_loop'] = 0; // re
 if ($GLOBALS['inside_code_block'] == 0) $GLOBALS['for_loop_tracker'] = ""; // reset for_loop_tracker if not inside block
 if ($GLOBALS['inside_while_loop'] == 1) return " // end_fi while loop marker"; return "";}
 
-function add_concat($source_string) { // parse string and add missing + concatenator 
-if ((strpos($source_string,"'")!==false) and (strpos($source_string,"\"")!==false))
-{echo "ERROR - " . current_line() . " inconsistent quotes in " . $source_string . "\n";}
-else if (strpos($source_string,"'")!==false) $quote_type = "'"; // derive quote type used
-else if (strpos($source_string,"\"")!==false) $quote_type = "\""; else $quote_type = "none";
+function add_concat($source_string) { // parse string and add missing + concatenator
+if ((strpos($source_string,"'") === false) and (strpos($source_string,"\"") === false)) $quote_type = "none";
+else if ((strpos($source_string,"'") !== false) and (strpos($source_string,"\"") === false)) $quote_type = "'";
+else if ((strpos($source_string,"'") === false) and (strpos($source_string,"\"") !== false)) $quote_type = "\"";
+else if (strpos($source_string,"'") < strpos($source_string,"\"")) $quote_type = "'"; else $quote_type = "\"";
 $within_quote = false; $source_string = trim($source_string); // trim for future proof
+$previous_char = ""; // to help detect backslash escape for quotes
 for ($srcpos=0; $srcpos<strlen($source_string); $srcpos++) {
-if ($source_string[$srcpos] == $quote_type) $within_quote = !$within_quote; 
-if (($within_quote == false) and ($source_string[$srcpos]==" ")) $source_string[$srcpos] = "+";}
+if (($source_string[$srcpos] == $quote_type) and ($previous_char != "\\")) $within_quote = !$within_quote;
+$previous_char = $source_string[$srcpos]; // to detect a previous backlash escape and ignore quote
+if (($within_quote == false) and ($source_string[$srcpos] == " ")) $source_string[$srcpos] = "+";}
 $source_string = str_replace("+++++","+",$source_string); $source_string = str_replace("++++","+",$source_string);
 $source_string = str_replace("+++","+",$source_string); $source_string = str_replace("++","+",$source_string);
-return $source_string;} // replacing multiple variations of + to handle user typos of double spaces etc 
+return $source_string;} // replacing multiple variations of + to handle user typos of double spaces etc
 
 function is_coordinates($input_params) { // helper function to check if string is (x,y) coordinates
 if (strlen($input_params)>4 and substr($input_params,0,1)=='(' and substr($input_params,-1)==')' 
