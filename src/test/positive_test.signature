@@ -107,7 +107,7 @@ function dummy_echo(muted_string) {return;}
 // for saving text information to file
 function save_text(file_name,info_text) {var ds; if (flow_path.indexOf('/') !== -1) ds = '/'; else ds = '\\';
 if (!file_name) {save_text_count++; file_name = flow_path + ds + 'text' + save_text_count.toString() + '.txt';}
-var fs = require('fs'); fs.write(file_name, info_text, 'w');}
+var fs = require('fs'); fs.write(file_name, info_text + '\r\n', 'w');}
 
 // for appending text information to file
 function append_text(file_name,info_text) {var ds; if (flow_path.indexOf('/') !== -1) ds = '/'; else ds = '\\';
