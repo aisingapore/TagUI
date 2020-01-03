@@ -1,4 +1,4 @@
-<img src="https://raw.githubusercontent.com/kelaberetiv/TagUI/master/src/media/tagui_logo.png" height="111" align="right">
+<img src="https://raw.githubusercontent.com/kelaberetiv/TagUI/develop/src/media/tagui_logo.png" height="111" align="right">
 
 # TagUI
 
