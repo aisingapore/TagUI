@@ -7,6 +7,4 @@ assignees: ''
 
 ---
 
-<!--
-**How can we replicate the issue (include your TagUI code)?**
--->
+<!-- How can we replicate the issue (include your TagUI code)? -->
