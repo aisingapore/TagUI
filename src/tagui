@@ -34,7 +34,7 @@ if [ -f "$online_reponame" ]; then if grep -iq "404\|400" "$online_reponame"; th
 fi;fi;fi;fi; set -- "$online_flowname" "${@:2}"; fi
 
 # enter live mode directly without user creating dummy file
-if [ "$1" = "live" ]; then echo live > "$1.tag" ; set -- "$1.tag" "${@:2}"; fi
+if [ "$1" = "live" ]; then echo live > "live.tag" ; set -- "live.tag" "${@:2}"; fi
 
 # check whether specified automation flow file exists
 if ! [ -f "$1" ]; then echo "ERROR - cannot find $1"; exit 1; fi
