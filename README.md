@@ -110,24 +110,6 @@ Avoid spaces in the folder path as some components of TagUI don't work well with
 
 **Tip** - to try [cutting edge version](https://github.com/kelaberetiv/TagUI/compare/v5.11.0...develop) with the latest features, [download develop.zip](https://github.com/kelaberetiv/TagUI/archive/develop.zip) to overwrite your existing packaged installation. Be sure to manually select and move the folders & files inside master.zip's TagUI-master/src folder to replace your existing tagui/src folder, some OSes will delete existing target folders that are missing from source folder.
 
-### MANUAL INSTALLATION
-
-<details>
-  <summary>
-    Click to show step-by-step setup if you prefer to download dependencies manually from their websites
-  </summary>
-  
-  1. PhantomJS (headless scriptable web browser) - http://phantomjs.org
-  2. CasperJS (navigation/testing for PhantomJS) - http://casperjs.org
-  3. SlimerJS (scriptable web browser for Firefox) - https://slimerjs.org
-  4. TagUI (general purpose UI automation tool) - https://git.io/vMCTZ
-  5. SikuliX (required for visual automation features) - http://sikulix.com
-  6. PHP (only required for manual Windows setup) - http://windows.php.net
-
-**Tip** - take note to put TagUI to a folder path without spaces (some dependencies have issue with that). for manual Windows setup, 1. set SLIMERJS_EXECUTABLE env variable to point to slimerjs.bat, 2. put [GNU utilities](http://unxutils.sourceforge.net) (cut / gawk / grep / head / sort / tail / tee), [curl ssl](https://curl.haxx.se) in tagui\src\unx, 3. add phantomjs\bin, casperjs\bin, php folders to path
-
-</details>
-
 # To Use
 
 ### COMMAND LINE
