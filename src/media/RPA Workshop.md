@@ -24,7 +24,7 @@ Avoid spaces in the folder path as some components of TagUI don't work well with
 ### COMMAND LINE
 `tagui flow_filename option(s)` for Windows and `./tagui flow_filename option(s)` for macOS/Linux   
 - Flow filename can be a local file or the URL of an online file
-- Filename can have no extension, .txt or .js or .tagui extension
+- File extension of flow filename is now standardised to .tag
 - Type tagui without parameters to see its version and options
 
 By default, log files (.log .raw .js) are created after running. To switch off, put an empty file tagui_no_logging in tagui/src folder. If your command prompt or terminal font size is too small, you can set it to much larger font sizes for easier reading. Below example runs a script to search on Yahoo website and capture screenshots of the results.
