@@ -28,7 +28,7 @@ _In this section, we'll have a guided walkthrough on running TagUI, using its Ch
 `tagui flow_filename option(s)` for Windows and `./tagui flow_filename option(s)` for macOS/Linux
 
 - Flow filename can be a local file or the URL of an online file
-- Filename can have no extension, .txt or .js or .tagui extension
+- File extension of flow filename is now standardised to .tag
 - Type tagui without parameters to see its version and options
 
 **Windows** - unzip the tagui folder to c:\\. Open command prompt with Start Menu -> type run -> type cmd and enter
