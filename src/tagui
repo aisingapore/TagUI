@@ -33,6 +33,9 @@ else online_reponame=`echo "${1##*/}.csv"`; curl -k -s -o $online_reponame "$1".
 if [ -f "$online_reponame" ]; then if grep -iq "404\|400" "$online_reponame"; then rm "$online_reponame"
 fi;fi;fi;fi; set -- "$online_flowname" "${@:2}"; fi
 
+# enter live mode directly without user creating dummy file
+if [ "$1" = "live" ]; then echo live > "$1.tag" ; set -- "$1.tag" "${@:2}"; fi
+
 # check whether specified automation flow file exists
 if ! [ -f "$1" ]; then echo "ERROR - cannot find $1"; exit 1; fi
 
@@ -359,6 +362,12 @@ fi
 
 # change back to initial directory where tagui is called
 cd "$initial_dir"
+
+# remove direct live mode generated files
+if [ -f "live.tag" ]; then rm "live.tag"; fi
+if [ -f "live.tag.raw" ]; then rm "live.tag.raw"; fi
+if [ -f "live.tag.js" ]; then rm "live.tag.js"; fi
+if [ -f "live.tag.log" ]; then mv "live.tag.log" "live.log"; fi
 
 # returns 0 if no error parsing flow file, otherwise return 1
 exit $tagui_error_code
