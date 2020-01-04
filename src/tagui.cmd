@@ -51,6 +51,12 @@ if "%arg1:~0,4%"=="http" (
 	)
 )
 
+rem enter live mode directly without user creating dummy file
+if "%~nx1"=="live" (
+	echo live > "live.tag"
+	set "flow_file=%~dp1live.tag"
+)
+
 rem check whether specified automation flow file exists
 if "%flow_file%"=="" if not exist "%~1" (
 	echo ERROR - cannot find %~1
@@ -676,6 +682,16 @@ if not exist "tagui_logging" (
 
 rem change back to initial directory where tagui is called
 cd /d "%initial_dir%"
+
+rem remove direct live mode generated files
+if exist "live.tag" del "live.tag"
+if exist "live.tag.raw" del "live.tag.raw"
+if exist "live.tag.js" del "live.tag.js"
+if exist "live.tag.log" (
+	rename "live.tag.log" "live.log"
+	gawk "sub(\"$\", \"\")" "live.log" > "live.log.tmp"
+	move /Y "live.log.tmp" "live.log" > nul
+)
 
 rem returns 0 if no error parsing flow file, otherwise return 1
 exit /b %tagui_error_code%
