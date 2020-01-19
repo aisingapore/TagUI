@@ -553,6 +553,7 @@ if ($GLOBALS['inside_code_block'] == 0) $GLOBALS['for_loop_tracker'] = ""; // re
 if ($GLOBALS['inside_while_loop'] == 1) return " // end_fi while loop marker"; return "";}
 
 function add_concat($source_string) { // parse string and add missing + concatenator
+return $source_string; // deprecated in v6 for consistency with rest of TagUI steps
 if ((strpos($source_string,"'") === false) and (strpos($source_string,"\"") === false)) $quote_type = "none";
 else if ((strpos($source_string,"'") !== false) and (strpos($source_string,"\"") === false)) $quote_type = "'";
 else if ((strpos($source_string,"'") === false) and (strpos($source_string,"\"") !== false)) $quote_type = "\"";
@@ -737,8 +738,8 @@ return "casper.then(function() {"."{techo('".$raw_intent."');\n".
 
 function echo_intent($raw_intent) {
 $params = trim(substr($raw_intent." ",1+strpos($raw_intent." "," ")));
-if ($params == "") echo "ERROR - " . current_line() . " text missing for " . $raw_intent . "\n"; else 
-return "casper.then(function() {"."this.echo(".add_concat($params).");".end_fi()."});"."\n\n";}
+if ($params == "") echo "ERROR - " . current_line() . " text missing for " . $raw_intent . "\n"; else
+return "casper.then(function() {"."this.echo('".add_concat($params)."');".end_fi()."});"."\n\n";}
 
 function save_intent($raw_intent) {$twb = $GLOBALS['tagui_web_browser'];
 $params = trim(substr($raw_intent." ",1+strpos($raw_intent." "," ")));
@@ -764,28 +765,31 @@ return "casper.then(function() {"."{techo('".$raw_intent."');".beg_tx($params).
 
 function dump_intent($raw_intent) {
 $safe_intent = str_replace("'","\'",$raw_intent); // avoid breaking echo below when single quote is used
-$params = trim(substr($raw_intent." ",1+strpos($raw_intent." "," ")));
-$param1 = trim(substr($params,0,strpos($params," to "))); $param2 = trim(substr($params,4+strpos($params," to ")));
-if ($params == "") echo "ERROR - " . current_line() . " variable missing for " . $raw_intent . "\n"; 
-else if (strpos($params," to ")!==false)
-return "casper.then(function() {".
-"{techo('".$safe_intent."');\nsave_text('".abs_file($param2)."',".add_concat($param1).");}".end_fi()."});"."\n\n";
-else return "casper.then(function() {".
-"{techo('".$safe_intent."');\nsave_text(''," . add_concat($params) . ");}".end_fi()."});"."\n\n";}
-
-function write_intent($raw_intent) {
-$safe_intent = str_replace("'","\'",$raw_intent); // avoid breaking echo below when single quote is used
+$safe_intent = $raw_intent; // old syntax deprecated in v6 for consistency with rest of TagUI steps
 $params = trim(substr($raw_intent." ",1+strpos($raw_intent." "," ")));
 $param1 = trim(substr($params,0,strpos($params," to "))); $param2 = trim(substr($params,4+strpos($params," to ")));
 if ($params == "") echo "ERROR - " . current_line() . " variable missing for " . $raw_intent . "\n";
 else if (strpos($params," to ")!==false)
 return "casper.then(function() {".
-"{techo('".$safe_intent."');\nappend_text('".abs_file($param2)."',".add_concat($param1).");}".end_fi()."});"."\n\n";
+"{techo('".$safe_intent."');\nsave_text('".abs_file($param2)."','".add_concat($param1)."');}".end_fi()."});"."\n\n";
 else return "casper.then(function() {".
-"{techo('".$safe_intent."');\nappend_text(''," . add_concat($params) . ");}".end_fi()."});"."\n\n";}
+"{techo('".$safe_intent."');\nsave_text('','" . add_concat($params) . "');}".end_fi()."});"."\n\n";}
+
+function write_intent($raw_intent) {
+$safe_intent = str_replace("'","\'",$raw_intent); // avoid breaking echo below when single quote is used
+$safe_intent = $raw_intent; // old syntax deprecated in v6 for consistency with rest of TagUI steps
+$params = trim(substr($raw_intent." ",1+strpos($raw_intent." "," ")));
+$param1 = trim(substr($params,0,strpos($params," to "))); $param2 = trim(substr($params,4+strpos($params," to ")));
+if ($params == "") echo "ERROR - " . current_line() . " variable missing for " . $raw_intent . "\n";
+else if (strpos($params," to ")!==false)
+return "casper.then(function() {".
+"{techo('".$safe_intent."');\nappend_text('".abs_file($param2)."','".add_concat($param1)."');}".end_fi()."});"."\n\n";
+else return "casper.then(function() {".
+"{techo('".$safe_intent."');\nappend_text('','" . add_concat($params) . "');}".end_fi()."});"."\n\n";}
 
 function load_intent($raw_intent) {
 $safe_intent = str_replace("'","\'",$raw_intent); // avoid breaking echo below when single quote is used
+$safe_intent = $raw_intent; // old syntax deprecated in v6 for consistency with rest of TagUI steps
 $params = trim(substr($raw_intent." ",1+strpos($raw_intent." "," ")));
 $param1 = trim(substr($params,0,strpos($params," to "))); $param2 = trim(substr($params,4+strpos($params," to ")));
 if ($params == "") echo "ERROR - " . current_line() . " filename missing for " . $raw_intent . "\n";
@@ -872,18 +876,18 @@ $GLOBALS['code_block_tracker']=substr($GLOBALS['code_block_tracker'],0,$last_del
 
 function check_intent($raw_intent) {
 $params = trim(substr($raw_intent." ",1+strpos($raw_intent." "," ")));
-$params = str_replace("||"," JAVASCRIPT_OR ",$params); // to handle conflict with "|" delimiter 
+$params = str_replace("||"," JAVASCRIPT_OR ",$params); // to handle conflict with "|" delimiter
 $param1 = trim(substr($params,0,strpos($params,"|"))); $param2 = trim(substr($params,1+strpos($params,"|")));
 $param3 = trim(substr($param2,1+strpos($param2,"|"))); $param2 = trim(substr($param2,0,strpos($param2,"|")));
 $param1 = str_replace(" JAVASCRIPT_OR ","||",$param1); // to restore back "||" that were replaced
 $param2 = str_replace(" JAVASCRIPT_OR ","||",$param2); $param3 = str_replace(" JAVASCRIPT_OR ","||",$param3);
-if (substr_count($params,"|")!=2) 
+if (substr_count($params,"|")!=2)
 echo "ERROR - " . current_line() . " if/true/false missing for " . $raw_intent . "\n";
 else if (getenv('tagui_test_mode') == 'true') return "casper.then(function() {"."{".parse_condition("if ".$param1).
-"\ntest.assert(true,".add_concat($param2).");\nelse test.assert(false,".add_concat($param3).");}".
+"\ntest.assert(true,'".add_concat($param2)."');\nelse test.assert(false,'".add_concat($param3)."');}".
 check_intent_clear_injected_if_block().end_fi()."});"."\n\n";
-else return "casper.then(function() {"."{".parse_condition("if ".$param1)."\nthis.echo(".add_concat($param2).
-");\nelse this.echo(".add_concat($param3).");}".check_intent_clear_injected_if_block().end_fi()."});"."\n\n";}
+else return "casper.then(function() {"."{".parse_condition("if ".$param1)."\nthis.echo('".add_concat($param2).
+"');\nelse this.echo('".add_concat($param3)."');}".check_intent_clear_injected_if_block().end_fi()."});"."\n\n";}
 
 function test_intent($raw_intent) {
 echo "ERROR - " . current_line() . " use CasperJS tester module to professionally " . $raw_intent . "\n";
