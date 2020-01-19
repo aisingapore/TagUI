@@ -150,6 +150,47 @@ if exist "%~dp0slimerjs\slimerjs.bat" set "SLIMERJS_EXECUTABLE=%~dp0slimerjs\sli
 if exist "%~dp0php\php.exe" set "path=%~dp0php;%path%"
 if exist "%~dp0unx\gawk.exe" set "path=%~dp0unx;%path%"
 
+set tagui_deploy_workflow=false
+rem check deploy parameter to generate an executable file to run workflow
+if "%arg2%"=="deploy" (
+	set arg2=
+	set tagui_deploy_workflow=true
+)
+if "%arg3%"=="deploy" (
+	set arg3=
+	set tagui_deploy_workflow=true
+)
+if "%arg4%"=="deploy" (
+	set arg4=
+	set tagui_deploy_workflow=true
+)
+if "%arg5%"=="deploy" (
+	set arg5=
+	set tagui_deploy_workflow=true
+)
+if "%arg6%"=="deploy" (
+	set arg6=
+	set tagui_deploy_workflow=true
+)
+if "%arg7%"=="deploy" (
+	set arg7=
+	set tagui_deploy_workflow=true
+)
+if "%arg8%"=="deploy" (
+	set arg8=
+	set tagui_deploy_workflow=true
+)
+if "%arg9%"=="deploy" (
+	set arg9=
+	set tagui_deploy_workflow=true
+)
+
+if %tagui_deploy_workflow%==true (
+	echo cd /d "%initial_dir%" > "%flow_file%.cmd"
+	echo "%~dp0tagui" "%flow_file%" %arg2% %arg3% %arg4% %arg5% %arg6% %arg7% %arg8% %arg9% >> "%flow_file%.cmd"
+	exit /b 0
+)
+
 rem set default web browser to be used to phantomjs
 set tagui_web_browser=chrome
 
