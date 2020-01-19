@@ -371,6 +371,10 @@ case "dom finish":
 return $script_line;}
 
 function process_intent($intent_type, $script_line) {
+// convert 'wait for' step to 'hover' step, to wait until timeout for element to appear and hover on it
+if ((strlen($script_line) > 9) and (strtolower(substr($script_line,0,9)) == "wait for "))
+$script_line = "hover " . substr($script_line,9);
+
 // check intent of step for interpretation into casperjs code
 switch ($intent_type) {
 case "url": return url_intent($script_line); break;
