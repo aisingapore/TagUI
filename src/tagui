@@ -80,7 +80,7 @@ if [ -f "$(pwd)/phantomjs/bin/phantomjs" ]; then export PHANTOMJS_EXECUTABLE="$(
 if [ -f "$(pwd)/slimerjs/slimerjs" ]; then export SLIMERJS_EXECUTABLE="$(pwd)/slimerjs/slimerjs"; fi
 
 # set default web browser to be used to phantomjs
-tagui_web_browser="phantomjs"
+tagui_web_browser="chrome"
 
 # check chrome parameter to run on in-built integration with visible chrome
 if [ "$2" = "chrome" ]; then set -- "$1" "${@:3}"; tagui_web_browser="chrome"; fi
