@@ -54,6 +54,7 @@ if "%arg1:~0,4%"=="http" (
 rem enter live mode directly without user creating dummy file
 if "%~nx1"=="live" (
 	echo live > "live.tag"
+	echo // mouse_xy^(^) >> "live.tag"
 	set "flow_file=%~dp1live.tag"
 	goto live_mode_skip
 )
