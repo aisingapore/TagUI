@@ -737,6 +737,10 @@ function parse_intent(live_line) {
 live_line = live_line.trim(); if (live_line == '') return '';
 live_line = parse_variables(live_line);
 live_line = live_line.trim(); if (live_line == '') return '';
+// convert 'wait for' step to 'hover' step, to wait until timeout for element to appear and hover on it
+if ((live_line.length > 9) && ((live_line.substr(0,9)).toLowerCase() == 'wait for '))
+live_line = 'hover ' + live_line.substr(9);
+
 switch (get_intent(live_line)) {
 case 'url': return url_intent(live_line); break;
 case 'tap': return tap_intent(live_line); break;
