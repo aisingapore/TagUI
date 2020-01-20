@@ -151,7 +151,7 @@ if exist "%~dp0php\php.exe" set "path=%~dp0php;%path%"
 if exist "%~dp0unx\gawk.exe" set "path=%~dp0unx;%path%"
 
 rem set default web browser to be used to phantomjs
-set tagui_web_browser=phantomjs
+set tagui_web_browser=chrome
 
 rem check chrome parameter to run on in-built integration with visible chrome
 if "%arg2%"=="chrome" (
