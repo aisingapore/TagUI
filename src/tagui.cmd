@@ -55,6 +55,7 @@ rem enter live mode directly without user creating dummy file
 if "%~nx1"=="live" (
 	echo live > "live.tag"
 	set "flow_file=%~dp1live.tag"
+	goto live_mode_skip
 )
 
 rem check whether specified automation flow file exists
@@ -66,6 +67,8 @@ if not "%flow_file%"=="" if not exist "%online_flowname%" (
 	echo ERROR - cannot find %online_flowname%
 	exit /b 1
 )
+
+:live_mode_skip
 
 rem additional windows section for parameters handling using windows way
 set arg2=%2
