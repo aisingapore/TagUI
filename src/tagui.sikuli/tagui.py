@@ -312,9 +312,12 @@ def text_read ( raw_intent ):
 			return 0
 	else:
 		matched_element = text_locator(param1)
-		temp_text = matched_element.text()
-		output_sikuli_text(temp_text)
-		return 1
+		if matched_element == None:
+			return 0
+		else:
+			temp_text = matched_element.text()
+			output_sikuli_text(temp_text)
+			return 1
 
 # function for capturing screenshot
 def snap_intent ( raw_intent ):
@@ -348,10 +351,13 @@ def snap_intent ( raw_intent ):
 	else:
 		fullscreen_layer = Screen()
 		matched_element = text_locator(param1)
-		temp_snap_file = fullscreen_layer.capture(matched_element).getFile()
-		import shutil
-		shutil.copy(temp_snap_file,param2)
-		return 1	
+		if matched_element == None:
+			return 0
+		else:
+			temp_snap_file = fullscreen_layer.capture(matched_element).getFile()
+			import shutil
+			shutil.copy(temp_snap_file,param2)
+			return 1	
 
 # function for low-level keyboard control
 def keyboard_intent ( raw_intent ):
