@@ -396,12 +396,18 @@ def visible_intent ( raw_intent ):
 	setAutoWaitTimeout(1)
 	params = (raw_intent + ' ')[1+(raw_intent + ' ').find(' '):].strip()
 	print '[tagui] ACTION - ' + raw_intent.strip()
-	if exists(params):
-		setAutoWaitTimeout(wait_timeout)
-		return 1
+	if file_exists(params):
+		if exists(params):
+			setAutoWaitTimeout(wait_timeout)
+			return 1
+		else:
+			setAutoWaitTimeout(wait_timeout)
+			return 0
 	else:
-		setAutoWaitTimeout(wait_timeout)
-		return 0
+		if text_locator(params) == None:
+			return 0
+		else:
+			return 1
 
 # function to interpret input intent
 def get_intent ( raw_intent ):
