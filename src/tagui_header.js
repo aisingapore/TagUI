@@ -230,7 +230,6 @@ return false;}
 // friendlier name to use check_tx() in if condition in flow
 function present(element_locator) {if (!element_locator) return false; 
 if (is_sikuli(element_locator)) {var abs_param = abs_file(element_locator); var fs = require('fs');
-if (!fs.exists(abs_param)) {casper.echo('ERROR - cannot find image file for present step').exit();}
 if (sikuli_step("present " + abs_param)) return true; else return false;}
 else return check_tx(element_locator);}
 
@@ -241,7 +240,6 @@ while (Date.now() < exist_timeout) {if (present(element_identifier)) return true
 // friendlier name to check element visibility using elementVisible()
 function visible(element_locator) {if (!element_locator) return false;
 if (is_sikuli(element_locator)) {var abs_param = abs_file(element_locator); var fs = require('fs');
-if (!fs.exists(abs_param)) {casper.echo('ERROR - cannot find image file for visible step').exit();}
 if (sikuli_step("visible " + abs_param)) return true; else return false;}
 else {var element_located = tx(element_locator); var element_visible = casper.elementVisible(element_located);
 // if tx() returns xps666('/html') means that the element is not found, so set element_visible to false
@@ -931,6 +929,13 @@ escaped_string = input_string.replace(/\\/g,'\\\\').replace(/\'/g,'\\\'').replac
 escaped_string = escaped_string.replace(/\t/g,'\\t').replace(/\f/g,'\\f').replace(/\v/g,'\\v').replace(/\"/g,'\\\"');
 return escaped_string.replace(/\[SINGLE_QUOTE_FOR_VARIABLE_HANDLING\]/g,'\'');}
 
+function get_text_for_sikuli(image_filename) { // helper function to decompose full path and filename to get text
+image_filename = image_filename.substr(0, image_filename.length - 4);
+last_back_slash = image_filename.lastIndexOf('/');
+last_forward_slash = image_filename.lastIndexOf('\\');
+last_slash_position = max(last_back_slash, last_forward_slash);
+return image_filename.substr(last_slash_position + 1);}
+
 function is_coordinates(input_params) { // helper function to check if string is (x,y) coordinates
 if ((input_params.length > 4) && (input_params.substr(0,1) == '(') && (input_params.substr(-1) == ')') 
 && (input_params.split(',').length == 2 || input_params.split(',').length == 3) 
@@ -948,7 +953,7 @@ if (!fs.exists('tagui.sikuli/tagui_sikuli.in')) return "this.echo('ERROR - canno
 if (!fs.exists('tagui.sikuli/tagui_sikuli.out')) return "this.echo('ERROR - cannot initialise tagui_sikuli.out')";
 if (!other_actions) other_actions = ''; // to handle most cases where other_actions is not passed in during call
 return "var fs = require('fs'); if (!sikuli_step('"+input_intent+"')) if (!fs.exists('"+input_params+"')) " +
-"this.echo('ERROR - cannot find image file "+input_params+"'); " +
+"this.echo('ERROR - cannot find "+get_text_for_sikuli(input_params)+" on screen'); " +
 "else this.echo('ERROR - cannot find "+input_params+" on screen'); " + other_actions;}
 
 function call_r(input_intent) { // helper function to use R integration for data analytics and machine learning
