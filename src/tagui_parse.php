@@ -569,6 +569,13 @@ $source_string = str_replace("+++++","+",$source_string); $source_string = str_r
 $source_string = str_replace("+++","+",$source_string); $source_string = str_replace("++","+",$source_string);
 return $source_string;} // replacing multiple variations of + to handle user typos of double spaces etc
 
+function get_text_for_sikuli($image_filename) { // helper function to decompose full path and filename to get text
+$image_filename = substr($image_filename, 0, -4);
+$last_back_slash = strrpos($image_filename, "/");
+$last_forward_slash = strrpos($image_filename, "\\");
+$last_slash_position = max($last_back_slash, $last_forward_slash);
+return substr($image_filename, $last_slash_position + 1);}
+
 function is_coordinates($input_params) { // helper function to check if string is (x,y) coordinates
 if (strlen($input_params)>4 and substr($input_params,0,1)=='(' and substr($input_params,-1)==')' 
 and (substr_count($input_params,',')==1 or substr_count($input_params,',')==2) 
@@ -586,8 +593,8 @@ if (!touch('tagui.sikuli/tagui_sikuli.out')) die("ERROR - cannot initialise tagu
 if ($other_actions != '') $other_actions = "\n" . $other_actions;
 return "{techo('".str_replace(' to snap_image()','',$input_intent)."'); var fs = require('fs');\n" .
 "if (!sikuli_step('".$input_intent."')) if (!fs.exists('".$input_params."'))\n" .
-"this.echo('ERROR - cannot find image ".$input_params."').exit(); else\n" . 
-"this.echo('ERROR - cannot find " . $input_params." on screen').exit(); this.wait(0);" . $other_actions. "}" .
+"this.echo('ERROR - cannot find ".get_text_for_sikuli($input_params)." on screen').exit(); else\n" .      
+"this.echo('ERROR - cannot find ".$input_params." on screen').exit(); this.wait(0);" . $other_actions. "}" .
 end_fi()."});\n\n";}
 
 function call_r($input_intent) { // helper function to use R integration for data analytics and machine learning
