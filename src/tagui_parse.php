@@ -586,7 +586,7 @@ if (!touch('tagui.sikuli/tagui_sikuli.out')) die("ERROR - cannot initialise tagu
 if ($other_actions != '') $other_actions = "\n" . $other_actions;
 return "{techo('".str_replace(' to snap_image()','',$input_intent)."'); var fs = require('fs');\n" .
 "if (!sikuli_step('".$input_intent."')) if (!fs.exists('".$input_params."'))\n" .
-"this.echo('ERROR - cannot find image file ".$input_params."').exit(); else\n" . 
+"this.echo('ERROR - cannot find image ".$input_params."').exit(); else\n" . 
 "this.echo('ERROR - cannot find " . $input_params." on screen').exit(); this.wait(0);" . $other_actions. "}" .
 end_fi()."});\n\n";}
 
