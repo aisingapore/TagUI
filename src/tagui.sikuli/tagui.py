@@ -405,8 +405,10 @@ def visible_intent ( raw_intent ):
 			return 0
 	else:
 		if text_locator(params) == None:
+			setAutoWaitTimeout(wait_timeout)
 			return 0
 		else:
+			setAutoWaitTimeout(wait_timeout)
 			return 1
 
 # function to interpret input intent
