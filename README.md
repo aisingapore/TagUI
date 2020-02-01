@@ -414,8 +414,8 @@ TagUI Writer is a Windows app created by Arnaud Degardin / [@adegard](https://gi
 
 </details>
 
-### TAGUI FOR PYTHON
-TagUI for Python is a Python package created by TagUI's creator Ken Soh / [@kensoh](https://github.com/kensoh). It brings the digital process automation capabilities of TagUI directly to the Python environment through a simple, expressive and powerful API. To install, `pip install tagui`. For its Python API and architecture, refer to the [project homepage](https://github.com/tebelorg/TagUI-Python). At merely ~1k lines of code, the package is built on TagUI and its architecture is based on integration with TagUI's live mode.
+### RPA FOR PYTHON
+RPA for Python is a Python package created by TagUI's creator Ken Soh / [@kensoh](https://github.com/kensoh). It brings the digital process automation capabilities of TagUI directly to the Python environment through a simple, expressive and powerful API. To install, `pip install rpa`. For its Python API and architecture, refer to the [project homepage](https://github.com/tebelorg/RPA-Python). At merely ~1k lines of code, the package is built on TagUI and its architecture is based on integration with TagUI's live mode.
 
 ### FLOW SAMPLES
 TagUI includes the following automation flow samples ([tagui/src/samples folder](https://github.com/kelaberetiv/TagUI/tree/master/src/samples))
