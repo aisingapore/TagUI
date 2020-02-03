@@ -1,27 +1,51 @@
-Setup
-******************
-TagUI is in v5.11 - it unzips and runs directly on Windows, macOS, Linux (`link to release notes <https://github.com/kelaberetiv/TagUI/releases>`_).
-
-1. Install OpenJDK v8 (64-bit) or later
-2. Avoid spaces in the folder path of TagUI
-
-macOS
------------------------
-`unzip and run <https://github.com/kelaberetiv/TagUI/releases/download/v5.11.0/TagUI_macOS.zip>`_
-
-Linux
------------------------
-`unzip and run <https://github.com/kelaberetiv/TagUI/releases/download/v5.11.0/TagUI_Linux.zip>`_
+Installation
+===================
 
 Windows
-------------------
-`unzip and run <https://github.com/kelaberetiv/TagUI/releases/download/v5.11.0/TagUI_Windows.zip>`_
+-------------------------------
 
-Node.js (macOS/Linux)
------------------------
-`npm install tagui <https://www.npmjs.com/package/tagui>`_
+1. `Download TagUI v6.0.0 for Windows <https://github.com/kelaberetiv/TagUI/releases/download/v5.11.0/TagUI_Windows.zip>`_.
 
+2. Unzip the contents to ``C:\``.
 
-Cutting Edge Version
-=======================
-To use the latest features and fixes, `download the cutting edge version <https://github.com/kelaberetiv/TagUI/archive/develop.zip>`_ and overwrite the packaged installation.
+3. `Install OpenJDK for Windows <https://corretto.aws/downloads/latest/amazon-corretto-8-x64-windows-jdk.msi>`_.
+
+4. `Install Chrome <https://www.google.com/chrome/>`_.
+
+5. Open :ref:`Command Prompt <how-to-use-command-prompt>`.
+
+6. Copy, paste and run these commands:
+
+.. code-block:: bat
+
+    setx path "%path%;c:\tagui\src"
+
+    tagui c:\tagui\src\samples\1_yahoo chrome
+
+You have run your first TagUI flow!
+
+:ref:`Having problems? <troubleshooting-windows>`
+
+macOS/Linux
+-----------------------------------
+1. Download TagUI v6.0.0 (`macOS <https://github.com/kelaberetiv/TagUI/releases/download/v5.11.0/TagUI_macOS.zip>`_, `Linux <https://github.com/kelaberetiv/TagUI/releases/download/v5.11.0/TagUI_Linux.zip>`_).
+
+2. Unzip the contents to your desktop on macOS, or ``/home/your_userid`` on Linux.
+
+3. Install OpenJDK (`macOS <https://corretto.aws/downloads/latest/amazon-corretto-8-x64-macos-jdk.pkg>`_, `Linux <https://corretto.aws/downloads/latest/amazon-corretto-8-x64-linux-jdk.tar.gz>`_).
+
+4. `Install Chrome <https://www.google.com/chrome/>`_.
+
+5. Open :ref:`Terminal <how-to-use-terminal>`.
+
+6. Copy, paste and run these commands, replacing ``your_tagui_path`` as needed:
+
+.. code-block:: bash
+
+    ln -sf /your_tagui_path/tagui/src/tagui /usr/local/bin/tagui
+
+    ./tagui your_tagui_path/tagui/src/samples/1_yahoo chrome
+
+You have run your first TagUI flow!
+
+:ref:`Having problems? <troubleshooting-macos-linux>`

@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Setup &mdash; TagUI 6.0.0 documentation</title>
+  <title>Installation &mdash; TagUI 6.0.0 documentation</title>
   
 
   
@@ -34,7 +34,9 @@
   <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
   <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <link rel="index" title="Index" href="genindex.html" />
-    <link rel="search" title="Search" href="search.html" /> 
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Main concepts" href="main_concepts.html" />
+    <link rel="prev" title="TagUI" href="index.html" /> 
 </head>
 
 <body class="wy-body-for-nav">
@@ -78,20 +80,20 @@
               
             
             
-              <!-- Local TOC -->
-              <div class="local-toc"><ul>
-<li><a class="reference internal" href="#">Setup</a><ul>
-<li><a class="reference internal" href="#macos">macOS</a></li>
-<li><a class="reference internal" href="#linux">Linux</a></li>
-<li><a class="reference internal" href="#windows">Windows</a></li>
-<li><a class="reference internal" href="#node-js-macos-linux">Node.js (macOS/Linux)</a><ul>
-<li><a class="reference internal" href="#cutting-edge-version">Cutting Edge Version</a></li>
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Installation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#windows">Windows</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#macos-linux">macOS/Linux</a></li>
 </ul>
 </li>
+<li class="toctree-l1"><a class="reference internal" href="main_concepts.html">Main concepts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="advanced.html">Advanced concepts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="reference.html">Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tools.html">Tools</a></li>
+<li class="toctree-l1"><a class="reference internal" href="faq.html">FAQ</a></li>
 </ul>
-</li>
-</ul>
-</div>
+
             
           
         </div>
@@ -135,7 +137,7 @@
     
       <li><a href="index.html">Docs</a> &raquo;</li>
         
-      <li>Setup</li>
+      <li>Installation</li>
     
     
       <li class="wy-breadcrumbs-aside">
@@ -154,32 +156,43 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
             
-  <div class="section" id="setup">
-<h1>Setup<a class="headerlink" href="#setup" title="Permalink to this headline">¶</a></h1>
-<p>TagUI is in v5.11 - it unzips and runs directly on Windows, macOS, Linux (<a class="reference external" href="https://github.com/kelaberetiv/TagUI/releases">link to release notes</a>).</p>
-<ol class="arabic simple">
-<li><p>Install OpenJDK v8 (64-bit) or later</p></li>
-<li><p>Avoid spaces in the folder path of TagUI</p></li>
-</ol>
-<div class="section" id="macos">
-<h2>macOS<a class="headerlink" href="#macos" title="Permalink to this headline">¶</a></h2>
-<p><a class="reference external" href="https://github.com/kelaberetiv/TagUI/releases/download/v5.11.0/TagUI_macOS.zip">unzip and run</a></p>
-</div>
-<div class="section" id="linux">
-<h2>Linux<a class="headerlink" href="#linux" title="Permalink to this headline">¶</a></h2>
-<p><a class="reference external" href="https://github.com/kelaberetiv/TagUI/releases/download/v5.11.0/TagUI_Linux.zip">unzip and run</a></p>
-</div>
+  <div class="section" id="installation">
+<h1>Installation<a class="headerlink" href="#installation" title="Permalink to this headline">¶</a></h1>
 <div class="section" id="windows">
 <h2>Windows<a class="headerlink" href="#windows" title="Permalink to this headline">¶</a></h2>
-<p><a class="reference external" href="https://github.com/kelaberetiv/TagUI/releases/download/v5.11.0/TagUI_Windows.zip">unzip and run</a></p>
+<ol class="arabic simple">
+<li><p><a class="reference external" href="https://github.com/kelaberetiv/TagUI/releases/download/v5.11.0/TagUI_Windows.zip">Download TagUI v6.0.0 for Windows</a>.</p></li>
+<li><p>Unzip the contents to <code class="docutils literal notranslate"><span class="pre">C:\</span></code>.</p></li>
+<li><p><a class="reference external" href="https://corretto.aws/downloads/latest/amazon-corretto-8-x64-windows-jdk.msi">Install OpenJDK for Windows</a>.</p></li>
+<li><p><a class="reference external" href="https://www.google.com/chrome/">Install Chrome</a>.</p></li>
+<li><p>Open <a class="reference internal" href="faq.html#how-to-use-command-prompt"><span class="std std-ref">Command Prompt</span></a>.</p></li>
+<li><p>Copy, paste and run these commands:</p></li>
+</ol>
+<div class="highlight-bat notranslate"><div class="highlight"><pre><span></span>setx path <span class="s2">&quot;</span><span class="nv">%path%</span><span class="s2">;c:\tagui\src&quot;</span>
+
+tagui c:\tagui\src\samples\1_yahoo chrome
+</pre></div>
 </div>
-<div class="section" id="node-js-macos-linux">
-<h2>Node.js (macOS/Linux)<a class="headerlink" href="#node-js-macos-linux" title="Permalink to this headline">¶</a></h2>
-<p><a class="reference external" href="https://www.npmjs.com/package/tagui">npm install tagui</a></p>
-<div class="section" id="cutting-edge-version">
-<h3>Cutting Edge Version<a class="headerlink" href="#cutting-edge-version" title="Permalink to this headline">¶</a></h3>
-<p>To use the latest features and fixes, <a class="reference external" href="https://github.com/kelaberetiv/TagUI/archive/develop.zip">download the cutting edge version</a> and overwrite the packaged installation.</p>
+<p>You have run your first TagUI flow!</p>
+<p><a class="reference internal" href="setup_troubleshooting.html#troubleshooting-windows"><span class="std std-ref">Having problems?</span></a></p>
 </div>
+<div class="section" id="macos-linux">
+<h2>macOS/Linux<a class="headerlink" href="#macos-linux" title="Permalink to this headline">¶</a></h2>
+<ol class="arabic simple">
+<li><p>Download TagUI v6.0.0 (<a class="reference external" href="https://github.com/kelaberetiv/TagUI/releases/download/v5.11.0/TagUI_macOS.zip">macOS</a>, <a class="reference external" href="https://github.com/kelaberetiv/TagUI/releases/download/v5.11.0/TagUI_Linux.zip">Linux</a>).</p></li>
+<li><p>Unzip the contents to your desktop on macOS, or <code class="docutils literal notranslate"><span class="pre">/home/your_userid</span></code> on Linux.</p></li>
+<li><p>Install OpenJDK (<a class="reference external" href="https://corretto.aws/downloads/latest/amazon-corretto-8-x64-macos-jdk.pkg">macOS</a>, <a class="reference external" href="https://corretto.aws/downloads/latest/amazon-corretto-8-x64-linux-jdk.tar.gz">Linux</a>).</p></li>
+<li><p><a class="reference external" href="https://www.google.com/chrome/">Install Chrome</a>.</p></li>
+<li><p>Open <a class="reference internal" href="faq.html#how-to-use-terminal"><span class="std std-ref">Terminal</span></a>.</p></li>
+<li><p>Copy, paste and run these commands, replacing <code class="docutils literal notranslate"><span class="pre">your_tagui_path</span></code> as needed:</p></li>
+</ol>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>ln -sf /your_tagui_path/tagui/src/tagui /usr/local/bin/tagui
+
+./tagui your_tagui_path/tagui/src/samples/1_yahoo chrome
+</pre></div>
+</div>
+<p>You have run your first TagUI flow!</p>
+<p><a class="reference internal" href="setup_troubleshooting.html#troubleshooting-macos-linux"><span class="std std-ref">Having problems?</span></a></p>
 </div>
 </div>
 
@@ -188,6 +201,15 @@
            
           </div>
           <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="main_concepts.html" class="btn btn-neutral float-right" title="Main concepts" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="index.html" class="btn btn-neutral float-left" title="TagUI" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
   
 
   <hr/>

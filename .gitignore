@@ -2,6 +2,9 @@
 /archive/*
 /flows/*
 
+# exclude docs build
+/docs/_build/*
+
 # exclude folders for packaged installation
 /src/casperjs/*
 /src/phantomjs/*
