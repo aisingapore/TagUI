@@ -189,6 +189,7 @@ if %tagui_deploy_workflow%==true (
 	echo @echo off > "%flow_file%.cmd"
 	echo cd /d "%initial_dir%" >> "%flow_file%.cmd"
 	echo "%~dp0tagui" "%flow_file%" %arg2% %arg3% %arg4% %arg5% %arg6% %arg7% %arg8% %arg9% >> "%flow_file%.cmd"
+	echo INFO - deployment script %flow_file%.cmd generated
 	exit /b 0
 )
 
