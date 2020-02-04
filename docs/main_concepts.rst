@@ -1,50 +1,70 @@
 Main concepts
 ====================
 
-There are various flow samples in the ``tagui/samples/`` folder for you to learn by example.
-
 Flows
 --------------
 TagUI automates your actions by running *flows*, which are just text files with the ``.tag`` file extension.
 
-You can run a flow in the Command Prompt/Terminal like this:: 
+You can run a flow in the :ref:`Command Prompt/Terminal<how-to-use-command-prompt>` like this:: 
 
     tagui my_flow.tag
+
+.. raw:: html
+
+    <video playsinline autoplay muted loop width="100%">
+        <source src="./_static/run-a-flow.mp4" type="video/mp4">
+        Your browser does not support the video tag.
+    </video>
 
 TagUI looks for ``my_flow.tag`` in your current working directory. You can also provide the full path to your flow::
 
     tagui c:\tagui\samples\1_yahoo.tag chrome
 
+You can also :ref:`run flows on a fixed schedule <run-on-schedule>`.
+
+
+Run by double-click
+**********************
+You can create a shortcut file with::
+
+  tagui my_flow.tag deploy
+
+This creates a shortcut to run your flow just by double clicking the shortcut. The shortcut is in the same folder as your flow.
+
+.. raw:: html
+
+    <video playsinline autoplay muted loop width="100%">
+        <source src="./_static/deploy-a-flow.mp4" type="video/mp4">
+        Your browser does not support the video tag.
+    </video>
+
+
+Run from a URL
+**********************
 You can also run a flow directly from a URL::
 
     tagui https://raw.githubusercontent.com/kelaberetiv/TagUI/master/src/samples/1_yahoo chrome
 
-.. raw:: html
 
-    <video playsinline autoplay muted loop height="200">
-        <source src="./_static/testonly.mp4" type="video/mp4">
-        Your browser does not support the video tag.
-    </video>
-
-You can also :ref:`run flows on a fixed schedule <run-on-schedule>`, or :ref:`run flows just by double-clicking a file <run-by-double-click>`.
-
-
-Running flows without opening the browser
-********************************************
-You can run web flows without opening a web browser by running TagUI with the ``headless`` option. ::
+Hide the browser
+**********************
+You can run web flows without showing the web browser by running TagUI with the ``headless`` option. ::
 
     tagui my_flow.tag headless
 
 This allows you to continue using your desktop normally while the flow is running, but it will not work if your flow uses visual automation, because visual automation reads and clicks what is on your screen.
 
-INSERT HEADLESS GIF HERE
+.. raw:: html
+
+    <video playsinline autoplay muted loop width="100%">
+        <source src="./_static/run-headless-flow.mp4" type="video/mp4">
+        Your browser does not support the video tag.
+    </video>
 
 
 Steps
 ---------
-Flows are made out of *steps*. Below are some common steps.
-
-You can see all the steps in the :ref:`step reference <step-reference>`.
+Flows are made out of *steps*. Below are some common steps. You can see all the steps in the :ref:`step reference <step-reference>`.
 
 
 click

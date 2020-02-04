@@ -1,6 +1,9 @@
 TagUI
 =================================
 
+.. image:: _static/tagui-logo.png
+    :width: 400px
+
 An open-source, cross-platform, command-line RPA tool that allows you to automate your desktop web, mouse and keyboard actions easily.
 
 Here's what a simple TagUI flow looks like:

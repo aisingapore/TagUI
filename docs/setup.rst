@@ -22,7 +22,7 @@ Windows
 
     tagui c:\tagui\src\samples\1_yahoo chrome
 
-You have run your first TagUI flow!
+You have run your first TagUI flow! 🎉
 
 :ref:`Having problems? <troubleshooting-windows>`
 
@@ -46,6 +46,6 @@ macOS/Linux
 
     ./tagui your_tagui_path/tagui/src/samples/1_yahoo chrome
 
-You have run your first TagUI flow!
+You have run your first TagUI flow! 🎉
 
 :ref:`Having problems? <troubleshooting-macos-linux>`
