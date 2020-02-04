@@ -1,9 +1,9 @@
 EN,HI
 click,क्लिक
-tap,नल टोटी
+tap,दबाना
 move,चाल
 hover,मंडराना
-type,प्रकार
+type,लिखो
 enter,दर्ज
 select,चुनते हैं
 choose,चुनें
@@ -68,14 +68,14 @@ contain,शामिल
 and,तथा
 or,या
 from,से
-to,सेवा मेरे
+to,तक
 as,जैसा
 title(),शीर्षक()
 url(),यूआरएल()
 text(),पाठ()
 timer(),टाइमर()
 count(),गिनती()
-present(),वर्तमान()
+present(),मौजूद()
 visible(),दृश्य()
 mouse_xy(),माउस_xy()
 mouse_x(),माउस_x()
