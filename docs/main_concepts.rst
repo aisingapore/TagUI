@@ -38,6 +38,9 @@ This creates a shortcut to run your flow just by double clicking the shortcut. T
         Your browser does not support the video tag.
     </video>
 
+If you want to create the shortcut file with options like ``headless``, you can just add them in the same line like this::
+
+  tagui my_flow.tag headless deploy
 
 Run from a URL
 **********************
