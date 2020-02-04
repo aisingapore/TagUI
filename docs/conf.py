@@ -21,7 +21,7 @@ from recommonmark.transform import AutoStructify
 # -- Project information -----------------------------------------------------
 
 project = 'TagUI'
-copyright = '2020, Ken Soh, Siow Yi Sheng'
+copyright = '2020, AI Singapore'
 author = 'Ken Soh, Siow Yi Sheng'
 
 # The full version, including alpha/beta/rc tags
