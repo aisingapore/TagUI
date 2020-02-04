@@ -1,0 +1,12 @@
+
+START - automation started - Mon Feb 03 2020 15:55:10 GMT+0800 (Malay Peninsula Standard Time)
+https://ca.yahoo.com - Yahoo
+
+NOTE - this sample may not work for EU users due to website changes for GDPR
+EU users may have to modify script to first click on announcement OK button
+
+type search-box as github
+show search-box
+github
+click search-button
+wait 6.6

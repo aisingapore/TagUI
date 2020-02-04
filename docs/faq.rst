@@ -64,28 +64,6 @@ CSV files are files which stores data in a table form. They can be opened with M
 Each line is a row of values. The values are split into different columns by commas ``,``, which is CSV stands for Comma Separated Values.
 
 
-.. _run-by-double-click:
-
-How do I run a flow by double clicking an icon?
-------------------------------------------------
-On Windows, create a ``.cmd`` or ``.bat`` file with contents like below. 
-
-::
-
-    @echo off
-    cd c:\path\to\my\flow
-    tagui my_flow.tag
-
-On macOS/Linux, create a ``.sh`` file with contents like below and run ``chmod 700 my_file.sh``.
-
-::
-
-    cd /Users/username/folder
-    tagui my_flow.tag
-
-You can double click these files to run the flow.
-
-
 .. _run-on-schedule:
 
 Running flows on a fixed schedule
@@ -93,6 +71,13 @@ Running flows on a fixed schedule
 It is often useful to run flows automatically on a fixed schedule: monthly; weekly; daily or even every 5 minutes.
 
 On Windows, `use the Task Scheduler <https://www.digitalcitizen.life/how-create-task-basic-task-wizard>`_.
+
+.. raw:: html
+
+    <video playsinline autoplay muted loop width="100%">
+        <source src="./_static/schedule-a-flow.mp4" type="video/mp4">
+        Your browser does not support the video tag.
+    </video>
 
 On macOS/Linux, `use crontab <https://www.ostechnix.com/a-beginners-guide-to-cron-jobs/>`_.
 
