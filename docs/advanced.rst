@@ -5,7 +5,7 @@ Advanced concepts
 
 Object repositories
 ------------------------
-Object repositories are optional :ref:`csv files <what-are-csv-files>` which can store variables for use in flows.
+Object repositories are optional :ref:`csv files <what-are-csv-files>` which can store variables for use in flows. They help to separate your flows from your personal data (like login information for web flows), and allow you to share common information between multiple flows for easy updating.
 
 Each flow has a **local object repository** and all flows share the **global object repository**. The local object repository is the ``tagui_local.csv`` in the same folder as the flow. The global object repository is the ``tagui_global.csv`` in the ``tagui/src/`` folder.
 
@@ -22,7 +22,8 @@ Within the flow, TagUI can use the objects ``email``, ``create account`` as vari
 
 If ``user-email-textbox`` was the identifier for some web text input, then you could use the following in your flow::
 
-  type ``email`` as my_email@email.com
+  type `email` as my_email@email.com
+
 
 .. _datatables:
 
@@ -44,6 +45,7 @@ To use it, you run your flow with ``tagui my_flow.tag trade_data.csv``. TagUI wi
 
 You can run the flow with the ``speed`` option like this: ``tagui my_flow.tag trade_data.csv speed`` to remove the delay between runs.
 
+
 Running other flows within a flow
 -----------------------------------
 A flow can run another flow, like this::
@@ -52,11 +54,13 @@ A flow can run another flow, like this::
 
 Variables in the parent flow are accessible in the child flow. 
 
+
 Visual automation tricks
 ------------------------------------
-If you remove the background of a UI element in a ``.png`` file using an image editor, TagUI will be able to target the element regardless of its background. 
+If you make the background of a UI element in a ``.png`` file 100% transparent using an image editor, TagUI will be able to target the element regardless of its background. 
 
 Conversely, you can also remove the foreground content near some anchor element like a frame, to allow you to OCR varying content in the empty area using the **read** step.
+
 
 Writing Python within flows
 --------------------------------
@@ -89,6 +93,7 @@ You can pass a variable to Python like this::
   py print(phone)
   echo py_result
 
+
 Saving flow run results
 -------------------------
 You can save an html log of the run and the flow run results to ``tagui/src/tagui_report.csv`` with the ``report`` option. ::
@@ -97,10 +102,11 @@ You can save an html log of the run and the flow run results to ``tagui/src/tagu
 
 The CSV file will show one line for each run, when it started, how long it took to complete, any error message during run, and the link to the log file for that run.
 
+
 Create log files for debugging
 ---------------------------------
 To do advanced debugging, you can create log files when running flows by creating an empty ``tagui_logging`` file in ``tagui/src/``.
 
-- ``my_flow.tag.log`` stores output of the execution. 
-- ``my_flow.tag.js`` is the generated JavaScript file that was run.
-- ``my_flow.tag.raw`` is the expanded flow after parsing modules.
+- ``my_flow.log`` stores output of the execution. 
+- ``my_flow.js`` is the generated JavaScript file that was run.
+- ``my_flow.raw`` is the expanded flow after parsing modules.

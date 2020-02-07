@@ -61,7 +61,7 @@ What are csv files?
 -------------------------------------------------
 CSV files are files which stores data in a table form. They can be opened with Microsoft Excel and Google Sheets.
 
-Each line is a row of values. The values are split into different columns by commas ``,``, which is CSV stands for Comma Separated Values.
+Each line is a row of values. The values are split into different columns by commas ``,``, which is why CSV stands for Comma Separated Values.
 
 
 .. _run-on-schedule:
