@@ -18,7 +18,7 @@ You can run a flow in the :ref:`Command Prompt/Terminal<how-to-use-command-promp
 
 TagUI looks for ``my_flow.tag`` in your current working directory. You can also provide the full path to your flow::
 
-    tagui c:\tagui\samples\1_yahoo.tag chrome
+    tagui c:\tagui\samples\1_yahoo.tag
 
 You can also :ref:`run flows on a fixed schedule <run-on-schedule>`.
 
@@ -29,7 +29,7 @@ You can create a shortcut file with::
 
   tagui my_flow.tag deploy
 
-This creates a shortcut to run your flow just by double clicking the shortcut. The shortcut is in the same folder as your flow.
+This creates a shortcut (my_flow.cmd) to run your flow just by double clicking the shortcut. The shortcut is in the same folder as your flow, but you can move it to your desktop or anywhere else for easy access.
 
 .. raw:: html
 
@@ -42,11 +42,14 @@ If you want to create the shortcut file with options like ``headless``, you can 
 
   tagui my_flow.tag headless deploy
 
+.. note:: If you move your flow file to another folder, you will need to create a new shortcut file.
+
+
 Run from a URL
 **********************
 You can also run a flow directly from a URL::
 
-    tagui https://raw.githubusercontent.com/kelaberetiv/TagUI/master/src/samples/1_yahoo chrome
+    tagui https://raw.githubusercontent.com/kelaberetiv/TagUI/master/src/samples/1_yahoo
 
 
 Hide the browser
@@ -172,6 +175,95 @@ You can also use XPath to read some attribute values from web elements. This com
 
   read //some-element/@some-attribute to some-variable
 
+Identifiers
+---------------
+You have probably noticed that different steps have different ways that they target elements, called **identifiers**. Let's look at the different types of identifiers.
+
+.. note:: The DOM and XPath identifiers only work for Chrome. To automate other browsers, use the Point/Region and Image identifiers.
+
+
+.. _dom:
+
+DOM
+**********
+.. code-block:: none
+
+  click Getting started
+
+This matches an element in the DOM (Document Object Model) of the web page, matching either the :ref:`id, name, class attributes <element_attributes>` or the text of the element itself.
+
+
+.. _xpath:
+
+XPath
+**********
+.. code-block:: none
+
+  click //body/div[1]/nav/div/div[1]/a
+
+This matches the :ref:`XPath <find-xpath>` of an element in the web page. It is a more explicit and powerful way of targeting web elements.
+
+.. note:: You can use CSS selectors too in place of XPath, but XPath is preferred.
+
+
+.. _point:
+
+Point
+**********
+.. code-block:: none
+
+  click (200,500)
+
+This matches the point on the screen 200 pixels from the left of the screen and 500 pixels from the top of the screen. This uses *visual automation*.
+
+
+.. _region:
+
+Region
+**********
+.. code-block:: none
+
+  read (300,400)-(500,550) to some-variable
+
+This matches the rectangle formed between the two points (300,400) and (500,550). See :ref:`Point <point>`. This uses *visual automation*.
+
+
+.. _image:
+
+Image
+**********
+.. code-block:: none
+
+  click button.png
+
+This matches any area on the screen that looks similar to an image file ``button.png`` (in the folder of the flow). You first need to take a screenshot of ``button.png``. This uses *visual automation*.
+
+.. code-block:: none
+
+  click image/button.png
+
+This allows you to look for ``button.png`` within the ``image`` folder.
+
+
+.. _live-mode:
+
+Live mode
+---------------
+We recommend using live mode when you want to write your own flows or try out some step. In :ref:`Command Prompt/Terminal <how-to-use-command-prompt>`::
+
+  tagui live
+
+This starts up a live session, where you can run steps one line at a time and immediately see the output.
+
+.. raw:: html
+
+    <video playsinline autoplay muted loop width="100%">
+        <source src="./_static/live-mode.mp4" type="video/mp4">
+        Your browser does not support the video tag.
+    </video>
+
+
+.. _if-statements:
 
 If statements
 ---------------
@@ -189,11 +281,11 @@ For example, if the URL contains the word “success”, then we want to click s
 
 ``url()`` is a :ref:`helper function <helper-functions>` that gets the url of the current webpage. Note the use of ``{`` and ``}``. The steps within these curly braces will only be run if the condition is met, ie. the url contains the word “success”.
 
-Another common case is to check if some element exists. Here, we say that “if some-element doesn’t appear, then visit this webpage”.
+Another common case is to check if some element exists. Here, we say that “if some-element doesn’t appear after waiting for the timeout, then visit this webpage”.
 
 .. code-block:: none
 
-  if !present('some-element')
+  if !exist('some-element')
   {
     https://tagui.readthedocs.io/
   }
@@ -273,6 +365,13 @@ Gets text from the clipboard::
   keyboard [ctrl]c
   text_contents = clipboard()
 
+You can also give it an input, which puts the input *onto* the clipboard instead. This can be useful for pasting large amounts of text directly, which is faster than using the **type** step::
+
+  long_text = "This is a very long text which takes a long time to type"
+  clipboard(`long_text`)
+  click text_input
+  keyboard [ctrl]v[enter]
+  
 
 mouse_x(), mouse_y() 
 *********************
@@ -290,6 +389,6 @@ The example below clicks 200 pixels to the right of ``element.png``::
 
 mouse_xy() 
 *********************
-In live mode, you can use find out the coordinates of your mouse using ``echo mouse_xy()`` so that you can use the coordinates in your flows.
+In live mode, you can use find out the coordinates of your mouse using ``echo mouse_xy()`` so that you can use the coordinates in your flows::
 
   echo mouse_xy()

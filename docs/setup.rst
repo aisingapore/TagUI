@@ -44,7 +44,7 @@ macOS/Linux
 
     ln -sf /your_tagui_path/tagui/src/tagui /usr/local/bin/tagui
 
-    ./tagui your_tagui_path/tagui/src/samples/1_yahoo chrome
+    tagui your_tagui_path/tagui/src/samples/1_yahoo chrome
 
 You have run your first TagUI flow! 🎉
 
