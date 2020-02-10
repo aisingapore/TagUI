@@ -930,6 +930,9 @@ escaped_string = escaped_string.replace(/\t/g,'\\t').replace(/\f/g,'\\f').replac
 return escaped_string.replace(/\[SINGLE_QUOTE_FOR_VARIABLE_HANDLING\]/g,'\'');}
 
 function get_text_for_sikuli(image_filename) { // helper function to decompose full path and filename to get text
+if (image_filename.length <= 4) return image_filename; // initial check to handle variables, and steps
+filename_extension = image_filename.substr(-4).toLowerCase(); // without image input, for eg keyboard step
+if ((filename_extension !== '.png') && (filename_extension !== '.bmp')) return image_filename;
 image_filename = image_filename.substr(0, image_filename.length - 4);
 last_back_slash = image_filename.lastIndexOf('/');
 last_forward_slash = image_filename.lastIndexOf('\\');
