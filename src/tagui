@@ -33,6 +33,9 @@ else online_reponame=`echo "${1##*/}.csv"`; curl -k -s -o $online_reponame "$1".
 if [ -f "$online_reponame" ]; then if grep -iq "404\|400" "$online_reponame"; then rm "$online_reponame"
 fi;fi;fi;fi; set -- "$online_flowname" "${@:2}"; fi
 
+# enter live mode directly without user creating dummy file
+if [ "$1" = "live" ]; then echo live > "live.tag" ; echo "// mouse_xy()" >> "live.tag" ; set -- "live.tag" "${@:2}"; fi
+
 # check whether specified automation flow file exists
 if ! [ -f "$1" ]; then echo "ERROR - cannot find $1"; exit 1; fi
 
@@ -79,8 +82,23 @@ if [ -f "$(pwd)/casperjs/bin/casperjs" ]; then CASPERJS_EXECUTABLE="$(pwd)/caspe
 if [ -f "$(pwd)/phantomjs/bin/phantomjs" ]; then export PHANTOMJS_EXECUTABLE="$(pwd)/phantomjs/bin/phantomjs"; fi
 if [ -f "$(pwd)/slimerjs/slimerjs" ]; then export SLIMERJS_EXECUTABLE="$(pwd)/slimerjs/slimerjs"; fi
 
+tagui_deploy_workflow=false
+# check deploy parameter to generate an executable file to run workflow
+if [ "$2" = "deploy" ]; then set -- "$1" "${@:3}"; tagui_deploy_workflow=true; fi
+if [ "$3" = "deploy" ]; then set -- "${@:1:2}" "${@:4}"; tagui_deploy_workflow=true; fi
+if [ "$4" = "deploy" ]; then set -- "${@:1:3}" "${@:5}"; tagui_deploy_workflow=true; fi
+if [ "$5" = "deploy" ]; then set -- "${@:1:4}" "${@:6}"; tagui_deploy_workflow=true; fi
+if [ "$6" = "deploy" ]; then set -- "${@:1:5}" "${@:7}"; tagui_deploy_workflow=true; fi
+if [ "$7" = "deploy" ]; then set -- "${@:1:6}" "${@:8}"; tagui_deploy_workflow=true; fi
+if [ "$8" = "deploy" ]; then set -- "${@:1:7}" "${@:9}"; tagui_deploy_workflow=true; fi
+if [ "$9" = "deploy" ]; then set -- "${@:1:8}"; tagui_deploy_workflow=true; fi
+if [ "$tagui_deploy_workflow" == true ]; then echo cd \""$initial_dir"\" > "$1".command
+echo \""$TAGUI_DIR/tagui"\" \""$1"\" "$2" "$3" "$4" "$5" "$6" "$7" "$8" "$9" >> "$1".command
+echo "INFO - deployment script $1.command generated"
+chmod 700 "$1".command; exit 0; fi
+
 # set default web browser to be used to phantomjs
-tagui_web_browser="phantomjs"
+tagui_web_browser="chrome"
 
 # check chrome parameter to run on in-built integration with visible chrome
 if [ "$2" = "chrome" ]; then set -- "$1" "${@:3}"; tagui_web_browser="chrome"; fi
@@ -350,8 +368,8 @@ if [ -s "$1".log ] && [ "$tagui_html_report" == true ]; then php -q tagui_report
 # check upload option to upload result to hastebin.com
 if [ -s "$1".log ] && [ "$tagui_upload_result" == true ]; then ./tagui samples/8_hastebin quiet "$1"; fi
 
-# remove logs if tagui_no_logging exists
-if [ -f tagui_no_logging ]; then
+# remove logs if tagui_logging doesn't exist
+if ! [ -f tagui_logging ]; then
 if [ -f "$1".raw ]; then rm "$1".raw; fi
 if [ -f "$1".log ]; then rm "$1".log; fi
 if [ -f "$1".js ]; then rm "$1".js; fi
@@ -359,6 +377,12 @@ fi
 
 # change back to initial directory where tagui is called
 cd "$initial_dir"
+
+# remove direct live mode generated files
+if [ -f "live.tag" ]; then rm "live.tag"; fi
+if [ -f "live.tag.raw" ]; then rm "live.tag.raw"; fi
+if [ -f "live.tag.js" ]; then rm "live.tag.js"; fi
+if [ -f "live.tag.log" ]; then mv "live.tag.log" "live.log"; fi
 
 # returns 0 if no error parsing flow file, otherwise return 1
 exit $tagui_error_code

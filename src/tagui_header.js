@@ -80,7 +80,7 @@ function dummy_echo(muted_string) {return;}
 // for saving text information to file
 function save_text(file_name,info_text) {var ds; if (flow_path.indexOf('/') !== -1) ds = '/'; else ds = '\\';
 if (!file_name) {save_text_count++; file_name = flow_path + ds + 'text' + save_text_count.toString() + '.txt';}
-var fs = require('fs'); fs.write(file_name, info_text, 'w');}
+var fs = require('fs'); fs.write(file_name, info_text + '\r\n', 'w');}
 
 // for appending text information to file
 function append_text(file_name,info_text) {var ds; if (flow_path.indexOf('/') !== -1) ds = '/'; else ds = '\\';
@@ -233,6 +233,10 @@ if (is_sikuli(element_locator)) {var abs_param = abs_file(element_locator); var 
 if (!fs.exists(abs_param)) {casper.echo('ERROR - cannot find image file for present step').exit();}
 if (sikuli_step("present " + abs_param)) return true; else return false;}
 else return check_tx(element_locator);}
+
+// present() function that waits until timeout before returning result
+function exist(element_identifier) {var exist_timeout = Date.now() + casper.options.waitTimeout;
+while (Date.now() < exist_timeout) {if (present(element_identifier)) return true; else sleep(100);}; return false;}
 
 // friendlier name to check element visibility using elementVisible()
 function visible(element_locator) {if (!element_locator) return false;
@@ -733,6 +737,10 @@ function parse_intent(live_line) {
 live_line = live_line.trim(); if (live_line == '') return '';
 live_line = parse_variables(live_line);
 live_line = live_line.trim(); if (live_line == '') return '';
+// convert 'wait for' step to 'hover' step, to wait until timeout for element to appear and hover on it
+if ((live_line.length > 9) && ((live_line.substr(0,9)).toLowerCase() == 'wait for '))
+live_line = 'hover ' + live_line.substr(9);
+
 switch (get_intent(live_line)) {
 case 'url': return url_intent(live_line); break;
 case 'tap': return tap_intent(live_line); break;
@@ -903,14 +911,16 @@ if (tmp_flow_path.indexOf('/') > -1) return (tmp_flow_path + '/' + filename).rep
 else return tmp_flow_path + '\\' + filename;}
 
 function add_concat(source_string) { // parse string and add missing + concatenator
-if ((source_string.indexOf("'") > -1) && (source_string.indexOf('"') > -1))
-return "'ERROR - inconsistent quotes in text'";
-else if (source_string.indexOf("'") > -1) var quote_type = "'"; // derive quote type used
-else if (source_string.indexOf('"') > -1) var quote_type = '"'; else var quote_type = "none";
+if ((source_string.indexOf("'") == -1) && (source_string.indexOf('"') == -1)) var quote_type = "none";
+else if ((source_string.indexOf("'") > -1) && (source_string.indexOf('"') == -1)) var quote_type = "'";
+else if ((source_string.indexOf("'") == -1) && (source_string.indexOf('"') > -1)) var quote_type = '"';
+else if (source_string.indexOf("'") < source_string.indexOf('"')) var quote_type = "'"; else var quote_type = '"';
 var within_quote = false; source_string = source_string.trim(); // trim for future proof
+var previous_char = ""; // to help detect backslash escape for quotes
 for (srcpos = 0; srcpos < source_string.length; srcpos++) {
-if (source_string.charAt(srcpos) == quote_type) within_quote = !(within_quote);
-if ((within_quote == false) && (source_string.charAt(srcpos)==" "))
+if ((source_string.charAt(srcpos) == quote_type) && (previous_char !== "\\")) within_quote = !(within_quote);
+previous_char = source_string.charAt(srcpos); // to detect a previous backlash escape and ignore quote
+if ((within_quote == false) && (source_string.charAt(srcpos) == " "))
 source_string = source_string.substring(0,srcpos) + "+" + source_string.substring(srcpos+1);}
 source_string = source_string.replace(/\+\+\+\+\+/g,'+'); source_string = source_string.replace(/\+\+\+\+/g,'+');
 source_string = source_string.replace(/\+\+\+/g,'+'); source_string = source_string.replace(/\+\+/g,'+');

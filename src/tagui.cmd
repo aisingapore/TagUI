@@ -51,6 +51,14 @@ if "%arg1:~0,4%"=="http" (
 	)
 )
 
+rem enter live mode directly without user creating dummy file
+if "%~nx1"=="live" (
+	echo live > "live.tag"
+	echo // mouse_xy^(^) >> "live.tag"
+	set "flow_file=%~dp1live.tag"
+	goto live_mode_skip
+)
+
 rem check whether specified automation flow file exists
 if "%flow_file%"=="" if not exist "%~1" (
 	echo ERROR - cannot find %~1
@@ -60,6 +68,8 @@ if not "%flow_file%"=="" if not exist "%online_flowname%" (
 	echo ERROR - cannot find %online_flowname%
 	exit /b 1
 )
+
+:live_mode_skip
 
 rem additional windows section for parameters handling using windows way
 set arg2=%2
@@ -140,8 +150,51 @@ if exist "%~dp0slimerjs\slimerjs.bat" set "SLIMERJS_EXECUTABLE=%~dp0slimerjs\sli
 if exist "%~dp0php\php.exe" set "path=%~dp0php;%path%"
 if exist "%~dp0unx\gawk.exe" set "path=%~dp0unx;%path%"
 
+set tagui_deploy_workflow=false
+rem check deploy parameter to generate an executable file to run workflow
+if "%arg2%"=="deploy" (
+	set arg2=
+	set tagui_deploy_workflow=true
+)
+if "%arg3%"=="deploy" (
+	set arg3=
+	set tagui_deploy_workflow=true
+)
+if "%arg4%"=="deploy" (
+	set arg4=
+	set tagui_deploy_workflow=true
+)
+if "%arg5%"=="deploy" (
+	set arg5=
+	set tagui_deploy_workflow=true
+)
+if "%arg6%"=="deploy" (
+	set arg6=
+	set tagui_deploy_workflow=true
+)
+if "%arg7%"=="deploy" (
+	set arg7=
+	set tagui_deploy_workflow=true
+)
+if "%arg8%"=="deploy" (
+	set arg8=
+	set tagui_deploy_workflow=true
+)
+if "%arg9%"=="deploy" (
+	set arg9=
+	set tagui_deploy_workflow=true
+)
+
+if %tagui_deploy_workflow%==true (
+	echo @echo off > "%flow_file%.cmd"
+	echo cd /d "%initial_dir%" >> "%flow_file%.cmd"
+	echo "%~dp0tagui" "%flow_file%" %arg2% %arg3% %arg4% %arg5% %arg6% %arg7% %arg8% %arg9% >> "%flow_file%.cmd"
+	echo INFO - deployment script %flow_file%.cmd generated
+	exit /b 0
+)
+
 rem set default web browser to be used to phantomjs
-set tagui_web_browser=phantomjs
+set tagui_web_browser=chrome
 
 rem check chrome parameter to run on in-built integration with visible chrome
 if "%arg2%"=="chrome" (
@@ -667,15 +720,32 @@ rem set flow_file to blank or the variable will break that tagui call
 	tagui samples\8_hastebin quiet "!tmp_flow_file!"
 )
 
-rem remove logs if tagui_no_logging exists
-if exist "tagui_no_logging" (
+rem remove logs if tagui_logging doesn't exist
+if not exist "tagui_logging" (
 	if exist "%flow_file%.raw" del "%flow_file%.raw"
 	if exist "%flow_file%.log" del "%flow_file%.log" 
 	if exist "%flow_file%.js" del "%flow_file%.js"
 )
 
+rem hack chrome to prevent ended unexpectedly message
+set "chrome_pref=%LOCALAPPDATA%\Google\Chrome\User Data\Default"
+if exist "%chrome_pref%" (
+	gawk "sub(\"\\\"exited_cleanly\\\":false\", \"\\\"exited_cleanly\\\":true\")" "%chrome_pref%" > "%chrome_pref%" > nul 2>&1
+	gawk "sub(\"\\\"exit_type\\\":\\\"Crashed\\\"\", \"\\\"exit_type\\\":\\\"Normal\\\"\")" "%chrome_pref%" > "%chrome_pref%" > nul 2>&1
+)
+
 rem change back to initial directory where tagui is called
 cd /d "%initial_dir%"
+
+rem remove direct live mode generated files
+if exist "live.tag" del "live.tag"
+if exist "live.tag.raw" del "live.tag.raw"
+if exist "live.tag.js" del "live.tag.js"
+if exist "live.tag.log" (
+	rename "live.tag.log" "live.log"
+	gawk "sub(\"$\", \"\")" "live.log" > "live.log.tmp"
+	move /Y "live.log.tmp" "live.log" > nul
+)
 
 rem returns 0 if no error parsing flow file, otherwise return 1
 exit /b %tagui_error_code%
