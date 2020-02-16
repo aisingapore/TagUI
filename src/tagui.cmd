@@ -1,8 +1,11 @@
 @echo off
 rem # SCRIPT FOR RUNNING TAGUI FRAMEWORK ~ TEBEL.ORG #
 
-rem configure command to launch chrome for Windows
+rem configure default command location to launch Chrome on Windows
 set chrome_command=C:\Program Files (x86)\Google\Chrome\Application\chrome.exe
+
+rem fallback to backup location for some users who cannot install Chrome system-wide
+if not exist "%chrome_command%" set chrome_command=%LOCALAPPDATA%\Google\Chrome\Application\chrome.exe
 
 rem enable windows for loop advanced flow control
 setlocal enableextensions enabledelayedexpansion
@@ -645,7 +648,8 @@ if exist "tagui_chrome.in" (
 	set chrome_started=Windows
 	set chrome_switches=--user-data-dir=chrome\tagui_user_profile --remote-debugging-port=9222 about:blank
 	if not exist "%chrome_command%" (
-		echo ERROR - cannot find Chrome at "%chrome_command%"
+		echo ERROR - cannot find Chrome at "C:\Program Files (x86)\Google\Chrome\Application\chrome.exe"
+		echo ERROR - or at user folder "%LOCALAPPDATA%\Google\Chrome\Application\chrome.exe"
 		echo update chrome_command setting in tagui\src\tagui.cmd to your chrome.exe
 		exit /b 1
 	)
