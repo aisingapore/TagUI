@@ -10,18 +10,21 @@ setlocal enableextensions enabledelayedexpansion
 if "%~1"=="" (
 echo tagui v5.11: use following options and this syntax to run - tagui flow_filename option^(s^)
 echo.
-echo chrome   - run on visible Chrome web browser instead of invisible PhantomJS ^(first install Chrome^)
-echo headless - run on invisible Chrome web browser instead of default PhantomJS ^(first install Chrome^)
-echo firefox  - run on visible Firefox web browser instead of invisible browser ^(first install Firefox^)
-echo report   - track run result in tagui\src\tagui_report.csv and save html log of automation execution
-echo upload   - upload automation flow and result to hastebin.com ^(expires 30 days after last view^)
-echo speed    - skip 3-second delay between datatable iterations ^(and skip restarting of Chrome^)
-echo quiet    - run without output except for explicit output ^(echo / show / check / errors etc^)
-echo debug    - show run-time backend messages from PhantomJS mode for detailed tracing and logging
-echo test     - testing with check step test assertions for CI/CD integration ^(output XUnit XML file^)
-echo baseline - output execution log and relative-path output files to a separate baseline directory
-echo input^(s^) - add your own parameter^(s^) to be used in your automation flow as variables p1 to p9
-echo data.csv - specify a csv file to be used as the datatable for batch automation of many records
+echo live      - launch in live mode enabled with visual automation for interactive development session
+echo deploy    - generate .cmd file which can be double-clicked to run workflow with specific options
+echo chrome    - run on visible Chrome web browser instead of invisible PhantomJS ^(first install Chrome^)
+echo headless  - run on invisible Chrome web browser instead of default PhantomJS ^(first install Chrome^)
+echo nobrowser - run without any web browser, for example to perform automation only with visual automation
+echo firefox   - run on visible Firefox web browser instead of invisible browser ^(first install Firefox^)
+echo report    - track run result in tagui\src\tagui_report.csv and save html log of automation execution
+echo upload    - upload automation flow and result to hastebin.com ^(expires 30 days after last view^)
+echo speed     - skip 3-second delay between datatable iterations ^(and skip restarting of Chrome^)
+echo quiet     - run without output except for explicit output ^(echo / show / check / errors etc^)
+echo debug     - show run-time backend messages from PhantomJS mode for detailed tracing and logging
+echo test      - testing with check step test assertions for CI/CD integration ^(output XUnit XML file^)
+echo baseline  - output execution log and relative-path output files to a separate baseline directory
+echo input^(s^)  - add your own parameter^(s^) to be used in your automation flow as variables p1 to p9
+echo data.csv  - specify a csv file to be used as the datatable for batch automation of many records
 echo.
 echo TagUI is a command-line tool for digital process automation ^(RPA^) - for more info, google tagui
 echo.
@@ -195,6 +198,40 @@ if %tagui_deploy_workflow%==true (
 
 rem set default web browser to be used to phantomjs
 set tagui_web_browser=chrome
+
+rem check nobrowser parameter to run without any web browser, ie only phantomjs engine
+if "%arg2%"=="nobrowser" (
+	set arg2=
+	set tagui_web_browser=phantomjs
+)
+if "%arg3%"=="nobrowser" (
+	set arg3=
+	set tagui_web_browser=phantomjs
+)
+if "%arg4%"=="nobrowser" (
+	set arg4=
+	set tagui_web_browser=phantomjs
+)
+if "%arg5%"=="nobrowser" (
+	set arg5=
+	set tagui_web_browser=phantomjs
+)
+if "%arg6%"=="nobrowser" (
+	set arg6=
+	set tagui_web_browser=phantomjs
+)
+if "%arg7%"=="nobrowser" (
+	set arg7=
+	set tagui_web_browser=phantomjs
+)
+if "%arg8%"=="nobrowser" (
+	set arg8=
+	set tagui_web_browser=phantomjs
+)
+if "%arg9%"=="nobrowser" (
+	set arg9=
+	set tagui_web_browser=phantomjs
+)
 
 rem check chrome parameter to run on in-built integration with visible chrome
 if "%arg2%"=="chrome" (
