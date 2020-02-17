@@ -938,6 +938,7 @@ if (tmp_flow_path.indexOf('/') > -1) return (tmp_flow_path + '/' + filename).rep
 else return tmp_flow_path + '\\' + filename;}
 
 function add_concat(source_string) { // parse string and add missing + concatenator
+return source_string; // deprecated in v6 for consistency with rest of TagUI steps
 if ((source_string.indexOf("'") == -1) && (source_string.indexOf('"') == -1)) var quote_type = "none";
 else if ((source_string.indexOf("'") > -1) && (source_string.indexOf('"') == -1)) var quote_type = "'";
 else if ((source_string.indexOf("'") == -1) && (source_string.indexOf('"') > -1)) var quote_type = '"';
@@ -1096,10 +1097,10 @@ else return "this.download('" + param1 + "','" + abs_file(param2) + "')";}
 function receive_intent(raw_intent) {raw_intent = eval("'" + escape_bs(raw_intent) + "'"); // support dynamic variables
 return "this.echo('ERROR - step not supported in live mode, it requires creating CasperJS event')";}
 
-function echo_intent(raw_intent) { // code to support dynamic variables not applicable
+function echo_intent(raw_intent) {raw_intent = eval("'" + escape_bs(raw_intent) + "'"); // support dynamic variables
 var params = ((raw_intent + ' ').substr(1+(raw_intent + ' ').indexOf(' '))).trim();
 if (params == '') return "this.echo('ERROR - text missing for " + raw_intent + "')";
-else return "this.echo(" + add_concat(params) + ")";}
+else return "this.echo('" + add_concat(params) + "')";}
 
 function save_intent(raw_intent) {raw_intent = eval("'" + escape_bs(raw_intent) + "'"); // support dynamic variables
 var params = ((raw_intent + ' ').substr(1+(raw_intent + ' ').indexOf(' '))).trim();
@@ -1121,25 +1122,25 @@ else return "this.echo('ERROR - cannot find " + param1 + "')";}
 else {if (check_tx(params)) return "save_text('',this.fetchText(tx('" + params + "')).trim())";
 else return "this.echo('ERROR - cannot find " + params + "')";}}
 
-function dump_intent(raw_intent) { // code to support dynamic variables not applicable
+function dump_intent(raw_intent) {raw_intent = eval("'" + escape_bs(raw_intent) + "'"); // support dynamic variables
 var params = ((raw_intent + ' ').substr(1+(raw_intent + ' ').indexOf(' '))).trim();
 var param1 = (params.substr(0,params.indexOf(' to '))).trim();
 var param2 = (params.substr(4+params.indexOf(' to '))).trim();
 if (params == '') return "this.echo('ERROR - variable missing for " + raw_intent + "')";
 else if (params.indexOf(' to ') > -1)
-return "save_text('" + abs_file(param2) + "'," + add_concat(param1) + ")"; else
-return "save_text(''," + add_concat(params) + ")";}
+return "save_text('" + abs_file(param2) + "','" + add_concat(param1) + "')"; else
+return "save_text('','" + add_concat(params) + "')";}
 
-function write_intent(raw_intent) { // code to support dynamic variables not applicable
+function write_intent(raw_intent) {raw_intent = eval("'" + escape_bs(raw_intent) + "'"); // support dynamic variables
 var params = ((raw_intent + ' ').substr(1+(raw_intent + ' ').indexOf(' '))).trim();
 var param1 = (params.substr(0,params.indexOf(' to '))).trim();
 var param2 = (params.substr(4+params.indexOf(' to '))).trim();
 if (params == '') return "this.echo('ERROR - variable missing for " + raw_intent + "')";
 else if (params.indexOf(' to ') > -1)
-return "append_text('" + abs_file(param2) + "'," + add_concat(param1) + ")"; else
-return "append_text(''," + add_concat(params) + ")";}
+return "append_text('" + abs_file(param2) + "','" + add_concat(param1) + "')"; else
+return "append_text('','" + add_concat(params) + "')";}
 
-function load_intent(raw_intent) { // code to support dynamic variables not applicable
+function load_intent(raw_intent) {raw_intent = eval("'" + escape_bs(raw_intent) + "'"); // support dynamic variables
 var params = ((raw_intent + ' ').substr(1+(raw_intent + ' ').indexOf(' '))).trim();
 var param1 = (params.substr(0,params.indexOf(' to '))).trim();
 var param2 = (params.substr(4+params.indexOf(' to '))).trim();
