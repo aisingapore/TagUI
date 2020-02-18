@@ -947,16 +947,20 @@ if ((input_params.length > 4) && (input_params.substr(0,1) == '(') && (input_par
 function is_sikuli(input_params) { // helper function to check if input is meant for sikuli visual automation
 if (input_params.length > 4 && input_params.substr(-4).toLowerCase() == '.png') return true; // support png and bmp
 else if (input_params.length > 4 && input_params.substr(-4).toLowerCase() == '.bmp') return true;
+else if (input_params.length > 9 && input_params.substr(-9).toLowerCase() == 'using ocr') return true;
 else if (is_coordinates(input_params)) return true; else return false;}
 
 function call_sikuli(input_intent,input_params,other_actions) { // helper function to use sikuli visual automation
+if (input_params.length > 9 && input_params.substr(-9).toLowerCase() == 'using ocr')
+{input_intent = input_intent.replace(input_params,get_text_for_sikuli(input_params));
+input_params = get_text_for_sikuli(input_params);} // handle using ocr use case
 var fs = require('fs'); // use phantomjs fs file system module to access files and directories
 fs.write('tagui.sikuli/tagui_sikuli.in', '', 'w'); fs.write('tagui.sikuli/tagui_sikuli.out', '', 'w');
 if (!fs.exists('tagui.sikuli/tagui_sikuli.in')) return "this.echo('ERROR - cannot initialise tagui_sikuli.in')";
 if (!fs.exists('tagui.sikuli/tagui_sikuli.out')) return "this.echo('ERROR - cannot initialise tagui_sikuli.out')";
 if (!other_actions) other_actions = ''; // to handle most cases where other_actions is not passed in during call
 return "var fs = require('fs'); if (!sikuli_step('"+input_intent+"')) if (!fs.exists('"+input_params+"')) " +
-"this.echo('ERROR - cannot find "+get_text_for_sikuli(input_params)+" on screen'); " +
+"this.echo('ERROR - cannot find image file "+input_params+"'); " +
 "else this.echo('ERROR - cannot find "+input_params+" on screen'); " + other_actions;}
 
 function call_r(input_intent) { // helper function to use R integration for data analytics and machine learning
