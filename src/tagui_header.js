@@ -930,13 +930,9 @@ escaped_string = escaped_string.replace(/\t/g,'\\t').replace(/\f/g,'\\f').replac
 return escaped_string.replace(/\[SINGLE_QUOTE_FOR_VARIABLE_HANDLING\]/g,'\'');}
 
 function get_text_for_sikuli(image_filename) { // helper function to decompose full path and filename to get text
-if (image_filename.length <= 4) return image_filename; // initial check to handle variables, and steps
-filename_extension = image_filename.substr(-4).toLowerCase(); // without image input, for eg keyboard step
-if ((filename_extension !== '.png') && (filename_extension !== '.bmp')) return image_filename;
-image_filename = image_filename.substr(0, image_filename.length - 4);
 last_back_slash = image_filename.lastIndexOf('/');
 last_forward_slash = image_filename.lastIndexOf('\\');
-last_slash_position = max(last_back_slash, last_forward_slash);
+last_slash_position = Math.max(last_back_slash, last_forward_slash);
 return image_filename.substr(last_slash_position + 1);}
 
 function is_coordinates(input_params) { // helper function to check if string is (x,y) coordinates
@@ -951,7 +947,7 @@ else if (input_params.length > 9 && input_params.substr(-9).toLowerCase() == 'us
 else if (is_coordinates(input_params)) return true; else return false;}
 
 function call_sikuli(input_intent,input_params,other_actions) { // helper function to use sikuli visual automation
-if (input_params.length > 9 && input_params.substr(-9).toLowerCase() == 'using ocr')
+if (input_intent.length > 9 && input_intent.substr(-9).toLowerCase() == 'using ocr')
 {input_intent = input_intent.replace(input_params,get_text_for_sikuli(input_params));
 input_params = get_text_for_sikuli(input_params);} // handle using ocr use case
 var fs = require('fs'); // use phantomjs fs file system module to access files and directories
