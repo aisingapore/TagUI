@@ -570,10 +570,6 @@ $source_string = str_replace("+++","+",$source_string); $source_string = str_rep
 return $source_string;} // replacing multiple variations of + to handle user typos of double spaces etc
 
 function get_text_for_sikuli($image_filename) { // helper function to decompose full path and filename to get text
-if (strlen($image_filename) <= 4) return $image_filename; // initial check to handle variables, and steps
-$filename_extension = strtolower(substr($image_filename, -4)); // without image input, for eg keyboard step
-if (($filename_extension != '.png') and ($filename_extension != '.bmp')) return $image_filename;
-$image_filename = substr($image_filename, 0, -4);
 $last_back_slash = strrpos($image_filename, "/");
 $last_forward_slash = strrpos($image_filename, "\\");
 $last_slash_position = max($last_back_slash, $last_forward_slash);
