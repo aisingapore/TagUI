@@ -588,15 +588,19 @@ or !preg_match('/[a-zA-Z]/',$input_params))) return true; else return false;}
 function is_sikuli($input_params) { // helper function to check if input is meant for sikuli visual automation
 if (strlen($input_params)>4 and strtolower(substr($input_params,-4))=='.png') return true; // support png and bmp
 else if (strlen($input_params)>4 and strtolower(substr($input_params,-4))=='.bmp') return true;
+else if (strlen($input_params)>9 and strtolower(substr($input_params,-9))=='using ocr') return true;
 else if (is_coordinates($input_params)) return true; else return false;}
 
 function call_sikuli($input_intent,$input_params,$other_actions = '') { // helper function to use sikuli visual automation
+if (strlen($input_intent)>9 and strtolower(substr($input_intent,-9))=='using ocr')
+{$input_intent = str_replace($input_params,get_text_for_sikuli($input_params),$input_intent);
+$input_params = get_text_for_sikuli($input_params);} // handle using ocr use case
 if (!touch('tagui.sikuli/tagui_sikuli.in')) die("ERROR - cannot initialise tagui_sikuli.in\n");
 if (!touch('tagui.sikuli/tagui_sikuli.out')) die("ERROR - cannot initialise tagui_sikuli.out\n");
 if ($other_actions != '') $other_actions = "\n" . $other_actions;
 return "{techo('".str_replace(' to snap_image()','',$input_intent)."'); var fs = require('fs');\n" .
 "if (!sikuli_step('".$input_intent."')) if (!fs.exists('".$input_params."'))\n" .
-"this.echo('ERROR - cannot find ".get_text_for_sikuli($input_params)." on screen').exit(); else\n" .
+"this.echo('ERROR - cannot find image file ".$input_params."').exit(); else\n" .
 "this.echo('ERROR - cannot find ".$input_params." on screen').exit(); this.wait(0);" . $other_actions. "}" .
 end_fi()."});\n\n";}
 
