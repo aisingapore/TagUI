@@ -1128,7 +1128,7 @@ if not exist "tagui_logging" (
 )
 
 rem hack chrome to prevent ended unexpectedly message
-set "chrome_pref=%LOCALAPPDATA%\Google\Chrome\User Data\Default\Preferences"
+set "chrome_pref=%LOCALAPPDATA%\Google\Chrome\User Data\Default"
 if exist "%chrome_pref%" (
 	gawk "sub(\"\\\"exited_cleanly\\\":false\", \"\\\"exited_cleanly\\\":true\")" "%chrome_pref%" > "%chrome_pref%" > nul 2>&1
 	gawk "sub(\"\\\"exit_type\\\":\\\"Crashed\\\"\", \"\\\"exit_type\\\":\\\"Normal\\\"\")" "%chrome_pref%" > "%chrome_pref%" > nul 2>&1
