@@ -8,23 +8,23 @@ rem enable windows for loop advanced flow control
 setlocal enableextensions enabledelayedexpansion
 
 if "%~1"=="" (
-echo tagui v5.11: use following options and this syntax to run - tagui flow_filename option^(s^)
+echo tagui v6.0: use following options and this syntax to run - tagui flow_filename option^(s^)
 echo.
-echo live      - launch in live mode enabled with visual automation for interactive development session
-echo deploy    - generate .cmd file which can be double-clicked to run workflow with specific options
-echo chrome    - run on visible Chrome web browser instead of invisible PhantomJS ^(first install Chrome^)
-echo headless  - run on invisible Chrome web browser instead of default PhantomJS ^(first install Chrome^)
-echo nobrowser - run without any web browser, for example to perform automation only with visual automation
-echo firefox   - run on visible Firefox web browser instead of invisible browser ^(first install Firefox^)
-echo report    - track run result in tagui\src\tagui_report.csv and save html log of automation execution
-echo upload    - upload automation flow and result to hastebin.com ^(expires 30 days after last view^)
-echo speed     - skip 3-second delay between datatable iterations ^(and skip restarting of Chrome^)
-echo quiet     - run without output except for explicit output ^(echo / show / check / errors etc^)
-echo debug     - show run-time backend messages from PhantomJS mode for detailed tracing and logging
-echo test      - testing with check step test assertions for CI/CD integration ^(output XUnit XML file^)
-echo baseline  - output execution log and relative-path output files to a separate baseline directory
-echo input^(s^)  - add your own parameter^(s^) to be used in your automation flow as variables p1 to p9
-echo data.csv  - specify a csv file to be used as the datatable for batch automation of many records
+echo live         launch in live mode enabled with visual automation for interactive development session
+echo input^(s^)   add your own parameter^(s^) to be used in your automation flow as variables p1 to p9
+echo data.csv     specify a csv file to be used as the datatable for batch automation of many records
+echo -deploy      generate .cmd file which can be double-clicked to run workflow with specific options
+echo -chrome      run on visible Chrome web browser instead of invisible PhantomJS ^(first install Chrome^)
+echo -headless    run on invisible Chrome web browser instead of default PhantomJS ^(first install Chrome^)
+echo -nobrowser   run without any web browser, for example to perform automation only with visual automation
+echo -firefox     run on visible Firefox web browser instead of invisible browser ^(first install Firefox^)
+echo -report      track run result in tagui\src\tagui_report.csv and save html log of automation execution
+echo -upload      upload automation flow and result to hastebin.com ^(expires 30 days after last view^)
+echo -speed       skip 3-second delay between datatable iterations ^(and skip restarting of Chrome^)
+echo -quiet       run without output except for explicit output ^(echo / show / check / errors etc^)
+echo -debug       show run-time backend messages from PhantomJS mode for detailed tracing and logging
+echo -test        testing with check step test assertions for CI/CD integration ^(output XUnit XML file^)
+echo -baseline    output execution log and relative-path output files to a separate baseline directory
 echo.
 echo TagUI is a command-line tool for digital process automation ^(RPA^) - for more info, google tagui
 echo.
@@ -86,35 +86,68 @@ set arg9=%9
 
 set tagui_baseline_mode=false
 rem check baseline parameter to output files to baseline directory
-if "%arg2%"=="baseline" (
+if "%arg2%"=="-baseline" (
 	set arg2=
 	set tagui_baseline_mode=true
 )
-if "%arg3%"=="baseline" (
+if "%arg3%"=="-baseline" (
 	set arg3=
 	set tagui_baseline_mode=true
 )
-if "%arg4%"=="baseline" (
+if "%arg4%"=="-baseline" (
 	set arg4=
 	set tagui_baseline_mode=true
 )
-if "%arg5%"=="baseline" (
+if "%arg5%"=="-baseline" (
 	set arg5=
 	set tagui_baseline_mode=true
 )
-if "%arg6%"=="baseline" (
+if "%arg6%"=="-baseline" (
 	set arg6=
 	set tagui_baseline_mode=true
 )
-if "%arg7%"=="baseline" (
+if "%arg7%"=="-baseline" (
 	set arg7=
 	set tagui_baseline_mode=true
 )
-if "%arg8%"=="baseline" (
+if "%arg8%"=="-baseline" (
 	set arg8=
 	set tagui_baseline_mode=true
 )
-if "%arg9%"=="baseline" (
+if "%arg9%"=="-baseline" (
+	set arg9=
+	set tagui_baseline_mode=true
+)
+
+if "%arg2%"=="-b" (
+	set arg2=
+	set tagui_baseline_mode=true
+)
+if "%arg3%"=="-b" (
+	set arg3=
+	set tagui_baseline_mode=true
+)
+if "%arg4%"=="-b" (
+	set arg4=
+	set tagui_baseline_mode=true
+)
+if "%arg5%"=="-b" (
+	set arg5=
+	set tagui_baseline_mode=true
+)
+if "%arg6%"=="-b" (
+	set arg6=
+	set tagui_baseline_mode=true
+)
+if "%arg7%"=="-b" (
+	set arg7=
+	set tagui_baseline_mode=true
+)
+if "%arg8%"=="-b" (
+	set arg8=
+	set tagui_baseline_mode=true
+)
+if "%arg9%"=="-b" (
 	set arg9=
 	set tagui_baseline_mode=true
 )
@@ -155,35 +188,68 @@ if exist "%~dp0unx\gawk.exe" set "path=%~dp0unx;%path%"
 
 set tagui_deploy_workflow=false
 rem check deploy parameter to generate an executable file to run workflow
-if "%arg2%"=="deploy" (
+if "%arg2%"=="-deploy" (
 	set arg2=
 	set tagui_deploy_workflow=true
 )
-if "%arg3%"=="deploy" (
+if "%arg3%"=="-deploy" (
 	set arg3=
 	set tagui_deploy_workflow=true
 )
-if "%arg4%"=="deploy" (
+if "%arg4%"=="-deploy" (
 	set arg4=
 	set tagui_deploy_workflow=true
 )
-if "%arg5%"=="deploy" (
+if "%arg5%"=="-deploy" (
 	set arg5=
 	set tagui_deploy_workflow=true
 )
-if "%arg6%"=="deploy" (
+if "%arg6%"=="-deploy" (
 	set arg6=
 	set tagui_deploy_workflow=true
 )
-if "%arg7%"=="deploy" (
+if "%arg7%"=="-deploy" (
 	set arg7=
 	set tagui_deploy_workflow=true
 )
-if "%arg8%"=="deploy" (
+if "%arg8%"=="-deploy" (
 	set arg8=
 	set tagui_deploy_workflow=true
 )
-if "%arg9%"=="deploy" (
+if "%arg9%"=="-deploy" (
+	set arg9=
+	set tagui_deploy_workflow=true
+)
+
+if "%arg2%"=="-d" (
+	set arg2=
+	set tagui_deploy_workflow=true
+)
+if "%arg3%"=="-d" (
+	set arg3=
+	set tagui_deploy_workflow=true
+)
+if "%arg4%"=="-d" (
+	set arg4=
+	set tagui_deploy_workflow=true
+)
+if "%arg5%"=="-d" (
+	set arg5=
+	set tagui_deploy_workflow=true
+)
+if "%arg6%"=="-d" (
+	set arg6=
+	set tagui_deploy_workflow=true
+)
+if "%arg7%"=="-d" (
+	set arg7=
+	set tagui_deploy_workflow=true
+)
+if "%arg8%"=="-d" (
+	set arg8=
+	set tagui_deploy_workflow=true
+)
+if "%arg9%"=="-d" (
 	set arg9=
 	set tagui_deploy_workflow=true
 )
@@ -196,141 +262,273 @@ if %tagui_deploy_workflow%==true (
 	exit /b 0
 )
 
-rem set default web browser to be used to phantomjs
+rem set default web browser to be used to chrome
 set tagui_web_browser=chrome
 
 rem check nobrowser parameter to run without any web browser, ie only phantomjs engine
-if "%arg2%"=="nobrowser" (
+if "%arg2%"=="-nobrowser" (
 	set arg2=
 	set tagui_web_browser=phantomjs
 )
-if "%arg3%"=="nobrowser" (
+if "%arg3%"=="-nobrowser" (
 	set arg3=
 	set tagui_web_browser=phantomjs
 )
-if "%arg4%"=="nobrowser" (
+if "%arg4%"=="-nobrowser" (
 	set arg4=
 	set tagui_web_browser=phantomjs
 )
-if "%arg5%"=="nobrowser" (
+if "%arg5%"=="-nobrowser" (
 	set arg5=
 	set tagui_web_browser=phantomjs
 )
-if "%arg6%"=="nobrowser" (
+if "%arg6%"=="-nobrowser" (
 	set arg6=
 	set tagui_web_browser=phantomjs
 )
-if "%arg7%"=="nobrowser" (
+if "%arg7%"=="-nobrowser" (
 	set arg7=
 	set tagui_web_browser=phantomjs
 )
-if "%arg8%"=="nobrowser" (
+if "%arg8%"=="-nobrowser" (
 	set arg8=
 	set tagui_web_browser=phantomjs
 )
-if "%arg9%"=="nobrowser" (
+if "%arg9%"=="-nobrowser" (
+	set arg9=
+	set tagui_web_browser=phantomjs
+)
+
+if "%arg2%"=="-n" (
+	set arg2=
+	set tagui_web_browser=phantomjs
+)
+if "%arg3%"=="-n" (
+	set arg3=
+	set tagui_web_browser=phantomjs
+)
+if "%arg4%"=="-n" (
+	set arg4=
+	set tagui_web_browser=phantomjs
+)
+if "%arg5%"=="-n" (
+	set arg5=
+	set tagui_web_browser=phantomjs
+)
+if "%arg6%"=="-n" (
+	set arg6=
+	set tagui_web_browser=phantomjs
+)
+if "%arg7%"=="-n" (
+	set arg7=
+	set tagui_web_browser=phantomjs
+)
+if "%arg8%"=="-n" (
+	set arg8=
+	set tagui_web_browser=phantomjs
+)
+if "%arg9%"=="-n" (
 	set arg9=
 	set tagui_web_browser=phantomjs
 )
 
 rem check chrome parameter to run on in-built integration with visible chrome
-if "%arg2%"=="chrome" (
+if "%arg2%"=="-chrome" (
 	set arg2=
 	set tagui_web_browser=chrome
 )
-if "%arg3%"=="chrome" (
+if "%arg3%"=="-chrome" (
 	set arg3=
 	set tagui_web_browser=chrome
 )
-if "%arg4%"=="chrome" (
+if "%arg4%"=="-chrome" (
 	set arg4=
 	set tagui_web_browser=chrome
 )
-if "%arg5%"=="chrome" (
+if "%arg5%"=="-chrome" (
 	set arg5=
 	set tagui_web_browser=chrome
 )
-if "%arg6%"=="chrome" (
+if "%arg6%"=="-chrome" (
 	set arg6=
 	set tagui_web_browser=chrome
 )
-if "%arg7%"=="chrome" (
+if "%arg7%"=="-chrome" (
 	set arg7=
 	set tagui_web_browser=chrome
 )
-if "%arg8%"=="chrome" (
+if "%arg8%"=="-chrome" (
 	set arg8=
 	set tagui_web_browser=chrome
 )
-if "%arg9%"=="chrome" (
+if "%arg9%"=="-chrome" (
+	set arg9=
+	set tagui_web_browser=chrome
+)
+
+if "%arg2%"=="-c" (
+	set arg2=
+	set tagui_web_browser=chrome
+)
+if "%arg3%"=="-c" (
+	set arg3=
+	set tagui_web_browser=chrome
+)
+if "%arg4%"=="-c" (
+	set arg4=
+	set tagui_web_browser=chrome
+)
+if "%arg5%"=="-c" (
+	set arg5=
+	set tagui_web_browser=chrome
+)
+if "%arg6%"=="-c" (
+	set arg6=
+	set tagui_web_browser=chrome
+)
+if "%arg7%"=="-c" (
+	set arg7=
+	set tagui_web_browser=chrome
+)
+if "%arg8%"=="-c" (
+	set arg8=
+	set tagui_web_browser=chrome
+)
+if "%arg9%"=="-c" (
 	set arg9=
 	set tagui_web_browser=chrome
 )
 
 rem check headless parameter to run on in-built integration with headless chrome
-if "%arg2%"=="headless" (
+if "%arg2%"=="-headless" (
 	set arg2=
 	set tagui_web_browser=headless
 )
-if "%arg3%"=="headless" (
+if "%arg3%"=="-headless" (
 	set arg3=
 	set tagui_web_browser=headless
 )
-if "%arg4%"=="headless" (
+if "%arg4%"=="-headless" (
 	set arg4=
 	set tagui_web_browser=headless
 )
-if "%arg5%"=="headless" (
+if "%arg5%"=="-headless" (
 	set arg5=
 	set tagui_web_browser=headless
 )
-if "%arg6%"=="headless" (
+if "%arg6%"=="-headless" (
 	set arg6=
 	set tagui_web_browser=headless
 )
-if "%arg7%"=="headless" (
+if "%arg7%"=="-headless" (
 	set arg7=
 	set tagui_web_browser=headless
 )
-if "%arg8%"=="headless" (
+if "%arg8%"=="-headless" (
 	set arg8=
 	set tagui_web_browser=headless
 )
-if "%arg9%"=="headless" (
+if "%arg9%"=="-headless" (
+	set arg9=
+	set tagui_web_browser=headless
+)
+
+if "%arg2%"=="-h" (
+	set arg2=
+	set tagui_web_browser=headless
+)
+if "%arg3%"=="-h" (
+	set arg3=
+	set tagui_web_browser=headless
+)
+if "%arg4%"=="-h" (
+	set arg4=
+	set tagui_web_browser=headless
+)
+if "%arg5%"=="-h" (
+	set arg5=
+	set tagui_web_browser=headless
+)
+if "%arg6%"=="-h" (
+	set arg6=
+	set tagui_web_browser=headless
+)
+if "%arg7%"=="-h" (
+	set arg7=
+	set tagui_web_browser=headless
+)
+if "%arg8%"=="-h" (
+	set arg8=
+	set tagui_web_browser=headless
+)
+if "%arg9%"=="-h" (
 	set arg9=
 	set tagui_web_browser=headless
 )
 
 rem check firefox parameter to run on visible firefox browser through slimerjs
-if "%arg2%"=="firefox" (
+if "%arg2%"=="-firefox" (
 	set arg2=--engine=slimerjs
 	set tagui_web_browser=firefox
 )
-if "%arg3%"=="firefox" (
+if "%arg3%"=="-firefox" (
 	set arg3=--engine=slimerjs
 	set tagui_web_browser=firefox
 )
-if "%arg4%"=="firefox" (
+if "%arg4%"=="-firefox" (
 	set arg4=--engine=slimerjs
 	set tagui_web_browser=firefox
 )
-if "%arg5%"=="firefox" (
+if "%arg5%"=="-firefox" (
 	set arg5=--engine=slimerjs
 	set tagui_web_browser=firefox
 )
-if "%arg6%"=="firefox" (
+if "%arg6%"=="-firefox" (
 	set arg6=--engine=slimerjs
 	set tagui_web_browser=firefox
 )
-if "%arg7%"=="firefox" (
+if "%arg7%"=="-firefox" (
 	set arg7=--engine=slimerjs
 	set tagui_web_browser=firefox
 )
-if "%arg8%"=="firefox" (
+if "%arg8%"=="-firefox" (
 	set arg8=--engine=slimerjs
 	set tagui_web_browser=firefox
 )
-if "%arg9%"=="firefox" (
+if "%arg9%"=="-firefox" (
+	set arg9=--engine=slimerjs
+	set tagui_web_browser=firefox
+)
+
+if "%arg2%"=="-f" (
+	set arg2=--engine=slimerjs
+	set tagui_web_browser=firefox
+)
+if "%arg3%"=="-f" (
+	set arg3=--engine=slimerjs
+	set tagui_web_browser=firefox
+)
+if "%arg4%"=="-f" (
+	set arg4=--engine=slimerjs
+	set tagui_web_browser=firefox
+)
+if "%arg5%"=="-f" (
+	set arg5=--engine=slimerjs
+	set tagui_web_browser=firefox
+)
+if "%arg6%"=="-f" (
+	set arg6=--engine=slimerjs
+	set tagui_web_browser=firefox
+)
+if "%arg7%"=="-f" (
+	set arg7=--engine=slimerjs
+	set tagui_web_browser=firefox
+)
+if "%arg8%"=="-f" (
+	set arg8=--engine=slimerjs
+	set tagui_web_browser=firefox
+)
+if "%arg9%"=="-f" (
 	set arg9=--engine=slimerjs
 	set tagui_web_browser=firefox
 )
@@ -338,186 +536,351 @@ if "%arg9%"=="firefox" (
 rem export web browser variable not needed for windows batch file
 
 rem check debug parameter to show run-time backend messages from phantomjs
-if "%arg2%"=="debug" set arg2=--verbose
-if "%arg3%"=="debug" set arg3=--verbose
-if "%arg4%"=="debug" set arg4=--verbose
-if "%arg5%"=="debug" set arg5=--verbose
-if "%arg6%"=="debug" set arg6=--verbose
-if "%arg7%"=="debug" set arg7=--verbose
-if "%arg8%"=="debug" set arg8=--verbose
-if "%arg9%"=="debug" set arg9=--verbose
+if "%arg2%"=="-debug" set arg2=--verbose
+if "%arg3%"=="-debug" set arg3=--verbose
+if "%arg4%"=="-debug" set arg4=--verbose
+if "%arg5%"=="-debug" set arg5=--verbose
+if "%arg6%"=="-debug" set arg6=--verbose
+if "%arg7%"=="-debug" set arg7=--verbose
+if "%arg8%"=="-debug" set arg8=--verbose
+if "%arg9%"=="-debug" set arg9=--verbose
 
 set tagui_test_mode=false
 rem check test parameter to run flow as casperjs test automation script
-if "%arg2%"=="test" (
+if "%arg2%"=="-test" (
 	set arg2=
 	set tagui_test_mode=true
 )
-if "%arg3%"=="test" (
+if "%arg3%"=="-test" (
 	set arg3=
 	set tagui_test_mode=true
 )
-if "%arg4%"=="test" (
+if "%arg4%"=="-test" (
 	set arg4=
 	set tagui_test_mode=true
 )
-if "%arg5%"=="test" (
+if "%arg5%"=="-test" (
 	set arg5=
 	set tagui_test_mode=true
 )
-if "%arg6%"=="test" (
+if "%arg6%"=="-test" (
 	set arg6=
 	set tagui_test_mode=true
 )
-if "%arg7%"=="test" (
+if "%arg7%"=="-test" (
 	set arg7=
 	set tagui_test_mode=true
 )
-if "%arg8%"=="test" (
+if "%arg8%"=="-test" (
 	set arg8=
 	set tagui_test_mode=true
 )
-if "%arg9%"=="test" (
+if "%arg9%"=="-test" (
+	set arg9=
+	set tagui_test_mode=true
+)
+
+if "%arg2%"=="-t" (
+	set arg2=
+	set tagui_test_mode=true
+)
+if "%arg3%"=="-t" (
+	set arg3=
+	set tagui_test_mode=true
+)
+if "%arg4%"=="-t" (
+	set arg4=
+	set tagui_test_mode=true
+)
+if "%arg5%"=="-t" (
+	set arg5=
+	set tagui_test_mode=true
+)
+if "%arg6%"=="-t" (
+	set arg6=
+	set tagui_test_mode=true
+)
+if "%arg7%"=="-t" (
+	set arg7=
+	set tagui_test_mode=true
+)
+if "%arg8%"=="-t" (
+	set arg8=
+	set tagui_test_mode=true
+)
+if "%arg9%"=="-t" (
 	set arg9=
 	set tagui_test_mode=true
 )
 
 set tagui_quiet_mode=false
 rem check quiet parameter to run flow quietly by only showing explicit output
-if "%arg2%"=="quiet" (
+if "%arg2%"=="-quiet" (
 	set arg2=
 	set tagui_quiet_mode=true
 )
-if "%arg3%"=="quiet" (
+if "%arg3%"=="-quiet" (
 	set arg3=
 	set tagui_quiet_mode=true
 )
-if "%arg4%"=="quiet" (
+if "%arg4%"=="-quiet" (
 	set arg4=
 	set tagui_quiet_mode=true
 )
-if "%arg5%"=="quiet" (
+if "%arg5%"=="-quiet" (
 	set arg5=
 	set tagui_quiet_mode=true
 )
-if "%arg6%"=="quiet" (
+if "%arg6%"=="-quiet" (
 	set arg6=
 	set tagui_quiet_mode=true
 )
-if "%arg7%"=="quiet" (
+if "%arg7%"=="-quiet" (
 	set arg7=
 	set tagui_quiet_mode=true
 )
-if "%arg8%"=="quiet" (
+if "%arg8%"=="-quiet" (
 	set arg8=
 	set tagui_quiet_mode=true
 )
-if "%arg9%"=="quiet" (
+if "%arg9%"=="-quiet" (
+	set arg9=
+	set tagui_quiet_mode=true
+)
+
+if "%arg2%"=="-q" (
+	set arg2=
+	set tagui_quiet_mode=true
+)
+if "%arg3%"=="-q" (
+	set arg3=
+	set tagui_quiet_mode=true
+)
+if "%arg4%"=="-q" (
+	set arg4=
+	set tagui_quiet_mode=true
+)
+if "%arg5%"=="-q" (
+	set arg5=
+	set tagui_quiet_mode=true
+)
+if "%arg6%"=="-q" (
+	set arg6=
+	set tagui_quiet_mode=true
+)
+if "%arg7%"=="-q" (
+	set arg7=
+	set tagui_quiet_mode=true
+)
+if "%arg8%"=="-q" (
+	set arg8=
+	set tagui_quiet_mode=true
+)
+if "%arg9%"=="-q" (
 	set arg9=
 	set tagui_quiet_mode=true
 )
 
 set tagui_html_report=false
 rem check report parameter to generate html formatted automation log
-if "%arg2%"=="report" (
+if "%arg2%"=="-report" (
 	set arg2=
 	set tagui_html_report=true
 )
-if "%arg3%"=="report" (
+if "%arg3%"=="-report" (
 	set arg3=
 	set tagui_html_report=true
 )
-if "%arg4%"=="report" (
+if "%arg4%"=="-report" (
 	set arg4=
 	set tagui_html_report=true
 )
-if "%arg5%"=="report" (
+if "%arg5%"=="-report" (
 	set arg5=
 	set tagui_html_report=true
 )
-if "%arg6%"=="report" (
+if "%arg6%"=="-report" (
 	set arg6=
 	set tagui_html_report=true
 )
-if "%arg7%"=="report" (
+if "%arg7%"=="-report" (
 	set arg7=
 	set tagui_html_report=true
 )
-if "%arg8%"=="report" (
+if "%arg8%"=="-report" (
 	set arg8=
 	set tagui_html_report=true
 )
-if "%arg9%"=="report" (
+if "%arg9%"=="-report" (
+	set arg9=
+	set tagui_html_report=true
+)
+
+if "%arg2%"=="-r" (
+	set arg2=
+	set tagui_html_report=true
+)
+if "%arg3%"=="-r" (
+	set arg3=
+	set tagui_html_report=true
+)
+if "%arg4%"=="-r" (
+	set arg4=
+	set tagui_html_report=true
+)
+if "%arg5%"=="-r" (
+	set arg5=
+	set tagui_html_report=true
+)
+if "%arg6%"=="-r" (
+	set arg6=
+	set tagui_html_report=true
+)
+if "%arg7%"=="-r" (
+	set arg7=
+	set tagui_html_report=true
+)
+if "%arg8%"=="-r" (
+	set arg8=
+	set tagui_html_report=true
+)
+if "%arg9%"=="-r" (
 	set arg9=
 	set tagui_html_report=true
 )
 
 set tagui_upload_result=false
 rem check upload parameter to upload flow result to online storage
-if "%arg2%"=="upload" (
+if "%arg2%"=="-upload" (
 	set arg2=
 	set tagui_upload_result=true
 )
-if "%arg3%"=="upload" (
+if "%arg3%"=="-upload" (
 	set arg3=
 	set tagui_upload_result=true
 )
-if "%arg4%"=="upload" (
+if "%arg4%"=="-upload" (
 	set arg4=
 	set tagui_upload_result=true
 )
-if "%arg5%"=="upload" (
+if "%arg5%"=="-upload" (
 	set arg5=
 	set tagui_upload_result=true
 )
-if "%arg6%"=="upload" (
+if "%arg6%"=="-upload" (
 	set arg6=
 	set tagui_upload_result=true
 )
-if "%arg7%"=="upload" (
+if "%arg7%"=="-upload" (
 	set arg7=
 	set tagui_upload_result=true
 )
-if "%arg8%"=="upload" (
+if "%arg8%"=="-upload" (
 	set arg8=
 	set tagui_upload_result=true
 )
-if "%arg9%"=="upload" (
+if "%arg9%"=="-upload" (
+	set arg9=
+	set tagui_upload_result=true
+)
+
+if "%arg2%"=="-u" (
+	set arg2=
+	set tagui_upload_result=true
+)
+if "%arg3%"=="-u" (
+	set arg3=
+	set tagui_upload_result=true
+)
+if "%arg4%"=="-u" (
+	set arg4=
+	set tagui_upload_result=true
+)
+if "%arg5%"=="-u" (
+	set arg5=
+	set tagui_upload_result=true
+)
+if "%arg6%"=="-u" (
+	set arg6=
+	set tagui_upload_result=true
+)
+if "%arg7%"=="-u" (
+	set arg7=
+	set tagui_upload_result=true
+)
+if "%arg8%"=="-u" (
+	set arg8=
+	set tagui_upload_result=true
+)
+if "%arg9%"=="-u" (
 	set arg9=
 	set tagui_upload_result=true
 )
 
 set tagui_speed_mode=false
 rem check speed parameter to skip delay and chrome restart between iterations
-if "%arg2%"=="speed" (
+if "%arg2%"=="-speed" (
 	set arg2=
 	set tagui_speed_mode=true
 )
-if "%arg3%"=="speed" (
+if "%arg3%"=="-speed" (
 	set arg3=
 	set tagui_speed_mode=true
 )
-if "%arg4%"=="speed" (
+if "%arg4%"=="-speed" (
 	set arg4=
 	set tagui_speed_mode=true
 )
-if "%arg5%"=="speed" (
+if "%arg5%"=="-speed" (
 	set arg5=
 	set tagui_speed_mode=true
 )
-if "%arg6%"=="speed" (
+if "%arg6%"=="-speed" (
 	set arg6=
 	set tagui_speed_mode=true
 )
-if "%arg7%"=="speed" (
+if "%arg7%"=="-speed" (
 	set arg7=
 	set tagui_speed_mode=true
 )
-if "%arg8%"=="speed" (
+if "%arg8%"=="-speed" (
 	set arg8=
 	set tagui_speed_mode=true
 )
-if "%arg9%"=="speed" (
+if "%arg9%"=="-speed" (
+	set arg9=
+	set tagui_speed_mode=true
+)
+
+if "%arg2%"=="-s" (
+	set arg2=
+	set tagui_speed_mode=true
+)
+if "%arg3%"=="-s" (
+	set arg3=
+	set tagui_speed_mode=true
+)
+if "%arg4%"=="-s" (
+	set arg4=
+	set tagui_speed_mode=true
+)
+if "%arg5%"=="-s" (
+	set arg5=
+	set tagui_speed_mode=true
+)
+if "%arg6%"=="-s" (
+	set arg6=
+	set tagui_speed_mode=true
+)
+if "%arg7%"=="-s" (
+	set arg7=
+	set tagui_speed_mode=true
+)
+if "%arg8%"=="-s" (
+	set arg8=
+	set tagui_speed_mode=true
+)
+if "%arg9%"=="-s" (
 	set arg9=
 	set tagui_speed_mode=true
 )
@@ -765,7 +1128,7 @@ if not exist "tagui_logging" (
 )
 
 rem hack chrome to prevent ended unexpectedly message
-set "chrome_pref=%LOCALAPPDATA%\Google\Chrome\User Data\Default"
+set "chrome_pref=%LOCALAPPDATA%\Google\Chrome\User Data\Default\Preferences"
 if exist "%chrome_pref%" (
 	gawk "sub(\"\\\"exited_cleanly\\\":false\", \"\\\"exited_cleanly\\\":true\")" "%chrome_pref%" > "%chrome_pref%" > nul 2>&1
 	gawk "sub(\"\\\"exit_type\\\":\\\"Crashed\\\"\", \"\\\"exit_type\\\":\\\"Normal\\\"\")" "%chrome_pref%" > "%chrome_pref%" > nul 2>&1
