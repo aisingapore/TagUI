@@ -100,7 +100,7 @@ Recommended locations to unzip to
 
 Avoid spaces in the folder path as some components of TagUI don't work well with spaces in folder and file names. Optionally, configure web browser settings in tagui_config.txt, such as browser resolution, step timeout of 10s etc.
 
-**Tip** - to try [cutting edge version](https://github.com/kelaberetiv/TagUI/compare/v5.11.0...develop) with the latest features, [download develop.zip](https://github.com/kelaberetiv/TagUI/archive/develop.zip) to overwrite your existing packaged installation. Be sure to manually select and move the folders & files inside master.zip's TagUI-master/src folder to replace your existing tagui/src folder, some OSes will delete existing target folders that are missing from source folder.
+**Tip** - to try [cutting edge version](https://github.com/kelaberetiv/TagUI/compare/v5.11.0...develop) with the latest features, [download TagUI-develop.zip](https://github.com/kelaberetiv/TagUI/archive/develop.zip) to overwrite your existing packaged installation. Be sure to manually select and move the folders & files inside the zip file's TagUI-develop/src folder to replace your existing tagui/src folder, some OSes will delete existing target folders that are missing from source folder.
 
 ### MANUAL INSTALLATION
 <details>
