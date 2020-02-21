@@ -528,13 +528,14 @@ function abs_file($filename) { // helper function to return absolute filename
 if ($filename == "") return ""; $flow_script = $GLOBALS['script']; // get flow filename
 if (substr($filename,0,1)=="/") return $filename; // return mac/linux absolute filename directly
 if (substr($filename,1,1)==":") return str_replace("\\","/",$filename); // return windows absolute filename directly
+if (strlen($filename)>9 and strtolower(substr($filename,-9))=='using ocr') return $filename; // to handle using ocr
+if (is_coordinates($filename)) return $filename; // to handle when sikuli (x,y) coordinates locator is provided
 if (strpos($filename,"'+")!==false and strpos($filename,"+'")!==false)
 return "'+abs_file('" . $filename . "')+'"; // throw to runtime abs_file function if dynamic filename is given
-if (is_coordinates($filename)) return $filename; // to handle when sikuli (x,y) coordinates locator is provided
 $flow_path = str_replace("\\","/",dirname($flow_script)); // otherwise use flow script path to build absolute filename
 // above str_replace is because casperjs/phantomjs do not seem to support \ for windows paths, replace with / to work
 if (strpos($flow_path,"/")!==false) return str_replace("\\","/",$flow_path . '/' . $filename);
-else return $flow_path . '\\' . $filename;} 
+else return $flow_path . '\\' . $filename;}
 
 function beg_tx($locator) { // helper function to return beginning string for handling locators
 if ($GLOBALS['inside_while_loop'] == 0)
@@ -590,13 +591,12 @@ else if (is_coordinates($input_params)) return true; else return false;}
 
 function call_sikuli($input_intent,$input_params,$other_actions = '') { // helper function to use sikuli visual automation
 if (strlen($input_intent)>9 and strtolower(substr($input_intent,-9))=='using ocr')
-{$input_intent = str_replace($input_params,get_text_for_sikuli($input_params),$input_intent);
-$input_params = get_text_for_sikuli($input_params);} // handle using ocr use case
+$use_ocr = "true"; else $use_ocr = "false"; // to track if it is a text locator using OCR
 if (!touch('tagui.sikuli/tagui_sikuli.in')) die("ERROR - cannot initialise tagui_sikuli.in\n");
 if (!touch('tagui.sikuli/tagui_sikuli.out')) die("ERROR - cannot initialise tagui_sikuli.out\n");
 if ($other_actions != '') $other_actions = "\n" . $other_actions;
 return "{techo('".str_replace(' to snap_image()','',$input_intent)."'); var fs = require('fs');\n" .
-"if (!sikuli_step('".$input_intent."')) if (!fs.exists('".$input_params."'))\n" .
+"if (!sikuli_step('".$input_intent."')) if (!fs.exists('".$input_params."') && !".$use_ocr.")\n" .
 "this.echo('ERROR - cannot find image file ".$input_params."').exit(); else\n" .
 "this.echo('ERROR - cannot find ".$input_params." on screen').exit(); this.wait(0);" . $other_actions. "}" .
 end_fi()."});\n\n";}
