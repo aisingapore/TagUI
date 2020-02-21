@@ -902,6 +902,7 @@ function abs_file(filename) { // helper function to return absolute filename
 if (filename == '') return ''; // unlike tagui_parse.php not deriving path from script variable
 if (filename.substr(0,1) == '/') return filename; // return mac/linux absolute filename directly
 if (filename.substr(1,1) == ':') return filename.replace(/\\/g,'/'); // return windows absolute filename directly
+if (filename.length > 9 && filename.substr(-9).toLowerCase() == 'using ocr') return filename; // to handle using ocr
 if (is_coordinates(filename)) return filename; // to handle when sikuli (x,y) coordinates locator is provided
 var tmp_flow_path = flow_path; // otherwise use flow_path defined in generated script to build absolute filename
 // above str_replace is because casperjs/phantomjs do not seem to support \ for windows paths, replace with / to work
@@ -949,15 +950,14 @@ else if (is_coordinates(input_params)) return true; else return false;}
 
 function call_sikuli(input_intent,input_params,other_actions) { // helper function to use sikuli visual automation
 if (input_intent.length > 9 && input_intent.substr(-9).toLowerCase() == 'using ocr')
-{input_intent = input_intent.replace(input_params,get_text_for_sikuli(input_params));
-input_params = get_text_for_sikuli(input_params);} // handle using ocr use case
+var use_ocr = 'true'; else var use_ocr = 'false';  // to track if it is a text locator using OCR
 var fs = require('fs'); // use phantomjs fs file system module to access files and directories
 fs.write('tagui.sikuli/tagui_sikuli.in', '', 'w'); fs.write('tagui.sikuli/tagui_sikuli.out', '', 'w');
 if (!fs.exists('tagui.sikuli/tagui_sikuli.in')) return "this.echo('ERROR - cannot initialise tagui_sikuli.in')";
 if (!fs.exists('tagui.sikuli/tagui_sikuli.out')) return "this.echo('ERROR - cannot initialise tagui_sikuli.out')";
 if (!other_actions) other_actions = ''; // to handle most cases where other_actions is not passed in during call
-return "var fs = require('fs'); if (!sikuli_step('"+input_intent+"')) if (!fs.exists('"+input_params+"')) " +
-"this.echo('ERROR - cannot find image file "+input_params+"'); " +
+return "var fs = require('fs'); if (!sikuli_step('"+input_intent+"')) if (!fs.exists('"+input_params+"') && !" +
+use_ocr + ") " + "this.echo('ERROR - cannot find image file "+input_params+"'); " +
 "else this.echo('ERROR - cannot find "+input_params+" on screen'); " + other_actions;}
 
 function call_r(input_intent) { // helper function to use R integration for data analytics and machine learning
