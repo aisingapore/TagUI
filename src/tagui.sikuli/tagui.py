@@ -30,7 +30,7 @@ def x_coordinate ( input_locator ):
 
 # helper function to return y coordinate from (x,y)
 def y_coordinate ( input_locator ):
-        return int(input_locator[input_locator.find(',')+1:-1])
+	return int(input_locator[input_locator.find(',')+1:-1])
 
 # helper function to return Region from (x1,y1)-(x2,y2)
 def define_region( input_locator ):
@@ -44,6 +44,22 @@ def define_region( input_locator ):
 	region_origin_x = min(region_x1_coordinate,region_x2_coordinate)
 	region_origin_y = min(region_y1_coordinate,region_y2_coordinate)
 	return Region(region_origin_x,region_origin_y,region_width,region_height)
+
+# helper function to return whether image file exists
+def file_exists( full_path_and_filename ):
+	import os
+	return os.path.isfile(full_path_and_filename)
+
+# helper function to check if OCR identifier is used
+def using_ocr( locator ):
+	if len(locator) > 9:
+		if locator[-9:].lower() == 'using ocr':
+			return True
+	return False
+
+# helper function to return region containing text to interact by text
+def text_locator ( locator ):
+	return findText(locator)
 
 # function to map modifier keys to unicode for use in type()
 def modifiers_map ( input_keys ):
@@ -120,50 +136,95 @@ def output_sikuli_text ( output_text ):
 
 # function for tap / click step
 def tap_intent ( raw_intent ):
+	if using_ocr(raw_intent):
+		ocr_locator = True
+		raw_intent = raw_intent[:-9].strip()
+	else:
+		ocr_locator = False
 	params = (raw_intent + ' ')[1+(raw_intent + ' ').find(' '):].strip()
 	print '[tagui] ACTION - click ' + params
-	if is_coordinates(params):
+	if ocr_locator:
+		return click(text_locator(params))
+	elif is_coordinates(params):
 		return click(Location(x_coordinate(params),y_coordinate(params)))
-	elif exists(params):
-		return click(params)
+	elif file_exists(params):
+		if exists(params):
+			return click(params)
+		else:
+			return 0
 	else:
 		return 0
 
 # function for rtap / rclick step
 def rtap_intent ( raw_intent ):
+	if using_ocr(raw_intent):
+		ocr_locator = True
+		raw_intent = raw_intent[:-9].strip()
+	else:
+		ocr_locator = False
 	params = (raw_intent + ' ')[1+(raw_intent + ' ').find(' '):].strip()
 	print '[tagui] ACTION - rclick ' + params
-	if is_coordinates(params):
+	if ocr_locator:
+		return rightClick(text_locator(params))
+	elif is_coordinates(params):
 		return rightClick(Location(x_coordinate(params),y_coordinate(params)))
-	elif exists(params):
-		return rightClick(params)
+	elif file_exists(params):
+		if exists(params):
+			return rightClick(params)
+		else:
+			return 0
 	else:
 		return 0
 
 # function for dtap / dclick step
 def dtap_intent ( raw_intent ):
+	if using_ocr(raw_intent):
+		ocr_locator = True
+		raw_intent = raw_intent[:-9].strip()
+	else:
+		ocr_locator = False
 	params = (raw_intent + ' ')[1+(raw_intent + ' ').find(' '):].strip()
 	print '[tagui] ACTION - dclick ' + params
-	if is_coordinates(params):
+	if ocr_locator:
+		return doubleClick(text_locator(params))
+	elif is_coordinates(params):
 		return doubleClick(Location(x_coordinate(params),y_coordinate(params)))
-	elif exists(params):
-		return doubleClick(params)
+	elif file_exists(params):
+		if exists(params):
+			return doubleClick(params)
+		else:
+			return 0
 	else:
 		return 0
 
 # function for hover / move step
 def hover_intent ( raw_intent ):
+	if using_ocr(raw_intent):
+		ocr_locator = True
+		raw_intent = raw_intent[:-9].strip()
+	else:
+		ocr_locator = False
 	params = (raw_intent + ' ')[1+(raw_intent + ' ').find(' '):].strip()
 	print '[tagui] ACTION - hover ' + params
-	if is_coordinates(params):
+	if ocr_locator:
+		return hover(text_locator(params))
+	elif is_coordinates(params):
 		return hover(Location(x_coordinate(params),y_coordinate(params)))
-	elif exists(params):
-		return hover(params)
+	elif file_exists(params):
+		if exists(params):
+			return hover(params)
+		else:
+			return 0
 	else:
 		return 0
 
 # function for type / enter step
 def type_intent ( raw_intent ):
+	if using_ocr(raw_intent):
+		ocr_locator = True
+		raw_intent = raw_intent[:-9].strip()
+	else:
+		ocr_locator = False
 	params = (raw_intent + ' ')[1+(raw_intent + ' ').find(' '):].strip()
 	param1 = params[:params.find(' as ')].strip()
 	param2 = params[4+params.find(' as '):].strip()
@@ -175,48 +236,85 @@ def type_intent ( raw_intent ):
 			return type(param2)
 		else:
 			return type(param2,modifier_keys)
+	elif ocr_locator:
+		if modifier_keys == 0:
+			return type(text_locator(param1),param2)
+		else:
+			return type(text_locator(param1),param2,modifier_keys)
 	elif is_coordinates(param1):
 		if modifier_keys == 0:
 			return type(Location(x_coordinate(param1),y_coordinate(param1)),param2)
 		else:
 			return type(Location(x_coordinate(param1),y_coordinate(param1)),param2,modifier_keys)
-	elif exists(param1):
-		if modifier_keys == 0:
-			return type(param1,param2)
+	elif file_exists(param1):
+		if exists(param1):
+			if modifier_keys == 0:
+				return type(param1,param2)
+			else:
+				return type(param1,param2,modifier_keys)
 		else:
-			return type(param1,param2,modifier_keys)
+			return 0
 	else:
 		return 0
 
 # function for select / choose step
 def select_intent ( raw_intent ):
+	if using_ocr(raw_intent):
+		ocr_locator = True
+		raw_intent = raw_intent[:-9].strip()
+	else:
+		ocr_locator = False
 	params = (raw_intent + ' ')[1+(raw_intent + ' ').find(' '):].strip()
 	param1 = params[:params.find(' as ')].strip()
 	param2 = params[4+params.find(' as '):].strip()
 	print '[tagui] ACTION - click ' + param1
-	if is_coordinates(param1):
+	if ocr_locator:
+		if click(text_locator(param1)) == 0:
+			return 0
+		else:
+			print '[tagui] ACTION - click ' + param2
+			if is_coordinates(param2):
+				return click(Location(x_coordinate(param2),y_coordinate(param2)))
+			elif file_exists(param2):
+				if exists(param2):
+					return click(param2)
+				else:
+					return 0
+			else:
+				return click(text_locator(param2))
+	elif is_coordinates(param1):
 		if click(Location(x_coordinate(param1),y_coordinate(param1))) == 0:
 			return 0
 		else:
 			print '[tagui] ACTION - click ' + param2
 			if is_coordinates(param2):
 				return click(Location(x_coordinate(param2),y_coordinate(param2)))
-			elif exists(param2):
-				return click(param2)
+			elif file_exists(param2):
+				if exists(param2):
+					return click(param2)
+				else:
+					return 0
 			else:
-				return 0
+				return click(text_locator(param2))
  
-	elif exists(param1):
-		if click(param1) == 0:
-			return 0
-		else:
-			print '[tagui] ACTION - click ' + param2
-			if is_coordinates(param2):
-				return click(Location(x_coordinate(param2),y_coordinate(param2)))
-			elif exists(param2):
-				return click(param2)
-			else:
+	elif file_exists(param1):
+		if exists(param1):
+			if click(param1) == 0:
 				return 0
+			else:
+				print '[tagui] ACTION - click ' + param2
+				if is_coordinates(param2):
+					return click(Location(x_coordinate(param2),y_coordinate(param2)))
+				elif file_exists(param2):
+					if exists(param2):
+						return click(param2)
+					else:
+						return 0
+				else:
+					return click(text_locator(param2))
+		else:
+			return 0
+
 	else:
 		return 0
 
@@ -234,11 +332,24 @@ def save_intent ( raw_intent ):
 
 # function for reading text using Tesseract OCR
 def text_read ( raw_intent ):
+	if using_ocr(raw_intent):
+		ocr_locator = True
+		raw_intent = raw_intent[:-9].strip()
+	else:
+		ocr_locator = False
 	params = (raw_intent + ' ')[1+(raw_intent + ' ').find(' '):].strip()
 	param1 = params.split(' to ')[0].strip()
 
 	print '[tagui] ACTION - ' + raw_intent
-	if is_coordinates(param1):
+	if ocr_locator:
+		matched_element = text_locator(param1)
+		if matched_element == None:
+			return 0
+		else:
+			temp_text = matched_element.text()
+			output_sikuli_text(temp_text)
+			return 1
+	elif is_coordinates(param1):
 		region_layer = define_region(param1)
 		temp_text = region_layer.text()
 		output_sikuli_text(temp_text)
@@ -248,21 +359,39 @@ def text_read ( raw_intent ):
 		temp_text = fullscreen_layer.text()
 		output_sikuli_text(temp_text)
 		return 1
-	elif exists(param1):
-		matched_element = find(param1)
-		temp_text = matched_element.text()
-		output_sikuli_text(temp_text)
-		return 1
+	elif file_exists(param1):
+		if exists(param1):
+			matched_element = find(param1)
+			temp_text = matched_element.text()
+			output_sikuli_text(temp_text)
+			return 1
+		else:
+			return 0
 	else:
 		return 0
 
 # function for capturing screenshot
 def snap_intent ( raw_intent ):
+	if using_ocr(raw_intent):
+		ocr_locator = True
+		raw_intent = raw_intent[:-9].strip()
+	else:
+		ocr_locator = False
 	params = (raw_intent + ' ')[1+(raw_intent + ' ').find(' '):].strip()
 	param1 = params[:params.find(' to ')].strip()
 	param2 = params[4+params.find(' to '):].strip()
 	print '[tagui] ACTION - snap ' + param1 + ' to ' + param2
-	if is_coordinates(param1):
+	if ocr_locator:
+		fullscreen_layer = Screen()
+		matched_element = text_locator(param1)
+		if matched_element == None:
+			return 0
+		else:
+			temp_snap_file = fullscreen_layer.capture(matched_element).getFile()
+			import shutil
+			shutil.copy(temp_snap_file,param2)
+			return 1
+	elif is_coordinates(param1):
 		fullscreen_layer = Screen()
 		region_layer = define_region(param1)
 		temp_snap_file = fullscreen_layer.capture(region_layer).getFile()
@@ -275,13 +404,16 @@ def snap_intent ( raw_intent ):
 		import shutil
 		shutil.copy(temp_snap_file,param2)
 		return 1
-	elif exists(param1):
-		fullscreen_layer = Screen()
-		matched_element = find(param1)
-		temp_snap_file = fullscreen_layer.capture(matched_element).getFile()
-		import shutil
-		shutil.copy(temp_snap_file,param2)
-		return 1
+	elif file_exists(param1):
+		if exists(param1):
+			fullscreen_layer = Screen()
+			matched_element = find(param1)
+			temp_snap_file = fullscreen_layer.capture(matched_element).getFile()
+			import shutil
+			shutil.copy(temp_snap_file,param2)
+			return 1
+		else:
+			return 0
 	else:
 		return 0
 
@@ -322,12 +454,20 @@ def visible_intent ( raw_intent ):
 	setAutoWaitTimeout(1)
 	params = (raw_intent + ' ')[1+(raw_intent + ' ').find(' '):].strip()
 	print '[tagui] ACTION - ' + raw_intent.strip()
-	if exists(params):
-		setAutoWaitTimeout(wait_timeout)
-		return 1
+	if file_exists(params):
+		if exists(params):
+			setAutoWaitTimeout(wait_timeout)
+			return 1
+		else:
+			setAutoWaitTimeout(wait_timeout)
+			return 0
 	else:
-		setAutoWaitTimeout(wait_timeout)
-		return 0
+		if text_locator(params) == None:
+			setAutoWaitTimeout(wait_timeout)
+			return 0
+		else:
+			setAutoWaitTimeout(wait_timeout)
+			return 1
 
 # function to interpret input intent
 def get_intent ( raw_intent ):
