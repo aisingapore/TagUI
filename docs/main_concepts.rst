@@ -49,7 +49,7 @@ Run from a URL
 **********************
 You can also run a flow directly from a URL::
 
-    tagui https://raw.githubusercontent.com/kelaberetiv/TagUI/master/src/samples/1_yahoo
+    tagui https://raw.githubusercontent.com/kelaberetiv/TagUI/master/src/samples/1_yahoo.tag
 
 
 Hide the browser
@@ -368,7 +368,7 @@ Gets text from the clipboard::
 You can also give it an input, which puts the input *onto* the clipboard instead. This can be useful for pasting large amounts of text directly, which is faster than using the **type** step::
 
   long_text = "This is a very long text which takes a long time to type"
-  clipboard(`long_text`)
+  clipboard(long_text)
   click text_input
   keyboard [ctrl]v[enter]
   
