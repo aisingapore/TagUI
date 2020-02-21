@@ -95,10 +95,10 @@ if [ "$6" = "-deploy" ] || [ "$6" = "-d" ]; then set -- "${@:1:5}" "${@:7}"; tag
 if [ "$7" = "-deploy" ] || [ "$7" = "-d" ]; then set -- "${@:1:6}" "${@:8}"; tagui_deploy_workflow=true; fi
 if [ "$8" = "-deploy" ] || [ "$8" = "-d" ]; then set -- "${@:1:7}" "${@:9}"; tagui_deploy_workflow=true; fi
 if [ "$9" = "-deploy" ] || [ "$9" = "-d" ]; then set -- "${@:1:8}"; tagui_deploy_workflow=true; fi
-if [ "$tagui_deploy_workflow" == true ]; then echo cd \""$initial_dir"\" > "$1".command
-echo \""$TAGUI_DIR/tagui"\" \""$1"\" "$2" "$3" "$4" "$5" "$6" "$7" "$8" "$9" >> "$1".command
-echo "INFO - deployment script $1.command generated"
-chmod 700 "$1".command; exit 0; fi
+if [ "$tagui_deploy_workflow" == true ]; then echo cd \""$initial_dir"\" > "${1%.tag}".command
+echo \""$TAGUI_DIR/tagui"\" \""$1"\" "$2" "$3" "$4" "$5" "$6" "$7" "$8" "$9" >> "${1%.tag}".command
+echo "INFO - deployment script ${1%.tag}.command generated"
+chmod 700 "${1%.tag}".command; exit 0; fi
 
 # set default web browser to be used to chrome
 tagui_web_browser="chrome"
