@@ -230,7 +230,6 @@ return false;}
 // friendlier name to use check_tx() in if condition in flow
 function present(element_locator) {if (!element_locator) return false; 
 if (is_sikuli(element_locator)) {var abs_param = abs_file(element_locator); var fs = require('fs');
-if (!fs.exists(abs_param)) {casper.echo('ERROR - cannot find image file for present step').exit();}
 if (sikuli_step("present " + abs_param)) return true; else return false;}
 else return check_tx(element_locator);}
 
@@ -241,7 +240,6 @@ while (Date.now() < exist_timeout) {if (present(element_identifier)) return true
 // friendlier name to check element visibility using elementVisible()
 function visible(element_locator) {if (!element_locator) return false;
 if (is_sikuli(element_locator)) {var abs_param = abs_file(element_locator); var fs = require('fs');
-if (!fs.exists(abs_param)) {casper.echo('ERROR - cannot find image file for visible step').exit();}
 if (sikuli_step("visible " + abs_param)) return true; else return false;}
 else {var element_located = tx(element_locator); var element_visible = casper.elementVisible(element_located);
 // if tx() returns xps666('/html') means that the element is not found, so set element_visible to false
@@ -932,6 +930,12 @@ escaped_string = input_string.replace(/\\/g,'\\\\').replace(/\'/g,'\\\'').replac
 escaped_string = escaped_string.replace(/\t/g,'\\t').replace(/\f/g,'\\f').replace(/\v/g,'\\v').replace(/\"/g,'\\\"');
 return escaped_string.replace(/\[SINGLE_QUOTE_FOR_VARIABLE_HANDLING\]/g,'\'');}
 
+function get_text_for_sikuli(image_filename) { // helper function to decompose full path and filename to get text
+last_back_slash = image_filename.lastIndexOf('/');
+last_forward_slash = image_filename.lastIndexOf('\\');
+last_slash_position = Math.max(last_back_slash, last_forward_slash);
+return image_filename.substr(last_slash_position + 1);}
+
 function is_coordinates(input_params) { // helper function to check if string is (x,y) coordinates
 if ((input_params.length > 4) && (input_params.substr(0,1) == '(') && (input_params.substr(-1) == ')') 
 && (input_params.split(',').length == 2 || input_params.split(',').length == 3) 
@@ -940,9 +944,13 @@ if ((input_params.length > 4) && (input_params.substr(0,1) == '(') && (input_par
 function is_sikuli(input_params) { // helper function to check if input is meant for sikuli visual automation
 if (input_params.length > 4 && input_params.substr(-4).toLowerCase() == '.png') return true; // support png and bmp
 else if (input_params.length > 4 && input_params.substr(-4).toLowerCase() == '.bmp') return true;
+else if (input_params.length > 9 && input_params.substr(-9).toLowerCase() == 'using ocr') return true;
 else if (is_coordinates(input_params)) return true; else return false;}
 
 function call_sikuli(input_intent,input_params,other_actions) { // helper function to use sikuli visual automation
+if (input_intent.length > 9 && input_intent.substr(-9).toLowerCase() == 'using ocr')
+{input_intent = input_intent.replace(input_params,get_text_for_sikuli(input_params));
+input_params = get_text_for_sikuli(input_params);} // handle using ocr use case
 var fs = require('fs'); // use phantomjs fs file system module to access files and directories
 fs.write('tagui.sikuli/tagui_sikuli.in', '', 'w'); fs.write('tagui.sikuli/tagui_sikuli.out', '', 'w');
 if (!fs.exists('tagui.sikuli/tagui_sikuli.in')) return "this.echo('ERROR - cannot initialise tagui_sikuli.in')";
