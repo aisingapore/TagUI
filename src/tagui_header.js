@@ -317,7 +317,8 @@ function sanitise_csv_cell(cell_data) {
  * @param {string[]} row_data a 1-D array of strings denoting data to
  * encode as a CSV row
  */
-function csv_row(row_data) {
+function csv_row(original_row_data) {
+  var row_data = original_row_data.slice()
   // if row_data has at least 1 element, extract and sanitise first element
   // else start_element is empty string
   var start_element = (row_data.length > 0)
