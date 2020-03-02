@@ -1132,10 +1132,10 @@ if not exist "tagui_logging" (
 )
 
 rem hack chrome to prevent ended unexpectedly message
-set "chrome_pref=%LOCALAPPDATA%\Google\Chrome\User Data\Default"
+set "chrome_pref=chrome\tagui_user_profile\Default\Preferences"
 if exist "%chrome_pref%" (
-	gawk "sub(\"\\\"exited_cleanly\\\":false\", \"\\\"exited_cleanly\\\":true\")" "%chrome_pref%" > "%chrome_pref%" > nul 2>&1
-	gawk "sub(\"\\\"exit_type\\\":\\\"Crashed\\\"\", \"\\\"exit_type\\\":\\\"Normal\\\"\")" "%chrome_pref%" > "%chrome_pref%" > nul 2>&1
+	php -q -r "file_put_contents('%chrome_pref%',str_replace('\"exited_cleanly\":false','\"exited_cleanly\":true',file_get_contents('%chrome_pref%')));" > nul 2>&1
+	php -q -r "file_put_contents('%chrome_pref%',str_replace('\"exit_type\":\"Crashed\"','\"exit_type\":\"Normal\"',file_get_contents('%chrome_pref%')));" > nul 2>&1
 )
 
 rem change back to initial directory where tagui is called
