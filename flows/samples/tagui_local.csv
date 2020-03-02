@@ -1,0 +1,8 @@
+OBJECT,DEFINITION
+email,quick_email
+password,quick_pass
+user_email,mickey_mouse@disney.com
+user_password,iloveminnie4eva
+show info,Show full information
+click link,click `facebook_link`
+facebook_link,//*[@id="profile_full"]//a
