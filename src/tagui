@@ -386,6 +386,10 @@ if ! [ -f tagui_logging ]; then
 if [ -f "$1".raw ]; then rm "$1".raw; fi
 if [ -f "$1".log ]; then rm "$1".log; fi
 if [ -f "$1".js ]; then rm "$1".js; fi
+else
+if [ -f "$1".raw ]; then mv "$1".raw "${1%.tag}".raw; fi
+if [ -f "$1".log ]; then mv "$1".log "${1%.tag}".log; fi
+if [ -f "$1".js ]; then mv "$1".js "${1%.tag}.js"; fi
 fi
 
 # change back to initial directory where tagui is called

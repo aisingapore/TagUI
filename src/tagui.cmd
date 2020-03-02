@@ -1123,8 +1123,12 @@ rem set flow_file to blank or the variable will break that tagui call
 rem remove logs if tagui_logging doesn't exist
 if not exist "tagui_logging" (
 	if exist "%flow_file%.raw" del "%flow_file%.raw"
-	if exist "%flow_file%.log" del "%flow_file%.log" 
+	if exist "%flow_file%.log" del "%flow_file%.log"
 	if exist "%flow_file%.js" del "%flow_file%.js"
+) else (
+	if exist "%flow_file%.raw" move /Y "%flow_file%.raw" "%flow_file:~0,-4%.raw" > nul
+	if exist "%flow_file%.log" move /Y "%flow_file%.log" "%flow_file:~0,-4%.log" > nul
+	if exist "%flow_file%.js" move /Y "%flow_file%.js" "%flow_file:~0,-4%.js" > nul
 )
 
 rem hack chrome to prevent ended unexpectedly message
