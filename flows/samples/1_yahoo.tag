@@ -7,9 +7,8 @@ https://ca.yahoo.com
 // see cheatsheet for steps, conditions, finding element identifiers, etc
 // https://github.com/kelaberetiv/TagUI#cheat-sheet
 
-echo 'NOTE - this sample may not work for EU users due to website changes for GDPR'
-echo 'EU users may have to modify script to first click on announcement OK button'
-echo ''
+echo NOTE - this sample may not work for EU users due to website changes for GDPR
+echo EU users may have to modify script to first click on announcement OK button
 
 // lines which begin with // means user comments, which are ignored during execution
 
