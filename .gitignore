@@ -1,6 +1,5 @@
 # exclude files in archive and flows folder
 /archive/*
-/flows/*
 
 # exclude docs build
 /docs/_build/*
