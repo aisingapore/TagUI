@@ -117,9 +117,12 @@ file_put_contents($script . '.raw', $translated_raw_flow); // save translated ou
 $input_file = fopen($script . '.raw','r') or die("ERROR - cannot open " . $script . '.raw' . "\n");}
 
 // section to do required pre-processing on expanded .raw flow file
+$indentation_spaces = 0;
+$previous_indentation_length = 0;
+$current_indentation_length = 0;
 $padded_raw_flow = ""; $previous_line_is_condition = false; $reference_indentation = "";
 while(!feof($input_file)) {$padded_raw_flow_line = fgets($input_file);
-$indentation_tracker = str_replace(ltrim($padded_raw_flow_line),'',$padded_raw_flow_line);
+$indentation_tracker = str_replace(ltrim($padded_raw_flow_line, " \t"),'',$padded_raw_flow_line);
 $indentation_tracker = substr($indentation_tracker,strlen($reference_indentation));
 // above line handles py and vision blocks that begin indented (eg in if or loops)
 $padded_raw_flow_line = ltrim($padded_raw_flow_line);
@@ -147,6 +150,23 @@ if (($inside_js_block + $inside_py_block + $inside_r_block +
 $inside_dom_block + $inside_run_block + $inside_vision_block) > 0)
 {$padded_raw_flow .= $indentation_tracker . $padded_raw_flow_line; continue;}
 
+$current_indentation_length = strlen($indentation_tracker);
+if ($indentation_spaces == 0 and $current_indentation_length > 0) {
+	$indentation_spaces = $current_indentation_length;
+}
+if ($current_indentation_length > $previous_indentation_length) {
+	$padded_raw_flow .= "{\n";
+}
+if ($current_indentation_length < $previous_indentation_length) {
+	$indentation_drop = $previous_indentation_length - $current_indentation_length;
+	if ($indentation_drop % $indentation_spaces != 0) {
+		die("ERROR - use a consistent number of spaces for indentation\n");
+	}
+	$indentation_levels = $indentation_drop / $indentation_spaces;
+	$padded_raw_flow .= str_repeat("}\n" , $indentation_levels);
+}
+$previous_indentation_length = $current_indentation_length;
+
 // rewrite JS function definitions to work in scope within CasperJS blocks
 if ((substr($padded_raw_flow_line,0,9)=="function ") or (substr($padded_raw_flow_line,0,12)=="js function "))
 if (strpos($padded_raw_flow_line,"(")!==false) {$js_function_name_startpos = strpos($padded_raw_flow_line,"function ")+9;
@@ -154,18 +174,16 @@ $js_function_name_endpos = strpos($padded_raw_flow_line,"(",$js_function_name_st
 $padded_raw_flow_line = trim(substr($padded_raw_flow_line,$js_function_name_startpos,$js_function_name_endpos -
 $js_function_name_startpos)) . ' = function ' . trim(substr($padded_raw_flow_line,$js_function_name_endpos))."\n";}
 else die("ERROR - missing brackets () for ".$padded_raw_flow_line);
+
 // pad { and } blocks for conditions, to keep JavaScript syntax correct
 if ((substr($padded_raw_flow_line,0,3)=="if ") or (substr($padded_raw_flow_line,0,8)=="else if ")
 or (substr($padded_raw_flow_line,0,4)=="for ") or (substr($padded_raw_flow_line,0,6)=="while ") or
 (substr($padded_raw_flow_line,0,6)=="popup ") or (substr($padded_raw_flow_line,0,6)=="frame ") or
 (trim($padded_raw_flow_line)=="else")) $current_line_is_condition = true; else $current_line_is_condition = false;
-if (($previous_line_is_condition == true) and ($current_line_is_condition == true))
-die("ERROR - for nested conditions, loops, popup, frame, set { and } explicitly\n".
-"ERROR - add { before this line and add } accordingly - ".$padded_raw_flow_line);
-if (($previous_line_is_condition == true) and (substr($padded_raw_flow_line,0,1)!="{"))
-$padded_raw_flow .= "{\n".trim($padded_raw_flow_line)."\n}\n"; else $padded_raw_flow .= $padded_raw_flow_line;
+$padded_raw_flow .= $padded_raw_flow_line;
 $previous_line_is_condition = $current_line_is_condition; // prepare for next line
-} fclose($input_file); file_put_contents($script . '.raw', $padded_raw_flow);
+} 
+fclose($input_file); file_put_contents($script . '.raw', $padded_raw_flow);
 // generate temp output file with padded { and } (if any) before reopening as input
 $input_file = fopen($script . '.raw','r') or die("ERROR - cannot open " . $script . '.raw' . "\n");
 // re-initialize trackers for begin-finish blocks of integrations
@@ -1010,6 +1028,7 @@ if (substr($logic,0,2)=="//") return $logic; // skip processing for comment
 // take only lines starting with { or } as code blocks for processing, otherwise will break many valid javascript code
 if (substr($logic,0,1) == "{") $GLOBALS['inside_code_block']++; // assume nothing on rest of the line except comment
 if (substr($logic,0,1) == "}") $GLOBALS['inside_code_block']--; // assume nothing on rest of the line except comment
+
 $code_block_header = ""; $code_block_footer = "";
 $last_delimiter_pos = strrpos($GLOBALS['code_block_tracker'],"|");
 $code_block_intent = substr($GLOBALS['code_block_tracker'],$last_delimiter_pos+1);
@@ -1144,5 +1163,3 @@ $logic = "casper.bypass(teleport_distance('[CONTINUE_SIGNAL][".$teleport_marker.
 
 // return code after all the parsing and special handling
 return $logic;}
-
-?>
