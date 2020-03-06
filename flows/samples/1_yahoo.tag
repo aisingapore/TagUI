@@ -1,4 +1,5 @@
 https://ca.yahoo.com
+<<<<<<< HEAD
 // automation flow files usually start with an URL to tell TagUI where to go
 // files can also start with // for comments, or no URL if it's not web-related
 
@@ -58,3 +59,22 @@ type search_form_input_homepage as The search engine that doesn\'t track you.
 snap page to duckduckgo.png
 
 wait 4.4 seconds
+=======
+// visits the webpage
+
+type search-box as github
+// looks on the web page for an element with 'search-box' in their 
+// text, id or name (or some other attributes) and then types 'github' into it
+
+click search-button
+// clicks the 'search-button' element
+
+wait 2.5
+// waits 2.5 seconds so the page can load
+
+snap page to results.png
+// saves a screenshot of the web page 
+
+snap logo to logo.png
+// saves a screenshot of the 'logo' element 
+>>>>>>> WIP added in samples from previous branch
