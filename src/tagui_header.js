@@ -1221,6 +1221,7 @@ if (params == '') return "this.echo('ERROR - statement missing for " + raw_inten
 else return check_chrome_context(params);}
 
 function r_intent(raw_intent) { // code to support dynamic variables not applicable
+return "this.echo('ERROR - R integration is deprecated, raise an issue if you need to use it')";
 if (raw_intent.toLowerCase() == 'r begin') {inside_r_block = 1; return '';}
 else if (raw_intent.toLowerCase() == 'r finish') {inside_r_block = 0; return '';}
 if (inside_r_block == 1) raw_intent = 'r ' + raw_intent;
