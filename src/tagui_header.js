@@ -1081,8 +1081,7 @@ return "this.echo('ERROR - step not supported in live mode, it requires creating
 
 function echo_intent(raw_intent) {raw_intent = eval("'" + escape_bs(raw_intent) + "'"); // support dynamic variables
 var params = ((raw_intent + ' ').substr(1+(raw_intent + ' ').indexOf(' '))).trim();
-if (params == '') return "this.echo('ERROR - text missing for " + raw_intent + "')";
-else return "this.echo('" + add_concat(params) + "')";}
+if (params == '') return "this.echo('')"; else return "this.echo('" + add_concat(params) + "')";}
 
 function save_intent(raw_intent) {raw_intent = eval("'" + escape_bs(raw_intent) + "'"); // support dynamic variables
 var params = ((raw_intent + ' ').substr(1+(raw_intent + ' ').indexOf(' '))).trim();
