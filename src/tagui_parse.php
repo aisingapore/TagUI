@@ -959,7 +959,9 @@ $params = trim(substr($raw_intent." ",1+strpos($raw_intent." "," ")));
 if ($params == "") echo "ERROR - " . current_line() . " statement missing for " . $raw_intent . "\n";
 else return "casper.then(function() { // start of JS code\n".$params."\n}); // end of JS code"."\n\n";}
 
-function r_intent($raw_intent) {if (strtolower($raw_intent) == "r begin")
+function r_intent($raw_intent) {
+echo "ERROR - R integration is deprecated, raise an issue if you need to use it\n"; return "";
+if (strtolower($raw_intent) == "r begin")
 {$GLOBALS['inside_r_block'] = 1; $GLOBALS['integration_block_body'] = "r "; return "";}
 $raw_intent = str_replace('\\','\\\\',$raw_intent); // to send \ correctly over to integration 
 $raw_intent = str_replace('[END_OF_LINE]','\\n',$raw_intent); // replace after above to prevent from escape
