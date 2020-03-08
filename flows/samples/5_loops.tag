@@ -9,6 +9,6 @@ for n from 1 to 3
 	read (//img[@class="s-item__image-img"])[1]/@src to out
 	// saves the src attribute from the element (ie. the image link) using XPath and calls it 'out'
 
-	echo out
+	echo `out`
 	// show 'out' value in the command line output
 } 
