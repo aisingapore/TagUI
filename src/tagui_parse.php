@@ -277,7 +277,6 @@ $script_content = str_replace("test.comment('ERROR","test.fail('ERROR",$script_c
 // change echo to test comment in techo to show output correctly as test comments
 $script_content = str_replace("casper.echo(echo_string);","casper.test.comment(echo_string);",$script_content);
 $script_content = str_replace("casper.echo(translated_string);","casper.test.comment(translated_string);",$script_content);
-$script_content = str_replace("\\n'","'",str_replace("'\\n","'",$script_content)); // compact test output
 // casperjs testing does not allow creation of casper object as it is already created by test engine
 $script_content = str_replace("var casper = require(","// var casper = require(",$script_content);
 // following help to define the script structure required by casperjs for test automation purpose
