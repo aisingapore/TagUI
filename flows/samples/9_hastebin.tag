@@ -26,4 +26,4 @@ combined_data = combined_data.replace(/[\x80-\xFE]/g,'');
 type //textarea as `combined_data`
 click save function button-picture enabled
 click raw function button-picture enabled
-echo 'UPLOADED URL - ' this.getCurrentUrl() + '\n'
+echo UPLOADED URL - `this.getCurrentUrl()`\n
