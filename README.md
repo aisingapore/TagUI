@@ -27,6 +27,10 @@ download https://admin.typeform.com/xxx to report.csv
 
 ### v6 Features
 
+#### TagUI live mode
+You can run TagUI live mode directly for faster development by running `tagui live` on the command line.
+
+
 #### Click using OCR
 TagUI can now click on the screen with visual automation just using text input, using OCR.
 
