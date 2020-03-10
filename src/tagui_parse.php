@@ -121,7 +121,13 @@ $indentation_spaces = 0;
 $previous_indentation_length = 0;
 $current_indentation_length = 0;
 $padded_raw_flow = ""; $previous_line_is_condition = false; $reference_indentation = "";
+$no_of_lines = count(file($script . '.raw'));
+$line_num = 0;
 while(!feof($input_file)) {$padded_raw_flow_line = fgets($input_file);
+$line_num = $line_num + 1;
+if ((trim($padded_raw_flow_line) == '') and ($line_num != $no_of_lines + 1)) {
+	continue;
+}
 $indentation_tracker = str_replace(ltrim($padded_raw_flow_line, " \t"),'',$padded_raw_flow_line);
 $indentation_tracker = substr($indentation_tracker,strlen($reference_indentation));
 // above line handles py and vision blocks that begin indented (eg in if or loops)
