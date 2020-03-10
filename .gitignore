@@ -1,6 +1,8 @@
 # exclude files in archive and flows folder
 /archive/*
-/flows/*
+
+# exclude docs build
+/docs/_build/*
 
 # exclude folders for packaged installation
 /src/casperjs/*
@@ -24,9 +26,6 @@
 
 # exclude custom global functions file
 /src/tagui_global.js
-
-# exclude custom global repository file
-/src/tagui_global.csv
 
 # exclude custom datatable temp file
 /src/tagui_datatable_transpose.csv

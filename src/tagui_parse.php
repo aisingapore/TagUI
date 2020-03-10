@@ -8,11 +8,9 @@
 // Q2. Is there a beautified version for easier viewing or editing? - yes snapshot below
 // https://github.com/kelaberetiv/TagUI/blob/master/src/media/snapshots/tagui_parse.md
 
-// check flow filename for .tagui or .js or .txt or no extension
+// check flow filename for .tag file extension
 $script = $argv[1]; if ($script=="") die("ERROR - specify flow filename as first parameter\n");
-if (strpos(pathinfo($script, PATHINFO_BASENAME), '.') !== false) // check if file has extension
-if ((pathinfo($script, PATHINFO_EXTENSION)!="gui") and (pathinfo($script, PATHINFO_EXTENSION)!="txt") and (pathinfo($script, PATHINFO_EXTENSION)!="js") and (pathinfo($script, PATHINFO_EXTENSION)!="tagui"))
-die("ERROR - use .tagui .js .txt or no extension for flow filename\n");
+if (strtolower(pathinfo($script, PATHINFO_EXTENSION))!="tag") die("ERROR - use .tag extension for flow filename\n");
 
 // make sure required files are available and can be opened
 if (!file_exists($script)) die("ERROR - cannot find " . $script . "\n");
@@ -32,7 +30,7 @@ if (@count($repo_data[$repo_count]) == 1) $repo_count-=1;} //-1 for EOF (Windows
 $local_repo_location = str_replace("\\","/",dirname($script)) . '/tagui_local.csv';
 if (file_exists($local_repo_location)) { // load local repository file if it exists for objects and keywords
 $local_repo_file = fopen($local_repo_location,'r') or die("ERROR - cannot open " . 'tagui_local.csv' . "\n");
-if ($repo_count != 0) $repo_count++; fgetcsv($local_repo_file); // +1 if array has data, discard header record
+if ($repo_count != 0) {$repo_count++; fgetcsv($local_repo_file);} // +1 if array has data, discard header record
 while (!feof($local_repo_file)) {$repo_data[$repo_count] = fgetcsv($local_repo_file);
 if (@count($repo_data[$repo_count]) == 0) die("ERROR - empty row found in " . 'tagui_local.csv' . "\n");
 if (@count($repo_data[$repo_count]) != 1) // pad the empty columns when local repository is used with datatable
@@ -41,7 +39,7 @@ $repo_count++;} fclose($local_repo_file); $repo_count-=1; if (@count($repo_data[
 
 if (file_exists('tagui_global.csv')) { // load global repository file if it exists for objects and keywords
 $global_repo_file = fopen('tagui_global.csv','r') or die("ERROR - cannot open " . 'tagui_global.csv' . "\n");
-if ($repo_count != 0) $repo_count++; fgetcsv($global_repo_file); // +1 if array has data, discard header record
+if ($repo_count != 0) {$repo_count++; fgetcsv($global_repo_file);} // +1 if array has data, discard header record
 while (!feof($global_repo_file)) {$repo_data[$repo_count] = fgetcsv($global_repo_file);
 if (@count($repo_data[$repo_count]) == 0) die("ERROR - empty row found in " . 'tagui_global.csv' . "\n");
 if (@count($repo_data[$repo_count]) != 1) // pad the empty columns when global repository is used with datatable
@@ -119,9 +117,18 @@ file_put_contents($script . '.raw', $translated_raw_flow); // save translated ou
 $input_file = fopen($script . '.raw','r') or die("ERROR - cannot open " . $script . '.raw' . "\n");}
 
 // section to do required pre-processing on expanded .raw flow file
+$indentation_spaces = 0;
+$previous_indentation_length = 0;
+$current_indentation_length = 0;
 $padded_raw_flow = ""; $previous_line_is_condition = false; $reference_indentation = "";
+$no_of_lines = count(file($script . '.raw'));
+$line_num = 0;
 while(!feof($input_file)) {$padded_raw_flow_line = fgets($input_file);
-$indentation_tracker = str_replace(ltrim($padded_raw_flow_line),'',$padded_raw_flow_line);
+$line_num = $line_num + 1;
+if ((trim($padded_raw_flow_line) == '') and ($line_num != $no_of_lines + 1)) {
+	continue;
+}
+$indentation_tracker = str_replace(ltrim($padded_raw_flow_line, " \t"),'',$padded_raw_flow_line);
 $indentation_tracker = substr($indentation_tracker,strlen($reference_indentation));
 // above line handles py and vision blocks that begin indented (eg in if or loops)
 $padded_raw_flow_line = ltrim($padded_raw_flow_line);
@@ -149,6 +156,23 @@ if (($inside_js_block + $inside_py_block + $inside_r_block +
 $inside_dom_block + $inside_run_block + $inside_vision_block) > 0)
 {$padded_raw_flow .= $indentation_tracker . $padded_raw_flow_line; continue;}
 
+$current_indentation_length = strlen($indentation_tracker);
+if ($indentation_spaces == 0 and $current_indentation_length > 0) {
+	$indentation_spaces = $current_indentation_length;
+}
+if ($current_indentation_length > $previous_indentation_length) {
+	$padded_raw_flow .= "{\n";
+}
+if ($current_indentation_length < $previous_indentation_length) {
+	$indentation_drop = $previous_indentation_length - $current_indentation_length;
+	if ($indentation_drop % $indentation_spaces != 0) {
+		die("ERROR - use a consistent number of spaces for indentation\n");
+	}
+	$indentation_levels = $indentation_drop / $indentation_spaces;
+	$padded_raw_flow .= str_repeat("}\n" , $indentation_levels);
+}
+$previous_indentation_length = $current_indentation_length;
+
 // rewrite JS function definitions to work in scope within CasperJS blocks
 if ((substr($padded_raw_flow_line,0,9)=="function ") or (substr($padded_raw_flow_line,0,12)=="js function "))
 if (strpos($padded_raw_flow_line,"(")!==false) {$js_function_name_startpos = strpos($padded_raw_flow_line,"function ")+9;
@@ -156,18 +180,22 @@ $js_function_name_endpos = strpos($padded_raw_flow_line,"(",$js_function_name_st
 $padded_raw_flow_line = trim(substr($padded_raw_flow_line,$js_function_name_startpos,$js_function_name_endpos -
 $js_function_name_startpos)) . ' = function ' . trim(substr($padded_raw_flow_line,$js_function_name_endpos))."\n";}
 else die("ERROR - missing brackets () for ".$padded_raw_flow_line);
+
 // pad { and } blocks for conditions, to keep JavaScript syntax correct
 if ((substr($padded_raw_flow_line,0,3)=="if ") or (substr($padded_raw_flow_line,0,8)=="else if ")
 or (substr($padded_raw_flow_line,0,4)=="for ") or (substr($padded_raw_flow_line,0,6)=="while ") or
 (substr($padded_raw_flow_line,0,6)=="popup ") or (substr($padded_raw_flow_line,0,6)=="frame ") or
 (trim($padded_raw_flow_line)=="else")) $current_line_is_condition = true; else $current_line_is_condition = false;
+
 if (($previous_line_is_condition == true) and ($current_line_is_condition == true))
-die("ERROR - for nested conditions, loops, popup, frame, set { and } explicitly\n".
-"ERROR - add { before this line and add } accordingly - ".$padded_raw_flow_line);
-if (($previous_line_is_condition == true) and (substr($padded_raw_flow_line,0,1)!="{"))
+die("ERROR - for nested conditions, loops, popup, frame, set { and } explicitly\n".	
+"ERROR - add { before this line and add } accordingly - ".$padded_raw_flow_line);	
+if (($previous_line_is_condition == true) and (substr($padded_raw_flow_line,0,1)!="{"))	
 $padded_raw_flow .= "{\n".trim($padded_raw_flow_line)."\n}\n"; else $padded_raw_flow .= $padded_raw_flow_line;
+
 $previous_line_is_condition = $current_line_is_condition; // prepare for next line
-} fclose($input_file); file_put_contents($script . '.raw', $padded_raw_flow);
+} 
+fclose($input_file); file_put_contents($script . '.raw', $padded_raw_flow);
 // generate temp output file with padded { and } (if any) before reopening as input
 $input_file = fopen($script . '.raw','r') or die("ERROR - cannot open " . $script . '.raw' . "\n");
 // re-initialize trackers for begin-finish blocks of integrations
@@ -279,7 +307,6 @@ $script_content = str_replace("test.comment('ERROR","test.fail('ERROR",$script_c
 // change echo to test comment in techo to show output correctly as test comments
 $script_content = str_replace("casper.echo(echo_string);","casper.test.comment(echo_string);",$script_content);
 $script_content = str_replace("casper.echo(translated_string);","casper.test.comment(translated_string);",$script_content);
-$script_content = str_replace("\\n'","'",str_replace("'\\n","'",$script_content)); // compact test output
 // casperjs testing does not allow creation of casper object as it is already created by test engine
 $script_content = str_replace("var casper = require(","// var casper = require(",$script_content);
 // following help to define the script structure required by casperjs for test automation purpose
@@ -371,6 +398,10 @@ case "dom finish":
 return $script_line;}
 
 function process_intent($intent_type, $script_line) {
+// convert 'wait for' step to 'hover' step, to wait until timeout for element to appear and hover on it
+if ((strlen($script_line) > 9) and (strtolower(substr($script_line,0,9)) == "wait for "))
+$script_line = "hover " . substr($script_line,9);
+
 // check intent of step for interpretation into casperjs code
 switch ($intent_type) {
 case "url": return url_intent($script_line); break;
@@ -526,13 +557,14 @@ function abs_file($filename) { // helper function to return absolute filename
 if ($filename == "") return ""; $flow_script = $GLOBALS['script']; // get flow filename
 if (substr($filename,0,1)=="/") return $filename; // return mac/linux absolute filename directly
 if (substr($filename,1,1)==":") return str_replace("\\","/",$filename); // return windows absolute filename directly
+if (strlen($filename)>9 and strtolower(substr($filename,-9))=='using ocr') return $filename; // to handle using ocr
+if (is_coordinates($filename)) return $filename; // to handle when sikuli (x,y) coordinates locator is provided
 if (strpos($filename,"'+")!==false and strpos($filename,"+'")!==false)
 return "'+abs_file('" . $filename . "')+'"; // throw to runtime abs_file function if dynamic filename is given
-if (is_coordinates($filename)) return $filename; // to handle when sikuli (x,y) coordinates locator is provided
 $flow_path = str_replace("\\","/",dirname($flow_script)); // otherwise use flow script path to build absolute filename
 // above str_replace is because casperjs/phantomjs do not seem to support \ for windows paths, replace with / to work
 if (strpos($flow_path,"/")!==false) return str_replace("\\","/",$flow_path . '/' . $filename);
-else return $flow_path . '\\' . $filename;} 
+else return $flow_path . '\\' . $filename;}
 
 function beg_tx($locator) { // helper function to return beginning string for handling locators
 if ($GLOBALS['inside_while_loop'] == 0)
@@ -552,18 +584,21 @@ if ($GLOBALS['inside_code_block'] == 0) $GLOBALS['inside_while_loop'] = 0; // re
 if ($GLOBALS['inside_code_block'] == 0) $GLOBALS['for_loop_tracker'] = ""; // reset for_loop_tracker if not inside block
 if ($GLOBALS['inside_while_loop'] == 1) return " // end_fi while loop marker"; return "";}
 
-function add_concat($source_string) { // parse string and add missing + concatenator 
-if ((strpos($source_string,"'")!==false) and (strpos($source_string,"\"")!==false))
-{echo "ERROR - " . current_line() . " inconsistent quotes in " . $source_string . "\n";}
-else if (strpos($source_string,"'")!==false) $quote_type = "'"; // derive quote type used
-else if (strpos($source_string,"\"")!==false) $quote_type = "\""; else $quote_type = "none";
+function add_concat($source_string) { // parse string and add missing + concatenator
+return $source_string; // deprecated in v6 for consistency with rest of TagUI steps
+if ((strpos($source_string,"'") === false) and (strpos($source_string,"\"") === false)) $quote_type = "none";
+else if ((strpos($source_string,"'") !== false) and (strpos($source_string,"\"") === false)) $quote_type = "'";
+else if ((strpos($source_string,"'") === false) and (strpos($source_string,"\"") !== false)) $quote_type = "\"";
+else if (strpos($source_string,"'") < strpos($source_string,"\"")) $quote_type = "'"; else $quote_type = "\"";
 $within_quote = false; $source_string = trim($source_string); // trim for future proof
+$previous_char = ""; // to help detect backslash escape for quotes
 for ($srcpos=0; $srcpos<strlen($source_string); $srcpos++) {
-if ($source_string[$srcpos] == $quote_type) $within_quote = !$within_quote; 
-if (($within_quote == false) and ($source_string[$srcpos]==" ")) $source_string[$srcpos] = "+";}
+if (($source_string[$srcpos] == $quote_type) and ($previous_char != "\\")) $within_quote = !$within_quote;
+$previous_char = $source_string[$srcpos]; // to detect a previous backlash escape and ignore quote
+if (($within_quote == false) and ($source_string[$srcpos] == " ")) $source_string[$srcpos] = "+";}
 $source_string = str_replace("+++++","+",$source_string); $source_string = str_replace("++++","+",$source_string);
 $source_string = str_replace("+++","+",$source_string); $source_string = str_replace("++","+",$source_string);
-return $source_string;} // replacing multiple variations of + to handle user typos of double spaces etc 
+return $source_string;} // replacing multiple variations of + to handle user typos of double spaces etc
 
 function is_coordinates($input_params) { // helper function to check if string is (x,y) coordinates
 if (strlen($input_params)>4 and substr($input_params,0,1)=='(' and substr($input_params,-1)==')' 
@@ -574,16 +609,19 @@ or !preg_match('/[a-zA-Z]/',$input_params))) return true; else return false;}
 function is_sikuli($input_params) { // helper function to check if input is meant for sikuli visual automation
 if (strlen($input_params)>4 and strtolower(substr($input_params,-4))=='.png') return true; // support png and bmp
 else if (strlen($input_params)>4 and strtolower(substr($input_params,-4))=='.bmp') return true;
+else if (strlen($input_params)>9 and strtolower(substr($input_params,-9))=='using ocr') return true;
 else if (is_coordinates($input_params)) return true; else return false;}
 
 function call_sikuli($input_intent,$input_params,$other_actions = '') { // helper function to use sikuli visual automation
+if (strlen($input_intent)>9 and strtolower(substr($input_intent,-9))=='using ocr')
+$use_ocr = "true"; else $use_ocr = "false"; // to track if it is a text locator using OCR
 if (!touch('tagui.sikuli/tagui_sikuli.in')) die("ERROR - cannot initialise tagui_sikuli.in\n");
 if (!touch('tagui.sikuli/tagui_sikuli.out')) die("ERROR - cannot initialise tagui_sikuli.out\n");
 if ($other_actions != '') $other_actions = "\n" . $other_actions;
 return "{techo('".str_replace(' to snap_image()','',$input_intent)."'); var fs = require('fs');\n" .
-"if (!sikuli_step('".$input_intent."')) if (!fs.exists('".$input_params."'))\n" .
-"this.echo('ERROR - cannot find image file ".$input_params."').exit(); else\n" . 
-"this.echo('ERROR - cannot find " . $input_params." on screen').exit(); this.wait(0);" . $other_actions. "}" .
+"if (!sikuli_step('".$input_intent."')) if (!fs.exists('".$input_params."') && !".$use_ocr.")\n" .
+"this.echo('ERROR - cannot find image file ".$input_params."').exit(); else\n" .
+"this.echo('ERROR - cannot find ".$input_params." on screen').exit(); this.wait(0);" . $other_actions. "}" .
 end_fi()."});\n\n";}
 
 function call_r($input_intent) { // helper function to use R integration for data analytics and machine learning
@@ -735,8 +773,8 @@ return "casper.then(function() {"."{techo('".$raw_intent."');\n".
 
 function echo_intent($raw_intent) {
 $params = trim(substr($raw_intent." ",1+strpos($raw_intent." "," ")));
-if ($params == "") echo "ERROR - " . current_line() . " text missing for " . $raw_intent . "\n"; else 
-return "casper.then(function() {"."this.echo(".add_concat($params).");".end_fi()."});"."\n\n";}
+if ($params == "") return "casper.then(function() {"."this.echo('');".end_fi()."});"."\n\n"; else
+return "casper.then(function() {"."this.echo('".add_concat($params)."');".end_fi()."});"."\n\n";}
 
 function save_intent($raw_intent) {$twb = $GLOBALS['tagui_web_browser'];
 $params = trim(substr($raw_intent." ",1+strpos($raw_intent." "," ")));
@@ -762,28 +800,31 @@ return "casper.then(function() {"."{techo('".$raw_intent."');".beg_tx($params).
 
 function dump_intent($raw_intent) {
 $safe_intent = str_replace("'","\'",$raw_intent); // avoid breaking echo below when single quote is used
-$params = trim(substr($raw_intent." ",1+strpos($raw_intent." "," ")));
-$param1 = trim(substr($params,0,strpos($params," to "))); $param2 = trim(substr($params,4+strpos($params," to ")));
-if ($params == "") echo "ERROR - " . current_line() . " variable missing for " . $raw_intent . "\n"; 
-else if (strpos($params," to ")!==false)
-return "casper.then(function() {".
-"{techo('".$safe_intent."');\nsave_text('".abs_file($param2)."',".add_concat($param1).");}".end_fi()."});"."\n\n";
-else return "casper.then(function() {".
-"{techo('".$safe_intent."');\nsave_text(''," . add_concat($params) . ");}".end_fi()."});"."\n\n";}
-
-function write_intent($raw_intent) {
-$safe_intent = str_replace("'","\'",$raw_intent); // avoid breaking echo below when single quote is used
+$safe_intent = $raw_intent; // old syntax deprecated in v6 for consistency with rest of TagUI steps
 $params = trim(substr($raw_intent." ",1+strpos($raw_intent." "," ")));
 $param1 = trim(substr($params,0,strpos($params," to "))); $param2 = trim(substr($params,4+strpos($params," to ")));
 if ($params == "") echo "ERROR - " . current_line() . " variable missing for " . $raw_intent . "\n";
 else if (strpos($params," to ")!==false)
 return "casper.then(function() {".
-"{techo('".$safe_intent."');\nappend_text('".abs_file($param2)."',".add_concat($param1).");}".end_fi()."});"."\n\n";
+"{techo('".$safe_intent."');\nsave_text('".abs_file($param2)."','".add_concat($param1)."');}".end_fi()."});"."\n\n";
 else return "casper.then(function() {".
-"{techo('".$safe_intent."');\nappend_text(''," . add_concat($params) . ");}".end_fi()."});"."\n\n";}
+"{techo('".$safe_intent."');\nsave_text('','" . add_concat($params) . "');}".end_fi()."});"."\n\n";}
+
+function write_intent($raw_intent) {
+$safe_intent = str_replace("'","\'",$raw_intent); // avoid breaking echo below when single quote is used
+$safe_intent = $raw_intent; // old syntax deprecated in v6 for consistency with rest of TagUI steps
+$params = trim(substr($raw_intent." ",1+strpos($raw_intent." "," ")));
+$param1 = trim(substr($params,0,strpos($params," to "))); $param2 = trim(substr($params,4+strpos($params," to ")));
+if ($params == "") echo "ERROR - " . current_line() . " variable missing for " . $raw_intent . "\n";
+else if (strpos($params," to ")!==false)
+return "casper.then(function() {".
+"{techo('".$safe_intent."');\nappend_text('".abs_file($param2)."','".add_concat($param1)."');}".end_fi()."});"."\n\n";
+else return "casper.then(function() {".
+"{techo('".$safe_intent."');\nappend_text('','" . add_concat($params) . "');}".end_fi()."});"."\n\n";}
 
 function load_intent($raw_intent) {
 $safe_intent = str_replace("'","\'",$raw_intent); // avoid breaking echo below when single quote is used
+$safe_intent = $raw_intent; // old syntax deprecated in v6 for consistency with rest of TagUI steps
 $params = trim(substr($raw_intent." ",1+strpos($raw_intent." "," ")));
 $param1 = trim(substr($params,0,strpos($params," to "))); $param2 = trim(substr($params,4+strpos($params," to ")));
 if ($params == "") echo "ERROR - " . current_line() . " filename missing for " . $raw_intent . "\n";
@@ -870,18 +911,18 @@ $GLOBALS['code_block_tracker']=substr($GLOBALS['code_block_tracker'],0,$last_del
 
 function check_intent($raw_intent) {
 $params = trim(substr($raw_intent." ",1+strpos($raw_intent." "," ")));
-$params = str_replace("||"," JAVASCRIPT_OR ",$params); // to handle conflict with "|" delimiter 
+$params = str_replace("||"," JAVASCRIPT_OR ",$params); // to handle conflict with "|" delimiter
 $param1 = trim(substr($params,0,strpos($params,"|"))); $param2 = trim(substr($params,1+strpos($params,"|")));
 $param3 = trim(substr($param2,1+strpos($param2,"|"))); $param2 = trim(substr($param2,0,strpos($param2,"|")));
 $param1 = str_replace(" JAVASCRIPT_OR ","||",$param1); // to restore back "||" that were replaced
 $param2 = str_replace(" JAVASCRIPT_OR ","||",$param2); $param3 = str_replace(" JAVASCRIPT_OR ","||",$param3);
-if (substr_count($params,"|")!=2) 
+if (substr_count($params,"|")!=2)
 echo "ERROR - " . current_line() . " if/true/false missing for " . $raw_intent . "\n";
 else if (getenv('tagui_test_mode') == 'true') return "casper.then(function() {"."{".parse_condition("if ".$param1).
-"\ntest.assert(true,".add_concat($param2).");\nelse test.assert(false,".add_concat($param3).");}".
+"\ntest.assert(true,'".add_concat($param2)."');\nelse test.assert(false,'".add_concat($param3)."');}".
 check_intent_clear_injected_if_block().end_fi()."});"."\n\n";
-else return "casper.then(function() {"."{".parse_condition("if ".$param1)."\nthis.echo(".add_concat($param2).
-");\nelse this.echo(".add_concat($param3).");}".check_intent_clear_injected_if_block().end_fi()."});"."\n\n";}
+else return "casper.then(function() {"."{".parse_condition("if ".$param1)."\nthis.echo('".add_concat($param2).
+"');\nelse this.echo('".add_concat($param3)."');}".check_intent_clear_injected_if_block().end_fi()."});"."\n\n";}
 
 function test_intent($raw_intent) {
 echo "ERROR - " . current_line() . " use CasperJS tester module to professionally " . $raw_intent . "\n";
@@ -941,7 +982,9 @@ $params = trim(substr($raw_intent." ",1+strpos($raw_intent." "," ")));
 if ($params == "") echo "ERROR - " . current_line() . " statement missing for " . $raw_intent . "\n";
 else return "casper.then(function() { // start of JS code\n".$params."\n}); // end of JS code"."\n\n";}
 
-function r_intent($raw_intent) {if (strtolower($raw_intent) == "r begin")
+function r_intent($raw_intent) {
+echo "ERROR - R integration is deprecated, raise an issue if you need to use it\n"; return "";
+if (strtolower($raw_intent) == "r begin")
 {$GLOBALS['inside_r_block'] = 1; $GLOBALS['integration_block_body'] = "r "; return "";}
 $raw_intent = str_replace('\\','\\\\',$raw_intent); // to send \ correctly over to integration 
 $raw_intent = str_replace('[END_OF_LINE]','\\n',$raw_intent); // replace after above to prevent from escape
@@ -992,6 +1035,7 @@ if (substr($logic,0,2)=="//") return $logic; // skip processing for comment
 // take only lines starting with { or } as code blocks for processing, otherwise will break many valid javascript code
 if (substr($logic,0,1) == "{") $GLOBALS['inside_code_block']++; // assume nothing on rest of the line except comment
 if (substr($logic,0,1) == "}") $GLOBALS['inside_code_block']--; // assume nothing on rest of the line except comment
+
 $code_block_header = ""; $code_block_footer = "";
 $last_delimiter_pos = strrpos($GLOBALS['code_block_tracker'],"|");
 $code_block_intent = substr($GLOBALS['code_block_tracker'],$last_delimiter_pos+1);
@@ -1126,5 +1170,3 @@ $logic = "casper.bypass(teleport_distance('[CONTINUE_SIGNAL][".$teleport_marker.
 
 // return code after all the parsing and special handling
 return $logic;}
-
-?>

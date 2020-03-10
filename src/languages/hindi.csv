@@ -1,29 +1,29 @@
-EN,HI
+﻿EN,HI
 click,क्लिक
-tap,नल टोटी
-move,चाल
-hover,मंडराना
-type,प्रकार
+tap,दबाएं
+move,स्थान-परिवर्तन
+hover,मंडराएं
+type,लिखो
 enter,दर्ज
 select,चुनते हैं
 choose,चुनें
-read,पढ़ना
-fetch,लाना
-show,दिखाना
-print,छाप
-save,बचाना
-echo,गूंज
-dump,ढेर
-write,लिखना
-snap,स्नैप
+read,पढ़ें
+fetch,लाएं
+show,दिखाएँ
+print,छापें
+save,सुरक्षित करें
+echo,प्रिन्ट
+dump,डालें
+write,लिखें
+snap,स्क्रीनशॉट
 table,तालिका
 mouse,माउस
 keyboard,कीबोर्ड
-live,जीना
+live,लाइव
 download,डाउनलोड
 upload,अपलोड
-load,भार
-receive,प्राप्त करना
+load,भरें
+receive,प्राप्त करें
 frame,ढांचा
 popup,पॉप अप
 wait,रुकिए
@@ -68,14 +68,14 @@ contain,शामिल
 and,तथा
 or,या
 from,से
-to,सेवा मेरे
+to,को
 as,जैसा
 title(),शीर्षक()
 url(),यूआरएल()
-text(),पाठ()
+text(),टेक्स्ट()
 timer(),टाइमर()
 count(),गिनती()
-present(),वर्तमान()
+present(),मौजूद()
 visible(),दृश्य()
 mouse_xy(),माउस_xy()
 mouse_x(),माउस_x()

@@ -80,7 +80,7 @@ function dummy_echo(muted_string) {return;}
 // for saving text information to file
 function save_text(file_name,info_text) {var ds; if (flow_path.indexOf('/') !== -1) ds = '/'; else ds = '\\';
 if (!file_name) {save_text_count++; file_name = flow_path + ds + 'text' + save_text_count.toString() + '.txt';}
-var fs = require('fs'); fs.write(file_name, info_text, 'w');}
+var fs = require('fs'); fs.write(file_name, info_text + '\r\n', 'w');}
 
 // for appending text information to file
 function append_text(file_name,info_text) {var ds; if (flow_path.indexOf('/') !== -1) ds = '/'; else ds = '\\';
@@ -230,14 +230,16 @@ return false;}
 // friendlier name to use check_tx() in if condition in flow
 function present(element_locator) {if (!element_locator) return false; 
 if (is_sikuli(element_locator)) {var abs_param = abs_file(element_locator); var fs = require('fs');
-if (!fs.exists(abs_param)) {casper.echo('ERROR - cannot find image file for present step').exit();}
 if (sikuli_step("present " + abs_param)) return true; else return false;}
 else return check_tx(element_locator);}
+
+// present() function that waits until timeout before returning result
+function exist(element_identifier) {var exist_timeout = Date.now() + casper.options.waitTimeout;
+while (Date.now() < exist_timeout) {if (present(element_identifier)) return true; else sleep(100);}; return false;}
 
 // friendlier name to check element visibility using elementVisible()
 function visible(element_locator) {if (!element_locator) return false;
 if (is_sikuli(element_locator)) {var abs_param = abs_file(element_locator); var fs = require('fs');
-if (!fs.exists(abs_param)) {casper.echo('ERROR - cannot find image file for visible step').exit();}
 if (sikuli_step("visible " + abs_param)) return true; else return false;}
 else {var element_located = tx(element_locator); var element_visible = casper.elementVisible(element_located);
 // if tx() returns xps666('/html') means that the element is not found, so set element_visible to false
@@ -315,7 +317,8 @@ function sanitise_csv_cell(cell_data) {
  * @param {string[]} row_data a 1-D array of strings denoting data to
  * encode as a CSV row
  */
-function csv_row(row_data) {
+function csv_row(original_row_data) {
+  var row_data = original_row_data.slice()
   // if row_data has at least 1 element, extract and sanitise first element
   // else start_element is empty string
   var start_element = (row_data.length > 0)
@@ -733,6 +736,10 @@ function parse_intent(live_line) {
 live_line = live_line.trim(); if (live_line == '') return '';
 live_line = parse_variables(live_line);
 live_line = live_line.trim(); if (live_line == '') return '';
+// convert 'wait for' step to 'hover' step, to wait until timeout for element to appear and hover on it
+if ((live_line.length > 9) && ((live_line.substr(0,9)).toLowerCase() == 'wait for '))
+live_line = 'hover ' + live_line.substr(9);
+
 switch (get_intent(live_line)) {
 case 'url': return url_intent(live_line); break;
 case 'tap': return tap_intent(live_line); break;
@@ -896,6 +903,7 @@ function abs_file(filename) { // helper function to return absolute filename
 if (filename == '') return ''; // unlike tagui_parse.php not deriving path from script variable
 if (filename.substr(0,1) == '/') return filename; // return mac/linux absolute filename directly
 if (filename.substr(1,1) == ':') return filename.replace(/\\/g,'/'); // return windows absolute filename directly
+if (filename.length > 9 && filename.substr(-9).toLowerCase() == 'using ocr') return filename; // to handle using ocr
 if (is_coordinates(filename)) return filename; // to handle when sikuli (x,y) coordinates locator is provided
 var tmp_flow_path = flow_path; // otherwise use flow_path defined in generated script to build absolute filename
 // above str_replace is because casperjs/phantomjs do not seem to support \ for windows paths, replace with / to work
@@ -903,14 +911,17 @@ if (tmp_flow_path.indexOf('/') > -1) return (tmp_flow_path + '/' + filename).rep
 else return tmp_flow_path + '\\' + filename;}
 
 function add_concat(source_string) { // parse string and add missing + concatenator
-if ((source_string.indexOf("'") > -1) && (source_string.indexOf('"') > -1))
-return "'ERROR - inconsistent quotes in text'";
-else if (source_string.indexOf("'") > -1) var quote_type = "'"; // derive quote type used
-else if (source_string.indexOf('"') > -1) var quote_type = '"'; else var quote_type = "none";
+return source_string; // deprecated in v6 for consistency with rest of TagUI steps
+if ((source_string.indexOf("'") == -1) && (source_string.indexOf('"') == -1)) var quote_type = "none";
+else if ((source_string.indexOf("'") > -1) && (source_string.indexOf('"') == -1)) var quote_type = "'";
+else if ((source_string.indexOf("'") == -1) && (source_string.indexOf('"') > -1)) var quote_type = '"';
+else if (source_string.indexOf("'") < source_string.indexOf('"')) var quote_type = "'"; else var quote_type = '"';
 var within_quote = false; source_string = source_string.trim(); // trim for future proof
+var previous_char = ""; // to help detect backslash escape for quotes
 for (srcpos = 0; srcpos < source_string.length; srcpos++) {
-if (source_string.charAt(srcpos) == quote_type) within_quote = !(within_quote);
-if ((within_quote == false) && (source_string.charAt(srcpos)==" "))
+if ((source_string.charAt(srcpos) == quote_type) && (previous_char !== "\\")) within_quote = !(within_quote);
+previous_char = source_string.charAt(srcpos); // to detect a previous backlash escape and ignore quote
+if ((within_quote == false) && (source_string.charAt(srcpos) == " "))
 source_string = source_string.substring(0,srcpos) + "+" + source_string.substring(srcpos+1);}
 source_string = source_string.replace(/\+\+\+\+\+/g,'+'); source_string = source_string.replace(/\+\+\+\+/g,'+');
 source_string = source_string.replace(/\+\+\+/g,'+'); source_string = source_string.replace(/\+\+/g,'+');
@@ -929,16 +940,19 @@ if ((input_params.length > 4) && (input_params.substr(0,1) == '(') && (input_par
 function is_sikuli(input_params) { // helper function to check if input is meant for sikuli visual automation
 if (input_params.length > 4 && input_params.substr(-4).toLowerCase() == '.png') return true; // support png and bmp
 else if (input_params.length > 4 && input_params.substr(-4).toLowerCase() == '.bmp') return true;
+else if (input_params.length > 9 && input_params.substr(-9).toLowerCase() == 'using ocr') return true;
 else if (is_coordinates(input_params)) return true; else return false;}
 
 function call_sikuli(input_intent,input_params,other_actions) { // helper function to use sikuli visual automation
+if (input_intent.length > 9 && input_intent.substr(-9).toLowerCase() == 'using ocr')
+var use_ocr = 'true'; else var use_ocr = 'false';  // to track if it is a text locator using OCR
 var fs = require('fs'); // use phantomjs fs file system module to access files and directories
 fs.write('tagui.sikuli/tagui_sikuli.in', '', 'w'); fs.write('tagui.sikuli/tagui_sikuli.out', '', 'w');
 if (!fs.exists('tagui.sikuli/tagui_sikuli.in')) return "this.echo('ERROR - cannot initialise tagui_sikuli.in')";
 if (!fs.exists('tagui.sikuli/tagui_sikuli.out')) return "this.echo('ERROR - cannot initialise tagui_sikuli.out')";
 if (!other_actions) other_actions = ''; // to handle most cases where other_actions is not passed in during call
-return "var fs = require('fs'); if (!sikuli_step('"+input_intent+"')) if (!fs.exists('"+input_params+"')) " +
-"this.echo('ERROR - cannot find image file "+input_params+"'); " +
+return "var fs = require('fs'); if (!sikuli_step('"+input_intent+"')) if (!fs.exists('"+input_params+"') && !" +
+use_ocr + ") " + "this.echo('ERROR - cannot find image file "+input_params+"'); " +
 "else this.echo('ERROR - cannot find "+input_params+" on screen'); " + other_actions;}
 
 function call_r(input_intent) { // helper function to use R integration for data analytics and machine learning
@@ -1059,10 +1073,9 @@ else return "this.download('" + param1 + "','" + abs_file(param2) + "')";}
 function receive_intent(raw_intent) {raw_intent = eval("'" + escape_bs(raw_intent) + "'"); // support dynamic variables
 return "this.echo('ERROR - step not supported in live mode, it requires creating CasperJS event')";}
 
-function echo_intent(raw_intent) { // code to support dynamic variables not applicable
+function echo_intent(raw_intent) {raw_intent = eval("'" + escape_bs(raw_intent) + "'"); // support dynamic variables
 var params = ((raw_intent + ' ').substr(1+(raw_intent + ' ').indexOf(' '))).trim();
-if (params == '') return "this.echo('ERROR - text missing for " + raw_intent + "')";
-else return "this.echo(" + add_concat(params) + ")";}
+if (params == '') return "this.echo('')"; else return "this.echo('" + add_concat(params) + "')";}
 
 function save_intent(raw_intent) {raw_intent = eval("'" + escape_bs(raw_intent) + "'"); // support dynamic variables
 var params = ((raw_intent + ' ').substr(1+(raw_intent + ' ').indexOf(' '))).trim();
@@ -1084,25 +1097,25 @@ else return "this.echo('ERROR - cannot find " + param1 + "')";}
 else {if (check_tx(params)) return "save_text('',this.fetchText(tx('" + params + "')).trim())";
 else return "this.echo('ERROR - cannot find " + params + "')";}}
 
-function dump_intent(raw_intent) { // code to support dynamic variables not applicable
+function dump_intent(raw_intent) {raw_intent = eval("'" + escape_bs(raw_intent) + "'"); // support dynamic variables
 var params = ((raw_intent + ' ').substr(1+(raw_intent + ' ').indexOf(' '))).trim();
 var param1 = (params.substr(0,params.indexOf(' to '))).trim();
 var param2 = (params.substr(4+params.indexOf(' to '))).trim();
 if (params == '') return "this.echo('ERROR - variable missing for " + raw_intent + "')";
 else if (params.indexOf(' to ') > -1)
-return "save_text('" + abs_file(param2) + "'," + add_concat(param1) + ")"; else
-return "save_text(''," + add_concat(params) + ")";}
+return "save_text('" + abs_file(param2) + "','" + add_concat(param1) + "')"; else
+return "save_text('','" + add_concat(params) + "')";}
 
-function write_intent(raw_intent) { // code to support dynamic variables not applicable
+function write_intent(raw_intent) {raw_intent = eval("'" + escape_bs(raw_intent) + "'"); // support dynamic variables
 var params = ((raw_intent + ' ').substr(1+(raw_intent + ' ').indexOf(' '))).trim();
 var param1 = (params.substr(0,params.indexOf(' to '))).trim();
 var param2 = (params.substr(4+params.indexOf(' to '))).trim();
 if (params == '') return "this.echo('ERROR - variable missing for " + raw_intent + "')";
 else if (params.indexOf(' to ') > -1)
-return "append_text('" + abs_file(param2) + "'," + add_concat(param1) + ")"; else
-return "append_text(''," + add_concat(params) + ")";}
+return "append_text('" + abs_file(param2) + "','" + add_concat(param1) + "')"; else
+return "append_text('','" + add_concat(params) + "')";}
 
-function load_intent(raw_intent) { // code to support dynamic variables not applicable
+function load_intent(raw_intent) {raw_intent = eval("'" + escape_bs(raw_intent) + "'"); // support dynamic variables
 var params = ((raw_intent + ' ').substr(1+(raw_intent + ' ').indexOf(' '))).trim();
 var param1 = (params.substr(0,params.indexOf(' to '))).trim();
 var param2 = (params.substr(4+params.indexOf(' to '))).trim();
@@ -1202,6 +1215,7 @@ if (params == '') return "this.echo('ERROR - statement missing for " + raw_inten
 else return check_chrome_context(params);}
 
 function r_intent(raw_intent) { // code to support dynamic variables not applicable
+return "this.echo('ERROR - R integration is deprecated, raise an issue if you need to use it')";
 if (raw_intent.toLowerCase() == 'r begin') {inside_r_block = 1; return '';}
 else if (raw_intent.toLowerCase() == 'r finish') {inside_r_block = 0; return '';}
 if (inside_r_block == 1) raw_intent = 'r ' + raw_intent;
