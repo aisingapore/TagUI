@@ -20,7 +20,7 @@ Windows
 
     setx path "%path%;c:\tagui\src"
 
-    tagui c:\tagui\src\samples\1_yahoo.tag
+    tagui c:\tagui\flows\samples\1_google.tag
 
 You have run your first TagUI flow! 🎉
 
@@ -44,7 +44,7 @@ macOS/Linux
 
     ln -sf /your_tagui_path/tagui/src/tagui /usr/local/bin/tagui
 
-    tagui your_tagui_path/tagui/src/samples/1_yahoo.tag
+    tagui your_tagui_path/tagui/flows/samples/1_google.tag
 
 You have run your first TagUI flow! 🎉
 

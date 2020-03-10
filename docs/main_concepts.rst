@@ -27,7 +27,7 @@ Run by double-click
 **********************
 You can create a shortcut file with::
 
-  tagui my_flow.tag deploy
+  tagui my_flow.tag -deploy
 
 This creates a shortcut (my_flow.cmd) to run your flow just by double clicking the shortcut. The shortcut is in the same folder as your flow, but you can move it to your desktop or anywhere else for easy access.
 
@@ -40,7 +40,7 @@ This creates a shortcut (my_flow.cmd) to run your flow just by double clicking t
 
 If you want to create the shortcut file with options like ``headless``, you can just add them in the same line like this::
 
-  tagui my_flow.tag headless deploy
+  tagui my_flow.tag -headless -deploy
 
 .. note:: If you move your flow file to another folder, you will need to create a new shortcut file.
 
@@ -56,7 +56,7 @@ Hide the browser
 **********************
 You can run web flows without showing the web browser by running TagUI with the ``headless`` option. ::
 
-    tagui my_flow.tag headless
+    tagui my_flow.tag -headless
 
 This allows you to continue using your desktop normally while the flow is running, but it will not work if your flow uses visual automation, because visual automation reads and clicks what is on your screen.
 
@@ -81,7 +81,7 @@ One of the most common steps is click. You can use it to click on a web element:
 
   click Getting started
 
-This command tells TagUI to try to click on any element which has “Getting started” as it’s “id”, “name”, “class” or “title” attributes (:ref:`How to find an element’s attributes <element_attributes>`), or as a last resort, has “Getting started” in its text.
+This command tells TagUI to try to click on any element which has “Getting started” as its “id”, “name”, “class” or “title” attributes (:ref:`How to find an element’s attributes <element_attributes>`), or as a last resort, has “Getting started” in its text.
 
 This method usually works for targeting what you want, but you can be more explicit by providing an XPath. XPath is a powerful way to choose which web element you want to target. Use it like this:
 
@@ -389,6 +389,6 @@ The example below clicks 200 pixels to the right of ``element.png``::
 
 mouse_xy() 
 *********************
-In live mode, you can use find out the coordinates of your mouse using ``echo mouse_xy()`` so that you can use the coordinates in your flows::
+In live mode, you can use find out the coordinates of your mouse using ``echo `mouse_xy()``` so that you can use the coordinates in your flows::
 
-  echo mouse_xy()
+  echo `mouse_xy()`

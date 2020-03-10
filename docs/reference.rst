@@ -171,7 +171,7 @@ select
 
 table
 #####################
-| Saves html table data to a csv file.
+| Saves html table data to a csv file. This only works for simple, neat HTML tables.
 | Uses :ref:`XPath <xpath>` identifier only. 
 
 .. code-block:: none
@@ -466,7 +466,7 @@ Runs JavaScript code explicitly. TagUI has direct access to the JavaScript varia
 
   js begin
   [JavaScript statements]
-  js end
+  js finish
 
 *Examples*
 
@@ -478,7 +478,7 @@ Runs JavaScript code explicitly. TagUI has direct access to the JavaScript varia
   js begin
   obj = JSON.parse(api_result)  
   randomInteger = Math.floor(Math.random() * Math.floor(5)) + 1
-  js end
+  js finish
   dump `obj` to result.json
 
 
@@ -492,7 +492,7 @@ Runs Python code and saves the stdout to the variable ``py_result`` as a string.
 
   py begin
   [Python statements]
-  py end
+  py finish
 
 *Examples*
 
@@ -506,7 +506,7 @@ Runs Python code and saves the stdout to the variable ``py_result`` as a string.
   import random
   random_integer = random.randint(1,6)
   print(random_integer)
-  py end
+  py finish
   echo `py_result`
 
 
@@ -535,7 +535,7 @@ Runs Sikuli code.
 
   vision begin
   [Sikuli statements]
-  vision end
+  vision finish
 
 *Examples*
 
@@ -554,7 +554,7 @@ Runs code in the browser dom and saves the stdout to the variable ``dom_result``
 
   dom begin
   [JavaScript statements to run in the DOM]
-  dom end
+  dom finish
 
 *Examples*
 
@@ -573,7 +573,7 @@ Runs R statements and saves the stdout to the variable ``r_result``.
 
   r begin
   [R statements]
-  r end
+  r finish
 
 
 Miscellaneous
@@ -676,15 +676,20 @@ You can use the below options when running ``tagui``.
 
 For example, the command below runs ``my_flow.tag`` without showing the web browser, while storing the flow run result in ``tagui_report.csv``. ::
     
-    tagui my_flow.tag headless report
+    tagui my_flow.tag -headless -report
 
 
-headless
+-deploy or -d
+********************
+Deploys a flow, creating a shortcut which can be double-clicked to run the flow. If the flow file is moved, a new shortcut must be created. The flow will be run with all the options used when creating the shortcut.
+
+
+-headless or -h
 ********************
 Runs the flow without a visible browser (does not work for visual automation).
 
 
-report
+-report or -r
 ********************
 Tracks flow run result in ``tagui/src/tagui_report.csv`` and saves html logs of flows.
 
@@ -694,9 +699,10 @@ my_datatable.csv
 Uses the specified csv file as the datatable. See :ref:`datatables <datatables>`.
 
 
-speed
+-speed or -s
 ********************
 Runs a datatable flow, skipping the default 3s delay and restarting of Chrome between datatable iterations.
+
 
 See :doc:`other deprecated options </dep_options>`.
 
