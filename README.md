@@ -1,12 +1,12 @@
-<img src="https://raw.githubusercontent.com/kelaberetiv/TagUI/develop/src/media/tagui_logo.png" height="111" align="right">
+<img src="https://raw.githubusercontent.com/kelaberetiv/TagUI/master/src/media/tagui_logo.png" height="111" align="right">
 
 # TagUI
 
 **TagUI is a command-line tool for digital process automation (RPA).**
 
-### [Download TagUI v6.0.0](https://tagui.readthedocs.io/en/readthedocs_page/setup.html)
+### [Download TagUI v6.0.0](https://tagui.readthedocs.io/en/latest/setup.html)
 
-### [Visit the documentation](https://tagui.readthedocs.io/en/readthedocs_page/index.html)
+### [Visit the documentation](https://tagui.readthedocs.io/en/latest/index.html)
 
 Write flows (scripts) in simple TagUI language and automate your web, mouse and keyboard interactions on the desktop.
 
