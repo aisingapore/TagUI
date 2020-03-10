@@ -13,7 +13,7 @@ echo.
 echo live           launch in live mode enabled with visual automation for interactive development session
 echo input^(s^)       add your own parameter^(s^) to be used in your automation flow as variables p1 to p9
 echo data.csv       specify a csv file to be used as the datatable for batch automation of many records
-echo -deploy -s     generate .cmd file which can be double-clicked to run workflow with specific options
+echo -deploy -d     generate .cmd file which can be double-clicked to run workflow with specific options
 echo -headless -h   run on invisible Chrome web browser instead of default PhantomJS ^(first install Chrome^)
 echo -nobrowser -n  run without any web browser, for example to perform automation only with visual automation
 echo -report -r     track run result in tagui\src\tagui_report.csv and save html log of automation execution
