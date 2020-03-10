@@ -12,7 +12,7 @@ Write flows (scripts) in simple TagUI language and automate your web, mouse and 
 
 TagUI is free to use and open-source. It's easy to setup and use and works on Windows, macOS and Linux.
 
-In TagUI language, you use _steps_ like `click` and `type` and interact with _identifiers_:
+In TagUI language, you use _steps_ like `click` and `type` and interact with _identifiers_, which includes images, screen coordinates, or even text using OCR:
 
 ```
 https://www.typeform.com
