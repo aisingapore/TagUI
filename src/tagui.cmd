@@ -19,7 +19,6 @@ echo -headless    run on invisible Chrome web browser instead of default Phantom
 echo -nobrowser   run without any web browser, for example to perform automation only with visual automation
 echo -firefox     run on visible Firefox web browser instead of invisible browser ^(first install Firefox^)
 echo -report      track run result in tagui\src\tagui_report.csv and save html log of automation execution
-echo -upload      upload automation flow and result to hastebin.com ^(expires 30 days after last view^)
 echo -speed       skip 3-second delay between datatable iterations ^(and skip restarting of Chrome^)
 echo -quiet       run without output except for explicit output ^(echo / show / check / errors etc^)
 echo -debug       show run-time backend messages from PhantomJS mode for detailed tracing and logging
@@ -749,74 +748,6 @@ if "%arg9%"=="-r" (
 	set tagui_html_report=true
 )
 
-set tagui_upload_result=false
-rem check upload parameter to upload flow result to online storage
-if "%arg2%"=="-upload" (
-	set arg2=
-	set tagui_upload_result=true
-)
-if "%arg3%"=="-upload" (
-	set arg3=
-	set tagui_upload_result=true
-)
-if "%arg4%"=="-upload" (
-	set arg4=
-	set tagui_upload_result=true
-)
-if "%arg5%"=="-upload" (
-	set arg5=
-	set tagui_upload_result=true
-)
-if "%arg6%"=="-upload" (
-	set arg6=
-	set tagui_upload_result=true
-)
-if "%arg7%"=="-upload" (
-	set arg7=
-	set tagui_upload_result=true
-)
-if "%arg8%"=="-upload" (
-	set arg8=
-	set tagui_upload_result=true
-)
-if "%arg9%"=="-upload" (
-	set arg9=
-	set tagui_upload_result=true
-)
-
-if "%arg2%"=="-u" (
-	set arg2=
-	set tagui_upload_result=true
-)
-if "%arg3%"=="-u" (
-	set arg3=
-	set tagui_upload_result=true
-)
-if "%arg4%"=="-u" (
-	set arg4=
-	set tagui_upload_result=true
-)
-if "%arg5%"=="-u" (
-	set arg5=
-	set tagui_upload_result=true
-)
-if "%arg6%"=="-u" (
-	set arg6=
-	set tagui_upload_result=true
-)
-if "%arg7%"=="-u" (
-	set arg7=
-	set tagui_upload_result=true
-)
-if "%arg8%"=="-u" (
-	set arg8=
-	set tagui_upload_result=true
-)
-if "%arg9%"=="-u" (
-	set arg9=
-	set tagui_upload_result=true
-)
-
 set tagui_speed_mode=false
 rem check speed parameter to skip delay and chrome restart between iterations
 if "%arg2%"=="-speed" (
@@ -1109,15 +1040,6 @@ if %file_size% gtr 0 if %tagui_html_report%==true (
 	php -q tagui_report.php "%flow_file%"
 	gawk "sub(\"$\", \"\")" "%flow_file%.html" > "%flow_file%.html.tmp"
 	move /Y "%flow_file%.html.tmp" "%flow_file%.html" > nul
-)
-
-rem check upload option to upload result to hastebin.com
-for /f "usebackq" %%f in ('%flow_file%.log') do set file_size=%%~zf
-if %file_size% gtr 0 if %tagui_upload_result%==true (
-rem set flow_file to blank or the variable will break that tagui call
-	set "tmp_flow_file=%flow_file%"
-	set flow_file=
-	tagui ..\flows\samples\8_hastebin.tag -nobrowser -quiet "!tmp_flow_file!"
 )
 
 rem remove logs if tagui_logging doesn't exist
