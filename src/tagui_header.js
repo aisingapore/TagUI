@@ -932,12 +932,6 @@ escaped_string = input_string.replace(/\\/g,'\\\\').replace(/\'/g,'\\\'').replac
 escaped_string = escaped_string.replace(/\t/g,'\\t').replace(/\f/g,'\\f').replace(/\v/g,'\\v').replace(/\"/g,'\\\"');
 return escaped_string.replace(/\[SINGLE_QUOTE_FOR_VARIABLE_HANDLING\]/g,'\'');}
 
-function get_text_for_sikuli(image_filename) { // helper function to decompose full path and filename to get text
-last_back_slash = image_filename.lastIndexOf('/');
-last_forward_slash = image_filename.lastIndexOf('\\');
-last_slash_position = Math.max(last_back_slash, last_forward_slash);
-return image_filename.substr(last_slash_position + 1);}
-
 function is_coordinates(input_params) { // helper function to check if string is (x,y) coordinates
 if ((input_params.length > 4) && (input_params.substr(0,1) == '(') && (input_params.substr(-1) == ')') 
 && (input_params.split(',').length == 2 || input_params.split(',').length == 3) 

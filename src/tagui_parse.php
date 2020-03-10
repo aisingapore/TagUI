@@ -600,12 +600,6 @@ $source_string = str_replace("+++++","+",$source_string); $source_string = str_r
 $source_string = str_replace("+++","+",$source_string); $source_string = str_replace("++","+",$source_string);
 return $source_string;} // replacing multiple variations of + to handle user typos of double spaces etc
 
-function get_text_for_sikuli($image_filename) { // helper function to decompose full path and filename to get text
-$last_back_slash = strrpos($image_filename, "/");
-$last_forward_slash = strrpos($image_filename, "\\");
-$last_slash_position = max($last_back_slash, $last_forward_slash);
-return substr($image_filename, $last_slash_position + 1);}
-
 function is_coordinates($input_params) { // helper function to check if string is (x,y) coordinates
 if (strlen($input_params)>4 and substr($input_params,0,1)=='(' and substr($input_params,-1)==')' 
 and (substr_count($input_params,',')==1 or substr_count($input_params,',')==2) 
