@@ -24,3 +24,5 @@ click btnlogin
 
 download https://admin.typeform.com/xxx to report.csv
 ```
+
+This project is supported by the National Research Foundation, Singapore under its AI Singapore Programme (AISG-RP-2019-050).

@@ -82,6 +82,24 @@ On Windows, `use the Task Scheduler <https://www.digitalcitizen.life/how-create-
 On macOS/Linux, `use crontab <https://www.ostechnix.com/a-beginners-guide-to-cron-jobs/>`_.
 
 
+How do I kill any unfinished TagUI processes?
+-----------------------------------------------
+If you Ctrl+C to break a TagUI automation, you can use ``tagui/src/end_processes`` (for macOS/Linux) or ``end_processes.cmd`` (for Windows) to kill any dead processes of TagUI integrations (Chrome, SikuliX, Python etc).
+
+
+Why doesn't TagUI work on zoom levels other than 100%?
+-------------------------------------------------------------
+TagUI mimics the user mouse-clicks at the (x,y) coordinates of web elements, so using a different zoom level will cause clicks to be triggered at wrong coordinates. Make sure TagUI's Chrome browser is set to 100% zoom for best results. 
+
+
+Who is TagUI's technologies?
+-----------------------------------------
+TagUI - Ken Soh / @kensoh
+SikuliX - Raimund Hocke / @RaiMan
+CasperJS - Nicolas Perriault / @n1k0
+PhantomJS - Ariya Hidayat / @ariya
+SlimerJS - Laurent Jouanneau / @laurentj
+
 
 Is TagUI safe to use?
 -----------------------------
