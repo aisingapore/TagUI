@@ -18,7 +18,7 @@ You can run a flow in the :ref:`Command Prompt/Terminal<how-to-use-command-promp
 
 TagUI looks for ``my_flow.tag`` in your current working directory. You can also provide the full path to your flow::
 
-    tagui c:\tagui\samples\1_yahoo.tag
+    tagui c:\tagui\samples\1_google.tag
 
 You can also :ref:`run flows on a fixed schedule <run-on-schedule>`.
 
@@ -29,6 +29,10 @@ You can create a shortcut file with::
 
   tagui my_flow.tag -deploy
 
+or using the shortcut ``-d``::
+
+  tagui my_flow.tag -d
+
 This creates a shortcut (my_flow.cmd) to run your flow just by double clicking the shortcut. The shortcut is in the same folder as your flow, but you can move it to your desktop or anywhere else for easy access.
 
 .. raw:: html
@@ -38,9 +42,9 @@ This creates a shortcut (my_flow.cmd) to run your flow just by double clicking t
         Your browser does not support the video tag.
     </video>
 
-If you want to create the shortcut file with options like ``headless``, you can just add them in the same line like this::
+If you want to create the shortcut file with options like ``headless`` (``-h``), you can just add them in the same line like this::
 
-  tagui my_flow.tag -headless -deploy
+  tagui my_flow.tag -h -d
 
 .. note:: If you move your flow file to another folder, you will need to create a new shortcut file.
 
@@ -49,7 +53,7 @@ Run from a URL
 **********************
 You can also run a flow directly from a URL::
 
-    tagui https://raw.githubusercontent.com/kelaberetiv/TagUI/master/src/samples/1_yahoo.tag
+    tagui https://raw.githubusercontent.com/kelaberetiv/TagUI/master/src/samples/1_google.tag
 
 
 Hide the browser
@@ -57,6 +61,10 @@ Hide the browser
 You can run web flows without showing the web browser by running TagUI with the ``headless`` option. ::
 
     tagui my_flow.tag -headless
+
+or using the shortcut ``-h``::
+
+  tagui my_flow.tag -h
 
 This allows you to continue using your desktop normally while the flow is running, but it will not work if your flow uses visual automation, because visual automation reads and clicks what is on your screen.
 
@@ -274,21 +282,29 @@ For example, if the URL contains the word “success”, then we want to click s
 .. code-block:: none
 
   if url() contains "success"
-  {
     click button1.png
     click button2.png
-  }
 
-``url()`` is a :ref:`helper function <helper-functions>` that gets the url of the current webpage. Note the use of ``{`` and ``}``. The steps within these curly braces will only be run if the condition is met, ie. the url contains the word “success”.
+``url()`` is a :ref:`helper function <helper-functions>` that gets the url of the current webpage. Note that the other lines are *indented*, ie. there are spaces (or tabs) in front of them. This means that they are in the *if block*. The steps in the *if block* will only be run if the condition is met, ie. the url contains the word “success”.
+
+.. note:: 
+  Before v6, you need to use ``{`` and ``}`` to surround your *if block*, so the above example would be:
+
+  .. code-block:: none
+    if url() contains "success"
+    {
+      click button1.png
+      click button2.png
+    }
+  
+  From v6 onwards, the curly braces ``{}`` are optional.
 
 Another common case is to check if some element exists. Here, we say that “if some-element doesn’t appear after waiting for the timeout, then visit this webpage”.
 
 .. code-block:: none
 
   if !exist('some-element')
-  {
     https://tagui.readthedocs.io/
-  }
 
 The ! negates the condition and comes from JavaScript, which TagUI code eventually translates to.
 
@@ -297,25 +313,19 @@ In this next example, we check if a variable row_count, which we assigned a valu
 .. code-block:: none
 
   if row_count equals 5
-  {
     some steps
-  }
 
 Here’s how we check if it is more than or less than 5:
 
 .. code-block:: none
 
   if row_count is more than 5
-  {
     some steps
-  }
 
 .. code-block:: none
 
   if row_count is less than 5
-  {
     some steps
-  }
 
 
 Loops
@@ -327,9 +337,7 @@ In this example, we repeat the steps within the curly braces ``{`` and ``}`` a t
 .. code-block:: none
 
   for n from 1 to 20
-  {
     some steps
-  }
 
 .. _helper-functions:
 
