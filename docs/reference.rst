@@ -192,18 +192,14 @@ Modifies the next steps to be run in a new tab.
 .. code-block:: none
 
   popup [unique part of new tab's URL]
-  {
     [steps]
-  }
 
 *Examples*
 
 .. code-block:: none
   
   popup confirm
-  {
     click Confirm
-  }
 
 
 frame
@@ -213,28 +209,20 @@ Modifies the next steps to use the DOM or XPath in a frame or subframe.
 .. code-block:: none
 
   frame [frame name]
-  {
     [steps]
-  }
 
   frame [frame name] | [subframe name]
-  {
     [steps]
-  }
 
 *Examples*
 
 .. code-block:: none
   
   frame navigation
-  {
     click Products
-  }
 
   frame main | register
-  {
     click Register
-  }
 
 
 download
@@ -761,9 +749,7 @@ Gets the URL of the current web page.
 .. code-block:: none
 
   if url() contains 'success'
-  {
     click button1
-  }
 
 
 title()
@@ -775,9 +761,7 @@ Gets the title of the current web page.
 .. code-block:: none
 
   if title() contains 'Confirmation'
-  {
     click button1
-  }
 
 
 text()
@@ -789,9 +773,7 @@ Gets all text content of the current web page.
 .. code-block:: none
 
   if text() contains 'success'
-  {
     click button1
-  }
 
 
 timer()
@@ -826,9 +808,7 @@ exist()
 .. code-block:: none
   
   if exist('//table')
-  {
     click button1
-  }
 
 
 present()
