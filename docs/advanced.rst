@@ -96,9 +96,9 @@ You can pass a variable to Python like this::
 
 Saving flow run results
 -------------------------
-You can save an html log of the run and the flow run results to ``tagui/src/tagui_report.csv`` with the ``report`` option. ::
+You can save an html log of the run and the flow run results to ``tagui/src/tagui_report.csv`` with the ``report`` option (shortcut ``-r``). ::
 
-    tagui my_flow.tag report
+    tagui my_flow.tag -report
 
 The CSV file will show one line for each run, when it started, how long it took to complete, any error message during run, and the link to the log file for that run.
 
