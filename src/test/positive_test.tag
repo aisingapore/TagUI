@@ -185,9 +185,9 @@ for n from 1 to 20
     echo `n`
 
 for n from 1 to 20
-if (a==1)
-    for p from 21 to 40
-        echo `n` - `p`
+    if (a==1)
+        for p from 21 to 40
+            echo `n` - `p`
 
 // test indentation for popup step
 popup about
