@@ -360,7 +360,7 @@ Turns some variables into csv text for writing to a csv file. It takes variables
   read name_element to name
   read price_element to price
   read details_element to details
-  write csv_row([name, price, details]) to product_list.csv
+  write `csv_row([name, price, details])` to product_list.csv
 
 
 clipboard()

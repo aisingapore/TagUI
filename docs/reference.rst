@@ -711,7 +711,7 @@ Formats an array for writing to csv file.
   read name_element to name
   read price_element to price
   read details_element to details
-  write csv_row([name, price, details]) to product_list.csv
+  write `csv_row([name, price, details])` to product_list.csv
 
 
 count()
