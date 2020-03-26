@@ -1014,19 +1014,33 @@ rem end of big loop for managing multiple data sets in datatable
 :break_for_loop
 
 rem additional windows section to convert unix to windows file format
-gawk "sub(\"$\", \"\")" "%flow_file%.raw" > "%flow_file%.raw.tmp"
-move /Y "%flow_file%.raw.tmp" "%flow_file%.raw" > nul
-gawk "sub(\"$\", \"\")" "%flow_file%.js" > "%flow_file%.js.tmp"
-move /Y "%flow_file%.js.tmp" "%flow_file%.js" > nul
-gawk "sub(\"$\", \"\")" "%flow_file%.log" > "%flow_file%.log.tmp"
-move /Y "%flow_file%.log.tmp" "%flow_file%.log" > nul
-gawk "sub(\"$\", \"\")" "tagui_chrome.log" > "tagui_chrome.log.tmp"
-move /Y "tagui_chrome.log.tmp" "tagui_chrome.log" > nul
+if exist "%flow_file%.raw" (
+	gawk "sub(\"$\", \"\")" "%flow_file%.raw" > "%flow_file%.raw.tmp"
+	move /Y "%flow_file%.raw.tmp" "%flow_file%.raw" > nul
+)
+if exist "%flow_file%.js" (
+	gawk "sub(\"$\", \"\")" "%flow_file%.js" > "%flow_file%.js.tmp"
+	move /Y "%flow_file%.js.tmp" "%flow_file%.js" > nul
+)
+if exist "%flow_file%.log" (
+	gawk "sub(\"$\", \"\")" "%flow_file%.log" > "%flow_file%.log.tmp"
+	move /Y "%flow_file%.log.tmp" "%flow_file%.log" > nul
+)
+if exist "tagui_chrome.log" (
+	gawk "sub(\"$\", \"\")" "tagui_chrome.log" > "tagui_chrome.log.tmp"
+	move /Y "tagui_chrome.log.tmp" "tagui_chrome.log" > nul
+)
 rem keep non-windows logs to help debug integrations when needed
 rem and prevent file-still-locked issues while processes are exiting
-gawk "sub(\"$\", \"\")" "tagui_r\tagui_r.log" > "tagui_r\tagui_r_windows.log"
-gawk "sub(\"$\", \"\")" "tagui_py\tagui_py.log" > "tagui_py\tagui_py_windows.log"
-gawk "sub(\"$\", \"\")" "tagui.sikuli\tagui.log" > "tagui.sikuli\tagui_windows.log"
+if exist "tagui_r\tagui_r.log" (
+	gawk "sub(\"$\", \"\")" "tagui_r\tagui_r.log" > "tagui_r\tagui_r_windows.log"
+)
+if exist "tagui_py\tagui_py.log" (
+	gawk "sub(\"$\", \"\")" "tagui_py\tagui_py.log" > "tagui_py\tagui_py_windows.log"
+)
+if exist "tagui.sikuli\tagui.log" (
+	gawk "sub(\"$\", \"\")" "tagui.sikuli\tagui.log" > "tagui.sikuli\tagui_windows.log"
+)
 
 rem check report option to generate html automation log
 for /f "usebackq" %%f in ('%flow_file%.log') do set file_size=%%~zf
