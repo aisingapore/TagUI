@@ -187,11 +187,8 @@ or (substr($padded_raw_flow_line,0,4)=="for ") or (substr($padded_raw_flow_line,
 (substr($padded_raw_flow_line,0,6)=="popup ") or (substr($padded_raw_flow_line,0,6)=="frame ") or
 (trim($padded_raw_flow_line)=="else")) $current_line_is_condition = true; else $current_line_is_condition = false;
 
-if (($previous_line_is_condition == true) and ($current_line_is_condition == true))
-die("ERROR - for nested conditions, loops, popup, frame, set { and } explicitly\n".	
-"ERROR - add { before this line and add } accordingly - ".$padded_raw_flow_line);	
-if (($previous_line_is_condition == true) and (substr($padded_raw_flow_line,0,1)!="{"))	
-$padded_raw_flow .= "{\n".trim($padded_raw_flow_line)."\n}\n"; else $padded_raw_flow .= $padded_raw_flow_line;
+// append flow line to output raw flow
+$padded_raw_flow .= $padded_raw_flow_line;
 
 $previous_line_is_condition = $current_line_is_condition; // prepare for next line
 } 
