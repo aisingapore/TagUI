@@ -1,7 +1,7 @@
 https://www.google.com
 // code to auto-replace local path names in generated js file with /full_path
 var fs = require('fs');
-var js_result = fs.read('test' + fs.separator + 'positive_test.tag' + '.js');
+var js_result = fs.read('test' + fs.separator + 'positive_test' + '.tag.js');
 var local_path = js_result.substring(js_result.indexOf("var flow_path = '") + 17);
 local_path = local_path.substring(0,local_path.indexOf("'"));
 var regex = new RegExp(local_path,"g"); js_result = js_result.replace(regex,"/full_path");
@@ -15,131 +15,131 @@ https://ca.yahoo.com
 // test contain / not contain
 variable = "test variable with some text"
 if variable contain "some text"
-echo FOUND
+    echo FOUND
 if variable contains "some text"
-echo FOUND
+    echo FOUND
 if variable not contain "some text"
-echo NOT FOUND
+    echo NOT FOUND
 if variable not contains "some text"
-echo NOT FOUND
+    echo NOT FOUND
 variable = 'test variable with some text'
 if variable contain 'some text'
-echo FOUND
+    echo FOUND
 if variable contains 'some text'
-echo FOUND
+    echo FOUND
 if variable not contain 'some text'
-echo NOT FOUND
+    echo NOT FOUND
 if variable not contains 'some text'
-echo NOT FOUND
+    echo NOT FOUND
 
 // test equal to / not equal to
 variable = "lemon"
 if variable equal to "lemon"
-echo LEMON
+    echo LEMON
 if variable equals to "lemon"
-echo LEMON
+    echo LEMON
 if variable not equal to "lemon"
-echo NOT LEMON
+    echo NOT LEMON
 if variable not equals to "lemon"
-echo NOT LEMON
+    echo NOT LEMON
 if variable equal to 'lemon'
-echo LEMON
+    echo LEMON
 if variable equals to 'lemon'
-echo LEMON
+    echo LEMON
 if variable not equal to 'lemon'
-echo NOT LEMON
+    echo NOT LEMON
 if variable not equals to 'lemon'
-echo NOT LEMON
+    echo NOT LEMON
 variable = 12345
 if variable equal to 12345
-echo 12345
+    echo 12345
 if variable equals to 12345
-echo 12345
+    echo 12345
 if variable not equal to 12345
-echo NOT 12345
+    echo NOT 12345
 if variable not equals to 12345
-echo NOT 12345
+    echo NOT 12345
 
 // test more than / greater than / higher than
 variable = 5
 if variable more than 3
-echo MORE THAN 3
+    echo MORE THAN 3
 if variable greater than 3
-echo MORE THAN 3
+    echo MORE THAN 3
 if variable higher than 3
-echo MORE THAN 3
+    echo MORE THAN 3
 
 // test more than or equal to / greater than or equal to / higher than or equal to
 variable = 5
 if variable more than or equal to 5
-echo MORE THAN OR EQUAL TO 5
+    echo MORE THAN OR EQUAL TO 5
 if variable greater than or equal to 5
-echo MORE THAN OR EQUAL TO 5
+    echo MORE THAN OR EQUAL TO 5
 if variable higher than or equal to 5
-echo MORE THAN OR EQUAL TO 5
+    echo MORE THAN OR EQUAL TO 5
 
 // test less than / lesser than / lower than
 variable = 3
 if variable less than 5
-echo LESS THAN 5
+    echo LESS THAN 5
 if variable lesser than 5
-echo LESS THAN 5
+    echo LESS THAN 5
 if variable lower than 5
-echo LESS THAN 5
+    echo LESS THAN 5
 
 // test less than or equal to / lesser than or equal to / lower than or equal to
 variable = 5
 if variable less than or equal to 5
-echo LESS THAN OR EQUAL TO 5
+    echo LESS THAN OR EQUAL TO 5
 if variable lesser than or equal to 5
-echo LESS THAN OR EQUAL TO 5
+    echo LESS THAN OR EQUAL TO 5
 if variable lower than or equal to 5
-echo LESS THAN OR EQUAL TO 5
+    echo LESS THAN OR EQUAL TO 5
 
 // test and
 if "apple" equals to "apple" and "orange" equals to "orange"
-echo TRUE
+    echo TRUE
 if 5 greater than 3 and 3 lesser than 4
-echo TRUE
+    echo TRUE
 if 5 greater than 3 and 3 lesser than 4 and "kiwi" equals to "kiwi"
-echo TRUE
+    echo TRUE
 
 // test or
 if 'apple' equals to 'apple' or 'orange' equals to 'kiwi'
-echo TRUE
+    echo TRUE
 if 5 lesser than 3 or 5 more than 4
-echo TRUE
+    echo TRUE
 if 5 lesser than 3 or 3 lesser than 4 and "kiwi" equals to "kiwi"
-echo TRUE
+    echo TRUE
 
 // test combinations of conditions
 menu = "fruits and salads"
 if menu contains 'fruits' and menu not contains "potatoes"
-echo FRUITS ONLY
+    echo FRUITS ONLY
 
 // test for
 for n from 1 to 5
-echo ITERATION `n`
+    echo ITERATION `n`
 for n from 0 to 0
-echo ITERATION `n`
+    echo ITERATION `n`
 for (n=6; n<=10; n++)
-echo ITERATION `n`
+    echo ITERATION `n`
 for n from 1 to 5
-click element
+    click element
 for n from 0 to 0
-click element
+    click element
 for (n=6; n<=10; n++)
-click element
+    click element
 
 // test while
 while 2 > 3 and 3 > 4
-echo INVALID
+    echo INVALID
 while ((2 > 3) && (3 > 4))
-echo INVALID
+    echo INVALID
 while 2 > 3 and 3 > 4
-click element
+    click element
 while ((2 > 3) && (3 > 4))
-click element
+    click element
 
 // test indentation simple
     this.echo('test');
@@ -179,7 +179,7 @@ while (number <= 5)
 // test for complex for and if nested loops
 a = 1
 for n from 1 to 20
-echo `n`
+    echo `n`
 
 for n from 1 to 20
     echo `n`
@@ -220,7 +220,7 @@ frame about | detail
 
 // test if in javascript
 if (2 < 3)
-echo TRUE
+    echo TRUE
 
 // TEST STEPS
 
@@ -392,31 +392,31 @@ mouse down
 mouse up
 
 // test check
-check eggs lesser than 10 | eggs lesser than 10 | eggs not lesser than 10
-check eggs lesser than 10|eggs lesser than 10|eggs not lesser than 10
+check `eggs` lesser than 10 | eggs lesser than 10 | eggs not lesser than 10
+check `eggs` lesser than 10|eggs lesser than 10|eggs not lesser than 10
 
 // test check within for loop
 for n from 1 to 10
-check eggs lesser than 10 | eggs lesser than 10 | eggs not lesser than 10
+    check `eggs` lesser than 10 | eggs lesser than 10 | eggs not lesser than 10
 
 for n from 1 to 10
-    check eggs lesser than 10 | eggs lesser than 10 | eggs not lesser than 10
+    check `eggs` lesser than 10 | eggs lesser than 10 | eggs not lesser than 10
 
 // test frame
 frame mainframe
-echo test mainframe
+    echo test mainframe
 frame mainframe | subframe
-echo test subframe
+    echo test subframe
 
 // test popup
-// popup url_keyword
-// echo test popup
-// popup url_keyword
-//    frame mainframe
-//        echo test popup with mainframe
-// popup url_keyword
-//    frame mainframe | subframe
-//      echo test popup with subframe
+popup url_keyword
+    echo test popup
+popup url_keyword
+    frame mainframe
+        echo test popup with mainframe
+popup url_keyword
+    frame mainframe | subframe
+        echo test popup with subframe
 
 // test api direct
 api http://www.dummytestsite.com/api?COLOR1=red&COLOR2=green&COLOR3=blue
@@ -441,8 +441,8 @@ run finish
 dom var page_title = document.title;
 dom begin
     var page_title = document.title;
-	var page_input = prompt('enter your title');
-	return page_title + ' ' + page_input;
+    var page_input = prompt('enter your title');
+    return page_title + ' ' + page_input;
 dom finish
 dom document.querySelector('#header p').focus()
 
@@ -451,50 +451,19 @@ js this.echo('THIS IS JAVASCRIPT');
 js begin
    b = 1
 c = 2
-	a = b + c;
+    a = b + c;
 
-	if (a == 3)
-	{
-		this.echo('YES');
+    if (a == 3)
+    {
+        this.echo('YES');
 
-	}
+    }
 
 if (a != 3)
 {
 this.echo('NO');
 }
 js finish
-
-// deprecate R
-
-// // test r
-// r a=1;b=2
-// r c=a+b
-// r cat(c)
-// echo `r_result`
-
-// r begin
-// a='1';b='2'
-// d=paste(a,b,sep='')
-// cat(d)
-// r finish
-// echo `r_result`
-
-// r begin
-// if (TRUE) {
-// cat('TRUE1')
-// cat('TRUE2')
-// }
-// r finish
-// echo `r_result`
-
-// r begin
-// 		if (FALSE) {
-// 	cat('FALSE1')
-// cat('FALSE2')
-// 			}
-// r finish
-// echo `r_result`
 
 // test py
 py a=1;b=2
@@ -512,24 +481,24 @@ echo `py_result`
 py begin
 a = 1
 if a == 1:
-	print('TRUE1')
-	print('TRUE2')
+    print('TRUE1')
+    print('TRUE2')
 py finish
 
-	py begin
-	a = 2
-	if a == 1:
-		print('FALSE1')
-		print('FALSE2')
-	py finish
+    py begin
+    a = 2
+    if a == 1:
+        print('FALSE1')
+        print('FALSE2')
+    py finish
 
 // test vision
 vision click('/tmp/test.png')
 vision begin
 a = 1
 if a == 1:
-	click('1.png')
-	click('1.png')
+    click('1.png')
+    click('1.png')
 vision finish
 
 // test timeout
@@ -594,17 +563,17 @@ for n from 1 to element_count
 // test url function
 echo `url()`
 if url() contains 'org'
-echo page url contains org
+    echo page url contains org
 
 // test title function
 echo `title()`
 if title() contains 'About'
-echo page title contains About
+    echo page title contains About
 
 // test text function
 echo `text()`
 if text() contains 'automation'
-echo page text contains automation
+    echo page text contains automation
 
 // test timer function
 start = timer()
