@@ -5,7 +5,7 @@ var js_result = fs.read('test' + fs.separator + 'positive_test' + '.tag.js');
 var local_path = js_result.substring(js_result.indexOf("var flow_path = '") + 17);
 local_path = local_path.substring(0,local_path.indexOf("'"));
 var regex = new RegExp(local_path,"g"); js_result = js_result.replace(regex,"/full_path");
-fs.write('test' + fs.separator + 'positive_test.tag' + '.js', js_result, 'w');
+fs.write('test' + fs.separator + 'positive_test' + '.tag.js', js_result, 'w');
 this.exit(); // don't actually run the steps and code, test is for language conversion
 // add a navigation step in order to exit in time and block below output from running
 https://ca.yahoo.com
