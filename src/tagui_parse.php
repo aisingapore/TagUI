@@ -284,9 +284,13 @@ if (!touch('tagui_chrome.in')) die("ERROR - cannot initialise tagui_chrome.in\n"
 if (!touch('tagui_chrome.out')) die("ERROR - cannot initialise tagui_chrome.out\n");}
 
 // if clipboard(), mouse_xy(), mouse_x(), mouse_y() helper functions are used, invoke sikuli visual automation
-if ((strpos($script_content,'clipboard(')!==false) or (strpos($script_content,'mouse_xy()')!==false) or 
-(strpos($script_content,'mouse_x()')!==false) or (strpos($script_content,'mouse_y()')!==false)) {
-if (!touch('tagui.sikuli/tagui_sikuli.in')) die("ERROR - cannot initialise tagui_sikuli.in\n");
+// if present(), visible(), exist() helper functions are used with image file as parameter, invoke sikuli too
+if ((strpos($script_content,'clipboard(')!==false) or (strpos($script_content,'mouse_xy()')!==false) or
+(strpos($script_content,'mouse_x()')!==false) or (strpos($script_content,'mouse_y()')!==false) or
+preg_match('/present\(.*\.png.*\)/i',$script_content) or preg_match('/present\(.*\.bmp.*\)/i',$script_content) or
+preg_match('/visible\(.*\.png.*\)/i',$script_content) or preg_match('/visible\(.*\.bmp.*\)/i',$script_content) or
+preg_match('/exist\(.*\.png.*\)/i',$script_content) or preg_match('/exist\(.*\.bmp.*\)/i',$script_content))
+{if (!touch('tagui.sikuli/tagui_sikuli.in')) die("ERROR - cannot initialise tagui_sikuli.in\n");
 if (!touch('tagui.sikuli/tagui_sikuli.out')) die("ERROR - cannot initialise tagui_sikuli.out\n");}
 
 // check quiet parameter to run flow quietly by only showing explicit output
