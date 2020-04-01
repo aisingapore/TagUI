@@ -257,7 +257,6 @@ return false;}
 // friendlier name to use check_tx() in if condition in flow
 function present(element_locator) {if (!element_locator) return false; 
 if (is_sikuli(element_locator)) {var abs_param = abs_file(element_locator); var fs = require('fs');
-if (!fs.exists(abs_param)) {casper.echo('ERROR - cannot find image file for present step').exit();}
 if (sikuli_step("present " + abs_param)) return true; else return false;}
 else return check_tx(element_locator);}
 
@@ -268,7 +267,6 @@ while (Date.now() < exist_timeout) {if (present(element_identifier)) return true
 // friendlier name to check element visibility using elementVisible()
 function visible(element_locator) {if (!element_locator) return false;
 if (is_sikuli(element_locator)) {var abs_param = abs_file(element_locator); var fs = require('fs');
-if (!fs.exists(abs_param)) {casper.echo('ERROR - cannot find image file for visible step').exit();}
 if (sikuli_step("visible " + abs_param)) return true; else return false;}
 else {var element_located = tx(element_locator); var element_visible = casper.elementVisible(element_located);
 // if tx() returns xps666('/html') means that the element is not found, so set element_visible to false
@@ -346,7 +344,8 @@ function sanitise_csv_cell(cell_data) {
  * @param {string[]} row_data a 1-D array of strings denoting data to
  * encode as a CSV row
  */
-function csv_row(row_data) {
+function csv_row(original_row_data) {
+  var row_data = original_row_data.slice()
   // if row_data has at least 1 element, extract and sanitise first element
   // else start_element is empty string
   var start_element = (row_data.length > 0)
@@ -931,6 +930,7 @@ function abs_file(filename) { // helper function to return absolute filename
 if (filename == '') return ''; // unlike tagui_parse.php not deriving path from script variable
 if (filename.substr(0,1) == '/') return filename; // return mac/linux absolute filename directly
 if (filename.substr(1,1) == ':') return filename.replace(/\\/g,'/'); // return windows absolute filename directly
+if (filename.length > 9 && filename.substr(-9).toLowerCase() == 'using ocr') return filename; // to handle using ocr
 if (is_coordinates(filename)) return filename; // to handle when sikuli (x,y) coordinates locator is provided
 var tmp_flow_path = flow_path; // otherwise use flow_path defined in generated script to build absolute filename
 // above str_replace is because casperjs/phantomjs do not seem to support \ for windows paths, replace with / to work
@@ -967,16 +967,19 @@ if ((input_params.length > 4) && (input_params.substr(0,1) == '(') && (input_par
 function is_sikuli(input_params) { // helper function to check if input is meant for sikuli visual automation
 if (input_params.length > 4 && input_params.substr(-4).toLowerCase() == '.png') return true; // support png and bmp
 else if (input_params.length > 4 && input_params.substr(-4).toLowerCase() == '.bmp') return true;
+else if (input_params.length > 9 && input_params.substr(-9).toLowerCase() == 'using ocr') return true;
 else if (is_coordinates(input_params)) return true; else return false;}
 
 function call_sikuli(input_intent,input_params,other_actions) { // helper function to use sikuli visual automation
+if (input_intent.length > 9 && input_intent.substr(-9).toLowerCase() == 'using ocr')
+var use_ocr = 'true'; else var use_ocr = 'false';  // to track if it is a text locator using OCR
 var fs = require('fs'); // use phantomjs fs file system module to access files and directories
 fs.write('tagui.sikuli/tagui_sikuli.in', '', 'w'); fs.write('tagui.sikuli/tagui_sikuli.out', '', 'w');
 if (!fs.exists('tagui.sikuli/tagui_sikuli.in')) return "this.echo('ERROR - cannot initialise tagui_sikuli.in')";
 if (!fs.exists('tagui.sikuli/tagui_sikuli.out')) return "this.echo('ERROR - cannot initialise tagui_sikuli.out')";
 if (!other_actions) other_actions = ''; // to handle most cases where other_actions is not passed in during call
-return "var fs = require('fs'); if (!sikuli_step('"+input_intent+"')) if (!fs.exists('"+input_params+"')) " +
-"this.echo('ERROR - cannot find image file "+input_params+"'); " +
+return "var fs = require('fs'); if (!sikuli_step('"+input_intent+"')) if (!fs.exists('"+input_params+"') && !" +
+use_ocr + ") " + "this.echo('ERROR - cannot find image file "+input_params+"'); " +
 "else this.echo('ERROR - cannot find "+input_params+" on screen'); " + other_actions;}
 
 function call_r(input_intent) { // helper function to use R integration for data analytics and machine learning
@@ -1099,8 +1102,7 @@ return "this.echo('ERROR - step not supported in live mode, it requires creating
 
 function echo_intent(raw_intent) {raw_intent = eval("'" + escape_bs(raw_intent) + "'"); // support dynamic variables
 var params = ((raw_intent + ' ').substr(1+(raw_intent + ' ').indexOf(' '))).trim();
-if (params == '') return "this.echo('ERROR - text missing for " + raw_intent + "')";
-else return "this.echo('" + add_concat(params) + "')";}
+if (params == '') return "this.echo('')"; else return "this.echo('" + add_concat(params) + "')";}
 
 function save_intent(raw_intent) {raw_intent = eval("'" + escape_bs(raw_intent) + "'"); // support dynamic variables
 var params = ((raw_intent + ' ').substr(1+(raw_intent + ' ').indexOf(' '))).trim();
@@ -1240,6 +1242,7 @@ if (params == '') return "this.echo('ERROR - statement missing for " + raw_inten
 else return check_chrome_context(params);}
 
 function r_intent(raw_intent) { // code to support dynamic variables not applicable
+return "this.echo('ERROR - R integration is deprecated, raise an issue if you need to use it')";
 if (raw_intent.toLowerCase() == 'r begin') {inside_r_block = 1; return '';}
 else if (raw_intent.toLowerCase() == 'r finish') {inside_r_block = 0; return '';}
 if (inside_r_block == 1) raw_intent = 'r ' + raw_intent;
@@ -1448,13 +1451,11 @@ techo('https://www.google.com' + ' - ' + this.getTitle() + '\n');});
 // code to auto-replace local path names in generated js file with /full_path
 casper.then(function() { // start of JS code
 var fs = require('fs');
-var js_result = fs.read('test' + fs.separator + 'positive_test' + '.js');
+var js_result = fs.read('test' + fs.separator + 'positive_test' + '.tag.js');
 var local_path = js_result.substring(js_result.indexOf("var flow_path = '") + 17);
 local_path = local_path.substring(0,local_path.indexOf("'"));
 var regex = new RegExp(local_path,"g"); js_result = js_result.replace(regex,"/full_path");
-fs.write('test' + fs.separator + 'positive_test' + '.js', js_result, 'w');
-fs.remove('test' + fs.separator + 'positive_test' + '.log');
-fs.remove('test' + fs.separator + 'positive_test' + '.raw');
+fs.write('test' + fs.separator + 'positive_test' + '.tag.js', js_result, 'w');
 this.exit(); // don't actually run the steps and code, test is for language conversion
 }); // end of JS code
 
@@ -1471,7 +1472,7 @@ variable = "test variable with some text"
 casper.then(function() {if (((variable.indexOf("some text")>-1)))
 { // start of code block
 
-casper.then(function() {this.echo("FOUND");});
+casper.then(function() {this.echo('FOUND');});
 
 } // end of code block
 });
@@ -1479,7 +1480,7 @@ casper.then(function() {this.echo("FOUND");});
 casper.then(function() {if (((variable.indexOf("some text")>-1)))
 { // start of code block
 
-casper.then(function() {this.echo("FOUND");});
+casper.then(function() {this.echo('FOUND');});
 
 } // end of code block
 });
@@ -1487,7 +1488,7 @@ casper.then(function() {this.echo("FOUND");});
 casper.then(function() {if (((variable.indexOf("some text")<0)))
 { // start of code block
 
-casper.then(function() {this.echo("NOT FOUND");});
+casper.then(function() {this.echo('NOT FOUND');});
 
 } // end of code block
 });
@@ -1495,7 +1496,7 @@ casper.then(function() {this.echo("NOT FOUND");});
 casper.then(function() {if (((variable.indexOf("some text")<0)))
 { // start of code block
 
-casper.then(function() {this.echo("NOT FOUND");});
+casper.then(function() {this.echo('NOT FOUND');});
 
 } // end of code block
 });
@@ -1544,7 +1545,7 @@ variable = "lemon"
 casper.then(function() {if ((variable == "lemon"))
 { // start of code block
 
-casper.then(function() {this.echo("LEMON");});
+casper.then(function() {this.echo('LEMON');});
 
 } // end of code block
 });
@@ -1552,7 +1553,7 @@ casper.then(function() {this.echo("LEMON");});
 casper.then(function() {if ((variable == "lemon"))
 { // start of code block
 
-casper.then(function() {this.echo("LEMON");});
+casper.then(function() {this.echo('LEMON');});
 
 } // end of code block
 });
@@ -1560,7 +1561,7 @@ casper.then(function() {this.echo("LEMON");});
 casper.then(function() {if ((variable != "lemon"))
 { // start of code block
 
-casper.then(function() {this.echo("NOT LEMON");});
+casper.then(function() {this.echo('NOT LEMON');});
 
 } // end of code block
 });
@@ -1568,7 +1569,7 @@ casper.then(function() {this.echo("NOT LEMON");});
 casper.then(function() {if ((variable != "lemon"))
 { // start of code block
 
-casper.then(function() {this.echo("NOT LEMON");});
+casper.then(function() {this.echo('NOT LEMON');});
 
 } // end of code block
 });
@@ -1612,7 +1613,7 @@ variable = 12345
 casper.then(function() {if ((variable == 12345))
 { // start of code block
 
-casper.then(function() {this.echo("12345");});
+casper.then(function() {this.echo('12345');});
 
 } // end of code block
 });
@@ -1620,7 +1621,7 @@ casper.then(function() {this.echo("12345");});
 casper.then(function() {if ((variable == 12345))
 { // start of code block
 
-casper.then(function() {this.echo("12345");});
+casper.then(function() {this.echo('12345');});
 
 } // end of code block
 });
@@ -1628,7 +1629,7 @@ casper.then(function() {this.echo("12345");});
 casper.then(function() {if ((variable != 12345))
 { // start of code block
 
-casper.then(function() {this.echo("NOT 12345");});
+casper.then(function() {this.echo('NOT 12345');});
 
 } // end of code block
 });
@@ -1636,7 +1637,7 @@ casper.then(function() {this.echo("NOT 12345");});
 casper.then(function() {if ((variable != 12345))
 { // start of code block
 
-casper.then(function() {this.echo("NOT 12345");});
+casper.then(function() {this.echo('NOT 12345');});
 
 } // end of code block
 });
@@ -1649,7 +1650,7 @@ variable = 5
 casper.then(function() {if ((variable > 3))
 { // start of code block
 
-casper.then(function() {this.echo("MORE THAN 3");});
+casper.then(function() {this.echo('MORE THAN 3');});
 
 } // end of code block
 });
@@ -1657,7 +1658,7 @@ casper.then(function() {this.echo("MORE THAN 3");});
 casper.then(function() {if ((variable > 3))
 { // start of code block
 
-casper.then(function() {this.echo("MORE THAN 3");});
+casper.then(function() {this.echo('MORE THAN 3');});
 
 } // end of code block
 });
@@ -1665,7 +1666,7 @@ casper.then(function() {this.echo("MORE THAN 3");});
 casper.then(function() {if ((variable > 3))
 { // start of code block
 
-casper.then(function() {this.echo("MORE THAN 3");});
+casper.then(function() {this.echo('MORE THAN 3');});
 
 } // end of code block
 });
@@ -1678,7 +1679,7 @@ variable = 5
 casper.then(function() {if ((variable >= 5))
 { // start of code block
 
-casper.then(function() {this.echo("MORE THAN OR EQUAL TO 5");});
+casper.then(function() {this.echo('MORE THAN OR EQUAL TO 5');});
 
 } // end of code block
 });
@@ -1686,7 +1687,7 @@ casper.then(function() {this.echo("MORE THAN OR EQUAL TO 5");});
 casper.then(function() {if ((variable >= 5))
 { // start of code block
 
-casper.then(function() {this.echo("MORE THAN OR EQUAL TO 5");});
+casper.then(function() {this.echo('MORE THAN OR EQUAL TO 5');});
 
 } // end of code block
 });
@@ -1694,7 +1695,7 @@ casper.then(function() {this.echo("MORE THAN OR EQUAL TO 5");});
 casper.then(function() {if ((variable >= 5))
 { // start of code block
 
-casper.then(function() {this.echo("MORE THAN OR EQUAL TO 5");});
+casper.then(function() {this.echo('MORE THAN OR EQUAL TO 5');});
 
 } // end of code block
 });
@@ -1707,7 +1708,7 @@ variable = 3
 casper.then(function() {if ((variable < 5))
 { // start of code block
 
-casper.then(function() {this.echo("LESS THAN 5");});
+casper.then(function() {this.echo('LESS THAN 5');});
 
 } // end of code block
 });
@@ -1715,7 +1716,7 @@ casper.then(function() {this.echo("LESS THAN 5");});
 casper.then(function() {if ((variable < 5))
 { // start of code block
 
-casper.then(function() {this.echo("LESS THAN 5");});
+casper.then(function() {this.echo('LESS THAN 5');});
 
 } // end of code block
 });
@@ -1723,7 +1724,7 @@ casper.then(function() {this.echo("LESS THAN 5");});
 casper.then(function() {if ((variable < 5))
 { // start of code block
 
-casper.then(function() {this.echo("LESS THAN 5");});
+casper.then(function() {this.echo('LESS THAN 5');});
 
 } // end of code block
 });
@@ -1736,7 +1737,7 @@ variable = 5
 casper.then(function() {if ((variable <= 5))
 { // start of code block
 
-casper.then(function() {this.echo("LESS THAN OR EQUAL TO 5");});
+casper.then(function() {this.echo('LESS THAN OR EQUAL TO 5');});
 
 } // end of code block
 });
@@ -1744,7 +1745,7 @@ casper.then(function() {this.echo("LESS THAN OR EQUAL TO 5");});
 casper.then(function() {if ((variable <= 5))
 { // start of code block
 
-casper.then(function() {this.echo("LESS THAN OR EQUAL TO 5");});
+casper.then(function() {this.echo('LESS THAN OR EQUAL TO 5');});
 
 } // end of code block
 });
@@ -1752,7 +1753,7 @@ casper.then(function() {this.echo("LESS THAN OR EQUAL TO 5");});
 casper.then(function() {if ((variable <= 5))
 { // start of code block
 
-casper.then(function() {this.echo("LESS THAN OR EQUAL TO 5");});
+casper.then(function() {this.echo('LESS THAN OR EQUAL TO 5');});
 
 } // end of code block
 });
@@ -1761,7 +1762,7 @@ casper.then(function() {this.echo("LESS THAN OR EQUAL TO 5");});
 casper.then(function() {if (("apple" == "apple") && ("orange" == "orange"))
 { // start of code block
 
-casper.then(function() {this.echo("TRUE");});
+casper.then(function() {this.echo('TRUE');});
 
 } // end of code block
 });
@@ -1769,7 +1770,7 @@ casper.then(function() {this.echo("TRUE");});
 casper.then(function() {if ((5 > 3) && (3 < 4))
 { // start of code block
 
-casper.then(function() {this.echo("TRUE");});
+casper.then(function() {this.echo('TRUE');});
 
 } // end of code block
 });
@@ -1777,7 +1778,7 @@ casper.then(function() {this.echo("TRUE");});
 casper.then(function() {if ((5 > 3) && (3 < 4) && ("kiwi" == "kiwi"))
 { // start of code block
 
-casper.then(function() {this.echo("TRUE");});
+casper.then(function() {this.echo('TRUE');});
 
 } // end of code block
 });
@@ -1786,7 +1787,7 @@ casper.then(function() {this.echo("TRUE");});
 casper.then(function() {if (('apple' == 'apple') || ('orange' == 'kiwi'))
 { // start of code block
 
-casper.then(function() {this.echo("TRUE");});
+casper.then(function() {this.echo('TRUE');});
 
 } // end of code block
 });
@@ -1794,7 +1795,7 @@ casper.then(function() {this.echo("TRUE");});
 casper.then(function() {if ((5 < 3) || (5 > 4))
 { // start of code block
 
-casper.then(function() {this.echo("TRUE");});
+casper.then(function() {this.echo('TRUE');});
 
 } // end of code block
 });
@@ -1802,7 +1803,7 @@ casper.then(function() {this.echo("TRUE");});
 casper.then(function() {if ((5 < 3) || (3 < 4) && ("kiwi" == "kiwi"))
 { // start of code block
 
-casper.then(function() {this.echo("TRUE");});
+casper.then(function() {this.echo('TRUE');});
 
 } // end of code block
 });
@@ -1815,7 +1816,7 @@ menu = "fruits and salads"
 casper.then(function() {if (((menu.indexOf('fruits')>-1)) && ((menu.indexOf("potatoes")<0)))
 { // start of code block
 
-casper.then(function() {this.echo("FRUITS ONLY");});
+casper.then(function() {this.echo('FRUITS ONLY');});
 
 } // end of code block
 });
@@ -1826,7 +1827,7 @@ casper.then(function() {for (n=1; n<=5; n++)
 (function (n) { // start of IIFE pattern
 { // start of code block
 
-casper.then(function() {this.echo("ITERATION "+n);});
+casper.then(function() {this.echo('ITERATION '+n+'');});
 
 } // end of code block
 })(n); // end of IIFE pattern, with dummy marker for break step
@@ -1837,7 +1838,7 @@ casper.then(function() {for (n=0; n<=0; n++)
 (function (n) { // start of IIFE pattern
 { // start of code block
 
-casper.then(function() {this.echo("ITERATION "+n);});
+casper.then(function() {this.echo('ITERATION '+n+'');});
 
 } // end of code block
 })(n); // end of IIFE pattern, with dummy marker for break step
@@ -1848,7 +1849,7 @@ casper.then(function() {for (n=6; n<=10; n++)
 (function (n) { // start of IIFE pattern
 { // start of code block
 
-casper.then(function() {this.echo("ITERATION "+n);});
+casper.then(function() {this.echo('ITERATION '+n+'');});
 
 } // end of code block
 })(n); // end of IIFE pattern, with dummy marker for break step
@@ -1900,7 +1901,7 @@ casper.then(function() {for_loop_signal = '[BREAK_SIGNAL][n]';});}});
 casper.then(function() {while ((2 > 3) && (3 > 4))
 { // start of code block
 
-this.echo("INVALID");
+this.echo('INVALID');
 
 } // end of code block
 });
@@ -1908,7 +1909,7 @@ this.echo("INVALID");
 casper.then(function() {while ((((2 > 3) && (3 > 4))))
 { // start of code block
 
-this.echo("INVALID");
+this.echo('INVALID');
 
 } // end of code block
 });
@@ -1929,16 +1930,12 @@ this.click(tx('element'));
 } // end of code block
 });
 
-// test {} simple
+// test indentation simple
 {
 
 casper.then(function() { // start of JS code
 this.echo('test');
 }); // end of JS code
-
-}
-
-{
 
 casper.then(function() {{techo('click test');
 casper.waitFor(function check() {return check_tx('test');},
@@ -1947,7 +1944,7 @@ function timeout() {this.echo('ERROR - cannot find test').exit();});}});
 
 }
 
-// test {} complex
+// test indentation complex
 {
 
 casper.then(function() {{techo('click test1');
@@ -1971,7 +1968,7 @@ function timeout() {this.echo('ERROR - cannot find test3').exit();});}});
 
 }
 
-// test {} for loop simple
+// test indentation for loop simple
 casper.then(function() {for (number=1; number<=5; number++)
 {casper.then(function() {for_loop_signal = '[CONTINUE_SIGNAL][number]';});
 (function (number) { // start of IIFE pattern
@@ -1986,7 +1983,7 @@ function timeout() {this.echo('ERROR - cannot find test').exit();});}});
 })(number); // end of IIFE pattern, with dummy marker for break step
 casper.then(function() {for_loop_signal = '[BREAK_SIGNAL][number]';});}});
 
-// test {} for loop complex
+// test indentation for loop complex
 casper.then(function() {for (number=1; number<=5; number++)
 {casper.then(function() {for_loop_signal = '[CONTINUE_SIGNAL][number]';});
 (function (number) { // start of IIFE pattern
@@ -2015,7 +2012,7 @@ function timeout() {this.echo('ERROR - cannot find test3').exit();});}});
 })(number); // end of IIFE pattern, with dummy marker for break step
 casper.then(function() {for_loop_signal = '[BREAK_SIGNAL][number]';});}});
 
-// test {} while loop simple
+// test indentation while loop simple
 casper.then(function() { // start of JS code
 number = 1
 }); // end of JS code
@@ -2028,7 +2025,7 @@ this.click(tx('test'));
 } // end of code block
 });
 
-// test {} while loop complex
+// test indentation while loop complex
 casper.then(function() {while (((number <= 5)))
 { // start of code block
 
@@ -2053,7 +2050,7 @@ casper.then(function() {for (n=1; n<=20; n++)
 (function (n) { // start of IIFE pattern
 { // start of code block
 
-casper.then(function() {this.echo(n);});
+casper.then(function() {this.echo(''+n+'');});
 
 } // end of code block
 })(n); // end of IIFE pattern, with dummy marker for break step
@@ -2064,7 +2061,7 @@ casper.then(function() {for (n=1; n<=20; n++)
 (function (n) { // start of IIFE pattern
 { // start of code block
 
-casper.then(function() {this.echo(n);});
+casper.then(function() {this.echo(''+n+'');});
 
 } // end of code block
 })(n); // end of IIFE pattern, with dummy marker for break step
@@ -2083,7 +2080,7 @@ casper.then(function() {for (p=21; p<=40; p++)
 (function (p) { // start of IIFE pattern
 { // start of code block
 
-casper.then(function() {this.echo(n+' - '+p);});
+casper.then(function() {this.echo(''+n+' - '+p+'');});
 
 } // end of code block
 })(p); // end of IIFE pattern, with dummy marker for break step
@@ -2096,7 +2093,7 @@ casper.then(function() {for_loop_signal = '[BREAK_SIGNAL][p]';});}});
 })(n); // end of IIFE pattern, with dummy marker for break step
 casper.then(function() {for_loop_signal = '[BREAK_SIGNAL][n]';});}});
 
-// test {} for popup step
+// test indentation for popup step
 casper.then(function() {techo('popup about');});
 casper.waitForPopup(/about/, function then() {},
 function timeout() {this.echo('ERROR - cannot find popup about').exit();});
@@ -2139,7 +2136,7 @@ function timeout() {this.echo('ERROR - cannot find test3').exit();});}});
 } // end of code block
 });
 
-// test {} for frame step
+// test indentation for frame step
 casper.then(function() {techo('frame about');});
 casper.withFrame('about', function() {
 { // start of code block
@@ -2220,7 +2217,7 @@ function timeout() {this.echo('ERROR - cannot find test3').exit();});}});
 casper.then(function() {if (((2 < 3)))
 { // start of code block
 
-casper.then(function() {this.echo("TRUE");});
+casper.then(function() {this.echo('TRUE');});
 
 } // end of code block
 });
@@ -2238,24 +2235,29 @@ function then() {this.click(tx('element'));},
 function timeout() {this.echo('ERROR - cannot find element').exit();});}});
 
 casper.then(function() {{techo('tap /full_path/button.png'); var fs = require('fs');
-if (!sikuli_step('tap /full_path/button.png')) if (!fs.exists('/full_path/button.png'))
+if (!sikuli_step('tap /full_path/button.png')) if (!fs.exists('/full_path/button.png') && !false)
 this.echo('ERROR - cannot find image file /full_path/button.png').exit(); else
 this.echo('ERROR - cannot find /full_path/button.png on screen').exit(); this.wait(0);}});
 
 casper.then(function() {{techo('click /full_path/button.bmp'); var fs = require('fs');
-if (!sikuli_step('click /full_path/button.bmp')) if (!fs.exists('/full_path/button.bmp'))
+if (!sikuli_step('click /full_path/button.bmp')) if (!fs.exists('/full_path/button.bmp') && !false)
 this.echo('ERROR - cannot find image file /full_path/button.bmp').exit(); else
 this.echo('ERROR - cannot find /full_path/button.bmp on screen').exit(); this.wait(0);}});
 
 casper.then(function() {{techo('tap (100,200)'); var fs = require('fs');
-if (!sikuli_step('tap (100,200)')) if (!fs.exists('(100,200)'))
+if (!sikuli_step('tap (100,200)')) if (!fs.exists('(100,200)') && !false)
 this.echo('ERROR - cannot find image file (100,200)').exit(); else
 this.echo('ERROR - cannot find (100,200) on screen').exit(); this.wait(0);}});
 
 casper.then(function() {{techo('click (200,400)'); var fs = require('fs');
-if (!sikuli_step('click (200,400)')) if (!fs.exists('(200,400)'))
+if (!sikuli_step('click (200,400)')) if (!fs.exists('(200,400)') && !false)
 this.echo('ERROR - cannot find image file (200,400)').exit(); else
 this.echo('ERROR - cannot find (200,400) on screen').exit(); this.wait(0);}});
+
+casper.then(function() {{techo('click some text using ocr'); var fs = require('fs');
+if (!sikuli_step('click some text using ocr')) if (!fs.exists('some text using ocr') && !true)
+this.echo('ERROR - cannot find image file some text using ocr').exit(); else
+this.echo('ERROR - cannot find some text using ocr on screen').exit(); this.wait(0);}});
 
 // test hover / move (including sikuli visual automation)
 casper.then(function() {{techo('hover element');
@@ -2269,24 +2271,29 @@ function then() {this.mouse.move(tx('element'));},
 function timeout() {this.echo('ERROR - cannot find element').exit();});}});
 
 casper.then(function() {{techo('hover /full_path/button.png'); var fs = require('fs');
-if (!sikuli_step('hover /full_path/button.png')) if (!fs.exists('/full_path/button.png'))
+if (!sikuli_step('hover /full_path/button.png')) if (!fs.exists('/full_path/button.png') && !false)
 this.echo('ERROR - cannot find image file /full_path/button.png').exit(); else
 this.echo('ERROR - cannot find /full_path/button.png on screen').exit(); this.wait(0);}});
 
 casper.then(function() {{techo('move /full_path/button.bmp'); var fs = require('fs');
-if (!sikuli_step('move /full_path/button.bmp')) if (!fs.exists('/full_path/button.bmp'))
+if (!sikuli_step('move /full_path/button.bmp')) if (!fs.exists('/full_path/button.bmp') && !false)
 this.echo('ERROR - cannot find image file /full_path/button.bmp').exit(); else
 this.echo('ERROR - cannot find /full_path/button.bmp on screen').exit(); this.wait(0);}});
 
 casper.then(function() {{techo('hover (100,200)'); var fs = require('fs');
-if (!sikuli_step('hover (100,200)')) if (!fs.exists('(100,200)'))
+if (!sikuli_step('hover (100,200)')) if (!fs.exists('(100,200)') && !false)
 this.echo('ERROR - cannot find image file (100,200)').exit(); else
 this.echo('ERROR - cannot find (100,200) on screen').exit(); this.wait(0);}});
 
 casper.then(function() {{techo('move (200,400)'); var fs = require('fs');
-if (!sikuli_step('move (200,400)')) if (!fs.exists('(200,400)'))
+if (!sikuli_step('move (200,400)')) if (!fs.exists('(200,400)') && !false)
 this.echo('ERROR - cannot find image file (200,400)').exit(); else
 this.echo('ERROR - cannot find (200,400) on screen').exit(); this.wait(0);}});
+
+casper.then(function() {{techo('hover some text using ocr'); var fs = require('fs');
+if (!sikuli_step('hover some text using ocr')) if (!fs.exists('some text using ocr') && !true)
+this.echo('ERROR - cannot find image file some text using ocr').exit(); else
+this.echo('ERROR - cannot find some text using ocr on screen').exit(); this.wait(0);}});
 
 // test type / enter (including sikuli visual automation)
 casper.then(function() {{techo('type element as some text');
@@ -2300,24 +2307,29 @@ function then() {this.sendKeys(tx('element'),'some text');},
 function timeout() {this.echo('ERROR - cannot find element').exit();});}});
 
 casper.then(function() {{techo('type /full_path/textbox.png as some text'); var fs = require('fs');
-if (!sikuli_step('type /full_path/textbox.png as some text')) if (!fs.exists('/full_path/textbox.png'))
+if (!sikuli_step('type /full_path/textbox.png as some text')) if (!fs.exists('/full_path/textbox.png') && !false)
 this.echo('ERROR - cannot find image file /full_path/textbox.png').exit(); else
 this.echo('ERROR - cannot find /full_path/textbox.png on screen').exit(); this.wait(0);}});
 
 casper.then(function() {{techo('enter /full_path/textbox.bmp as some text'); var fs = require('fs');
-if (!sikuli_step('enter /full_path/textbox.bmp as some text')) if (!fs.exists('/full_path/textbox.bmp'))
+if (!sikuli_step('enter /full_path/textbox.bmp as some text')) if (!fs.exists('/full_path/textbox.bmp') && !false)
 this.echo('ERROR - cannot find image file /full_path/textbox.bmp').exit(); else
 this.echo('ERROR - cannot find /full_path/textbox.bmp on screen').exit(); this.wait(0);}});
 
 casper.then(function() {{techo('type (100,200) as some text'); var fs = require('fs');
-if (!sikuli_step('type (100,200) as some text')) if (!fs.exists('(100,200)'))
+if (!sikuli_step('type (100,200) as some text')) if (!fs.exists('(100,200)') && !false)
 this.echo('ERROR - cannot find image file (100,200)').exit(); else
 this.echo('ERROR - cannot find (100,200) on screen').exit(); this.wait(0);}});
 
 casper.then(function() {{techo('enter (200,400) as some text'); var fs = require('fs');
-if (!sikuli_step('enter (200,400) as some text')) if (!fs.exists('(200,400)'))
+if (!sikuli_step('enter (200,400) as some text')) if (!fs.exists('(200,400)') && !false)
 this.echo('ERROR - cannot find image file (200,400)').exit(); else
 this.echo('ERROR - cannot find (200,400) on screen').exit(); this.wait(0);}});
+
+casper.then(function() {{techo('type some element text as some text using ocr');
+casper.waitFor(function check() {return check_tx('some element text');},
+function then() {this.sendKeys(tx('some element text'),'some text using ocr');},
+function timeout() {this.echo('ERROR - cannot find some element text').exit();});}});
 
 // test type / enter for [enter] and [clear] keywords
 casper.then(function() {{techo('type element as some text[enter]');
@@ -2380,27 +2392,27 @@ this.selectOptionByValue(select_locator,'option');},
 function timeout() {this.echo('ERROR - cannot find element').exit();});}});
 
 casper.then(function() {{techo('select /full_path/option_list.png as /full_path/option_item.bmp'); var fs = require('fs');
-if (!sikuli_step('select /full_path/option_list.png as /full_path/option_item.bmp')) if (!fs.exists('/full_path/option_list.png'))
+if (!sikuli_step('select /full_path/option_list.png as /full_path/option_item.bmp')) if (!fs.exists('/full_path/option_list.png') && !false)
 this.echo('ERROR - cannot find image file /full_path/option_list.png').exit(); else
 this.echo('ERROR - cannot find /full_path/option_list.png on screen').exit(); this.wait(0);}});
 
 casper.then(function() {{techo('choose /full_path/option_list.bmp as /full_path/option_item.png'); var fs = require('fs');
-if (!sikuli_step('choose /full_path/option_list.bmp as /full_path/option_item.png')) if (!fs.exists('/full_path/option_list.bmp'))
+if (!sikuli_step('choose /full_path/option_list.bmp as /full_path/option_item.png')) if (!fs.exists('/full_path/option_list.bmp') && !false)
 this.echo('ERROR - cannot find image file /full_path/option_list.bmp').exit(); else
 this.echo('ERROR - cannot find /full_path/option_list.bmp on screen').exit(); this.wait(0);}});
 
 casper.then(function() {{techo('select (100,200) as (200,400)'); var fs = require('fs');
-if (!sikuli_step('select (100,200) as (200,400)')) if (!fs.exists('(100,200)'))
+if (!sikuli_step('select (100,200) as (200,400)')) if (!fs.exists('(100,200)') && !false)
 this.echo('ERROR - cannot find image file (100,200)').exit(); else
 this.echo('ERROR - cannot find (100,200) on screen').exit(); this.wait(0);}});
 
 casper.then(function() {{techo('choose /full_path/textbox.bmp as (200,400)'); var fs = require('fs');
-if (!sikuli_step('choose /full_path/textbox.bmp as (200,400)')) if (!fs.exists('/full_path/textbox.bmp'))
+if (!sikuli_step('choose /full_path/textbox.bmp as (200,400)')) if (!fs.exists('/full_path/textbox.bmp') && !false)
 this.echo('ERROR - cannot find image file /full_path/textbox.bmp').exit(); else
 this.echo('ERROR - cannot find /full_path/textbox.bmp on screen').exit(); this.wait(0);}});
 
 casper.then(function() {{techo('select (100,200) as /full_path/sometext.png'); var fs = require('fs');
-if (!sikuli_step('select (100,200) as /full_path/sometext.png')) if (!fs.exists('(100,200)'))
+if (!sikuli_step('select (100,200) as /full_path/sometext.png')) if (!fs.exists('(100,200)') && !false)
 this.echo('ERROR - cannot find image file (100,200)').exit(); else
 this.echo('ERROR - cannot find (100,200) on screen').exit(); this.wait(0);}});
 
@@ -2502,68 +2514,35 @@ casper.then(function() {{techo('save page to .\tmp\filename.txt');
 save_text('/full_path/./tmp/filename.txt',this.getHTML());}});
 
 // test echo
-casper.then(function() {this.echo(variable);});
+casper.then(function() {this.echo(''+variable+'');});
 
-casper.then(function() {this.echo('some text'+' '+'some text');});
+casper.then(function() {this.echo('some text some text');});
 
-casper.then(function() {this.echo("some text - "+variable);});
+casper.then(function() {this.echo('some text - '+variable+'');});
 
-casper.then(function() {this.echo('some text - '+variable);});
-
-casper.then(function() {this.echo("some text - "+variable);});
-
-casper.then(function() {this.echo('some text - '+variable);});
-
-casper.then(function() {this.echo(variable+" - some text - "+variable+" - some text "+"some text - "+variable);});
+casper.then(function() {this.echo(''+variable+' - some text - '+variable+' - some text some text - '+variable+'');});
 
 // test dump
-casper.then(function() {{techo('dump "some text - " + variable');
-save_text('',"some text - "+variable);}});
+casper.then(function() {{techo('dump some text - '+variable+'');
+save_text('','some text - '+variable+'');}});
 
-casper.then(function() {{techo('dump \'some text - \' + variable');
-save_text('','some text - '+variable);}});
+casper.then(function() {{techo('dump some text - '+variable+' to filename.txt');
+save_text('/full_path/filename.txt','some text - '+variable+'');}});
 
-casper.then(function() {{techo('dump "some text - " + variable to filename.txt');
-save_text('/full_path/filename.txt',"some text - "+variable);}});
-
-casper.then(function() {{techo('dump \'some text - \' + variable to filename.txt');
-save_text('/full_path/filename.txt','some text - '+variable);}});
-
-casper.then(function() {{techo('dump "some text - " + variable to /tmp/filename.txt');
-save_text('/tmp/filename.txt',"some text - "+variable);}});
-
-casper.then(function() {{techo('dump \'some text - \' + variable to /tmp/filename.txt');
-save_text('/tmp/filename.txt','some text - '+variable);}});
-
-casper.then(function() {{techo('dump "some text - " variable');
-save_text('',"some text - "+variable);}});
-
-casper.then(function() {{techo('dump \'some text - \' variable');
-save_text('','some text - '+variable);}});
-
-casper.then(function() {{techo('dump "some text - " variable to filename.txt');
-save_text('/full_path/filename.txt',"some text - "+variable);}});
-
-casper.then(function() {{techo('dump \'some text - \' variable to filename.txt');
-save_text('/full_path/filename.txt','some text - '+variable);}});
-
-casper.then(function() {{techo('dump "some text - " variable to /tmp/filename.txt');
-save_text('/tmp/filename.txt',"some text - "+variable);}});
-
-casper.then(function() {{techo('dump \'some text - \' variable to /tmp/filename.txt');
-save_text('/tmp/filename.txt','some text - '+variable);}});
+casper.then(function() {{techo('dump some text - '+variable+' to /tmp/filename.txt');
+save_text('/tmp/filename.txt','some text - '+variable+'');}});
 
 // test write
-casper.then(function() {{techo('write \'abc\'');
+casper.then(function() {{techo('write abc');
 append_text('','abc');}});
 
-casper.then(function() {{techo('write \'efg\'');
+casper.then(function() {{techo('write efg');
 append_text('','efg');}});
 
-casper.then(function() {{techo('write \'ghi\' to filename.txt');
+casper.then(function() {{techo('write ghi to filename.txt');
 append_text('/full_path/filename.txt','ghi');}});
 
-casper.then(function() {{techo('write \'ijk\' to filename.txt');
+casper.then(function() {{techo('write ijk to filename.txt');
 append_text('/full_path/filename.txt','ijk');}});
 
 // test snap
@@ -2705,95 +2684,87 @@ catch(e) {this.echo('ERROR - ' + e.message.charAt(0).toLowerCase() + e.message.s
 
 // test keyboard
 casper.then(function() {{techo('keyboard ls -lrt[enter]'); var fs = require('fs');
-if (!sikuli_step('keyboard ls -lrt[enter]')) if (!fs.exists('ls -lrt[enter]'))
+if (!sikuli_step('keyboard ls -lrt[enter]')) if (!fs.exists('ls -lrt[enter]') && !false)
 this.echo('ERROR - cannot find image file ls -lrt[enter]').exit(); else
 this.echo('ERROR - cannot find ls -lrt[enter] on screen').exit(); this.wait(0);}});
 
 casper.then(function() {{techo('keyboard ls -lrt[ENTER]'); var fs = require('fs');
-if (!sikuli_step('keyboard ls -lrt[ENTER]')) if (!fs.exists('ls -lrt[ENTER]'))
+if (!sikuli_step('keyboard ls -lrt[ENTER]')) if (!fs.exists('ls -lrt[ENTER]') && !false)
 this.echo('ERROR - cannot find image file ls -lrt[ENTER]').exit(); else
 this.echo('ERROR - cannot find ls -lrt[ENTER] on screen').exit(); this.wait(0);}});
 
 casper.then(function() {{techo('keyboard [pageup]'); var fs = require('fs');
-if (!sikuli_step('keyboard [pageup]')) if (!fs.exists('[pageup]'))
+if (!sikuli_step('keyboard [pageup]')) if (!fs.exists('[pageup]') && !false)
 this.echo('ERROR - cannot find image file [pageup]').exit(); else
 this.echo('ERROR - cannot find [pageup] on screen').exit(); this.wait(0);}});
 
 casper.then(function() {{techo('keyboard [PAGEDOWN]'); var fs = require('fs');
-if (!sikuli_step('keyboard [PAGEDOWN]')) if (!fs.exists('[PAGEDOWN]'))
+if (!sikuli_step('keyboard [PAGEDOWN]')) if (!fs.exists('[PAGEDOWN]') && !false)
 this.echo('ERROR - cannot find image file [PAGEDOWN]').exit(); else
 this.echo('ERROR - cannot find [PAGEDOWN] on screen').exit(); this.wait(0);}});
 
 casper.then(function() {{techo('keyboard 123[enter]456[ENTER]'); var fs = require('fs');
-if (!sikuli_step('keyboard 123[enter]456[ENTER]')) if (!fs.exists('123[enter]456[ENTER]'))
+if (!sikuli_step('keyboard 123[enter]456[ENTER]')) if (!fs.exists('123[enter]456[ENTER]') && !false)
 this.echo('ERROR - cannot find image file 123[enter]456[ENTER]').exit(); else
 this.echo('ERROR - cannot find 123[enter]456[ENTER] on screen').exit(); this.wait(0);}});
 
 casper.then(function() {{techo('keyboard [home]'); var fs = require('fs');
-if (!sikuli_step('keyboard [home]')) if (!fs.exists('[home]'))
+if (!sikuli_step('keyboard [home]')) if (!fs.exists('[home]') && !false)
 this.echo('ERROR - cannot find image file [home]').exit(); else
 this.echo('ERROR - cannot find [home] on screen').exit(); this.wait(0);}});
 
 casper.then(function() {{techo('keyboard [end]'); var fs = require('fs');
-if (!sikuli_step('keyboard [end]')) if (!fs.exists('[end]'))
+if (!sikuli_step('keyboard [end]')) if (!fs.exists('[end]') && !false)
 this.echo('ERROR - cannot find image file [end]').exit(); else
 this.echo('ERROR - cannot find [end] on screen').exit(); this.wait(0);}});
 
 casper.then(function() {{techo('keyboard [ctrl][home]'); var fs = require('fs');
-if (!sikuli_step('keyboard [ctrl][home]')) if (!fs.exists('[ctrl][home]'))
+if (!sikuli_step('keyboard [ctrl][home]')) if (!fs.exists('[ctrl][home]') && !false)
 this.echo('ERROR - cannot find image file [ctrl][home]').exit(); else
 this.echo('ERROR - cannot find [ctrl][home] on screen').exit(); this.wait(0);}});
 
 casper.then(function() {{techo('keyboard [ctrl][end]'); var fs = require('fs');
-if (!sikuli_step('keyboard [ctrl][end]')) if (!fs.exists('[ctrl][end]'))
+if (!sikuli_step('keyboard [ctrl][end]')) if (!fs.exists('[ctrl][end]') && !false)
 this.echo('ERROR - cannot find image file [ctrl][end]').exit(); else
 this.echo('ERROR - cannot find [ctrl][end] on screen').exit(); this.wait(0);}});
 
 casper.then(function() {{techo('keyboard [win]'); var fs = require('fs');
-if (!sikuli_step('keyboard [win]')) if (!fs.exists('[win]'))
+if (!sikuli_step('keyboard [win]')) if (!fs.exists('[win]') && !false)
 this.echo('ERROR - cannot find image file [win]').exit(); else
 this.echo('ERROR - cannot find [win] on screen').exit(); this.wait(0);}});
 
 casper.then(function() {{techo('keyboard e[win]'); var fs = require('fs');
-if (!sikuli_step('keyboard e[win]')) if (!fs.exists('e[win]'))
+if (!sikuli_step('keyboard e[win]')) if (!fs.exists('e[win]') && !false)
 this.echo('ERROR - cannot find image file e[win]').exit(); else
 this.echo('ERROR - cannot find e[win] on screen').exit(); this.wait(0);}});
 
 casper.then(function() {{techo('keyboard [win]e'); var fs = require('fs');
-if (!sikuli_step('keyboard [win]e')) if (!fs.exists('[win]e'))
+if (!sikuli_step('keyboard [win]e')) if (!fs.exists('[win]e') && !false)
 this.echo('ERROR - cannot find image file [win]e').exit(); else
 this.echo('ERROR - cannot find [win]e on screen').exit(); this.wait(0);}});
 
 casper.then(function() {{techo('keyboard [cmd][space]'); var fs = require('fs');
-if (!sikuli_step('keyboard [cmd][space]')) if (!fs.exists('[cmd][space]'))
+if (!sikuli_step('keyboard [cmd][space]')) if (!fs.exists('[cmd][space]') && !false)
 this.echo('ERROR - cannot find image file [cmd][space]').exit(); else
 this.echo('ERROR - cannot find [cmd][space] on screen').exit(); this.wait(0);}});
 
 // test mouse
 casper.then(function() {{techo('mouse down'); var fs = require('fs');
-if (!sikuli_step('mouse down')) if (!fs.exists('down'))
+if (!sikuli_step('mouse down')) if (!fs.exists('down') && !false)
 this.echo('ERROR - cannot find image file down').exit(); else
 this.echo('ERROR - cannot find down on screen').exit(); this.wait(0);}});
 
 casper.then(function() {{techo('mouse up'); var fs = require('fs');
-if (!sikuli_step('mouse up')) if (!fs.exists('up'))
+if (!sikuli_step('mouse up')) if (!fs.exists('up') && !false)
 this.echo('ERROR - cannot find image file up').exit(); else
 this.echo('ERROR - cannot find up on screen').exit(); this.wait(0);}});
 
 // test check
-casper.then(function() {{if ((eggs < 10))
-this.echo("eggs lesser than 10");
-else this.echo("eggs not lesser than 10");}});
-
-casper.then(function() {{if ((eggs < 10))
-this.echo("eggs lesser than 10");
-else this.echo("eggs not lesser than 10");}});
-
-casper.then(function() {{if ((eggs < 10))
+casper.then(function() {{if (('+eggs+' < 10))
 this.echo('eggs lesser than 10');
 else this.echo('eggs not lesser than 10');}});
 
-casper.then(function() {{if ((eggs < 10))
+casper.then(function() {{if (('+eggs+' < 10))
 this.echo('eggs lesser than 10');
 else this.echo('eggs not lesser than 10');}});
 
@@ -2803,9 +2774,9 @@ casper.then(function() {for (n=1; n<=10; n++)
 (function (n) { // start of IIFE pattern
 { // start of code block
 
-casper.then(function() {{if ((eggs < 10))
-this.echo("eggs lesser than 10");
-else this.echo("eggs not lesser than 10");}});
+casper.then(function() {{if (('+eggs+' < 10))
+this.echo('eggs lesser than 10');
+else this.echo('eggs not lesser than 10');}});
 
 } // end of code block
 })(n); // end of IIFE pattern, with dummy marker for break step
@@ -2816,9 +2787,9 @@ casper.then(function() {for (n=1; n<=10; n++)
 (function (n) { // start of IIFE pattern
 { // start of code block
 
-casper.then(function() {{if ((eggs < 10))
-this.echo("eggs lesser than 10");
-else this.echo("eggs not lesser than 10");}});
+casper.then(function() {{if (('+eggs+' < 10))
+this.echo('eggs lesser than 10');
+else this.echo('eggs not lesser than 10');}});
 
 } // end of code block
 })(n); // end of IIFE pattern, with dummy marker for break step
@@ -2829,7 +2800,7 @@ casper.then(function() {techo('frame mainframe');});
 casper.withFrame('mainframe', function() {
 { // start of code block
 
-casper.then(function() {this.echo("test mainframe");});
+casper.then(function() {this.echo('test mainframe');});
 
 } // end of code block
 });
@@ -2838,7 +2809,7 @@ casper.then(function() {techo('frame mainframe | subframe');});
 casper.withFrame('mainframe', function() {casper.withFrame('subframe', function() {
 { // start of code block
 
-casper.then(function() {this.echo("test subframe");});
+casper.then(function() {this.echo('test subframe');});
 
 } // end of code block
 });});
@@ -2850,7 +2821,7 @@ function timeout() {this.echo('ERROR - cannot find popup url_keyword').exit();})
 casper.withPopup(/url_keyword/, function() {
 { // start of code block
 
-casper.then(function() {this.echo("test popup");});
+casper.then(function() {this.echo('test popup');});
 
 } // end of code block
 });
@@ -2865,7 +2836,7 @@ casper.then(function() {techo('frame mainframe');});
 casper.withFrame('mainframe', function() {
 { // start of code block
 
-casper.then(function() {this.echo("test popup with mainframe");});
+casper.then(function() {this.echo('test popup with mainframe');});
 
 } // end of code block
 });
@@ -2883,7 +2854,7 @@ casper.then(function() {techo('frame mainframe | subframe');});
 casper.withFrame('mainframe', function() {casper.withFrame('subframe', function() {
 { // start of code block
 
-casper.then(function() {this.echo("test popup with subframe");});
+casper.then(function() {this.echo('test popup with subframe');});
 
 } // end of code block
 });});
@@ -2925,12 +2896,22 @@ casper.then(function() {casper.waitForExec('face_recognition2 par1 par2 par3', n
 run_result = (response.data.stdout.trim() || response.data.stderr.trim()); run_result = run_result.replace(/\r\n/g,'\n');
 run_json = response.data;}, function() {this.echo('ERROR - command to run exceeded '+(casper.options.waitTimeout/1000).toFixed(1)+'s timeout').exit();},casper.options.waitTimeout);});
 
+casper.then(function() {techo('run face_recognition1 par1 par2 par3');});
+casper.then(function() {casper.waitForExec('face_recognition1 par1 par2 par3', null, function(response) {run_result = '';
+run_result = (response.data.stdout.trim() || response.data.stderr.trim()); run_result = run_result.replace(/\r\n/g,'\n');
+run_json = response.data;}, function() {this.echo('ERROR - command to run exceeded '+(casper.options.waitTimeout/1000).toFixed(1)+'s timeout').exit();},casper.options.waitTimeout);});
+
+casper.then(function() {techo('run face_recognition2 par1 par2 par3');});
+casper.then(function() {casper.waitForExec('face_recognition2 par1 par2 par3', null, function(response) {run_result = '';
+run_result = (response.data.stdout.trim() || response.data.stderr.trim()); run_result = run_result.replace(/\r\n/g,'\n');
+run_json = response.data;}, function() {this.echo('ERROR - command to run exceeded '+(casper.options.waitTimeout/1000).toFixed(1)+'s timeout').exit();},casper.options.waitTimeout);});
+
 // test dom
 casper.then(function() {dom_result = ''; dom_result = this.evaluate(function(dom_json) {var page_title = document.title;}, dom_json);});
 
 casper.then(function() {dom_result = ''; dom_result = this.evaluate(function(dom_json) {var page_title = document.title;
-	var page_input = prompt('enter your title');
-		return page_title + ' ' + page_input;}, dom_json);});
+    var page_input = prompt('enter your title');
+    return page_title + ' ' + page_input;}, dom_json);});
 
 casper.then(function() {dom_result = ''; dom_result = this.evaluate(function(dom_json) {document.querySelector('#header p').focus()}, dom_json);});
 
@@ -2939,61 +2920,16 @@ casper.then(function() { // start of JS code
 this.echo('THIS IS JAVASCRIPT');
 b = 1
 c = 2
-	a = b + c;
-	if (a == 3)
-	{
-		this.echo('YES');
-	}
+    a = b + c;
+    if (a == 3)
+    {
+        this.echo('YES');
+    }
 if (a != 3)
 {
 this.echo('NO');
 }
 }); // end of JS code
-
-// test r
-casper.then(function() {{techo('r a=1;b=2');
-r_result = ''; if (!r_step('r a=1;b=2'))
-this.echo('ERROR - cannot execute R command(s)').exit(); this.wait(0);
-r_result = fetch_r_text(); clear_r_text();
-try {r_json = JSON.parse(r_result);} catch(e) {r_json = JSON.parse('null');}}});
-
-casper.then(function() {{techo('r c=a+b');
-r_result = ''; if (!r_step('r c=a+b'))
-this.echo('ERROR - cannot execute R command(s)').exit(); this.wait(0);
-r_result = fetch_r_text(); clear_r_text();
-try {r_json = JSON.parse(r_result);} catch(e) {r_json = JSON.parse('null');}}});
-
-casper.then(function() {{techo('r cat(c)');
-r_result = ''; if (!r_step('r cat(c)'))
-this.echo('ERROR - cannot execute R command(s)').exit(); this.wait(0);
-r_result = fetch_r_text(); clear_r_text();
-try {r_json = JSON.parse(r_result);} catch(e) {r_json = JSON.parse('null');}}});
-
-casper.then(function() {this.echo(r_result);});
-
-casper.then(function() {{techo('r a=\'1\';b=\'2\'; d=paste(a,b,sep=\'\'); cat(d); ');
-r_result = ''; if (!r_step('r a=\'1\';b=\'2\'; d=paste(a,b,sep=\'\'); cat(d); '))
-this.echo('ERROR - cannot execute R command(s)').exit(); this.wait(0);
-r_result = fetch_r_text(); clear_r_text();
-try {r_json = JSON.parse(r_result);} catch(e) {r_json = JSON.parse('null');}}});
-
-casper.then(function() {this.echo(r_result);});
-
-casper.then(function() {{techo('r if (TRUE) {; cat(\'TRUE1\'); cat(\'TRUE2\'); }; ');
-r_result = ''; if (!r_step('r if (TRUE) {; cat(\'TRUE1\'); cat(\'TRUE2\'); }; '))
-this.echo('ERROR - cannot execute R command(s)').exit(); this.wait(0);
-r_result = fetch_r_text(); clear_r_text();
-try {r_json = JSON.parse(r_result);} catch(e) {r_json = JSON.parse('null');}}});
-
-casper.then(function() {this.echo(r_result);});
-
-casper.then(function() {{techo('r 		if (FALSE) {; 	cat(\'FALSE1\'); cat(\'FALSE2\'); 			}; ');
-r_result = ''; if (!r_step('r 		if (FALSE) {; 	cat(\'FALSE1\'); cat(\'FALSE2\'); 			}; '))
-this.echo('ERROR - cannot execute R command(s)').exit(); this.wait(0);
-r_result = fetch_r_text(); clear_r_text();
-try {r_json = JSON.parse(r_result);} catch(e) {r_json = JSON.parse('null');}}});
-
-casper.then(function() {this.echo(r_result);});
 
 // test py
 casper.then(function() {{techo('py a=1;b=2');
@@ -3014,7 +2950,7 @@ this.echo('ERROR - cannot execute Python command(s)').exit(); this.wait(0);
 py_result = fetch_py_text(); clear_py_text();
 try {py_json = JSON.parse(py_result);} catch(e) {py_json = JSON.parse('null');}}});
 
-casper.then(function() {this.echo(py_result);});
+casper.then(function() {this.echo(''+py_result+'');});
 
 casper.then(function() {{techo('py e=\'1\';f=\'2\'\ng=e+f\nprint(g)');
 py_result = ''; if (!py_step('py e=\'1\';f=\'2\'\ng=e+f\nprint(g)'))
@@ -3022,28 +2958,28 @@ this.echo('ERROR - cannot execute Python command(s)').exit(); this.wait(0);
 py_result = fetch_py_text(); clear_py_text();
 try {py_json = JSON.parse(py_result);} catch(e) {py_json = JSON.parse('null');}}});
 
-casper.then(function() {this.echo(py_result);});
+casper.then(function() {this.echo(''+py_result+'');});
 
-casper.then(function() {{techo('py a = 1\nif a == 1:\n	print(\'TRUE1\')\n	print(\'TRUE2\')');
-py_result = ''; if (!py_step('py a = 1\nif a == 1:\n	print(\'TRUE1\')\n	print(\'TRUE2\')'))
+casper.then(function() {{techo('py a = 1\nif a == 1:\n    print(\'TRUE1\')\n    print(\'TRUE2\')');
+py_result = ''; if (!py_step('py a = 1\nif a == 1:\n    print(\'TRUE1\')\n    print(\'TRUE2\')'))
 this.echo('ERROR - cannot execute Python command(s)').exit(); this.wait(0);
 py_result = fetch_py_text(); clear_py_text();
 try {py_json = JSON.parse(py_result);} catch(e) {py_json = JSON.parse('null');}}});
 
-casper.then(function() {{techo('py a = 2\nif a == 1:\n	print(\'FALSE1\')\n	print(\'FALSE2\')');
-py_result = ''; if (!py_step('py a = 2\nif a == 1:\n	print(\'FALSE1\')\n	print(\'FALSE2\')'))
+casper.then(function() {{techo('py a = 2\nif a == 1:\n    print(\'FALSE1\')\n    print(\'FALSE2\')');
+py_result = ''; if (!py_step('py a = 2\nif a == 1:\n    print(\'FALSE1\')\n    print(\'FALSE2\')'))
 this.echo('ERROR - cannot execute Python command(s)').exit(); this.wait(0);
 py_result = fetch_py_text(); clear_py_text();
 try {py_json = JSON.parse(py_result);} catch(e) {py_json = JSON.parse('null');}}});
 
 // test vision
 casper.then(function() {{techo('vision click(\'/tmp/// test.png\')'); var fs = require('fs');
-if (!sikuli_step('vision click(\'/tmp/// test.png\')')) if (!fs.exists('for vision step'))
+if (!sikuli_step('vision click(\'/tmp/// test.png\')')) if (!fs.exists('for vision step') && !false)
 this.echo('ERROR - cannot find image file for vision step').exit(); else
 this.echo('ERROR - cannot find for vision step on screen').exit(); this.wait(0);}});
 
-casper.then(function() {{techo('vision a = 1\nif a == 1:\n	click(\'1.png\')\n	click(\'1.png\')'); var fs = require('fs');
-if (!sikuli_step('vision a = 1\nif a == 1:\n	click(\'1.png\')\n	click(\'1.png\')')) if (!fs.exists('for vision step'))
+casper.then(function() {{techo('vision a = 1\nif a == 1:\n    click(\'1.png\')\n    click(\'1.png\')'); var fs = require('fs');
+if (!sikuli_step('vision a = 1\nif a == 1:\n    click(\'1.png\')\n    click(\'1.png\')')) if (!fs.exists('for vision step') && !false)
 this.echo('ERROR - cannot find image file for vision step').exit(); else
 this.echo('ERROR - cannot find for vision step on screen').exit(); this.wait(0);}});
 
@@ -3057,8 +2993,12 @@ casper.then(function() {casper.options.waitTimeout = 6000; sikuli_timeout(6);});
 // test comment
 // user comment with space
 //user comment without space
+{
+
 // user comment with leading spaces
 // user comment with leading tabs
+}
+
 // test test
 // test something and see what happens
 // test url without variable
@@ -3135,6 +3075,26 @@ casper.then(function() {this.echo('footer not found');});
 } // end of code block
 });
 
+// test exist function
+casper.then(function() {if ((exist('footer')))
+{ // start of code block
+
+casper.then(function() {{techo('print footer');
+casper.waitFor(function check() {return check_tx('footer');},
+function then() {this.echo(this.fetchText(tx('footer')).trim());},
+function timeout() {this.echo('ERROR - cannot find footer').exit();});}});
+
+} // end of code block
+
+else
+
+{ // start of code block
+
+casper.then(function() {this.echo('footer not found');});
+
+} // end of code block
+});
+
 // test visible function
 casper.then(function() {if ((visible('footer')))
 { // start of code block
@@ -3153,7 +3113,7 @@ casper.then(function() {this.echo('footer not visible');});
 });
 
 // test count function
-casper.then(function() {this.echo(count('element'));});
+casper.then(function() {this.echo(''+count('element')+'');});
 
 casper.then(function() { // start of JS code
 element_count = count('element')
@@ -3164,14 +3124,14 @@ casper.then(function() {for (n=1; n<=element_count; n++)
 (function (n) { // start of IIFE pattern
 { // start of code block
 
-casper.then(function() {this.echo(n);});
+casper.then(function() {this.echo(''+n+'');});
 
 } // end of code block
 })(n); // end of IIFE pattern, with dummy marker for break step
 casper.then(function() {for_loop_signal = '[BREAK_SIGNAL][n]';});}});
 
 // test url function
-casper.then(function() {this.echo(url());});
+casper.then(function() {this.echo(''+url()+'');});
 
 casper.then(function() {if (((url().indexOf('org')>-1)))
 { // start of code block
@@ -3182,7 +3142,7 @@ casper.then(function() {this.echo('page url contains org');});
 });
 
 // test title function
-casper.then(function() {this.echo(title());});
+casper.then(function() {this.echo(''+title()+'');});
 
 casper.then(function() {if (((title().indexOf('About')>-1)))
 { // start of code block
@@ -3193,7 +3153,7 @@ casper.then(function() {this.echo('page title contains About');});
 });
 
 // test text function
-casper.then(function() {this.echo(text());});
+casper.then(function() {this.echo(''+text()+'');});
 
 casper.then(function() {if (((text().indexOf('automation')>-1)))
 { // start of code block
@@ -3228,17 +3188,17 @@ y = y + 100
 y = y - 100
 }); // end of JS code
 
-casper.then(function() {this.echo(xy+' - '+x+','+y);});
+casper.then(function() {this.echo(''+xy+' - ('+x+','+y+')');});
 
 // test infinity constant (set to 1024)
-casper.then(function() {this.echo(infinity);});
+casper.then(function() {this.echo(''+infinity+'');});
 
 casper.then(function() {for (n=1; n<=infinity; n++)
 {casper.then(function() {for_loop_signal = '[CONTINUE_SIGNAL][n]';});
 (function (n) { // start of IIFE pattern
 { // start of code block
 
-casper.then(function() {this.echo(n);});
+casper.then(function() {this.echo(''+n+'');});
 
 } // end of code block
 })(n); // end of IIFE pattern, with dummy marker for break step
@@ -3250,7 +3210,7 @@ casper.then(function() {for (n=1; n<=10; n++)
 (function (n) { // start of IIFE pattern
 { // start of code block
 
-casper.then(function() {this.echo(n);});
+casper.then(function() {this.echo(''+n+'');});
 
 casper.then(function() {if ((n == 6))
 { // start of code block
@@ -3264,7 +3224,7 @@ casper.then(function() { // start of JS code
 casper.bypass(teleport_distance('[CONTINUE_SIGNAL][k]')); return;
 }); // end of JS code
 
-casper.then(function() {this.echo(k);});
+casper.then(function() {this.echo(''+k+'');});
 
 casper.then(function() {if ((k == 83))
 { // start of code block
@@ -3292,7 +3252,7 @@ casper.then(function() {for (cde=1; cde<=5; cde++)
 (function (cde) { // start of IIFE pattern
 { // start of code block
 
-casper.then(function() {this.echo("cde "+cde);});
+casper.then(function() {this.echo('cde '+cde+'');});
 
 casper.then(function() {if ((cde == 3))
 { // start of code block
@@ -3323,7 +3283,7 @@ casper.bypass(teleport_distance('[CONTINUE_SIGNAL][abc]')); return;
 } // end of code block
 });
 
-casper.then(function() {this.echo("abc "+abc);});
+casper.then(function() {this.echo('abc '+abc+'');});
 
 } // end of code block
 })(abc); // end of IIFE pattern, with dummy marker for break step
@@ -3334,7 +3294,7 @@ casper.then(function() {for (n=30; n<=35; n++)
 (function (n) { // start of IIFE pattern
 { // start of code block
 
-casper.then(function() {this.echo(n);});
+casper.then(function() {this.echo(''+n+'');});
 
 } // end of code block
 })(n); // end of IIFE pattern, with dummy marker for break step
@@ -3345,7 +3305,7 @@ casper.then(function() {for (k=20; k<=25; k++)
 (function (k) { // start of IIFE pattern
 { // start of code block
 
-casper.then(function() {this.echo(k);});
+casper.then(function() {this.echo(''+k+'');});
 
 } // end of code block
 })(k); // end of IIFE pattern, with dummy marker for break step

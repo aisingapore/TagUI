@@ -1,13 +1,11 @@
 https://www.google.com
 // code to auto-replace local path names in generated js file with /full_path
 var fs = require('fs');
-var js_result = fs.read('test' + fs.separator + 'positive_test' + '.js');
+var js_result = fs.read('test' + fs.separator + 'positive_test' + '.tag.js');
 var local_path = js_result.substring(js_result.indexOf("var flow_path = '") + 17);
 local_path = local_path.substring(0,local_path.indexOf("'"));
 var regex = new RegExp(local_path,"g"); js_result = js_result.replace(regex,"/full_path");
-fs.write('test' + fs.separator + 'positive_test' + '.js', js_result, 'w');
-fs.remove('test' + fs.separator + 'positive_test' + '.log');
-fs.remove('test' + fs.separator + 'positive_test' + '.raw');
+fs.write('test' + fs.separator + 'positive_test' + '.tag.js', js_result, 'w');
 this.exit(); // don't actually run the steps and code, test is for language conversion
 // add a navigation step in order to exit in time and block below output from running
 https://ca.yahoo.com
@@ -17,242 +15,212 @@ https://ca.yahoo.com
 // test contain / not contain
 variable = "test variable with some text"
 if variable contain "some text"
-echo "FOUND"
+    echo FOUND
 if variable contains "some text"
-echo "FOUND"
+    echo FOUND
 if variable not contain "some text"
-echo "NOT FOUND"
+    echo NOT FOUND
 if variable not contains "some text"
-echo "NOT FOUND"
+    echo NOT FOUND
 variable = 'test variable with some text'
 if variable contain 'some text'
-echo 'FOUND'
+    echo FOUND
 if variable contains 'some text'
-echo 'FOUND'
+    echo FOUND
 if variable not contain 'some text'
-echo 'NOT FOUND'
+    echo NOT FOUND
 if variable not contains 'some text'
-echo 'NOT FOUND'
+    echo NOT FOUND
 
 // test equal to / not equal to
 variable = "lemon"
 if variable equal to "lemon"
-echo "LEMON"
+    echo LEMON
 if variable equals to "lemon"
-echo "LEMON"
+    echo LEMON
 if variable not equal to "lemon"
-echo "NOT LEMON"
+    echo NOT LEMON
 if variable not equals to "lemon"
-echo "NOT LEMON"
+    echo NOT LEMON
 if variable equal to 'lemon'
-echo 'LEMON'
+    echo LEMON
 if variable equals to 'lemon'
-echo 'LEMON'
+    echo LEMON
 if variable not equal to 'lemon'
-echo 'NOT LEMON'
+    echo NOT LEMON
 if variable not equals to 'lemon'
-echo 'NOT LEMON'
+    echo NOT LEMON
 variable = 12345
 if variable equal to 12345
-echo "12345"
+    echo 12345
 if variable equals to 12345
-echo "12345"
+    echo 12345
 if variable not equal to 12345
-echo "NOT 12345"
+    echo NOT 12345
 if variable not equals to 12345
-echo "NOT 12345"
+    echo NOT 12345
 
 // test more than / greater than / higher than
 variable = 5
 if variable more than 3
-echo "MORE THAN 3"
+    echo MORE THAN 3
 if variable greater than 3
-echo "MORE THAN 3"
+    echo MORE THAN 3
 if variable higher than 3
-echo "MORE THAN 3"
+    echo MORE THAN 3
 
 // test more than or equal to / greater than or equal to / higher than or equal to
 variable = 5
 if variable more than or equal to 5
-echo "MORE THAN OR EQUAL TO 5"
+    echo MORE THAN OR EQUAL TO 5
 if variable greater than or equal to 5
-echo "MORE THAN OR EQUAL TO 5"
+    echo MORE THAN OR EQUAL TO 5
 if variable higher than or equal to 5
-echo "MORE THAN OR EQUAL TO 5"
+    echo MORE THAN OR EQUAL TO 5
 
 // test less than / lesser than / lower than
 variable = 3
 if variable less than 5
-echo "LESS THAN 5"
+    echo LESS THAN 5
 if variable lesser than 5
-echo "LESS THAN 5"
+    echo LESS THAN 5
 if variable lower than 5
-echo "LESS THAN 5"
+    echo LESS THAN 5
 
 // test less than or equal to / lesser than or equal to / lower than or equal to
 variable = 5
 if variable less than or equal to 5
-echo "LESS THAN OR EQUAL TO 5"
+    echo LESS THAN OR EQUAL TO 5
 if variable lesser than or equal to 5
-echo "LESS THAN OR EQUAL TO 5"
+    echo LESS THAN OR EQUAL TO 5
 if variable lower than or equal to 5
-echo "LESS THAN OR EQUAL TO 5"
+    echo LESS THAN OR EQUAL TO 5
 
 // test and
 if "apple" equals to "apple" and "orange" equals to "orange"
-echo "TRUE"
+    echo TRUE
 if 5 greater than 3 and 3 lesser than 4
-echo "TRUE"
+    echo TRUE
 if 5 greater than 3 and 3 lesser than 4 and "kiwi" equals to "kiwi"
-echo "TRUE"
+    echo TRUE
 
 // test or
 if 'apple' equals to 'apple' or 'orange' equals to 'kiwi'
-echo "TRUE"
+    echo TRUE
 if 5 lesser than 3 or 5 more than 4
-echo "TRUE"
+    echo TRUE
 if 5 lesser than 3 or 3 lesser than 4 and "kiwi" equals to "kiwi"
-echo "TRUE"
+    echo TRUE
 
 // test combinations of conditions
 menu = "fruits and salads"
 if menu contains 'fruits' and menu not contains "potatoes"
-echo "FRUITS ONLY"
+    echo FRUITS ONLY
 
 // test for
 for n from 1 to 5
-echo "ITERATION " + n
+    echo ITERATION `n`
 for n from 0 to 0
-echo "ITERATION " + n
+    echo ITERATION `n`
 for (n=6; n<=10; n++)
-echo "ITERATION " + n
+    echo ITERATION `n`
 for n from 1 to 5
-click element
+    click element
 for n from 0 to 0
-click element
+    click element
 for (n=6; n<=10; n++)
-click element
+    click element
 
 // test while
 while 2 > 3 and 3 > 4
-echo "INVALID"
+    echo INVALID
 while ((2 > 3) && (3 > 4))
-echo "INVALID"
+    echo INVALID
 while 2 > 3 and 3 > 4
-click element
+    click element
 while ((2 > 3) && (3 > 4))
-click element
+    click element
 
-// test {} simple
-{
-this.echo('test');
-}
-{
-click test
-}
+// test indentation simple
+    this.echo('test');
+    click test
 
-// test {} complex
-{
-click test1
-click test2
-this.echo('test');
-click test3
-}
+// test indentation complex
+    click test1
+    click test2
+    this.echo('test');
+    click test3
 
-// test {} for loop simple
+// test indentation for loop simple
 for number from 1 to 5
-{
-click test
-}
+    click test
 
-// test {} for loop complex
+
+// test indentation for loop complex
 for number from 1 to 5
-{
-click test1
-click test2
-this.echo('test');
-click test3
-}
+    click test1
+    click test2
+    this.echo('test');
+    click test3
 
-// test {} while loop simple
+// test indentation while loop simple
 number = 1
 while (number <= 5)
-{
-click test
-}
+    click test
 
-// test {} while loop complex
+// test indentation while loop complex
 while (number <= 5)
-{
-click test1
-click test2
-this.echo('test');
-click test3
-number++;
-}
+    click test1
+    click test2
+    this.echo('test');
+    click test3
+    number++;
 
 // test for complex for and if nested loops
 a = 1
 for n from 1 to 20
-echo n
+    echo `n`
 
 for n from 1 to 20
-{
-echo n
-}
+    echo `n`
 
 for n from 1 to 20
-{
-	if (a==1)
-	{
-		for p from 21 to 40
-		{
-			echo n ' - ' p
-		}
-	}
-}
+    if (a==1)
+        for p from 21 to 40
+            echo `n` - `p`
 
-// test {} for popup step
+// test indentation for popup step
 popup about
-{
-click test
-}
-popup about
-{
-click test1
-click test2
-this.echo('test');
-click test3
-}
+    click test
 
-// test {} for frame step
+popup about
+    click test1
+    click test2
+    this.echo('test');
+    click test3
+
+// test indentation for frame step
+frame about 
+    click test
+
 frame about
-{
-click test
-}
-frame about
-{
-click test1
-click test2
-this.echo('test');
-click test3
-}
+    click test1
+    click test2
+    this.echo('test');
+    click test3
 
 frame about | detail
-{
-click test
-}
+    click test
+
 frame about | detail
-{
-click test1
-click test2
-this.echo('test');
-click test3
-}
+    click test1
+    click test2
+    this.echo('test');
+    click test3
 
 // test if in javascript
 if (2 < 3)
-echo "TRUE"
+    echo TRUE
 
 // TEST STEPS
 
@@ -263,6 +231,7 @@ tap button.png
 click button.bmp
 tap (100,200)
 click (200,400)
+click some text using ocr
 
 // test hover / move (including sikuli visual automation)
 hover element
@@ -271,6 +240,7 @@ hover button.png
 move button.bmp
 hover (100,200)
 move (200,400)
+hover some text using ocr
 
 // test type / enter (including sikuli visual automation)
 type element as some text
@@ -279,6 +249,7 @@ type textbox.png as some text
 enter textbox.bmp as some text
 type (100,200) as some text
 enter (200,400) as some text
+type some element text as some text using ocr
 
 // test type / enter for [enter] and [clear] keywords
 type element as some text[enter]
@@ -329,33 +300,21 @@ save page to c:\tmp\filename.txt
 save page to .\tmp\filename.txt
 
 // test echo
-echo variable
-echo 'some text' ' ' 'some text'
-echo "some text - " + variable
-echo 'some text - ' + variable
-echo "some text - " variable
-echo 'some text - ' variable
-echo variable " - some text - " variable  " - some text "   "some text - "  +  variable
+echo `variable`
+echo some text some text
+echo some text - `variable`
+echo `variable` - some text - `variable` - some text some text - `variable`
 
 // test dump
-dump "some text - " + variable
-dump 'some text - ' + variable
-dump "some text - " + variable to filename.txt
-dump 'some text - ' + variable to filename.txt
-dump "some text - " + variable to /tmp/filename.txt
-dump 'some text - ' + variable to /tmp/filename.txt
-dump "some text - " variable
-dump 'some text - ' variable
-dump "some text - " variable to filename.txt
-dump 'some text - ' variable to filename.txt
-dump "some text - " variable to /tmp/filename.txt
-dump 'some text - ' variable to /tmp/filename.txt
+dump some text - `variable`
+dump some text - `variable` to filename.txt
+dump some text - `variable` to /tmp/filename.txt
 
 // test write
-write 'abc'
-write 'efg'
-write 'ghi' to filename.txt
-write 'ijk' to filename.txt
+write abc
+write efg
+write ghi to filename.txt
+write ijk to filename.txt
 
 // test snap
 snap element
@@ -433,39 +392,31 @@ mouse down
 mouse up
 
 // test check
-check eggs lesser than 10 | "eggs lesser than 10" | "eggs not lesser than 10"
-check eggs lesser than 10|"eggs lesser than 10"|"eggs not lesser than 10"
-check eggs lesser than 10 | 'eggs lesser than 10' | 'eggs not lesser than 10'
-check eggs lesser than 10|'eggs lesser than 10'|'eggs not lesser than 10'
+check `eggs` lesser than 10 | eggs lesser than 10 | eggs not lesser than 10
+check `eggs` lesser than 10|eggs lesser than 10|eggs not lesser than 10
 
 // test check within for loop
 for n from 1 to 10
-check eggs lesser than 10 | "eggs lesser than 10" | "eggs not lesser than 10"
+    check `eggs` lesser than 10 | eggs lesser than 10 | eggs not lesser than 10
 
 for n from 1 to 10
-{
-check eggs lesser than 10 | "eggs lesser than 10" | "eggs not lesser than 10"
-}
+    check `eggs` lesser than 10 | eggs lesser than 10 | eggs not lesser than 10
 
 // test frame
 frame mainframe
-echo "test mainframe"
+    echo test mainframe
 frame mainframe | subframe
-echo "test subframe"
+    echo test subframe
 
 // test popup
 popup url_keyword
-echo "test popup"
+    echo test popup
 popup url_keyword
-{
-frame mainframe
-echo "test popup with mainframe"
-}
+    frame mainframe
+        echo test popup with mainframe
 popup url_keyword
-{
-frame mainframe | subframe
-echo "test popup with subframe"
-}
+    frame mainframe | subframe
+        echo test popup with subframe
 
 // test api direct
 api http://www.dummytestsite.com/api?COLOR1=red&COLOR2=green&COLOR3=blue
@@ -481,13 +432,17 @@ run begin
 face_recognition1 par1 par2 par3
 face_recognition2 par1 par2 par3
 run finish
+run begin
+    face_recognition1 par1 par2 par3
+    face_recognition2 par1 par2 par3
+run finish
 
 // test dom
 dom var page_title = document.title;
 dom begin
-var page_title = document.title;
-	var page_input = prompt('enter your title');
-		return page_title + ' ' + page_input;
+    var page_title = document.title;
+    var page_input = prompt('enter your title');
+    return page_title + ' ' + page_input;
 dom finish
 dom document.querySelector('#header p').focus()
 
@@ -496,13 +451,13 @@ js this.echo('THIS IS JAVASCRIPT');
 js begin
    b = 1
 c = 2
-	a = b + c;
+    a = b + c;
 
-	if (a == 3)
-	{
-		this.echo('YES');
+    if (a == 3)
+    {
+        this.echo('YES');
 
-	}
+    }
 
 if (a != 3)
 {
@@ -510,69 +465,40 @@ this.echo('NO');
 }
 js finish
 
-// test r
-r a=1;b=2
-r c=a+b
-r cat(c)
-echo r_result
-
-r begin
-a='1';b='2'
-d=paste(a,b,sep='')
-cat(d)
-r finish
-echo r_result
-
-r begin
-if (TRUE) {
-cat('TRUE1')
-cat('TRUE2')
-}
-r finish
-echo r_result
-
-r begin
-		if (FALSE) {
-	cat('FALSE1')
-cat('FALSE2')
-			}
-r finish
-echo r_result
-
 // test py
 py a=1;b=2
 py c=a+b
 py print(c)
-echo py_result
+echo `py_result`
 
 py begin
 e='1';f='2'
 g=e+f
 print(g)
 py finish
-echo py_result
+echo `py_result`
 
 py begin
 a = 1
 if a == 1:
-	print('TRUE1')
-	print('TRUE2')
+    print('TRUE1')
+    print('TRUE2')
 py finish
 
-	py begin
-	a = 2
-	if a == 1:
-		print('FALSE1')
-		print('FALSE2')
-	py finish
+    py begin
+    a = 2
+    if a == 1:
+        print('FALSE1')
+        print('FALSE2')
+    py finish
 
 // test vision
 vision click('/tmp/test.png')
 vision begin
 a = 1
 if a == 1:
-	click('1.png')
-	click('1.png')
+    click('1.png')
+    click('1.png')
 vision finish
 
 // test timeout
@@ -583,8 +509,8 @@ timeout 6
 // test comment
 // user comment with space
 //user comment without space
-  // user comment with leading spaces
-		// user comment with leading tabs
+    // user comment with leading spaces
+    // user comment with leading tabs
 
 // test test
 // test something and see what happens
@@ -612,52 +538,48 @@ click (//*[@id="test"])[`variable`]
 
 // test present function
 if present('footer')
-{
-print footer
-}
+    print footer
 else
-{
-echo 'footer not found'
-}
+    echo footer not found
+
+// test exist function
+if exist('footer')
+    print footer
+else
+    echo footer not found
 
 // test visible function
 if visible('footer')
-{
-echo 'footer is visible'
-}
+    echo footer is visible
 else
-{
-echo 'footer not visible'
-}
+    echo footer not visible
 
 // test count function
-echo count('element')
+echo `count('element')`
 element_count = count('element')
 for n from 1 to element_count
-{
-echo n
-}
+    echo `n`
 
 // test url function
-echo url()
+echo `url()`
 if url() contains 'org'
-echo 'page url contains org'
+    echo page url contains org
 
 // test title function
-echo title()
+echo `title()`
 if title() contains 'About'
-echo 'page title contains About'
+    echo page title contains About
 
 // test text function
-echo text()
+echo `text()`
 if text() contains 'automation'
-echo 'page text contains automation'
+    echo page text contains automation
 
 // test timer function
 start = timer()
 wait 3 seconds
 time_taken = timer()
-echo 'time taken - ' time_taken ' seconds'
+echo time taken - `time_taken` seconds
 
 // test mouse_xy, mouse_x, mouse_y functions
 xy = mouse_xy()
@@ -667,54 +589,35 @@ x = x + 100
 x = x - 100
 y = y + 100
 y = y - 100
-echo xy ' - ' x ',' y
+echo `xy` - (`x`,`y`)
 
 // test infinity constant (set to 1024)
-echo infinity
+echo `infinity`
 for n from 1 to infinity
-{
-echo n
-}
+    echo `n`
 
 // test break and continue in for loops
 for n from 1 to 10
-{
-	echo n
-	if n equals to 6
-	{
-		for k from 80 to 85
-		{
-			continue
-			echo k
-			if k equals to 83
-			{
-				break;
-			}
-		}
-	}
-}
+    echo `n`
+    if n equals to 6
+        for k from 80 to 85
+            continue
+            echo `k`
+            if k equals to 83
+                break;
 
 for cde from 1 to 5
-{
-	echo "cde " + cde
-	if cde equals to 3
-	continue;
-}
+    echo cde `cde`
+    if cde equals to 3
+        continue;
 
 for abc from 1 to 5
-{
-	if abc equals to 3
-	continue
-	echo "abc " + abc
-}
+    if abc equals to 3
+        continue
+    echo abc `abc`
 
 for n from 30 to 35
-{
-	echo n
-}
+    echo `n`
 
 for k from 20 to 25
-{
-	echo k
-}
-
+    echo `k`
