@@ -105,4 +105,4 @@ if some_condition
 
 #### [Visit the older TagUI v5.11 documentation/release page](https://github.com/kelaberetiv/TagUI/tree/pre_v6)
 
-This project is supported by the National Research Foundation, Singapore under its AI Singapore Programme (AISG-RP-2019-050).
+This project  is supported by the National Research Foundation, Singapore under its AI Singapore Programme (AISG-RP-2019-050). Any opinions, findings and conclusions or recommendations expressed in this material are those of the author(s) and do not reflect the views of National Research Foundation, Singapore.
