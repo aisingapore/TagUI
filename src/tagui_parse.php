@@ -326,10 +326,11 @@ $params = trim(substr(trim($script_line)." ",1+strpos(trim($script_line)." "," "
 die("ERROR - filename missing for step " . trim($script_line) . "\n");
 else if (!file_exists(abs_file($params)))
 die("ERROR - file not found for step " . trim($script_line) . "\n");
-else {$expanded_intent = ""; $temp_input_file = fopen(abs_file($params),'r'); if ($temp_input_file == false)
+else {$indentation_for_tagui_step = str_replace(ltrim($script_line),'',$script_line);
+$expanded_intent = ""; $temp_input_file = fopen(abs_file($params),'r'); if ($temp_input_file == false)
 die("ERROR - cannot open file for step " . trim($script_line) . "\n");
-while(!feof($temp_input_file)) {$expanded_intent .= expand_intent(fgets($temp_input_file));} fclose($temp_input_file);
-return $expanded_intent;}} else return rtrim($script_line) . "\n";}
+while(!feof($temp_input_file)) {$expanded_intent .= $indentation_for_tagui_step . expand_intent(fgets($temp_input_file));}
+fclose($temp_input_file); return $expanded_intent;}} else return rtrim($script_line) . "\n";}
 
 function current_line() {return "[LINE " . $GLOBALS['line_number'] . "]";}
 
