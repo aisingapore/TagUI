@@ -160,6 +160,11 @@ $current_indentation_length = strlen($indentation_tracker);
 if ($indentation_spaces == 0 and $current_indentation_length > 0) {
 	$indentation_spaces = $current_indentation_length;
 }
+if ($current_indentation_length == $previous_indentation_length) {
+    if ($previous_line_is_condition) {
+        die("ERROR - missing indentation for ".$padded_raw_flow_line);
+    }
+}
 if ($current_indentation_length > $previous_indentation_length) {
 	$padded_raw_flow .= "{\n";
 }
@@ -181,15 +186,13 @@ $padded_raw_flow_line = trim(substr($padded_raw_flow_line,$js_function_name_star
 $js_function_name_startpos)) . ' = function ' . trim(substr($padded_raw_flow_line,$js_function_name_endpos))."\n";}
 else die("ERROR - missing brackets () for ".$padded_raw_flow_line);
 
-// pad { and } blocks for conditions, to keep JavaScript syntax correct
+// append flow line to output raw flow
+$padded_raw_flow .= $padded_raw_flow_line;
+
 if ((substr($padded_raw_flow_line,0,3)=="if ") or (substr($padded_raw_flow_line,0,8)=="else if ")
 or (substr($padded_raw_flow_line,0,4)=="for ") or (substr($padded_raw_flow_line,0,6)=="while ") or
 (substr($padded_raw_flow_line,0,6)=="popup ") or (substr($padded_raw_flow_line,0,6)=="frame ") or
 (trim($padded_raw_flow_line)=="else")) $current_line_is_condition = true; else $current_line_is_condition = false;
-
-// append flow line to output raw flow
-$padded_raw_flow .= $padded_raw_flow_line;
-
 $previous_line_is_condition = $current_line_is_condition; // prepare for next line
 } 
 fclose($input_file); file_put_contents($script . '.raw', $padded_raw_flow);
