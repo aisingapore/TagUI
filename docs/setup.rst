@@ -36,13 +36,22 @@ macOS/Linux
 
 4. `Install Chrome <https://www.google.com/chrome/>`_.
 
+5. Install PHP_Latest.
+
+.. code-block:: bash
+
+    sudo apt update
+    sudo apt upgrade
+    sudo apt install php -y
+    php --version
+
 5. Open :ref:`Terminal <how-to-use-terminal>`.
 
 6. Copy, paste and run these commands, replacing ``your_tagui_path`` as needed:
 
 .. code-block:: bash
 
-    ln -sf /your_tagui_path/tagui/src/tagui /usr/local/bin/tagui
+    sudo ln -sf /your_tagui_path/tagui/src/tagui /usr/local/bin/tagui
 
     tagui your_tagui_path/tagui/flows/samples/1_google.tag
 
