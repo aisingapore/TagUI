@@ -1052,8 +1052,8 @@ if %file_size% gtr 0 if %tagui_html_report%==true (
 
 rem give errorlevel 1 on error detected
 if exist "%flow_file%.log" (
-	    find /c "ERROR -" "%flow_file%.log" > nul
-	    if not errorlevel 1 set tagui_error_code=1
+	find /c "ERROR -" "%flow_file%.log" > nul
+	if not errorlevel 1 set tagui_error_code=1
 )
 
 rem remove logs if tagui_logging doesn't exist
