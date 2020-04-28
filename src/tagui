@@ -360,6 +360,11 @@ done
 # check report option to generate html automation log
 if [ -s "$1".log ] && [ "$tagui_html_report" == true ]; then php -q tagui_report.php "$1"; fi
 
+# give errorlevel 1 on error detected
+if [ -f "$1".log ]; then
+if grep -q "ERROR -" "$1".log; then tagui_error_code=1; fi
+fi
+
 # remove logs if tagui_logging doesn't exist
 if ! [ -f tagui_logging ]; then
 if [ -f "$1".raw ]; then rm "$1".raw; fi
