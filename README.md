@@ -4,7 +4,7 @@
 
 ### TagUI is a command-line tool for digital process automation (RPA)
 
-### [Download TagUI v6.0.0](https://tagui.readthedocs.io/en/latest/setup.html)&ensp;|&ensp;[Visit the documentation](https://tagui.readthedocs.io/en/latest/index.html)
+### [Download TagUI v6](https://tagui.readthedocs.io/en/latest/setup.html)&ensp;|&ensp;[Visit documentation](https://tagui.readthedocs.io/en/latest/index.html)&ensp;|&ensp;[User feedback](https://forms.gle/mieY66xTN4NNm5Gq5)
 
 Write flows in simple TagUI language and automate your web, mouse and keyboard interactions on the screen.
 
@@ -28,7 +28,7 @@ download https://admin.typeform.com/xxx to report.csv
 ### TagUI live mode
 You can run live mode directly for faster development by running `tagui live` on the command line.
 
-### Click using OCR
+### Click text using OCR
 TagUI can now click on the screen with visual automation just using text input, by using OCR technology.
 
 ```
@@ -49,7 +49,7 @@ For example, you can now do ``tagui my_flow.tag -h`` instead of ``tagui my_flow.
 
 # Migrating to v6
 
-### Mandatory .tag extension
+### Mandatory .tag file extension
 All flow files must have a .tag extension.
 
 ### Options must be used with a leading hyphen (-)
