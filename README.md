@@ -4,7 +4,7 @@
 
 ### TagUI is a command-line tool for digital process automation (RPA)
 
-### [Download TagUI v6](https://tagui.readthedocs.io/en/latest/setup.html)&ensp;|&ensp;[Visit documentation](https://tagui.readthedocs.io/en/latest/index.html)&ensp;|&ensp;[User feedback](https://forms.gle/mieY66xTN4NNm5Gq5)
+### [Download TagUI v6](https://tagui.readthedocs.io/en/latest/setup.html)&ensp;|&ensp;[Visit documentation](https://tagui.readthedocs.io/en/latest/index.html)&ensp;|&ensp;[User feedback](https://forms.gle/mieY66xTN4NNm5Gq5)&ensp;|&ensp;[We're hiring](https://nuscareers.taleo.net/careersection/2/jobdetail.ftl?job=00CMO)
 
 Write flows in simple TagUI language and automate your web, mouse and keyboard interactions on the screen.
 
@@ -67,7 +67,7 @@ OR
 $ tagui my_flow.tag -h
 ```
 
-### echo, dump, write steps
+### Change in syntax for echo, dump, write steps
 The echo, dump and write steps are now consistent with the other steps. They no longer require quotes surrounding the string input. Instead, variables now need to be surrounded by backticks.
 
 Before v6:
