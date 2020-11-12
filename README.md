@@ -22,6 +22,16 @@ click btnlogin
 
 download https://admin.typeform.com/xxx to report.csv
 ```
+```
+// besides web identifiers, images of UI elements can be used
+click login_button.png
+type username_box.png as user@gmail.com
+```
+```
+// (x,y) coordinates of user-interface elements can also be used
+click (1200,200)
+type (800,400) as user@gmail.com
+```
 
 # v6 Features
 
@@ -101,8 +111,13 @@ if some_condition
 
 # TagUI v5.11
 
-### [Visit the older TagUI v5.11 documentation/release page](https://github.com/kelaberetiv/TagUI/tree/pre_v6)
+### [Visit TagUI v5.11 homepage & documentation](https://github.com/kelaberetiv/TagUI/tree/pre_v6)
 
 # Credits
+- [TagUI v3](https://github.com/kensoh/TagUI/tree/before_aisg) - Ken Soh from Singapore
+- [SikuliX](http://sikulix.com) - Raimund Hocke from Germany
+- [CasperJS](http://casperjs.org) - Nicolas Perriault from France
+- [PhantomJS](https://github.com/ariya/phantomjs) - Ariya Hidayat from Indonesia
+- [SlimerJS](https://slimerjs.org) - Laurent Jouanneau from France
 
 This project  is supported by the National Research Foundation, Singapore under its AI Singapore Programme (AISG-RP-2019-050). Any opinions, findings and conclusions or recommendations expressed in this material are those of the author(s) and do not reflect the views of National Research Foundation, Singapore.
