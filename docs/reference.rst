@@ -836,7 +836,7 @@ mouse_xy()
 
 .. code-block:: none
 
-  echo mouse_xy()
+  echo `mouse_xy()`
 
 
 mouse_x()
