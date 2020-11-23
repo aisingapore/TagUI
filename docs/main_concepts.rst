@@ -319,12 +319,12 @@ Here’s how we check if it is more than or less than 5:
 
 .. code-block:: none
 
-  if row_count is more than 5
+  if row_count more than 5
     some steps
 
 .. code-block:: none
 
-  if row_count is less than 5
+  if row_count less than 5
     some steps
 
 
