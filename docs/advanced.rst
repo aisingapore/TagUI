@@ -74,7 +74,7 @@ The ``py`` step can be used to run commands in Python (TagUI will call ``python`
   py b=2
   py c=a+b
   py print(c)
-  echo py_result
+  echo `py_result`
 
 You can also use ``py begin`` and ``py finish`` before and after a Python code block::
 
@@ -84,14 +84,14 @@ You can also use ``py begin`` and ``py finish`` before and after a Python code b
   c=a+b
   print(c)
   py finish
-  echo py_result
+  echo `py_result`
 
 You can pass a variable to Python like this::
 
   phone = 1234567
   py 'phone = ' + phone
   py print(phone)
-  echo py_result
+  echo `py_result`
 
 
 Saving flow run results
