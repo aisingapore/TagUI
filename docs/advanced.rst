@@ -89,7 +89,7 @@ You can also use ``py begin`` and ``py finish`` before and after a Python code b
 You can pass a variable to Python like this::
 
   phone = 1234567
-  py 'phone = ' + phone
+  py_step('phone = ' + phone)
   py print(phone)
   echo `py_result`
 
