@@ -552,6 +552,7 @@ if ((substr($raw_intent,0,6)=="break;") or ($raw_intent=="break")) return true;
 if ((substr($raw_intent,0,9)=="continue;") or ($raw_intent=="continue")) return true;
 if ((substr($raw_intent,0,7)=="casper.") or (substr($raw_intent,0,5)=="this.")) return true;
 if (substr($raw_intent,0,7)=="chrome.") return true; // chrome object for chrome integration
+if (substr($raw_intent,0,10)=="clipboard(") return true; // for handling clipboard('text')
 if (substr($raw_intent,0,5)=="test.") {$GLOBALS['test_automation']++; return true;}
 if (substr($raw_intent,0,2)=="//") {$GLOBALS['real_line_number']--; return true;} 
 if (substr($raw_intent,-1)==";") return true; if (substr($raw_intent,0,9)=="function ") return true;

@@ -890,6 +890,8 @@ if ((raw_intent.substr(0,6) == 'break;') || (raw_intent == 'break')) return true
 if ((raw_intent.substr(0,9) == 'continue;') || (raw_intent == 'continue')) return true;
 if ((raw_intent.substr(0,7) == 'casper.') || (raw_intent.substr(0,5) == 'this.')) return true;
 if (raw_intent.substr(0,7) == 'chrome.') return true; // chrome object for chrome integration
+// below breaking up the single word clip+board( in order not to trigger false sikuli loading
+if (raw_intent.substr(0,10) == ('clip'+'board(')) return true; // for handling clip+board('text')
 if (raw_intent.substr(0,5) == ('test'+'.')) return true; // avoid replacement with test option
 if ((raw_intent.substr(0,2) == '//') || (raw_intent.charAt(raw_intent.length-1) == ';')) return true;
 if (raw_intent.substr(0,9) == 'function ') return true; // function definition
