@@ -821,10 +821,8 @@ present()
 
 .. code-block:: none
   
-  read name_element to name
-  read price_element to price
-  read details_element to details
-  write csv_row([name, price, details]) to product_list.csv
+  if present('//table')
+    click button1
 
 
 mouse_xy()
