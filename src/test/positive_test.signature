@@ -323,6 +323,8 @@ sikuli_step('vision App.setClipboard(clipboard_text)');}}
  * @param {string} cell_data
  */
 function sanitise_csv_cell(cell_data) {
+    // ensure numbers are converted to string
+    cell_data = cell_data.toString()
     // Replace all double quotes with 2 double quotes
     cell_data = cell_data.replace(/"/g, '\"\"')
     var whitespaceCheckRegex = /\s/
