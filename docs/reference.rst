@@ -674,22 +674,37 @@ Deploys a flow, creating a shortcut which can be double-clicked to run the flow.
 
 -headless or -h
 ********************
-Runs the flow without a visible browser (does not work for visual automation).
+Runs the flow with an invisible Chrome web browser (does not work for visual automation).
+
+
+-nobrowser or -n
+********************
+Runs without any web browser, for example to perform automation only with visual automation.
 
 
 -report or -r
 ********************
-Tracks flow run result in ``tagui/src/tagui_report.csv`` and saves html logs of flows.
-
-
-my_datatable.csv
-********************
-Uses the specified csv file as the datatable. See :ref:`datatables <datatables>`.
+Tracks flow run result in ``tagui/src/tagui_report.csv`` and saves html logs of flows execution.
 
 
 -speed or -s
 ********************
 Runs a datatable flow, skipping the default 3s delay and restarting of Chrome between datatable iterations.
+
+
+-quiet or -q
+********************
+Runs without output to command prompt except for explicit output (echo, show, check steps and errors etc).
+
+
+my_datatable.csv
+********************
+Uses the specified csv file as the datatable for batch automation. See :ref:`datatables <datatables>`.
+
+
+input(s)
+********************
+Add your own parameter(s) to be used in your automation flow as variables p1 to p9.
 
 
 See :doc:`other deprecated options </dep_options>`.

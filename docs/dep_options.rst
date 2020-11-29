@@ -10,9 +10,6 @@ firefox
 upload
     upload automation flow and result to [hastebin.com](https://hastebin.com) (expires 30 days after last view)
 
-quiet
-    run without output except for explicit output (echo / show / check / errors etc)
-
 debug
     show run-time backend messages from PhantomJS mode for detailed tracing and logging
 
