@@ -451,6 +451,8 @@ def vision_intent ( raw_intent ):
 	return 1
 	
 def visible_intent ( raw_intent ):
+	if using_ocr(raw_intent):
+		raw_intent = raw_intent[:-9].strip()
 	setAutoWaitTimeout(1)
 	params = (raw_intent + ' ')[1+(raw_intent + ' ').find(' '):].strip()
 	print '[tagui] ACTION - ' + raw_intent.strip()
