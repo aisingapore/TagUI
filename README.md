@@ -4,33 +4,34 @@
 
 ### TagUI is a command-line tool for digital process automation (RPA)
 
-### [Download TagUI v6](https://tagui.readthedocs.io/en/latest/setup.html)&ensp;|&ensp;[Visit documentation](https://tagui.readthedocs.io/en/latest/index.html)&ensp;|&ensp;[User feedback](https://forms.gle/mieY66xTN4NNm5Gq5)&ensp;|&ensp;[We're hiring](https://nuscareers.taleo.net/careersection/2/jobdetail.ftl?job=00CMO)
+### [Download TagUI v6](https://tagui.readthedocs.io/en/latest/setup.html)&ensp;|&ensp;[Visit documentation](https://tagui.readthedocs.io/en/latest/index.html)&ensp;|&ensp;[User feedback](https://forms.gle/mieY66xTN4NNm5Gq5)&ensp;|&ensp;[We're hiring](https://www.linkedin.com/posts/kensoh_ai-singapore-is-hiring-rpa-engineers-to-work-activity-6731843813762969600-6Go9)
 
 Write flows in simple TagUI language and automate your web, mouse and keyboard interactions on the screen.
 
 TagUI is free to use and open-source. It's easy to setup and use, and works on Windows, macOS and Linux.
 
-In TagUI language, you use steps like `click` and `type` to interact with identifiers, which include web identifiers, image snapshots, screen coordinates, or even text using OCR. Below is a sample flow to download a report:
+In TagUI language, you use steps like `click` and `type` to interact with identifiers, which include web identifiers, image snapshots, screen coordinates, or even text using OCR. Below is an example to login to Xero accounting:
 
 ```
-https://www.typeform.com
+https://login.xero.com/identity/user/login
 
-click login
-type username as user@gmail.com
+type email as user@gmail.com
 type password as 12345678
-click btnlogin
-
-download https://admin.typeform.com/xxx to report.csv
+click Log in
 ```
 ```
 // besides web identifiers, images of UI elements can be used
+
+type email_box.png as user@gmail.com
+type password_box.png as 12345678
 click login_button.png
-type username_box.png as user@gmail.com
 ```
 ```
 // (x,y) coordinates of user-interface elements can also be used
-click (1200,200)
-type (800,400) as user@gmail.com
+
+type (720,400) as user@gmail.com
+type (720,440) as 12345678
+click (720,500)
 ```
 
 # v6 Features
