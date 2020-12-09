@@ -8,6 +8,7 @@ An open-source, cross-platform, command-line RPA tool that allows you to automat
 
 .. code-block:: none
 
+    // below is an example to login to Xero accounting website
     https://login.xero.com/identity/user/login
 
     type email as user@gmail.com

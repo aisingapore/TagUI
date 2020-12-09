@@ -2,13 +2,13 @@ Deprecated command line options
 ================================
 
 chrome
-    run on visible Chrome web browser instead of invisible PhantomJS (first install [Chrome](https://www.google.com/chrome/))
+    run on visible Chrome web browser instead of invisible PhantomJS (first install Chrome)
 
 firefox
-    run on visible Firefox web browser instead of invisible browser (first install [Firefox](https://ftp.mozilla.org/pub/firefox/releases/59.0/))
+    run on visible Firefox web browser instead of invisible browser (first install Firefox)
   
 upload
-    upload automation flow and result to [hastebin.com](https://hastebin.com) (expires 30 days after last view)
+    upload automation flow and result to hastebin.com (expires 30 days after last view)
 
 debug
     show run-time backend messages from PhantomJS mode for detailed tracing and logging

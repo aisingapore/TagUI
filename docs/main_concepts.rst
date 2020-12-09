@@ -53,7 +53,7 @@ Run from a URL
 **********************
 You can also run a flow directly from a URL::
 
-    tagui https://raw.githubusercontent.com/kelaberetiv/TagUI/master/src/samples/1_google.tag
+    tagui https://raw.githubusercontent.com/kelaberetiv/TagUI/master/flows/samples/1_google.tag
 
 
 Hide the browser
@@ -288,15 +288,8 @@ For example, if the URL contains the word “success”, then we want to click s
 ``url()`` is a :ref:`helper function <helper-functions>` that gets the url of the current webpage. Note that the other lines are *indented*, ie. there are spaces (or tabs) in front of them. This means that they are in the *if block*. The steps in the *if block* will only be run if the condition is met, ie. the url contains the word “success”.
 
 .. note:: 
-  Before v6, you need to use ``{`` and ``}`` to surround your *if block*, so the above example would be:
+  Before v6, you need to use ``{`` and ``}`` to surround your *if block*.
 
-  .. code-block:: none
-    if url() contains "success"
-    {
-      click button1.png
-      click button2.png
-    }
-  
   From v6 onwards, the curly braces ``{}`` are optional.
 
 Another common case is to check if some element exists. Here, we say that “if some-element doesn’t appear after waiting for the timeout, then visit this webpage”.
@@ -378,7 +371,8 @@ You can also give it an input, which puts the input *onto* the clipboard instead
   long_text = "This is a very long text which takes a long time to type"
   clipboard(long_text)
   click text_input
-  keyboard [ctrl]v[enter]
+  keyboard [ctrl]v
+  keyboard [enter]
   
 
 mouse_x(), mouse_y() 

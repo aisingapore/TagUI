@@ -51,7 +51,7 @@ This highlighted element has a class attribute of "chat-line__body". It doesn't 
 How do I use the cutting edge version of TagUI?
 --------------------------------------------------
 1. Download the latest stable version at :doc:`the installation page </setup>`.
-2. `Download the cutting edge version <https://github.com/kelaberetiv/TagUI/archive/develop.zip>`_.
+2. Download the `cutting edge version <https://github.com/kelaberetiv/TagUI/archive/master.zip>`_.
 3. Unzip and overwrite the files in your ``tagui/src/`` folder.
 
 
@@ -90,15 +90,6 @@ If you Ctrl+C to break a TagUI automation, you can use ``tagui/src/end_processes
 Why doesn't TagUI work on zoom levels other than 100%?
 -------------------------------------------------------------
 TagUI mimics the user mouse-clicks at the (x,y) coordinates of web elements, so using a different zoom level will cause clicks to be triggered at wrong coordinates. Make sure TagUI's Chrome browser is set to 100% zoom for best results. 
-
-
-Who is TagUI's technologies?
------------------------------------------
-TagUI - Ken Soh / @kensoh
-SikuliX - Raimund Hocke / @RaiMan
-CasperJS - Nicolas Perriault / @n1k0
-PhantomJS - Ariya Hidayat / @ariya
-SlimerJS - Laurent Jouanneau / @laurentj
 
 
 Is TagUI safe to use?

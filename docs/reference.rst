@@ -510,7 +510,7 @@ Runs a command in Command Prompt or Terminal and saves the stdout to the variabl
 
 .. code-block:: none
 
-  run mkdir new_directory
+  run cmd /c mkdir new_directory
 
 
 vision
@@ -803,7 +803,7 @@ Gets the time elapsed in seconds in between each running of this function.
   click button1
   click button2
   click button3
-  echo timer()
+  echo `timer()`
 
 
 .. _exist:

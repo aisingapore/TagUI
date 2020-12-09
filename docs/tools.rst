@@ -1,11 +1,13 @@
 Tools
 ====================
-These are separate apps which help you in writing TagUI flows. **TagUI For Python** is a Python API for TagUI.
+These are separate apps which help you in writing TagUI flows.
+
+**RPA for Python** is a Python API and wrapper for TagUI.
 
 
 TagUI Chrome Extension
 --------------------------
-The TagUI Chrome extension (`Download <https://chrome.google.com/webstore/detail/tagui-web-automation/egdllmehgfgjebhlkjmcnhiocfcidnjk/>`_) helps you write web flows.
+The TagUI Chrome extension (`download <https://chrome.google.com/webstore/detail/tagui-web-automation/egdllmehgfgjebhlkjmcnhiocfcidnjk/>`_) helps you write web flows.
 
 It records steps such as page navigation, clicking of web elements and entering information. It then displays the steps for you to paste into your flow.
 
@@ -36,6 +38,6 @@ TagUI Editor allows you to edit and run TagUI scripts via AutoHotKey.
 .. image:: https://raw.githubusercontent.com/adegard/tagui_scripts/master/TagUI_Editor.gif
 
 
-RPA For Python
+RPA for Python
 --------------------
-RPA for Python is a Python package (``pip install rpa`` to install) which allows you to use TagUI through a Python API. Check out `the documentation <https://github.com/tebelorg/RPA-Python>`_. It was created and is maintained by TagUI's creator `Ken Soh @kensoh <https://github.com/kensoh>`_.
+RPA for Python is a Python package (``pip install rpa`` to install) which allows you to use TagUI through a Python API. Check out `the documentation <https://github.com/tebelorg/RPA-Python>`_. It was created and is maintained by TagUI's creator Ken Soh `@kensoh <https://github.com/kensoh>`_.
