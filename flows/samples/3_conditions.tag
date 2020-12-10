@@ -9,6 +9,7 @@ cupcakes = 12
 if animals equals to 'dog, cat'
 	echo animals
 
+// If the condition is true, then show 'contains dog' and 'another instruction' in command line output
 if animals contains 'dog'
 	echo contains dog
 	echo another instruction
