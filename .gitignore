@@ -1,6 +1,3 @@
-# exclude files in archive and flows folder
-/archive/*
-
 # exclude docs build
 /docs/_build/*
 
@@ -11,18 +8,6 @@
 /src/slimerjs/*
 /src/php/*
 /src/unx/*
-
-# exclude generated files for hastebin upload
-/src/samples/8_hastebin.js
-/src/samples/8_hastebin.log
-/src/samples/8_hastebin.raw
-
-# exclude generated files for sample flows
-/src/samples/*.js
-/src/samples/*.log
-/src/samples/*.raw
-/src/samples/*.png
-/src/samples/*.txt
 
 # exclude custom global functions file
 /src/tagui_global.js
