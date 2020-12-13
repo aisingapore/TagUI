@@ -980,7 +980,7 @@ if exist "tagui_chrome.in" (
 		echo update chrome_command setting in tagui\src\tagui.cmd to your chrome.exe
 		exit /b 1
 	)
-	for /f "tokens=* usebackq" %%p in (`wmic process where "caption like '%%chrome.exe%%' and commandline like '%%tagui_user_profile\" --remote-debugging-port=9222%%'" get processid 2^>nul ^| cut -d" " -f 1 ^| sort -nur ^| head -n 1`) do set chrome_process_id=%%p
+	for /f "tokens=* usebackq" %%p in (`wmic process where "caption like '%%chrome.exe%%' and commandline like '%%tagui_user_profile_ --remote-debugging-port=9222%%'" get processid 2^>nul ^| cut -d" " -f 1 ^| sort -nur ^| head -n 1`) do set chrome_process_id=%%p
 	if not "!chrome_process_id!"=="" taskkill /PID !chrome_process_id! /T /F > nul 2>&1
 	start "" "%chrome_command%" --user-data-dir="%~dp0chrome\tagui_user_profile" !chrome_switches! !window_size! !headless_switch!
 
@@ -1012,7 +1012,7 @@ if exist "tagui_chrome.in" echo finish > tagui_chrome.in
 
 rem kill chrome processes by checking which os the processes are started on
 if not "!chrome_started!"=="" if %tagui_speed_mode%==false (
-	for /f "tokens=* usebackq" %%p in (`wmic process where "caption like '%%chrome.exe%%' and commandline like '%%tagui_user_profile\" --remote-debugging-port=9222%%'" get processid 2^>nul ^| cut -d" " -f 1 ^| sort -nur ^| head -n 1`) do set chrome_process_id=%%p
+	for /f "tokens=* usebackq" %%p in (`wmic process where "caption like '%%chrome.exe%%' and commandline like '%%tagui_user_profile_ --remote-debugging-port=9222%%'" get processid 2^>nul ^| cut -d" " -f 1 ^| sort -nur ^| head -n 1`) do set chrome_process_id=%%p
 	if not "!chrome_process_id!"=="" taskkill /PID !chrome_process_id! /T /F > nul 2>&1
 )
 rem end of big loop for managing multiple data sets in datatable
