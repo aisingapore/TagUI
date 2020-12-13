@@ -14,5 +14,5 @@ echo `license_type`
 click octicon-download
 click octicon-file-zip
 
-// Wait for a default 5 seconds to give the download time to complete 
-wait
+// Wait 15 seconds to give the download time to complete on slow networks 
+wait 15
