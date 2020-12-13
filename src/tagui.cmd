@@ -4,6 +4,11 @@ rem # SCRIPT FOR RUNNING TAGUI FRAMEWORK ~ TEBEL.ORG #
 rem configure command to launch chrome for Windows
 set chrome_command=C:\Program Files (x86)\Google\Chrome\Application\chrome.exe
 
+rem fallback in case newer Chrome is not installed in x86 folder
+if not exist "%chrome_command%" (
+	set chrome_command=C:\Program Files\Google\Chrome\Application\chrome.exe
+)
+
 rem enable windows for loop advanced flow control
 setlocal enableextensions enabledelayedexpansion
 
