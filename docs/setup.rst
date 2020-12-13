@@ -14,11 +14,17 @@ Windows
 
 5. Open :ref:`Command Prompt <how-to-use-command-prompt>`.
 
-6. Copy, paste and run these commands:
+6. Copy, paste and run this command:
 
 .. code-block:: bat
 
     setx path "%path%;c:\tagui\src"
+
+7. Close and reopen your Command Prompt.
+
+8. Copy, paste and run this command:
+
+.. code-block:: bat
 
     tagui c:\tagui\flows\samples\1_google.tag
 
