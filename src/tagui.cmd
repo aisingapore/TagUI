@@ -13,7 +13,7 @@ rem enable windows for loop advanced flow control
 setlocal enableextensions enabledelayedexpansion
 
 if "%~1"=="" (
-echo tagui v6.11: use following options and this syntax to run - tagui flow_filename option^(s^)
+echo tagui v6.12: use following options and this syntax to run - tagui flow_filename option^(s^)
 echo.
 echo live           launch in live mode enabled with visual automation for interactive development
 echo input^(s^)       add your own parameter^(s^) to be used in your automation flow as variables p1 to p9

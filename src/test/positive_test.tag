@@ -423,7 +423,7 @@ api http://www.dummytestsite.com/api?COLOR1=red&COLOR2=green&COLOR3=blue
 
 // test api with variables
 var COLOR1='red'; var COLOR2='green'; var COLOR3='blue';
-api http://www.dummytestsite.com/api?COLOR1='+COLOR1+'&COLOR2='+COLOR2+'&COLOR3='+COLOR3+'
+// obsolete syntax - api http://www.dummytestsite.com/api?COLOR1='+COLOR1+'&COLOR2='+COLOR2+'&COLOR3='+COLOR3+'
 api http://www.dummytestsite.com/api?COLOR1=`COLOR1`&COLOR2=`COLOR2`&COLOR3=`COLOR3`
 
 // test run
@@ -520,15 +520,15 @@ http://www.dummytestsite.com
 
 // test url with variable
 target_url = "www.dummytestsite.com";
-http://'+target_url+'
+// obsolete syntax - http://'+target_url+'
 http://`target_url`
 
 // test use of variable
 // old way for '+variable+' backward compatibility 
 locator = 'email_button'
-click '+locator+'
+// obsolete syntax - click '+locator+'
 number = 5
-click (//*[@id="test"])['+variable+']
+// obsolete syntax - click (//*[@id="test"])['+variable+']
 
 // new way of using `variable` to denote variable
 locator = 'email_button'

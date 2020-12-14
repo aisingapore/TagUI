@@ -340,12 +340,24 @@ function current_line() {return "[LINE " . $GLOBALS['line_number'] . "]";}
 function parse_intent($script_line) {$GLOBALS['line_number']++; $GLOBALS['real_line_number']++;
 $indentation_tracker = str_replace(ltrim($script_line),'',$script_line); // tracking for py and vision
 $script_line = trim($script_line); if ($script_line=="") {$GLOBALS['real_line_number']--; return "";}
+if (!in_array(get_intent($script_line), array("integration_block", "run", "dom", "js", "r", "py", "vision", "code")))
+{$script_line = escape_quote($script_line);} // to avoid breaking JavaScript compilation with '
 $script_line = parse_backticks($script_line); // below check again after replacing repository definitions
 $script_line = trim($script_line); if ($script_line=="") {$GLOBALS['real_line_number']--; return "";}
 // below use buffer to handle integration code blocks if inside integration code block
 $intent_type = get_intent($script_line); if ($intent_type == "integration_block")
 {$GLOBALS['integration_block_body'] .= $indentation_tracker . $script_line ."[END_OF_LINE]"; return "";}
 else {$script_line = parse_closure($script_line); return process_intent($intent_type, $script_line);}}
+
+function escape_quote($script_line) { // helper function for string context intents
+if ($script_line == "") return ""; $current_context = "string"; // default is string
+$script_line = str_replace("\'", "'", $script_line); // for backward compatibility
+for ($char_counter = 0; $char_counter < strlen($script_line); $char_counter++) {
+if ((substr($script_line,$char_counter,1) == "'") and ($current_context == "string"))
+{$script_line = substr_replace($script_line,"\'",$char_counter,1); $char_counter++;}
+if (substr($script_line,$char_counter,1) == "`")
+{if ($current_context == "string") $current_context = "code"; else $current_context = "string";}
+} return $script_line;}
 
 function parse_backticks($script_line) {
 // check existence of objects or keywords by searching for `object or keyword name`, then expand from repository

@@ -736,8 +736,8 @@ else return parse_intent(translated_string);}}
 // for live mode interpretation of step into casperjs code
 function parse_intent(live_line) {
 live_line = live_line.trim(); if (live_line == '') return '';
-live_line = parse_variables(live_line);
-live_line = live_line.trim(); if (live_line == '') return '';
+if (['run','dom','js','r','py','vision','code'].indexOf(get_intent(live_line)) == -1) live_line = escape_quote(live_line);
+live_line = parse_variables(live_line); live_line = live_line.trim(); if (live_line == '') return '';
 // convert 'wait for' step to 'hover' step, to wait until timeout for element to appear and hover on it
 if ((live_line.length > 9) && ((live_line.substr(0,9)).toLowerCase() == 'wait for '))
 live_line = 'hover ' + live_line.substr(9);
@@ -782,6 +782,15 @@ case 'timeout': return timeout_intent(live_line); break;
 case 'code': return code_intent(live_line); break;
 default: return "this.echo('ERROR - cannot understand step " + live_line.replace(/'/g,'\\\'') + "')";}}
 
+function escape_quote(script_line) { // helper function for string context intents
+if (script_line == '') return ''; current_context = 'string'; // default is string
+script_line = script_line.replace(/\\\'/g,'\''); // for backward compatibility
+for (char_counter = 0; char_counter < script_line.length; char_counter++) {
+if ((script_line.charAt(char_counter) == "'") && (current_context == 'string'))
+{script_line = script_line.substr(0,char_counter) + '\\\'' + script_line.substr(char_counter+1); char_counter++;}
+if (script_line.charAt(char_counter) == "`")
+{if (current_context == 'string') current_context = 'code'; else current_context = 'string';}} return script_line;}
+
 function parse_variables(script_line) { // `variable` --> '+variable+'
 // use "[SINGLE_QUOTE_FOR_VARIABLE_HANDLING]" instead of "'" to prevent escaping ' in escape_bs()
 quote_token = "[SINGLE_QUOTE_FOR_VARIABLE_HANDLING]+"; // token to alternate replacements for '+variable+'
@@ -789,7 +798,12 @@ for (char_counter = 0; char_counter < script_line.length; char_counter++) {
 if (script_line.charAt(char_counter) == "`") {
 script_line = script_line.substr(0,char_counter) + quote_token + script_line.substr(char_counter+1);
 if (quote_token == "[SINGLE_QUOTE_FOR_VARIABLE_HANDLING]+") quote_token = "+[SINGLE_QUOTE_FOR_VARIABLE_HANDLING]";
-else quote_token = "[SINGLE_QUOTE_FOR_VARIABLE_HANDLING]+";}} return script_line;}
+else quote_token = "[SINGLE_QUOTE_FOR_VARIABLE_HANDLING]+";}
+if (quote_token == "+[SINGLE_QUOTE_FOR_VARIABLE_HANDLING]") { // protect code context from escape_bs()
+if (script_line.charAt(char_counter) == "'") script_line = script_line.substr(0,char_counter) +
+"[SINGLE_QUOTE_FOR_VARIABLE_HANDLING]" + script_line.substr(char_counter+1);
+else if (script_line.charAt(char_counter) == '"') script_line = script_line.substr(0,char_counter) +
+"[DOUBLE_QUOTE_FOR_VARIABLE_HANDLING]" + script_line.substr(char_counter+1);}} return script_line;}
 
 // for live mode understanding intent of line entered
 function get_intent(raw_intent) {var lc_raw_intent = raw_intent.toLowerCase();
@@ -934,7 +948,8 @@ return source_string;} // replacing multiple variations of + to handle user typo
 function escape_bs(input_string) { // helper function to escape backslash characters and friends
 escaped_string = input_string.replace(/\\/g,'\\\\').replace(/\'/g,'\\\'').replace(/\n/g,'\\n').replace(/\r/g,'\\r');
 escaped_string = escaped_string.replace(/\t/g,'\\t').replace(/\f/g,'\\f').replace(/\v/g,'\\v').replace(/\"/g,'\\\"');
-return escaped_string.replace(/\[SINGLE_QUOTE_FOR_VARIABLE_HANDLING\]/g,'\'');}
+escaped_string = escaped_string.replace(/\[SINGLE_QUOTE_FOR_VARIABLE_HANDLING\]/g,'\'');
+return escaped_string.replace(/\[DOUBLE_QUOTE_FOR_VARIABLE_HANDLING\]/g,'\"');}
 
 function is_coordinates(input_params) { // helper function to check if string is (x,y) coordinates
 if ((input_params.length > 4) && (input_params.substr(0,1) == '(') && (input_params.substr(-1) == ')') 
