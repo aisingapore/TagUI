@@ -619,7 +619,7 @@ Prompts user for input and saves the input as the variable ``ask_result``.
 
 live
 ###################
-Wait for user confirmation before continuing. The user must enter "done" before the flow continues.
+Run steps interactively and immediately see the output. The user must enter "done" before the flow continues.
 
 .. code-block:: none
 
@@ -704,7 +704,7 @@ Uses the specified csv file as the datatable for batch automation. See :ref:`dat
 
 input(s)
 ********************
-Add your own parameter(s) to be used in your automation flow as variables p1 to p9.
+Add your own parameter(s) to be used in your automation flow as variables p1 to p8.
 
 
 See :doc:`other deprecated options </dep_options>`.

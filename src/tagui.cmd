@@ -13,10 +13,10 @@ rem enable windows for loop advanced flow control
 setlocal enableextensions enabledelayedexpansion
 
 if "%~1"=="" (
-echo tagui v6.12: use following options and this syntax to run - tagui flow_filename option^(s^)
+echo tagui v6.14: use following options and this syntax to run - tagui flow_filename option^(s^)
 echo.
-echo live           launch in live mode enabled with visual automation for interactive development
-echo input^(s^)       add your own parameter^(s^) to be used in your automation flow as variables p1 to p9
+echo tagui live     launch TagUI live mode enabled with visual automation for interactive development
+echo input^(s^)       add your own parameter^(s^) to be used in your automation flow as variables p1 to p8
 echo data.csv       specify a csv file to be used as the datatable for batch automation of many records
 echo -deploy    -d  generate .cmd file which can be double-clicked to run workflow with specific options
 echo -headless  -h  run on invisible Chrome web browser instead of visible as default ^(first install Chrome^)
