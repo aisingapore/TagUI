@@ -43,8 +43,6 @@ A datatable (``trade_data.csv``) could look like this:
 
 To use it, you run your flow with ``tagui my_flow.tag trade_data.csv``. TagUI will run ``my_flow.tag`` once for each row in the datatable (except the header). Within the flow, TagUI can use the variables ``trade``, ``username``, ``password``, etc as if they were in the :ref:`local object repository <object-repository>` and the values will be from that run's row.
 
-You can run the flow with the ``speed`` option like this: ``tagui my_flow.tag trade_data.csv -speed`` to remove the delay between runs.
-
 
 Running other flows within a flow
 -----------------------------------

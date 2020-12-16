@@ -15,7 +15,6 @@ echo "-deploy    -d  generate .command file which can be double-clicked to run w
 echo "-headless  -h  run on invisible Chrome web browser instead of visible as default (first install Chrome)"
 echo "-nobrowser -n  run without any web browser, for example to perform automation only with visual automation"
 echo "-report    -r  track run result in tagui/src/tagui_report.csv and save html log of automation execution"
-echo "-speed     -s  skip 3-second delay between datatable iterations (and skip restarting of Chrome browser)"
 echo "-quiet     -q  run without output except for explicit output (echo, show, check steps and errors etc)"
 echo
 echo "TagUI is a command-line tool for digital process automation (RPA) - for more info, google tagui"

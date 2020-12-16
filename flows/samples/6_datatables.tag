@@ -14,7 +14,3 @@ type firstname as [clear]`firstname`
 type lastname as [clear]`lastname`
 
 click submit
-
-// TIP: if you want to skip restarting of Chrome after each time,
-// run with tagui 6_datatables.tag form_data.csv -speed
-// or tagui 6_datatables.tag form_data.csv -s

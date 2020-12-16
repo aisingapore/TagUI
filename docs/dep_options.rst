@@ -6,7 +6,10 @@ chrome
 
 firefox
     run on visible Firefox web browser instead of invisible browser (first install Firefox)
-  
+
+speed
+    skip 3-second delay between datatable iterations (and skip restarting of Chrome browser)
+
 upload
     upload automation flow and result to hastebin.com (expires 30 days after last view)
 
