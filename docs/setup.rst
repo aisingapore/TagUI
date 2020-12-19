@@ -4,7 +4,7 @@ Installation
 Windows
 -------------------------------
 
-1. `Download TagUI v6.0.0 for Windows <https://github.com/kelaberetiv/TagUI/releases/download/v6.0.0/TagUI_Windows.zip>`_.
+1. `Download TagUI v6.14 for Windows <https://github.com/kelaberetiv/TagUI/releases/download/v6.14.0/TagUI_Windows.zip>`_.
 
 2. Unzip the contents to ``C:\``.
 
@@ -34,7 +34,7 @@ You have run your first TagUI flow! 🎉
 
 macOS/Linux
 -----------------------------------
-1. Download TagUI v6.0.0 (`macOS <https://github.com/kelaberetiv/TagUI/releases/download/v6.0.0/TagUI_macOS.zip>`_, `Linux <https://github.com/kelaberetiv/TagUI/releases/download/v6.0.0/TagUI_Linux.zip>`_).
+1. Download TagUI v6.14 (`macOS <https://github.com/kelaberetiv/TagUI/releases/download/v6.14.0/TagUI_macOS.zip>`_, `Linux <https://github.com/kelaberetiv/TagUI/releases/download/v6.14.0/TagUI_Linux.zip>`_).
 
 2. Unzip the contents to your desktop on macOS, or ``/home/your_userid`` on Linux.
 

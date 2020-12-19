@@ -4,7 +4,7 @@
 
 ### TagUI is a command-line tool for digital process automation (RPA)
 
-### [Download TagUI v6](https://tagui.readthedocs.io/en/latest/setup.html)&ensp;|&ensp;[Visit documentation](https://tagui.readthedocs.io/en/latest/index.html)&ensp;|&ensp;[User feedback](https://forms.gle/mieY66xTN4NNm5Gq5)&ensp;|&ensp;[We're hiring](https://www.linkedin.com/posts/kensoh_ai-singapore-is-hiring-rpa-engineers-to-work-activity-6731843813762969600-6Go9)
+### [Download TagUI v6.14](https://tagui.readthedocs.io/en/latest/setup.html)&ensp;|&ensp;[Visit documentation](https://tagui.readthedocs.io/en/latest/index.html)&ensp;|&ensp;[User feedback](https://forms.gle/mieY66xTN4NNm5Gq5)&ensp;|&ensp;[We're hiring](https://www.linkedin.com/posts/kensoh_ai-singapore-is-hiring-rpa-engineers-to-work-activity-6731843813762969600-6Go9)
 
 Write flows in simple TagUI language and automate your web, mouse and keyboard interactions on the screen.
 
@@ -112,13 +112,14 @@ if some_condition
 
 # TagUI v5.11
 
-### [Visit TagUI v5.11 homepage & documentation](https://github.com/kelaberetiv/TagUI/tree/pre_v6)
+### [Visit v5.11 homepage & documentation](https://github.com/kelaberetiv/TagUI/tree/pre_v6)
 
 # Credits
-- [TagUI v3](https://github.com/kensoh/TagUI/tree/before_aisg) - Ken Soh from Singapore
+- [TagUI v3.0](https://github.com/kensoh/TagUI/tree/before_aisg) - Ken Soh from Singapore
 - [SikuliX](http://sikulix.com) - Raimund Hocke from Germany
 - [CasperJS](http://casperjs.org) - Nicolas Perriault from France
 - [PhantomJS](https://github.com/ariya/phantomjs) - Ariya Hidayat from Indonesia
 - [SlimerJS](https://slimerjs.org) - Laurent Jouanneau from France
 
+# Sponsor
 This project  is supported by the National Research Foundation, Singapore under its AI Singapore Programme (AISG-RP-2019-050). Any opinions, findings and conclusions or recommendations expressed in this material are those of the author(s) and do not reflect the views of National Research Foundation, Singapore.
