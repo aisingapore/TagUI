@@ -6,6 +6,8 @@
 
 ### [Download TagUI v6.14](https://tagui.readthedocs.io/en/latest/setup.html)&ensp;|&ensp;[Visit documentation](https://tagui.readthedocs.io/en/latest/index.html)&ensp;|&ensp;[User feedback](https://forms.gle/mieY66xTN4NNm5Gq5)&ensp;|&ensp;[We're hiring](https://www.linkedin.com/posts/kensoh_ai-singapore-is-hiring-rpa-engineers-to-work-activity-6731843813762969600-6Go9)
 
+---
+
 Write flows in simple TagUI language and automate your web, mouse and keyboard interactions on the screen.
 
 TagUI is free to use and open-source. It's easy to setup and use, and works on Windows, macOS and Linux.
@@ -112,7 +114,7 @@ if some_condition
 
 # TagUI v5.11
 
-### [Visit v5.11 homepage & documentation](https://github.com/kelaberetiv/TagUI/tree/pre_v6)
+### For technical details of TagUI, [visit its v5.11 documentation](https://github.com/kelaberetiv/TagUI/tree/pre_v6)
 
 # Credits
 - [TagUI v3.0](https://github.com/kensoh/TagUI/tree/before_aisg) - Ken Soh from Singapore
