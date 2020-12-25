@@ -12,17 +12,11 @@ Windows
 
 4. `Install Chrome <https://www.google.com/chrome/>`_.
 
-5. Open :ref:`Command Prompt <how-to-use-command-prompt>`.
+5. `Add c:\tagui\src to your path <https://www.c-sharpcorner.com/article/add-a-directory-to-path-environment-variable-in-windows-10/>`_.
 
-6. Copy, paste and run this command:
+6. Open :ref:`Command Prompt <how-to-use-command-prompt>`.
 
-.. code-block:: bat
-
-    setx path "%path%;c:\tagui\src"
-
-7. Close and reopen your Command Prompt.
-
-8. Copy, paste and run this command:
+7. Copy, paste and run this command:
 
 .. code-block:: bat
 
