@@ -12,7 +12,7 @@ Windows
 
 4. `Install Chrome <https://www.google.com/chrome/>`_.
 
-5. `Add c:\tagui\src to your path <https://www.c-sharpcorner.com/article/add-a-directory-to-path-environment-variable-in-windows-10/>`_.
+5. `Add c:\\tagui\\src to your path <https://www.c-sharpcorner.com/article/add-a-directory-to-path-environment-variable-in-windows-10/>`_.
 
 6. Open :ref:`Command Prompt <how-to-use-command-prompt>`.
 
