@@ -2,15 +2,15 @@
 
 # TagUI
 
-### TagUI is a command-line tool for digital process automation (RPA)
+**Command-line tool for digital process automation (RPA) by [AI Singapore](https://www.aisingapore.org), a government-funded programme to accelerate AI in Singapore. For any issues or questions, [let us know here](https://github.com/kelaberetiv/TagUI/issues).**
 
-### [Download TagUI v6.14](https://tagui.readthedocs.io/en/latest/setup.html)&ensp;|&ensp;[Visit documentation](https://tagui.readthedocs.io/en/latest/index.html)&ensp;|&ensp;[User feedback](https://forms.gle/mieY66xTN4NNm5Gq5)&ensp;|&ensp;[We're hiring](https://www.linkedin.com/posts/kensoh_ai-singapore-is-hiring-rpa-engineers-to-work-activity-6731843813762969600-6Go9)
+**[Download TagUI v6.14](https://tagui.readthedocs.io/en/latest/setup.html)&ensp;|&ensp;[Documentation](https://tagui.readthedocs.io/en/latest/index.html)&ensp;|&ensp;[RPA Demos](https://github.com/aimakerspace/TagUI-Bricks)&ensp;|&ensp;[Samples](https://github.com/kelaberetiv/TagUI/tree/master/flows/samples)&ensp;|&ensp;[Feedback](https://forms.gle/mieY66xTN4NNm5Gq5)&ensp;|&ensp;[We're hiring](https://www.linkedin.com/posts/kensoh_ai-singapore-is-hiring-rpa-engineers-to-work-activity-6731843813762969600-6Go9)**
 
 ---
 
 Write flows in simple TagUI language and automate your web, mouse and keyboard interactions on the screen.
 
-TagUI is free to use and open-source. It's easy to setup and use, and works on Windows, macOS and Linux.
+TagUI is free to use and open-source. It's easy to setup and use, and works on Windows, macOS and Linux. Besides English, flows can also be written in [20 other languages](https://github.com/kelaberetiv/TagUI/tree/master/src/languages), so go ahead and do RPA using your [native language](https://github.com/kelaberetiv/TagUI/blob/master/flows/samples/8_chineseflow.tag).
 
 In TagUI language, you use steps like `click` and `type` to interact with identifiers, which include web identifiers, image snapshots, screen coordinates, or even text using OCR. Below is an example to login to Xero accounting:
 
@@ -114,7 +114,7 @@ if some_condition
 
 # TagUI v5.11
 
-### For technical details of TagUI, [visit its v5.11 documentation](https://github.com/kelaberetiv/TagUI/tree/pre_v6)
+[Visit v5.11 homepage](https://github.com/kelaberetiv/TagUI/tree/pre_v6) for technical details of TagUI, such as its architecture diagram and codebase structure
 
 # Credits
 - [TagUI v3.0](https://github.com/kensoh/TagUI/tree/before_aisg) - Ken Soh from Singapore
