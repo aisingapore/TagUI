@@ -10,7 +10,7 @@ Windows
 
 3. `Install OpenJDK for Windows <https://corretto.aws/downloads/latest/amazon-corretto-8-x64-windows-jdk.msi>`_.
 
-4. `Install Chrome <https://www.google.com/chrome/>`_.
+4. `Install Chrome web browser <https://www.google.com/chrome/>`_.
 
 5. `Add c:\\tagui\\src to your path <https://www.c-sharpcorner.com/article/add-a-directory-to-path-environment-variable-in-windows-10/>`_.
 
@@ -34,7 +34,7 @@ macOS/Linux
 
 3. Install OpenJDK (`macOS <https://corretto.aws/downloads/latest/amazon-corretto-8-x64-macos-jdk.pkg>`_, `Linux <https://corretto.aws/downloads/latest/amazon-corretto-8-x64-linux-jdk.tar.gz>`_).
 
-4. `Install Chrome <https://www.google.com/chrome/>`_.
+4. `Install Chrome web browser <https://www.google.com/chrome/>`_.
 
 5. Open :ref:`Terminal <how-to-use-terminal>`.
 

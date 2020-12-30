@@ -687,11 +687,6 @@ Runs without any web browser, for example to perform automation only with visual
 Tracks flow run result in ``tagui/src/tagui_report.csv`` and saves html logs of flows execution.
 
 
--speed or -s
-********************
-Runs a datatable flow, skipping the default 3s delay and restarting of Chrome between datatable iterations.
-
-
 -quiet or -q
 ********************
 Runs without output to command prompt except for explicit output (echo, show, check steps and errors etc).
