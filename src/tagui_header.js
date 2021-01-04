@@ -793,13 +793,14 @@ if (script_line.charAt(char_counter) == "`")
 
 function parse_variables(script_line) { // `variable` --> '+variable+'
 // use "[SINGLE_QUOTE_FOR_VARIABLE_HANDLING]" instead of "'" to prevent escaping ' in escape_bs()
-quote_token = "[SINGLE_QUOTE_FOR_VARIABLE_HANDLING]+"; // token to alternate replacements for '+variable+'
+quote_token = "[SINGLE_QUOTE_FOR_VARIABLE_HANDLING]+escape_quote("; // token to alternate replacements for '+variable+'
 for (char_counter = 0; char_counter < script_line.length; char_counter++) {
 if (script_line.charAt(char_counter) == "`") {
 script_line = script_line.substr(0,char_counter) + quote_token + script_line.substr(char_counter+1);
-if (quote_token == "[SINGLE_QUOTE_FOR_VARIABLE_HANDLING]+") quote_token = "+[SINGLE_QUOTE_FOR_VARIABLE_HANDLING]";
-else quote_token = "[SINGLE_QUOTE_FOR_VARIABLE_HANDLING]+";}
-if (quote_token == "+[SINGLE_QUOTE_FOR_VARIABLE_HANDLING]") { // protect code context from escape_bs()
+if (quote_token == "[SINGLE_QUOTE_FOR_VARIABLE_HANDLING]+escape_quote(")
+quote_token = ")+[SINGLE_QUOTE_FOR_VARIABLE_HANDLING]";
+else quote_token = "[SINGLE_QUOTE_FOR_VARIABLE_HANDLING]+escape_quote(";}
+if (quote_token == ")+[SINGLE_QUOTE_FOR_VARIABLE_HANDLING]") { // protect code context from escape_bs()
 if (script_line.charAt(char_counter) == "'") script_line = script_line.substr(0,char_counter) +
 "[SINGLE_QUOTE_FOR_VARIABLE_HANDLING]" + script_line.substr(char_counter+1);
 else if (script_line.charAt(char_counter) == '"') script_line = script_line.substr(0,char_counter) +
