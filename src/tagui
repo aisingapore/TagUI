@@ -6,7 +6,7 @@ chrome_command="google-chrome"
 
 if [ -z "$1" ]
 then
-echo "tagui v6.14: use following options and this syntax to run - ./tagui flow_filename option(s)"
+echo "tagui v6.15: use following options and this syntax to run - ./tagui flow_filename option(s)"
 echo
 echo "tagui live     launch TagUI live mode enabled with visual automation for interactive development"
 echo "input(s)       add your own parameter(s) to be used in your automation flow as variables p1 to p8"
@@ -285,7 +285,10 @@ fi
 
 # start sikuli process if integration file is created during parsing
 if [ -f "tagui.sikuli/tagui_sikuli.in" ]; then
-# echo "[starting sikuli process]" | tee -a "$1".log
+# start dummy first run to let sikulix integrate jython
+if [ -f "sikulix/jython-standalone-2.7.1.jar" ]; then
+java -jar sikulix/sikulix.jar -h > /dev/null 2>&1 
+fi
 java -jar sikulix/sikulix.jar -r tagui.sikuli -d 3 >> tagui.sikuli/tagui.log 2>&1 &
 fi
 
