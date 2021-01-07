@@ -820,9 +820,9 @@ function dump_intent($raw_intent) {
 $safe_intent = str_replace("'","\'",$raw_intent); // avoid breaking echo below when single quote is used
 $safe_intent = $raw_intent; // old syntax deprecated in v6 for consistency with rest of TagUI steps
 $params = trim(substr($raw_intent." ",1+strpos($raw_intent." "," ")));
-$param1 = trim(substr($params,0,strpos($params," to "))); $param2 = trim(substr($params,4+strpos($params," to ")));
+$param1 = trim(substr($params,0,strrpos($params," to "))); $param2 = trim(substr($params,4+strrpos($params," to ")));
 if ($params == "") echo "ERROR - " . current_line() . " variable missing for " . $raw_intent . "\n";
-else if (strpos($params," to ")!==false)
+else if (strrpos($params," to ")!==false)
 return "casper.then(function() {".
 "{techo('".$safe_intent."');\nsave_text('".abs_file($param2)."','".add_concat($param1)."');}".end_fi()."});"."\n\n";
 else return "casper.then(function() {".
@@ -832,9 +832,9 @@ function write_intent($raw_intent) {
 $safe_intent = str_replace("'","\'",$raw_intent); // avoid breaking echo below when single quote is used
 $safe_intent = $raw_intent; // old syntax deprecated in v6 for consistency with rest of TagUI steps
 $params = trim(substr($raw_intent." ",1+strpos($raw_intent." "," ")));
-$param1 = trim(substr($params,0,strpos($params," to "))); $param2 = trim(substr($params,4+strpos($params," to ")));
+$param1 = trim(substr($params,0,strrpos($params," to "))); $param2 = trim(substr($params,4+strrpos($params," to ")));
 if ($params == "") echo "ERROR - " . current_line() . " variable missing for " . $raw_intent . "\n";
-else if (strpos($params," to ")!==false)
+else if (strrpos($params," to ")!==false)
 return "casper.then(function() {".
 "{techo('".$safe_intent."');\nappend_text('".abs_file($param2)."','".add_concat($param1)."');}".end_fi()."});"."\n\n";
 else return "casper.then(function() {".
@@ -844,9 +844,9 @@ function load_intent($raw_intent) {
 $safe_intent = str_replace("'","\'",$raw_intent); // avoid breaking echo below when single quote is used
 $safe_intent = $raw_intent; // old syntax deprecated in v6 for consistency with rest of TagUI steps
 $params = trim(substr($raw_intent." ",1+strpos($raw_intent." "," ")));
-$param1 = trim(substr($params,0,strpos($params," to "))); $param2 = trim(substr($params,4+strpos($params," to ")));
+$param1 = trim(substr($params,0,strrpos($params," to "))); $param2 = trim(substr($params,4+strrpos($params," to ")));
 if ($params == "") echo "ERROR - " . current_line() . " filename missing for " . $raw_intent . "\n";
-else if (strpos($params," to ")!==false)
+else if (strrpos($params," to ")!==false)
 return "casper.then(function() {"."{techo('".$safe_intent."');\nvar fs = require('fs'); ".$param2." = '';\n".
 	"if (fs.exists('".abs_file($param1)."'))\n".$param2." = fs.read('".abs_file($param1)."').trim();\n".
 	"else this.echo('ERROR - cannot find file ".$param1."').exit();}".end_fi()."});"."\n\n";

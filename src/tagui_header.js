@@ -1120,28 +1120,28 @@ else return "this.echo('ERROR - cannot find " + params + "')";}}
 
 function dump_intent(raw_intent) {raw_intent = eval("'" + escape_bs(raw_intent) + "'"); // support dynamic variables
 var params = ((raw_intent + ' ').substr(1+(raw_intent + ' ').indexOf(' '))).trim();
-var param1 = (params.substr(0,params.indexOf(' to '))).trim();
-var param2 = (params.substr(4+params.indexOf(' to '))).trim();
+var param1 = (params.substr(0,params.lastIndexOf(' to '))).trim();
+var param2 = (params.substr(4+params.lastIndexOf(' to '))).trim();
 if (params == '') return "this.echo('ERROR - variable missing for " + raw_intent + "')";
-else if (params.indexOf(' to ') > -1)
+else if (params.lastIndexOf(' to ') > -1)
 return "save_text('" + abs_file(param2) + "','" + add_concat(param1) + "')"; else
 return "save_text('','" + add_concat(params) + "')";}
 
 function write_intent(raw_intent) {raw_intent = eval("'" + escape_bs(raw_intent) + "'"); // support dynamic variables
 var params = ((raw_intent + ' ').substr(1+(raw_intent + ' ').indexOf(' '))).trim();
-var param1 = (params.substr(0,params.indexOf(' to '))).trim();
-var param2 = (params.substr(4+params.indexOf(' to '))).trim();
+var param1 = (params.substr(0,params.lastIndexOf(' to '))).trim();
+var param2 = (params.substr(4+params.lastIndexOf(' to '))).trim();
 if (params == '') return "this.echo('ERROR - variable missing for " + raw_intent + "')";
-else if (params.indexOf(' to ') > -1)
+else if (params.lastIndexOf(' to ') > -1)
 return "append_text('" + abs_file(param2) + "','" + add_concat(param1) + "')"; else
 return "append_text('','" + add_concat(params) + "')";}
 
 function load_intent(raw_intent) {raw_intent = eval("'" + escape_bs(raw_intent) + "'"); // support dynamic variables
 var params = ((raw_intent + ' ').substr(1+(raw_intent + ' ').indexOf(' '))).trim();
-var param1 = (params.substr(0,params.indexOf(' to '))).trim();
-var param2 = (params.substr(4+params.indexOf(' to '))).trim();
+var param1 = (params.substr(0,params.lastIndexOf(' to '))).trim();
+var param2 = (params.substr(4+params.lastIndexOf(' to '))).trim();
 if (params == '') return "this.echo('ERROR - filename missing for " + raw_intent + "')";
-else if (params.indexOf(' to ') > -1)
+else if (params.lastIndexOf(' to ') > -1)
 return "var fs = require('fs'); " + param2 + " = ''; if (fs.exists('" + abs_file(param1) + "')) " + param2 +  " = fs.read('" + abs_file(param1) + "').trim(); else this.echo('ERROR - cannot find file " + param1 + "')"; else
 return "this.echo('ERROR - variable missing for " + raw_intent + "')";}
 
