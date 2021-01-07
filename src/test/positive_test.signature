@@ -974,6 +974,7 @@ source_string = source_string.replace(/\+\+\+/g,'+'); source_string = source_str
 return source_string;} // replacing multiple variations of + to handle user typos of double spaces etc
 
 function escape_bs(input_string) { // helper function to escape backslash characters and friends
+if (!input_string) return ''; input_string = String(input_string); // to handle variable input that is a number
 escaped_string = input_string.replace(/\\/g,'\\\\').replace(/\'/g,'\\\'').replace(/\n/g,'\\n').replace(/\r/g,'\\r');
 escaped_string = escaped_string.replace(/\t/g,'\\t').replace(/\f/g,'\\f').replace(/\v/g,'\\v').replace(/\"/g,'\\\"');
 escaped_string = escaped_string.replace(/\[SINGLE_QUOTE_FOR_VARIABLE_HANDLING\]/g,'\'');
