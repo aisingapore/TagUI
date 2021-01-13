@@ -4,7 +4,7 @@
 
 **Command-line tool for digital process automation (RPA) by [AI Singapore](https://www.aisingapore.org), a government-funded programme to accelerate AI in Singapore. For any issues or questions, [let us know here](https://github.com/kelaberetiv/TagUI/issues).**
 
-**[Download TagUI v6.14](https://tagui.readthedocs.io/en/latest/setup.html)&ensp;|&ensp;[Documentation](https://tagui.readthedocs.io/en/latest/index.html)&ensp;|&ensp;[Demos](https://github.com/aimakerspace/TagUI-Bricks)&ensp;|&ensp;[Samples](https://github.com/kelaberetiv/TagUI/tree/master/flows/samples)&ensp;|&ensp;[Slides](https://drive.google.com/file/d/1pltAMzr0MZsttgg1w2ORH3ontR6Q51W9/view?usp=sharing)&ensp;|&ensp;[Feedback](https://forms.gle/mieY66xTN4NNm5Gq5)&ensp;|&ensp;[Q&A Video](https://www.linkedin.com/posts/kensoh_tagui-intro-and-qa-2021-01-10-at-1903-activity-6754319020629065728-vIoB)**
+**[Download TagUI v6.14](https://tagui.readthedocs.io/en/latest/setup.html)&ensp;|&ensp;[Documentation](https://tagui.readthedocs.io/en/latest/index.html)&ensp;|&ensp;[Demos](https://github.com/aimakerspace/TagUI-Bricks)&ensp;|&ensp;[Samples](https://github.com/kelaberetiv/TagUI/tree/master/flows/samples)&ensp;|&ensp;[Slides](https://drive.google.com/file/d/1pltAMzr0MZsttgg1w2ORH3ontR6Q51W9/view?usp=sharing)&ensp;|&ensp;[Feedback](https://forms.gle/mieY66xTN4NNm5Gq5)&ensp;|&ensp;[Q&A Video](https://youtu.be/ppwyN_uwRRM)**
 
 ---
 
