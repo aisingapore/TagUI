@@ -4,7 +4,7 @@
 
 **Command-line tool for robotic process automation (RPA) by [AI Singapore](https://www.aisingapore.org), a government-funded programme to accelerate AI in Singapore. For any support issues or questions, [please let us know here](https://github.com/kelaberetiv/TagUI/issues). Our target is to respond to your query [within 24 hours](https://youtu.be/gZiTPjpD-gQ), including on weekends when IT projects usually go live.**
 
-**[Download TagUI v6.14](https://tagui.readthedocs.io/en/latest/setup.html)&ensp;|&ensp;[Documentation](https://tagui.readthedocs.io/en/latest/index.html)&ensp;|&ensp;[Demos](https://github.com/aimakerspace/TagUI-Bricks)&ensp;|&ensp;[Samples](https://github.com/kelaberetiv/TagUI/tree/master/flows/samples)&ensp;|&ensp;[Slides](https://drive.google.com/file/d/1pltAMzr0MZsttgg1w2ORH3ontR6Q51W9/view?usp=sharing)&ensp;|&ensp;[Feedback](https://forms.gle/mieY66xTN4NNm5Gq5)&ensp;|&ensp;[Q&A Video](https://youtu.be/ppwyN_uwRRM)**
+**[Download TagUI v6.14](https://tagui.readthedocs.io/en/latest/setup.html)&ensp;|&ensp;[Documentation](https://tagui.readthedocs.io/en/latest/index.html)&ensp;|&ensp;[Demos](https://github.com/aimakerspace/TagUI-Bricks)&ensp;|&ensp;[Samples](https://github.com/kelaberetiv/TagUI/tree/master/flows/samples)&ensp;|&ensp;[Slides](https://drive.google.com/file/d/1pltAMzr0MZsttgg1w2ORH3ontR6Q51W9/view?usp=sharing)&ensp;|&ensp;[Q&A Video](https://youtu.be/ppwyN_uwRRM)&ensp;|&ensp;[Feedback](https://forms.gle/mieY66xTN4NNm5Gq5)**
 
 ---
 
@@ -124,4 +124,4 @@ if some_condition
 - [SlimerJS](https://slimerjs.org) - Laurent Jouanneau from France
 
 # Sponsor
-This project  is supported by the National Research Foundation, Singapore under its AI Singapore Programme (AISG-RP-2019-050). Any opinions, findings and conclusions or recommendations expressed in this material are those of the author(s) and do not reflect the views of National Research Foundation, Singapore.
+This project  is supported by the [National Research Foundation](https://www.nrf.gov.sg), Singapore under its AI Singapore Programme (AISG-RP-2019-050). Any opinions, findings and conclusions or recommendations expressed in this material are those of the author(s) and do not reflect the views of National Research Foundation, Singapore.
