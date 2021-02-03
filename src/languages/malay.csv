@@ -1,0 +1,82 @@
+EN,ID
+click,klik
+tap,keran
+move,pindah
+hover,hover
+type,mengetik
+enter,memasukkan
+select,memilih
+choose,memilih
+read,baca baca
+fetch,mengambil
+show,menunjukkan
+print,mencetak
+save,menyimpan
+echo,gema
+dump,membuang
+write,menulis
+snap,jepret
+table,meja
+mouse,mouse
+keyboard,keyboard
+live,hidup
+download,download
+upload,upload
+load,beban
+receive,menerima
+frame,bingkai
+popup,muncul
+wait,tunggu
+timeout,waktu habis
+seconds,detik
+second,kedua
+api,api
+dom,dom
+js,js
+else if,lain jika
+else,lain
+if,jika
+for,untuk
+while,sementara
+check,memeriksa
+more than or equals to,lebih dari atau sama dengan
+more than or equal to,lebih dari atau sama dengan
+greater than or equals to,lebih besar dari atau sama dengan
+greater than or equal to,lebih dari atau sama dengan
+higher than or equals to,lebih tinggi dari atau sama dengan
+higher than or equal to,lebih tinggi dari atau sama dengan
+less than or equals to,kurang dari atau sama dengan
+less than or equal to,kurang dari atau sama dengan
+lesser than or equals to,kurang dari atau sama dengan
+lesser than or equal to,kurang dari atau sama dengan
+lower than or equals to,lebih rendah dari atau sama dengan
+lower than or equal to,lebih rendah dari atau sama dengan
+more than,lebih dari
+greater than,lebih besar dari
+higher than,lebih tinggi dari
+less than,kurang dari
+lesser than,lebih rendah dari
+lower than,lebih rendah dari
+not equals to,tidak sama dengan
+not equal to,tidak sebanding dengan
+equals to,sama dengan
+equal to,sama dengan
+not contains,tidak berisi
+not contain,tidak mengandung
+contains,mengandung
+contain,berisi
+and,dan
+or,atau
+from,dari
+to,untuk
+as,sebagai
+title(),judul()
+url(),url()
+text(),teks()
+timer(),timer()
+count(),menghitung()
+present(),menyajikan()
+visible(),terlihat()
+mouse_xy(),mouse_xy()
+mouse_x(),mouse_x()
+mouse_y(),mouse_y()
