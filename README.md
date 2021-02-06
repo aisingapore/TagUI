@@ -2,7 +2,7 @@
 
 # TagUI
 
-**Free RPA tool by [AI Singapore](https://www.aisingapore.org), a government-funded programme to accelerate AI. For any support issues or questions, [tell us more here](https://github.com/kelaberetiv/TagUI/issues) and we'll try to reply [within 24 hours](https://youtu.be/gZiTPjpD-gQ).**
+**Free RPA tool by [AI Singapore](https://www.aisingapore.org), a government-funded programme to accelerate AI. For any support issues or questions, [please tell us here](https://github.com/kelaberetiv/TagUI/issues) and we'll try to reply [within 24 hours](https://youtu.be/gZiTPjpD-gQ).**
 
 **[Download TagUI v6.14](https://tagui.readthedocs.io/en/latest/setup.html)&ensp;|&ensp;[Documentation](https://tagui.readthedocs.io/en/latest/index.html)&ensp;|&ensp;[Demos](https://github.com/aimakerspace/TagUI-Bricks)&ensp;|&ensp;[Samples](https://github.com/kelaberetiv/TagUI/tree/master/flows/samples)&ensp;|&ensp;[Slides](https://drive.google.com/file/d/1pltAMzr0MZsttgg1w2ORH3ontR6Q51W9/view?usp=sharing)&ensp;|&ensp;[Feedback](https://forms.gle/mieY66xTN4NNm5Gq5)&ensp;|&ensp;[Weekly Live Q&A](https://github.com/kelaberetiv/TagUI/issues/914)**
 
