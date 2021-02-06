@@ -10,7 +10,7 @@
 
 Write flows in simple TagUI language and automate your web, mouse and keyboard interactions on the screen.
 
-TagUI is free to use and open-source. It's easy to setup and use, and works on Windows, macOS and Linux. Besides English, flows can also be written in [20 other languages](https://github.com/kelaberetiv/TagUI/tree/master/src/languages), so go ahead and do RPA using your [native language](https://github.com/kelaberetiv/TagUI/blob/master/flows/samples/8_chineseflow.tag).
+TagUI is free and open-source. It's easy to setup and use, and works on Windows, macOS and Linux. Besides English, flows can also be written in [20 other languages](https://github.com/kelaberetiv/TagUI/tree/master/src/languages), so go ahead and do RPA using your [native language](https://github.com/kelaberetiv/TagUI/blob/master/flows/samples/8_chineseflow.tag).
 
 In TagUI language, you use steps like `click` and `type` to interact with identifiers, which include web identifiers, image snapshots, screen coordinates, or even text using OCR. Below is an example to login to Xero accounting:
 
@@ -93,7 +93,7 @@ After v6:
 echo This works! `some_text_variable`
 ```
 
-### if and loop code blocks can use indentation instead of curly braces {}
+### If and loop code blocks can use indentation instead of curly braces {}
 This increases readability and ease of use. Just indent your code within the if and loop code blocks. 
 
 Before v6:

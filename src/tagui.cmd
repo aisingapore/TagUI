@@ -13,7 +13,7 @@ rem enable windows for loop advanced flow control
 setlocal enableextensions enabledelayedexpansion
 
 if "%~1"=="" (
-echo tagui v6.20: use following options and this syntax to run - tagui flow_filename option^(s^)
+echo tagui v6.21: use following options and this syntax to run - tagui flow_filename option^(s^)
 echo.
 echo tagui live     launch TagUI live mode enabled with visual automation for interactive development
 echo input^(s^)       add your own parameter^(s^) to be used in your automation flow as variables p1 to p8
@@ -23,8 +23,6 @@ echo -headless  -h  run on invisible Chrome web browser instead of visible as de
 echo -nobrowser -n  run without any web browser, for example to perform automation only with visual automation
 echo -report    -r  track run result in tagui\src\tagui_report.csv and save html log of automation execution
 echo -quiet     -q  run without output except for explicit output ^(echo, show, check steps and errors etc^)
-echo.
-echo TagUI is a command-line tool for robotic process automation ^(RPA^) by AI Singapore - for info, google tagui
 echo.
 exit /b 1
 )

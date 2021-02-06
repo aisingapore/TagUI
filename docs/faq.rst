@@ -3,7 +3,7 @@ Frequently Asked Questions
 
 How is TagUI licensed?
 -------------------------
-TagUI is open-source software released under the Apache 2.0 license.
+TagUI is a free, open-source, cross-platform software released under the Apache 2.0 license.
 
 
 .. _find-xpath:
