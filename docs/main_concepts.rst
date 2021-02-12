@@ -91,7 +91,7 @@ One of the most common steps is click. You can use it to click on a web element:
 
 This command tells TagUI to try to click on any element which has “Getting started” as its “id”, “name”, “class” or “title” attributes (:ref:`How to find an element’s attributes <element_attributes>`), or as a last resort, has “Getting started” in its text.
 
-This method usually works for targeting what you want, but you can be more explicit by providing an XPath. XPath is a powerful way to choose which web element you want to target. Use it like this:
+This method usually works for targeting what you want, but you can be more explicit by providing an XPath. XPath is a powerful way to choose which web element you want to target. Use it like this (use double quotes for text in the XPath instead of single quotes):
 
 .. code-block:: none
 
@@ -209,7 +209,7 @@ XPath
 
   click //body/div[1]/nav/div/div[1]/a
 
-This matches the :ref:`XPath <find-xpath>` of an element in the web page. It is a more explicit and powerful way of targeting web elements.
+This matches the :ref:`XPath <find-xpath>` of an element in the web page. It is a more explicit and powerful way of targeting web elements. Use double quotes for text in the XPath instead of single quotes.
 
 .. note:: You can use CSS selectors too in place of XPath, but XPath is preferred.
 
