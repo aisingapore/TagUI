@@ -591,7 +591,8 @@ else return " // beg_tx while loop marker\n";}
 
 function end_tx($locator) { // helper function to return ending string for handling locators
 if ($GLOBALS['inside_while_loop'] == 0)
-return "},\nfunction timeout() {this.echo('ERROR - cannot find ".$locator."').exit();});}"."});".end_fi()."\n\n";
+return "},\nfunction timeout() {this.capture('".abs_file(pathinfo($GLOBALS['script'],PATHINFO_FILENAME))."_error.png');".
+"\nthis.echo('ERROR - cannot find ".$locator."').exit(); this.wait(0);});}"."});".end_fi()."\n\n";
 else if ($GLOBALS['inside_code_block']==0)
 {$GLOBALS['inside_while_loop'] = 0; // reset inside_while_loop if not inside block
 $GLOBALS['for_loop_tracker'] = ""; // reset for_loop_tracker if not inside block
@@ -638,8 +639,9 @@ if (!touch('tagui.sikuli/tagui_sikuli.out')) die("ERROR - cannot initialise tagu
 if ($other_actions != '') $other_actions = "\n" . $other_actions;
 return "{techo('".str_replace(' to snap_image()','',$input_intent)."'); var fs = require('fs');\n" .
 "if (!sikuli_step('".$input_intent."')) if (!fs.exists('".$input_params."') && !".$use_ocr.")\n" .
-"this.echo('ERROR - cannot find image file ".$input_params."').exit(); else\n" .
-"this.echo('ERROR - cannot find ".$input_params." on screen').exit(); this.wait(0);" . $other_actions. "}" .
+"{this.echo('ERROR - cannot find image file ".$input_params."').exit(); this.wait(0);} else\n" .
+"{sikuli_step('snap page.png to ".abs_file(pathinfo($GLOBALS['script'],PATHINFO_FILENAME))."_error.png');\n" .
+"this.echo('ERROR - cannot find ".$input_params." on screen').exit(); this.wait(0);}" . $other_actions. "}" .
 end_fi()."});\n\n";}
 
 function call_r($input_intent) { // helper function to use R integration for data analytics and machine learning

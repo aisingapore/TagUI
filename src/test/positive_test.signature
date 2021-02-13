@@ -1883,7 +1883,8 @@ casper.then(function() {for (n=1; n<=5; n++)
 casper.then(function() {{techo('click element');
 casper.waitFor(function check() {return check_tx('element');},
 function then() {this.click(tx('element'));},
-function timeout() {this.echo('ERROR - cannot find element').exit();});}});
+function timeout() {this.capture('/full_path/positive_test_error.png');
+this.echo('ERROR - cannot find element').exit(); this.wait(0);});}});
 
 } // end of code block
 })(n); // end of IIFE pattern, with dummy marker for break step
@@ -1897,7 +1898,8 @@ casper.then(function() {for (n=0; n<=0; n++)
 casper.then(function() {{techo('click element');
 casper.waitFor(function check() {return check_tx('element');},
 function then() {this.click(tx('element'));},
-function timeout() {this.echo('ERROR - cannot find element').exit();});}});
+function timeout() {this.capture('/full_path/positive_test_error.png');
+this.echo('ERROR - cannot find element').exit(); this.wait(0);});}});
 
 } // end of code block
 })(n); // end of IIFE pattern, with dummy marker for break step
@@ -1911,7 +1913,8 @@ casper.then(function() {for (n=6; n<=10; n++)
 casper.then(function() {{techo('click element');
 casper.waitFor(function check() {return check_tx('element');},
 function then() {this.click(tx('element'));},
-function timeout() {this.echo('ERROR - cannot find element').exit();});}});
+function timeout() {this.capture('/full_path/positive_test_error.png');
+this.echo('ERROR - cannot find element').exit(); this.wait(0);});}});
 
 } // end of code block
 })(n); // end of IIFE pattern, with dummy marker for break step
@@ -1960,7 +1963,8 @@ this.echo('test');
 casper.then(function() {{techo('click test');
 casper.waitFor(function check() {return check_tx('test');},
 function then() {this.click(tx('test'));},
-function timeout() {this.echo('ERROR - cannot find test').exit();});}});
+function timeout() {this.capture('/full_path/positive_test_error.png');
+this.echo('ERROR - cannot find test').exit(); this.wait(0);});}});
 
 }
 
@@ -1970,12 +1974,14 @@ function timeout() {this.echo('ERROR - cannot find test').exit();});}});
 casper.then(function() {{techo('click test1');
 casper.waitFor(function check() {return check_tx('test1');},
 function then() {this.click(tx('test1'));},
-function timeout() {this.echo('ERROR - cannot find test1').exit();});}});
+function timeout() {this.capture('/full_path/positive_test_error.png');
+this.echo('ERROR - cannot find test1').exit(); this.wait(0);});}});
 
 casper.then(function() {{techo('click test2');
 casper.waitFor(function check() {return check_tx('test2');},
 function then() {this.click(tx('test2'));},
-function timeout() {this.echo('ERROR - cannot find test2').exit();});}});
+function timeout() {this.capture('/full_path/positive_test_error.png');
+this.echo('ERROR - cannot find test2').exit(); this.wait(0);});}});
 
 casper.then(function() { // start of JS code
 this.echo('test');
@@ -1984,7 +1990,8 @@ this.echo('test');
 casper.then(function() {{techo('click test3');
 casper.waitFor(function check() {return check_tx('test3');},
 function then() {this.click(tx('test3'));},
-function timeout() {this.echo('ERROR - cannot find test3').exit();});}});
+function timeout() {this.capture('/full_path/positive_test_error.png');
+this.echo('ERROR - cannot find test3').exit(); this.wait(0);});}});
 
 }
 
@@ -1997,7 +2004,8 @@ casper.then(function() {for (number=1; number<=5; number++)
 casper.then(function() {{techo('click test');
 casper.waitFor(function check() {return check_tx('test');},
 function then() {this.click(tx('test'));},
-function timeout() {this.echo('ERROR - cannot find test').exit();});}});
+function timeout() {this.capture('/full_path/positive_test_error.png');
+this.echo('ERROR - cannot find test').exit(); this.wait(0);});}});
 
 } // end of code block
 })(number); // end of IIFE pattern, with dummy marker for break step
@@ -2012,12 +2020,14 @@ casper.then(function() {for (number=1; number<=5; number++)
 casper.then(function() {{techo('click test1');
 casper.waitFor(function check() {return check_tx('test1');},
 function then() {this.click(tx('test1'));},
-function timeout() {this.echo('ERROR - cannot find test1').exit();});}});
+function timeout() {this.capture('/full_path/positive_test_error.png');
+this.echo('ERROR - cannot find test1').exit(); this.wait(0);});}});
 
 casper.then(function() {{techo('click test2');
 casper.waitFor(function check() {return check_tx('test2');},
 function then() {this.click(tx('test2'));},
-function timeout() {this.echo('ERROR - cannot find test2').exit();});}});
+function timeout() {this.capture('/full_path/positive_test_error.png');
+this.echo('ERROR - cannot find test2').exit(); this.wait(0);});}});
 
 casper.then(function() { // start of JS code
 this.echo('test');
@@ -2026,7 +2036,8 @@ this.echo('test');
 casper.then(function() {{techo('click test3');
 casper.waitFor(function check() {return check_tx('test3');},
 function then() {this.click(tx('test3'));},
-function timeout() {this.echo('ERROR - cannot find test3').exit();});}});
+function timeout() {this.capture('/full_path/positive_test_error.png');
+this.echo('ERROR - cannot find test3').exit(); this.wait(0);});}});
 
 } // end of code block
 })(number); // end of IIFE pattern, with dummy marker for break step
@@ -2123,7 +2134,8 @@ casper.withPopup(/about/, function() {
 casper.then(function() {{techo('click test');
 casper.waitFor(function check() {return check_tx('test');},
 function then() {this.click(tx('test'));},
-function timeout() {this.echo('ERROR - cannot find test').exit();});}});
+function timeout() {this.capture('/full_path/positive_test_error.png');
+this.echo('ERROR - cannot find test').exit(); this.wait(0);});}});
 
 } // end of code block
 });
@@ -2137,12 +2149,14 @@ casper.withPopup(/about/, function() {
 casper.then(function() {{techo('click test1');
 casper.waitFor(function check() {return check_tx('test1');},
 function then() {this.click(tx('test1'));},
-function timeout() {this.echo('ERROR - cannot find test1').exit();});}});
+function timeout() {this.capture('/full_path/positive_test_error.png');
+this.echo('ERROR - cannot find test1').exit(); this.wait(0);});}});
 
 casper.then(function() {{techo('click test2');
 casper.waitFor(function check() {return check_tx('test2');},
 function then() {this.click(tx('test2'));},
-function timeout() {this.echo('ERROR - cannot find test2').exit();});}});
+function timeout() {this.capture('/full_path/positive_test_error.png');
+this.echo('ERROR - cannot find test2').exit(); this.wait(0);});}});
 
 casper.then(function() { // start of JS code
 this.echo('test');
@@ -2151,7 +2165,8 @@ this.echo('test');
 casper.then(function() {{techo('click test3');
 casper.waitFor(function check() {return check_tx('test3');},
 function then() {this.click(tx('test3'));},
-function timeout() {this.echo('ERROR - cannot find test3').exit();});}});
+function timeout() {this.capture('/full_path/positive_test_error.png');
+this.echo('ERROR - cannot find test3').exit(); this.wait(0);});}});
 
 } // end of code block
 });
@@ -2164,7 +2179,8 @@ casper.withFrame('about', function() {
 casper.then(function() {{techo('click test');
 casper.waitFor(function check() {return check_tx('test');},
 function then() {this.click(tx('test'));},
-function timeout() {this.echo('ERROR - cannot find test').exit();});}});
+function timeout() {this.capture('/full_path/positive_test_error.png');
+this.echo('ERROR - cannot find test').exit(); this.wait(0);});}});
 
 } // end of code block
 });
@@ -2176,12 +2192,14 @@ casper.withFrame('about', function() {
 casper.then(function() {{techo('click test1');
 casper.waitFor(function check() {return check_tx('test1');},
 function then() {this.click(tx('test1'));},
-function timeout() {this.echo('ERROR - cannot find test1').exit();});}});
+function timeout() {this.capture('/full_path/positive_test_error.png');
+this.echo('ERROR - cannot find test1').exit(); this.wait(0);});}});
 
 casper.then(function() {{techo('click test2');
 casper.waitFor(function check() {return check_tx('test2');},
 function then() {this.click(tx('test2'));},
-function timeout() {this.echo('ERROR - cannot find test2').exit();});}});
+function timeout() {this.capture('/full_path/positive_test_error.png');
+this.echo('ERROR - cannot find test2').exit(); this.wait(0);});}});
 
 casper.then(function() { // start of JS code
 this.echo('test');
@@ -2190,7 +2208,8 @@ this.echo('test');
 casper.then(function() {{techo('click test3');
 casper.waitFor(function check() {return check_tx('test3');},
 function then() {this.click(tx('test3'));},
-function timeout() {this.echo('ERROR - cannot find test3').exit();});}});
+function timeout() {this.capture('/full_path/positive_test_error.png');
+this.echo('ERROR - cannot find test3').exit(); this.wait(0);});}});
 
 } // end of code block
 });
@@ -2202,7 +2221,8 @@ casper.withFrame('about', function() {casper.withFrame('detail', function() {
 casper.then(function() {{techo('click test');
 casper.waitFor(function check() {return check_tx('test');},
 function then() {this.click(tx('test'));},
-function timeout() {this.echo('ERROR - cannot find test').exit();});}});
+function timeout() {this.capture('/full_path/positive_test_error.png');
+this.echo('ERROR - cannot find test').exit(); this.wait(0);});}});
 
 } // end of code block
 });});
@@ -2214,12 +2234,14 @@ casper.withFrame('about', function() {casper.withFrame('detail', function() {
 casper.then(function() {{techo('click test1');
 casper.waitFor(function check() {return check_tx('test1');},
 function then() {this.click(tx('test1'));},
-function timeout() {this.echo('ERROR - cannot find test1').exit();});}});
+function timeout() {this.capture('/full_path/positive_test_error.png');
+this.echo('ERROR - cannot find test1').exit(); this.wait(0);});}});
 
 casper.then(function() {{techo('click test2');
 casper.waitFor(function check() {return check_tx('test2');},
 function then() {this.click(tx('test2'));},
-function timeout() {this.echo('ERROR - cannot find test2').exit();});}});
+function timeout() {this.capture('/full_path/positive_test_error.png');
+this.echo('ERROR - cannot find test2').exit(); this.wait(0);});}});
 
 casper.then(function() { // start of JS code
 this.echo('test');
@@ -2228,7 +2250,8 @@ this.echo('test');
 casper.then(function() {{techo('click test3');
 casper.waitFor(function check() {return check_tx('test3');},
 function then() {this.click(tx('test3'));},
-function timeout() {this.echo('ERROR - cannot find test3').exit();});}});
+function timeout() {this.capture('/full_path/positive_test_error.png');
+this.echo('ERROR - cannot find test3').exit(); this.wait(0);});}});
 
 } // end of code block
 });});
@@ -2247,109 +2270,130 @@ casper.then(function() {this.echo('TRUE');});
 casper.then(function() {{techo('tap element');
 casper.waitFor(function check() {return check_tx('element');},
 function then() {this.click(tx('element'));},
-function timeout() {this.echo('ERROR - cannot find element').exit();});}});
+function timeout() {this.capture('/full_path/positive_test_error.png');
+this.echo('ERROR - cannot find element').exit(); this.wait(0);});}});
 
 casper.then(function() {{techo('click element');
 casper.waitFor(function check() {return check_tx('element');},
 function then() {this.click(tx('element'));},
-function timeout() {this.echo('ERROR - cannot find element').exit();});}});
+function timeout() {this.capture('/full_path/positive_test_error.png');
+this.echo('ERROR - cannot find element').exit(); this.wait(0);});}});
 
 casper.then(function() {{techo('tap /full_path/button.png'); var fs = require('fs');
 if (!sikuli_step('tap /full_path/button.png')) if (!fs.exists('/full_path/button.png') && !false)
-this.echo('ERROR - cannot find image file /full_path/button.png').exit(); else
-this.echo('ERROR - cannot find /full_path/button.png on screen').exit(); this.wait(0);}});
+{this.echo('ERROR - cannot find image file /full_path/button.png').exit(); this.wait(0);} else
+{sikuli_step('snap page.png to /full_path/positive_test_error.png');
+this.echo('ERROR - cannot find /full_path/button.png on screen').exit(); this.wait(0);}}});
 
 casper.then(function() {{techo('click /full_path/button.bmp'); var fs = require('fs');
 if (!sikuli_step('click /full_path/button.bmp')) if (!fs.exists('/full_path/button.bmp') && !false)
-this.echo('ERROR - cannot find image file /full_path/button.bmp').exit(); else
-this.echo('ERROR - cannot find /full_path/button.bmp on screen').exit(); this.wait(0);}});
+{this.echo('ERROR - cannot find image file /full_path/button.bmp').exit(); this.wait(0);} else
+{sikuli_step('snap page.png to /full_path/positive_test_error.png');
+this.echo('ERROR - cannot find /full_path/button.bmp on screen').exit(); this.wait(0);}}});
 
 casper.then(function() {{techo('tap (100,200)'); var fs = require('fs');
 if (!sikuli_step('tap (100,200)')) if (!fs.exists('(100,200)') && !false)
-this.echo('ERROR - cannot find image file (100,200)').exit(); else
-this.echo('ERROR - cannot find (100,200) on screen').exit(); this.wait(0);}});
+{this.echo('ERROR - cannot find image file (100,200)').exit(); this.wait(0);} else
+{sikuli_step('snap page.png to /full_path/positive_test_error.png');
+this.echo('ERROR - cannot find (100,200) on screen').exit(); this.wait(0);}}});
 
 casper.then(function() {{techo('click (200,400)'); var fs = require('fs');
 if (!sikuli_step('click (200,400)')) if (!fs.exists('(200,400)') && !false)
-this.echo('ERROR - cannot find image file (200,400)').exit(); else
-this.echo('ERROR - cannot find (200,400) on screen').exit(); this.wait(0);}});
+{this.echo('ERROR - cannot find image file (200,400)').exit(); this.wait(0);} else
+{sikuli_step('snap page.png to /full_path/positive_test_error.png');
+this.echo('ERROR - cannot find (200,400) on screen').exit(); this.wait(0);}}});
 
 casper.then(function() {{techo('click some text using ocr'); var fs = require('fs');
 if (!sikuli_step('click some text using ocr')) if (!fs.exists('some text using ocr') && !true)
-this.echo('ERROR - cannot find image file some text using ocr').exit(); else
-this.echo('ERROR - cannot find some text using ocr on screen').exit(); this.wait(0);}});
+{this.echo('ERROR - cannot find image file some text using ocr').exit(); this.wait(0);} else
+{sikuli_step('snap page.png to /full_path/positive_test_error.png');
+this.echo('ERROR - cannot find some text using ocr on screen').exit(); this.wait(0);}}});
 
 // test hover / move (including sikuli visual automation)
 casper.then(function() {{techo('hover element');
 casper.waitFor(function check() {return check_tx('element');},
 function then() {this.mouse.move(tx('element'));},
-function timeout() {this.echo('ERROR - cannot find element').exit();});}});
+function timeout() {this.capture('/full_path/positive_test_error.png');
+this.echo('ERROR - cannot find element').exit(); this.wait(0);});}});
 
 casper.then(function() {{techo('move element');
 casper.waitFor(function check() {return check_tx('element');},
 function then() {this.mouse.move(tx('element'));},
-function timeout() {this.echo('ERROR - cannot find element').exit();});}});
+function timeout() {this.capture('/full_path/positive_test_error.png');
+this.echo('ERROR - cannot find element').exit(); this.wait(0);});}});
 
 casper.then(function() {{techo('hover /full_path/button.png'); var fs = require('fs');
 if (!sikuli_step('hover /full_path/button.png')) if (!fs.exists('/full_path/button.png') && !false)
-this.echo('ERROR - cannot find image file /full_path/button.png').exit(); else
-this.echo('ERROR - cannot find /full_path/button.png on screen').exit(); this.wait(0);}});
+{this.echo('ERROR - cannot find image file /full_path/button.png').exit(); this.wait(0);} else
+{sikuli_step('snap page.png to /full_path/positive_test_error.png');
+this.echo('ERROR - cannot find /full_path/button.png on screen').exit(); this.wait(0);}}});
 
 casper.then(function() {{techo('move /full_path/button.bmp'); var fs = require('fs');
 if (!sikuli_step('move /full_path/button.bmp')) if (!fs.exists('/full_path/button.bmp') && !false)
-this.echo('ERROR - cannot find image file /full_path/button.bmp').exit(); else
-this.echo('ERROR - cannot find /full_path/button.bmp on screen').exit(); this.wait(0);}});
+{this.echo('ERROR - cannot find image file /full_path/button.bmp').exit(); this.wait(0);} else
+{sikuli_step('snap page.png to /full_path/positive_test_error.png');
+this.echo('ERROR - cannot find /full_path/button.bmp on screen').exit(); this.wait(0);}}});
 
 casper.then(function() {{techo('hover (100,200)'); var fs = require('fs');
 if (!sikuli_step('hover (100,200)')) if (!fs.exists('(100,200)') && !false)
-this.echo('ERROR - cannot find image file (100,200)').exit(); else
-this.echo('ERROR - cannot find (100,200) on screen').exit(); this.wait(0);}});
+{this.echo('ERROR - cannot find image file (100,200)').exit(); this.wait(0);} else
+{sikuli_step('snap page.png to /full_path/positive_test_error.png');
+this.echo('ERROR - cannot find (100,200) on screen').exit(); this.wait(0);}}});
 
 casper.then(function() {{techo('move (200,400)'); var fs = require('fs');
 if (!sikuli_step('move (200,400)')) if (!fs.exists('(200,400)') && !false)
-this.echo('ERROR - cannot find image file (200,400)').exit(); else
-this.echo('ERROR - cannot find (200,400) on screen').exit(); this.wait(0);}});
+{this.echo('ERROR - cannot find image file (200,400)').exit(); this.wait(0);} else
+{sikuli_step('snap page.png to /full_path/positive_test_error.png');
+this.echo('ERROR - cannot find (200,400) on screen').exit(); this.wait(0);}}});
 
 casper.then(function() {{techo('hover some text using ocr'); var fs = require('fs');
 if (!sikuli_step('hover some text using ocr')) if (!fs.exists('some text using ocr') && !true)
-this.echo('ERROR - cannot find image file some text using ocr').exit(); else
-this.echo('ERROR - cannot find some text using ocr on screen').exit(); this.wait(0);}});
+{this.echo('ERROR - cannot find image file some text using ocr').exit(); this.wait(0);} else
+{sikuli_step('snap page.png to /full_path/positive_test_error.png');
+this.echo('ERROR - cannot find some text using ocr on screen').exit(); this.wait(0);}}});
 
 // test type / enter (including sikuli visual automation)
 casper.then(function() {{techo('type element as some text');
 casper.waitFor(function check() {return check_tx('element');},
 function then() {this.sendKeys(tx('element'),'some text');},
-function timeout() {this.echo('ERROR - cannot find element').exit();});}});
+function timeout() {this.capture('/full_path/positive_test_error.png');
+this.echo('ERROR - cannot find element').exit(); this.wait(0);});}});
 
 casper.then(function() {{techo('enter element as some text');
 casper.waitFor(function check() {return check_tx('element');},
 function then() {this.sendKeys(tx('element'),'some text');},
-function timeout() {this.echo('ERROR - cannot find element').exit();});}});
+function timeout() {this.capture('/full_path/positive_test_error.png');
+this.echo('ERROR - cannot find element').exit(); this.wait(0);});}});
 
 casper.then(function() {{techo('type /full_path/textbox.png as some text'); var fs = require('fs');
 if (!sikuli_step('type /full_path/textbox.png as some text')) if (!fs.exists('/full_path/textbox.png') && !false)
-this.echo('ERROR - cannot find image file /full_path/textbox.png').exit(); else
-this.echo('ERROR - cannot find /full_path/textbox.png on screen').exit(); this.wait(0);}});
+{this.echo('ERROR - cannot find image file /full_path/textbox.png').exit(); this.wait(0);} else
+{sikuli_step('snap page.png to /full_path/positive_test_error.png');
+this.echo('ERROR - cannot find /full_path/textbox.png on screen').exit(); this.wait(0);}}});
 
 casper.then(function() {{techo('enter /full_path/textbox.bmp as some text'); var fs = require('fs');
 if (!sikuli_step('enter /full_path/textbox.bmp as some text')) if (!fs.exists('/full_path/textbox.bmp') && !false)
-this.echo('ERROR - cannot find image file /full_path/textbox.bmp').exit(); else
-this.echo('ERROR - cannot find /full_path/textbox.bmp on screen').exit(); this.wait(0);}});
+{this.echo('ERROR - cannot find image file /full_path/textbox.bmp').exit(); this.wait(0);} else
+{sikuli_step('snap page.png to /full_path/positive_test_error.png');
+this.echo('ERROR - cannot find /full_path/textbox.bmp on screen').exit(); this.wait(0);}}});
 
 casper.then(function() {{techo('type (100,200) as some text'); var fs = require('fs');
 if (!sikuli_step('type (100,200) as some text')) if (!fs.exists('(100,200)') && !false)
-this.echo('ERROR - cannot find image file (100,200)').exit(); else
-this.echo('ERROR - cannot find (100,200) on screen').exit(); this.wait(0);}});
+{this.echo('ERROR - cannot find image file (100,200)').exit(); this.wait(0);} else
+{sikuli_step('snap page.png to /full_path/positive_test_error.png');
+this.echo('ERROR - cannot find (100,200) on screen').exit(); this.wait(0);}}});
 
 casper.then(function() {{techo('enter (200,400) as some text'); var fs = require('fs');
 if (!sikuli_step('enter (200,400) as some text')) if (!fs.exists('(200,400)') && !false)
-this.echo('ERROR - cannot find image file (200,400)').exit(); else
-this.echo('ERROR - cannot find (200,400) on screen').exit(); this.wait(0);}});
+{this.echo('ERROR - cannot find image file (200,400)').exit(); this.wait(0);} else
+{sikuli_step('snap page.png to /full_path/positive_test_error.png');
+this.echo('ERROR - cannot find (200,400) on screen').exit(); this.wait(0);}}});
 
 casper.then(function() {{techo('type some element text as some text using ocr');
 casper.waitFor(function check() {return check_tx('some element text');},
 function then() {this.sendKeys(tx('some element text'),'some text using ocr');},
-function timeout() {this.echo('ERROR - cannot find some element text').exit();});}});
+function timeout() {this.capture('/full_path/positive_test_error.png');
+this.echo('ERROR - cannot find some element text').exit(); this.wait(0);});}});
 
 // test type / enter for [enter] and [clear] keywords
 casper.then(function() {{techo('type element as some text[enter]');
@@ -2357,26 +2401,30 @@ casper.waitFor(function check() {return check_tx('element');},
 function then() {this.sendKeys(tx('element'),'some text',{keepFocus: true});
 this.sendKeys(tx('element'),casper.page.event.key.Enter,{keepFocus: true});
 this.sendKeys(tx('element'),'',{keepFocus: true});},
-function timeout() {this.echo('ERROR - cannot find element').exit();});}});
+function timeout() {this.capture('/full_path/positive_test_error.png');
+this.echo('ERROR - cannot find element').exit(); this.wait(0);});}});
 
 casper.then(function() {{techo('enter element as some text[enter]');
 casper.waitFor(function check() {return check_tx('element');},
 function then() {this.sendKeys(tx('element'),'some text',{keepFocus: true});
 this.sendKeys(tx('element'),casper.page.event.key.Enter,{keepFocus: true});
 this.sendKeys(tx('element'),'',{keepFocus: true});},
-function timeout() {this.echo('ERROR - cannot find element').exit();});}});
+function timeout() {this.capture('/full_path/positive_test_error.png');
+this.echo('ERROR - cannot find element').exit(); this.wait(0);});}});
 
 casper.then(function() {{techo('type element as [clear]');
 casper.waitFor(function check() {return check_tx('element');},
 function then() {this.sendKeys(tx('element'),'',{reset: true});
 this.sendKeys(tx('element'),'');},
-function timeout() {this.echo('ERROR - cannot find element').exit();});}});
+function timeout() {this.capture('/full_path/positive_test_error.png');
+this.echo('ERROR - cannot find element').exit(); this.wait(0);});}});
 
 casper.then(function() {{techo('enter element as [clear]');
 casper.waitFor(function check() {return check_tx('element');},
 function then() {this.sendKeys(tx('element'),'',{reset: true});
 this.sendKeys(tx('element'),'');},
-function timeout() {this.echo('ERROR - cannot find element').exit();});}});
+function timeout() {this.capture('/full_path/positive_test_error.png');
+this.echo('ERROR - cannot find element').exit(); this.wait(0);});}});
 
 casper.then(function() {{techo('type element as [clear]some text[enter]');
 casper.waitFor(function check() {return check_tx('element');},
@@ -2384,7 +2432,8 @@ function then() {this.sendKeys(tx('element'),'',{reset: true});
 this.sendKeys(tx('element'),'some text',{keepFocus: true});
 this.sendKeys(tx('element'),casper.page.event.key.Enter,{keepFocus: true});
 this.sendKeys(tx('element'),'',{keepFocus: true});},
-function timeout() {this.echo('ERROR - cannot find element').exit();});}});
+function timeout() {this.capture('/full_path/positive_test_error.png');
+this.echo('ERROR - cannot find element').exit(); this.wait(0);});}});
 
 casper.then(function() {{techo('enter element as [clear]some text[enter]');
 casper.waitFor(function check() {return check_tx('element');},
@@ -2392,7 +2441,8 @@ function then() {this.sendKeys(tx('element'),'',{reset: true});
 this.sendKeys(tx('element'),'some text',{keepFocus: true});
 this.sendKeys(tx('element'),casper.page.event.key.Enter,{keepFocus: true});
 this.sendKeys(tx('element'),'',{keepFocus: true});},
-function timeout() {this.echo('ERROR - cannot find element').exit();});}});
+function timeout() {this.capture('/full_path/positive_test_error.png');
+this.echo('ERROR - cannot find element').exit(); this.wait(0);});}});
 
 // test select / enter (including sikuli visual automation)
 casper.then(function() {{techo('select element as option');
@@ -2401,7 +2451,8 @@ function then() {var select_locator = tx('element');
 if (is_xpath_selector(select_locator.toString().replace('xpath selector: ','')))
 select_locator = select_locator.toString().substring(16);
 this.selectOptionByValue(select_locator,'option');},
-function timeout() {this.echo('ERROR - cannot find element').exit();});}});
+function timeout() {this.capture('/full_path/positive_test_error.png');
+this.echo('ERROR - cannot find element').exit(); this.wait(0);});}});
 
 casper.then(function() {{techo('choose element as option');
 casper.waitFor(function check() {return check_tx('element');},
@@ -2409,38 +2460,45 @@ function then() {var select_locator = tx('element');
 if (is_xpath_selector(select_locator.toString().replace('xpath selector: ','')))
 select_locator = select_locator.toString().substring(16);
 this.selectOptionByValue(select_locator,'option');},
-function timeout() {this.echo('ERROR - cannot find element').exit();});}});
+function timeout() {this.capture('/full_path/positive_test_error.png');
+this.echo('ERROR - cannot find element').exit(); this.wait(0);});}});
 
 casper.then(function() {{techo('select /full_path/option_list.png as /full_path/option_item.bmp'); var fs = require('fs');
 if (!sikuli_step('select /full_path/option_list.png as /full_path/option_item.bmp')) if (!fs.exists('/full_path/option_list.png') && !false)
-this.echo('ERROR - cannot find image file /full_path/option_list.png').exit(); else
-this.echo('ERROR - cannot find /full_path/option_list.png on screen').exit(); this.wait(0);}});
+{this.echo('ERROR - cannot find image file /full_path/option_list.png').exit(); this.wait(0);} else
+{sikuli_step('snap page.png to /full_path/positive_test_error.png');
+this.echo('ERROR - cannot find /full_path/option_list.png on screen').exit(); this.wait(0);}}});
 
 casper.then(function() {{techo('choose /full_path/option_list.bmp as /full_path/option_item.png'); var fs = require('fs');
 if (!sikuli_step('choose /full_path/option_list.bmp as /full_path/option_item.png')) if (!fs.exists('/full_path/option_list.bmp') && !false)
-this.echo('ERROR - cannot find image file /full_path/option_list.bmp').exit(); else
-this.echo('ERROR - cannot find /full_path/option_list.bmp on screen').exit(); this.wait(0);}});
+{this.echo('ERROR - cannot find image file /full_path/option_list.bmp').exit(); this.wait(0);} else
+{sikuli_step('snap page.png to /full_path/positive_test_error.png');
+this.echo('ERROR - cannot find /full_path/option_list.bmp on screen').exit(); this.wait(0);}}});
 
 casper.then(function() {{techo('select (100,200) as (200,400)'); var fs = require('fs');
 if (!sikuli_step('select (100,200) as (200,400)')) if (!fs.exists('(100,200)') && !false)
-this.echo('ERROR - cannot find image file (100,200)').exit(); else
-this.echo('ERROR - cannot find (100,200) on screen').exit(); this.wait(0);}});
+{this.echo('ERROR - cannot find image file (100,200)').exit(); this.wait(0);} else
+{sikuli_step('snap page.png to /full_path/positive_test_error.png');
+this.echo('ERROR - cannot find (100,200) on screen').exit(); this.wait(0);}}});
 
 casper.then(function() {{techo('choose /full_path/textbox.bmp as (200,400)'); var fs = require('fs');
 if (!sikuli_step('choose /full_path/textbox.bmp as (200,400)')) if (!fs.exists('/full_path/textbox.bmp') && !false)
-this.echo('ERROR - cannot find image file /full_path/textbox.bmp').exit(); else
-this.echo('ERROR - cannot find /full_path/textbox.bmp on screen').exit(); this.wait(0);}});
+{this.echo('ERROR - cannot find image file /full_path/textbox.bmp').exit(); this.wait(0);} else
+{sikuli_step('snap page.png to /full_path/positive_test_error.png');
+this.echo('ERROR - cannot find /full_path/textbox.bmp on screen').exit(); this.wait(0);}}});
 
 casper.then(function() {{techo('select (100,200) as /full_path/sometext.png'); var fs = require('fs');
 if (!sikuli_step('select (100,200) as /full_path/sometext.png')) if (!fs.exists('(100,200)') && !false)
-this.echo('ERROR - cannot find image file (100,200)').exit(); else
-this.echo('ERROR - cannot find (100,200) on screen').exit(); this.wait(0);}});
+{this.echo('ERROR - cannot find image file (100,200)').exit(); this.wait(0);} else
+{sikuli_step('snap page.png to /full_path/positive_test_error.png');
+this.echo('ERROR - cannot find (100,200) on screen').exit(); this.wait(0);}}});
 
 // test read / fetch
 casper.then(function() {{techo('read element to variable');
 casper.waitFor(function check() {return check_tx('element');},
 function then() {variable = this.fetchText(tx('element')).trim();},
-function timeout() {this.echo('ERROR - cannot find element').exit();});}});
+function timeout() {this.capture('/full_path/positive_test_error.png');
+this.echo('ERROR - cannot find element').exit(); this.wait(0);});}});
 
 casper.then(function() {{techo('read page to variable');
 variable = this.getHTML();}});
@@ -2448,7 +2506,8 @@ variable = this.getHTML();}});
 casper.then(function() {{techo('fetch element to variable');
 casper.waitFor(function check() {return check_tx('element');},
 function then() {variable = this.fetchText(tx('element')).trim();},
-function timeout() {this.echo('ERROR - cannot find element').exit();});}});
+function timeout() {this.capture('/full_path/positive_test_error.png');
+this.echo('ERROR - cannot find element').exit(); this.wait(0);});}});
 
 casper.then(function() {{techo('fetch page to variable');
 variable = this.getHTML();}});
@@ -2457,14 +2516,16 @@ variable = this.getHTML();}});
 casper.then(function() {{techo('show element');
 casper.waitFor(function check() {return check_tx('element');},
 function then() {this.echo(this.fetchText(tx('element')).trim());},
-function timeout() {this.echo('ERROR - cannot find element').exit();});}});
+function timeout() {this.capture('/full_path/positive_test_error.png');
+this.echo('ERROR - cannot find element').exit(); this.wait(0);});}});
 
 casper.then(function() {this.echo('show page' + ' - \n' + this.getHTML());});
 
 casper.then(function() {{techo('print element');
 casper.waitFor(function check() {return check_tx('element');},
 function then() {this.echo(this.fetchText(tx('element')).trim());},
-function timeout() {this.echo('ERROR - cannot find element').exit();});}});
+function timeout() {this.capture('/full_path/positive_test_error.png');
+this.echo('ERROR - cannot find element').exit(); this.wait(0);});}});
 
 casper.then(function() {this.echo('print page' + ' - \n' + this.getHTML());});
 
@@ -2472,42 +2533,50 @@ casper.then(function() {this.echo('print page' + ' - \n' + this.getHTML());});
 casper.then(function() {{techo('save element');
 casper.waitFor(function check() {return check_tx('element');},
 function then() {save_text('',this.fetchText(tx('element')).trim());},
-function timeout() {this.echo('ERROR - cannot find element').exit();});}});
+function timeout() {this.capture('/full_path/positive_test_error.png');
+this.echo('ERROR - cannot find element').exit(); this.wait(0);});}});
 
 casper.then(function() {{techo('save element to filename.txt');
 casper.waitFor(function check() {return check_tx('element');},
 function then() {save_text('/full_path/filename.txt',this.fetchText(tx('element')).trim());},
-function timeout() {this.echo('ERROR - cannot find element').exit();});}});
+function timeout() {this.capture('/full_path/positive_test_error.png');
+this.echo('ERROR - cannot find element').exit(); this.wait(0);});}});
 
 casper.then(function() {{techo('save element to tmp/filename.txt');
 casper.waitFor(function check() {return check_tx('element');},
 function then() {save_text('/full_path/tmp/filename.txt',this.fetchText(tx('element')).trim());},
-function timeout() {this.echo('ERROR - cannot find element').exit();});}});
+function timeout() {this.capture('/full_path/positive_test_error.png');
+this.echo('ERROR - cannot find element').exit(); this.wait(0);});}});
 
 casper.then(function() {{techo('save element to /tmp/filename.txt');
 casper.waitFor(function check() {return check_tx('element');},
 function then() {save_text('/tmp/filename.txt',this.fetchText(tx('element')).trim());},
-function timeout() {this.echo('ERROR - cannot find element').exit();});}});
+function timeout() {this.capture('/full_path/positive_test_error.png');
+this.echo('ERROR - cannot find element').exit(); this.wait(0);});}});
 
 casper.then(function() {{techo('save element to ./tmp/filename.txt');
 casper.waitFor(function check() {return check_tx('element');},
 function then() {save_text('/full_path/./tmp/filename.txt',this.fetchText(tx('element')).trim());},
-function timeout() {this.echo('ERROR - cannot find element').exit();});}});
+function timeout() {this.capture('/full_path/positive_test_error.png');
+this.echo('ERROR - cannot find element').exit(); this.wait(0);});}});
 
 casper.then(function() {{techo('save element to tmp\filename.txt');
 casper.waitFor(function check() {return check_tx('element');},
 function then() {save_text('/full_path/tmp/filename.txt',this.fetchText(tx('element')).trim());},
-function timeout() {this.echo('ERROR - cannot find element').exit();});}});
+function timeout() {this.capture('/full_path/positive_test_error.png');
+this.echo('ERROR - cannot find element').exit(); this.wait(0);});}});
 
 casper.then(function() {{techo('save element to c:\tmp\filename.txt');
 casper.waitFor(function check() {return check_tx('element');},
 function then() {save_text('c:/tmp/filename.txt',this.fetchText(tx('element')).trim());},
-function timeout() {this.echo('ERROR - cannot find element').exit();});}});
+function timeout() {this.capture('/full_path/positive_test_error.png');
+this.echo('ERROR - cannot find element').exit(); this.wait(0);});}});
 
 casper.then(function() {{techo('save element to .\tmp\filename.txt');
 casper.waitFor(function check() {return check_tx('element');},
 function then() {save_text('/full_path/./tmp/filename.txt',this.fetchText(tx('element')).trim());},
-function timeout() {this.echo('ERROR - cannot find element').exit();});}});
+function timeout() {this.capture('/full_path/positive_test_error.png');
+this.echo('ERROR - cannot find element').exit(); this.wait(0);});}});
 
 casper.then(function() {{techo('save page');
 save_text('',this.getHTML());}});
@@ -2569,22 +2638,26 @@ append_text('/full_path/filename.txt','ijk');}});
 casper.then(function() {{techo('snap element');
 casper.waitFor(function check() {return check_tx('element');},
 function then() {this.captureSelector(snap_image(),tx('element'));},
-function timeout() {this.echo('ERROR - cannot find element').exit();});}});
+function timeout() {this.capture('/full_path/positive_test_error.png');
+this.echo('ERROR - cannot find element').exit(); this.wait(0);});}});
 
 casper.then(function() {{techo('snap element to filename.png');
 casper.waitFor(function check() {return check_tx('element');},
 function then() {this.captureSelector('/full_path/filename.png',tx('element'));},
-function timeout() {this.echo('ERROR - cannot find element').exit();});}});
+function timeout() {this.capture('/full_path/positive_test_error.png');
+this.echo('ERROR - cannot find element').exit(); this.wait(0);});}});
 
 casper.then(function() {{techo('snap element to /tmp/filename.png');
 casper.waitFor(function check() {return check_tx('element');},
 function then() {this.captureSelector('/tmp/filename.png',tx('element'));},
-function timeout() {this.echo('ERROR - cannot find element').exit();});}});
+function timeout() {this.capture('/full_path/positive_test_error.png');
+this.echo('ERROR - cannot find element').exit(); this.wait(0);});}});
 
 casper.then(function() {{techo('snap element to document.pdf');
 casper.waitFor(function check() {return check_tx('element');},
 function then() {this.captureSelector('/full_path/document.pdf',tx('element'));},
-function timeout() {this.echo('ERROR - cannot find element').exit();});}});
+function timeout() {this.capture('/full_path/positive_test_error.png');
+this.echo('ERROR - cannot find element').exit(); this.wait(0);});}});
 
 casper.then(function() {{techo('snap page');
 this.capture(snap_image());}});
@@ -2602,22 +2675,26 @@ this.capture('/full_path/document.pdf');}});
 casper.then(function() {{techo('table element');
 casper.waitFor(function check() {return check_tx('element');},
 function then() {save_table('',tx('element'));},
-function timeout() {this.echo('ERROR - cannot find element').exit();});}});
+function timeout() {this.capture('/full_path/positive_test_error.png');
+this.echo('ERROR - cannot find element').exit(); this.wait(0);});}});
 
 casper.then(function() {{techo('table element to filename.csv');
 casper.waitFor(function check() {return check_tx('element');},
 function then() {save_table('/full_path/filename.csv',tx('element'));},
-function timeout() {this.echo('ERROR - cannot find element').exit();});}});
+function timeout() {this.capture('/full_path/positive_test_error.png');
+this.echo('ERROR - cannot find element').exit(); this.wait(0);});}});
 
 casper.then(function() {{techo('table (//table)[7]');
 casper.waitFor(function check() {return check_tx('(//table)[7]');},
 function then() {save_table('',tx('(//table)[7]'));},
-function timeout() {this.echo('ERROR - cannot find (//table)[7]').exit();});}});
+function timeout() {this.capture('/full_path/positive_test_error.png');
+this.echo('ERROR - cannot find (//table)[7]').exit(); this.wait(0);});}});
 
 casper.then(function() {{techo('table (//table)[7] to filename.csv');
 casper.waitFor(function check() {return check_tx('(//table)[7]');},
 function then() {save_table('/full_path/filename.csv',tx('(//table)[7]'));},
-function timeout() {this.echo('ERROR - cannot find (//table)[7]').exit();});}});
+function timeout() {this.capture('/full_path/positive_test_error.png');
+this.echo('ERROR - cannot find (//table)[7]').exit(); this.wait(0);});}});
 
 // test tagui
 // can't really test as folders and files structure won't be the same
@@ -2632,12 +2709,14 @@ function timeout() {this.echo('ERROR - cannot find (//table)[7]').exit();});}});
 casper.then(function() {{techo('upload #css_selector as abc.png');
 casper.waitFor(function check() {return check_tx('#css_selector');},
 function then() {this.page.uploadFile(tx('#css_selector'),'/full_path/abc.png');},
-function timeout() {this.echo('ERROR - cannot find #css_selector').exit();});}});
+function timeout() {this.capture('/full_path/positive_test_error.png');
+this.echo('ERROR - cannot find #css_selector').exit(); this.wait(0);});}});
 
 casper.then(function() {{techo('upload #css_selector as /tmp/abc.png');
 casper.waitFor(function check() {return check_tx('#css_selector');},
 function then() {this.page.uploadFile(tx('#css_selector'),'/tmp/abc.png');},
-function timeout() {this.echo('ERROR - cannot find #css_selector').exit();});}});
+function timeout() {this.capture('/full_path/positive_test_error.png');
+this.echo('ERROR - cannot find #css_selector').exit(); this.wait(0);});}});
 
 // test download
 casper.then(function() {{techo('download http://www.dummytestsite.com/report/month.txt to filename.txt');
@@ -2705,79 +2784,94 @@ catch(e) {this.echo('ERROR - ' + e.message.charAt(0).toLowerCase() + e.message.s
 // test keyboard
 casper.then(function() {{techo('keyboard ls -lrt[enter]'); var fs = require('fs');
 if (!sikuli_step('keyboard ls -lrt[enter]')) if (!fs.exists('ls -lrt[enter]') && !false)
-this.echo('ERROR - cannot find image file ls -lrt[enter]').exit(); else
-this.echo('ERROR - cannot find ls -lrt[enter] on screen').exit(); this.wait(0);}});
+{this.echo('ERROR - cannot find image file ls -lrt[enter]').exit(); this.wait(0);} else
+{sikuli_step('snap page.png to /full_path/positive_test_error.png');
+this.echo('ERROR - cannot find ls -lrt[enter] on screen').exit(); this.wait(0);}}});
 
 casper.then(function() {{techo('keyboard ls -lrt[ENTER]'); var fs = require('fs');
 if (!sikuli_step('keyboard ls -lrt[ENTER]')) if (!fs.exists('ls -lrt[ENTER]') && !false)
-this.echo('ERROR - cannot find image file ls -lrt[ENTER]').exit(); else
-this.echo('ERROR - cannot find ls -lrt[ENTER] on screen').exit(); this.wait(0);}});
+{this.echo('ERROR - cannot find image file ls -lrt[ENTER]').exit(); this.wait(0);} else
+{sikuli_step('snap page.png to /full_path/positive_test_error.png');
+this.echo('ERROR - cannot find ls -lrt[ENTER] on screen').exit(); this.wait(0);}}});
 
 casper.then(function() {{techo('keyboard [pageup]'); var fs = require('fs');
 if (!sikuli_step('keyboard [pageup]')) if (!fs.exists('[pageup]') && !false)
-this.echo('ERROR - cannot find image file [pageup]').exit(); else
-this.echo('ERROR - cannot find [pageup] on screen').exit(); this.wait(0);}});
+{this.echo('ERROR - cannot find image file [pageup]').exit(); this.wait(0);} else
+{sikuli_step('snap page.png to /full_path/positive_test_error.png');
+this.echo('ERROR - cannot find [pageup] on screen').exit(); this.wait(0);}}});
 
 casper.then(function() {{techo('keyboard [PAGEDOWN]'); var fs = require('fs');
 if (!sikuli_step('keyboard [PAGEDOWN]')) if (!fs.exists('[PAGEDOWN]') && !false)
-this.echo('ERROR - cannot find image file [PAGEDOWN]').exit(); else
-this.echo('ERROR - cannot find [PAGEDOWN] on screen').exit(); this.wait(0);}});
+{this.echo('ERROR - cannot find image file [PAGEDOWN]').exit(); this.wait(0);} else
+{sikuli_step('snap page.png to /full_path/positive_test_error.png');
+this.echo('ERROR - cannot find [PAGEDOWN] on screen').exit(); this.wait(0);}}});
 
 casper.then(function() {{techo('keyboard 123[enter]456[ENTER]'); var fs = require('fs');
 if (!sikuli_step('keyboard 123[enter]456[ENTER]')) if (!fs.exists('123[enter]456[ENTER]') && !false)
-this.echo('ERROR - cannot find image file 123[enter]456[ENTER]').exit(); else
-this.echo('ERROR - cannot find 123[enter]456[ENTER] on screen').exit(); this.wait(0);}});
+{this.echo('ERROR - cannot find image file 123[enter]456[ENTER]').exit(); this.wait(0);} else
+{sikuli_step('snap page.png to /full_path/positive_test_error.png');
+this.echo('ERROR - cannot find 123[enter]456[ENTER] on screen').exit(); this.wait(0);}}});
 
 casper.then(function() {{techo('keyboard [home]'); var fs = require('fs');
 if (!sikuli_step('keyboard [home]')) if (!fs.exists('[home]') && !false)
-this.echo('ERROR - cannot find image file [home]').exit(); else
-this.echo('ERROR - cannot find [home] on screen').exit(); this.wait(0);}});
+{this.echo('ERROR - cannot find image file [home]').exit(); this.wait(0);} else
+{sikuli_step('snap page.png to /full_path/positive_test_error.png');
+this.echo('ERROR - cannot find [home] on screen').exit(); this.wait(0);}}});
 
 casper.then(function() {{techo('keyboard [end]'); var fs = require('fs');
 if (!sikuli_step('keyboard [end]')) if (!fs.exists('[end]') && !false)
-this.echo('ERROR - cannot find image file [end]').exit(); else
-this.echo('ERROR - cannot find [end] on screen').exit(); this.wait(0);}});
+{this.echo('ERROR - cannot find image file [end]').exit(); this.wait(0);} else
+{sikuli_step('snap page.png to /full_path/positive_test_error.png');
+this.echo('ERROR - cannot find [end] on screen').exit(); this.wait(0);}}});
 
 casper.then(function() {{techo('keyboard [ctrl][home]'); var fs = require('fs');
 if (!sikuli_step('keyboard [ctrl][home]')) if (!fs.exists('[ctrl][home]') && !false)
-this.echo('ERROR - cannot find image file [ctrl][home]').exit(); else
-this.echo('ERROR - cannot find [ctrl][home] on screen').exit(); this.wait(0);}});
+{this.echo('ERROR - cannot find image file [ctrl][home]').exit(); this.wait(0);} else
+{sikuli_step('snap page.png to /full_path/positive_test_error.png');
+this.echo('ERROR - cannot find [ctrl][home] on screen').exit(); this.wait(0);}}});
 
 casper.then(function() {{techo('keyboard [ctrl][end]'); var fs = require('fs');
 if (!sikuli_step('keyboard [ctrl][end]')) if (!fs.exists('[ctrl][end]') && !false)
-this.echo('ERROR - cannot find image file [ctrl][end]').exit(); else
-this.echo('ERROR - cannot find [ctrl][end] on screen').exit(); this.wait(0);}});
+{this.echo('ERROR - cannot find image file [ctrl][end]').exit(); this.wait(0);} else
+{sikuli_step('snap page.png to /full_path/positive_test_error.png');
+this.echo('ERROR - cannot find [ctrl][end] on screen').exit(); this.wait(0);}}});
 
 casper.then(function() {{techo('keyboard [win]'); var fs = require('fs');
 if (!sikuli_step('keyboard [win]')) if (!fs.exists('[win]') && !false)
-this.echo('ERROR - cannot find image file [win]').exit(); else
-this.echo('ERROR - cannot find [win] on screen').exit(); this.wait(0);}});
+{this.echo('ERROR - cannot find image file [win]').exit(); this.wait(0);} else
+{sikuli_step('snap page.png to /full_path/positive_test_error.png');
+this.echo('ERROR - cannot find [win] on screen').exit(); this.wait(0);}}});
 
 casper.then(function() {{techo('keyboard e[win]'); var fs = require('fs');
 if (!sikuli_step('keyboard e[win]')) if (!fs.exists('e[win]') && !false)
-this.echo('ERROR - cannot find image file e[win]').exit(); else
-this.echo('ERROR - cannot find e[win] on screen').exit(); this.wait(0);}});
+{this.echo('ERROR - cannot find image file e[win]').exit(); this.wait(0);} else
+{sikuli_step('snap page.png to /full_path/positive_test_error.png');
+this.echo('ERROR - cannot find e[win] on screen').exit(); this.wait(0);}}});
 
 casper.then(function() {{techo('keyboard [win]e'); var fs = require('fs');
 if (!sikuli_step('keyboard [win]e')) if (!fs.exists('[win]e') && !false)
-this.echo('ERROR - cannot find image file [win]e').exit(); else
-this.echo('ERROR - cannot find [win]e on screen').exit(); this.wait(0);}});
+{this.echo('ERROR - cannot find image file [win]e').exit(); this.wait(0);} else
+{sikuli_step('snap page.png to /full_path/positive_test_error.png');
+this.echo('ERROR - cannot find [win]e on screen').exit(); this.wait(0);}}});
 
 casper.then(function() {{techo('keyboard [cmd][space]'); var fs = require('fs');
 if (!sikuli_step('keyboard [cmd][space]')) if (!fs.exists('[cmd][space]') && !false)
-this.echo('ERROR - cannot find image file [cmd][space]').exit(); else
-this.echo('ERROR - cannot find [cmd][space] on screen').exit(); this.wait(0);}});
+{this.echo('ERROR - cannot find image file [cmd][space]').exit(); this.wait(0);} else
+{sikuli_step('snap page.png to /full_path/positive_test_error.png');
+this.echo('ERROR - cannot find [cmd][space] on screen').exit(); this.wait(0);}}});
 
 // test mouse
 casper.then(function() {{techo('mouse down'); var fs = require('fs');
 if (!sikuli_step('mouse down')) if (!fs.exists('down') && !false)
-this.echo('ERROR - cannot find image file down').exit(); else
-this.echo('ERROR - cannot find down on screen').exit(); this.wait(0);}});
+{this.echo('ERROR - cannot find image file down').exit(); this.wait(0);} else
+{sikuli_step('snap page.png to /full_path/positive_test_error.png');
+this.echo('ERROR - cannot find down on screen').exit(); this.wait(0);}}});
 
 casper.then(function() {{techo('mouse up'); var fs = require('fs');
 if (!sikuli_step('mouse up')) if (!fs.exists('up') && !false)
-this.echo('ERROR - cannot find image file up').exit(); else
-this.echo('ERROR - cannot find up on screen').exit(); this.wait(0);}});
+{this.echo('ERROR - cannot find image file up').exit(); this.wait(0);} else
+{sikuli_step('snap page.png to /full_path/positive_test_error.png');
+this.echo('ERROR - cannot find up on screen').exit(); this.wait(0);}}});
 
 // test check
 casper.then(function() {{if (('+eggs+' < 10))
@@ -2992,13 +3086,15 @@ try {py_json = JSON.parse(py_result);} catch(e) {py_json = JSON.parse('null');}}
 // test vision
 casper.then(function() {{techo('vision click(\'/tmp/// test.png\')'); var fs = require('fs');
 if (!sikuli_step('vision click(\'/tmp/// test.png\')')) if (!fs.exists('for vision step') && !false)
-this.echo('ERROR - cannot find image file for vision step').exit(); else
-this.echo('ERROR - cannot find for vision step on screen').exit(); this.wait(0);}});
+{this.echo('ERROR - cannot find image file for vision step').exit(); this.wait(0);} else
+{sikuli_step('snap page.png to /full_path/positive_test_error.png');
+this.echo('ERROR - cannot find for vision step on screen').exit(); this.wait(0);}}});
 
 casper.then(function() {{techo('vision a = 1\nif a == 1:\n    click(\'1.png\')\n    click(\'1.png\')'); var fs = require('fs');
 if (!sikuli_step('vision a = 1\nif a == 1:\n    click(\'1.png\')\n    click(\'1.png\')')) if (!fs.exists('for vision step') && !false)
-this.echo('ERROR - cannot find image file for vision step').exit(); else
-this.echo('ERROR - cannot find for vision step on screen').exit(); this.wait(0);}});
+{this.echo('ERROR - cannot find image file for vision step').exit(); this.wait(0);} else
+{sikuli_step('snap page.png to /full_path/positive_test_error.png');
+this.echo('ERROR - cannot find for vision step on screen').exit(); this.wait(0);}}});
 
 // test timeout
 casper.then(function() {casper.options.waitTimeout = 4000; sikuli_timeout(4);});
@@ -3051,7 +3147,8 @@ locator = 'email_button'
 casper.then(function() {{techo('click '+locator+'');
 casper.waitFor(function check() {return check_tx(''+locator+'');},
 function then() {this.click(tx(''+locator+''));},
-function timeout() {this.echo('ERROR - cannot find '+locator+'').exit();});}});
+function timeout() {this.capture('/full_path/positive_test_error.png');
+this.echo('ERROR - cannot find '+locator+'').exit(); this.wait(0);});}});
 
 casper.then(function() { // start of JS code
 number = 5
@@ -3060,7 +3157,8 @@ number = 5
 casper.then(function() {{techo('click (//*[@id="test"])['+variable+']');
 casper.waitFor(function check() {return check_tx('(//*[@id="test"])['+variable+']');},
 function then() {this.click(tx('(//*[@id="test"])['+variable+']'));},
-function timeout() {this.echo('ERROR - cannot find (//*[@id="test"])['+variable+']').exit();});}});
+function timeout() {this.capture('/full_path/positive_test_error.png');
+this.echo('ERROR - cannot find (//*[@id="test"])['+variable+']').exit(); this.wait(0);});}});
 
 // test present function
 casper.then(function() {if ((present('footer')))
@@ -3069,7 +3167,8 @@ casper.then(function() {if ((present('footer')))
 casper.then(function() {{techo('print footer');
 casper.waitFor(function check() {return check_tx('footer');},
 function then() {this.echo(this.fetchText(tx('footer')).trim());},
-function timeout() {this.echo('ERROR - cannot find footer').exit();});}});
+function timeout() {this.capture('/full_path/positive_test_error.png');
+this.echo('ERROR - cannot find footer').exit(); this.wait(0);});}});
 
 } // end of code block
 
@@ -3089,7 +3188,8 @@ casper.then(function() {if ((exist('footer')))
 casper.then(function() {{techo('print footer');
 casper.waitFor(function check() {return check_tx('footer');},
 function then() {this.echo(this.fetchText(tx('footer')).trim());},
-function timeout() {this.echo('ERROR - cannot find footer').exit();});}});
+function timeout() {this.capture('/full_path/positive_test_error.png');
+this.echo('ERROR - cannot find footer').exit(); this.wait(0);});}});
 
 } // end of code block
 
