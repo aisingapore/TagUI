@@ -1,7 +1,7 @@
-# TagUI Word Add-in v1
-**You can now do RPA with Microsoft Word. Edit your process document in your native language, choose the options and run!**
+# Microsoft Word Add-in v1
+**You can now do RPA with Microsoft Word. Edit your process document in your native language and deploy!**
 
-**This Add-in uses [TagUI free RPA tool](https://github.com/kelaberetiv/TagUI) by AI Singapore, a government-funded programme to accelerate AI.**
+**This add-in uses [TagUI free RPA tool](https://github.com/kelaberetiv/TagUI) by AI Singapore, a government-funded programme to accelerate AI.**
 
 ![Word Add-in](https://raw.githubusercontent.com/kelaberetiv/TagUI/master/src/office/word/word_addin.png)
 
