@@ -112,9 +112,11 @@ if some_condition
   do_some_step_B
 ```
 
-# TagUI v5.11
-
+# v5.11
 [Visit v5.11 homepage](https://github.com/kelaberetiv/TagUI/tree/pre_v6) for technical details of TagUI, such as its architecture diagram and codebase structure
+
+# Users
+![TagUI Users](https://raw.githubusercontent.com/kelaberetiv/TagUI/master/src/media/tagui_users.png)
 
 # Credits
 - [TagUI v3.0](https://github.com/kensoh/TagUI/tree/before_aisg) - Ken Soh from Singapore
