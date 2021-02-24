@@ -4,13 +4,13 @@
 
 **Free RPA tool by [AI Singapore](https://www.aisingapore.org), a government-funded programme to accelerate AI. For any support issues or questions, [please tell us here](https://github.com/kelaberetiv/TagUI/issues) and we'll try to reply [within 24 hours](https://youtu.be/gZiTPjpD-gQ).**
 
-**[Download TagUI v6.14](https://tagui.readthedocs.io/en/latest/setup.html)&ensp;|&ensp;[Documentation](https://tagui.readthedocs.io/en/latest/index.html)&ensp;|&ensp;[Demos](https://github.com/aimakerspace/TagUI-Bricks)&ensp;|&ensp;[Samples](https://github.com/kelaberetiv/TagUI/tree/master/flows/samples)&ensp;|&ensp;[Slides](https://drive.google.com/file/d/1pltAMzr0MZsttgg1w2ORH3ontR6Q51W9/view?usp=sharing)&ensp;|&ensp;[Feedback](https://forms.gle/mieY66xTN4NNm5Gq5)&ensp;|&ensp;[Live Q&A](https://github.com/kelaberetiv/TagUI/issues/914)**
+**[Download TagUI v6.14](https://tagui.readthedocs.io/en/latest/setup.html)&ensp;|&ensp;[Documentation](https://tagui.readthedocs.io/en/latest/index.html)&ensp;|&ensp;[Demos](https://github.com/aimakerspace/TagUI-Bricks)&ensp;|&ensp;[Samples](https://github.com/kelaberetiv/TagUI/tree/master/flows/samples)&ensp;|&ensp;[Slides](https://drive.google.com/file/d/1pltAMzr0MZsttgg1w2ORH3ontR6Q51W9/view?usp=sharing)&ensp;|&ensp;[Live Q&A](https://github.com/kelaberetiv/TagUI/issues/914)**
 
 ---
 
 Write flows in simple TagUI language and automate your web, mouse and keyboard interactions on the screen.
 
-TagUI is free and open-source. It's easy to setup and use, and works on Windows, macOS and Linux. Besides English, flows can also be written in [20 other languages](https://github.com/kelaberetiv/TagUI/tree/master/src/languages), so go ahead and do RPA using your [native language](https://github.com/kelaberetiv/TagUI/blob/master/flows/samples/8_chineseflow.tag).
+TagUI is free and open-source. It's easy to setup and use, and works on Windows, macOS and Linux. Besides English, flows can also be written in [20 other languages](https://github.com/kelaberetiv/TagUI/tree/master/src/languages), so go ahead and do RPA using your [native language](https://github.com/kelaberetiv/TagUI/blob/master/flows/samples/8_chineseflow.tag). There's even a [Microsoft Word Add-in](https://github.com/kelaberetiv/TagUI/tree/master/src/office) that lets you create and deploy Word documents as RPA robots.
 
 In TagUI language, you use steps like `click` and `type` to interact with identifiers, which include web identifiers, image snapshots, screen coordinates, or even text using OCR. Below is an example to login to Xero accounting:
 
