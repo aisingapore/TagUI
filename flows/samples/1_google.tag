@@ -7,6 +7,9 @@ https://www.google.com
 // (or some other attributes), then type 'latest movies' and enter
 type q as latest movies[enter]
 
+// Use below if above fails, google.com differs for different locations
+// type //*[@name="q"] as latest movies[enter]
+
 // Click the first result using XPath
 // Learn XPath: https://www.w3schools.com/xml/xpath_intro.asp
 click (//*[@class="g"])[1]//a
