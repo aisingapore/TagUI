@@ -55,13 +55,13 @@ namespace TagUIExcelAddIn
             this.textBoxFlowFile.Enabled = false;
             this.textBoxFlowFile.Location = new System.Drawing.Point(10, 50);
             this.textBoxFlowFile.Name = "textBoxFlowFile";
-            this.textBoxFlowFile.Size = new System.Drawing.Size(202, 26);
+            this.textBoxFlowFile.Size = new System.Drawing.Size(213, 26);
             this.textBoxFlowFile.TabIndex = 0;
             // 
             // buttonEditFlow
             // 
             this.buttonEditFlow.BackColor = System.Drawing.SystemColors.Control;
-            this.buttonEditFlow.Location = new System.Drawing.Point(10, 93);
+            this.buttonEditFlow.Location = new System.Drawing.Point(131, 93);
             this.buttonEditFlow.Name = "buttonEditFlow";
             this.buttonEditFlow.Size = new System.Drawing.Size(92, 42);
             this.buttonEditFlow.TabIndex = 1;
@@ -83,7 +83,7 @@ namespace TagUIExcelAddIn
             // 
             this.labelDocumentation.AutoSize = true;
             this.labelDocumentation.ForeColor = System.Drawing.SystemColors.MenuHighlight;
-            this.labelDocumentation.Location = new System.Drawing.Point(7, 590);
+            this.labelDocumentation.Location = new System.Drawing.Point(7, 581);
             this.labelDocumentation.Name = "labelDocumentation";
             this.labelDocumentation.Size = new System.Drawing.Size(79, 20);
             this.labelDocumentation.TabIndex = 3;
@@ -136,7 +136,7 @@ namespace TagUIExcelAddIn
             this.textBoxParam.Enabled = false;
             this.textBoxParam.Location = new System.Drawing.Point(38, 479);
             this.textBoxParam.Name = "textBoxParam";
-            this.textBoxParam.Size = new System.Drawing.Size(174, 26);
+            this.textBoxParam.Size = new System.Drawing.Size(185, 26);
             this.textBoxParam.TabIndex = 8;
             // 
             // labelFlow
@@ -152,7 +152,7 @@ namespace TagUIExcelAddIn
             // buttonRun
             // 
             this.buttonRun.BackColor = System.Drawing.SystemColors.Control;
-            this.buttonRun.Location = new System.Drawing.Point(11, 526);
+            this.buttonRun.Location = new System.Drawing.Point(11, 524);
             this.buttonRun.Name = "buttonRun";
             this.buttonRun.Size = new System.Drawing.Size(92, 42);
             this.buttonRun.TabIndex = 10;
@@ -163,7 +163,7 @@ namespace TagUIExcelAddIn
             // buttonDeploy
             // 
             this.buttonDeploy.BackColor = System.Drawing.SystemColors.Control;
-            this.buttonDeploy.Location = new System.Drawing.Point(120, 526);
+            this.buttonDeploy.Location = new System.Drawing.Point(131, 524);
             this.buttonDeploy.Name = "buttonDeploy";
             this.buttonDeploy.Size = new System.Drawing.Size(92, 42);
             this.buttonDeploy.TabIndex = 11;
@@ -188,7 +188,7 @@ namespace TagUIExcelAddIn
             this.comboBoxAllSheets.FormattingEnabled = true;
             this.comboBoxAllSheets.Location = new System.Drawing.Point(38, 355);
             this.comboBoxAllSheets.Name = "comboBoxAllSheets";
-            this.comboBoxAllSheets.Size = new System.Drawing.Size(174, 28);
+            this.comboBoxAllSheets.Size = new System.Drawing.Size(185, 28);
             this.comboBoxAllSheets.TabIndex = 13;
             this.comboBoxAllSheets.Click += new System.EventHandler(this.comboBoxAllSheets_Click);
             // 
@@ -207,7 +207,7 @@ namespace TagUIExcelAddIn
             this.comboBoxObjectRepository.FormattingEnabled = true;
             this.comboBoxObjectRepository.Location = new System.Drawing.Point(38, 417);
             this.comboBoxObjectRepository.Name = "comboBoxObjectRepository";
-            this.comboBoxObjectRepository.Size = new System.Drawing.Size(174, 28);
+            this.comboBoxObjectRepository.Size = new System.Drawing.Size(185, 28);
             this.comboBoxObjectRepository.TabIndex = 16;
             this.comboBoxObjectRepository.Click += new System.EventHandler(this.comboBoxObjectRepository_Click);
             // 
@@ -229,9 +229,9 @@ namespace TagUIExcelAddIn
             // buttonSelect
             // 
             this.buttonSelect.BackColor = System.Drawing.SystemColors.Control;
-            this.buttonSelect.Location = new System.Drawing.Point(216, 50);
+            this.buttonSelect.Location = new System.Drawing.Point(10, 93);
             this.buttonSelect.Name = "buttonSelect";
-            this.buttonSelect.Size = new System.Drawing.Size(75, 26);
+            this.buttonSelect.Size = new System.Drawing.Size(92, 42);
             this.buttonSelect.TabIndex = 18;
             this.buttonSelect.Text = "Browse";
             this.buttonSelect.UseVisualStyleBackColor = false;

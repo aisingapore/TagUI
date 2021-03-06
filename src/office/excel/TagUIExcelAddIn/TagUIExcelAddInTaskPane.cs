@@ -125,29 +125,29 @@ namespace TagUIExcelAddIn
         {
             RunFlow(false);
         }
-       private void buttonDeploy_Click(object sender, EventArgs e)
-       {
-           string fileLoc = Globals.ThisAddIn.Application.ActiveWorkbook.FullName;
-           if (fileLoc.Contains(@"\"))
-           {
+        private void buttonDeploy_Click(object sender, EventArgs e)
+        {
+            string fileLoc = Globals.ThisAddIn.Application.ActiveWorkbook.FullName;
+            if (fileLoc.Contains(@"\"))
+            {
                 string tagFilePath = textBoxFlowFile.Text;
                 RunFlow(true);
-           }
-           else
-           {
-               MessageBox.Show("Workbook must be saved before deploying", "Oops!");
-               try
-               {
-                   Globals.ThisAddIn.Application.ActiveWorkbook.Save();
-               }
-               catch { }
-           }
-       }
-       private void RunFlow(bool deploy)
-       {
-           string flowFilePath = textBoxFlowFile.Text;
-           string fileType = FlowFileType(flowFilePath);
-           if (fileType!="invalid")
+            }
+            else
+            {
+                MessageBox.Show("Workbook must be saved before deploying", "Oops!");
+                try
+                {
+                    Globals.ThisAddIn.Application.ActiveWorkbook.Save();
+                }
+                catch { }
+            }
+        }
+        private void RunFlow(bool deploy)
+        {
+            string flowFilePath = textBoxFlowFile.Text;
+            string fileType = FlowFileType(flowFilePath);
+            if (fileType != "invalid")
             {
                 string tagFilePath = flowFilePath;
                 if (fileType == ".docx")
@@ -197,8 +197,8 @@ namespace TagUIExcelAddIn
             {
                 MessageBox.Show("Please select a valid flow file to run/deploy", "Oops!");
             }
-       }
-        private string GetObjRepoCsvFilePath (string flowFilePath)
+        }
+        private string GetObjRepoCsvFilePath(string flowFilePath)
         {
             string[] fileLocArr = flowFilePath.Split('\\');
             Int32 lengthToCut = fileLocArr[fileLocArr.Length - 1].Length;
@@ -239,7 +239,12 @@ namespace TagUIExcelAddIn
         }
         private string CreateTagFile(string flowFilePath)
         {
-            string tagFilePath = flowFilePath.Substring(0, flowFilePath.Length - 5) + ".tag";
+            string[] fileLocArr = flowFilePath.Split('\\');
+            Int32 lengthToCut = fileLocArr[fileLocArr.Length - 1].Length;
+            string folderPath = flowFilePath.Substring(0, flowFilePath.Length - lengthToCut);
+            string[] fileLocArr2 = fileLocArr[fileLocArr.Length - 1].Split('.');
+            string fileName = fileLocArr2[0];
+            string tagFilePath = folderPath + fileName.Replace(" ", "_") + ".tag";
             WordprocessingDocument wordprocessingDocument =
                     WordprocessingDocument.Open(flowFilePath, true);
             string textFromDoc = "";
@@ -293,13 +298,13 @@ namespace TagUIExcelAddIn
         }
         private string GetCsvFilePathSavedDoc(string fileLoc)
         {
-           string[] fileLocArr = fileLoc.Split('\\');
-           Int32 lengthToCut = fileLocArr[fileLocArr.Length - 1].Length;
-           string folderPath = fileLoc.Substring(0, fileLoc.Length - lengthToCut);
-           string[] fileLocArr2 = fileLocArr[fileLocArr.Length - 1].Split('.');
-           string fileName = fileLocArr2[0];
-           string csvFilePath = folderPath + fileName + "_" + comboBoxAllSheets.Text + ".tag";
-           return csvFilePath;
+            string[] fileLocArr = fileLoc.Split('\\');
+            Int32 lengthToCut = fileLocArr[fileLocArr.Length - 1].Length;
+            string folderPath = fileLoc.Substring(0, fileLoc.Length - lengthToCut);
+            string[] fileLocArr2 = fileLocArr[fileLocArr.Length - 1].Split('.');
+            string fileName = fileLocArr2[0];
+            string csvFilePath = folderPath + fileName.Replace(" ", "_") + "_" + comboBoxAllSheets.Text.Replace(" ", "_") + ".csv";
+            return csvFilePath;
         }
         private void RunCommand(string tagFilePath, string runOptions)
         {
