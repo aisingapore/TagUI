@@ -1,7 +1,7 @@
 .. _troubleshooting-windows:
 
-Troubleshooting Windows Setup
-=====================================
+Troubleshooting Windows
+================================
 
 - If you see ``MSVCR110.dll is missing``: install :download:`Visual C++ Redistributable <./_static/vcredist_x86.exe>`
 
@@ -9,8 +9,8 @@ Troubleshooting Windows Setup
 
 .. _troubleshooting-macos-linux:
 
-Troubleshooting macOS/Linux Setup
-=====================================
+Troubleshooting macOS/Linux
+================================
 
 - If you see ``dyld: Library not loaded``: overwrite tagui/src/phantomjs with `contents of this zip <https://bitbucket.org/ariya/phantomjs/downloads/phantomjs-2.1.1-macosx.zip>`_
 
