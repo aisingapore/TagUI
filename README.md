@@ -10,7 +10,9 @@
 
 Write flows in simple TagUI language and automate your web, mouse and keyboard interactions on the screen.
 
-TagUI is free and open-source. It's easy to setup and use, and works on Windows, macOS and Linux. Besides English, flows can also be written in [20 other languages](https://github.com/kelaberetiv/TagUI/tree/master/src/languages), so go ahead and do RPA using your [native language](https://github.com/kelaberetiv/TagUI/blob/master/flows/samples/8_chineseflow.tag). There's even a [Microsoft Word Add-in](https://github.com/kelaberetiv/TagUI/tree/master/src/office) that lets you create and deploy Word documents as RPA robots.
+TagUI is free and open-source. It's easy to setup and use, and works on Windows, macOS and Linux. Besides English, flows can also be written in [20 other languages](https://github.com/kelaberetiv/TagUI/tree/master/src/languages), so go ahead and do RPA using your [native language](https://github.com/kelaberetiv/TagUI/blob/master/flows/samples/8_chineseflow.tag).
+
+There are even [Microsoft Office Add-ins](https://github.com/kelaberetiv/TagUI/tree/master/src/office) that let you easily create and deploy Word documents as RPA robots, and set up automation data & variables using Excel spreadsheets. Python users, you'll be happy with [pip install rpa](https://github.com/tebelorg/RPA-Python).
 
 In TagUI language, you use steps like `click` and `type` to interact with identifiers, which include web identifiers, image snapshots, screen coordinates, or even text using OCR. Below is an example to login to Xero accounting:
 
