@@ -95,7 +95,7 @@ fwrite($output_file,$marker_for_opening_url);
 
 // section to handle calling of other TagUI automation scripts for reusability
 $temp_output_file = fopen($script . '.raw','w') or die("ERROR - cannot open " . $script . '.raw' . "\n");
-while(!feof($input_file)) {fwrite($temp_output_file,expand_intent(fgets($input_file)));} fclose($input_file);
+while(!feof($input_file)) {fwrite($temp_output_file,expand_intent(fgets($input_file),""));} fclose($input_file);
 fclose($temp_output_file); // generate temp output file of expanded intents (if any) before reopening as input
 $input_file = fopen($script . '.raw','r') or die("ERROR - cannot open " . $script . '.raw' . "\n");
 
@@ -323,17 +323,17 @@ file_put_contents($script . '.js',$script_content);} // save script after restru
 else if ($test_automation > 0) {$script_content = file_get_contents($script . '.js'); // read generated script
 $script_content = str_replace("test.","// test.",$script_content); file_put_contents($script . '.js',$script_content);}
 
-function expand_intent($script_line) { // function to handle calling of other TagUI automation scripts for reusability
+function expand_intent($script_line, $indentation_for_tagui_step) { // function to call other scripts for reusability
 if ((strpos(strtolower(trim($script_line)),'tagui ') === 0) or (strtolower(trim($script_line)) == 'tagui')) {
 $params = trim(substr(trim($script_line)." ",1+strpos(trim($script_line)." "," "))); if ($params == "")
 die("ERROR - filename missing for step " . trim($script_line) . "\n");
 else if (!file_exists(abs_file($params)))
 die("ERROR - file not found for step " . trim($script_line) . "\n");
-else {$indentation_for_tagui_step = str_replace(ltrim($script_line),'',$script_line);
+else {$indentation_for_tagui_step .= str_replace(ltrim($script_line),'',$script_line);
 $expanded_intent = ""; $temp_input_file = fopen(abs_file($params),'r'); if ($temp_input_file == false)
 die("ERROR - cannot open file for step " . trim($script_line) . "\n");
-while(!feof($temp_input_file)) {$expanded_intent .= $indentation_for_tagui_step . expand_intent(fgets($temp_input_file));}
-fclose($temp_input_file); return $expanded_intent;}} else return rtrim($script_line) . "\n";}
+while(!feof($temp_input_file)) {$expanded_intent .= expand_intent(fgets($temp_input_file),$indentation_for_tagui_step);}
+fclose($temp_input_file); return $expanded_intent;}} else return $indentation_for_tagui_step . rtrim($script_line) . "\n";}
 
 function current_line() {return "[LINE " . $GLOBALS['line_number'] . "]";}
 
