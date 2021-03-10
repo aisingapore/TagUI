@@ -14,6 +14,8 @@ TagUI is free and open-source. It's easy to setup and use, and works on Windows,
 
 There are even [Microsoft Office Add-ins](https://github.com/kelaberetiv/TagUI/tree/master/src/office) that let you easily create and deploy Word documents as RPA robots, and set up automation data & parameters using Excel spreadsheets. Python users, you'll be happy with [pip install rpa](https://github.com/tebelorg/RPA-Python), the #1 Python RPA package. You can also run [TagUI on the cloud](https://github.com/kelaberetiv/TagUI/issues/913) through your phone browser. Microsoft [Power Automate Desktop](https://flow.microsoft.com/en-us/desktop/) users, you'll be happy to know that there's [2-way integration](https://www.linkedin.com/posts/kensoh_tagui-activity-6773236538596831232-1aFu) with TagUI out of the box!
 
+![TagUI Roadmap](https://raw.githubusercontent.com/kelaberetiv/TagUI/master/src/media/roadmap.png)
+
 In TagUI language, you use steps like `click` and `type` to interact with identifiers, which include web identifiers, image snapshots, screen coordinates, or even text using OCR. Below is an example to login to Xero accounting:
 
 ```
@@ -114,8 +116,8 @@ if some_condition
   do_some_step_B
 ```
 
-# v5.11
-[Visit v5.11 homepage](https://github.com/kelaberetiv/TagUI/tree/pre_v6) for technical details of TagUI, such as its architecture diagram and codebase structure
+# TagUI v5.11
+[See previous homepage](https://github.com/kelaberetiv/TagUI/tree/pre_v6) for technical details of TagUI, such as architecture diagram and codebase structure
 
 # Users
 ![TagUI Users](https://raw.githubusercontent.com/kelaberetiv/TagUI/master/src/media/tagui_users.png)
