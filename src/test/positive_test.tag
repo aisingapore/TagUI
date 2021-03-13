@@ -485,6 +485,7 @@ if a == 1:
     print('TRUE2')
 py finish
 
+if true
     py begin
     a = 2
     if a == 1:

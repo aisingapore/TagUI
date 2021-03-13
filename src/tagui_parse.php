@@ -152,9 +152,26 @@ else if (strtolower(trim($padded_raw_flow_line)) == "vision finish")
 {$inside_vision_block = 0; $reference_indentation = "";} // reset reference indentation
 
 // auto-padding not relevant in integrations code blocks
-if (($inside_js_block + $inside_py_block + $inside_r_block + 
+// except for xxx begin, padding or dropping is important
+if ((($inside_js_block + $inside_py_block + $inside_r_block + 
 $inside_dom_block + $inside_run_block + $inside_vision_block) > 0)
+and !((strtolower(trim($padded_raw_flow_line)) == "js begin") or
+(strtolower(trim($padded_raw_flow_line)) == "py begin") or
+(strtolower(trim($padded_raw_flow_line)) == "r begin") or
+(strtolower(trim($padded_raw_flow_line)) == "dom begin") or
+(strtolower(trim($padded_raw_flow_line)) == "run begin") or
+(strtolower(trim($padded_raw_flow_line)) == "vision begin")))
 {$padded_raw_flow .= $indentation_tracker . $padded_raw_flow_line; continue;}
+
+// auto-padding is important outside of integration code blocks
+// except for xxx finish, padding or dropping should be skipped
+if ((strtolower(trim($padded_raw_flow_line)) == "js finish") or
+(strtolower(trim($padded_raw_flow_line)) == "py finish") or
+(strtolower(trim($padded_raw_flow_line)) == "r finish") or
+(strtolower(trim($padded_raw_flow_line)) == "dom finish") or
+(strtolower(trim($padded_raw_flow_line)) == "run finish") or
+(strtolower(trim($padded_raw_flow_line)) == "vision finish"))
+{$padded_raw_flow .= $padded_raw_flow_line; continue;}
 
 $current_indentation_length = strlen($indentation_tracker);
 if ($indentation_spaces == 0 and $current_indentation_length > 0) {
