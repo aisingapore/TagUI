@@ -1,35 +1,35 @@
 EN,ID
 click,klik
-tap,keran
-move,pindah
-hover,hover
-type,mengetik
-enter,memasukkan
-select,memilih
-choose,memilih
-read,baca baca
-fetch,mengambil
-show,menunjukkan
-print,mencetak
-save,menyimpan
+tap,tap
+move,move
+hover,gerak
+type,taip
+enter,enter
+select,pilih
+choose,choose
+read,salin
+fetch,ambil
+show,tunjuk
+print,cetak
+save,simpan
 echo,gema
-dump,membuang
-write,menulis
-snap,jepret
-table,meja
+dump,buang
+write,tulis
+snap,mengambar
+table,tabel
 mouse,mouse
 keyboard,keyboard
-live,hidup
+live,langsung
 download,download
 upload,upload
-load,beban
-receive,menerima
-frame,bingkai
+load,tugaskan
+receive,terima
+frame,frame
 popup,muncul
 wait,tunggu
-timeout,waktu habis
+timeout,masa tamat
 seconds,detik
-second,kedua
+second,second
 api,api
 dom,dom
 js,js
@@ -37,8 +37,8 @@ else if,lain jika
 else,lain
 if,jika
 for,untuk
-while,sementara
-check,memeriksa
+while,selagi
+check,periksa
 more than or equals to,lebih dari atau sama dengan
 more than or equal to,lebih dari atau sama dengan
 greater than or equals to,lebih besar dari atau sama dengan
