@@ -1,0 +1,83 @@
+EN,ML
+click,ക്ലിക്കുചെയ്യുക
+tap,ടാപ്പുചെയ്യുക
+move,നീക്കുക
+hover,ഹോവർ ചെയ്യുക
+type,ടൈപ്പ് ചെയ്യുക
+enter,നൽകുക
+select,തിരഞ്ഞെടുക്കുക
+choose,തിരഞ്ഞെടുക്കുക
+read,വായിക്കുക
+fetch,ലഭ്യമാക്കുക
+show,കാണിക്കുക
+print,അച്ചടിക്കുക
+save,രക്ഷിക്കും
+echo,എക്കോ
+dump,ഡമ്പ്
+write,എഴുതുക
+snap,സ്നാപ്പ്
+table,മേശ
+mouse,മൗസ്
+keyboard,കീബോർഡ്
+live,തത്സമയം
+download,ഡൗൺലോഡ്
+upload,അപ്‌ലോഡുചെയ്യുക
+load,ലോഡ്
+receive,സ്വീകരിക്കുക
+frame,ഫ്രെയിം
+popup,പോപ്പപ്പ്
+wait,കാത്തിരിക്കുക
+timeout,ടൈം ഔട്ട്
+seconds,സെക്കൻഡ്
+second,രണ്ടാമത്തേത്
+api,api
+dom,dom
+js,js
+vision,കാഴ്ച
+else if,അല്ലെങ്കിൽ
+else,അല്ലെങ്കിൽ
+if,എങ്കിൽ
+for,വേണ്ടി
+while,ആയിരിക്കുമ്പോൾ
+check,ചെക്ക്
+more than or equals to,എന്നതിനേക്കാൾ കൂടുതൽ അല്ലെങ്കിൽ തുല്യമാണ്
+more than or equal to,കൂടുതലോ തുല്യമോ
+greater than or equals to,എന്നതിനേക്കാൾ വലുത് അല്ലെങ്കിൽ തുല്യമാണ്
+greater than or equal to,വലുതോ തുല്യമോ
+higher than or equals to,എന്നതിനേക്കാൾ ഉയർന്നതോ തുല്യമോ
+higher than or equal to,എന്നതിനേക്കാൾ ഉയർന്നതോ തുല്യമോ
+less than or equals to,കുറവ് അല്ലെങ്കിൽ തുല്യമാണ്
+less than or equal to,കുറവോ തുല്യമോ
+lesser than or equals to,കുറവ് അല്ലെങ്കിൽ തുല്യമാണ്
+lesser than or equal to,കുറവോ തുല്യമോ
+lower than or equals to,എന്നതിനേക്കാൾ കുറവാണ് അല്ലെങ്കിൽ തുല്യമാണ്
+lower than or equal to,കുറവോ തുല്യമോ
+more than,അതിലും കൂടുതൽ
+greater than,എന്നതിനേക്കാൾ വലുത്
+higher than,എന്നതിനേക്കാൾ ഉയർന്നത്
+less than,അതിൽ കുറവ്
+lesser than,കുറവ്
+lower than,അതിനേക്കാൾ താന്നത്
+not equals to,എന്നതിന് തുല്യമല്ല
+not equal to,തുല്യമല്ല
+equals to,എന്നതിന് തുല്യമാണ്
+equal to,തുല്യമാണ്
+not contains,അടങ്ങിയിട്ടില്ല
+not contain,അടങ്ങിയിട്ടില്ല
+contains,അടങ്ങിയിരിക്കുന്നു
+contain,അടങ്ങിയിട്ടുണ്ട്
+and,ഒപ്പം
+or,അഥവാ
+from,മുതൽ
+to,ടു
+as,പോലെ
+title(),ശീർഷകം()
+url(),വെബ്സൈറ്റ്()
+text(),വാചകം()
+timer(),ടൈമർ()
+count(),എണ്ണം()
+present(),വർത്തമാന()
+visible(),ദൃശ്യമാണ്()
+mouse_xy(),മൗസ്_xy()
+mouse_x(),മൗസ്_x()
+mouse_y(),മൗസ്_y()
