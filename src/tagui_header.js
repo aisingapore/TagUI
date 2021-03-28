@@ -108,7 +108,7 @@ else return true;}} // if '",' is not found, means end of table is reached as th
 
 // for translating multi-language flows (comments in translate.php)
 function translate(script_line,direction,language) {var start_keywords = 
-'|click|tap|move|hover|type|enter|select|choose|read|fetch|show|print|save|echo|dump|write|snap|table|mouse|keyboard|'+
+'|click|tap|move|hover|type|enter|select|choose|read|fetch|show|print|save|echo|dump|write|snap|ask|table|mouse|keyboard|'+
 'wait|live|download|upload|load|receive|frame|popup|timeout|api|dom|js|vision|else if|else|if|for|while|check|';
 var to_separator_keywords = '|read|fetch|save|load|dump|write|snap|table|download|receive|for|'
 var as_separator_keywords = '|type|enter|select|choose|upload|'; var forloop_keywords = '|from|';
