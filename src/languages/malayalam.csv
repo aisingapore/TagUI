@@ -16,6 +16,7 @@ echo,എക്കോ
 dump,ഡമ്പ്
 write,എഴുതുക
 snap,സ്നാപ്പ്
+ask,ചോദിക്കുക
 table,മേശ
 mouse,മൗസ്
 keyboard,കീബോർഡ്
@@ -81,4 +82,3 @@ visible(),ദൃശ്യമാണ്()
 mouse_xy(),മൗസ്_xy()
 mouse_x(),മൗസ്_x()
 mouse_y(),മൗസ്_y()
-ask,ചോദിക്കുക
