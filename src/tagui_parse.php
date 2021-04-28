@@ -178,7 +178,7 @@ if ($indentation_spaces == 0 and $current_indentation_length > 0) {
 	$indentation_spaces = $current_indentation_length;
 }
 if ($current_indentation_length == $previous_indentation_length) {
-    if ($previous_line_is_condition) {
+    if (($previous_line_is_condition) and (trim($padded_raw_flow_line) != "{")) {
         die("ERROR - missing indentation for ".$padded_raw_flow_line);
     }
 }
