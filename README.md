@@ -2,9 +2,9 @@
 
 # TagUI
 
-**Free RPA tool by [AI Singapore](https://www.aisingapore.org), a government-funded programme to accelerate AI. To start, click download link below. Join the community or ask any questions at our [Telegram chat group](https://t.me/rpa_chat).**
+**Free RPA tool by [AI Singapore](https://www.aisingapore.org), a government-funded programme to accelerate AI. To start, click download link below. Join the community or ask any questions at our [Telegram chat](https://t.me/rpa_chat).**
 
-**[Download TagUI v6.14](https://tagui.readthedocs.io/en/latest/setup.html)&ensp;|&ensp;[Usage Guide](https://tagui.readthedocs.io/en/latest/index.html)&ensp;|&ensp;[Demos](https://github.com/aimakerspace/TagUI-Bricks)&ensp;|&ensp;[Samples](https://github.com/kelaberetiv/TagUI/tree/master/flows/samples)&ensp;|&ensp;[Video](https://youtu.be/hKc4eNBhMws)&ensp;|&ensp;[Slides](https://drive.google.com/file/d/1pltAMzr0MZsttgg1w2ORH3ontR6Q51W9/view?usp=sharing)&ensp;|&ensp;[Weekly Zoom Q&A](https://github.com/kelaberetiv/TagUI/issues/914)**
+**[Download TagUI v6.14](https://tagui.readthedocs.io/en/latest/setup.html)&ensp;|&ensp;[Usage Guide](https://tagui.readthedocs.io/en/latest/index.html)&ensp;|&ensp;[Demos](https://github.com/aimakerspace/TagUI-Bricks)&ensp;|&ensp;[Samples](https://github.com/kelaberetiv/TagUI/tree/master/flows/samples)&ensp;|&ensp;[Video](https://youtu.be/hKc4eNBhMws)&ensp;|&ensp;[Slides](https://drive.google.com/file/d/1pltAMzr0MZsttgg1w2ORH3ontR6Q51W9/view?usp=sharing)&ensp;|&ensp;[Zoom Q&A](https://github.com/kelaberetiv/TagUI/issues/914)**
 
 ---
 
