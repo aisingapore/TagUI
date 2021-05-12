@@ -67,6 +67,10 @@ fclose(fopen('translate.log','w')); chmod('translate.log',0600);
 
 // function to perform translation of automation flow by processing each flow line
 function translate_intent($script_line) {if ($script_line == "") return ""; // avoid next line character if none
+
+// track indentation to add back at the end and preserve indentation for conditions etc
+$indentation_tracker = str_replace(ltrim($script_line, " \t"),'',$script_line);
+
 // use special padding to reduce mistakes by preventing false replacement when a match happens mid-string
 $script_line = '[START_OF_LINE]'.trim($script_line).'[END_OF_LINE]'; // special padding to be removed later
 $start_word = '[NOT_ASSIGNED]'; // used for tracking which start keyword the flow statement starts with 
@@ -104,8 +108,8 @@ or (($start_word != '[NOT_ASSIGNED]') and (strpos($GLOBALS['start_helper_keyword
 or (strpos($script_line,'=')!==false))
 $script_line = str_replace(' '.str_replace(')','',$GLOBALS['language_data'][$language_check][$GLOBALS['column_from']]),' '.str_replace(')','',$GLOBALS['language_data'][$language_check][$GLOBALS['column_to']]),$script_line);}}
 
-$script_line = str_replace('[START_OF_LINE]','',str_replace('[END_OF_LINE]','',$script_line));
-$translate_log = fopen('translate.log','a'); fwrite($translate_log, trim($script_line)."\n"); fclose($translate_log);
-return trim($script_line)."\n";}
+$script_line = str_replace('[START_OF_LINE]',$indentation_tracker,str_replace('[END_OF_LINE]','',$script_line));
+$translate_log = fopen('translate.log','a'); fwrite($translate_log, $script_line."\n"); fclose($translate_log);
+return $script_line."\n";}
 
 ?>
