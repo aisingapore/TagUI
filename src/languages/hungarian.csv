@@ -1,22 +1,25 @@
 EN,HU
-click,kettyenés
-tap,koppintson a
+click,kattint
+rclick,jobbkattint
+dclick,dublakattint
+tap,koppint
 move,mozog
 hover,lebeg
-type,típus
+type,írd
 enter,belép
 select,választ
 choose,választ
 read,olvas
 fetch,lekérés
-show,előadás
+show,mutat
 print,nyomtatás
 save,mentés
-echo,visszhang
+echo,kiír
 dump,lerak
 write,ír
-snap,snap
-table,asztal
+snap,kép
+ask,kérdez
+table,táblázat
 mouse,egér
 keyboard,billentyűzet
 live,élő
@@ -26,7 +29,7 @@ load,betöltés
 receive,kap
 frame,keret
 popup,felugrik
-wait,várjon
+wait,várj
 timeout,időtúllépés
 seconds,másodperc
 second,második
@@ -34,9 +37,9 @@ api,api
 dom,dom
 js,js
 else if,egyébként ha
-else,más
+else,különben
 if,ha
-for,mert
+for,bejár
 while,míg
 check,jelölje be
 more than or equals to,több vagy egyenlő
@@ -67,15 +70,15 @@ contains,tartalmaz
 contain,tartalmaz
 and,és
 or,vagy
-from,tól től
-to,nak nek
+from,tól
+to,ide
 as,mint
 title(),cím()
 url(),url()
 text(),szöveg()
 timer(),időzítő()
 count(),számol()
-present(),ajándék()
+present(),megjelenik()
 visible(),látható()
 mouse_xy(),egér_xy()
 mouse_x(),egér_x()

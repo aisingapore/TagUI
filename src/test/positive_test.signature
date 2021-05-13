@@ -134,9 +134,9 @@ if (row_data.substr(0,2) == '",') {row_data = row_data.substr(2); row_data += '"
 else return true;}} // if '",' is not found, means end of table is reached as there is no cell found in row
 
 // for translating multi-language flows (comments in translate.php)
-function translate(script_line,direction,language) {var start_keywords = 
-'|click|tap|move|hover|type|enter|select|choose|read|fetch|show|print|save|echo|dump|write|snap|ask|table|mouse|keyboard|'+
-'wait|live|download|upload|load|receive|frame|popup|timeout|api|dom|js|vision|else if|else|if|for|while|check|';
+function translate(script_line,direction,language) {var start_keywords = '|click|rclick|dclick|tap|move|hover|'+
+'type|enter|select|choose|read|fetch|show|print|save|echo|dump|write|snap|ask|table|mouse|keyboard|wait|live|'+
+'download|upload|load|receive|frame|popup|timeout|api|dom|js|vision|else if|else|if|for|while|check|';
 var to_separator_keywords = '|read|fetch|save|load|dump|write|snap|table|download|receive|for|'
 var as_separator_keywords = '|type|enter|select|choose|upload|'; var forloop_keywords = '|from|';
 var start_conditions_keywords = '|else if|if|for|while|check|'; var start_helper_keywords = '|echo|dump|write|';

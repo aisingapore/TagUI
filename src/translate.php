@@ -11,7 +11,7 @@
 // english is used as reference language, define keywords for contextual translation
 
 // list of keywords that are supposed to be at the start of a flow statement
-$start_keywords = '|click|tap|move|hover|type|enter|select|choose|read|fetch|show|print|save|echo|dump|write|snap|ask|table|mouse|keyboard|';
+$start_keywords = '|click|rclick|dclick|tap|move|hover|type|enter|select|choose|read|fetch|show|print|save|echo|dump|write|snap|ask|table|mouse|keyboard|';
 $start_keywords.='wait|live|download|upload|load|receive|frame|popup|timeout|api|dom|js|vision|else if|else|if|for|while|check|';
 
 // list of keywords at start of flow statement for valid to and as separators
