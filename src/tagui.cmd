@@ -1002,7 +1002,7 @@ rem end of if block to start chrome processes
 
 rem check if test mode is enabled and run casperjs accordingly, before sending finish signal if integrations are active
 if %tagui_test_mode%==false (
-	casperjs "%flow_file%.js" %params%!api! | tee -a "%flow_file%.log"
+	casperjs \"%flow_file%.js\" %params%!api! | tee -a "%flow_file%.log"
 ) else (
 	casperjs test "%flow_file%.js" !api! --xunit="%flow_file%.xml" | tee -a "%flow_file%.log"
 )
