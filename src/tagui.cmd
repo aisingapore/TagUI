@@ -14,7 +14,7 @@ rem enable windows for loop advanced flow control
 setlocal enableextensions enabledelayedexpansion
 
 if "%~1"=="" (
-echo tagui v6.21: use following options and this syntax to run - tagui flow_filename option^(s^)
+echo tagui v6.36: use following options and this syntax to run - tagui flow_filename option^(s^)
 echo.
 echo tagui live     launch TagUI live mode enabled with visual automation for interactive development
 echo input^(s^)       add your own parameter^(s^) to be used in your automation flow as variables p1 to p8
@@ -978,7 +978,7 @@ if exist "tagui_chrome.in" (
 	set chrome_started=Windows
 	set chrome_switches=--remote-debugging-port=9222 about:blank
 	if not exist "%chrome_command%" (
-		echo ERROR - cannot find Chrome at "%chrome_command%"
+		echo ERROR - cannot find Chrome executable at a few commonly located folders
 		echo update chrome_command setting in tagui\src\tagui.cmd to your chrome.exe
 		exit /b 1
 	)
