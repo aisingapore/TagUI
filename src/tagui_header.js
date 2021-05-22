@@ -183,7 +183,7 @@ function is_xpath_selector(selector) {if (selector.length == 0) return false;
 if ((selector.indexOf('/') == 0) || (selector.indexOf('(') == 0)) return true; return false;}
 
 // for finding best match for given locator
-function tx(locator) {if (is_xpath_selector(locator)) return xps666(locator);
+function tx(locator) {if (is_xpath_selector(locator)) return xps666(locator.replace(/'/g,'"'));
 if (casper.exists(locator)) return locator; // check for css locator
 // first check for exact match then check for containing string
 if (casper.exists(xps666('//*[@id="'+locator+'"]'))) return xps666('//*[@id="'+locator+'"]');
@@ -204,7 +204,7 @@ return xps666('/html');}
 
 // for checking if given locator is found
 function check_tx(locator) {if (is_xpath_selector(locator))
-{if (casper.exists(xps666(locator))) return true; else return false;}
+{if (casper.exists(xps666(locator.replace(/'/g,'"')))) return true; else return false;}
 if (casper.exists(locator)) return true; // check for css locator
 // first check for exact match then check for containing string
 if (casper.exists(xps666('//*[@id="'+locator+'"]'))) return true;
@@ -1056,7 +1056,7 @@ var abs_param1 = abs_file(param1); var abs_intent = raw_intent.replace(param1,ab
 var abs_param2 = abs_file(param2); abs_intent = abs_intent.replace(param2,abs_param2);
 return call_sikuli(abs_intent,abs_param1);} // use sikuli visual automation as needed
 if ((param1 == '') || (param2 == '')) return "this.echo('ERROR - target/option missing for " + raw_intent + "')";
-else if (check_tx(param1)) return "var select_locator = tx('" + param1 + "'); if (is_xpath_selector(select_locator.toString().replace('xpath selector: ',''))) select_locator = select_locator.toString().substring(16); this.selectOptionByValue(select_locator,'" + param2 + "');";
+else if (check_tx(param1)) return "var select_locator = tx('" + param1 + "'); if (is_xpath_selector(select_locator.toString().replace('xpath selector: ',''))) select_locator = select_locator.toString().substring(16).replace(/'/g,'\"'); this.selectOptionByValue(select_locator,'" + param2 + "');";
 else return "this.echo('ERROR - cannot find " + param1 + "')";}
 
 function read_intent(raw_intent) {raw_intent = eval("'" + escape_bs(raw_intent) + "'"); // support dynamic variables
