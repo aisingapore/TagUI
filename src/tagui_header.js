@@ -245,6 +245,10 @@ else {var element_located = tx(element_locator); var element_visible = casper.el
 // if tx() returns xps666('/html') means that the element is not found, so set element_visible to false
 if (element_located.toString() == xps666('/html').toString()) element_visible = false; return element_visible;}}
 
+// visible() function that waits until timeout before returning result
+function appeared(element_identifier) {var appeared_timeout = Date.now() + casper.options.waitTimeout;
+while (Date.now() < appeared_timeout) {if (visible(element_identifier)) return true; else sleep(100);}; return false;}
+
 // friendlier name to count elements using countElements()
 function count(element_locator) {if (!element_locator) return 0;
 var element_located = tx(element_locator); var element_count = casper.countElements(element_located);
