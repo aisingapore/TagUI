@@ -7,8 +7,8 @@ set chrome_command=C:\Program Files (x86)\Google\Chrome\Application\chrome.exe
 rem fallback in case newer Chrome is not installed in x86 folder
 if not exist "%chrome_command%" set chrome_command=C:\Program Files\Google\Chrome\Application\chrome.exe
 
-rem fallback to backup location for some users who cannot install Chrome system-wide^M
-if not exist "%chrome_command%" set chrome_command=%LOCALAPPDATA%\Google\Chrome\Application\chrome.exe^M
+rem fallback to backup location for some users who cannot install Chrome system-wide
+if not exist "%chrome_command%" set chrome_command=%LOCALAPPDATA%\Google\Chrome\Application\chrome.exe
 
 rem enable windows for loop advanced flow control
 setlocal enableextensions enabledelayedexpansion
