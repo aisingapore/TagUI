@@ -20,7 +20,7 @@ $target_file = fopen($target_csv,'w') or die("ERROR - cannot open " . $target_cs
 for($i=0; $i<$csv_count; $i++) {
   $csv_result[0][$i] = $i;
 }
-$csv_result[0][0] = "[iteration]";
+$csv_result[0][0] = "iteration";
 foreach ($csv_data as $row => $columns) {
   if (is_array($columns) || is_object($columns)) {
     foreach ($columns as $row2 => $column2) {

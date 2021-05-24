@@ -85,8 +85,14 @@ $local_functions_file = fopen($local_functions_location,'r') or die("ERROR - can
 while(!feof($local_functions_file)) {fwrite($output_file,fgets($local_functions_file));}
 fwrite($output_file,"\n"); fclose($local_functions_file);}
 
-// add marker for repo variables to be replaced at the end after parsing
-fwrite($output_file,"// define repository and datatable variables\n\n");
+// define data from repository and datatable as variables for use in conditions and JS code
+if ($repo_count > 0) {$data_set = intval(getenv('tagui_data_set')); $escaped_line_ends = ["\n" => "\\n", "\r" => "\\r"];
+for ($repo_check = 0; $repo_check <= $repo_count; $repo_check++) {
+$repo_data_value = strtr($repo_data[$repo_check][$data_set], $escaped_line_ends);
+$variable_name = str_replace(" ", "_", $repo_data[$repo_check][0]); $variable_name = str_replace("%", "", $variable_name);
+$variable_name = str_replace("#", "hash", $variable_name); $variable_name = str_replace("/", "slash", $variable_name);
+$repo_variables .= "var " . $variable_name . " = " . "'" . escape_quote($repo_data_value) . "';\n";}
+fwrite($output_file,"// define repository and datatable variables\n" . $repo_variables . "\n");}
 
 // append comment on flow path variable in casperjs script
 fwrite($output_file,"// flow path for save_text and snap_image\n");
@@ -233,12 +239,6 @@ if (!$url_provided) { // echo "ERROR - first line of " . $script . " not URL or 
 $GLOBALS['real_line_number'] = 1; $generated_js_file_contents = file_get_contents($script . '.js');
 $generated_js_file_contents = str_replace($marker_for_opening_url, $marker_for_opening_url . 
 url_intent('about:blank'), $generated_js_file_contents); file_put_contents($script . '.js',$generated_js_file_contents);}
-
-// define data from repository and datatable as variables for use in conditions and JS code
-if ($repo_variables != "") {$updated_js_file_contents = file_get_contents($script . '.js');
-$updated_js_file_contents = str_replace("// define repository and datatable variables\n\n", 
-"// define repository and datatable variables\n\n" . $repo_variables . "\n", $updated_js_file_contents);
-file_put_contents($script . '.js',$updated_js_file_contents);}
 if ($inside_code_block != 0) echo "ERROR - number of step { does not tally with with }\n";
 
 // post-processing to clean up artifacts from translating human language to JavaScript
@@ -403,20 +403,12 @@ if ((substr_count($script_line,'`') > 1) and (!(substr_count($script_line,'`') &
 		for ($repo_check = 0; $repo_check <= $GLOBALS['repo_count']; $repo_check++) {
 			$repo_keyword = "`".$GLOBALS['repo_data'][$repo_check][0]."`";
 			$repo_data_value = strtr($GLOBALS['repo_data'][$repo_check][$data_set], $escaped_line_ends);
-			$script_line = str_replace($repo_keyword, escape_quote($repo_data_value), $script_line, $match_count);
-			if ($match_count > 0) {
-				$variable_name = str_replace(" ", "_", $GLOBALS['repo_data'][$repo_check][0]);
-				$GLOBALS['repo_variables'] .= "var " . $variable_name . " = " . "'" . escape_quote($repo_data_value) . "';\n";
-			}
+			$script_line = str_replace($repo_keyword, escape_quote($repo_data_value), $script_line);
 		}
 		for ($repo_check = 0; $repo_check <= $GLOBALS['repo_count']; $repo_check++) {
 			$repo_keyword = "`".$GLOBALS['repo_data'][$repo_check][0]."`";
 			$repo_data_value = strtr($GLOBALS['repo_data'][$repo_check][$data_set], $escaped_line_ends);
-			$script_line = str_replace($repo_keyword, escape_quote($repo_data_value), $script_line, $match_count);
-			if ($match_count > 0) {
-				$variable_name = str_replace(" ", "_", $GLOBALS['repo_data'][$repo_check][0]);
-				$GLOBALS['repo_variables'] .= "var " . $variable_name . " = " . "'" . escape_quote($repo_data_value) . "';\n";
-			}
+			$script_line = str_replace($repo_keyword, escape_quote($repo_data_value), $script_line);
 		}
 		if (strpos($script_line,'`')!==false) {
 			$script_line = parse_variables($script_line);
