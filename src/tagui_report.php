@@ -35,7 +35,7 @@ $start_timestamp = str_replace('"', '""', $start_timestamp);
 $finish_timestamp = str_replace('"', '""', $finish_timestamp);
 $error_status = str_replace('"', '""', $error_status);
 
-$audit_output_header = '"#","AUTOMATION FLOW","START TIME","FINISH TIME","ERROR STATUS","LOG FILE"';
+$audit_output_header = '"#","WORKFLOW","START TIME","TIME TAKEN","ERROR STATUS","LOG FILE"';
 if (!file_exists('tagui_report.csv')) file_put_contents('tagui_report.csv', $audit_output_header . "\r\n");
 $audit_output_count = @count(file('tagui_report.csv')) - 1 + 1; // to track and increment entry # in audit file
 $html_log_file = $script . '_' . $audit_output_count . '.html'; // to allow log persistence without overwriting
