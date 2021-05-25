@@ -532,7 +532,7 @@ if (substr($lc_raw_intent,0,4)=="api ") return "api";
 if (substr($lc_raw_intent,0,4)=="run ") return "run";
 if (substr($lc_raw_intent,0,4)=="dom ") return "dom";
 if (substr($lc_raw_intent,0,3)=="js ") return "js";
-if (substr($lc_raw_intent,0,2)=="r ") return "r";
+if ((substr($lc_raw_intent,0,2)=="r ") and (substr($lc_raw_intent,0,3)!="r =")) return "r";
 if (substr($lc_raw_intent,0,3)=="py ") return "py";
 if (substr($lc_raw_intent,0,7)=="vision ") return "vision";
 if (substr($lc_raw_intent,0,8)=="timeout ") return "timeout";

@@ -850,7 +850,7 @@ if (lc_raw_intent.substr(0,4) == 'api ') return 'api';
 if (lc_raw_intent.substr(0,4) == 'run ') return 'run';
 if (lc_raw_intent.substr(0,4) == 'dom ') return 'dom';
 if (lc_raw_intent.substr(0,3) == 'js ') return 'js';
-if (lc_raw_intent.substr(0,2) == 'r ') return 'r';
+if ((lc_raw_intent.substr(0,2) == 'r ') && (lc_raw_intent.substr(0,3) != 'r =')) return 'r';
 if (lc_raw_intent.substr(0,3) == 'py ') return 'py';
 if (lc_raw_intent.substr(0,7) == 'vision ') return 'vision';
 if (lc_raw_intent.substr(0,8) == 'timeout ') return 'timeout';
