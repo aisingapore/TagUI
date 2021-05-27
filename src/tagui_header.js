@@ -324,17 +324,27 @@ function sanitise_csv_cell(cell_data) {
  * encode as a CSV row
  */
 function csv_row(original_row_data) {
-  var row_data = original_row_data.slice()
-  // if row_data has at least 1 element, extract and sanitise first element
-  // else start_element is empty string
-  var start_element = (row_data.length > 0)
-    ? sanitise_csv_cell(row_data.shift())
-    : ''
-  // concat each row_data with a comma
-  return row_data.reduce(function(accumulator, currentValue) {
-    return accumulator + ',' + sanitise_csv_cell(currentValue)
-  }, start_element)
+    var row_data = original_row_data.slice()
+    // if row_data has at least 1 element, extract and sanitise first element
+    // else start_element is empty string
+    var start_element = (row_data.length > 0)
+        ? sanitise_csv_cell(row_data.shift())
+        : ''
+    // concat each row_data with a comma
+    return row_data.reduce(function(accumulator, currentValue) {
+        return accumulator + ',' + sanitise_csv_cell(currentValue)
+    }, start_element)
 }
+
+// retrieve text between 2 provided anchors in given text content
+function get_text(source_text, left_marker, right_marker, optional_count) {
+    if (!source_text || !left_marker || !right_marker) return '';
+    var left_position = source_text.indexOf(left_marker); if (left_position == -1) return '';
+    var right_position = source_text.indexOf(right_marker, left_position+1); if (right_position == -1) return '';
+    if (optional_count > 1) {var occurrence_count = 2; while(occurrence_count <= optional_count) {occurrence_count++;
+            left_position = source_text.indexOf(left_marker, right_position+1); if (left_position == -1) return '';
+            right_position = source_text.indexOf(right_marker, left_position+1); if (right_position == -1) return '';}}
+    return source_text.slice(left_position + left_marker.length, right_position).trim();}
 
 // for initialising integration with sikuli visual automation
 function sikuli_handshake() { // techo('[connecting to sikuli process]');
