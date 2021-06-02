@@ -498,7 +498,7 @@ $GLOBALS['inside_vision_block'] != 0 || $GLOBALS['inside_js_block'] != 0 ||
 $GLOBALS['inside_dom_block'] != 0) return "integration_block";
 if ($GLOBALS['inside_run_block'] != 0) return "run";
 
-if ((substr($lc_raw_intent,0,7)=="http://") or (substr($lc_raw_intent,0,8)=="https://") or (substr($lc_raw_intent,0,11)=="about:blank")) return "url"; // recognizing about:blank as valid URL as it is part of HTML5 standard
+if ((substr($lc_raw_intent,0,7)=="http://") or (substr($lc_raw_intent,0,8)=="https://") or (substr($lc_raw_intent,0,4)=="www.") or (substr($lc_raw_intent,0,11)=="about:blank")) return "url"; // recognizing about:blank as valid URL as it is part of HTML5 standard
 
 // first set of conditions check for valid keywords with their parameters
 if ((substr($lc_raw_intent,0,4)=="tap ") or (substr($lc_raw_intent,0,6)=="click ")) return "tap";
@@ -690,7 +690,8 @@ return "{techo('".$input_intent."');\n" . "py_result = ''; if (!py_step('".$inpu
 end_fi()."});\n\n";}
 
 // set of functions to interpret steps into corresponding casperjs code
-function url_intent($raw_intent) {$twb = $GLOBALS['tagui_web_browser']; $casper_url = $raw_intent; $chrome_call = '';
+function url_intent($raw_intent) {if (substr(strtolower($raw_intent),0,4)=="www.") $raw_intent = "https://" . $raw_intent;
+$twb = $GLOBALS['tagui_web_browser']; $casper_url = $raw_intent; $chrome_call = '';
 if ($twb == 'chrome') {$chrome_call = "var download_path = flow_path; // to set path correctly for Windows\n" .
 "if (download_path.indexOf(':')>0) download_path = download_path.replace(/\//g,'\\\\').replace(/\\\\/g,'\\\\');\n" .
 "chrome_step('Page.setDownloadBehavior',{behavior: 'allow', downloadPath: download_path});\n";

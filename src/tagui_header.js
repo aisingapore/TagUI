@@ -826,7 +826,7 @@ if (inside_py_block !== 0) return 'py'; if (inside_r_block !== 0) return 'r';
 if (inside_run_block !== 0) return 'run'; if (inside_vision_block !== 0) return 'vision';
 if (inside_js_block !== 0) return 'js'; if (inside_dom_block !== 0) return 'dom';
 
-if (lc_raw_intent.substr(0,7) == 'http://' || lc_raw_intent.substr(0,8) == 'https://') return 'url';
+if (lc_raw_intent.substr(0,7) == 'http://' || lc_raw_intent.substr(0,8) == 'https://' || lc_raw_intent.substr(0,4) == 'www.') return 'url';
 
 // first set of conditions check for valid keywords with their parameters
 if ((lc_raw_intent.substr(0,4) == 'tap ') || (lc_raw_intent.substr(0,6) == 'click ')) return 'tap';
@@ -1004,7 +1004,8 @@ if (!fs.exists('tagui_py/tagui_py.in')) return "this.echo('ERROR - cannot initia
 if (!fs.exists('tagui_py/tagui_py.out')) return "this.echo('ERROR - cannot initialise tagui_py.out')";
 return "py_result = ''; if (!py_step('"+input_intent+"')) this.echo('ERROR - cannot execute Python command(s)'); else {py_result = fetch_py_text(); clear_py_text(); try {py_json = JSON.parse(py_result);} catch(e) {py_json = JSON.parse('null');}}";}
 
-function url_intent(raw_intent) {raw_intent = eval("'" + escape_bs(raw_intent) + "'"); // support dynamic variables
+function url_intent(raw_intent) {if (raw_intent.toLowerCase().substr(0,4) == 'www.') raw_intent = 'https://' + raw_intent;
+raw_intent = eval("'" + escape_bs(raw_intent) + "'"); // support dynamic variables
 if (chrome_id == 0) return "this.echo('ERROR - step only supported in live mode using Chrome browser')";
 else return "this.evaluate(function() {window.location.href = \"" + raw_intent + "\"})";}
 
