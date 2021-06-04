@@ -1010,10 +1010,10 @@ if exist "tagui.sikuli\tagui_sikuli.in" echo finish > tagui.sikuli\tagui_sikuli.
 if exist "tagui_chrome.in" echo finish > tagui_chrome.in
 
 rem add delay between repetitions to pace out iterations
-if !tagui_data_set_size! neq 1 php -q sleep.php 3
+if %tagui_data_set_size% neq 1 php -q sleep.php 3
 
 rem kill chrome processes on single first run or data set last run
-if !tagui_data_set! equ !tagui_data_set_size! (
+if !tagui_data_set! equ %tagui_data_set_size% (
 	for /f "tokens=* usebackq" %%p in (`wmic process where "caption like '%%chrome.exe%%' and commandline like '%%tagui_user_profile_ --remote-debugging-port=9222%%'" get processid 2^>nul ^| cut -d" " -f 1 ^| sort -nur ^| head -n 1`) do set chrome_process_id=%%p
 	if not "!chrome_process_id!"=="" taskkill /PID !chrome_process_id! /T /F > nul 2>&1
 )
