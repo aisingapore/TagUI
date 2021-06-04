@@ -87,10 +87,12 @@ fwrite($output_file,"\n"); fclose($local_functions_file);}
 
 // define data from repository and datatable as variables for use in conditions and JS code
 if ($repo_count > 0) {$data_set = intval(getenv('tagui_data_set')); $escaped_line_ends = ["\n" => "\\n", "\r" => "\\r"];
-for ($repo_check = 0; $repo_check <= $repo_count; $repo_check++) {
+for ($repo_check = 0; $repo_check <= $repo_count; $repo_check++) { // lots of clean-up to ensure valid variable names
 $repo_data_value = strtr($repo_data[$repo_check][$data_set], $escaped_line_ends);
-$variable_name = str_replace(" ", "_", $repo_data[$repo_check][0]); $variable_name = str_replace("%", "", $variable_name);
-$variable_name = str_replace("#", "hash", $variable_name); $variable_name = str_replace("/", "slash", $variable_name);
+$variable_name = str_replace(" ", "_", $repo_data[$repo_check][0]);
+$variable_name = preg_replace("/[^A-Za-z0-9_]/", "", $variable_name);
+if (strlen($variable_name) == 0) $variable_name = 'invalid_variable_name';
+if (is_numeric(substr($variable_name,0,1))) $variable_name = "_" . $variable_name; 
 $repo_variables .= "var " . $variable_name . " = " . "'" . escape_quote($repo_data_value) . "';\n";}
 fwrite($output_file,"// define repository and datatable variables\n" . $repo_variables . "\n");}
 
