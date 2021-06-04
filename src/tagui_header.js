@@ -342,9 +342,21 @@ function get_text(source_text, left_marker, right_marker, optional_count) {
     var left_position = source_text.indexOf(left_marker); if (left_position == -1) return '';
     var right_position = source_text.indexOf(right_marker, left_position+1); if (right_position == -1) return '';
     if (optional_count > 1) {var occurrence_count = 2; while(occurrence_count <= optional_count) {occurrence_count++;
-            left_position = source_text.indexOf(left_marker, right_position+1); if (left_position == -1) return '';
-            right_position = source_text.indexOf(right_marker, left_position+1); if (right_position == -1) return '';}}
+        left_position = source_text.indexOf(left_marker, right_position+1); if (left_position == -1) return '';
+        right_position = source_text.indexOf(right_marker, left_position+1); if (right_position == -1) return '';}}
     return source_text.slice(left_position + left_marker.length, right_position).trim();}
+
+// remove all occurrences of given characters from a given string
+function remove_char(source_text, characters) {
+    if (!source_text) return ''; else if (!characters) return source_text;
+    characters = characters.replace(/\\n/g,'\n').replace(/\\r/g,'\r').replace(/\\t/g,'\t');
+    characters = characters.replace(/\\f/g,'\f').replace(/\\v/g,'\v').replace(/\\\\/g,'\\');
+    for (char_counter = 0; char_counter < characters.length; char_counter++) {
+        if (characters[char_counter] != '\\')
+            source_text = source_text.replace(new RegExp(characters[char_counter],'g'),'');
+        else
+            source_text = source_text.replace(/\\/g,'');}
+    return source_text;}
 
 // for initialising integration with sikuli visual automation
 function sikuli_handshake() { // techo('[connecting to sikuli process]');
