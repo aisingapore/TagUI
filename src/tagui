@@ -6,7 +6,7 @@ chrome_command="google-chrome"
 
 if [ -z "$1" ]
 then
-echo "tagui v6.41: use following options and this syntax to run - ./tagui flow_filename option(s)"
+echo "tagui v6.42: use following options and this syntax to run - ./tagui flow_filename option(s)"
 echo
 echo "tagui live     launch TagUI live mode enabled with visual automation for interactive development"
 echo "input(s)       add your own parameter(s) to be used in your automation flow as variables p1 to p8"
@@ -180,7 +180,7 @@ if [ "$7" = "-report" ] || [ "$7" = "-r" ]; then set -- "${@:1:6}" "${@:8}"; tag
 if [ "$8" = "-report" ] || [ "$8" = "-r" ]; then set -- "${@:1:7}" "${@:9}"; tagui_html_report=true; fi
 if [ "$9" = "-report" ] || [ "$9" = "-r" ]; then set -- "${@:1:8}"; tagui_html_report=true; fi
 
-tagui_speed_mode=false
+tagui_speed_mode=true
 # check speed parameter to skip delay and chrome restart between iterations
 if [ "$2" = "-speed" ] || [ "$2" = "-s" ]; then set -- "$1" "${@:3}"; tagui_speed_mode=true; fi
 if [ "$3" = "-speed" ] || [ "$3" = "-s" ]; then set -- "${@:1:2}" "${@:4}"; tagui_speed_mode=true; fi
@@ -258,9 +258,6 @@ else tagui_data_set_size="$(($min_column-1))"; fi; fi
 # big loop for managing multiple data sets in datatable 
 for (( tagui_data_set=1; tagui_data_set<=$tagui_data_set_size; tagui_data_set++ ))
 do export tagui_data_set=$tagui_data_set
-
-# add delay between repetitions to pace out iterations
-if [ "$tagui_data_set" -ne 1 ] && [ "$tagui_speed_mode" == false ]; then sleep 3; fi
 
 # parse automation flow file, check for initial parse error
 # check R, python, sikuli, chrome, before calling casperjs
@@ -346,14 +343,14 @@ if [ -f "tagui_py/tagui_py.in" ]; then echo "finish" > tagui_py/tagui_py.in; fi
 if [ -f "tagui.sikuli/tagui_sikuli.in" ]; then echo "finish" > tagui.sikuli/tagui_sikuli.in; fi
 if [ -f "tagui_chrome.in" ]; then echo "finish" > tagui_chrome.in; fi
 
-# kill chrome processes by checking which os the processes are started on 
-if [ "$chrome_started" == "Darwin" ] && [ "$tagui_speed_mode" == false ]; then
+# add delay between repetitions to pace out iterations
+if [ "$tagui_data_set_size" -ne 1 ]; then sleep 3; fi
+
+# kill chrome processes on single first run or data set last run
+if [ "$tagui_data_set" -eq "$tagui_data_set_size" ]; then
 chrome_process_id="$(ps x | grep remote-debugging-port=9222 | grep tagui_user_profile | grep window-size | sed -e 's/^[ ]*//' | cut -d' ' -f 1 | sort -nur | head -n 1)"
 if [ -n "$chrome_process_id" ]; then kill $chrome_process_id; fi
-else if [ -n "$chrome_started" ] && [ "$tagui_speed_mode" == false ]; then
-chrome_process_id="$(ps x | grep remote-debugging-port=9222 | grep tagui_user_profile | grep window-size | sed -e 's/^[ ]*//' | cut -d' ' -f 1 | sort -nur | head -n 1)"
-if [ -n "$chrome_process_id" ]; then kill $chrome_process_id; fi
-fi; fi
+fi
 
 # end of big loop for managing multiple data sets in datatable
 done

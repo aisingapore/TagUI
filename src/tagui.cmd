@@ -14,7 +14,7 @@ rem enable windows for loop advanced flow control
 setlocal enableextensions enabledelayedexpansion
 
 if "%~1"=="" (
-echo tagui v6.41: use following options and this syntax to run - tagui flow_filename option^(s^)
+echo tagui v6.42: use following options and this syntax to run - tagui flow_filename option^(s^)
 echo.
 echo tagui live     launch TagUI live mode enabled with visual automation for interactive development
 echo input^(s^)       add your own parameter^(s^) to be used in your automation flow as variables p1 to p8
@@ -746,7 +746,7 @@ if "%arg9%"=="-r" (
 	set tagui_html_report=true
 )
 
-set tagui_speed_mode=false
+set tagui_speed_mode=true
 rem check speed parameter to skip delay and chrome restart between iterations
 if "%arg2%"=="-speed" (
 	set arg2=
@@ -911,9 +911,6 @@ rem big loop for managing multiple data sets in datatable
 for /l %%n in (1,1,%tagui_data_set_size%) do (
 set tagui_data_set=%%n
 
-rem add delay between repetitions to pace out iterations
-if !tagui_data_set! neq 1 if %tagui_speed_mode%==false php -q sleep.php 3
-
 rem parse automation flow file, check for initial parse error
 rem check R, python, sikuli, chrome, before calling casperjs
 php -q tagui_parse.php "%flow_file%" | tee -a "%flow_file%.log"
@@ -1012,8 +1009,11 @@ if exist "tagui_py\tagui_py.in" echo finish > tagui_py\tagui_py.in
 if exist "tagui.sikuli\tagui_sikuli.in" echo finish > tagui.sikuli\tagui_sikuli.in
 if exist "tagui_chrome.in" echo finish > tagui_chrome.in
 
-rem kill chrome processes by checking which os the processes are started on
-if not "!chrome_started!"=="" if %tagui_speed_mode%==false (
+rem add delay between repetitions to pace out iterations
+if !tagui_data_set_size! neq 1 php -q sleep.php 3
+
+rem kill chrome processes on single first run or data set last run
+if !tagui_data_set! equ !tagui_data_set_size! (
 	for /f "tokens=* usebackq" %%p in (`wmic process where "caption like '%%chrome.exe%%' and commandline like '%%tagui_user_profile_ --remote-debugging-port=9222%%'" get processid 2^>nul ^| cut -d" " -f 1 ^| sort -nur ^| head -n 1`) do set chrome_process_id=%%p
 	if not "!chrome_process_id!"=="" taskkill /PID !chrome_process_id! /T /F > nul 2>&1
 )
