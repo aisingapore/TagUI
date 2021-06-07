@@ -5,10 +5,11 @@ https://www.google.com
 
 // Look on the web page for an element with 'q' in its text, id or name
 // (or some other attributes), then type 'latest movies' and enter
-type q as latest movies[enter]
+// type q as latest movies[enter]
 
-// Use below if above fails, google.com differs for different locations
-// type //*[@name="q"] as latest movies[enter]
+// Use a more accurate identifier below instead because
+// google.com webpage differs for different locations
+type //*[@name="q"] as latest movies[enter]
 
 // Click the first result using XPath
 // Learn XPath: https://www.w3schools.com/xml/xpath_intro.asp
