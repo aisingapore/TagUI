@@ -663,11 +663,17 @@ ws_json = JSON.parse(ws_message);
 ws_message = chrome_step('DOM.disable'); // disable invoked DOM agent from running and firing events
 } catch(e) {casper.echo('ERROR - unable to upload ' + selector + ' as ' + filename);}};
 
+/* // backup of previous download implementation to switch to new download to location syntax
 chrome.download = function(url,filename) { // download function for downloading url resource to file
 // casper download cannot be used for urls which requires login as casperjs engine can't access chrome
 // the chromium issue 696481 is moving well, else an alternative may be to inject casper clientutils.js 
 // TagUI by default auto-sets to allow downloads for headless Chrome (otherwise it prevents downloads)
-casper.echo('ERROR - for headless and visible Chrome, download file using normal webpage interaction');};
+casper.echo('ERROR - for headless and visible Chrome, download file using normal webpage interaction');}; */
+
+chrome.download = function(location) { // download function for setting location of downloaded files
+// below replacement line to set path correctly on Windows to be sent to Chrome browser method
+if (location.indexOf(':')>0) location = location.replace(/\//g,'\\\\').replace(/\\\\/g,'\\\\');
+chrome_step('Page.setDownloadBehavior',{behavior: 'allow', downloadPath: location});}
 
 chrome.evaluate = function(fn_statement,eval_json) { // evaluate expression in browser dom context
 // chrome runtime.evaluate is different from casperjs evaluate, do some processing to reduce gap
@@ -1113,10 +1119,11 @@ else return "this.echo('ERROR - cannot find " + param1 + "')";}
 
 function down_intent(raw_intent) {raw_intent = eval("'" + escape_bs(raw_intent) + "'"); // support dynamic variables
 var params = ((raw_intent + ' ').substr(1+(raw_intent + ' ').indexOf(' '))).trim();
-var param1 = (params.substr(0,params.indexOf(' to '))).trim();
-var param2 = (params.substr(4+params.indexOf(' to '))).trim();
-if ((param1 == '') || (param2 == '')) return "this.echo('ERROR - url/filename missing for " + raw_intent + "')";
-else return "this.download('" + param1 + "','" + abs_file(param2) + "')";}
+if (params.substr(0,3) != 'to ') params = 'to ' + params; // handle user missing out to separator
+var param1 = (params.substr(0,params.indexOf('to '))).trim();
+var param2 = (params.substr(3+params.indexOf('to '))).trim();
+if (param2 == '') return "this.echo('ERROR - location missing for " + raw_intent + "')";
+else return "this.download('" + abs_file(param2) + "')";}
 
 function receive_intent(raw_intent) {raw_intent = eval("'" + escape_bs(raw_intent) + "'"); // support dynamic variables
 return "this.echo('ERROR - step not supported in live mode, it requires creating CasperJS event')";}

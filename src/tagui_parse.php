@@ -807,10 +807,10 @@ $twb.".page.uploadFile(tx('".$param1."'),'".abs_file($param2)."');".end_tx($para
 
 function down_intent($raw_intent) {$twb = $GLOBALS['tagui_web_browser'];
 $params = trim(substr($raw_intent." ",1+strpos($raw_intent." "," ")));
-$param1 = trim(substr($params,0,strpos($params," to "))); $param2 = trim(substr($params,4+strpos($params," to ")));
-if (($param1 == "") or ($param2 == "")) 
-echo "ERROR - " . current_line() . " url/filename missing for " . $raw_intent . "\n"; else
-return "casper.then(function() {"."{techo('".$raw_intent."');\n".$twb.".download('".$param1."','".abs_file($param2)."');}".end_fi()."});"."\n\n";}
+if (substr($params,0,3) != "to ") $params = "to " . $params; // handle user missing out to separator
+$param1 = trim(substr($params,0,strpos($params,"to "))); $param2 = trim(substr($params,3+strpos($params,"to ")));
+if ($param2 == "") echo "ERROR - " . current_line() . " location missing for " . $raw_intent . "\n";
+else return "casper.then(function() {"."{techo('".$raw_intent."');\n".$twb.".download('".abs_file($param2)."');}".end_fi()."});"."\n\n";}
 
 function receive_intent($raw_intent) {$twb = $GLOBALS['tagui_web_browser'];
 $params = trim(substr($raw_intent." ",1+strpos($raw_intent." "," ")));
