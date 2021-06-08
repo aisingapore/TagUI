@@ -12,15 +12,7 @@
 
 Write flows in simple TagUI language and automate away repetitive time-consuming tasks on your computer. The TagUI project is [open-source and free forever](https://www.linkedin.com/posts/kensoh_sneak-preview-of-tagui-ms-word-plug-in-v3-activity-6796860165338595328-02wD). It's easy to setup and use, and works on Windows, macOS and Linux. Besides English, flows can be written in [20 other languages](https://github.com/kelaberetiv/TagUI/tree/master/src/languages), so you can do RPA using your [native language](https://github.com/kelaberetiv/TagUI/blob/master/flows/samples/8_chineseflow.tag).
 
-You can use TagUI [MS Office Plug-ins](https://github.com/kelaberetiv/TagUI/tree/master/src/office) ([video demo](https://www.linkedin.com/posts/kensoh_rpa-tagui-activity-6775824220200017920-bxhA)) to easily create and deploy Word doc as RPA robots, and set up RPA data parameters using Excel. See below preview of upcoming MS Word Plug-in v3 - there will be a toolbar to add steps and a snapshot button to create image snapshots for computer vision RPA. You can also run TagUI easily on your phone web browser using [Google's free cloud](https://github.com/kelaberetiv/TagUI/issues/913). VS Code users can install this [TagUI language extension](https://www.linkedin.com/posts/kensoh_hi-vs-code-folks-who-love-rpa-now-you-can-activity-6805445134034042880--PWT).
-
-![Word v3 Preview](https://raw.githubusercontent.com/kelaberetiv/TagUI/master/src/office/word/word_v3_preview.png)
-
-TagUI has a bustling user community, and extended community champions create new RPA tools for their own communities, based on TagUI. Python users will [pip install rpa](https://github.com/tebelorg/RPA-Python) for the #1 Python RPA package. TagUI for [C# .NET](https://www.nuget.org/packages/tagui), [Java](https://www.linkedin.com/posts/kensoh_hi-c-net-folks-interested-in-rpa-happy-activity-6800991305251078144-Gx4T), and [Go](https://www.linkedin.com/posts/kensoh_hi-fans-of-go-programming-language-would-activity-6804658389772324864-_OgH) programming languages are being built. For event-driven RPA with thousands of connectors, check out TagUI [module for Node-RED](https://flows.nodered.org/node/node-red-contrib-tagui), a popular free and open-source workflow automation tool.
-
-For Microsoft [Power Automate Desktop](https://flow.microsoft.com/en-us/desktop/) users, you'll be happy to know that there's [2-way integration](https://www.linkedin.com/posts/kensoh_tagui-activity-6773236538596831232-1aFu) with TagUI out of the box (for business continuity if you switch between the 2 apps). Do also check out other leading open-source RPA tools, to see if they meet your needs better - [OpenRPA](https://github.com/open-rpa/openrpa) & [OpenFlow](https://github.com/open-rpa/openflow), [OpenBots](https://www.linkedin.com/posts/openbots_openbots-studio-demo-support-for-tag-ui-activity-6788174021964943361-RrUD), [Robocorp](https://youtu.be/HAfQpNZVbKI). All of them support orchestrating and running TagUI robots from their orchestrator.
-
-![TagUI Roadmap](https://raw.githubusercontent.com/kelaberetiv/TagUI/master/src/media/roadmap.png)
+### Language designed for RPA
 
 In TagUI language, you use steps like `click` and `type` to interact with identifiers, which include web identifiers, image snapshots, screen coordinates, or even text using OCR. Below is an example to login to Xero accounting:
 
@@ -47,6 +39,32 @@ click (720,500)
 ```
 
 To get started, see this [installation guide](https://tagui.readthedocs.io/en/latest/setup.html). Join the community or ask any questions at [our Telegram chat group](https://t.me/rpa_chat).
+
+### RPA using Microsoft Word
+
+You can use TagUI [MS Office Plug-ins](https://github.com/kelaberetiv/TagUI/tree/master/src/office) ([video demo](https://www.linkedin.com/posts/kensoh_rpa-tagui-activity-6775824220200017920-bxhA)) to easily create and deploy Word doc as RPA robots, and set up RPA data parameters using Excel. See below preview of upcoming MS Word Plug-in v3 - there will be a toolbar to add steps and a snapshot button to create image snapshots for computer vision RPA. You can also run TagUI easily on your phone web browser using [Google's free cloud](https://github.com/kelaberetiv/TagUI/issues/913). VS Code users can install this [TagUI language extension](https://www.linkedin.com/posts/kensoh_hi-vs-code-folks-who-love-rpa-now-you-can-activity-6805445134034042880--PWT).
+
+![Word v3 Preview](https://raw.githubusercontent.com/kelaberetiv/TagUI/master/src/office/word/word_v3_preview.png)
+
+### Ecosystem and Communities
+
+TagUI has a bustling user community, and extended community champions create new RPA tools for their own communities, based on TagUI. Python users will [pip install rpa](https://github.com/tebelorg/RPA-Python) for the #1 Python RPA package. TagUI for [C# .NET](https://www.nuget.org/packages/tagui), [Java](https://www.linkedin.com/posts/kensoh_hi-c-net-folks-interested-in-rpa-happy-activity-6800991305251078144-Gx4T), and [Go](https://www.linkedin.com/posts/kensoh_hi-fans-of-go-programming-language-would-activity-6804658389772324864-_OgH) programming languages are being built. For event-driven RPA with thousands of connectors, check out TagUI [module for Node-RED](https://flows.nodered.org/node/node-red-contrib-tagui), a popular free and open-source workflow automation tool.
+
+For Microsoft [Power Automate Desktop](https://flow.microsoft.com/en-us/desktop/) users, you'll be happy to know that there's [2-way integration](https://www.linkedin.com/posts/kensoh_tagui-activity-6773236538596831232-1aFu) with TagUI out of the box (for business continuity if you switch between the 2 apps). Do also check out other leading open-source RPA tools, to see if they meet your needs better - [OpenRPA](https://github.com/open-rpa/openrpa) & [OpenFlow](https://github.com/open-rpa/openflow), [OpenBots](https://www.linkedin.com/posts/openbots_openbots-studio-demo-support-for-tag-ui-activity-6788174021964943361-RrUD), [Robocorp](https://youtu.be/HAfQpNZVbKI). All of them support orchestrating and running TagUI robots from their orchestrator.
+
+![TagUI Roadmap](https://raw.githubusercontent.com/kelaberetiv/TagUI/master/src/media/roadmap.png)
+
+### Enterprise Security by Design
+
+- TagUI default implementation is an on-user-computer on-prem RPA tool that does not exist on any cloud
+- TagUI is not a SaaS or software on the cloud running on vendor's cloud, it runs on actual users' computers
+- Industry-specific certifications like PCI-DSS, HIPAA, SOX aren't applicable because TagUI doesn't store data
+- In decentralised bottom-up RPA, not advisable and no need for bot credentials as users are held accountable
+- For data at rest, storage encryption would be on user's computer's OS-level as it is run on user's computer
+- For data in use, recommend user to manually enter sensitive info like password before letting robot take over
+- For data in motion, users' enterprise app websites are now https by default for secure data entry and retrieval
+- With -report option, there is a summary and detailed logs of robots to be enhanced for [centralised reporting](https://github.com/kelaberetiv/TagUI/issues/956#issuecomment-850123072)
+- For more info on TagUI architecture diagram, software components and security considerations, [visit this link](https://github.com/kelaberetiv/TagUI/tree/pre_v6#security)
 
 # v6 Features
 
