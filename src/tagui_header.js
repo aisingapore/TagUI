@@ -676,7 +676,7 @@ casper.echo('ERROR - for headless and visible Chrome, download file using normal
 chrome.download = function(location) { // download function for setting location of downloaded files
 download_path = location; // to store the default download location for subsequent URL visits
 // below replacement line to set path correctly on Windows to be sent to Chrome browser method
-if (location.indexOf(':')>0) location = location.replace(/\//g,'\\\\').replace(/\\\\/g,'\\\\');
+if (location.indexOf(':')>0) location = location.replace(/\//g,'\\').replace(/\\/g,'\\');
 chrome_step('Page.setDownloadBehavior',{behavior: 'allow', downloadPath: location});}
 
 chrome.evaluate = function(fn_statement,eval_json) { // evaluate expression in browser dom context
