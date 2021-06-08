@@ -14,7 +14,7 @@ rem enable windows for loop advanced flow control
 setlocal enableextensions enabledelayedexpansion
 
 if "%~1"=="" (
-echo tagui v6.42: use following options and this syntax to run - tagui flow_filename option^(s^)
+echo tagui v6.43: use following options and this syntax to run - tagui flow_filename option^(s^)
 echo.
 echo tagui live     launch TagUI live mode enabled with visual automation for interactive development
 echo input^(s^)       add your own parameter^(s^) to be used in your automation flow as variables p1 to p8
@@ -914,7 +914,7 @@ set tagui_data_set=%%n
 rem parse automation flow file, check for initial parse error
 rem check R, python, sikuli, chrome, before calling casperjs
 php -q tagui_parse.php "%flow_file%" | tee -a "%flow_file%.log"
-for /f "usebackq" %%f in ('%flow_file%.log') do set file_size=%%~zf
+for /f "usebackq delims=" %%f in ('%flow_file%.log') do set file_size=%%~zf
 if !file_size! gtr 0 (
 	if !tagui_data_set! equ 1 (
 		echo ERROR - automation aborted due to above | tee -a "%flow_file%.log"
@@ -1051,7 +1051,7 @@ if exist "tagui.sikuli\tagui.log" (
 )
 
 rem check report option to generate html automation log
-for /f "usebackq" %%f in ('%flow_file%.log') do set file_size=%%~zf
+for /f "usebackq delims=" %%f in ('%flow_file%.log') do set file_size=%%~zf
 if %file_size% gtr 0 if %tagui_html_report%==true (
 	php -q tagui_report.php "%flow_file%"
 	gawk "sub(\"$\", \"\")" "%flow_file%.html" > "%flow_file%.html.tmp"
