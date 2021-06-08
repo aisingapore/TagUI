@@ -40,7 +40,7 @@ click (720,500)
 
 To get started, see this [installation guide](https://tagui.readthedocs.io/en/latest/setup.html). Join the community or ask any questions at [our Telegram chat group](https://t.me/rpa_chat).
 
-### RPA using Microsoft Word
+### Do RPA with Microsoft Word
 
 You can use TagUI [MS Office Plug-ins](https://github.com/kelaberetiv/TagUI/tree/master/src/office) ([video demo](https://www.linkedin.com/posts/kensoh_rpa-tagui-activity-6775824220200017920-bxhA)) to easily create and deploy Word doc as RPA robots, and set up RPA data parameters using Excel. See below preview of upcoming MS Word Plug-in v3 - there will be a toolbar to add steps and a snapshot button to create image snapshots for computer vision RPA. You can also run TagUI easily on your phone web browser using [Google's free cloud](https://github.com/kelaberetiv/TagUI/issues/913). VS Code users can install this [TagUI language extension](https://www.linkedin.com/posts/kensoh_hi-vs-code-folks-who-love-rpa-now-you-can-activity-6805445134034042880--PWT).
 
@@ -56,13 +56,18 @@ For Microsoft [Power Automate Desktop](https://flow.microsoft.com/en-us/desktop/
 
 ### Enterprise Security by Design
 
+Security Considerations:
 - TagUI default implementation is an on-user-computer on-prem RPA tool that does not exist on any cloud
 - TagUI is not a SaaS or software on the cloud running on vendor's cloud, it runs on actual users' computers
 - Industry-specific certifications like PCI-DSS, HIPAA, SOX aren't applicable because TagUI doesn't store data
 - In decentralised bottom-up RPA, not advisable and no need for bot credentials as users are held accountable
+
+Data Considerations:
 - For data at rest, storage encryption would be on user's computer's OS-level as it is run on user's computer
 - For data in use, recommend user to manually enter sensitive info like password before letting robot take over
 - For data in motion, users' enterprise app websites are now https by default for secure data entry and retrieval
+
+More Information:
 - With -report option, there is a summary and detailed logs of robots to be enhanced for [centralised reporting](https://github.com/kelaberetiv/TagUI/issues/956#issuecomment-850123072)
 - For more info on TagUI architecture diagram, software components and security considerations, [visit this link](https://github.com/kelaberetiv/TagUI/tree/pre_v6#security)
 
