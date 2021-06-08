@@ -38,8 +38,6 @@ type (720,440) as 12345678
 click (720,500)
 ```
 
-To get started, see this [installation guide](https://tagui.readthedocs.io/en/latest/setup.html). Join the community or ask any questions at [our Telegram chat group](https://t.me/rpa_chat).
-
 ### Do RPA with Microsoft Word
 
 You can use TagUI [MS Office Plug-ins](https://github.com/kelaberetiv/TagUI/tree/master/src/office) ([video demo](https://www.linkedin.com/posts/kensoh_rpa-tagui-activity-6775824220200017920-bxhA)) to easily create and deploy Word doc as RPA robots, and set up RPA data parameters using Excel. See below preview of upcoming MS Word Plug-in v3 - there will be a toolbar to add steps and a snapshot button to create image snapshots for computer vision RPA. You can also run TagUI easily on your phone web browser using [Google's free cloud](https://github.com/kelaberetiv/TagUI/issues/913). VS Code users can install this [TagUI language extension](https://www.linkedin.com/posts/kensoh_hi-vs-code-folks-who-love-rpa-now-you-can-activity-6805445134034042880--PWT).
@@ -70,6 +68,8 @@ Data Considerations:
 More Information:
 - With -report option, there is a summary and detailed logs of robots to be enhanced for [centralised reporting](https://github.com/kelaberetiv/TagUI/issues/956#issuecomment-850123072)
 - For more info on TagUI architecture diagram, software components and security considerations, [visit this link](https://github.com/kelaberetiv/TagUI/tree/pre_v6#security)
+
+To get started, see this [installation guide](https://tagui.readthedocs.io/en/latest/setup.html). Join the community or ask any questions at [our Telegram chat group](https://t.me/rpa_chat).
 
 # v6 Features
 
