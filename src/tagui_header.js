@@ -31,6 +31,9 @@ var r_count = 0; var py_count = 0; var sikuli_count = 0; var chrome_id = 0;
 // chrome context for frame handling and targetid for popup handling
 var chrome_context = 'document'; var chrome_targetid = '';
 
+// to track download path if set by user using 'download to location' step
+var download_path = '';
+
 // variables to track frame offset if current context is within a frame
 var frame_step_offset_x = 0; var frame_step_offset_y = 0;
 var original_frame_step_offset_x = 0; var original_frame_step_offset_y = 0;
@@ -671,6 +674,7 @@ chrome.download = function(url,filename) { // download function for downloading 
 casper.echo('ERROR - for headless and visible Chrome, download file using normal webpage interaction');}; */
 
 chrome.download = function(location) { // download function for setting location of downloaded files
+download_path = location; // to store the default download location for subsequent URL visits
 // below replacement line to set path correctly on Windows to be sent to Chrome browser method
 if (location.indexOf(':')>0) location = location.replace(/\//g,'\\\\').replace(/\\\\/g,'\\\\');
 chrome_step('Page.setDownloadBehavior',{behavior: 'allow', downloadPath: location});}

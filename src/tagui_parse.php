@@ -693,8 +693,8 @@ end_fi()."});\n\n";}
 
 // set of functions to interpret steps into corresponding casperjs code
 function url_intent($raw_intent) {if (substr(strtolower($raw_intent),0,4)=="www.") $raw_intent = "https://" . $raw_intent;
-$twb = $GLOBALS['tagui_web_browser']; $casper_url = $raw_intent; $chrome_call = '';
-if ($twb == 'chrome') {$chrome_call = "var download_path = flow_path; // to set path correctly for Windows\n" .
+$twb = $GLOBALS['tagui_web_browser']; $casper_url = $raw_intent; $chrome_call = ''; if ($twb == 'chrome')
+{$chrome_call = "if (download_path == '') download_path = flow_path; // below to set path correctly for Windows\n" .
 "if (download_path.indexOf(':')>0) download_path = download_path.replace(/\//g,'\\\\').replace(/\\\\/g,'\\\\');\n" .
 "chrome_step('Page.setDownloadBehavior',{behavior: 'allow', downloadPath: download_path});\n";
 $casper_url = 'about:blank'; $chrome_call .= "chrome_step('Page.navigate',{url: '".$raw_intent."'}); sleep(1000);\n";}
