@@ -6,9 +6,10 @@ chrome_command="google-chrome"
 
 if [ -z "$1" ]
 then
-echo "tagui v6.45: use following options and this syntax to run - ./tagui flow_filename option(s)"
+echo "tagui v6.46: use following options and this syntax to run - ./tagui flow_filename option(s)"
 echo
 echo "tagui live     launch TagUI live mode enabled with visual automation for interactive development"
+echo "tagui update   download and update to latest TagUI version (please backup your version beforehand)"
 echo "input(s)       add your own parameter(s) to be used in your automation flow as variables p1 to p8"
 echo "data.csv       specify a csv file to be used as the datatable for batch automation of many records"
 echo "-deploy    -d  generate .command file which can be double-clicked to run workflow with specific options"
@@ -29,6 +30,18 @@ fi;fi;fi;fi; set -- "$online_flowname" "${@:2}"; fi
 
 # enter live mode directly without user creating dummy file
 if [ "$1" = "live" ]; then echo live > "live.tag" ; echo "// mouse_xy()" >> "live.tag" ; set -- "live.tag" "${@:2}"; fi
+
+# go into download and update process if tagui update is given
+if [ "$1" = "update" ]; then
+SOURCE="${BASH_SOURCE[0]}" # slimerjs's implementation instead of cd "`dirname "$0"`"
+while [ -h "$SOURCE" ]; do TAGUI_PARENT_DIR="$( cd -P "$( dirname "$SOURCE" )" && pwd )"
+SOURCE="$(readlink "$SOURCE")"; [[ $SOURCE != /* ]] && SOURCE="$TAGUI_PARENT_DIR/$SOURCE"; done
+TAGUI_PARENT_DIR="$( cd -P "$( dirname "$SOURCE" )/.." && pwd )"
+if [ -f "$TAGUI_PARENT_DIR/TagUI-master.zip" ]; then rm "$TAGUI_PARENT_DIR/TagUI-master.zip"; fi
+php -q "$TAGUI_PARENT_DIR/src/tagui_update.php"
+if ! [ -f "$TAGUI_PARENT_DIR/TagUI-master.zip" ]; then exit 1; fi
+tar -xf "$TAGUI_PARENT_DIR/TagUI-master.zip" -C "$TAGUI_PARENT_DIR"; cp -R "$TAGUI_PARENT_DIR/TagUI-master/src" "$TAGUI_PARENT_DIR/."; cp -R "$TAGUI_PARENT_DIR/TagUI-master/flows" "$TAGUI_PARENT_DIR/."; cp -R "$TAGUI_PARENT_DIR/TagUI-master/docs" "$TAGUI_PARENT_DIR/."; cp "$TAGUI_PARENT_DIR/TagUI-master/README.md" "$TAGUI_PARENT_DIR/."; cp "$TAGUI_PARENT_DIR/TagUI-master/LICENSE.md" "$TAGUI_PARENT_DIR/."; chmod -R 755 "$TAGUI_PARENT_DIR"; if [ -d "$TAGUI_PARENT_DIR/TagUI-master" ]; then rm -R "$TAGUI_PARENT_DIR/TagUI-master"; echo "TagUI successfully updated at $TAGUI_PARENT_DIR"; fi; exit 0
+fi
 
 # check whether specified automation flow file exists
 if ! [ -f "$1" ]; then echo "ERROR - cannot find $1"; exit 1; fi
