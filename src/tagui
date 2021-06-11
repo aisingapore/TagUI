@@ -42,14 +42,14 @@ if [ -f "$TAGUI_PARENT_DIR/src/tagui_master" ]; then rm "$TAGUI_PARENT_DIR/src/t
 
 curl -s -o "$TAGUI_PARENT_DIR/src/tagui_master" "https://raw.githubusercontent.com/kelaberetiv/TagUI/master/src/tagui"
 if [ -f "$TAGUI_PARENT_DIR/src/tagui_master" ]; then
-if grep -iq "not found\|bad request" "$TAGUI_PARENT_DIR/src/tagui_master"; then
+if ! grep -iq 'echo "tagui v' "$TAGUI_PARENT_DIR/src/tagui_master"; then
 rm "$TAGUI_PARENT_DIR/src/tagui_master"; fi; fi
 if ! [ -f "$TAGUI_PARENT_DIR/src/tagui_master" ]; then
 echo "ERROR - internet connection to access GitHub is required to update TagUI"; exit 1; fi
 
 TAGUI_MASTER_VERSION="$(grep 'echo "tagui v' "$TAGUI_PARENT_DIR/src/tagui_master" | cut -d' ' -f 3 | head -n 1)";
 TAGUI_LOCAL_VERSION="$(grep 'echo "tagui v' "$TAGUI_PARENT_DIR/src/tagui" | cut -d' ' -f 3 | head -n 1)";
-rm "$TAGUI_PARENT_DIR/src/tagui_master";
+rm "$TAGUI_PARENT_DIR/src/tagui_master"
 if [[ "$TAGUI_MASTER_VERSION" == "$TAGUI_LOCAL_VERSION" ]]; then
 echo "You are already using the latest version of TagUI (${TAGUI_LOCAL_VERSION%?})"; exit 0; fi
 
@@ -61,7 +61,7 @@ rm "$TAGUI_PARENT_DIR/TagUI-master.zip"; fi; fi
 if ! [ -f "$TAGUI_PARENT_DIR/TagUI-master.zip" ]; then
 echo "ERROR - cannot download from https://github.com/kelaberetiv/TagUI/archive/refs/heads/master.zip"; exit 1; fi
 
-tar -xf "$TAGUI_PARENT_DIR/TagUI-master.zip" -C "$TAGUI_PARENT_DIR"; \cp -R "$TAGUI_PARENT_DIR/TagUI-master/src" "$TAGUI_PARENT_DIR/."; \cp -R "$TAGUI_PARENT_DIR/TagUI-master/flows" "$TAGUI_PARENT_DIR/."; \cp -R "$TAGUI_PARENT_DIR/TagUI-master/docs" "$TAGUI_PARENT_DIR/."; \cp "$TAGUI_PARENT_DIR/TagUI-master/README.md" "$TAGUI_PARENT_DIR/."; \cp "$TAGUI_PARENT_DIR/TagUI-master/LICENSE.md" "$TAGUI_PARENT_DIR/."; chmod -R 755 "$TAGUI_PARENT_DIR"; if [ -d "$TAGUI_PARENT_DIR/TagUI-master" ]; then \rm -R "$TAGUI_PARENT_DIR/TagUI-master"; echo "TagUI successfully updated at $TAGUI_PARENT_DIR"; fi; exit 0
+unzip -qq "$TAGUI_PARENT_DIR/TagUI-master.zip" -d "$TAGUI_PARENT_DIR"; \cp -R "$TAGUI_PARENT_DIR/TagUI-master/src" "$TAGUI_PARENT_DIR/."; \cp -R "$TAGUI_PARENT_DIR/TagUI-master/flows" "$TAGUI_PARENT_DIR/."; \cp -R "$TAGUI_PARENT_DIR/TagUI-master/docs" "$TAGUI_PARENT_DIR/."; \cp "$TAGUI_PARENT_DIR/TagUI-master/README.md" "$TAGUI_PARENT_DIR/."; \cp "$TAGUI_PARENT_DIR/TagUI-master/LICENSE.md" "$TAGUI_PARENT_DIR/."; chmod -R 755 "$TAGUI_PARENT_DIR"; if [ -d "$TAGUI_PARENT_DIR/TagUI-master" ]; then \rm -R "$TAGUI_PARENT_DIR/TagUI-master"; echo "TagUI successfully updated at $TAGUI_PARENT_DIR"; fi; exit 0
 
 # end of if block to handle download and update process
 fi
