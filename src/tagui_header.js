@@ -350,7 +350,7 @@ function get_text(source_text, left_marker, right_marker, optional_count) {
     return source_text.slice(left_position + left_marker.length, right_position).trim();}
 
 // remove all occurrences of given characters from a given string
-function remove_char(source_text, characters) {
+function remove_chars(source_text, characters) {
     if (!source_text) return ''; else if (!characters) return source_text;
     characters = characters.replace(/\\n/g,'\n').replace(/\\r/g,'\r').replace(/\\t/g,'\t');
     characters = characters.replace(/\\f/g,'\f').replace(/\\v/g,'\v').replace(/\\\\/g,'\\');
