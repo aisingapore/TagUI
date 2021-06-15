@@ -14,9 +14,10 @@ rem enable windows for loop advanced flow control
 setlocal enableextensions enabledelayedexpansion
 
 if "%~1"=="" (
-echo tagui v6.45: use following options and this syntax to run - tagui flow_filename option^(s^)
+echo tagui v6.46: use following options and this syntax to run - tagui flow_filename option^(s^)
 echo.
 echo tagui live     launch TagUI live mode enabled with visual automation for interactive development
+echo tagui update   download and update to latest TagUI version ^(please backup your version beforehand^)
 echo input^(s^)       add your own parameter^(s^) to be used in your automation flow as variables p1 to p8
 echo data.csv       specify a csv file to be used as the datatable for batch automation of many records
 echo -deploy    -d  generate .cmd file which can be double-clicked to run workflow with specific options
@@ -57,6 +58,53 @@ if "%~nx1"=="live" (
 	echo // mouse_xy^(^) >> "live.tag"
 	set "flow_file=%~dp1live.tag"
 	goto live_mode_skip
+)
+
+rem go into download and update process if tagui update is given
+rem set TAGUI_PARENT_DIR here to avoid complication in for loop
+set "TAGUI_PARENT_DIR=%~dp0.."
+if "%1"=="update" (
+	if exist "%TAGUI_PARENT_DIR%\TagUI-master.zip" del "%TAGUI_PARENT_DIR%\TagUI-master.zip"
+	if exist "%TAGUI_PARENT_DIR%\src\tagui_master.cmd" del "%TAGUI_PARENT_DIR%\src\tagui_master.cmd"
+
+	if exist "%~dp0unx\curl.exe" (
+		set "path=%~dp0unx;%path%"
+	) else (
+		echo ERROR - cannot find curl command tagui\src\unx\curl.exe needed to update TagUI
+		exit /b 1
+	)
+	curl -k -s -o "%TAGUI_PARENT_DIR%\src\tagui_master.cmd" "https://raw.githubusercontent.com/kelaberetiv/TagUI/master/src/tagui.cmd"
+	if exist "%TAGUI_PARENT_DIR%\src\tagui_master.cmd" (
+		find /i /c "echo tagui v" "%TAGUI_PARENT_DIR%\src\tagui_master.cmd" > nul
+		if errorlevel 1 del "%TAGUI_PARENT_DIR%\src\tagui_master.cmd"
+	)
+	if not exist "%TAGUI_PARENT_DIR%\src\tagui_master.cmd" (
+		echo ERROR - internet connection to access GitHub is required to update TagUI
+		exit /b 1
+	)
+
+	for /f "tokens=* usebackq delims=" %%v in (`grep "echo tagui v" "%TAGUI_PARENT_DIR%\src\tagui_master.cmd" ^| cut -d" " -f 3 ^| head -n 1`) do set TAGUI_MASTER_VERSION=%%v
+	for /f "tokens=* usebackq delims=" %%v in (`grep "echo tagui v" "%TAGUI_PARENT_DIR%\src\tagui.cmd" ^| cut -d" " -f 3 ^| head -n 1`) do set TAGUI_LOCAL_VERSION=%%v
+	del "%TAGUI_PARENT_DIR%\src\tagui_master.cmd"
+	if "!TAGUI_MASTER_VERSION!" == "!TAGUI_LOCAL_VERSION!" (
+		echo You are already using the latest version of TagUI ^(!TAGUI_LOCAL_VERSION:~0,-1!^)
+		exit /b 0
+	)
+
+	echo Downloading and updating to latest version of TagUI ^(!TAGUI_MASTER_VERSION:~0,-1!^)
+	curl -k -s -L -o "%TAGUI_PARENT_DIR%\TagUI-master.zip" "https://github.com/kelaberetiv/TagUI/archive/refs/heads/master.zip"
+	if exist "%TAGUI_PARENT_DIR%\TagUI-master.zip" (
+		find /i /c "not found" "%TAGUI_PARENT_DIR%\TagUI-master.zip" > nul || find /i /c "bad request" "%TAGUI_PARENT_DIR%\TagUI-master.zip" > nul
+		if not errorlevel 1 del "%TAGUI_PARENT_DIR%\TagUI-master.zip"
+	)
+	if not exist "%TAGUI_PARENT_DIR%\TagUI-master.zip" ( 
+		echo ERROR - cannot download from https://github.com/kelaberetiv/TagUI/archive/refs/heads/master.zip
+		exit /b 1
+	)
+
+	tar -xf "%TAGUI_PARENT_DIR%\TagUI-master.zip" -C "%TAGUI_PARENT_DIR%" & xcopy "%TAGUI_PARENT_DIR%\TagUI-master\*" "%TAGUI_PARENT_DIR%\" /y /s /q  > nul & if exist "%TAGUI_PARENT_DIR%\TagUI-master\" ( rmdir /S /Q "%TAGUI_PARENT_DIR%\TagUI-master" & echo TagUI successfully updated at %TAGUI_PARENT_DIR:~0,-7% ) & exit /b 0
+
+rem end of if block to handle download and update process
 )
 
 rem check whether specified automation flow file exists

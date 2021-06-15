@@ -40,7 +40,7 @@ TAGUI_PARENT_DIR="$( cd -P "$( dirname "$SOURCE" )/.." && pwd )"
 if [ -f "$TAGUI_PARENT_DIR/TagUI-master.zip" ]; then rm "$TAGUI_PARENT_DIR/TagUI-master.zip"; fi
 if [ -f "$TAGUI_PARENT_DIR/src/tagui_master" ]; then rm "$TAGUI_PARENT_DIR/src/tagui_master"; fi
 
-curl -s -o "$TAGUI_PARENT_DIR/src/tagui_master" "https://raw.githubusercontent.com/kelaberetiv/TagUI/master/src/tagui"
+curl -k -s -o "$TAGUI_PARENT_DIR/src/tagui_master" "https://raw.githubusercontent.com/kelaberetiv/TagUI/master/src/tagui"
 if [ -f "$TAGUI_PARENT_DIR/src/tagui_master" ]; then
 if ! grep -iq 'echo "tagui v' "$TAGUI_PARENT_DIR/src/tagui_master"; then
 rm "$TAGUI_PARENT_DIR/src/tagui_master"; fi; fi
@@ -54,7 +54,7 @@ if [[ "$TAGUI_MASTER_VERSION" == "$TAGUI_LOCAL_VERSION" ]]; then
 echo "You are already using the latest version of TagUI (${TAGUI_LOCAL_VERSION%?})"; exit 0; fi
 
 echo "Downloading and updating to latest version of TagUI (${TAGUI_MASTER_VERSION%?})"
-curl -s -L -o "$TAGUI_PARENT_DIR/TagUI-master.zip" "https://github.com/kelaberetiv/TagUI/archive/refs/heads/master.zip"
+curl -k -s -L -o "$TAGUI_PARENT_DIR/TagUI-master.zip" "https://github.com/kelaberetiv/TagUI/archive/refs/heads/master.zip"
 if [ -f "$TAGUI_PARENT_DIR/TagUI-master.zip" ]; then
 if grep -iq "not found\|bad request" "$TAGUI_PARENT_DIR/TagUI-master.zip"; then
 rm "$TAGUI_PARENT_DIR/TagUI-master.zip"; fi; fi
