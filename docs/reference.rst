@@ -588,7 +588,7 @@ Explicitly wait for some time.
 
 timeout
 ####################
-Changes the auto-wait timeout when waiting for web elements to appear.
+Changes the auto-wait timeout when waiting for web elements to appear (default 10 seconds).
 
 .. code-block:: none
 
