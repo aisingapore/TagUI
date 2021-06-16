@@ -75,6 +75,10 @@
 # exclude local files for catboost integration
 /src/catboost/*
 
-# exclude packages for Office RPA projects
+# exclude packages and generated files for Office RPA
 /src/office/word/packages/*
 /src/office/excel/packages/*
+/src/office/word/TagUIWordAddIn/bin/Debug/*
+/src/office/word/TagUIWordAddIn/obj/Debug/*
+/src/office/excel/TagUIExcelAddIn/bin/Debug/*
+/src/office/excel/TagUIExcelAddIn/obj/Debug/*
