@@ -1,0 +1,46 @@
+C:\Users\ruthtxh\source\repos\TagUIWordAddIn\TagUIWordAddIn\bin\Debug\TagUIWordAddIn.dll
+C:\Users\ruthtxh\source\repos\TagUIWordAddIn\TagUIWordAddIn\bin\Debug\TagUIWordAddIn.pdb
+C:\Users\ruthtxh\source\repos\TagUIWordAddIn\TagUIWordAddIn\bin\Debug\TagUIWordAddIn.dll.manifest
+C:\Users\ruthtxh\source\repos\TagUIWordAddIn\TagUIWordAddIn\bin\Debug\TagUIWordAddIn.vsto
+C:\Users\ruthtxh\source\repos\TagUIWordAddIn\TagUIWordAddIn\bin\Debug\Microsoft.Office.Tools.Common.v4.0.Utilities.dll
+C:\Users\ruthtxh\source\repos\TagUIWordAddIn\TagUIWordAddIn\obj\Debug\TagUIWordAddIn.Properties.Resources.resources
+C:\Users\ruthtxh\source\repos\TagUIWordAddIn\TagUIWordAddIn\obj\Debug\TagUIWordAddIn.TagUITaskPane.resources
+C:\Users\ruthtxh\source\repos\TagUIWordAddIn\TagUIWordAddIn\obj\Debug\TagUIWordAddIn.csproj.GenerateResource.cache
+C:\Users\ruthtxh\source\repos\TagUIWordAddIn\TagUIWordAddIn\obj\Debug\TagUIWordAddIn.csproj.CoreCompileInputs.cache
+C:\Users\ruthtxh\source\repos\TagUIWordAddIn\TagUIWordAddIn\obj\Debug\TagUIWordAddIn.csproj.CopyComplete
+C:\Users\ruthtxh\source\repos\TagUIWordAddIn\TagUIWordAddIn\obj\Debug\TagUIWordAddIn.dll
+C:\Users\ruthtxh\source\repos\TagUIWordAddIn\TagUIWordAddIn\obj\Debug\TagUIWordAddIn.pdb
+C:\Users\ruthtxh\source\repos\TagUIWordAddIn - Copy\TagUIWordAddIn\bin\Debug\TagUIWordAddIn.dll
+C:\Users\ruthtxh\source\repos\TagUIWordAddIn - Copy\TagUIWordAddIn\bin\Debug\TagUIWordAddIn.pdb
+C:\Users\ruthtxh\source\repos\TagUIWordAddIn - Copy\TagUIWordAddIn\bin\Debug\TagUIWordAddIn.dll.manifest
+C:\Users\ruthtxh\source\repos\TagUIWordAddIn - Copy\TagUIWordAddIn\bin\Debug\TagUIWordAddIn.vsto
+C:\Users\ruthtxh\source\repos\TagUIWordAddIn - Copy\TagUIWordAddIn\bin\Debug\DocumentFormat.OpenXml.dll
+C:\Users\ruthtxh\source\repos\TagUIWordAddIn - Copy\TagUIWordAddIn\bin\Debug\Microsoft.Office.Tools.Common.v4.0.Utilities.dll
+C:\Users\ruthtxh\source\repos\TagUIWordAddIn - Copy\TagUIWordAddIn\bin\Debug\DocumentFormat.OpenXml.xml
+C:\Users\ruthtxh\source\repos\TagUIWordAddIn - Copy\TagUIWordAddIn\obj\Debug\TagUIWordAddIn.csprojAssemblyReference.cache
+C:\Users\ruthtxh\source\repos\TagUIWordAddIn - Copy\TagUIWordAddIn\obj\Debug\TagUIWordAddIn.Properties.Resources.resources
+C:\Users\ruthtxh\source\repos\TagUIWordAddIn - Copy\TagUIWordAddIn\obj\Debug\TagUIWordAddIn.TagUITaskPane.resources
+C:\Users\ruthtxh\source\repos\TagUIWordAddIn - Copy\TagUIWordAddIn\obj\Debug\TagUIWordAddIn.csproj.GenerateResource.cache
+C:\Users\ruthtxh\source\repos\TagUIWordAddIn - Copy\TagUIWordAddIn\obj\Debug\TagUIWordAddIn.csproj.CoreCompileInputs.cache
+C:\Users\ruthtxh\source\repos\TagUIWordAddIn - Copy\TagUIWordAddIn\obj\Debug\TagUIWordAddIn.csproj.CopyComplete
+C:\Users\ruthtxh\source\repos\TagUIWordAddIn - Copy\TagUIWordAddIn\obj\Debug\TagUIWordAddIn.dll
+C:\Users\ruthtxh\source\repos\TagUIWordAddIn - Copy\TagUIWordAddIn\obj\Debug\TagUIWordAddIn.pdb
+C:\Users\ruthtxh\source\repos\TagUIWordAddIn - v2\TagUIWordAddIn\bin\Debug\TagUIWordAddIn.dll
+C:\Users\ruthtxh\source\repos\TagUIWordAddIn - v2\TagUIWordAddIn\bin\Debug\TagUIWordAddIn.pdb
+C:\Users\ruthtxh\source\repos\TagUIWordAddIn - v2\TagUIWordAddIn\bin\Debug\TagUIWordAddIn.dll.manifest
+C:\Users\ruthtxh\source\repos\TagUIWordAddIn - v2\TagUIWordAddIn\bin\Debug\TagUIWordAddIn.vsto
+C:\Users\ruthtxh\source\repos\TagUIWordAddIn - v2\TagUIWordAddIn\bin\Debug\DocumentFormat.OpenXml.dll
+C:\Users\ruthtxh\source\repos\TagUIWordAddIn - v2\TagUIWordAddIn\bin\Debug\Microsoft.Office.Tools.Common.v4.0.Utilities.dll
+C:\Users\ruthtxh\source\repos\TagUIWordAddIn - v2\TagUIWordAddIn\bin\Debug\DocumentFormat.OpenXml.xml
+C:\Users\ruthtxh\source\repos\TagUIWordAddIn - v2\TagUIWordAddIn\obj\Debug\TagUIWordAddIn.Form1.resources
+C:\Users\ruthtxh\source\repos\TagUIWordAddIn - v2\TagUIWordAddIn\obj\Debug\TagUIWordAddIn.Form2.resources
+C:\Users\ruthtxh\source\repos\TagUIWordAddIn - v2\TagUIWordAddIn\obj\Debug\TagUIWordAddIn.FormUpdate.resources
+C:\Users\ruthtxh\source\repos\TagUIWordAddIn - v2\TagUIWordAddIn\obj\Debug\TagUIWordAddIn.Properties.Resources.resources
+C:\Users\ruthtxh\source\repos\TagUIWordAddIn - v2\TagUIWordAddIn\obj\Debug\TagUIWordAddIn.Ribbon1.resources
+C:\Users\ruthtxh\source\repos\TagUIWordAddIn - v2\TagUIWordAddIn\obj\Debug\TagUIWordAddIn.SnapshotBar.resources
+C:\Users\ruthtxh\source\repos\TagUIWordAddIn - v2\TagUIWordAddIn\obj\Debug\TagUIWordAddIn.TagUITaskPane.resources
+C:\Users\ruthtxh\source\repos\TagUIWordAddIn - v2\TagUIWordAddIn\obj\Debug\TagUIWordAddIn.csproj.GenerateResource.cache
+C:\Users\ruthtxh\source\repos\TagUIWordAddIn - v2\TagUIWordAddIn\obj\Debug\TagUIWordAddIn.csproj.CoreCompileInputs.cache
+C:\Users\ruthtxh\source\repos\TagUIWordAddIn - v2\TagUIWordAddIn\obj\Debug\TagUIWordAddIn.csproj.CopyComplete
+C:\Users\ruthtxh\source\repos\TagUIWordAddIn - v2\TagUIWordAddIn\obj\Debug\TagUIWordAddIn.dll
+C:\Users\ruthtxh\source\repos\TagUIWordAddIn - v2\TagUIWordAddIn\obj\Debug\TagUIWordAddIn.pdb

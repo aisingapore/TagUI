@@ -1,33 +1,60 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
 using System.Drawing;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Diagnostics;
 using System.IO;
-
+using DocumentFormat.OpenXml.Packaging;
+using DocumentFormat.OpenXml.Wordprocessing;
+using DocumentFormat.OpenXml.Spreadsheet;
+using Excel = Microsoft.Office.Interop.Excel;
+using Word = Microsoft.Office.Interop.Word;
+using System.Drawing.Imaging;
+using Run = DocumentFormat.OpenXml.Wordprocessing.Run;
+using CheckBox = System.Windows.Forms.CheckBox;
+using Text = DocumentFormat.OpenXml.Wordprocessing.Text;
+using DocumentFormat.OpenXml;
+using Microsoft.Office.Interop.Word;
+using Microsoft.Office.Core;
+using Microsoft.Office.Tools.Word;
 namespace TagUIWordAddIn
 {
     public partial class TagUITaskPane : UserControl
     {
+
         public TagUITaskPane()
         {
             InitializeComponent();
+            ToolTip ToolTip1 = new System.Windows.Forms.ToolTip();
+            ToolTip1.AutoPopDelay = 30000;
+            ToolTip1.SetToolTip(pictureBox1, "Datatables run a workflow multiple times with different inputs.\n\nTo use it, browse and select an.xlsx or.csv file.\nIf a .xlsx file is selected, specify the sheet and optional cell range (e.g. A1:B4).\n\nTagUI will run the current workflow once for each row in the datatable (except the header).\nWithin the flow, TagUI can use the datatable header as variables and the values will be from that run’s row.");
+            ToolTip ToolTip2 = new System.Windows.Forms.ToolTip();
+            ToolTip1.SetToolTip(pictureBox2, "Object repositories store variables for use in flows.\nThey help to separate your flows from your personal data (like login information for web flows), and allow you to share common information between multiple flows for easy updating.\n\nTo use it, browse and select an.xlsx or.csv file.If a.xlsx file is selected, specify the sheet.");
+            ToolTip1.AutoPopDelay = 30000;
         }
         //checkbox form validations
         private void checkBoxDatatableCSV_CheckedChanged(object sender, EventArgs e)
         {
             if (((CheckBox)sender).Checked)
             {
-                textBoxDatatableCSV.Enabled = true;
+                buttonBrowse.Enabled = true;
             }
             else
             {
-                textBoxDatatableCSV.Enabled = false;
+                buttonBrowse.Enabled = false;
+            }
+        }
+
+        private void checkBoxObjRepo_CheckedChanged(object sender, EventArgs e)
+        {
+            if (((CheckBox)sender).Checked)
+            {
+                buttonObjRepo.Enabled = true;
+            }
+            else
+            {
+                buttonObjRepo.Enabled = false;
             }
         }
         private void checkBoxInputs_CheckedChanged(object sender, EventArgs e)
@@ -41,85 +68,113 @@ namespace TagUIWordAddIn
                 textBoxParam.Enabled = false;
             }
         }
-        private void labelDocumentation_Click(object sender, EventArgs e)
+        private void buttonBrowse_Click(object sender, EventArgs e)
         {
-            Process.Start("IExplore.exe", "https://tagui.readthedocs.io/en/latest/index.html");
+            BrowseFile(textBoxDatatableCSV, comboBoxDatatableWs);
         }
-        private void buttonRun_Click(object sender, EventArgs e)
+        private void buttonObjRepo_Click(object sender, EventArgs e)
         {
-            string fileLoc = Globals.ThisAddIn.Application.ActiveDocument.FullName;
-            if (fileLoc.Contains(@"\"))
-            {
-                string tagFilePath = getTagFilePathSavedDoc(fileLoc);
-                RunFlow(tagFilePath, false);
-            }
-            else
-            {
-                string appDataFolder = System.Environment.GetEnvironmentVariable("USERPROFILE") + @"\AppData\Roaming\TagUI\";
-                System.IO.Directory.CreateDirectory(appDataFolder); //create new TagUI folder in appData folder it it does not exist
-                string tagFilePath = appDataFolder + "WorkFlow.tag";
-                RunFlow(tagFilePath, false);
-            }
-        }
-        private void buttonDeploy_Click(object sender, EventArgs e)
-        {
-            string fileLoc = Globals.ThisAddIn.Application.ActiveDocument.FullName;
-            if (fileLoc.Contains(@"\"))
-            {
-                string tagFilePath = getTagFilePathSavedDoc(fileLoc);
-                RunFlow(tagFilePath, true);
-            }
-            else
-            {
-                MessageBox.Show("Document must be saved before deploying", "Oops!");
-                try
-                {
-                    Globals.ThisAddIn.Application.ActiveDocument.Save();
-                }
-                catch { }
-            }
-        }
-        private string getTagFilePathSavedDoc(string fileLoc)
-        {
-            string[] fileLocArr = fileLoc.Split('\\');
-            Int32 lengthToCut = fileLocArr[fileLocArr.Length - 1].Length;
-            string folderPath = fileLoc.Substring(0, fileLoc.Length - lengthToCut);
-            string[] fileLocArr2 = fileLocArr[fileLocArr.Length - 1].Split('.');
-            string fileName = fileLocArr2[0];
-            string tagFilePath = folderPath + fileName + ".tag";
-            return tagFilePath;
-        }
-        private void RunFlow(string tagFilePath, bool deploy)
-        {
-            CreateTagFile(tagFilePath);
-            string runOptions = AddRunOption(deploy);
-            RunCommand(tagFilePath, runOptions);
+            BrowseFile(textBoxObjRepo, comboBoxObjRepo);
         }
 
-        private void CreateTagFile(string tagFilePath)
+        private void BrowseFile(TextBox textBox, ComboBox comboBox)
         {
-            Globals.ThisAddIn.Application.ActiveDocument.Range(
-        Globals.ThisAddIn.Application.ActiveDocument.Content.Start,
-        Globals.ThisAddIn.Application.ActiveDocument.Content.End).Select(); //select and get all text from document
-            string textFromDoc = (Globals.ThisAddIn.Application.Selection.Text).Replace("\r\n", "\n").Replace("\r", "\n").Replace("\n", "\r\n");  //change generated .tag file line ending to CRLF format instead of default macintosh
-            File.WriteAllText(tagFilePath, textFromDoc);
-            return;
+            OpenFileDialog openFileDialog1 = new OpenFileDialog
+            {
+                InitialDirectory = @"C:\Users\" + Environment.GetEnvironmentVariable("USERPROFILE"),
+                Title = "Browse Files",
+                CheckFileExists = true,
+                CheckPathExists = true,
+                DefaultExt = "docx",
+                Filter = "Microsoft Excel Worksheet (.xlsx)|*.xlsx|Comma Separated Values File (.csv)|*.csv",
+                FilterIndex = 1,
+                RestoreDirectory = true,
+                ReadOnlyChecked = false,
+                ShowReadOnly = true
+            };
+            if (openFileDialog1.ShowDialog() == DialogResult.OK)
+            {
+                string filePath = openFileDialog1.FileName;
+                textBox.Text = filePath;
+                string fileType = GetExcelFileType(filePath);
+                if (fileType == "xlsx")
+                {
+                    comboBox.Enabled = true;
+                }
+                else
+                {
+                    comboBox.Text = "";
+                    comboBox.Enabled = false;
+                }
+            }
         }
-        private string AddRunOption(bool deploy)
+        private void comboBoxDatatableWs_Click(object sender, EventArgs e)
         {
-            string runOptions = "";
-            if (checkBoxNoBrowser.Checked == true) runOptions += " -n";
-            if (checkBoxReport.Checked == true) runOptions += " -r";
-            if (checkBoxQuiet.Checked == true) runOptions += " -q";
-            if (checkBoxDatatableCSV.Checked == true) runOptions += " " + textBoxDatatableCSV.Text;
-            if (checkBoxInputs.Checked == true) runOptions += " " + textBoxParam.Text;
-            if (deploy) runOptions += " -d";
-            return runOptions;
+            Init(textBoxDatatableCSV, comboBoxDatatableWs);
+            textBoxRange.Enabled = true;
         }
-        private void RunCommand(string tagFilePath, string runOptions)
+
+        private void comboBoxObjRepo_Click(object sender, EventArgs e)
         {
-            string cmdCommand = "/C tagui " + tagFilePath + runOptions;
-            Process.Start("cmd.exe", cmdCommand);
+            Init(textBoxObjRepo, comboBoxObjRepo);
         }
+
+        private void Init(TextBox textBox, ComboBox comboBox)
+        {
+            List<Item> items = new List<Item>();
+            int index = 0;
+            string filePath = textBox.Text;
+            try
+            {
+                var results = GetAllWorksheets(filePath);
+                foreach (Sheet item in results)
+                {
+                    items.Add(new Item() { Text = item.Name, Value = item.Name });
+                    index++;
+                }
+                comboBox.DataSource = items;
+                comboBox.DisplayMember = "Text";
+                comboBox.ValueMember = "Value";
+            }
+            catch
+            {
+                MessageBox.Show("Ensure that workbook is closed before selecting");
+            }
+        }
+
+        private string GetExcelFileType(string filePath)
+        {
+            string fileType = "";
+            if (filePath.Substring(filePath.Length - 4, 4) == "xlsx")
+            {
+                fileType = "xlsx";
+            }
+            else fileType = "csv";
+            return fileType;
+        }
+        public static Sheets GetAllWorksheets(string fileName)
+        {
+            Sheets theSheets = null;
+            using (SpreadsheetDocument document =
+                SpreadsheetDocument.Open(fileName, false))
+            {
+                WorkbookPart wbPart = document.WorkbookPart;
+                theSheets = wbPart.Workbook.Sheets;
+            }
+            return theSheets;
+        }
+        public class Item
+        {
+            public Item() { }
+            public string Value { set; get; }
+            public string Text { set; get; }
+        }
+
+
+        private void textBoxRange_Enter(object sender, EventArgs e)
+        {
+            textBoxRange.Text = "";
+        }
+
     }
 }

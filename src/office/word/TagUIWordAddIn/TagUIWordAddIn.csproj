@@ -123,6 +123,12 @@
   -->
   <ItemGroup>
     <Reference Include="Accessibility" />
+    <Reference Include="DocumentFormat.OpenXml, Version=2.12.3.0, Culture=neutral, PublicKeyToken=8fb06cb64d019a17, processorArchitecture=MSIL">
+      <HintPath>..\packages\DocumentFormat.OpenXml.2.12.3\lib\net46\DocumentFormat.OpenXml.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Office.Interop.Excel, Version=15.0.0.0, Culture=neutral, PublicKeyToken=71e9bce111e9429c, processorArchitecture=MSIL">
+      <EmbedInteropTypes>True</EmbedInteropTypes>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
@@ -132,6 +138,7 @@
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
+    <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="Microsoft.Office.Tools.v4.0.Framework, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
@@ -179,21 +186,56 @@
     can be found.
   -->
   <ItemGroup>
+    <Compile Include="Form1.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Form1.Designer.cs">
+      <DependentUpon>Form1.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Form2.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Form2.Designer.cs">
+      <DependentUpon>Form2.cs</DependentUpon>
+    </Compile>
+    <Compile Include="FormUpdate.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FormUpdate.Designer.cs">
+      <DependentUpon>FormUpdate.cs</DependentUpon>
+    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>
-    <EmbeddedResource Include="Properties\Resources.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
+    <EmbeddedResource Include="Form1.resx">
+      <DependentUpon>Form1.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Form2.resx">
+      <DependentUpon>Form2.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FormUpdate.resx">
+      <DependentUpon>FormUpdate.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <SubType>Designer</SubType>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Ribbon1.resx">
+      <DependentUpon>Ribbon1.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="SnapshotBar.resx">
+      <DependentUpon>SnapshotBar.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="TagUITaskPane.resx">
       <DependentUpon>TagUITaskPane.cs</DependentUpon>
     </EmbeddedResource>
+    <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
@@ -201,6 +243,18 @@
     <Compile Include="Properties\Settings.Designer.cs">
       <AutoGen>True</AutoGen>
       <DependentUpon>Settings.settings</DependentUpon>
+    </Compile>
+    <Compile Include="Ribbon1.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Ribbon1.Designer.cs">
+      <DependentUpon>Ribbon1.cs</DependentUpon>
+    </Compile>
+    <Compile Include="SnapshotBar.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="SnapshotBar.Designer.cs">
+      <DependentUpon>SnapshotBar.cs</DependentUpon>
     </Compile>
     <Compile Include="TagUITaskPane.cs">
       <SubType>UserControl</SubType>
@@ -211,6 +265,7 @@
     <Compile Include="ThisAddIn.cs">
       <SubType>Code</SubType>
     </Compile>
+    <None Include="TagUIWordAddIn_TemporaryKey.pfx" />
     <None Include="ThisAddIn.Designer.xml">
       <DependentUpon>ThisAddIn.cs</DependentUpon>
     </None>
@@ -218,6 +273,27 @@
       <DependentUpon>ThisAddIn.Designer.xml</DependentUpon>
     </Compile>
     <AppDesigner Include="Properties\" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Snapshot.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Taskpane.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\UsageGuide.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Update.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Stop.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Run.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Deploy.png" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
@@ -236,8 +312,7 @@
     <SignAssembly>true</SignAssembly>
   </PropertyGroup>
   <PropertyGroup>
-    <AssemblyOriginatorKeyFile>
-    </AssemblyOriginatorKeyFile>
+    <AssemblyOriginatorKeyFile>TagUIWordAddIn_TemporaryKey.pfx</AssemblyOriginatorKeyFile>
   </PropertyGroup>
   <!-- Include the build rules for a C# project. -->
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
