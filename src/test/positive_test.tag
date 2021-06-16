@@ -347,8 +347,8 @@ upload #css_selector as abc.png
 upload #css_selector as /tmp/abc.png
 
 // test download
-download http://www.dummytestsite.com/report/month.txt to filename.txt
-download http://www.dummytestsite.com/report/month.txt to /tmp/filename.txt
+download to C:\Downloads\RPA
+download to /Users/username/Desktop
 
 // test receive
 receive report to filename.txt
