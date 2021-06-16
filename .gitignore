@@ -78,7 +78,7 @@
 # exclude packages and generated files for Office RPA
 /src/office/word/packages/*
 /src/office/excel/packages/*
-/src/office/word/TagUIWordAddIn/bin/Debug/*
-/src/office/word/TagUIWordAddIn/obj/Debug/*
-/src/office/excel/TagUIExcelAddIn/bin/Debug/*
-/src/office/excel/TagUIExcelAddIn/obj/Debug/*
+/src/office/word/TagUIWordAddIn/bin/*
+/src/office/word/TagUIWordAddIn/obj/*
+/src/office/excel/TagUIExcelAddIn/bin/*
+/src/office/excel/TagUIExcelAddIn/obj/*
