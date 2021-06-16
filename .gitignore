@@ -74,3 +74,7 @@
 
 # exclude local files for catboost integration
 /src/catboost/*
+
+# exclude packages for Office RPA projects
+/src/office/word/packages/*
+/src/office/excel/packages/*
