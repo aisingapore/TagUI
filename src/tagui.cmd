@@ -14,7 +14,7 @@ rem enable windows for loop advanced flow control
 setlocal enableextensions enabledelayedexpansion
 
 if "%~1"=="" (
-echo tagui v6.46: use following options and this syntax to run - tagui flow_filename option^(s^)
+echo tagui v6.47: use following options and this syntax to run - tagui flow_filename option^(s^)
 echo.
 echo tagui live     launch TagUI live mode enabled with visual automation for interactive development
 echo tagui update   download and update to latest TagUI version ^(please backup your version beforehand^)
@@ -992,7 +992,7 @@ rem start sikuli process if integration file is created during parsing
 if exist "tagui.sikuli\tagui_sikuli.in" (
 	rem start dummy first run to let sikulix integrate jython
 	if exist "sikulix\jython-standalone-2.7.1.jar" (
-		start "SikuliX Engine" /min cmd /c java -jar sikulix\sikulix.jar -h ^> nul 2^>^&1
+		java -jar sikulix\sikulix.jar -h > nul 2>&1
 	)
 	rem echo [starting sikuli process] | tee -a "%flow_file%.log"
 	start "SikuliX Engine" /min cmd /c java -jar sikulix\sikulix.jar -r tagui.sikuli -d 3 2^>^&1 ^| tee -a tagui.sikuli\tagui.log
