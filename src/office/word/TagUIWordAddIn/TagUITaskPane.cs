@@ -186,6 +186,7 @@ namespace TagUIWordAddIn
             buttonObjRepo.Location = new System.Drawing.Point(this.Size.Width - 75,310);
             textBoxParam.Width = this.Size.Width - 114;
             textBoxOutput.Width = this.Size.Width - 14;
+            textBoxOutput.Height = this.Size.Height - 500;
         }
     }
 }
