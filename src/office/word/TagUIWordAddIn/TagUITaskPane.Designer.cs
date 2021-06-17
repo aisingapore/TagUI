@@ -118,8 +118,6 @@ namespace TagUIWordAddIn
             // textBoxDatatableCSV
             // 
             this.textBoxDatatableCSV.Location = new System.Drawing.Point(35, 172);
-            this.textBoxDatatableCSV.MaximumSize = new System.Drawing.Size(500, 26);
-            this.textBoxDatatableCSV.MinimumSize = new System.Drawing.Size(174, 26);
             this.textBoxDatatableCSV.Name = "textBoxDatatableCSV";
             this.textBoxDatatableCSV.ReadOnly = true;
             this.textBoxDatatableCSV.Size = new System.Drawing.Size(174, 26);
@@ -276,6 +274,7 @@ namespace TagUIWordAddIn
             this.Controls.Add(this.labelRunOptions);
             this.Name = "TagUITaskPane";
             this.Size = new System.Drawing.Size(288, 676);
+            this.SizeChanged += new System.EventHandler(this.TagUITaskPane_SizeChanged);
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).EndInit();
             this.ResumeLayout(false);

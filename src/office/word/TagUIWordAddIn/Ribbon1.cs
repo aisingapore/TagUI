@@ -619,7 +619,7 @@ namespace TagUIWordAddIn
         private string GetTagFilePath(int index, bool deploy)
         {
             string tagFilePath;
-            if (deploy)
+            if (deploy || DocIsSaved())
             {
                 if (index == 0)
                 {
@@ -946,7 +946,7 @@ namespace TagUIWordAddIn
         private string GetImageFolderPath(bool deploy)
         {
             string imageFolderPath;
-            if (deploy)
+            if (deploy||DocIsSaved())
             {
                 imageFolderPath = GetSavedFolderPath() + "Images" + "\\";
             }
@@ -1158,7 +1158,7 @@ namespace TagUIWordAddIn
         private string GetWorkingFolderPath(bool deploy)
         {
             string workingFolder = "";
-            if (deploy)
+            if (deploy||DocIsSaved())
             {
                 workingFolder = GetSavedFolderPath();
             }
