@@ -19,6 +19,17 @@ For some web pages, the XPath of an element can change. To combat this, you can 
 XPath is very powerful and can allow you to select web elements in many ways. Learn more about XPath at `w3schools <https://www.w3schools.com/xml/xpath_intro.asp>`_.
 
 
+.. _element_attributes:
+
+How do I find the id, name, class or other attributes of a web element?
+----------------------------------------------------------------------------
+In Chrome, right-click on the element, click Inspect. There will be some highlighted HTML, like this:
+
+.. image:: ./_static/element_attributes.png
+
+This highlighted element has a class attribute of "chat-line__body". It doesn't have any ``id`` or ``name`` attribute
+
+
 .. _how-to-use-command-prompt:
 
 How do I use the Command Prompt?
@@ -35,24 +46,6 @@ How do I use the Terminal?
 Hold Command and press spacebar, then type ``Terminal`` and press Enter.
 
 From here, you can run a command by typing it and pressing Enter.
-
-
-.. _element_attributes:
-
-How do I find the id, name, class or other attributes of a web element?
-----------------------------------------------------------------------------
-In Chrome, right-click on the element, click Inspect. There will be some highlighted HTML, like this:
-
-.. image:: ./_static/element_attributes.png
-
-This highlighted element has a class attribute of "chat-line__body". It doesn't have any ``id`` or ``name`` attribute.
-
-
-How do I use the cutting edge version of TagUI?
---------------------------------------------------
-1. Download the latest stable version at :doc:`the installation page </setup>`.
-2. Download the `cutting edge version <https://github.com/kelaberetiv/TagUI/archive/master.zip>`_.
-3. Unzip and overwrite the files in your ``tagui/src/`` folder.
 
 
 .. _what-are-csv-files:
@@ -78,7 +71,7 @@ On Windows, `use the Task Scheduler <https://www.digitalcitizen.life/how-create-
         <source src="./_static/schedule-a-flow.mp4" type="video/mp4">
         Your browser does not support the video tag.
     </video>
-
+|
 On macOS/Linux, `use crontab <https://www.ostechnix.com/a-beginners-guide-to-cron-jobs/>`_.
 
 

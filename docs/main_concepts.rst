@@ -15,7 +15,7 @@ You can run a flow in the :ref:`Command Prompt/Terminal<how-to-use-command-promp
         <source src="./_static/run-a-flow.mp4" type="video/mp4">
         Your browser does not support the video tag.
     </video>
-
+|
 TagUI looks for ``my_flow.tag`` in your current working directory. You can also provide the full path::
 
     tagui c:\tagui\samples\1_google.tag
@@ -41,7 +41,7 @@ This creates a shortcut (my_flow.cmd) to run your flow just by double clicking t
         <source src="./_static/deploy-a-flow.mp4" type="video/mp4">
         Your browser does not support the video tag.
     </video>
-
+|
 If you want to create the shortcut with options like ``headless`` (``-h``), you can include them::
 
   tagui my_flow.tag -h -d
@@ -75,7 +75,7 @@ This allows you to continue using your desktop normally while the flow is runnin
         Your browser does not support the video tag.
     </video>
 
-
+|
 Steps
 ---------
 Flows are made out of *steps*. Below are some common steps.
@@ -274,12 +274,12 @@ This starts up a live session, where you can run steps one line at a time and im
         Your browser does not support the video tag.
     </video>
 
+|
+.. _if-conditions:
 
-.. _if-statements:
-
-If statements
+If conditions
 ---------------
-You may want your flow to do something different depending on some factors. You can use an if statement to do this.
+You may want your flow to do something different depending on some factors. You can use an if condition to do this.
 
 For example, if the URL contains the word “success”, then we want to click some buttons:
 
@@ -324,8 +324,9 @@ Here’s how we check if it is more than or less than 5:
   if row_count less than 5
     some steps
 
+.. _for-loops:
 
-Loops
+For loops
 -----------
 You can use loops to do the same thing many times within the same flow. In order to run one flow many times with different variables, the standard way is to use :ref:`datatables <datatables>`.
 
@@ -334,8 +335,9 @@ In this example, we repeat the steps within the block for a total of 20 times:
 .. code-block:: none
 
   for n from 1 to 20
-    some step
+    some step to take
     some other step
+    some more step
 
 .. _helper-functions:
 

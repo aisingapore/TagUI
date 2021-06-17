@@ -24,7 +24,9 @@ Windows
 
 8. :ref:`Having problems? Click here.<troubleshooting-windows>` You have run your first TagUI flow! 🎉
 
-macOS/Linux
+9. Optionally run ``tagui update`` command to get the latest TagUI features and any bug fixes.
+
+macOS / Linux
 -----------------------------------
 1. Download TagUI v6.46 for `macOS <https://github.com/kelaberetiv/TagUI/releases/download/v6.46.0/TagUI_macOS.zip>`_ or `Linux <https://github.com/kelaberetiv/TagUI/releases/download/v6.46.0/TagUI_Linux.zip>`_
 
@@ -45,3 +47,5 @@ macOS/Linux
     tagui /your_tagui_path/tagui/flows/samples/1_google.tag
 
 7. :ref:`Having problems? Click here.<troubleshooting-macos-linux>` You have run your first TagUI flow! 🎉
+
+8. Optionally run ``tagui update`` command to get the latest TagUI features and any bug fixes.

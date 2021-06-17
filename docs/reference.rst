@@ -226,7 +226,7 @@ Modifies the next steps to use the DOM or XPath in a frame or subframe.
 
 download to
 #####################
-| Specifies a folder location to store file downloads. The default location is the folder of the TagUI flow.
+| Specifies a location to store file downloads. The default location is the folder of the TagUI flow.
 
 .. code-block:: none
 
@@ -865,3 +865,29 @@ Gets the y coordinate of the current mouse position as a number, eg 200.
   y = mouse_y()
   click (`x`,`y`)
 
+
+get_text()
+********************
+Extracts text between 2 provided anchors from given text. Optional 4th parameter for occurrence during multiple matches.
+
+*Examples*
+
+.. code-block:: none
+
+  pdf_text = 'Name: John State: Texas City: Plano Contact: ...'
+  name = get_text(pdf_text, 'Name:', 'State:')
+  state = get_text(pdf_text, 'State:', 'City:')
+  city = get_text(pdf_text, 'City:', 'Contact:')
+  echo `name`, `state`, `city`
+
+
+remove_chars()
+********************
+Cleans text data by removing provided character(s) from given text.
+
+*Examples*
+
+.. code-block:: none
+
+  pdf_text = 'Name: John\n State: Texas\t City: Plano\n Contact: ...'
+  echo `remove_chars(pdf_text, '\n\t:')`

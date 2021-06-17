@@ -1,6 +1,6 @@
 **You can now do RPA with Microsoft Office. Edit the business process document in your native language, optionally set up your data or variables, and deploy! These add-ins uses [TagUI free RPA tool](https://github.com/kelaberetiv/TagUI) by AI Singapore, a government-funded programme to accelerate AI.**
 
-# Microsoft Word Add-in v1 (upcoming v3 to be released this weekend)
+# Microsoft Word Add-in v1 (v3 to be released this weekend)
 ![Word Add-in](https://raw.githubusercontent.com/kelaberetiv/TagUI/master/src/office/word/word_addin.png)
 
 ## Set Up

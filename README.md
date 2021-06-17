@@ -46,7 +46,7 @@ You can use TagUI [MS Office Plug-ins](https://github.com/kelaberetiv/TagUI/tree
 
 # Ecosystem and Communities
 
-TagUI has a bustling user community, and extended community champions create new RPA tools for their own communities, based on TagUI. Python users can [pip install rpa](https://github.com/tebelorg/RPA-Python) for the #1 Python RPA package. TagUI for [C# .NET](https://www.nuget.org/packages/tagui), [Java](https://www.linkedin.com/posts/kensoh_hi-c-net-folks-interested-in-rpa-happy-activity-6800991305251078144-Gx4T), and [Go](https://www.linkedin.com/posts/kensoh_hi-fans-of-go-programming-language-would-activity-6804658389772324864-_OgH) programming languages are being built. For event-driven RPA with thousands of connectors, check out this TagUI [module for Node-RED](https://flows.nodered.org/node/node-red-contrib-tagui), a popular free and open-source workflow automation tool.
+TagUI has a bustling user community, and extended community champions create new RPA tools for their own communities, based on TagUI. Python users can [pip install rpa](https://github.com/tebelorg/RPA-Python) for the #1 Python RPA package. TagUI for [C# .NET](https://www.nuget.org/packages/tagui), [Java](https://www.linkedin.com/posts/kensoh_hi-c-net-folks-interested-in-rpa-happy-activity-6800991305251078144-Gx4T), and [Go](https://www.linkedin.com/posts/kensoh_hi-fans-of-go-programming-language-would-activity-6804658389772324864-_OgH) programming languages are being built. For event-driven RPA with thousands of connectors, check out this [TagUI module for Node-RED](https://flows.nodered.org/node/node-red-contrib-tagui), a popular free and open-source workflow automation tool.
 
 For Microsoft [Power Automate Desktop](https://flow.microsoft.com/en-us/desktop/) users, you'll be happy to know that there's [2-way integration](https://www.linkedin.com/posts/kensoh_tagui-activity-6773236538596831232-1aFu) with TagUI out of the box (for business continuity if you switch between the 2 apps). Do also check out other leading open-source RPA tools, to see if they meet your needs better - [OpenRPA](https://github.com/open-rpa/openrpa) & [OpenFlow](https://github.com/open-rpa/openflow), [OpenBots](https://www.linkedin.com/posts/openbots_openbots-studio-demo-support-for-tag-ui-activity-6788174021964943361-RrUD), [Robocorp](https://youtu.be/HAfQpNZVbKI). All of them support enterprise-grade orchestrating and running TagUI robots from their orchestrator.
 
@@ -66,8 +66,8 @@ Data Considerations
 - For data in motion, users' enterprise app websites are now https by default for secure data entry and retrieval
 
 More Information
-- With -report option, there is a summary and detailed logs of robots to be enhanced for [centralised reporting](https://github.com/kelaberetiv/TagUI/issues/956#issuecomment-850123072)
-- For more info on TagUI architecture diagram, software components and security considerations, [visit this link](https://github.com/kelaberetiv/TagUI/tree/pre_v6#security)
+- With -report option, there is a summary and detailed logs of robots, to be enhanced for [centralised reporting](https://github.com/kelaberetiv/TagUI/issues/956#issuecomment-850123072)
+- For TagUI architecture diagram, software components and other security considerations, [visit this link](https://github.com/kelaberetiv/TagUI/tree/pre_v6#security)
 
 # How to get started
 
@@ -78,8 +78,8 @@ For technical details of TagUI, such as architecture diagram and codebase struct
 
 # Credits
 
-Open-source project|Maintainer|Where|How does this contribute to TagUI project
-:------------------|:---------|:----|:----------------------------------------
+Open-source project|Maintainer|From|How does this contribute to TagUI project
+:------------------|:---------|:---|:----------------------------------------
 [TagUI for VS Code](https://www.linkedin.com/posts/kensoh_hi-vs-code-folks-who-love-rpa-now-you-can-activity-6805445134034042880--PWT)|[Subhas Malik](https://www.linkedin.com/in/subhasmalik/)|India|language extension for Visual Studio Code
 [TagUI for Robocorp](https://youtu.be/HAfQpNZVbKI)|[Nived N](https://www.linkedin.com/in/nived-n-776470139/)|India|run TagUI in Robocorp or Robot Framework
 [TagUI for Node-RED](https://flows.nodered.org/node/node-red-contrib-tagui)|[Allan Zimmermann](https://www.linkedin.com/in/skadefro/)|Denmark|low-code event-driven workflow automation
