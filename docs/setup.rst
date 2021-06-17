@@ -4,7 +4,7 @@ Installation
 Windows
 -------------------------------
 
-1. `Download TagUI v6.14 for Windows <https://github.com/kelaberetiv/TagUI/releases/download/v6.14.0/TagUI_Windows.zip>`_
+1. `Download TagUI v6.46 for Windows <https://github.com/kelaberetiv/TagUI/releases/download/v6.46.0/TagUI_Windows.zip>`_
 
 2. Unzip the contents to ``C:\``
 
@@ -22,11 +22,11 @@ Windows
 
     tagui c:\tagui\flows\samples\1_google.tag
 
-:ref:`Having problems? Click here.<troubleshooting-windows>` You have run your first TagUI flow! 🎉
+8. :ref:`Having problems? Click here.<troubleshooting-windows>` You have run your first TagUI flow! 🎉
 
 macOS/Linux
 -----------------------------------
-1. Download TagUI v6.14 for `macOS <https://github.com/kelaberetiv/TagUI/releases/download/v6.14.0/TagUI_macOS.zip>`_ or `Linux <https://github.com/kelaberetiv/TagUI/releases/download/v6.14.0/TagUI_Linux.zip>`_
+1. Download TagUI v6.46 for `macOS <https://github.com/kelaberetiv/TagUI/releases/download/v6.46.0/TagUI_macOS.zip>`_ or `Linux <https://github.com/kelaberetiv/TagUI/releases/download/v6.46.0/TagUI_Linux.zip>`_
 
 2. Unzip the contents to your desktop on macOS, or ``/home/your_userid`` on Linux
 
@@ -36,7 +36,7 @@ macOS/Linux
 
 5. Open :ref:`Terminal <how-to-use-terminal>`
 
-6. Copy, paste and run these commands, replacing ``your_tagui_path`` as needed:
+6. Copy, paste and run these commands, replacing ``your_tagui_path`` accordingly:
 
 .. code-block:: bash
 
@@ -44,4 +44,4 @@ macOS/Linux
 
     tagui /your_tagui_path/tagui/flows/samples/1_google.tag
 
-:ref:`Having problems? Click here.<troubleshooting-macos-linux>` You have run your first TagUI flow! 🎉
+7. :ref:`Having problems? Click here.<troubleshooting-macos-linux>` You have run your first TagUI flow! 🎉

@@ -104,9 +104,8 @@ Enters keystrokes directly.
 
 You can use the following special keys:
 
-- [clear] 
-- [shift] [ctrl] [alt] [cmd] [meta] [enter]
-- [win] [space] [tab] [esc] [backspace] [delete]
+- [shift] [ctrl] [alt] [win] [cmd] [enter]
+- [space] [tab] [esc] [backspace] [delete] [clear]
 - [up] [down] [left] [right] [pageup] [pagedown] 
 - [home] [end] [insert] [f1] .. [f15] 
 - [printscreen] [scrolllock] [pause] [capslock] [numlock]
@@ -160,7 +159,7 @@ select
 
 .. code-block:: none
 
-  select [DOM/XPath of select input element] as [option value]
+  select [DOM/XPath of select input element] as [option value or text]
 
 *Examples*
 
@@ -225,21 +224,13 @@ Modifies the next steps to use the DOM or XPath in a frame or subframe.
     click Register
 
 
-download
+download to
 #####################
-| Downloads a file at a URL and saves it.
-| Saves to the flow's folder by default, but you can also provide a full path to save to.
+| Specifies a folder location to store file downloads. The default location is the folder of the TagUI flow.
 
 .. code-block:: none
 
-  download [file url] to [filename]
-
-*Examples*
-
-.. code-block:: none
-  
-  download https://github.com/kelaberetiv/TagUI/releases/download/v5.11.0/TagUI_Windows.zip to tagui.zip
-
+  download to [folder location]
 
 upload
 #####################

@@ -41,7 +41,7 @@ A datatable (``trade_data.csv``) could look like this:
 3 Trade EURUSD test_account  12345678 EURUSD 100000 BUY
 = ============ ============= ======== ====== ====== =========
 
-To use it, you run your flow with ``tagui my_flow.tag trade_data.csv``. TagUI will run ``my_flow.tag`` once for each row in the datatable (except the header). Within the flow, TagUI can use the variables ``trade``, ``username``, ``password``, etc as if they were in the :ref:`local object repository <object-repository>` and the values will be from that run's row.
+To use it, you run your flow with ``tagui my_flow.tag trade_data.csv``. TagUI will run ``my_flow.tag`` once for each row in the datatable (except the header). Within the flow, TagUI can use the variables ``trade``, ``username``, ``password``, etc as if they were in the :ref:`local object repository <object-repository>` and the values will be from that run's row. To know which iteration your flow is in you can use the ``iteration`` variable.
 
 
 Running other flows within a flow
@@ -50,7 +50,7 @@ A flow can run another flow, like this::
 
   tagui login_crm.tag
 
-Variables in the parent flow are accessible in the child flow. 
+Variables in the parent flow are accessible in the child flow and vice versa. 
 
 
 Visual automation tricks

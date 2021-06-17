@@ -3,7 +3,7 @@ Main concepts
 
 Flows
 --------------
-TagUI automates your actions by running *flows*, which are just text files with the ``.tag`` file extension.
+TagUI automates your actions by running *flows*, which are text files with ``.tag`` file extension.
 
 You can run a flow in the :ref:`Command Prompt/Terminal<how-to-use-command-prompt>` like this:: 
 
@@ -16,7 +16,7 @@ You can run a flow in the :ref:`Command Prompt/Terminal<how-to-use-command-promp
         Your browser does not support the video tag.
     </video>
 
-TagUI looks for ``my_flow.tag`` in your current working directory. You can also provide the full path to your flow::
+TagUI looks for ``my_flow.tag`` in your current working directory. You can also provide the full path::
 
     tagui c:\tagui\samples\1_google.tag
 
@@ -42,7 +42,7 @@ This creates a shortcut (my_flow.cmd) to run your flow just by double clicking t
         Your browser does not support the video tag.
     </video>
 
-If you want to create the shortcut file with options like ``headless`` (``-h``), you can just add them in the same line like this::
+If you want to create the shortcut with options like ``headless`` (``-h``), you can include them::
 
   tagui my_flow.tag -h -d
 
@@ -58,7 +58,7 @@ You can also run a flow directly from a URL::
 
 Hide the browser
 **********************
-You can run web flows without showing the web browser by running TagUI with the ``headless`` option. ::
+You can run web flows without showing web browser by running TagUI with ``headless`` option. ::
 
     tagui my_flow.tag -headless
 
@@ -66,7 +66,7 @@ or using the shortcut ``-h``::
 
   tagui my_flow.tag -h
 
-This allows you to continue using your desktop normally while the flow is running, but it will not work if your flow uses visual automation, because visual automation reads and clicks what is on your screen.
+This allows you to continue using your desktop normally while the flow is running, but it will not work if your flow uses visual automation, because it reads and clicks what is on your screen.
 
 .. raw:: html
 
@@ -78,7 +78,9 @@ This allows you to continue using your desktop normally while the flow is runnin
 
 Steps
 ---------
-Flows are made out of *steps*. Below are some common steps. You can see all the steps in the :ref:`step reference <step-reference>`.
+Flows are made out of *steps*. Below are some common steps.
+
+You can see all the steps in the :ref:`step reference <step-reference>`.
 
 
 click
@@ -91,7 +93,7 @@ One of the most common steps is click. You can use it to click on a web element:
 
 This command tells TagUI to try to click on any element which has “Getting started” as its “id”, “name”, “class” or “title” attributes (:ref:`How to find an element’s attributes <element_attributes>`), or as a last resort, has “Getting started” in its text.
 
-This method usually works for targeting what you want, but you can be more explicit by providing an XPath. XPath is a powerful way to choose which web element you want to target. Use it like this (use double quotes for text in the XPath instead of single quotes):
+This method usually works for targeting what you want, but you can be more explicit by providing an XPath. XPath is a powerful way to choose which web element you want to target. For example:
 
 .. code-block:: none
 
@@ -209,7 +211,9 @@ XPath
 
   click //body/div[1]/nav/div/div[1]/a
 
-This matches the :ref:`XPath <find-xpath>` of an element in the web page. It is a more explicit and powerful way of targeting web elements. Use double quotes for text in the XPath instead of single quotes.
+This matches the :ref:`XPath <find-xpath>` of an element in the web page.
+
+It is a more explicit and powerful way of targeting web elements.
 
 .. note:: You can use CSS selectors too in place of XPath, but XPath is preferred.
 
@@ -261,7 +265,7 @@ We recommend using live mode when you want to write your own flows or try out so
 
   tagui live
 
-This starts up a live session, where you can run steps one line at a time and immediately see the output.
+This starts up a live session, where you can run steps one line at a time and immediately see the output. Within a TagUI flow, you can also use ``live`` step to pause execution and enter live mode.
 
 .. raw:: html
 
@@ -325,12 +329,13 @@ Loops
 -----------
 You can use loops to do the same thing many times within the same flow. In order to run one flow many times with different variables, the standard way is to use :ref:`datatables <datatables>`.
 
-In this example, we repeat the steps within the curly braces ``{`` and ``}`` a total of 20 times:
+In this example, we repeat the steps within the block for a total of 20 times:
 
 .. code-block:: none
 
   for n from 1 to 20
-    some steps
+    some step
+    some other step
 
 .. _helper-functions:
 

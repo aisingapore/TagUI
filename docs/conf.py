@@ -21,11 +21,11 @@ from recommonmark.transform import AutoStructify
 # -- Project information -----------------------------------------------------
 
 project = 'TagUI'
-copyright = '2020, AI Singapore'
+copyright = '2021, AI Singapore'
 author = 'Ken Soh, Siow Yi Sheng'
 
 # The full version, including alpha/beta/rc tags
-release = '6.14.0'
+release = '6.46.0'
 
 # -- General configuration ---------------------------------------------------
 
