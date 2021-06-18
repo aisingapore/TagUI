@@ -40,9 +40,9 @@ click (720,500)
 
 # Do RPA with Microsoft Word
 
-You can use TagUI [MS Office Plug-ins](https://github.com/kelaberetiv/TagUI/tree/master/src/office) ([intro video](https://www.linkedin.com/posts/kensoh_hi-folks-interested-in-rpa-and-digital-process-activity-6809713603554492416-JgNZ)) to easily create and deploy Word doc as RPA robots, and set up RPA data parameters using Excel. Enjoy a full-featured RPA IDE with toolbar of TagUI steps and tooltips, snapshot tool to automate using computer vision, task pane for settings and run output. You can also run TagUI on your phone browser using [free Google Cloud](https://github.com/kelaberetiv/TagUI/issues/913). For VS Code users, you can install this [language extension](https://www.linkedin.com/posts/kensoh_hi-vs-code-folks-who-love-rpa-now-you-can-activity-6805445134034042880--PWT).
+You can use TagUI [MS Office Plug-ins](https://github.com/kelaberetiv/TagUI/blob/master/src/office/README.md) ([intro video](https://www.linkedin.com/posts/kensoh_hi-folks-interested-in-rpa-and-digital-process-activity-6809713603554492416-JgNZ)) to easily create and deploy Word doc as RPA robots, and set up RPA data parameters using Excel. Enjoy a full-featured RPA IDE with toolbar of TagUI steps and tooltips, snapshot tool to automate using computer vision, task pane for settings and run output. You can also run TagUI on your phone browser using [free Google Cloud](https://github.com/kelaberetiv/TagUI/issues/913). For VS Code users, you can install this [language extension](https://www.linkedin.com/posts/kensoh_hi-vs-code-folks-who-love-rpa-now-you-can-activity-6805445134034042880--PWT).
 
-![Word v3 Preview](https://raw.githubusercontent.com/kelaberetiv/TagUI/master/src/office/word/word_v3_preview.png)
+![Word Plug-in v3](https://raw.githubusercontent.com/kelaberetiv/TagUI/master/src/office/word/word_addin_v3.png)
 
 # Ecosystem and Communities
 
