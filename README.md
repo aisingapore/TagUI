@@ -67,7 +67,7 @@ Data Considerations
 
 More Information
 - With -report option, there is a summary and detailed logs of robots, to be enhanced for [centralised reporting](https://github.com/kelaberetiv/TagUI/issues/956#issuecomment-850123072)
-- For TagUI architecture diagram, software components and other security considerations, [visit this link](https://github.com/kelaberetiv/TagUI/tree/pre_v6#security)
+- For TagUI architecture diagram, software components and other security considerations, [check out this link](https://github.com/kelaberetiv/TagUI/tree/pre_v6#security)
 
 # How to get started
 

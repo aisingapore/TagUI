@@ -33,7 +33,7 @@ or using the shortcut ``-d``::
 
   tagui my_flow.tag -d
 
-This creates a shortcut (my_flow.cmd) to run your flow just by double clicking the shortcut. The shortcut is in the same folder as your flow, but you can move it to your desktop or anywhere else for easy access.
+This creates a shortcut (my_flow.cmd) to run your flow just by double clicking the shortcut. The shortcut is in the same folder as your flow, but you can move it to your desktop or anywhere else.
 
 .. raw:: html
 
@@ -80,7 +80,7 @@ Steps
 ---------
 Flows are made out of *steps*. Below are some common steps.
 
-You can see all the steps in the :ref:`step reference <step-reference>`.
+You can see the full list of steps in the :ref:`steps reference <step-reference>`.
 
 
 click
@@ -305,7 +305,7 @@ Another common case is to check if some element exists. Here, we say that “if 
 
 The ! negates the condition and comes from JavaScript, which TagUI code eventually translates to.
 
-In this next example, we check if a variable row_count, which we assigned a value earlier, is equal to 5:
+In below example, we check if a variable row_count, which we assigned a value earlier, is equal to 5:
 
 .. code-block:: none
 
@@ -346,9 +346,7 @@ Helper functions
 ---------------------
 Helper functions are useful JavaScript functions which can get values to use in your steps.
 
-Each helper function is followed by brackets ``()``. Some helper functions take inputs within these brackets.
-
-You can see all the helper functions in the :ref:`reference <helper-functions-reference>`.
+Each helper function is followed by brackets ``()``. Some helper functions take inputs within these brackets. You can see the full list of helper functions in the :ref:`helper functions reference <helper-functions-reference>`.
 
 
 csv_row()
@@ -386,9 +384,7 @@ mouse_x(), mouse_y()
 *********************
 Gets the mouse's x or y coordinates. 
 
-This is useful for modifying x or y coordinates with numbers for using in steps like ``read`` and ``click``. 
-
-The example below clicks 200 pixels to the right of ``element.png``::
+This is useful for modifying x or y coordinates with numbers for using in steps like ``read`` and ``click``. The example below clicks 200 pixels to the right of ``element.png``::
 
   hover element.png
   x = mouse_x() + 200

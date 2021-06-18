@@ -300,9 +300,7 @@ Saves text to a variable.
 
   [variable] = [value]
 
-| When using text in the value, surround the text in quotes, like "some text".
-| This is actually treated by TagUI as JavaScript, so you can assign numbers to variables or use other JavaScript functions.
-| The variable name needs to be a single word and cannot start with a number.
+| When using text in the value, surround the text in quotes, like "some text". This is actually treated by TagUI as JavaScript, so you can assign numbers to variables or use other JavaScript functions. The variable name needs to be a single word and cannot start with a number.
 
 *Examples*
 
@@ -868,7 +866,7 @@ Gets the y coordinate of the current mouse position as a number, eg 200.
 
 get_text()
 ********************
-Extracts text between 2 provided anchors from given text. Optional 4th parameter for occurrence during multiple matches.
+Extracts text between 2 provided anchors from given text. Optional 4th parameter for occurrence during multiple matches (for example 3 to tell the function to return the 3rd match found).
 
 *Examples*
 
@@ -883,7 +881,7 @@ Extracts text between 2 provided anchors from given text. Optional 4th parameter
 
 remove_chars()
 ********************
-Cleans text data by removing provided character(s) from given text.
+Cleans data by removing provided character(s) from given text.
 
 *Examples*
 

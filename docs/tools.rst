@@ -36,7 +36,7 @@ TagUI Editor allows you to edit and run TagUI scripts via AutoHotKey.
 .. image:: https://raw.githubusercontent.com/adegard/tagui_scripts/master/TagUI_Editor.gif
 
 
-RPA for Python (TagUI for Python users)
+RPA for Python (for Python users)
 ---------------------------------------
 RPA for Python is a Python package (``pip install rpa`` to install) which allows you to use TagUI through a Python API. Check out `the documentation <https://github.com/tebelorg/RPA-Python>`_. It is based on a fork of TagUI optimised for use by the Python package. Created and maintained by TagUI's creator Ken Soh `@kensoh <https://github.com/kensoh>`_.
 

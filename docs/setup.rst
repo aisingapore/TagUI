@@ -24,7 +24,7 @@ Windows
 
 8. :ref:`Having problems? Click here.<troubleshooting-windows>` You have run your first TagUI flow! 🎉
 
-9. Optionally run ``tagui update`` command to get the latest TagUI features and any bug fixes.
+9. Optionally run ``tagui update`` to get the `latest features and bug fixes <https://github.com/kelaberetiv/TagUI/issues?q=is%3Aissue+is%3Aopen+in%3Atitle+fixed+OR+done+>`_
 
 macOS / Linux
 -----------------------------------
@@ -48,4 +48,4 @@ macOS / Linux
 
 7. :ref:`Having problems? Click here.<troubleshooting-macos-linux>` You have run your first TagUI flow! 🎉
 
-8. Optionally run ``tagui update`` command to get the latest TagUI features and any bug fixes.
+8. Optionally run ``tagui update`` to get the `latest features and bug fixes <https://github.com/kelaberetiv/TagUI/issues?q=is%3Aissue+is%3Aopen+in%3Atitle+fixed+OR+done+>`_
