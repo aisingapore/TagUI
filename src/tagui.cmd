@@ -14,7 +14,7 @@ rem enable windows for loop advanced flow control
 setlocal enableextensions enabledelayedexpansion
 
 if "%~1"=="" (
-echo tagui v6.47: use following options and this syntax to run - tagui flow_filename option^(s^)
+echo tagui v6.48: use following options and this syntax to run - tagui flow_filename option^(s^)
 echo.
 echo tagui live     launch TagUI live mode enabled with visual automation for interactive development
 echo tagui update   download and update to latest TagUI version ^(please backup your version beforehand^)
@@ -53,7 +53,7 @@ if "%arg1:~0,4%"=="http" (
 )
 
 rem enter live mode directly without user creating dummy file
-if "%~nx1"=="live" (
+if "%~1"=="live" (
 	echo live > "live.tag"
 	echo // mouse_xy^(^) >> "live.tag"
 	set "flow_file=%~dp1live.tag"
@@ -63,7 +63,7 @@ if "%~nx1"=="live" (
 rem go into download and update process if tagui update is given
 rem set TAGUI_PARENT_DIR here to avoid complication in for loop
 set "TAGUI_PARENT_DIR=%~dp0.."
-if "%1"=="update" (
+if "%~1"=="update" (
 	if exist "%TAGUI_PARENT_DIR%\TagUI-master.zip" del "%TAGUI_PARENT_DIR%\TagUI-master.zip"
 	if exist "%TAGUI_PARENT_DIR%\src\tagui_master.cmd" del "%TAGUI_PARENT_DIR%\src\tagui_master.cmd"
 
