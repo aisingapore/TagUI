@@ -4,6 +4,8 @@ Installation
 Windows
 -------------------------------
 
+You can use `TagUI Windows Installer <https://github.com/kelaberetiv/TagUI/releases/download/v6.46.0/TagUI_Windows.exe>`_ or the steps below. If you use the installer, specify a directory you want TagUI to be installed, for eg ``c:\tagui``.
+
 1. `Download TagUI v6.46 for Windows <https://github.com/kelaberetiv/TagUI/releases/download/v6.46.0/TagUI_Windows.zip>`_
 
 2. Unzip the contents to ``C:\``

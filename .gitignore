@@ -12,6 +12,9 @@
 # exclude custom global functions file
 /src/tagui_global.js
 
+# exclude custom global repository file
+/src/tagui_global.csv
+
 # exclude custom datatable temp file
 /src/tagui_datatable_transpose.csv
 /src/tagui_datatable.csv
@@ -21,6 +24,9 @@
 
 # exclude tagui_no_logging flag
 /src/tagui_no_logging
+
+# exclude tagui_logging flag
+/src/tagui_logging
 
 # exclude translation temp build files
 /src/languages/build.js
