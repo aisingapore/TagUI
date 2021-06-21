@@ -66,8 +66,8 @@ Data Considerations
 - For data in motion, users' enterprise app websites are now https by default for secure data entry and retrieval
 
 More Information
+- [See this guide](https://github.com/kelaberetiv/TagUI/raw/master/src/media/TagUI%20Enterprise%20Setup%20v1.4.docx) on enterprise installation, including whitelisting details, TagUI architecture and dependencies
 - With -report option, there is a summary and detailed logs of robots, to be enhanced for [centralised reporting](https://github.com/kelaberetiv/TagUI/issues/956#issuecomment-850123072)
-- For TagUI architecture diagram, software components and other security considerations, [check out this link](https://github.com/kelaberetiv/TagUI/tree/pre_v6#security)
 
 # How to get started
 
