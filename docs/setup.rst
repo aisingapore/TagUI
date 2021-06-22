@@ -4,7 +4,7 @@ Installation
 Windows
 -------------------------------
 
-You can use `TagUI Windows Installer <https://github.com/kelaberetiv/TagUI/releases/download/v6.46.0/TagUI_Windows.exe>`_ or the steps below. If you use TagUI Windows Installer, please specify an installation folder which you have write permission to, for example ``C:\RPA`` or a `RPA` folder on your Windows Deskop.
+You can use `TagUI Windows Installer <https://github.com/kelaberetiv/TagUI/releases/download/v6.46.0/TagUI_Windows.exe>`_ or the steps below. If you use TagUI Windows Installer, please specify an installation folder which you have write permission to, for example ``C:\RPA`` or a ``RPA`` folder on your Windows Deskop. After installation, you can continue from step 6.
 
 1. `Download TagUI v6.46 for Windows <https://github.com/kelaberetiv/TagUI/releases/download/v6.46.0/TagUI_Windows.zip>`_
 
