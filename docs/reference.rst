@@ -879,13 +879,13 @@ Extracts text between 2 provided anchors from given text. Optional 4th parameter
   echo `name`, `state`, `city`
 
 
-remove_chars()
+del_chars()
 ********************
-Cleans data by removing provided character(s) from given text.
+Cleans data by removing provided character(s) from given text and returning the result.
 
 *Examples*
 
 .. code-block:: none
 
   pdf_text = 'Name: John\n State: Texas\t City: Plano\n Contact: ...'
-  echo `remove_chars(pdf_text, '\n\t:')`
+  echo `del_chars(pdf_text, '\n\t:')`
