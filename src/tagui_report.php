@@ -53,9 +53,20 @@ $log_content = file_get_contents($script . '.log'); $log_content = str_replace("
 $log_content = preg_replace("/\x{001B}\\[[;\\d]*m/u","",$log_content);
 
 // change automation start message to accent color
-$start_pos = strpos($log_content,"START - automation started - "); $end_pos = strpos($log_content,"<br>",$start_pos);
-$log_content = substr($log_content,0,$start_pos) . "<span style=\"color: rgb(30,130,201);\">" . 
-substr($log_content,$start_pos,$end_pos-$start_pos) . "</span>" .  substr($log_content,$end_pos);
+$start_pos = strpos($log_content,"START - automation started - ");
+$end_pos = strpos($log_content,"<br>",$start_pos); if (($start_pos !== false) and ($end_pos !== false))
+{$log_content = substr($log_content,0,$start_pos) . "<span style=\"color: rgb(30,130,201);\">" . 
+substr($log_content,$start_pos,$end_pos-$start_pos) . "</span>" .  substr($log_content,$end_pos);}
+
+// change automation finish message to greenish color
+$start_pos = strpos($log_content,"FINISH - automation finished - "); if ($start_pos !== false)
+{$log_content = substr($log_content,0,$start_pos) . "<span style=\"color: rgb(35,250,128);\">" .
+substr($log_content,$start_pos) . "</span>";}
+
+// change automation error message to reddish color
+$start_pos = strpos($log_content,"ERROR - "); if ($start_pos !== false)
+{$log_content = substr($log_content,0,$start_pos) . "<span style=\"color: rgb(255,108,102);\">" .
+substr($log_content,$start_pos) . "</span>";}
 
 // add html definition, font family, size (h1-h6), width, margin
 $log_content = "<!DOCTYPE html>\n<html><head>" . 
