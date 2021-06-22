@@ -170,19 +170,20 @@ select
 
 table
 #####################
-| Saves html table data to a csv file. This only works for simple, neat HTML tables.
-| Uses :ref:`XPath <xpath>` identifier only. 
+Saves table data to a csv file, base on the table number on webpage or its :ref:`XPath <xpath>` identifier.
 
 .. code-block:: none
 
+  table [table number] to [filename.csv]
   table [XPath] to [filename.csv]
 
 *Examples*
 
 .. code-block:: none
   
-  table //table[1] to exchange-rates.csv
-
+  table 1 to regional_exchange_rates.csv
+  table //table[2] to global_exchange_rates.csv
+  table //table[@name='report'] to report.csv
 
 popup
 #####################
