@@ -911,10 +911,10 @@ $params = trim(substr($raw_intent." ",1+strpos($raw_intent." "," ")));
 $param1 = trim(substr($params,0,strpos($params," to "))); $param2 = trim(substr($params,4+strpos($params," to ")));
 if ($params == "") echo "ERROR - " . current_line() . " target missing for " . $raw_intent . "\n";
 else if (strpos($params," to ")!==false)
-return "casper.then(function() {"."{techo('".$raw_intent."');".beg_tx($param1).
-	"save_table('".abs_file($param2)."',tx('".$param1."'));".end_tx($param1); else
-return "casper.then(function() {"."{techo('".$raw_intent."');".beg_tx($params).
-        "save_table('',tx('".$params."'));".end_tx($params);}
+return "casper.then(function() {"."{techo('".$raw_intent."');".beg_tx("'+table_identifier('".$param1."')+'").
+"save_table('".abs_file($param2)."',tx(table_identifier('".$param1."')));".end_tx("'+table_identifier('".$param1."')+'");
+else return "casper.then(function() {"."{techo('".$raw_intent."');".beg_tx("'+table_identifier('".$params."')+'").
+"save_table('',tx(table_identifier('".$params."')));".end_tx("'+table_identifier('".$params."')+'");}
 
 function wait_intent($raw_intent) {
 $params = trim(substr($raw_intent." ",1+strpos($raw_intent." "," "))); if ($params == "") $params = "5";

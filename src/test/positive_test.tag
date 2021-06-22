@@ -329,8 +329,10 @@ snap page to document.pdf
 // test table (no css selector)
 table element
 table element to filename.csv
-table (//table)[7]
-table (//table)[7] to filename.csv
+table 1
+table 2 to filename.csv
+table //table[7]
+table //table[7] to filename.csv
 
 // test tagui
 // can't really test as folders and files structure won't be the same

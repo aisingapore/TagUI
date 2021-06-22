@@ -103,9 +103,9 @@ if (!casper.exists(selector) || (selector.toString().indexOf('xpath selector: ')
 if (selector.toString().length == 16) selector = ''; else selector = selector.toString().substring(16); // get xpath
 for (table_row=1; table_row<=1024; table_row++) {row_data = ""; for (table_col=1; table_col<=1024; table_col++) {
 table_cell = '(((' + selector + '//tr)[' + table_row + ']//th)' + '|'; // build cell xpath selector to include
-table_cell += '((' + selector + '//tr)[' + table_row + ']//td))[' + table_col + ']'; // both td and td elements
+table_cell += '((' + selector + '//tr)[' + table_row + ']//td))[' + table_col + ']'; // both th and td elements
 if (casper.exists(xps666(table_cell))) row_data = row_data + '","' + casper.fetchText(xps666(table_cell)).trim();
-else break;} // if searching for table cells (th and td) is not successful,  means end of row is reached
+else break;} // if searching for table cells (th and td) is not successful, means end of row is reached
 if (row_data.substr(0,2) == '",') {row_data = row_data.substr(2); row_data += '"'; append_text(file_name,row_data);}
 else return true;}} // if '",' is not found, means end of table is reached as there is no cell found in row
 
@@ -1204,16 +1204,19 @@ else return "this.echo('ERROR - cannot find " + param1 + "')";}
 else {if (check_tx(params)) return "this.captureSelector(snap_image(),tx('" + params + "'))";
 else return "this.echo('ERROR - cannot find " + params + "')";}}
 
+function table_identifier(given_identifier) {if (!given_identifier) return '';
+if (isNaN(given_identifier)) return given_identifier; else return '//table[' + parseInt(given_identifier) + ']';}
+
 function table_intent(raw_intent) {raw_intent = eval("'" + escape_bs(raw_intent) + "'"); // support dynamic variables
 var params = ((raw_intent + ' ').substr(1+(raw_intent + ' ').indexOf(' '))).trim();
 var param1 = (params.substr(0,params.indexOf(' to '))).trim();
 var param2 = (params.substr(4+params.indexOf(' to '))).trim();
 if (params == '') return "this.echo('ERROR - target missing for " + raw_intent + "')";
-else if (params.indexOf(' to ') > -1)
-{if (check_tx(param1)) return "save_table('" + abs_file(param2) + "',tx('" + param1 + "'))";
-else return "this.echo('ERROR - cannot find " + param1 + "')";}
-else {if (check_tx(params)) return "save_table('',tx('" + params + "'))";
-else return "this.echo('ERROR - cannot find " + params + "')";}}
+else if (params.indexOf(' to ') > -1) {if (check_tx(table_identifier(param1)))
+return "save_table('" + abs_file(param2) + "',tx('" + table_identifier(param1) + "'))";
+else return "this.echo('ERROR - cannot find " + table_identifier(param1) + "')";}
+else {if (check_tx(table_identifier(params))) return "save_table('',tx('" + table_identifier(params) + "'))";
+else return "this.echo('ERROR - cannot find " + table_identifier(params) + "')";}}
 
 function wait_intent(raw_intent) {raw_intent = eval("'" + escape_bs(raw_intent) + "'"); // support dynamic variables
 return "this.echo('ERROR - waiting for some time is not relevant in live mode')";}
