@@ -88,3 +88,9 @@
 /src/office/word/TagUIWordAddIn/obj/*
 /src/office/excel/TagUIExcelAddIn/bin/*
 /src/office/excel/TagUIExcelAddIn/obj/*
+
+# exclude packages and generated files for installer
+/src/installer/TagUIBundle/bin/*
+/src/installer/TagUIBundle/obj/*
+/src/installer/TagUIv6.48/Debug/*
+/src/installer/TagUIv6.48/Release*
