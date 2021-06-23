@@ -11,19 +11,30 @@ namespace TagUIExcelAddIn
 {
     public partial class ThisAddIn
     {
-        private TagUIExcelAddInTaskPane myUserControl1;
-        private Microsoft.Office.Tools.CustomTaskPane myCustomTaskPane;
+        private TagUIExcelAddInTaskPane taskPaneControl1;
+        private Microsoft.Office.Tools.CustomTaskPane taskPaneValue;
         private void ThisAddIn_Startup(object sender, System.EventArgs e)
         {
-            myUserControl1 = new TagUIExcelAddInTaskPane();
-            myCustomTaskPane = this.CustomTaskPanes.Add(myUserControl1, "TagUI RPA");
-            myCustomTaskPane.Visible = true;
+            taskPaneControl1 = new TagUIExcelAddInTaskPane();
+            taskPaneValue = this.CustomTaskPanes.Add(taskPaneControl1, " ");
+            taskPaneValue.VisibleChanged += new EventHandler(taskPaneValue_VisibleChanged);
         }
 
         private void ThisAddIn_Shutdown(object sender, System.EventArgs e)
         {
         }
-
+        private void taskPaneValue_VisibleChanged(object sender, System.EventArgs e)
+        {
+               Globals.Ribbons.Ribbon1.toggleButton1.Checked =
+                 taskPaneValue.Visible;
+        }
+        public Microsoft.Office.Tools.CustomTaskPane TaskPane
+        {
+            get
+            {
+                return taskPaneValue;
+            }
+        }
         #region VSTO generated code
 
         /// <summary>
