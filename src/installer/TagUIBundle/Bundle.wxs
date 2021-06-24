@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
+	<Bundle Name="TagUI Bundle" Version="1.0.0.0" Manufacturer="AISG" UpgradeCode="8f65f60b-2aba-4833-a207-4a377f832fe2" IconSourceFile="TagUILogo.ico">
+		<BootstrapperApplicationRef Id="WixStandardBootstrapperApplication.HyperlinkLicense">
+			<bal:WixStandardBootstrapperApplication
+			  LogoFile="TagUILogo.png"
+		      SuppressOptionsUI="yes"
+			  LicenseUrl=""
+			  ThemeFile="HyperlinkTheme.xml"
+			  LocalizationFile="HyperlinkTheme.wxl"
+			  xmlns:bal="http://schemas.microsoft.com/wix/BalExtension" />
+		</BootstrapperApplicationRef>
+		
+		<Chain>
+			
+			<MsiPackage
+              SourceFile="TagUIv6.48.msi"
+			  DisplayInternalUI="yes"
+             />
+			<MsiPackage
+              SourceFile="amazon-corretto-8.292.10.1-windows-x64.msi"
+			  DisplayInternalUI="yes"
+			  Vital="no"
+             />
+			<ExePackage
+		      SourceFile="vcredist_x86.exe"
+              InstallCommand="/q /ACTION=Install"
+			  Vital="no"
+              RepairCommand="/q ACTION=Repair /hideconsole" />
+		</Chain>
+	</Bundle>
+</Wix>
