@@ -68,7 +68,12 @@ substr($log_content,$start_pos) . "</span>";}
 // change automation error message to reddish color
 $start_pos = strpos($log_content,"ERROR - "); if ($start_pos !== false)
 {$log_content = substr($log_content,0,$start_pos) . "<span style=\"color: rgb(255,108,102);\">" .
-substr($log_content,$start_pos) . "</span>";}
+substr($log_content,$start_pos) . "</span>";
+// embed copy of error screenshot into html log file
+if (file_exists(substr($script, 0, -4) . '_error.png')) {
+copy(substr($script, 0, -4).'_error.png', substr($script, 0, -4).'_'.$audit_output_count.'_error.png');
+$log_content .= '<img src="' . pathinfo(substr($script, 0, -4).'_'.$audit_output_count.'_error.png', PATHINFO_BASENAME) .
+'" width="100%" height="auto">' . "\n";}}
 
 // add html definition, font family, size (h1-h6), width, margin
 $log_content = "<!DOCTYPE html>\n<html><head>" . 
