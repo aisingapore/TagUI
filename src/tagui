@@ -6,7 +6,7 @@ chrome_command="google-chrome"
 
 if [ -z "$1" ]
 then
-echo "tagui v6.50: use following options and this syntax to run - ./tagui flow_filename option(s)"
+echo "tagui v6.52: use following options and this syntax to run - ./tagui flow_filename option(s)"
 echo
 echo "tagui live     launch TagUI live mode enabled with visual automation for interactive development"
 echo "tagui update   download and update to latest TagUI version (please backup your version beforehand)"
@@ -392,7 +392,9 @@ fi
 done
 
 # check report option to generate html automation log
-if [ -s "$1".log ] && [ "$tagui_html_report" == true ]; then php -q tagui_report.php "$1"; fi
+if [ -s "$1".log ] && [ "$tagui_html_report" == true ]; then tagui_user_id="$(id -gn)\\$(id -un)"
+php -q tagui_report.php "$1" "$tagui_user_id"
+fi
 
 # give errorlevel 1 on error detected
 if [ -f "$1".log ]; then

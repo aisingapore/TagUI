@@ -14,7 +14,7 @@ rem enable windows for loop advanced flow control
 setlocal enableextensions enabledelayedexpansion
 
 if "%~1"=="" (
-echo tagui v6.50: use following options and this syntax to run - tagui flow_filename option^(s^)
+echo tagui v6.52: use following options and this syntax to run - tagui flow_filename option^(s^)
 echo.
 echo tagui live     launch TagUI live mode enabled with visual automation for interactive development
 echo tagui update   download and update to latest TagUI version ^(please backup your version beforehand^)
@@ -1101,7 +1101,8 @@ if exist "tagui.sikuli\tagui.log" (
 rem check report option to generate html automation log
 for /f "usebackq delims=" %%f in ('%flow_file%.log') do set file_size=%%~zf
 if %file_size% gtr 0 if %tagui_html_report%==true (
-	php -q tagui_report.php "%flow_file%"
+	for /f "tokens=* usebackq delims=" %%u in (`whoami`) do set tagui_user_id=%%u
+	php -q tagui_report.php "%flow_file%" "!tagui_user_id!"
 	gawk "sub(\"$\", \"\")" "%flow_file%.html" > "%flow_file%.html.tmp"
 	move /Y "%flow_file%.html.tmp" "%flow_file%.html" > nul
 )

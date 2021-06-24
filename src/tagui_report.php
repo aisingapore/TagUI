@@ -7,6 +7,7 @@ $script = $argv[1]; if ($script=="") die("ERROR - specify flow filename for repo
 if (!file_exists($script . '.log')) die("ERROR - cannot find " . $script . '.log' . "\n");
 $log_file = fopen($script . '.log','r') or die("ERROR - cannot open " . $script . '.log' . "\n"); fclose($log_file);
 $rep_file = fopen($script . '.html','w') or die("ERROR - cannot open " . $script . '.html' . "\n"); fclose($rep_file);
+$user_id = $argv[2]; // retrieve user id owning the running TagUI process, for tracking in centralised report summary
 
 // below log automation outcome to audit report csv database
 
@@ -34,13 +35,14 @@ $escaped_script = str_replace('"', '""', $script);
 $start_timestamp = str_replace('"', '""', $start_timestamp);
 $finish_timestamp = str_replace('"', '""', $finish_timestamp);
 $error_status = str_replace('"', '""', $error_status);
+$user_id = str_replace('"', '""', $user_id);
 
-$audit_output_header = '"#","WORKFLOW","START TIME","TIME TAKEN","ERROR STATUS","LOG FILE"';
+$audit_output_header = '"#","WORKFLOW","START TIME","TIME TAKEN","ERROR STATUS","LOG FILE","USER ID"';
 if (!file_exists('tagui_report.csv')) file_put_contents('tagui_report.csv', $audit_output_header . "\r\n");
 $audit_output_count = @count(file('tagui_report.csv')) - 1 + 1; // to track and increment entry # in audit file
-$html_log_file = $script . '_' . $audit_output_count . '.html'; // to allow log persistence without overwriting
+$html_log_file = $escaped_script . '_' . $audit_output_count . '.html'; // to allow log persistence without overwriting
 $audit_output_line = '"' . $audit_output_count . '","' . $escaped_script . '","' . $start_timestamp . '","'; 
-$audit_output_line .= $finish_timestamp . '","' . $error_status . '","' . $html_log_file . '"' . "\r\n";
+$audit_output_line .= $finish_timestamp . '","' . $error_status . '","' . $html_log_file . '","' .$user_id . '"' . "\r\n";
 $audit_output_file = fopen('tagui_report.csv','a') or die("ERROR - cannot open " . 'tagui_report.csv' . "\n");
 fwrite($audit_output_file, $audit_output_line); fclose($audit_output_file);
 
