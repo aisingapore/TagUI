@@ -72,7 +72,8 @@ substr($log_content,$start_pos) . "</span>";
 // embed copy of error screenshot into html log file
 if (file_exists(substr($script, 0, -4) . '_error.png')) {
 copy(substr($script, 0, -4).'_error.png', substr($script, 0, -4).'_'.$audit_output_count.'_error.png');
-$log_content .= '<img src="' . pathinfo(substr($script, 0, -4).'_'.$audit_output_count.'_error.png', PATHINFO_BASENAME) .
+$log_content .= "<br>\n" . '<img src="' .
+pathinfo(substr($script, 0, -4).'_'.$audit_output_count.'_error.png', PATHINFO_BASENAME) .
 '" width="100%" height="auto">' . "\n";}}
 
 // add html definition, font family, size (h1-h6), width, margin
