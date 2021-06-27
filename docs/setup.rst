@@ -46,7 +46,7 @@ macOS / Linux
 
 .. code-block:: bash
 
-    ln -sf /your_tagui_path/tagui/src/tagui /usr/local/bin/tagui
+    sudo ln -sf /your_tagui_path/tagui/src/tagui /usr/local/bin/tagui
 
     tagui /your_tagui_path/tagui/flows/samples/1_google.tag
 
