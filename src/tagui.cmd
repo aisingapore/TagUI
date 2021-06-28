@@ -14,7 +14,7 @@ rem enable windows for loop advanced flow control
 setlocal enableextensions enabledelayedexpansion
 
 if "%~1"=="" (
-echo tagui v6.53: use following options and this syntax to run - tagui flow_filename option^(s^)
+echo tagui v6.54: use following options and this syntax to run - tagui flow_filename option^(s^)
 echo.
 echo tagui live     launch TagUI live mode enabled with visual automation for interactive development
 echo tagui update   download and update to latest TagUI version ^(please backup your version beforehand^)
@@ -1105,6 +1105,13 @@ if %file_size% gtr 0 if %tagui_html_report%==true (
 	php -q tagui_report.php "%flow_file%" "!tagui_user_id!"
 	gawk "sub(\"$\", \"\")" "%flow_file%.html" > "%flow_file%.html.tmp"
 	move /Y "%flow_file%.html.tmp" "%flow_file%.html" > nul
+	
+	rem do custom reporting here with OS commands, built-in curl or your programming language
+	rem for eg you can move files to your central server or post data somewhere using your API
+	rem "tagui_report.csv" - use this for the TagUI report summary CSV file
+	rem "!tagui_user_id!" - use this for the running user workgroup\userid
+	rem "%flow_file%.html" - use this for the detailed execution HTML log
+	rem "%flow_file:~0,-4%_error.png" - use this for error image (if any)
 )
 
 rem give errorlevel 1 on error detected

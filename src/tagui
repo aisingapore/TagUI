@@ -6,7 +6,7 @@ chrome_command="google-chrome"
 
 if [ -z "$1" ]
 then
-echo "tagui v6.53: use following options and this syntax to run - ./tagui flow_filename option(s)"
+echo "tagui v6.54: use following options and this syntax to run - ./tagui flow_filename option(s)"
 echo
 echo "tagui live     launch TagUI live mode enabled with visual automation for interactive development"
 echo "tagui update   download and update to latest TagUI version (please backup your version beforehand)"
@@ -394,6 +394,13 @@ done
 # check report option to generate html automation log
 if [ -s "$1".log ] && [ "$tagui_html_report" == true ]; then tagui_user_id="$(id -gn)\\$(id -un)"
 php -q tagui_report.php "$1" "$tagui_user_id"
+
+# do custom reporting here with OS commands, built-in curl or your programming language
+# for eg you can move files to your central server or post data somewhere using your API
+# "tagui_report.csv" - use this for the TagUI report summary CSV file
+# "$tagui_user_id" - use this for the running user workgroup\userid
+# "$1.html" - use this for the detailed execution HTML log
+# "${1%????}_error.png" - use this for error image (if any)
 fi
 
 # give errorlevel 1 on error detected
