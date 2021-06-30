@@ -6,7 +6,7 @@ chrome_command="google-chrome"
 
 if [ -z "$1" ]
 then
-echo "tagui v6.55: use following options and this syntax to run - ./tagui flow_filename option(s)"
+echo "tagui v6.56: use following options and this syntax to run - ./tagui flow_filename option(s)"
 echo
 echo "tagui live     launch TagUI live mode enabled with visual automation for interactive development"
 echo "tagui update   download and update to latest TagUI version (please backup your version beforehand)"
@@ -365,9 +365,12 @@ chrome_process_id="$(ps x | grep remote-debugging-port=9222 | grep tagui_user_pr
 if [ -n "$chrome_process_id" ]; then kill $chrome_process_id; fi
 "$tagui_browser_command" --user-data-dir="$TAGUI_DIR/chrome/tagui_user_profile" $chrome_switches $window_size $headless_switch > /dev/null 2>&1 &
 else
+if [ "$tagui_custom_browser" == "Edge" ]; then
+chrome_command="microsoft-edge"
+fi
 if ! type "$chrome_command" > /dev/null; then
-echo "ERROR - cannot find Chrome command \"$chrome_command\""
-echo "update chrome_command setting in tagui/src/tagui and make sure symlink to command is created"; exit 1; fi
+echo "ERROR - cannot find \"$chrome_command\" command on your Linux to launch web browser"
+echo "update chrome_command setting in tagui/src/tagui and make sure symlink is created"; exit 1; fi
 chrome_process_id="$(ps x | grep remote-debugging-port=9222 | grep tagui_user_profile | grep window-size | sed -e 's/^[ ]*//' | cut -d' ' -f 1 | sort -nur | head -n 1)"
 if [ -n "$chrome_process_id" ]; then kill $chrome_process_id; fi
 $chrome_command --user-data-dir="$TAGUI_DIR/chrome/tagui_user_profile" $chrome_switches $window_size $headless_switch > /dev/null 2>&1 &
