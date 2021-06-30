@@ -10,7 +10,7 @@ TagUI is a free, open-source, cross-platform software released under the Apache 
 
 How do I find the XPath of a web element?
 ---------------------------------------------
-In Chrome, right-click on the element, click Inspect, right-click on the highlighted HTML, then:
+In Chrome/Edge, right-click on the element, click Inspect, right-click on the highlighted HTML, then:
 
 .. image:: ./_static/find_xpath.png
 
@@ -23,7 +23,7 @@ XPath is very powerful and can allow you to select web elements in many ways. Le
 
 How do I find the id, name, class or other attributes of a web element?
 ----------------------------------------------------------------------------
-In Chrome, right-click on the element, click Inspect. There will be some highlighted HTML, like this:
+In Chrome/Edge, right-click on the element, click Inspect. There will be some highlighted HTML, like this:
 
 .. image:: ./_static/element_attributes.png
 
@@ -77,12 +77,12 @@ On macOS/Linux, `use crontab <https://www.ostechnix.com/a-beginners-guide-to-cro
 
 How do I kill any unfinished TagUI processes?
 -----------------------------------------------
-If you Ctrl+C to break a TagUI automation, you can use ``tagui/src/end_processes`` (for macOS/Linux) or ``end_processes.cmd`` (for Windows) to kill any dead processes of TagUI integrations (Chrome, SikuliX, Python etc).
+If you Ctrl+C to break a TagUI automation, you can use ``tagui/src/end_processes`` (for macOS/Linux) or ``end_processes.cmd`` (for Windows) to kill any dead processes of TagUI integrations (Chrome, Edge, SikuliX, Python etc).
 
 
 Why doesn't TagUI work on zoom levels other than 100%?
 -------------------------------------------------------------
-TagUI mimics the user mouse-clicks at the (x,y) coordinates of web elements, so using a different zoom level will cause clicks to be triggered at wrong coordinates. Make sure TagUI's Chrome browser is set to 100% zoom for best results. 
+TagUI mimics the user mouse-clicks at the (x,y) coordinates of web elements, so using a different zoom level will cause clicks to be triggered at wrong coordinates. Make sure TagUI's Chrome/Edge browser is set to 100% zoom for best results. 
 
 
 Is TagUI safe to use?

@@ -681,6 +681,9 @@ Tracks flow run result in ``tagui/src/tagui_report.csv`` and saves html logs of 
 ********************
 Runs without output to command prompt except for explicit output (echo, show, check steps and errors etc).
 
+-edge or -e
+********************
+Runs using Microsoft Edge web browser instead of Google Chrome (can be used with -headless option).
 
 my_datatable.csv
 ********************

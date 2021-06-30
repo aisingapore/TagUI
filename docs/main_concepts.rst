@@ -189,7 +189,7 @@ Identifiers
 ---------------
 You have probably noticed that different steps have different ways that they target elements, called **identifiers**. Let's look at the different types of identifiers.
 
-.. note:: The DOM and XPath identifiers only work for Chrome. To automate other browsers, use the Point/Region and Image identifiers.
+.. note:: The DOM and XPath identifiers only work for Chrome/Edge. To automate other browsers, use the Point/Region and Image identifiers.
 
 
 .. _dom:
