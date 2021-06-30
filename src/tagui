@@ -6,7 +6,7 @@ chrome_command="google-chrome"
 
 if [ -z "$1" ]
 then
-echo "tagui v6.56: use following options and this syntax to run - ./tagui flow_filename option(s)"
+echo "tagui v6.57: use following options and this syntax to run - ./tagui flow_filename option(s)"
 echo
 echo "tagui live     launch TagUI live mode enabled with visual automation for interactive development"
 echo "tagui update   download and update to latest TagUI version (please backup your version beforehand)"
@@ -17,6 +17,7 @@ echo "-headless  -h  run on invisible Chrome web browser instead of visible as d
 echo "-nobrowser -n  run without any web browser, for example to perform automation only with visual automation"
 echo "-report    -r  track run result in tagui/src/tagui_report.csv and save html log of automation execution"
 echo "-quiet     -q  run without output except for explicit output (echo, show, check steps and errors etc)"
+echo "-edge      -e  run TagUI using Microsoft Edge instead of Google Chrome (can be used with -headless)"
 echo
 exit 1
 fi
