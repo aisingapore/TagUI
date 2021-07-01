@@ -3,9 +3,9 @@
 Troubleshooting Windows
 ================================
 
-- If you see ``MSVCR110.dll is missing``: install :download:`Visual C++ Redistributable <./_static/vcredist_x86.exe>`
+- If you see ``MSVCR110.dll is missing``, install :download:`Visual C++ Redistributable <./_static/vcredist_x86.exe>`
 
-- If you cannot unzip to ``C:\``, unzip to your desktop instead
+- If you cannot unzip to ``C:\`` folder, unzip to your desktop instead
 
 .. _troubleshooting-macos-linux:
 

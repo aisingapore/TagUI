@@ -877,9 +877,11 @@ Extracts text between 2 provided anchors from given text. Optional 4th parameter
 .. code-block:: none
 
   pdf_text = 'Name: John State: Texas City: Plano Contact: ...'
+
   name = get_text(pdf_text, 'Name:', 'State:')
   state = get_text(pdf_text, 'State:', 'City:')
   city = get_text(pdf_text, 'City:', 'Contact:')
+
   echo `name`, `state`, `city`
 
 
