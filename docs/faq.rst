@@ -16,7 +16,7 @@ In Chrome/Edge, right-click on the element, click Inspect, right-click on the hi
 
 For some web pages, the XPath of an element can change. To combat this, you can find a stable element in the web page and writing a custom XPath relative to that stable element. 
 
-XPath is very powerful and can allow you to select web elements in many ways. Learn more about XPath at `w3schools <https://www.w3schools.com/xml/xpath_intro.asp>`_. Alternatively, check out `SelectorsHub Chrome extension <https://chrome.google.com/webstore/detail/selectorshub/ndgimibanhlabgdgjcpbbndiehljcpfh?hl=en>`_ tool.
+XPath is very powerful and can allow you to select web elements in many ways. Learn more about XPath at `W3Schools <https://www.w3schools.com/xml/xpath_intro.asp>`_. Alternatively, check out `SelectorsHub Chrome extension <https://chrome.google.com/webstore/detail/selectorshub/ndgimibanhlabgdgjcpbbndiehljcpfh?hl=en>`_ tool.
 
 
 .. _element_attributes:

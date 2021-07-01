@@ -7,16 +7,16 @@ You can save an html log of the run and the flow run results to ``tagui/src/tagu
 
     tagui my_flow.tag -report
 
-The CSV file will show one line for each run, when it started, how long it took to complete, any error message during run, the link to the log file for that run, and the user's workgroup\userid.
+The CSV file will show one line for each run, when it started, how long it took to complete, any error message during run, the link to the log file for that run, and the user's workgroup\\userid.
 
 
 Handling exceptions and errors
 --------------------------------
-There are 3 ways to handle exceptions in TagUI when things do not go as planned in the automation.
+There are 3 ways to handle exceptions in TagUI when things do not go as planned.
 
-The first way is local error handling. This means using if conditions to check specifically for certain scenarios and handling the scenarios accordingly. For example, check if some UI element is missing, then do xyz steps. Using this way, a single workflow can have multiple fine-grain exception handling scenarios.
+The first way is **local error handling**. This means using if conditions to check specifically for certain scenarios and handling the scenarios accordingly. For example, check if some UI element is missing, then do xyz steps. Using this way, a workflow can have multiple fine-grain exception handling.
 
-The second way is workflow error handling. A workflow can be chained as follows to handle error or success accordingly. The workflow error.tag will run only if flow.tag errors out. The workflow success.tag will run only if flow.tag runs successfully. TagUI will automatically throw error when it detects an expected UI element missing or some other unknown errors.
+The second way is **workflow error handling**. A workflow can be chained as follows to handle error or success accordingly. The workflow error.tag will run only if flow.tag errors out. The workflow success.tag will run only if flow.tag runs successfully. TagUI will automatically throw error when it detects an expected UI element missing (and autosave screenshot) or some other unknown errors.
 
 Windows example from the command prompt::
 
@@ -28,7 +28,7 @@ macOS / Linux example from the terminal::
   tagui flow.tag || tagui error.tag
   tagui flow.tag && tagui success.tag
 
-The third way is global error handling. Configuration can be done for TagUI such that after every run, special handling is done to send data or files generated from the report option to some target folder or API endpoint for error / success handling. For example, syncing all automation runs to some central storage for auditing purpose. Using this way, the special handling applies to all TagUI flows that are run.
+The third way is **global error handling**. Configuration can be done for TagUI such that after every run, special handling is done to send data or files generated from the report option to some target folder or API endpoint for error / success handling. For example, syncing all automation runs to central storage for auditing purpose. The special handling applies to all TagUI flows that are run.
 
 
 .. _datatables:
