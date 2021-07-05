@@ -1232,7 +1232,7 @@ else {if (check_tx(params)) return "this.captureSelector(snap_image(),tx('" + pa
 else return "this.echo('ERROR - cannot find " + params + "')";}}
 
 function table_identifier(given_identifier) {if (!given_identifier) return '';
-if (isNaN(given_identifier)) return given_identifier; else return '//table[' + parseInt(given_identifier) + ']';}
+if (isNaN(given_identifier)) return given_identifier; else return '(//table)[' + parseInt(given_identifier) + ']';}
 
 function table_intent(raw_intent) {raw_intent = eval("'" + escape_bs(raw_intent) + "'"); // support dynamic variables
 var params = ((raw_intent + ' ').substr(1+(raw_intent + ' ').indexOf(' '))).trim();
