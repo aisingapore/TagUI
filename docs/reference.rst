@@ -182,7 +182,7 @@ Saves table data to a csv file, base on the table number on webpage or its :ref:
 .. code-block:: none
   
   table 1 to regional_exchange_rates.csv
-  table //table[2] to global_exchange_rates.csv
+  table (//table)[2] to global_exchange_rates.csv
   table //table[@name='report'] to report.csv
 
 popup
