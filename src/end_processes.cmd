@@ -49,9 +49,16 @@ if not "%r_process_id%"=="" (
     goto repeat_kill_r
 )
 
+rem set variable to avoid leaving remnant end_processes_signal to quit datatable loops
+set e_p_signal=false
+
 :repeat_kill_tagui
 for /f "tokens=* usebackq" %%p in (`wmic process where "executablepath like '%%\\tagui\\src\\%%' and not caption like '%%cut.exe%%' and not caption like '%%sort.exe%%' and not caption like '%%head.exe%%'" get processid 2^>nul ^| cut -d" " -f 1 ^| sort -nur ^| head -n 1`) do set tagui_process_id=%%p
 if not "%tagui_process_id%"=="" (
+    if %e_p_signal%==false (
+        set e_p_signal=true
+        type nul > "%~dp0end_processes_signal"
+    )
     taskkill /PID %tagui_process_id% /T /F > nul 2>&1
     goto repeat_kill_tagui
 )

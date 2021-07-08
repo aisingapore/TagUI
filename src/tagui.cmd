@@ -14,7 +14,7 @@ rem enable windows for loop advanced flow control
 setlocal enableextensions enabledelayedexpansion
 
 if "%~1"=="" (
-echo tagui v6.58: use following options and this syntax to run - tagui flow_filename option^(s^)
+echo tagui v6.59: use following options and this syntax to run - tagui flow_filename option^(s^)
 echo.
 echo tagui live     launch TagUI live mode enabled with visual automation for interactive development
 echo tagui update   download and update to latest TagUI version ^(please backup your version beforehand^)
@@ -1139,6 +1139,10 @@ if exist "tagui_r\tagui_r.in" echo finish > tagui_r\tagui_r.in
 if exist "tagui_py\tagui_py.in" echo finish > tagui_py\tagui_py.in
 if exist "tagui.sikuli\tagui_sikuli.in" echo finish > tagui.sikuli\tagui_sikuli.in
 if exist "tagui_chrome.in" echo finish > tagui_chrome.in
+if exist "end_processes_signal" (
+	del "end_processes_signal"
+	exit /b 1
+)
 
 rem add delay between repetitions to pace out iterations
 if %tagui_data_set_size% neq 1 php -q sleep.php 3

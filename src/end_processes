@@ -49,9 +49,16 @@ while true; do
     fi
 done
 
+# get END_PROCESSES directory to create end_processes_signal to quit datatable loops
+SOURCE="${BASH_SOURCE[0]}" # slimerjs's implementation instead of cd "`dirname "$0"`"
+while [ -h "$SOURCE" ]; do END_PROCESSES_DIR="$( cd -P "$( dirname "$SOURCE" )" && pwd )"
+SOURCE="$(readlink "$SOURCE")"; [[ $SOURCE != /* ]] && SOURCE="$END_PROCESSES_DIR/$SOURCE"; done
+END_PROCESSES_DIR="$( cd -P "$( dirname "$SOURCE" )" && pwd )"; e_p_signal=false
+
 while true; do
     tagui_process_id="$(ps x | grep tagui/src/ | grep -v 'grep tagui/src/' | grep -v 'end_processes' | sed -e 's/^[ ]*//' | cut -d' ' -f 1 | sort -nur | head -n 1)"
     if [ -n "$tagui_process_id" ]; then
+        if [ "$e_p_signal" == false ]; then e_p_signal=true; touch "$END_PROCESSES_DIR/end_processes_signal"; fi
         kill $tagui_process_id > /dev/null 2>&1
     else
         break
