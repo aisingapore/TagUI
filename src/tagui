@@ -6,7 +6,7 @@ chrome_command="google-chrome"
 
 if [ -z "$1" ]
 then
-echo "tagui v6.59: use following options and this syntax to run - ./tagui flow_filename option(s)"
+echo "tagui v6.60: use following options and this syntax to run - ./tagui flow_filename option(s)"
 echo
 echo "tagui live     launch TagUI live mode enabled with visual automation for interactive development"
 echo "tagui update   download and update to latest TagUI version (please backup your version beforehand)"
@@ -399,10 +399,12 @@ if [ -f "tagui_r/tagui_r.in" ]; then echo "finish" > tagui_r/tagui_r.in; fi
 if [ -f "tagui_py/tagui_py.in" ]; then echo "finish" > tagui_py/tagui_py.in; fi
 if [ -f "tagui.sikuli/tagui_sikuli.in" ]; then echo "finish" > tagui.sikuli/tagui_sikuli.in; fi
 if [ -f "tagui_chrome.in" ]; then echo "finish" > tagui_chrome.in; fi
-if [ -f "end_processes_signal" ]; then rm end_processes_signal; exit 1; fi
 
 # add delay between repetitions to pace out iterations
-if [ "$tagui_data_set_size" -ne 1 ]; then sleep 3; fi
+if [ "$tagui_data_set_size" -ne 1 ] && ! [ -f "end_processes_signal" ]; then sleep 3; fi
+
+# check signal from end_processes command to terminate loops
+if [ -f "end_processes_signal" ]; then rm end_processes_signal; exit 1; fi
 
 # kill chrome processes on single first run or data set last run
 if [ "$tagui_data_set" -eq "$tagui_data_set_size" ]; then
