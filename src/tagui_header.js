@@ -46,7 +46,7 @@ var dom_json = {}; var dom_result = '';
 
 // telegram step api endpoint, you can host on your own server or cloud
 // see https://github.com/kelaberetiv/TagUI/tree/master/src/telegram
-var telegram_endpoint = 'http://tebel.org/taguibot';
+var telegram_endpoint = 'https://tebel.org/taguibot';
 
 // variable for advance usage of api step
 var api_config = {method:'GET', header:[], body:{}};

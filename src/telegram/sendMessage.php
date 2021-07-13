@@ -28,7 +28,8 @@ file_put_contents("../../telegram/sendMessage.log", $log_entry, FILE_APPEND);
 $post_data = http_build_query(
     array(
         'chat_id' => $chat_id,
-        'text' => $message
+        'text' => $message,
+        'parse_mode' => 'MarkdownV2'
     )
 );
 
