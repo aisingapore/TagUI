@@ -5,8 +5,8 @@
 // Q1. Why is formatting for this file so messed up? - it's created on the road
 // If you want to know more - https://github.com/kelaberetiv/TagUI/issues/490
 
-// Q2. Is there a beautified version for easier viewing or editing? - yes snapshot below
-// https://github.com/kelaberetiv/TagUI/blob/master/src/media/snapshots/tagui_parse.md
+// Q2. Is there a beautified version for easier viewing or editing?
+// Use this - https://loilo.github.io/prettier-php-playground
 
 // check flow filename for .tag file extension
 $script = $argv[1]; if ($script=="") die("ERROR - specify flow filename as first parameter\n");
@@ -946,14 +946,14 @@ else return "casper.then(function() {".
 "{ask_result = ''; var sys = require('system');\nthis.echo('".$params." '); ".
 "ask_result = sys.stdin.readLine();}".end_fi()."});"."\n\n";}
 
-function telegram_intent($raw_intent) {$telegram_endpoint = "http://tebel.org/taguibot";
+function telegram_intent($raw_intent) {
 $params = trim(substr($raw_intent." ",1+strpos($raw_intent." "," ")));
 $param1 = trim(substr($params,0,strpos($params," "))); $param2 = trim(substr($params,1+strpos($params," ")));
 if (($param1 == "") or ($param2 == ""))
 echo "ERROR - " . current_line() . " chat_id/message missing for " . $raw_intent . "\n"; else
 return "casper.then(function() {"."{techo('".$raw_intent."');\ntelegram_result = ''; // 'api http' to allow API calls\n".
 "telegram_chat_id = encodeURIComponent('". $param1 ."');\n"."telegram_message = encodeURIComponent('". $param2 ."');\n".
-"telegram_result = call_api('".$telegram_endpoint."/sendMessage.php?chat_id='+telegram_chat_id+'&text='+telegram_message);\n".
+"telegram_result = call_api(telegram_endpoint+'/sendMessage.php?chat_id='+telegram_chat_id+'&text='+telegram_message);\n".
 "try {telegram_json = JSON.parse(telegram_result);} catch(e) {telegram_json = JSON.parse('null');}}".end_fi()."});"."\n\n";}
 
 function keyboard_intent($raw_intent) {

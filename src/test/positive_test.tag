@@ -374,6 +374,9 @@ wait 7.5 seconds
 // test live
 live
 
+// test telegram
+telegram 123456789 some message to the user
+
 // test keyboard
 keyboard ls -lrt[enter]
 keyboard ls -lrt[ENTER]

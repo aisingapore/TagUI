@@ -2,8 +2,8 @@
 // Q1. Why is formatting for this file so messed up? - it's created on the road
 // If you want to know more - https://github.com/kelaberetiv/TagUI/issues/490
 
-// Q2. Is there a beautified version for easier viewing or editing? - yes snapshot below
-// https://github.com/kelaberetiv/TagUI/blob/master/src/media/snapshots/tagui_header.md
+// Q2. Is there a beautified version for easier viewing or editing?
+// Use this to view pretty version - https://prettier.io/playground
 
 // xpath for object identification
 var xps666 = require('casper').selectXPath;
@@ -43,6 +43,10 @@ var ask_result = '';
 
 // JSON variable to pass variables into browser DOM
 var dom_json = {}; var dom_result = '';
+
+// telegram step api endpoint, you can host on your own server or cloud
+// see https://github.com/kelaberetiv/TagUI/tree/master/src/telegram
+var telegram_endpoint = 'http://tebel.org/taguibot';
 
 // variable for advance usage of api step
 var api_config = {method:'GET', header:[], body:{}};
@@ -801,6 +805,7 @@ case 'table': return table_intent(live_line); break;
 case 'wait': return wait_intent(live_line); break;
 case 'live': return live_intent(live_line); break;
 case 'ask': return ask_intent(live_line); break;
+case 'telegram': return telegram_intent(live_line); break;
 case 'keyboard': return keyboard_intent(live_line); break;
 case 'mouse': return mouse_intent(live_line); break;
 case 'check': return check_intent(live_line); break;
@@ -872,6 +877,7 @@ if (lc_raw_intent.substr(0,6) == 'table ') return 'table';
 if (lc_raw_intent.substr(0,5) == 'wait ') return 'wait';
 if (lc_raw_intent.substr(0,5) == 'live ') return 'live';
 if (lc_raw_intent.substr(0,4) == 'ask ') return 'ask';
+if (lc_raw_intent.substr(0,9) == 'telegram ') return 'telegram';
 if (lc_raw_intent.substr(0,9) == 'keyboard ') return 'keyboard';
 if (lc_raw_intent.substr(0,6) == 'mouse ') return 'mouse';
 if (lc_raw_intent.substr(0,6) == 'check ') return 'check';
@@ -909,6 +915,7 @@ if (lc_raw_intent == 'table') return 'table';
 if (lc_raw_intent == 'wait') return 'wait';
 if (lc_raw_intent == 'live') return 'live';
 if (lc_raw_intent == 'ask') return 'ask';
+if (lc_raw_intent == 'telegram') return 'telegram';
 if (lc_raw_intent == 'keyboard') return 'keyboard';
 if (lc_raw_intent == 'mouse') return 'mouse';
 if (lc_raw_intent == 'check') return 'check';
@@ -1226,6 +1233,15 @@ return "this.echo('ERROR - you are already in live mode, type done to quit live 
 
 function ask_intent(raw_intent) {raw_intent = eval("'" + escape_bs(raw_intent) + "'"); // support dynamic variables
 return "this.echo('ERROR - step is not relevant in live mode, set ask_result directly')";}
+
+function telegram_intent(raw_intent) {raw_intent = eval("'" + escape_bs(raw_intent) + "'"); // support dynamic variables
+var params = ((raw_intent + ' ').substr(1+(raw_intent + ' ').indexOf(' '))).trim();
+var param1 = (params.substr(0,params.indexOf(' '))).trim(); var param2 = (params.substr(1+params.indexOf(' '))).trim();
+if ((param1 == '') || (param2 == '')) return "this.echo('ERROR - chat_id/message missing for " + raw_intent + "')";
+else return "telegram_result = ''; " +
+"telegram_chat_id = encodeURIComponent('"+param1+"'); " + "telegram_message = encodeURIComponent('"+param2+"'); " +
+"telegram_result = call_api(telegram_endpoint+'/sendMessage.php?chat_id='+telegram_chat_id+'&text='+telegram_message); " +
+"try {telegram_json = JSON.parse(telegram_result);} catch(e) {telegram_json = JSON.parse('null');}";}
 
 function keyboard_intent(raw_intent) {raw_intent = eval("'" + escape_bs(raw_intent) + "'"); // support dynamic variables
 var params = ((raw_intent + ' ').substr(1+(raw_intent + ' ').indexOf(' '))).trim();
