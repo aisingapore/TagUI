@@ -16,9 +16,13 @@ else if (!is_numeric($chat_id))
 else if ($message == "")
     die("ERROR - text parameter is not provided");
 
+// set to local timezone for date time stamp in log file
+// see list - https://www.php.net/manual/en/timezones.php
+date_default_timezone_set('see_above_for_your_time_zone');
+
 // log chat_id and message length to prevent abuse
 $log_entry = "[" . date('d-m-Y H:i:s') . "][" . $chat_id . "][" . strval(strlen($message)) . "]\n";
-file_put_contents("sendMessage.log", $log_entry, FILE_APPEND);
+file_put_contents("../../telegram/sendMessage.log", $log_entry, FILE_APPEND);
 
 // build the URL query string
 $post_data = http_build_query(
