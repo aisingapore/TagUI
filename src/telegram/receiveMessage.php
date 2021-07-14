@@ -33,7 +33,7 @@ $log_entry = "[" . date('d-m-Y H:i:s') . "][" . $chat_id . "][" . strval(strlen(
 file_put_contents("../../telegram/receiveMessage.log", $log_entry, FILE_APPEND);
 
 // form welcome message with chat_id and example
-$message = "Your Telegram ID is `" . $chat_id . "`\n\nTo use in TagUI RPA workflow \-\n\n`telegram id message`";
+$message = "Your Telegram ID is `" . $chat_id . "`\n\nTo send message in TagUI RPA \-\n\n`telegram id message`";
 
 // call sendMessage.php to send chat_id to user
 $_GET['chat_id'] = $chat_id; $_GET['text'] = $message; require 'sendMessage.php';

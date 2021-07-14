@@ -25,7 +25,7 @@ $log_entry = "[" . date('d-m-Y H:i:s') . "][" . $chat_id . "][" . strval(strlen(
 file_put_contents("../../telegram/sendMessage.log", $log_entry, FILE_APPEND);
 
 // build URL query string using MarkdownV2 only for bot welcome message, otherwise complicated escaping needed for users
-if ((strpos($message, "Your Telegram ID is") !== false) and (strpos($message, "To use in TagUI RPA workflow") !== false))
+if ((strpos($message, "Your Telegram ID is") !== false) and (strpos($message, "To send message in TagUI RPA") !== false))
     $post_data = http_build_query(
         array(
             'chat_id' => $chat_id,
