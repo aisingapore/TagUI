@@ -657,7 +657,7 @@ First, message `@taguibot <https://t.me/taguibot>`_ to authorise it to send mess
 
   telegram id message
 
-This feature is being hosted at following API endpoint - https://tebel.org/taguibot, but `the source code <https://github.com/kelaberetiv/TagUI/tree/master/src/telegram>`_ is on GitHub if you wish to host this feature on your own cloud or server. The implementation is in pure PHP without any dependencies.
+This feature is being hosted at this API endpoint - https://tebel.org/taguibot, but `the source code <https://github.com/kelaberetiv/TagUI/tree/master/src/telegram>`_ is on GitHub if you wish to host this feature on your own cloud or server. The implementation is in pure PHP without any dependencies. Note that using telegram step requires an internet connection.
 
 The only info logged is chat_id, length of the message, datetime stamp (to prevent abuse). If you wish to host on your own, first read through this to learn more about Telegram Bot API, creating your bot API token and setting up the webhook - https://core.telegram.org/bots
 
