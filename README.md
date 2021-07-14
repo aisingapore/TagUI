@@ -10,7 +10,7 @@
 
 ![TagUI Users](https://raw.githubusercontent.com/kelaberetiv/TagUI/master/src/media/tagui_users.png)
 
-Write flows in simple TagUI language and automate away repetitive time-consuming tasks on your computer. The TagUI project is [open-source and free forever](https://www.linkedin.com/posts/kensoh_sneak-preview-of-tagui-ms-word-plug-in-v3-activity-6796860165338595328-02wD). It's easy to setup and use, and works on Windows, macOS and Linux. Besides English, flows can be written in [22 other languages](https://github.com/kelaberetiv/TagUI/tree/master/src/languages), so you can do RPA using your [native language](https://github.com/kelaberetiv/TagUI/blob/master/flows/samples/8_chineseflow.tag).
+Write flows in simple TagUI language and automate away repetitive time-consuming tasks on your computer. Tasks include those on websites (native support for Chrome and Edge), desktop apps, or the command line. The TagUI project is [open-source and free forever](https://www.linkedin.com/posts/kensoh_sneak-preview-of-tagui-ms-word-plug-in-v3-activity-6796860165338595328-02wD). It's easy to setup and use, and works on Windows, macOS and Linux. Besides English, flows can be written in [22 other languages](https://github.com/kelaberetiv/TagUI/tree/master/src/languages), so you can do RPA using your [native language](https://github.com/kelaberetiv/TagUI/blob/master/flows/samples/8_chineseflow.tag).
 
 # Language designed for RPA
 
@@ -25,17 +25,27 @@ click Log in
 ```
 ```
 // besides web identifiers, images of UI elements can be used
-
 type email_box.png as user@gmail.com
 type password_box.png as 12345678
 click login_button.png
 ```
 ```
 // (x,y) coordinates of user-interface elements can also be used
-
 type (720,400) as user@gmail.com
 type (720,440) as 12345678
 click (720,500)
+```
+
+Grabbing data from a table on a website can be as easy as below (where n is the nth table on the webpage)
+
+```
+table n to forex_rates.csv
+```
+
+Sending a Telegram notification is trivially easy (first message [@taguibot](https://t.me/taguibot) to authorise it to send messages)
+
+```
+telegram id message
 ```
 
 # Do RPA with Microsoft Word
