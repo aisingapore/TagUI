@@ -647,6 +647,17 @@ Adds a comment.
 
   // updates the forex rates
 
+telegram
+###################
+Sends a Telegram notification, for example, to update on automation completion or exception.
+
+First, message `@taguibot <https://t.me/taguibot>`_ to authorise it to send messages to your Telegram app.
+
+.. code-block:: none
+
+  telegram id message
+
+This feature is being hosted at https://tebel.org/taguibot API endpoint, but `the source code <https://github.com/kelaberetiv/TagUI/tree/master/src/telegram>`_ is on GitHub if you wish to host this feature on your own cloud or server. The implementation is in pure PHP without any dependencies. The only info logged is chat_id, length of the message, datetime stamp (to prevent abuse). If you wish to host on your own, first read through this to learn more about Telegram Bot API, creating your bot API token and setting up the webhook - https://core.telegram.org/bots
 
 Run options
 ----------------------
