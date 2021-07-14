@@ -32,7 +32,10 @@ date_default_timezone_set('see_above_for_your_time_zone');
 $log_entry = "[" . date('d-m-Y H:i:s') . "][" . $chat_id . "][" . strval(strlen($message)) . "]\n";
 file_put_contents("../../telegram/receiveMessage.log", $log_entry, FILE_APPEND);
 
-// call sendMessage.php to send chat_id to user 
-$_GET['chat_id'] = $chat_id; $_GET['text'] = "Your Telegram ID is `" . $chat_id . "`"; require 'sendMessage.php';
+// form welcome message with chat_id and example
+$message = "Your Telegram ID is `" . $chat_id . "`\n\nTo use in TagUI RPA workflow \-\n\n`telegram id message`";
+
+// call sendMessage.php to send chat_id to user
+$_GET['chat_id'] = $chat_id; $_GET['text'] = $message; require 'sendMessage.php';
 
 ?>

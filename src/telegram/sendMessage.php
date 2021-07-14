@@ -24,14 +24,22 @@ date_default_timezone_set('see_above_for_your_time_zone');
 $log_entry = "[" . date('d-m-Y H:i:s') . "][" . $chat_id . "][" . strval(strlen($message)) . "]\n";
 file_put_contents("../../telegram/sendMessage.log", $log_entry, FILE_APPEND);
 
-// build the URL query string
-$post_data = http_build_query(
-    array(
-        'chat_id' => $chat_id,
-        'text' => $message,
-        'parse_mode' => 'MarkdownV2'
-    )
-);
+// build URL query string using MarkdownV2 only for bot welcome message, otherwise complicated escaping needed for users
+if ((strpos($message, "Your Telegram ID is") !== false) and (strpos($message, "To use in TagUI RPA workflow") !== false))
+    $post_data = http_build_query(
+        array(
+            'chat_id' => $chat_id,
+            'text' => $message,
+            'parse_mode' => 'MarkdownV2'
+        )
+    );
+else
+    $post_data = http_build_query(
+        array(
+            'chat_id' => $chat_id,
+            'text' => $message,
+        )
+    );
 
 // build the URL query options
 $post_options = array('http' =>
