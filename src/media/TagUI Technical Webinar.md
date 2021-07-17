@@ -127,7 +127,7 @@ py c = a + b
 py print(c)
 echo `py_result`
 
-// use py begin and py finish for Python code blocks
+// or use py begin and py finish for Python code blocks
 py begin
 a = 1
 b = 2
@@ -135,6 +135,9 @@ c = a + b
 print(c)
 py finish
 echo `py_result`
+
+// you can also run a certain Python script in 1 line
+py exec(open("full path to Python file").read())
 
 // alternatively, use Python version of TagUI directly
 https://github.com/tebelorg/RPA-Python
