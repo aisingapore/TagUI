@@ -30,6 +30,8 @@ date_default_timezone_set('see_above_for_your_time_zone');
 
 // log chat_id and message length to prevent abuse
 $log_entry = "[" . date('d-m-Y H:i:s') . "][" . $chat_id . "][" . strval(strlen($message)) . "]\n";
+
+// log at existing folder outside of public access
 file_put_contents("../../telegram/receiveMessage.log", $log_entry, FILE_APPEND);
 
 // form welcome message with chat_id and example

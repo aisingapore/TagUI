@@ -22,6 +22,8 @@ date_default_timezone_set('see_above_for_your_time_zone');
 
 // log chat_id and message length to prevent abuse
 $log_entry = "[" . date('d-m-Y H:i:s') . "][" . $chat_id . "][" . strval(strlen($message)) . "]\n";
+
+// log at existing folder outside of public access
 file_put_contents("../../telegram/sendMessage.log", $log_entry, FILE_APPEND);
 
 // build URL query string using MarkdownV2 only for bot welcome message, otherwise complicated escaping needed for users
@@ -46,7 +48,8 @@ $post_options = array('http' =>
     array(
         'method'  => 'POST',
         'header'  => 'Content-Type: application/x-www-form-urlencoded',
-        'content' => $post_data
+        'content' => $post_data,
+        'ignore_errors' => true
     )
 );
 
