@@ -664,6 +664,17 @@ First, message `@taguibot <https://t.me/taguibot>`_ to authorise it to send mess
 
   telegram 1234567890 Hello Alena,\n\nYour HR onboarding bot has completed successfully.
 
+.. code-block:: none 
+  // show full response from Telegram Bot API
+  echo `telegram_result`
+
+.. code-block:: none
+  // check JSON response ok property for success
+  if telegram_json.ok equals to true
+    echo Message sent successfully.
+  else
+    echo Message sending failed.
+
 Note that the telegram step requires an internet connection. This feature is being hosted at https://tebel.org, but the `source code <https://github.com/kelaberetiv/TagUI/tree/master/src/telegram>`_ is on GitHub if you wish to host this feature on your own cloud or server. The implementation is in pure PHP without any dependencies.
 
 The only info logged is chat_id, length of the message, datetime stamp (to prevent abuse). If you wish to host on your own, first read through this link to learn more about Telegram Bot API, creating your bot API token and setting up the webhook - https://core.telegram.org/bots
