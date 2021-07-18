@@ -662,16 +662,13 @@ First, message `@taguibot <https://t.me/taguibot>`_ to authorise it to send mess
 
 .. code-block:: none
 
+  // this line sends message to Telegram user with ID 1234567890, \n means a new line
   telegram 1234567890 Hello Alena,\n\nYour HR onboarding bot has completed successfully.
 
-To show full response from Telegram Bot API:
-
-.. code-block:: none 
+  // if you want to show the full response from Telegram Bot API
   echo `telegram_result`
 
-To check JSON response ok property for success:
-
-.. code-block:: none
+  // if you want to check JSON response ok property for success
   if telegram_json.ok equals to true
     echo Message sent successfully.
   else
