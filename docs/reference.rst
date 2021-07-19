@@ -652,7 +652,7 @@ telegram
 ###################
 Sends a Telegram notification, for example, to update on automation completion or exception.
 
-First, message `@taguibot <https://t.me/taguibot>`_ to authorise it to send messages to your Telegram app. Then in TagUI:
+First, message `@taguibot <https://t.me/taguibot>`_ to authorise it to send messages to your Telegram. Then in TagUI:
 
 .. code-block:: none
 
@@ -665,11 +665,11 @@ First, message `@taguibot <https://t.me/taguibot>`_ to authorise it to send mess
   // this line sends message to Telegram user with ID 1234567890, \n means a new line
   telegram 1234567890 Hello Alena,\n\nYour HR onboarding bot has completed successfully.
 
-  // if you want to show the full response from Telegram Bot API
-  echo `telegram_result`
+  // show telegram_result variable - 'success' means sent, 'fail' means sending failed
+  echo Telegram message - `telegram_result`
 
-  // if you want to check JSON response ok property for success
-  if telegram_json.ok equals to true
+  // if condition to check telegram_result 'success' or 'fail' and handle accordingly
+  if telegram_result equals to 'success'
     echo Message sent successfully.
   else
     echo Message sending failed.

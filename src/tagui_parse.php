@@ -954,7 +954,8 @@ echo "ERROR - " . current_line() . " chat_id/message missing for " . $raw_intent
 return "casper.then(function() {"."{techo('".$raw_intent."');\ntelegram_result = ''; // 'api http' to allow API calls\n".
 "telegram_chat_id = encodeURIComponent('". $param1 ."');\n"."telegram_message = encodeURIComponent('". $param2 ."');\n".
 "telegram_result = call_api(telegram_endpoint+'/sendMessage.php?chat_id='+telegram_chat_id+'&text='+telegram_message);\n".
-"try {telegram_json = JSON.parse(telegram_result);} catch(e) {telegram_json = JSON.parse('null');}}".end_fi()."});"."\n\n";}
+"try {telegram_json = JSON.parse(telegram_result); telegram_result = 'fail';\n".
+"if (telegram_json.ok) telegram_result = 'success';}\n"."catch(e) {telegram_result = 'fail';}}".end_fi()."});"."\n\n";}
 
 function keyboard_intent($raw_intent) {
 $params = trim(substr($raw_intent." ",1+strpos($raw_intent." "," ")));

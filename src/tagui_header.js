@@ -1241,7 +1241,8 @@ if ((param1 == '') || (param2 == '')) return "this.echo('ERROR - chat_id/message
 else return "telegram_result = ''; " +
 "telegram_chat_id = encodeURIComponent('"+param1+"'); " + "telegram_message = encodeURIComponent('"+param2+"'); " +
 "telegram_result = call_api(telegram_endpoint+'/sendMessage.php?chat_id='+telegram_chat_id+'&text='+telegram_message); " +
-"try {telegram_json = JSON.parse(telegram_result);} catch(e) {telegram_json = JSON.parse('null');}";}
+"try {telegram_json = JSON.parse(telegram_result); telegram_result = 'fail'; " +
+"if (telegram_json.ok) telegram_result = 'success';} " + "catch(e) {telegram_result = 'fail';}";}
 
 function keyboard_intent(raw_intent) {raw_intent = eval("'" + escape_bs(raw_intent) + "'"); // support dynamic variables
 var params = ((raw_intent + ' ').substr(1+(raw_intent + ' ').indexOf(' '))).trim();
