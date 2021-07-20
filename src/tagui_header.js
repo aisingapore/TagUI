@@ -1353,12 +1353,12 @@ return source_code;};
 // for calling rest api url synchronously
 function call_api(rest_url) { // advance users can define api_config for advance calls
 // the api_config variable defaults to {method:'GET', header:[], body:{}}
-var xhttp = new XMLHttpRequest(); xhttp.open(api_config.method, rest_url, false);
+try {var xhttp = new XMLHttpRequest(); xhttp.open(api_config.method, rest_url, false);
 for (var item=0;item<api_config.header.length;item++) { // process headers
 if (api_config.header[item] == '') continue; // skip if header is not defined
 var header_value_pair = api_config.header[item].split(':'); // format is 'Header_name: header_value'
 xhttp.setRequestHeader(header_value_pair[0].trim(),header_value_pair[1].trim());}
-xhttp.send(JSON.stringify(api_config.body)); return xhttp.responseText;}
+xhttp.send(JSON.stringify(api_config.body)); return xhttp.responseText;} catch(e) {return '';}}
 
 // custom function to handle dropdown option
 casper.selectOptionByValue = function(selector, valueToMatch) { // solution posted in casperjs issue #1390
