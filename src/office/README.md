@@ -14,5 +14,5 @@
 2. Download and unzip [Excel Add-in zip file](https://github.com/kelaberetiv/TagUI/releases/download/v6.64.0/TagUIExcelAddInSetupV3.05.zip) (double-click Setup.exe to start installing)
 3. For any questions, please let us know on [our Telegram group](https://t.me/rpa_chat) or [weekly Zoom Q&A](https://github.com/kelaberetiv/TagUI/issues/914)
 
-![Excel Add-in](https://raw.githubusercontent.com/kelaberetiv/TagUI/master/src/office/excel/excel_addin.png)
+![Excel Add-in](https://raw.githubusercontent.com/kelaberetiv/TagUI/master/src/office/excel/excel_addin_v3.png)
 
