@@ -236,17 +236,17 @@ download to
 upload
 #####################
 | Uploads file to a website.
-| Can use :ref:`DOM <dom>`, :ref:`XPath <xpath>` identifiers. 
+| Only :ref:`DOM <dom>` identifier can be used.
 
 .. code-block:: none
 
-  upload [DOM/XPath of upload input element] as [filename]
+  upload [DOM of upload element] as [filename]
 
 *Examples*
 
 .. code-block:: none
   
-  upload //input[@name="attach"] as report.csv
+  upload #element_id as report.csv
 
 
 api
