@@ -44,6 +44,9 @@ var ask_result = '';
 // JSON variable to pass variables into browser DOM
 var dom_json = {}; var dom_result = '';
 
+// tagui_user_os variable for user OS - windows, mac, linux
+var system = require('system'); var user_os = system.os; var tagui_user_os = user_os.name;
+
 // telegram step api endpoint, you can host on your own server or cloud
 // see https://github.com/kelaberetiv/TagUI/tree/master/src/telegram
 var telegram_endpoint = 'https://tebel.org/taguibot';
