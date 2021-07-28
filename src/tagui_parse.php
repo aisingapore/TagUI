@@ -240,7 +240,8 @@ chmod ($script . '.js',0600); // append url opening block below instead of throw
 if (!$url_provided) { // echo "ERROR - first line of " . $script . " not URL or comments\n";
 $GLOBALS['real_line_number'] = 1; $generated_js_file_contents = file_get_contents($script . '.js');
 $generated_js_file_contents = str_replace($marker_for_opening_url, $marker_for_opening_url . 
-url_intent('about:blank'), $generated_js_file_contents); file_put_contents($script . '.js',$generated_js_file_contents);}
+"casper.start('about:blank', function() {});\n\n", $generated_js_file_contents);
+file_put_contents($script . '.js',$generated_js_file_contents);}
 if ($inside_code_block != 0) echo "ERROR - number of step { does not tally with with }\n";
 
 // post-processing to clean up artifacts from translating human language to JavaScript
