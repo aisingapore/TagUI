@@ -239,8 +239,13 @@ while(!feof($footer_file)) {fwrite($output_file,fgets($footer_file));} fclose($f
 chmod ($script . '.js',0600); // append url opening block below instead of throwing error
 if (!$url_provided) { // echo "ERROR - first line of " . $script . " not URL or comments\n";
 $GLOBALS['real_line_number'] = 1; $generated_js_file_contents = file_get_contents($script . '.js');
+// below replicates url_intent() selectively to solve problem of URL preservation for datatable iterations
+$twb = $GLOBALS['tagui_web_browser']; $chrome_call = ''; if ($twb == 'chrome')
+{$chrome_call = "if (download_path == '') download_path = flow_path; // below to set path correctly for Windows\n" .
+"if (download_path.indexOf(':')>0) download_path = download_path.replace(/\//g,'\\\\').replace(/\\\\/g,'\\\\');\n" .
+"chrome_step('Page.setDownloadBehavior',{behavior: 'allow', downloadPath: download_path});\n";}
 $generated_js_file_contents = str_replace($marker_for_opening_url, $marker_for_opening_url . 
-"casper.start('about:blank', function() {});\n\n", $generated_js_file_contents);
+"casper.start('about:blank', function() {\n" . $chrome_call . "});\n\n", $generated_js_file_contents);
 file_put_contents($script . '.js',$generated_js_file_contents);}
 if ($inside_code_block != 0) echo "ERROR - number of step { does not tally with with }\n";
 
