@@ -1,6 +1,55 @@
 Advanced concepts
 ===================
 
+Saving flow run results
+-------------------------
+You can save an html log of the run and the flow run results to ``tagui/src/tagui_report.csv`` with the ``-report`` option (shortcut ``-r``). ::
+
+    tagui my_flow.tag -report
+
+The CSV file will show one line for each run, when it started, how long it took to complete, any error message during run, the link to the log file for that run, and the user's workgroup\\userid.
+
+
+Handling exceptions and errors
+--------------------------------
+There are 3 ways to handle exceptions in TagUI when things do not go as planned.
+
+The first way is **local error handling**. This means using if conditions to check specifically for certain scenarios and handling the scenarios accordingly. For example, check if some UI element is missing, then do xyz steps. Using this way, a workflow can have multiple fine-grain exception handling.
+
+The second way is **workflow error handling**. A workflow can be chained as follows to handle error or success accordingly. The workflow error.tag will run only if flow.tag errors out. The workflow success.tag will run only if flow.tag runs successfully. TagUI will automatically throw error when it detects an expected UI element missing (and autosave screenshot) or some other unknown errors.
+
+Windows example from the command prompt::
+
+  call tagui flow.tag || tagui error.tag
+  call tagui flow.tag && tagui success.tag
+
+macOS / Linux example from the terminal::
+
+  tagui flow.tag || tagui error.tag
+  tagui flow.tag && tagui success.tag
+
+The third way is **global error handling**. Configuration can be done for TagUI such that after every run, special handling is done to send data or files generated from the report option to some target folder or API endpoint for error / success handling. For example, syncing all automation runs to central storage for auditing purpose. The special handling applies to all TagUI flows that are run.
+
+
+.. _datatables:
+
+Datatables
+------------
+Datatables are :ref:`csv files <what-are-csv-files>` which can be used to run your flows multiple times with different inputs.
+
+A datatable (``trade_data.csv``) could look like this:
+
+= ============ ============= ======== ====== ====== =========
+# trade        username      password pair   size   direction
+- ------------ ------------- -------- ------ ------ ---------
+1 Trade USDSGD test_account  12345678 USDSGD 10000  BUY
+2 Trade USDSGD test_account  12345678 USDJPY 1000   SELL
+3 Trade EURUSD test_account  12345678 EURUSD 100000 BUY
+= ============ ============= ======== ====== ====== =========
+
+To use it, you run your flow with ``tagui my_flow.tag trade_data.csv``. TagUI will run ``my_flow.tag`` once for each row in the datatable (except the header). Within the flow, TagUI can use the variables ``trade``, ``username``, ``password``, etc as if they were in the :ref:`local object repository <object-repository>` and the values will be from that run's row. To know which iteration your flow is in you can use the ``iteration`` variable.
+
+
 .. _object-repository:
 
 Object repositories
@@ -23,25 +72,6 @@ Within the flow, TagUI can use the objects ``email``, ``create account`` as vari
 If ``user-email-textbox`` was the identifier for some web text input, then you could use the following in your flow::
 
   type `email` as my_email@email.com
-
-
-.. _datatables:
-
-Datatables
-------------
-Datatables are :ref:`csv files <what-are-csv-files>` which can be used to run your flows multiple times with different inputs.
-
-A datatable (``trade_data.csv``) could look like this:
-
-= ============ ============= ======== ====== ====== =========
-# trade        username      password pair   size   direction
-- ------------ ------------- -------- ------ ------ ---------
-1 Trade USDSGD test_account  12345678 USDSGD 10000  BUY
-2 Trade USDSGD test_account  12345678 USDJPY 1000   SELL
-3 Trade EURUSD test_account  12345678 EURUSD 100000 BUY
-= ============ ============= ======== ====== ====== =========
-
-To use it, you run your flow with ``tagui my_flow.tag trade_data.csv``. TagUI will run ``my_flow.tag`` once for each row in the datatable (except the header). Within the flow, TagUI can use the variables ``trade``, ``username``, ``password``, etc as if they were in the :ref:`local object repository <object-repository>` and the values will be from that run's row. To know which iteration your flow is in you can use the ``iteration`` variable.
 
 
 Running other flows within a flow
@@ -92,19 +122,10 @@ You can pass a variable to Python like this::
   echo `py_result`
 
 
-Saving flow run results
--------------------------
-You can save an html log of the run and the flow run results to ``tagui/src/tagui_report.csv`` with the ``report`` option (shortcut ``-r``). ::
-
-    tagui my_flow.tag -report
-
-The CSV file will show one line for each run, when it started, how long it took to complete, any error message during run, and the link to the log file for that run.
-
-
 Create log files for debugging
 ---------------------------------
 To do advanced debugging, you can create log files when running flows by creating an empty ``tagui_logging`` file in ``tagui/src/``.
 
-- ``my_flow.log`` stores output of the execution. 
+- ``my_flow.log`` stores step-by-step output of the execution. 
 - ``my_flow.js`` is the generated JavaScript file that was run.
 - ``my_flow.raw`` is the expanded flow after parsing modules.

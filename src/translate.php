@@ -5,8 +5,8 @@
 // Q1. Why is formatting for this file so messed up? - it's created on the road
 // If you want to know more - https://github.com/kelaberetiv/TagUI/issues/490
 
-// Q2. Is there a beautified version for easier viewing or editing? - yes snapshot below
-// https://github.com/kelaberetiv/TagUI/blob/master/src/media/snapshots/translate.md
+// Q2. Is there a beautified version for easier viewing or editing?
+// Use this - https://loilo.github.io/prettier-php-playground
 
 // english is used as reference language, define keywords for contextual translation
 

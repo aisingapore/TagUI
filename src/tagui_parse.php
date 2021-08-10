@@ -5,8 +5,8 @@
 // Q1. Why is formatting for this file so messed up? - it's created on the road
 // If you want to know more - https://github.com/kelaberetiv/TagUI/issues/490
 
-// Q2. Is there a beautified version for easier viewing or editing? - yes snapshot below
-// https://github.com/kelaberetiv/TagUI/blob/master/src/media/snapshots/tagui_parse.md
+// Q2. Is there a beautified version for easier viewing or editing?
+// Use this - https://loilo.github.io/prettier-php-playground
 
 // check flow filename for .tag file extension
 $script = $argv[1]; if ($script=="") die("ERROR - specify flow filename as first parameter\n");
@@ -239,8 +239,14 @@ while(!feof($footer_file)) {fwrite($output_file,fgets($footer_file));} fclose($f
 chmod ($script . '.js',0600); // append url opening block below instead of throwing error
 if (!$url_provided) { // echo "ERROR - first line of " . $script . " not URL or comments\n";
 $GLOBALS['real_line_number'] = 1; $generated_js_file_contents = file_get_contents($script . '.js');
+// below replicates url_intent() selectively to solve problem of URL preservation for datatable iterations
+$twb = $GLOBALS['tagui_web_browser']; $chrome_call = ''; if ($twb == 'chrome')
+{$chrome_call = "if (download_path == '') download_path = flow_path; // below to set path correctly for Windows\n" .
+"if (download_path.indexOf(':')>0) download_path = download_path.replace(/\//g,'\\\\').replace(/\\\\/g,'\\\\');\n" .
+"chrome_step('Page.setDownloadBehavior',{behavior: 'allow', downloadPath: download_path});\n";}
 $generated_js_file_contents = str_replace($marker_for_opening_url, $marker_for_opening_url . 
-url_intent('about:blank'), $generated_js_file_contents); file_put_contents($script . '.js',$generated_js_file_contents);}
+"casper.start('about:blank', function() {\n" . $chrome_call . "});\n\n", $generated_js_file_contents);
+file_put_contents($script . '.js',$generated_js_file_contents);}
 if ($inside_code_block != 0) echo "ERROR - number of step { does not tally with with }\n";
 
 // post-processing to clean up artifacts from translating human language to JavaScript
@@ -472,6 +478,7 @@ case "table": return table_intent($script_line); break;
 case "wait": return wait_intent($script_line); break;
 case "live": return live_intent($script_line); break;
 case "ask": return ask_intent($script_line); break;
+case "telegram": return telegram_intent($script_line); break;
 case "keyboard": return keyboard_intent($script_line); break;
 case "mouse": return mouse_intent($script_line); break;
 case "check": return check_intent($script_line); break;
@@ -524,6 +531,7 @@ if (substr($lc_raw_intent,0,6)=="table ") return "table";
 if (substr($lc_raw_intent,0,5)=="wait ") return "wait";
 if (substr($lc_raw_intent,0,5)=="live ") return "live";
 if (substr($lc_raw_intent,0,4)=="ask ") return "ask";
+if (substr($lc_raw_intent,0,9)=="telegram ") return "telegram";
 if (substr($lc_raw_intent,0,9)=="keyboard ") return "keyboard";
 if (substr($lc_raw_intent,0,6)=="mouse ") return "mouse";
 if (substr($lc_raw_intent,0,6)=="check ") {$GLOBALS['test_automation']++; return "check";}
@@ -561,6 +569,7 @@ if ($lc_raw_intent=="table") return "table";
 if ($lc_raw_intent=="wait") return "wait";
 if ($lc_raw_intent=="live") return "live";
 if ($lc_raw_intent=="ask") return "ask";
+if ($lc_raw_intent=="telegram") return "telegram";
 if ($lc_raw_intent=="keyboard") return "keyboard";
 if ($lc_raw_intent=="mouse") return "mouse";
 if ($lc_raw_intent=="check") {$GLOBALS['test_automation']++; return "check";}
@@ -942,6 +951,17 @@ return "casper.then(function() {".
 else return "casper.then(function() {".
 "{ask_result = ''; var sys = require('system');\nthis.echo('".$params." '); ".
 "ask_result = sys.stdin.readLine();}".end_fi()."});"."\n\n";}
+
+function telegram_intent($raw_intent) {
+$params = trim(substr($raw_intent." ",1+strpos($raw_intent." "," ")));
+$param1 = trim(substr($params,0,strpos($params," "))); $param2 = trim(substr($params,1+strpos($params," ")));
+if (($param1 == "") or ($param2 == ""))
+echo "ERROR - " . current_line() . " chat_id/message missing for " . $raw_intent . "\n"; else
+return "casper.then(function() {"."{techo('".$raw_intent."');\ntelegram_result = ''; // 'api http' to allow API calls\n".
+"telegram_chat_id = encodeURIComponent('". $param1 ."');\n"."telegram_message = encodeURIComponent('". $param2 ."');\n".
+"telegram_result = call_api(telegram_endpoint+'/sendMessage.php?chat_id='+telegram_chat_id+'&text='+telegram_message);\n".
+"try {telegram_json = JSON.parse(telegram_result); telegram_result = 'fail';\n".
+"if (telegram_json.ok) telegram_result = 'success';}\n"."catch(e) {telegram_result = 'fail';}}".end_fi()."});"."\n\n";}
 
 function keyboard_intent($raw_intent) {
 $params = trim(substr($raw_intent." ",1+strpos($raw_intent." "," ")));

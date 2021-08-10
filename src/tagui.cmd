@@ -14,7 +14,7 @@ rem enable windows for loop advanced flow control
 setlocal enableextensions enabledelayedexpansion
 
 if "%~1"=="" (
-echo tagui v6.54: use following options and this syntax to run - tagui flow_filename option^(s^)
+echo tagui v6.68: use following options and this syntax to run - tagui flow_filename option^(s^)
 echo.
 echo tagui live     launch TagUI live mode enabled with visual automation for interactive development
 echo tagui update   download and update to latest TagUI version ^(please backup your version beforehand^)
@@ -25,6 +25,7 @@ echo -headless  -h  run on invisible Chrome web browser instead of visible as de
 echo -nobrowser -n  run without any web browser, for example to perform automation only with visual automation
 echo -report    -r  track run result in tagui\src\tagui_report.csv and save html log of automation execution
 echo -quiet     -q  run without output except for explicit output ^(echo, show, check steps and errors etc^)
+echo -edge      -e  run TagUI using Microsoft Edge instead of Google Chrome ^(can be used with -headless^)
 echo.
 exit /b 1
 )
@@ -442,6 +443,76 @@ if "%arg8%"=="-c" (
 if "%arg9%"=="-c" (
 	set arg9=
 	set tagui_web_browser=chrome
+)
+
+rem set custom browser to allow setting to edge
+set tagui_custom_browser=Chrome
+
+rem check edge parameter to run on in-built integration with visible edge
+if "%arg2%"=="-edge" (
+	set arg2=
+	set tagui_custom_browser=Edge
+)
+if "%arg3%"=="-edge" (
+	set arg3=
+	set tagui_custom_browser=Edge
+)
+if "%arg4%"=="-edge" (
+	set arg4=
+	set tagui_custom_browser=Edge
+)
+if "%arg5%"=="-edge" (
+	set arg5=
+	set tagui_custom_browser=Edge
+)
+if "%arg6%"=="-edge" (
+	set arg6=
+	set tagui_custom_browser=Edge
+)
+if "%arg7%"=="-edge" (
+	set arg7=
+	set tagui_custom_browser=Edge
+)
+if "%arg8%"=="-edge" (
+	set arg8=
+	set tagui_custom_browser=Edge
+)
+if "%arg9%"=="-edge" (
+	set arg9=
+	set tagui_custom_browser=Edge
+)
+
+if "%arg2%"=="-e" (
+	set arg2=
+	set tagui_custom_browser=Edge
+)
+if "%arg3%"=="-e" (
+	set arg3=
+	set tagui_custom_browser=Edge
+)
+if "%arg4%"=="-e" (
+	set arg4=
+	set tagui_custom_browser=Edge
+)
+if "%arg5%"=="-e" (
+	set arg5=
+	set tagui_custom_browser=Edge
+)
+if "%arg6%"=="-e" (
+	set arg6=
+	set tagui_custom_browser=Edge
+)
+if "%arg7%"=="-e" (
+	set arg7=
+	set tagui_custom_browser=Edge
+)
+if "%arg8%"=="-e" (
+	set arg8=
+	set tagui_custom_browser=Edge
+)
+if "%arg9%"=="-e" (
+	set arg9=
+	set tagui_custom_browser=Edge
 )
 
 rem check headless parameter to run on in-built integration with headless chrome
@@ -1022,14 +1093,26 @@ if exist "tagui_chrome.in" (
 	rem check for which operating system and launch chrome accordingly
 	set chrome_started=Windows
 	set chrome_switches=--remote-debugging-port=9222 about:blank
-	if not exist "%chrome_command%" (
-		echo ERROR - cannot find Chrome executable at a few commonly located folders
-		echo update chrome_command setting in tagui\src\tagui.cmd to your chrome.exe
+	if "%tagui_custom_browser%"=="Edge" (
+		rem configure command to launch msedge for Windows
+		set "chrome_command=C:\Program Files (x86)\Microsoft\Edge\Application\msedge.exe"
+		rem fallback in case newer Edge is not installed in x86 folder
+		if not exist "!chrome_command!" set "chrome_command=C:\Program Files\Microsoft\Edge\Application\msedge.exe"
+		rem fallback to backup location for some users who cannot install Edge system-wide
+		if not exist "!chrome_command!" set "chrome_command=%LOCALAPPDATA%\Microsoft\Edge\Application\msedge.exe"
+	)
+	if not exist "!chrome_command!" (
+		echo ERROR - cannot find %tagui_custom_browser% browser executable file at a few commonly located folders
+		echo %tagui_custom_browser% is at a non-standard location on your Windows, raise an issue on t.me/rpa_chat
 		exit /b 1
 	)
-	for /f "tokens=* usebackq" %%p in (`wmic process where "caption like '%%chrome.exe%%' and commandline like '%%tagui_user_profile_ --remote-debugging-port=9222%%'" get processid 2^>nul ^| cut -d" " -f 1 ^| sort -nur ^| head -n 1`) do set chrome_process_id=%%p
+	if "%tagui_custom_browser%"=="Edge" (
+		for /f "tokens=* usebackq" %%p in (`wmic process where "caption like '%%msedge.exe%%' and commandline like '%%tagui_user_profile_ --remote-debugging-port=9222%%'" get processid 2^>nul ^| cut -d" " -f 1 ^| sort -nur ^| head -n 1`) do set chrome_process_id=%%p
+	) else (
+		for /f "tokens=* usebackq" %%p in (`wmic process where "caption like '%%chrome.exe%%' and commandline like '%%tagui_user_profile_ --remote-debugging-port=9222%%'" get processid 2^>nul ^| cut -d" " -f 1 ^| sort -nur ^| head -n 1`) do set chrome_process_id=%%p	
+	)
 	if not "!chrome_process_id!"=="" taskkill /PID !chrome_process_id! /T /F > nul 2>&1
-	start "" "%chrome_command%" --user-data-dir="%~dp0chrome\tagui_user_profile" !chrome_switches! !window_size! !headless_switch!
+	start "" "!chrome_command!" --user-data-dir="%~dp0chrome\tagui_user_profile" !chrome_switches! !window_size! !headless_switch!
 
 	:scan_ws_again
 	rem wait until chrome is ready with websocket url for php thread
@@ -1040,7 +1123,7 @@ if exist "tagui_chrome.in" (
 	)
 
 	rem launch php process to manage chrome websocket communications
-	start "Chrome Engine" /min cmd /c php -q tagui_chrome.php !ws_url! ^| tee -a tagui_chrome.log
+	start "%tagui_custom_browser% Engine" /min cmd /c php -q tagui_chrome.php !ws_url! ^| tee -a tagui_chrome.log
 
 rem end of if block to start chrome processes
 )
@@ -1058,11 +1141,21 @@ if exist "tagui.sikuli\tagui_sikuli.in" echo finish > tagui.sikuli\tagui_sikuli.
 if exist "tagui_chrome.in" echo finish > tagui_chrome.in
 
 rem add delay between repetitions to pace out iterations
-if %tagui_data_set_size% neq 1 php -q sleep.php 3
+if %tagui_data_set_size% neq 1 if not exist "end_processes_signal" php -q sleep.php 3
+
+rem check signal from end_processes command to terminate loops
+if exist "end_processes_signal" (
+	del "end_processes_signal"
+	exit /b 1
+)
 
 rem kill chrome processes on single first run or data set last run
 if !tagui_data_set! equ %tagui_data_set_size% (
-	for /f "tokens=* usebackq" %%p in (`wmic process where "caption like '%%chrome.exe%%' and commandline like '%%tagui_user_profile_ --remote-debugging-port=9222%%'" get processid 2^>nul ^| cut -d" " -f 1 ^| sort -nur ^| head -n 1`) do set chrome_process_id=%%p
+	if "%tagui_custom_browser%"=="Edge" (
+		for /f "tokens=* usebackq" %%p in (`wmic process where "caption like '%%msedge.exe%%' and commandline like '%%tagui_user_profile_ --remote-debugging-port=9222%%'" get processid 2^>nul ^| cut -d" " -f 1 ^| sort -nur ^| head -n 1`) do set chrome_process_id=%%p
+	) else (
+		for /f "tokens=* usebackq" %%p in (`wmic process where "caption like '%%chrome.exe%%' and commandline like '%%tagui_user_profile_ --remote-debugging-port=9222%%'" get processid 2^>nul ^| cut -d" " -f 1 ^| sort -nur ^| head -n 1`) do set chrome_process_id=%%p	
+	)
 	if not "!chrome_process_id!"=="" taskkill /PID !chrome_process_id! /T /F > nul 2>&1
 )
 rem end of big loop for managing multiple data sets in datatable

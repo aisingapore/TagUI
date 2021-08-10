@@ -29,8 +29,8 @@ localToRemoteUrlAccessEnabled: false
 // Q1. Why is formatting for this file so messed up? - it's created on the road
 // If you want to know more - https://github.com/kelaberetiv/TagUI/issues/490
 
-// Q2. Is there a beautified version for easier viewing or editing? - yes snapshot below
-// https://github.com/kelaberetiv/TagUI/blob/master/src/media/snapshots/tagui_header.md
+// Q2. Is there a beautified version for easier viewing or editing?
+// Use this to view pretty version - https://prettier.io/playground
 
 // xpath for object identification
 var xps666 = require('casper').selectXPath;
@@ -70,6 +70,10 @@ var ask_result = '';
 
 // JSON variable to pass variables into browser DOM
 var dom_json = {}; var dom_result = '';
+
+// telegram step api endpoint, you can host on your own server or cloud
+// see https://github.com/kelaberetiv/TagUI/tree/master/src/telegram
+var telegram_endpoint = 'https://tebel.org/taguibot';
 
 // variable for advance usage of api step
 var api_config = {method:'GET', header:[], body:{}};
@@ -828,6 +832,7 @@ case 'table': return table_intent(live_line); break;
 case 'wait': return wait_intent(live_line); break;
 case 'live': return live_intent(live_line); break;
 case 'ask': return ask_intent(live_line); break;
+case 'telegram': return telegram_intent(live_line); break;
 case 'keyboard': return keyboard_intent(live_line); break;
 case 'mouse': return mouse_intent(live_line); break;
 case 'check': return check_intent(live_line); break;
@@ -899,6 +904,7 @@ if (lc_raw_intent.substr(0,6) == 'table ') return 'table';
 if (lc_raw_intent.substr(0,5) == 'wait ') return 'wait';
 if (lc_raw_intent.substr(0,5) == 'live ') return 'live';
 if (lc_raw_intent.substr(0,4) == 'ask ') return 'ask';
+if (lc_raw_intent.substr(0,9) == 'telegram ') return 'telegram';
 if (lc_raw_intent.substr(0,9) == 'keyboard ') return 'keyboard';
 if (lc_raw_intent.substr(0,6) == 'mouse ') return 'mouse';
 if (lc_raw_intent.substr(0,6) == 'check ') return 'check';
@@ -936,6 +942,7 @@ if (lc_raw_intent == 'table') return 'table';
 if (lc_raw_intent == 'wait') return 'wait';
 if (lc_raw_intent == 'live') return 'live';
 if (lc_raw_intent == 'ask') return 'ask';
+if (lc_raw_intent == 'telegram') return 'telegram';
 if (lc_raw_intent == 'keyboard') return 'keyboard';
 if (lc_raw_intent == 'mouse') return 'mouse';
 if (lc_raw_intent == 'check') return 'check';
@@ -1232,7 +1239,7 @@ else {if (check_tx(params)) return "this.captureSelector(snap_image(),tx('" + pa
 else return "this.echo('ERROR - cannot find " + params + "')";}}
 
 function table_identifier(given_identifier) {if (!given_identifier) return '';
-if (isNaN(given_identifier)) return given_identifier; else return '//table[' + parseInt(given_identifier) + ']';}
+if (isNaN(given_identifier)) return given_identifier; else return '(//table)[' + parseInt(given_identifier) + ']';}
 
 function table_intent(raw_intent) {raw_intent = eval("'" + escape_bs(raw_intent) + "'"); // support dynamic variables
 var params = ((raw_intent + ' ').substr(1+(raw_intent + ' ').indexOf(' '))).trim();
@@ -1253,6 +1260,16 @@ return "this.echo('ERROR - you are already in live mode, type done to quit live 
 
 function ask_intent(raw_intent) {raw_intent = eval("'" + escape_bs(raw_intent) + "'"); // support dynamic variables
 return "this.echo('ERROR - step is not relevant in live mode, set ask_result directly')";}
+
+function telegram_intent(raw_intent) {raw_intent = eval("'" + escape_bs(raw_intent) + "'"); // support dynamic variables
+var params = ((raw_intent + ' ').substr(1+(raw_intent + ' ').indexOf(' '))).trim();
+var param1 = (params.substr(0,params.indexOf(' '))).trim(); var param2 = (params.substr(1+params.indexOf(' '))).trim();
+if ((param1 == '') || (param2 == '')) return "this.echo('ERROR - chat_id/message missing for " + raw_intent + "')";
+else return "telegram_result = ''; " +
+"telegram_chat_id = encodeURIComponent('"+param1+"'); " + "telegram_message = encodeURIComponent('"+param2+"'); " +
+"telegram_result = call_api(telegram_endpoint+'/sendMessage.php?chat_id='+telegram_chat_id+'&text='+telegram_message); " +
+"try {telegram_json = JSON.parse(telegram_result); telegram_result = 'fail'; " +
+"if (telegram_json.ok) telegram_result = 'success';} " + "catch(e) {telegram_result = 'fail';}";}
 
 function keyboard_intent(raw_intent) {raw_intent = eval("'" + escape_bs(raw_intent) + "'"); // support dynamic variables
 var params = ((raw_intent + ' ').substr(1+(raw_intent + ' ').indexOf(' '))).trim();
@@ -1363,12 +1380,12 @@ return source_code;};
 // for calling rest api url synchronously
 function call_api(rest_url) { // advance users can define api_config for advance calls
 // the api_config variable defaults to {method:'GET', header:[], body:{}}
-var xhttp = new XMLHttpRequest(); xhttp.open(api_config.method, rest_url, false);
+try {var xhttp = new XMLHttpRequest(); xhttp.open(api_config.method, rest_url, false);
 for (var item=0;item<api_config.header.length;item++) { // process headers
 if (api_config.header[item] == '') continue; // skip if header is not defined
 var header_value_pair = api_config.header[item].split(':'); // format is 'Header_name: header_value'
 xhttp.setRequestHeader(header_value_pair[0].trim(),header_value_pair[1].trim());}
-xhttp.send(JSON.stringify(api_config.body)); return xhttp.responseText;}
+xhttp.send(JSON.stringify(api_config.body)); return xhttp.responseText;} catch(e) {return '';}}
 
 // custom function to handle dropdown option
 casper.selectOptionByValue = function(selector, valueToMatch) { // solution posted in casperjs issue #1390
@@ -2833,6 +2850,16 @@ var sys = require('system'); sys.stdout.write('LIVE MODE - type done to quit\n \
 while (true) {live_input = sys.stdin.readLine(); // evaluate input in casperjs context until done is entered
 if (live_input.indexOf('done') == 0) break; try {eval(tagui_parse(live_input));}
 catch(e) {this.echo('ERROR - ' + e.message.charAt(0).toLowerCase() + e.message.slice(1));}}}});
+
+// test telegram
+casper.then(function() {{techo('telegram 123456789 some message to the user');
+telegram_result = ''; // 'api http' to allow API calls
+telegram_chat_id = encodeURIComponent('123456789');
+telegram_message = encodeURIComponent('some message to the user');
+telegram_result = call_api(telegram_endpoint+'/sendMessage.php?chat_id='+telegram_chat_id+'&text='+telegram_message);
+try {telegram_json = JSON.parse(telegram_result); telegram_result = 'fail';
+if (telegram_json.ok) telegram_result = 'success';}
+catch(e) {telegram_result = 'fail';}}});
 
 // test keyboard
 casper.then(function() {{techo('keyboard ls -lrt[enter]'); var fs = require('fs');

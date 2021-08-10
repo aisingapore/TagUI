@@ -25,7 +25,7 @@ You can also :ref:`run flows on a fixed schedule <run-on-schedule>`.
 
 Run by double-click
 **********************
-You can create a shortcut file with::
+You can create a shortcut file with ``-deploy``::
 
   tagui my_flow.tag -deploy
 
@@ -42,7 +42,7 @@ This creates a shortcut (my_flow.cmd) to run your flow just by double clicking t
         Your browser does not support the video tag.
     </video>
 |
-If you want to create the shortcut with options like ``headless`` (``-h``), you can include them::
+If you want to create the shortcut with options like ``-headless`` (``-h``), you can include them::
 
   tagui my_flow.tag -h -d
 
@@ -58,7 +58,7 @@ You can also run a flow directly from a URL::
 
 Hide the browser
 **********************
-You can run web flows without showing web browser by running TagUI with ``headless`` option. ::
+You can run web flows without showing web browser by running TagUI with ``-headless`` option. ::
 
     tagui my_flow.tag -headless
 
@@ -189,7 +189,7 @@ Identifiers
 ---------------
 You have probably noticed that different steps have different ways that they target elements, called **identifiers**. Let's look at the different types of identifiers.
 
-.. note:: The DOM and XPath identifiers only work for Chrome. To automate other browsers, use the Point/Region and Image identifiers.
+.. note:: The DOM and XPath identifiers only work for Chrome/Edge. To automate other browsers, use the Point/Region and Image identifiers.
 
 
 .. _dom:

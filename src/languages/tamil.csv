@@ -2,27 +2,27 @@
 click,கிளிக்
 tap,மெதுவாகத்தட்டு
 move,நகர்த்து
-hover,வட்டமிட
+hover,வட்டமிடு
 type,தட்டச்சிடு
 enter,நுழை
 select,தேர்ந்தெடு
 choose,தேர்வு
-read,படிக்க
-fetch,எடுக்க
+read,படி
+fetch,எடு
 show,காட்டு
 print,அச்சடி
 save,சேமி
 echo,வெளியீடு
 dump,கொட்டு
-write,எழுத
+write,எழுது
 snap,படம் எடு
 table,அட்டவணை
 mouse,சுட்டி
 keyboard,விசைப்பலகை
 live,நேரடி
-download,பதிவிறக்க
-upload,பதிவேற்ற
-load,பதிவேற்ற
+download,பதிவிறக்கு
+upload,பதிவேற்று
+load,பதிவேற்று
 receive,பெறு
 frame,சட்ட
 popup,மேல் மீட்பு
@@ -68,7 +68,7 @@ contain,கொண்டிருக்கும்
 and,மற்றும்
 or,அல்லது
 from,இருந்து
-to,க்கு
+to,வரை
 as,போன்ற
 title(),தலைப்பு()
 url(),இணைய முகவரிக்கு()

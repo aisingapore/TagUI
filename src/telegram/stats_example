@@ -1,0 +1,30 @@
+#!/usr/bin/env bash
+# sample script for Linux and macOS to show summary stats for your self-hosted bots #
+
+# 1. if logs are stored in folder 1 and 2, place this script 1 level above the logs
+# 2. replace <folder_1> and <folder_2> with folder names containing log summaries
+# 3. replace <id> with your Telegram ID to exclude your own usage from the stats
+
+# sample output statistics from this script (run from macOS or Linux terminal)
+
+# [sap_rpa_bot] 10 users received a total of 44 messages
+# [team2_bot] 12 users received a total of 84 messages
+# ---------------------------------------------------
+# [all bots] 22 users received a total of 128 messages
+
+all_users=0; all_messages=0
+
+bot_instance=<folder_1>
+total_recipients=$(cat $bot_instance/receiveMessage.log | grep -v <id> | grep -v 1234567890 | grep -v "\[\]" | wc -l)
+total_messages=$(cat $bot_instance/sendMessage.log | grep -v <id> | grep -v 1234567890 | grep -v "\[\]" | wc -l)
+echo "[$bot_instance] $total_recipients users received a total of $total_messages messages"
+all_users=$(($all_users + $total_recipients)); all_messages=$(($all_messages + $total_messages))
+
+bot_instance=<folder_2>
+total_recipients=$(cat $bot_instance/receiveMessage.log | grep -v <id> | grep -v 1234567890 | grep -v "\[\]" | wc -l)
+total_messages=$(cat $bot_instance/sendMessage.log | grep -v <id> | grep -v 1234567890 | grep -v "\[\]" | wc -l)
+echo "[$bot_instance] $total_recipients users received a total of $total_messages messages"
+all_users=$(($all_users + $total_recipients)); all_messages=$(($all_messages + $total_messages))
+
+echo "---------------------------------------------------"
+echo "[all bots] $all_users users received a total of $all_messages messages"

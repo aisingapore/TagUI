@@ -6,7 +6,7 @@ chrome_command="google-chrome"
 
 if [ -z "$1" ]
 then
-echo "tagui v6.54: use following options and this syntax to run - ./tagui flow_filename option(s)"
+echo "tagui v6.68: use following options and this syntax to run - ./tagui flow_filename option(s)"
 echo
 echo "tagui live     launch TagUI live mode enabled with visual automation for interactive development"
 echo "tagui update   download and update to latest TagUI version (please backup your version beforehand)"
@@ -17,6 +17,7 @@ echo "-headless  -h  run on invisible Chrome web browser instead of visible as d
 echo "-nobrowser -n  run without any web browser, for example to perform automation only with visual automation"
 echo "-report    -r  track run result in tagui/src/tagui_report.csv and save html log of automation execution"
 echo "-quiet     -q  run without output except for explicit output (echo, show, check steps and errors etc)"
+echo "-edge      -e  run TagUI using Microsoft Edge instead of Google Chrome (can be used with -headless)"
 echo
 exit 1
 fi
@@ -149,6 +150,19 @@ if [ "$6" = "-chrome" ] || [ "$6" = "-c" ]; then set -- "${@:1:5}" "${@:7}"; tag
 if [ "$7" = "-chrome" ] || [ "$7" = "-c" ]; then set -- "${@:1:6}" "${@:8}"; tagui_web_browser="chrome"; fi
 if [ "$8" = "-chrome" ] || [ "$8" = "-c" ]; then set -- "${@:1:7}" "${@:9}"; tagui_web_browser="chrome"; fi
 if [ "$9" = "-chrome" ] || [ "$9" = "-c" ]; then set -- "${@:1:8}"; tagui_web_browser="chrome"; fi
+
+# set custom browser to allow setting to edge
+tagui_custom_browser="Chrome"
+
+# check edge parameter to run on in-built integration with visible edge
+if [ "$2" = "-edge" ] || [ "$2" = "-e" ]; then set -- "$1" "${@:3}"; tagui_custom_browser="Edge"; fi
+if [ "$3" = "-edge" ] || [ "$3" = "-e" ]; then set -- "${@:1:2}" "${@:4}"; tagui_custom_browser="Edge"; fi
+if [ "$4" = "-edge" ] || [ "$4" = "-e" ]; then set -- "${@:1:3}" "${@:5}"; tagui_custom_browser="Edge"; fi
+if [ "$5" = "-edge" ] || [ "$5" = "-e" ]; then set -- "${@:1:4}" "${@:6}"; tagui_custom_browser="Edge"; fi
+if [ "$6" = "-edge" ] || [ "$6" = "-e" ]; then set -- "${@:1:5}" "${@:7}"; tagui_custom_browser="Edge"; fi
+if [ "$7" = "-edge" ] || [ "$7" = "-e" ]; then set -- "${@:1:6}" "${@:8}"; tagui_custom_browser="Edge"; fi
+if [ "$8" = "-edge" ] || [ "$8" = "-e" ]; then set -- "${@:1:7}" "${@:9}"; tagui_custom_browser="Edge"; fi
+if [ "$9" = "-edge" ] || [ "$9" = "-e" ]; then set -- "${@:1:8}"; tagui_custom_browser="Edge"; fi
 
 # check headless parameter to run on in-built integration with headless chrome
 if [ "$2" = "-headless" ] || [ "$2" = "-h" ]; then set -- "$1" "${@:3}"; tagui_web_browser="headless"; fi
@@ -341,16 +355,23 @@ if [ "$tagui_data_set" -eq 1 ] || [ "$tagui_speed_mode" == false ]; then
 # check for which operating system and launch chrome accordingly
 chrome_started="$(uname -s)"; chrome_switches="--remote-debugging-port=9222 about:blank"
 if [ "$chrome_started" == "Darwin" ]; then
-if ! [ -f "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome" ]; then
-echo "ERROR - cannot find Chrome at \"/Applications/Google Chrome.app/Contents/MacOS/Google Chrome\""
-echo "Chrome is at a non-standard location on your macOS, raise an issue on TagUI GitHub page"; exit 1; fi
+tagui_browser_command="/Applications/Google Chrome.app/Contents/MacOS/Google Chrome"
+if [ "$tagui_custom_browser" == "Edge" ]; then
+tagui_browser_command="/Applications/Microsoft Edge.app/Contents/MacOS/Microsoft Edge"
+fi
+if ! [ -f "$tagui_browser_command" ]; then
+echo "ERROR - cannot find \"$tagui_browser_command\""
+echo "$tagui_custom_browser is at a non-standard location on your macOS, raise an issue on t.me/rpa_chat"; exit 1; fi
 chrome_process_id="$(ps x | grep remote-debugging-port=9222 | grep tagui_user_profile | grep window-size | sed -e 's/^[ ]*//' | cut -d' ' -f 1 | sort -nur | head -n 1)"
 if [ -n "$chrome_process_id" ]; then kill $chrome_process_id; fi
-/Applications/Google\ Chrome.app/Contents/MacOS/Google\ Chrome --user-data-dir="$TAGUI_DIR/chrome/tagui_user_profile" $chrome_switches $window_size $headless_switch > /dev/null 2>&1 &
+"$tagui_browser_command" --user-data-dir="$TAGUI_DIR/chrome/tagui_user_profile" $chrome_switches $window_size $headless_switch > /dev/null 2>&1 &
 else
+if [ "$tagui_custom_browser" == "Edge" ]; then
+chrome_command="microsoft-edge"
+fi
 if ! type "$chrome_command" > /dev/null; then
-echo "ERROR - cannot find Chrome command \"$chrome_command\""
-echo "update chrome_command setting in tagui/src/tagui and make sure symlink to command is created"; exit 1; fi
+echo "ERROR - cannot find \"$chrome_command\" command on your Linux to launch web browser"
+echo "update chrome_command setting in tagui/src/tagui and make sure symlink is created"; exit 1; fi
 chrome_process_id="$(ps x | grep remote-debugging-port=9222 | grep tagui_user_profile | grep window-size | sed -e 's/^[ ]*//' | cut -d' ' -f 1 | sort -nur | head -n 1)"
 if [ -n "$chrome_process_id" ]; then kill $chrome_process_id; fi
 $chrome_command --user-data-dir="$TAGUI_DIR/chrome/tagui_user_profile" $chrome_switches $window_size $headless_switch > /dev/null 2>&1 &
@@ -380,7 +401,10 @@ if [ -f "tagui.sikuli/tagui_sikuli.in" ]; then echo "finish" > tagui.sikuli/tagu
 if [ -f "tagui_chrome.in" ]; then echo "finish" > tagui_chrome.in; fi
 
 # add delay between repetitions to pace out iterations
-if [ "$tagui_data_set_size" -ne 1 ]; then sleep 3; fi
+if [ "$tagui_data_set_size" -ne 1 ] && ! [ -f "end_processes_signal" ]; then sleep 3; fi
+
+# check signal from end_processes command to terminate loops
+if [ -f "end_processes_signal" ]; then rm end_processes_signal; exit 1; fi
 
 # kill chrome processes on single first run or data set last run
 if [ "$tagui_data_set" -eq "$tagui_data_set_size" ]; then

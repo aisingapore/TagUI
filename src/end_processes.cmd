@@ -21,6 +21,13 @@ if not "%chrome_process_id%"=="" (
     goto repeat_kill_chrome
 )
 
+:repeat_kill_edge
+for /f "tokens=* usebackq" %%p in (`wmic process where "caption like '%%msedge.exe%%' and commandline like '%%tagui_user_profile_ --remote-debugging-port=9222%%'" get processid 2^>nul ^| cut -d" " -f 1 ^| sort -nur ^| head -n 1`) do set edge_process_id=%%p
+if not "%edge_process_id%"=="" (
+    taskkill /PID %edge_process_id% /T /F > nul 2>&1
+    goto repeat_kill_edge
+)
+
 :repeat_kill_sikuli
 for /f "tokens=* usebackq" %%p in (`wmic process where "commandline like '%%tagui.sikuli%%' and not caption like '%%wmic%%' and not caption like '%%cmd.exe%%'" get processid 2^>nul ^| cut -d" " -f 1 ^| sort -nur ^| head -n 1`) do set sikuli_process_id=%%p
 if not "%sikuli_process_id%"=="" (
@@ -42,9 +49,16 @@ if not "%r_process_id%"=="" (
     goto repeat_kill_r
 )
 
+rem set variable to avoid leaving remnant end_processes_signal to quit datatable loops
+set e_p_signal=false
+
 :repeat_kill_tagui
 for /f "tokens=* usebackq" %%p in (`wmic process where "executablepath like '%%\\tagui\\src\\%%' and not caption like '%%cut.exe%%' and not caption like '%%sort.exe%%' and not caption like '%%head.exe%%'" get processid 2^>nul ^| cut -d" " -f 1 ^| sort -nur ^| head -n 1`) do set tagui_process_id=%%p
 if not "%tagui_process_id%"=="" (
+    if %e_p_signal%==false (
+        set e_p_signal=true
+        type nul > "%~dp0end_processes_signal"
+    )
     taskkill /PID %tagui_process_id% /T /F > nul 2>&1
     goto repeat_kill_tagui
 )

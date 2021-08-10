@@ -182,7 +182,7 @@ Saves table data to a csv file, base on the table number on webpage or its :ref:
 .. code-block:: none
   
   table 1 to regional_exchange_rates.csv
-  table //table[2] to global_exchange_rates.csv
+  table (//table)[2] to global_exchange_rates.csv
   table //table[@name='report'] to report.csv
 
 popup
@@ -236,17 +236,17 @@ download to
 upload
 #####################
 | Uploads file to a website.
-| Can use :ref:`DOM <dom>`, :ref:`XPath <xpath>` identifiers. 
+| Only :ref:`DOM <dom>` identifier can be used.
 
 .. code-block:: none
 
-  upload [DOM/XPath of upload input element] as [filename]
+  upload [DOM of upload element] as [filename]
 
 *Examples*
 
 .. code-block:: none
   
-  upload //input[@name="attach"] as report.csv
+  upload #element_id as report.csv
 
 
 api
@@ -648,6 +648,37 @@ Adds a comment.
   // updates the forex rates
 
 
+telegram
+###################
+Sends a Telegram notification, for example, to update on automation completion or exception.
+
+First, message `@taguibot <https://t.me/taguibot>`_ to authorise it to send messages to your Telegram. Then in TagUI:
+
+.. code-block:: none
+
+  telegram [id] [message]
+
+*Examples*
+
+.. code-block:: none
+
+  // this line sends message to Telegram user with ID 1234567890, \n means a new line
+  telegram 1234567890 Hello Alena,\n\nYour HR onboarding bot has completed successfully.
+
+  // show telegram_result variable - 'success' means sent, 'fail' means sending failed
+  echo Telegram message - `telegram_result`
+
+  // if condition to check telegram_result 'success' or 'fail' and handle accordingly
+  if telegram_result equals to 'success'
+    echo Message sent successfully.
+  else
+    echo Message sending failed.
+
+Note that the telegram step requires an internet connection. This feature is being hosted at https://tebel.org, but the `source code <https://github.com/kelaberetiv/TagUI/tree/master/src/telegram>`_ is on GitHub if you wish to host this feature on your own cloud or server. The implementation is in pure PHP without any dependencies.
+
+The only info logged is chat_id, length of the message, datetime stamp (to prevent abuse). If you wish to host on your own, first read through this link to learn more about Telegram Bot API, creating your bot API token and setting up the webhook - https://core.telegram.org/bots
+
+
 Run options
 ----------------------
 You can use the below options when running ``tagui``. 
@@ -681,6 +712,9 @@ Tracks flow run result in ``tagui/src/tagui_report.csv`` and saves html logs of 
 ********************
 Runs without output to command prompt except for explicit output (echo, show, check steps and errors etc).
 
+-edge or -e
+********************
+Runs using Microsoft Edge web browser instead of Google Chrome (can be used with -headless option).
 
 my_datatable.csv
 ********************
@@ -874,9 +908,11 @@ Extracts text between 2 provided anchors from given text. Optional 4th parameter
 .. code-block:: none
 
   pdf_text = 'Name: John State: Texas City: Plano Contact: ...'
+
   name = get_text(pdf_text, 'Name:', 'State:')
   state = get_text(pdf_text, 'State:', 'City:')
   city = get_text(pdf_text, 'City:', 'Contact:')
+
   echo `name`, `state`, `city`
 
 
