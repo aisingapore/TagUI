@@ -1,6 +1,7 @@
 ﻿using Microsoft.Office.Core;
 using Microsoft.Office.Tools.Word;
 
+
 using Microsoft.Office.Tools;
 using System;
 using System.Windows.Forms;
@@ -9,6 +10,9 @@ using Office = Microsoft.Office.Core;
 using Word = Microsoft.Office.Interop.Word;
 using CustomTaskPane = Microsoft.Office.Tools.CustomTaskPane;
 using System.Linq;
+using Microsoft.Win32;
+using System.Drawing;
+using System.Security.Principal;
 
 namespace TagUIWordAddIn
 {
@@ -31,7 +35,8 @@ namespace TagUIWordAddIn
             {
                 AddTaskPane(Globals.ThisAddIn.Application.ActiveDocument);
                 GetLastRunOptions();
-            } catch { }
+            }
+            catch { }
         }
         void Application_DocumentChange()
         {
@@ -39,7 +44,7 @@ namespace TagUIWordAddIn
         }
         void Application_DocumentBeforeClose(Word.Document Doc, ref bool Cancel)
         {
-             RemoveOrphanedTaskPanes();
+            RemoveOrphanedTaskPanes();
         }
         void Application_DocumentBeforeSave(Word.Document Doc, ref bool SaveAsUI, ref bool Cancel)
         {
@@ -67,7 +72,8 @@ namespace TagUIWordAddIn
                 {
                     ctp.Visible = true;
                 }
-            } catch { }
+            }
+            catch { }
         }
         void Application_WindowDeactivate(Word.Document Doc, Word.Window Wn)
         {
@@ -97,7 +103,7 @@ namespace TagUIWordAddIn
                 prps["customTaskPaneName"].Delete();
             }
             prps.Add("customTaskPaneName", false, MsoDocProperties.msoPropertyTypeString, taskPaneControl1.Name);
-           
+
             taskPaneValue.VisibleChanged += new EventHandler(taskPaneValue_VisibleChanged);
         }
         private void RemoveOrphanedTaskPanes()
@@ -150,7 +156,7 @@ namespace TagUIWordAddIn
         {
             DocumentProperties prps;
             prps = (DocumentProperties)Globals.ThisAddIn.Application.ActiveDocument.CustomDocumentProperties;
-            
+
 
             string[] customDocArr = {
                 "checkBoxNoBrowser",
@@ -316,5 +322,218 @@ namespace TagUIWordAddIn
             }
             return propertyValue;
         }
+        //public class GlobalVar
+        //{
+        //    //Theme Constants
+        //    public const int COLORFUL = 0;
+        //    public const int DARKGREY = 3;
+        //    public const int BLACK = 4;
+        //    public const int WHITE = 5;
+        //}
+
+        ///*
+        // ########################################
+        // # OFFICE CLASS TO RETURN TO THE ADDINS #
+        // # By Tsiriniaina Rakotonirina          #
+        // ########################################
+        // */
+        //public class ExcelTheme
+        //{
+        //    private int code;             //Theme Code               
+        //    private Color backgroundColor;//Addins Backcolor based on Theme
+        //    private Color textForeColor;  //Addins Text Color based on Theme
+
+        //    public Color BackgroundColor { get => backgroundColor; set => backgroundColor = value; }
+        //    public Color TextForeColor { get => textForeColor; set => textForeColor = value; }
+        //    public int Code { get => code; set => code = value; }
+        //}
+
+        ///*
+        // ###############################
+        // # OFFICE THEME CHANGE WATCHER #
+        // # By Tsiriniaina Rakotonirina #
+        // ###############################
+        // */
+        //class ExcelThemeWatcher
+        //{
+        //    /*
+        //     *****************************************
+        //     * CLASS CONSTRUCTOR                     *
+        //     * ---> The Watch start right away after *
+        //     *      the class is created             *
+        //     *****************************************
+        //     */
+        //    public ExcelThemeWatcher()
+        //    {
+        //        //Start Watching Office Theme Change
+        //        //By calling the following method
+        //        StartThemeWatcher();
+        //    }
+
+        //    /*
+        //     *****************************************
+        //     * GET OFFICE VERSION                    *
+        //     * ---> Read the Registry and            *
+        //     *      get the Current Office Version   *
+        //     *****************************************
+        //     */
+        //    public int GetOfficeVersion()
+        //    {
+        //        //Get Current Excel Version
+        //        try
+        //        {
+        //            //Get Office Version
+        //            //Goto the Registry Current Version
+        //            RegistryKey rk = Registry.ClassesRoot.OpenSubKey(@"Word.Application\\CurVer");
+
+        //            //Read Current Version
+        //            string officeVersion = rk.GetValue("").ToString();
+
+        //            //Office Version
+        //            string officeNumberVersion = officeVersion.Split('.')[officeVersion.Split('.').GetUpperBound(0)];
+
+        //            //Return Office Version
+        //            return Int32.Parse(officeNumberVersion);
+        //        }
+        //        catch (Exception ex)
+        //        {
+        //            Console.WriteLine(ex.Message);
+        //            return 0;
+        //        }
+        //    }
+
+        //    /*
+        //     *****************************************
+        //     * GET OFFICE THEME                      *
+        //     * ---> Read the Registry and            *
+        //     *      get the Current Office Theme     *
+        //     *****************************************
+        //     */
+        //    private int GetRegistryOfficeTheme()
+        //    {
+        //        //Get Office Version first
+        //        string officeVersion = GetOfficeVersion().ToString("F1");
+
+        //        //Goto the Registry Current Version
+        //        RegistryKey rk = Registry.CurrentUser.OpenSubKey(@"Software\Microsoft\Office\" + officeVersion + @"\Common");
+
+        //        return Convert.ToInt32(rk.GetValue("UI Theme", GlobalVar.COLORFUL));
+        //    }
+
+        //    /*
+        //     *****************************************
+        //     * GET ADDINS THEME                      *
+        //     * ---> Based on the Office Theme        *
+        //     *      Return the Addins Theme          *
+        //     *****************************************
+        //     */
+        //    public ExcelTheme GetAddinsTheme()
+        //    {
+        //        ExcelTheme theme = new ExcelTheme();
+
+        //        //Default Theme Code
+        //        theme.Code = GetRegistryOfficeTheme();
+
+        //        //Get Background Colors
+        //        theme.BackgroundColor = ColorTranslator.FromHtml("#EFE9D7");
+        //        theme.TextForeColor = ColorTranslator.FromHtml("#004B8D");
+
+        //        try
+        //        {
+        //            switch (theme.Code)
+        //            {
+        //                case GlobalVar.COLORFUL:
+        //                    theme.BackgroundColor = ColorTranslator.FromHtml("#E6E6E6");
+        //                    theme.TextForeColor = ColorTranslator.FromHtml("#004B8D");
+
+        //                    break;
+
+        //                case GlobalVar.DARKGREY:
+        //                    theme.BackgroundColor = ColorTranslator.FromHtml("#666666");
+        //                    theme.TextForeColor = ColorTranslator.FromHtml("White");
+        //                    break;
+
+        //                case GlobalVar.BLACK:
+        //                    theme.BackgroundColor = ColorTranslator.FromHtml("#323130");
+        //                    theme.TextForeColor = ColorTranslator.FromHtml("#CCA03B");
+        //                    break;
+
+        //                case GlobalVar.WHITE:
+        //                    theme.BackgroundColor = ColorTranslator.FromHtml("#FFFFFF");
+        //                    theme.TextForeColor = ColorTranslator.FromHtml("#004B8D");
+
+        //                    break;
+
+        //                default:
+        //                    break;
+        //            }
+        //        }
+        //        catch (Exception ex)
+        //        {
+        //            Console.WriteLine(ex.Message);
+        //        }
+
+        //        return theme;
+        //    }
+
+        //    /*
+        //     ******************************************
+        //     * START OFFICE THEME CHANGE WATCH        *
+        //     * ---> Using WMI, read and watch         *
+        //     *      Registry Section for Office Theme *
+        //     ******************************************
+        //     */
+        //    private void StartThemeWatcher()
+        //    {
+        //        string keyPath;   //Office Theme Path
+        //        string valueName; //Office Theme Value name
+
+        //        //Get Office Version first
+        //        string officeVersion = GetOfficeVersion().ToString("F1");
+
+        //        //Set the KeyPath based on the Office Version
+        //        keyPath = @"Software\\Microsoft\\Office\\" + officeVersion + "\\Common";
+        //        valueName = "UI Theme";
+
+        //        //Get the Current User ID
+        //        //---> HKEY_CURRENT_USER doesn't contain Value as it is a shortcut of HKEY_USERS + User ID
+        //        //     That is why we get that currentUser ID and use it to read the wanted location
+
+        //        //Get the User ID
+        //        var currentUser = WindowsIdentity.GetCurrent();
+
+        //        //Build the Query based on 3 parameters
+        //        //Param #1: User ID
+        //        //Param #2: Location or Path of the Registry Key
+        //        //Param #3: Registry Value to watch
+        //        var query = new WqlEventQuery(string.Format(
+        //                "SELECT * FROM RegistryValueChangeEvent WHERE Hive='HKEY_USERS' AND KeyPath='{0}\\\\{1}' AND ValueName='{2}'",
+        //                currentUser.User.Value, keyPath.Replace("\\", "\\\\"), valueName));
+
+        //        //Create a Watcher based on the "query" we just built
+        //        ManagementEventWatcher watcher = new ManagementEventWatcher(query);
+
+        //        //Create the Event using the "Function" to fire up, here called "KeyValueChanged"
+        //        watcher.EventArrived += (sender, args) => KeyValueChanged();
+
+        //        //Start the Watcher
+        //        watcher.Start();
+
+        //    }
+
+        //    /*
+        //     ******************************************
+        //     * EVENT FIRED UP WHEN CHANGE OCCURS      *
+        //     * ---> Here the event is instructed      *
+        //     *      to update the Addins Theme        *
+        //     ******************************************
+        //     */
+        //    private void KeyValueChanged()
+        //    {
+        //        // Here, whenever the user change the Office theme,
+        //        // this function will automatically Update the Addins Theme
+        //        Globals.ThisAddIn.SetAddinsInterfaceTheme();
+        //    }
+        }
     }
-}
+

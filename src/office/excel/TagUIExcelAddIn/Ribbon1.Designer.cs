@@ -35,6 +35,7 @@ namespace TagUIExcelAddIn
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Ribbon1));
             this.tab1 = this.Factory.CreateRibbonTab();
             this.group1 = this.Factory.CreateRibbonGroup();
             this.buttonRun = this.Factory.CreateRibbonButton();
@@ -44,7 +45,8 @@ namespace TagUIExcelAddIn
             this.group5 = this.Factory.CreateRibbonGroup();
             this.buttonViewReport = this.Factory.CreateRibbonButton();
             this.group4 = this.Factory.CreateRibbonGroup();
-            this.buttonUserGuide = this.Factory.CreateRibbonButton();
+            this.buttonUpdate = this.Factory.CreateRibbonButton();
+            this.buttonUsageGuide = this.Factory.CreateRibbonButton();
             this.tab1.SuspendLayout();
             this.group1.SuspendLayout();
             this.group2.SuspendLayout();
@@ -71,7 +73,7 @@ namespace TagUIExcelAddIn
             // buttonRun
             // 
             this.buttonRun.ControlSize = Microsoft.Office.Core.RibbonControlSize.RibbonControlSizeLarge;
-            this.buttonRun.Image = global::TagUIExcelAddIn.Properties.Resources.Run;
+            this.buttonRun.Image = ((System.Drawing.Image)(resources.GetObject("buttonRun.Image")));
             this.buttonRun.Label = "Run";
             this.buttonRun.Name = "buttonRun";
             this.buttonRun.ShowImage = true;
@@ -80,7 +82,7 @@ namespace TagUIExcelAddIn
             // buttonDeploy
             // 
             this.buttonDeploy.ControlSize = Microsoft.Office.Core.RibbonControlSize.RibbonControlSizeLarge;
-            this.buttonDeploy.Image = global::TagUIExcelAddIn.Properties.Resources.Deploy;
+            this.buttonDeploy.Image = ((System.Drawing.Image)(resources.GetObject("buttonDeploy.Image")));
             this.buttonDeploy.Label = "Deploy";
             this.buttonDeploy.Name = "buttonDeploy";
             this.buttonDeploy.ShowImage = true;
@@ -109,21 +111,37 @@ namespace TagUIExcelAddIn
             // 
             // buttonViewReport
             // 
-            this.buttonViewReport.Label = "Pull Latest Report";
+            this.buttonViewReport.ControlSize = Microsoft.Office.Core.RibbonControlSize.RibbonControlSizeLarge;
+            this.buttonViewReport.Image = global::TagUIExcelAddIn.Properties.Resources.Report;
+            this.buttonViewReport.Label = "Pull Latest";
             this.buttonViewReport.Name = "buttonViewReport";
+            this.buttonViewReport.ShowImage = true;
             this.buttonViewReport.Click += new Microsoft.Office.Tools.Ribbon.RibbonControlEventHandler(this.buttonViewReport_Click);
             // 
             // group4
             // 
-            this.group4.Items.Add(this.buttonUserGuide);
+            this.group4.Items.Add(this.buttonUpdate);
+            this.group4.Items.Add(this.buttonUsageGuide);
             this.group4.Label = "Help";
             this.group4.Name = "group4";
             // 
-            // buttonUserGuide
+            // buttonUpdate
             // 
-            this.buttonUserGuide.Label = "User Guide";
-            this.buttonUserGuide.Name = "buttonUserGuide";
-            this.buttonUserGuide.Click += new Microsoft.Office.Tools.Ribbon.RibbonControlEventHandler(this.buttonUserGuide_Click);
+            this.buttonUpdate.ControlSize = Microsoft.Office.Core.RibbonControlSize.RibbonControlSizeLarge;
+            this.buttonUpdate.Image = global::TagUIExcelAddIn.Properties.Resources.Update;
+            this.buttonUpdate.Label = "Update TagUI";
+            this.buttonUpdate.Name = "buttonUpdate";
+            this.buttonUpdate.ShowImage = true;
+            this.buttonUpdate.Click += new Microsoft.Office.Tools.Ribbon.RibbonControlEventHandler(this.buttonUpdate_Click);
+            // 
+            // buttonUsageGuide
+            // 
+            this.buttonUsageGuide.ControlSize = Microsoft.Office.Core.RibbonControlSize.RibbonControlSizeLarge;
+            this.buttonUsageGuide.Image = global::TagUIExcelAddIn.Properties.Resources.UsageGuide;
+            this.buttonUsageGuide.Label = "Usage Guide";
+            this.buttonUsageGuide.Name = "buttonUsageGuide";
+            this.buttonUsageGuide.ShowImage = true;
+            this.buttonUsageGuide.Click += new Microsoft.Office.Tools.Ribbon.RibbonControlEventHandler(this.buttonUsageGuide_Click);
             // 
             // Ribbon1
             // 
@@ -153,10 +171,11 @@ namespace TagUIExcelAddIn
         internal Microsoft.Office.Tools.Ribbon.RibbonButton buttonRun;
         internal Microsoft.Office.Tools.Ribbon.RibbonButton buttonDeploy;
         internal Microsoft.Office.Tools.Ribbon.RibbonGroup group2;
-        internal Microsoft.Office.Tools.Ribbon.RibbonButton buttonUserGuide;
+        internal Microsoft.Office.Tools.Ribbon.RibbonButton buttonUsageGuide;
         internal Microsoft.Office.Tools.Ribbon.RibbonGroup group4;
         internal Microsoft.Office.Tools.Ribbon.RibbonGroup group5;
         internal Microsoft.Office.Tools.Ribbon.RibbonButton buttonViewReport;
+        internal Microsoft.Office.Tools.Ribbon.RibbonButton buttonUpdate;
     }
 
     partial class ThisRibbonCollection

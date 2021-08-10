@@ -1,18 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Diagnostics;
-using System.IO;
 using Excel = Microsoft.Office.Interop.Excel;
 using CheckBox = System.Windows.Forms.CheckBox;
-using DocumentFormat.OpenXml.Packaging;
-using DocumentFormat.OpenXml.Wordprocessing;
+using System.IO;
 
 namespace TagUIExcelAddIn
 {
@@ -21,6 +13,12 @@ namespace TagUIExcelAddIn
         public TagUIExcelAddInTaskPane()
         {
             InitializeComponent();
+            ToolTip ToolTip1 = new System.Windows.Forms.ToolTip();
+            ToolTip1.AutoPopDelay = 30000;
+            ToolTip1.SetToolTip(pictureBox1, "Datatables run a workflow multiple times with different inputs.\n\nTo use it, select a sheet and specify an optional cell range (e.g. A1:B4) where the data resides.\n\nTagUI will run the current workflow once for each row in the datatable (except the header).\nWithin the flow, TagUI can use the datatable header as variables and the values will be from that run’s row.");
+            ToolTip ToolTip2 = new System.Windows.Forms.ToolTip();
+            ToolTip1.SetToolTip(pictureBox2, "Object repositories store variables for use in flows.\nThey help to separate your flows from your personal data (like login information for web flows), and allow you to share common information between multiple flows for easy updating.");
+            ToolTip1.AutoPopDelay = 30000;
         }
         private void buttonSelect_Click(object sender, EventArgs e)
         {
@@ -45,15 +43,14 @@ namespace TagUIExcelAddIn
         private void buttonEditFlow_Click(object sender, EventArgs e)
         {
             string flowFilePath = textBoxFlowFile.Text;
-            ////string flowFileType = FlowFileType(flowFilePath);
-            //if (flowFileType != "invalid")
-            //{
-            //    Process.Start(flowFilePath);
-            //}
-            //else
-            //{
-            //    MessageBox.Show("Please select a valid flow file for editing", "Oops!");
-            //}
+            Process.Start(flowFilePath);
+        }
+        private void textBoxFlowFile_TextChanged(object sender, EventArgs e)
+        {
+            if (textBoxFlowFile.Text != "")
+            {
+                buttonEditFlow.Enabled = true;
+            }
         }
         private void checkBoxObjectRepository_CheckedChanged(object sender, EventArgs e)
         {
@@ -72,10 +69,12 @@ namespace TagUIExcelAddIn
             if (((CheckBox)sender).Checked)
             {
                 comboBoxAllSheets.Enabled = true;
+                textBoxRange.Enabled = true;
             }
             else
             {
                 comboBoxAllSheets.Enabled = false;
+                textBoxRange.Enabled = false;
             }
         }
         private void checkBoxInputs_CheckedChanged(object sender, EventArgs e)
@@ -120,6 +119,35 @@ namespace TagUIExcelAddIn
             public Item() { }
             public string Value { set; get; }
             public string Text { set; get; }
+        }
+
+        private void textBoxRange_Click(object sender, EventArgs e)
+        {
+            textBoxRange.Text = "";
+            Excel.Worksheet ws = Globals.ThisAddIn.Application.ActiveSheet;
+            ws.SelectionChange += ws_SelectionChange;
+        }
+        void ws_SelectionChange(Excel.Range Target)
+        {
+            textBoxRange.Text = Target.Address.Replace("$", "");
+            Excel.Worksheet ws = Globals.ThisAddIn.Application.ActiveSheet;
+            ws.SelectionChange -= ws_SelectionChange;
+            this.Focus();
+        }
+        private void TagUIExcelAddInTaskPane_SizeChanged(object sender, EventArgs e)
+        {
+            textBoxFlowFile.Width = this.Size.Width - 19;
+            comboBoxAllSheets.Width = this.Size.Width - 44;
+            textBoxRange.Width = this.Size.Width - 44;
+            comboBoxObjectRepository.Width = this.Size.Width - 44;
+            textBoxParam.Width = this.Size.Width - 44;
+            textBoxOutput.Width = this.Size.Width - 19;
+            textBoxOutput.Height = this.Size.Height - 500;
+        }
+
+        private void comboBoxAllSheets_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            textBoxRange.Enabled = true;
         }
     }
 }

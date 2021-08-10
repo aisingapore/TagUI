@@ -180,10 +180,10 @@ namespace TagUIWordAddIn
             textBoxDatatableCSV.Width = this.Size.Width - 114;
             comboBoxDatatableWs.Width = this.Size.Width - 114;
             textBoxRange.Width = this.Size.Width - 114;
-            buttonBrowse.Location = new System.Drawing.Point(this.Size.Width - 75,172);
+            buttonBrowse.Location = new System.Drawing.Point(this.Size.Width - 75, textBoxDatatableCSV.Location.Y);
             textBoxObjRepo.Width = this.Size.Width - 114;
             comboBoxObjRepo.Width = this.Size.Width - 114;
-            buttonObjRepo.Location = new System.Drawing.Point(this.Size.Width - 75,310);
+            buttonObjRepo.Location = new System.Drawing.Point(this.Size.Width - 75, textBoxObjRepo.Location.Y);
             textBoxParam.Width = this.Size.Width - 114;
             textBoxOutput.Width = this.Size.Width - 14;
             textBoxOutput.Height = this.Size.Height - 500;

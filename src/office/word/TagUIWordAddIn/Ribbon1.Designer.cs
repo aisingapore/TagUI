@@ -38,8 +38,12 @@ namespace TagUIWordAddIn
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Ribbon1));
             this.tab1 = this.Factory.CreateRibbonTab();
             this.group1 = this.Factory.CreateRibbonGroup();
+            this.buttonRun = this.Factory.CreateRibbonButton();
+            this.buttonDeploy = this.Factory.CreateRibbonButton();
             this.group4 = this.Factory.CreateRibbonGroup();
+            this.toggleButton1 = this.Factory.CreateRibbonToggleButton();
             this.group3 = this.Factory.CreateRibbonGroup();
+            this.button1 = this.Factory.CreateRibbonButton();
             this.group2 = this.Factory.CreateRibbonGroup();
             this.buttonClick = this.Factory.CreateRibbonButton();
             this.buttonRclick = this.Factory.CreateRibbonButton();
@@ -86,10 +90,6 @@ namespace TagUIWordAddIn
             this.buttonTitle = this.Factory.CreateRibbonButton();
             this.buttonText = this.Factory.CreateRibbonButton();
             this.group8 = this.Factory.CreateRibbonGroup();
-            this.buttonRun = this.Factory.CreateRibbonButton();
-            this.buttonDeploy = this.Factory.CreateRibbonButton();
-            this.toggleButton1 = this.Factory.CreateRibbonToggleButton();
-            this.button1 = this.Factory.CreateRibbonButton();
             this.buttonUpdate = this.Factory.CreateRibbonButton();
             this.buttonUsageGuide = this.Factory.CreateRibbonButton();
             this.tab1.SuspendLayout();
@@ -123,17 +123,53 @@ namespace TagUIWordAddIn
             this.group1.Label = "Run / Deploy";
             this.group1.Name = "group1";
             // 
+            // buttonRun
+            // 
+            this.buttonRun.ControlSize = Microsoft.Office.Core.RibbonControlSize.RibbonControlSizeLarge;
+            this.buttonRun.Image = ((System.Drawing.Image)(resources.GetObject("buttonRun.Image")));
+            this.buttonRun.Label = "Run";
+            this.buttonRun.Name = "buttonRun";
+            this.buttonRun.ShowImage = true;
+            this.buttonRun.Click += new Microsoft.Office.Tools.Ribbon.RibbonControlEventHandler(this.buttonRun_Click);
+            // 
+            // buttonDeploy
+            // 
+            this.buttonDeploy.ControlSize = Microsoft.Office.Core.RibbonControlSize.RibbonControlSizeLarge;
+            this.buttonDeploy.Image = global::TagUIWordAddIn.Properties.Resources.Deploy;
+            this.buttonDeploy.Label = "Deploy";
+            this.buttonDeploy.Name = "buttonDeploy";
+            this.buttonDeploy.ShowImage = true;
+            this.buttonDeploy.Click += new Microsoft.Office.Tools.Ribbon.RibbonControlEventHandler(this.buttonDeploy_Click);
+            // 
             // group4
             // 
             this.group4.Items.Add(this.toggleButton1);
             this.group4.Label = "Options / Output";
             this.group4.Name = "group4";
             // 
+            // toggleButton1
+            // 
+            this.toggleButton1.ControlSize = Microsoft.Office.Core.RibbonControlSize.RibbonControlSizeLarge;
+            this.toggleButton1.Image = global::TagUIWordAddIn.Properties.Resources.Taskpane;
+            this.toggleButton1.Label = "Show Task Pane";
+            this.toggleButton1.Name = "toggleButton1";
+            this.toggleButton1.ShowImage = true;
+            this.toggleButton1.Click += new Microsoft.Office.Tools.Ribbon.RibbonControlEventHandler(this.toggleButton1_Click);
+            // 
             // group3
             // 
             this.group3.Items.Add(this.button1);
             this.group3.Label = "Helper Tools";
             this.group3.Name = "group3";
+            // 
+            // button1
+            // 
+            this.button1.ControlSize = Microsoft.Office.Core.RibbonControlSize.RibbonControlSizeLarge;
+            this.button1.Image = global::TagUIWordAddIn.Properties.Resources.Snapshot;
+            this.button1.Label = "Snapshot";
+            this.button1.Name = "button1";
+            this.button1.ShowImage = true;
+            this.button1.Click += new Microsoft.Office.Tools.Ribbon.RibbonControlEventHandler(this.button1_Click);
             // 
             // group2
             // 
@@ -533,42 +569,6 @@ namespace TagUIWordAddIn
             this.group8.Items.Add(this.buttonUsageGuide);
             this.group8.Label = "Help";
             this.group8.Name = "group8";
-            // 
-            // buttonRun
-            // 
-            this.buttonRun.ControlSize = Microsoft.Office.Core.RibbonControlSize.RibbonControlSizeLarge;
-            this.buttonRun.Image = ((System.Drawing.Image)(resources.GetObject("buttonRun.Image")));
-            this.buttonRun.Label = "Run";
-            this.buttonRun.Name = "buttonRun";
-            this.buttonRun.ShowImage = true;
-            this.buttonRun.Click += new Microsoft.Office.Tools.Ribbon.RibbonControlEventHandler(this.buttonRun_Click);
-            // 
-            // buttonDeploy
-            // 
-            this.buttonDeploy.ControlSize = Microsoft.Office.Core.RibbonControlSize.RibbonControlSizeLarge;
-            this.buttonDeploy.Image = global::TagUIWordAddIn.Properties.Resources.Deploy;
-            this.buttonDeploy.Label = "Deploy";
-            this.buttonDeploy.Name = "buttonDeploy";
-            this.buttonDeploy.ShowImage = true;
-            this.buttonDeploy.Click += new Microsoft.Office.Tools.Ribbon.RibbonControlEventHandler(this.buttonDeploy_Click);
-            // 
-            // toggleButton1
-            // 
-            this.toggleButton1.ControlSize = Microsoft.Office.Core.RibbonControlSize.RibbonControlSizeLarge;
-            this.toggleButton1.Image = global::TagUIWordAddIn.Properties.Resources.Taskpane;
-            this.toggleButton1.Label = "Show Task Pane";
-            this.toggleButton1.Name = "toggleButton1";
-            this.toggleButton1.ShowImage = true;
-            this.toggleButton1.Click += new Microsoft.Office.Tools.Ribbon.RibbonControlEventHandler(this.toggleButton1_Click);
-            // 
-            // button1
-            // 
-            this.button1.ControlSize = Microsoft.Office.Core.RibbonControlSize.RibbonControlSizeLarge;
-            this.button1.Image = global::TagUIWordAddIn.Properties.Resources.Snapshot;
-            this.button1.Label = "Snapshot";
-            this.button1.Name = "button1";
-            this.button1.ShowImage = true;
-            this.button1.Click += new Microsoft.Office.Tools.Ribbon.RibbonControlEventHandler(this.button1_Click);
             // 
             // buttonUpdate
             // 

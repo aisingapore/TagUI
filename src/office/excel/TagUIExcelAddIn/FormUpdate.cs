@@ -10,8 +10,10 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using Word = Microsoft.Office.Interop.Word;
+using Excel = Microsoft.Office.Interop.Excel;
+using Microsoft.Office.Interop.Excel;
 
-namespace TagUIWordAddIn
+namespace TagUIExcelAddIn
 {
     public partial class FormUpdate : Form
     {
@@ -19,12 +21,17 @@ namespace TagUIWordAddIn
         {
             InitializeComponent();
         }
-
-        private void button1_Click(object sender, EventArgs e)
+        private void buttonOk_Click(object sender, EventArgs e)
         {
-            Word.Application xlApp = Globals.ThisAddIn.Application;
-            xlApp.System.Cursor = WdCursorType.wdCursorWait;
-            button1.Visible = false;
+            this.Close();
+        }
+
+        private void buttonUpdate_Click(object sender, EventArgs e)
+        {
+
+            Excel.Application xlApp = Globals.ThisAddIn.Application;
+            xlApp.Cursor = XlMousePointer.xlWait;
+            buttonUpdate.Visible = false;
             labelUpdateTerms.Text = "Updating in progress...";
             string cmdCommand = "/C tagui update";
             try
@@ -54,7 +61,7 @@ namespace TagUIWordAddIn
                 process.Exited += (s, evt) =>
                 {
                     process?.Dispose();
-                    xlApp.System.Cursor = WdCursorType.wdCursorNormal;
+                    xlApp.Cursor = XlMousePointer.xlDefault;
                     buttonOk.Visible = true;
                 };
             }
@@ -62,12 +69,6 @@ namespace TagUIWordAddIn
             {
                 MessageBox.Show(ex.Message);
             }
-            
-        }
-
-        private void buttonOk_Click(object sender, EventArgs e)
-        {
-            this.Close();
         }
     }
 }

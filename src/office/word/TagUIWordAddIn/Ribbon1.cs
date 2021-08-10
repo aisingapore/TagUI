@@ -718,7 +718,8 @@ namespace TagUIWordAddIn
 
             TextBox textBoxOutput = ctp.Control.Controls["textBoxOutput"] as TextBox;
             textBoxOutput.Clear();
-            string cmdCommand = "/C end_processes & tagui \"" + tagFilePath + "\"" + runOptions;
+            string workingFolder = GetWorkingFolderPath(deploy);
+            string cmdCommand = "/C end_processes & cd \"" + workingFolder + "\" & tagui \"" + tagFilePath + "\"" + runOptions;
             try
             {
                 var process = new Process
@@ -877,7 +878,7 @@ namespace TagUIWordAddIn
                         using (Image toSaveImage = Bitmap.FromStream(img.GetStream()))
                         {
                             imageFileName = "Img_" + imageCount;
-                            imageFilePath = imageFolderPath + imageFileName + ".png";
+                            imageFilePath = imageFolderPath + "\\" + imageFileName + ".png";
                             try
                             {
                                 toSaveImage.Save(imageFilePath, ImageFormat.Png);
@@ -888,7 +889,7 @@ namespace TagUIWordAddIn
                         }
                         imageList.Add(imageFilePath);
                         Run run2 = par.Descendants<Run>().ElementAt(i - 1);
-                        run2.AppendChild(new Text(" Images\\" + imageFileName + ".png"));
+                        run2.AppendChild(new Text(" Images/" + imageFileName + ".png"));
                         image.Remove();
                         imageCount++;
                     }
@@ -1075,13 +1076,12 @@ namespace TagUIWordAddIn
             TextBox textBoxDatatableCSV = ctp.Control.Controls["textBoxDatatableCSV"] as TextBox;
             ComboBox comboBoxDatatableWs = ctp.Control.Controls["comboBoxDatatableWs"] as ComboBox;
             TextBox textBoxRange = ctp.Control.Controls["textBoxRange"] as TextBox;
-            string csvFilePath = "";
+            string csvFilePath = GetWorkingFolderPath(deploy) + "DataTable.csv";
             string dataTableFilePath = textBoxDatatableCSV.Text;
             string fileType = GetExcelFileType(dataTableFilePath);
             if (fileType == "xlsx")
             {
                 string dataTableSheet = comboBoxDatatableWs.Text;
-                csvFilePath = GetWorkingFolderPath(deploy) + "DataTable.csv";
                 string range = textBoxRange.Text;
                 string rangeStart = "";
                 string rangeEnd = "";
@@ -1109,11 +1109,17 @@ namespace TagUIWordAddIn
                 {
                     GenerateCsvFile(dataTableFilePath, csvFilePath, dataTableSheet);
                 }
+                
             }
             else
             {
-                csvFilePath = dataTableFilePath;
+                if (File.Exists(csvFilePath))
+                {
+                    File.Delete(csvFilePath);
+                }
+                File.Copy(dataTableFilePath, csvFilePath);
             }
+            csvFilePath = "DataTable.csv";
             return csvFilePath;
         }
 
