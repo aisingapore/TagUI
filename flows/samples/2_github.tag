@@ -9,10 +9,10 @@ https://github.com/kelaberetiv/TagUI
 read (//*[@class="mt-3"])[3] to license_type
 echo `license_type`
 
-// Look on the web page for an element with unique attributes provided
-// Then click to download a file to the current flow's folder
-click octicon-download
-click octicon-file-zip
+// Look for a web element with provided XPath, CSS or attributes
+// Then click to download the file to the folder of current flow
+click //get-repo 
+click //*[contains(@href, "master.zip")]
 
 // Wait 15 seconds to give the download time to complete on slow networks 
 wait 15
