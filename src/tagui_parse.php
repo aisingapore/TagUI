@@ -1015,9 +1015,9 @@ $params = trim(substr($raw_intent." ",1+strpos($raw_intent." "," ")));
 if ($params == "") echo "ERROR - " . current_line() . " keyword missing for " . $raw_intent . "\n";
 else {$GLOBALS['code_block_tracker'] .= "|" . 'popup';
 return "casper.then(function() {"."techo('".$raw_intent."');"."});\n".
-"casper.waitForPopup(/".preg_quote($params)."/, function then() {},\n".
+"casper.waitForPopup(/".preg_quote($params,'/')."/, function then() {},\n".
 "function timeout() {this.echo('ERROR - cannot find popup ".$params."').exit();});\n".
-"casper.withPopup(/".preg_quote($params)."/, function() {\n";}}
+"casper.withPopup(/".preg_quote($params,'/')."/, function() {\n";}}
 
 function api_intent($raw_intent) {
 $params = trim(substr($raw_intent." ",1+strpos($raw_intent." "," ")));
