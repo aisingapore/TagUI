@@ -45,7 +45,7 @@ var ask_result = '';
 var dom_json = {}; var dom_result = '';
 
 // variable for user OS with values windows, mac, linux
-var tagui_user_os = require('system').os.name;
+var user_system = require('system').os.name;
 
 // telegram step api endpoint, you can host on your own server or cloud
 // see https://github.com/kelaberetiv/TagUI/tree/master/src/telegram
@@ -953,6 +953,7 @@ if ((raw_intent.substr(0,7) == 'casper.') || (raw_intent.substr(0,5) == 'this.')
 if (raw_intent.substr(0,7) == 'chrome.') return true; // chrome object for chrome integration
 // below breaking up the single word clip+board( in order not to trigger false sikuli loading
 if (raw_intent.substr(0,10) == ('clip'+'board(')) return true; // for handling clip+board('text')
+if (raw_intent.substr(0,7) == 'timer()') return true; // for handling timer() helper function
 if (raw_intent.substr(0,5) == ('test'+'.')) return true; // avoid replacement with test option
 if ((raw_intent.substr(0,2) == '//') || (raw_intent.charAt(raw_intent.length-1) == ';')) return true;
 if (raw_intent.substr(0,9) == 'function ') return true; // function definition
