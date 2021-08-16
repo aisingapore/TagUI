@@ -251,7 +251,9 @@ upload
 
 api
 #####################
-Call a web API and save the response to the variable ``api_result``.
+Call a web API and save the raw response to the variable ``api_result``.
+
+If the response is in JSON, ``api_json`` will automatically be created.
 
 .. code-block:: none
 
@@ -262,8 +264,8 @@ Call a web API and save the response to the variable ``api_result``.
 .. code-block:: none
   
   api https://api.github.com/repos/kelaberetiv/TagUI/releases
-  js obj = JSON.parse(api_result)
-  js author = obj[0].author.login
+  echo `api_result`
+  author = api_json[0].author.login
 
 
 Using Variables
