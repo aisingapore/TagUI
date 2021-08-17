@@ -5,7 +5,10 @@ wait_timeout = 10
 setAutoWaitTimeout(wait_timeout)
 
 # delay in seconds between scanning for inputs
-scan_period = 0.5
+scan_period = 0
+
+# teleport mouse instead of moving to target
+Settings.MoveMouseDelay = 0
 
 # counter to track current tagui sikuli step
 tagui_count = '0'
