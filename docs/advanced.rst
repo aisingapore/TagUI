@@ -85,6 +85,17 @@ Variables in the parent flow are accessible in the child flow and vice versa.
 
 Visual automation tricks
 ------------------------------------
+For many steps, you can end the step with ``using ocr`` or ``using OCR`` to tell TagUI to interact on some UI element on the screen using OCR (optical character recognition). See the examples below. Steps which this can be done: click, rclick, dclick, hover, type, select, read, snap, exist(), present().
+
+.. code-block:: none
+
+  click Submit using ocr
+
+  select Dress Color as Dark Blue using OCR
+  
+  if exist('Special Offer using ocr')
+    click Add To Cart using OCR
+
 If you make the background of a UI element in a ``.png`` file 100% transparent using an image editor, TagUI will be able to target the element regardless of its background. 
 
 Conversely, you can also remove the foreground content near some anchor element like a frame, to allow you to OCR varying content in the empty area using the **read** step.
