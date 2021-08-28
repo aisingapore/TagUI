@@ -84,7 +84,7 @@ Variables in the parent flow are accessible in the child flow and vice versa.
 
 Turbo mode to run 10X faster
 -------------------------------
-To run TagUI with turbo option::
+To run TagUI with turbo option (use with caution)::
 
   tagui flow.tag -turbo
 
@@ -96,7 +96,7 @@ Most websites and desktop apps are not designed for the super-human speed user. 
 
 And the problems might happen randomly, including working on your PC but not working on another PC due to difference in CPU. Because of this, using turbo mode option is not recommended. You may save some cheap computer time, but if something is broken or does not work, you may end up spending expensive human time (your time) to troubleshoot or fix.
 
-However, this is very useful for some users for some specific scenarios. For eg, data collection from apps, data entry in web applications that can handle super-human speed reliably, as part of a chatbot doing backend RPA for user, for fast and rapid prototyping, perhaps taking part in RPA competitions and hackathons etc.
+However, this is very useful for some users for some specific scenarios. For eg, data collection from apps, data entry in web applications that can handle super-human speed reliably, as part of a chatbot doing backend RPA for user, for fast and rapid prototyping, perhaps taking part in RPA competitions and hackathons etc. Thoroughly test before using!
 
 Visual automation tricks
 ------------------------------------
