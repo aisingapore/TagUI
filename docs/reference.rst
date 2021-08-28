@@ -709,6 +709,9 @@ Runs without any web browser, for example to perform automation only with visual
 ********************
 Tracks flow run result in ``tagui/src/tagui_report.csv`` and saves html logs of flows execution.
 
+-turbo or -t
+********************
+Run automation at 10X the speed of normal human user. Read the caveats at Advanced concepts section!
 
 -quiet or -q
 ********************
