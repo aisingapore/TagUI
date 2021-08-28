@@ -14,7 +14,7 @@ rem enable windows for loop advanced flow control
 setlocal enableextensions enabledelayedexpansion
 
 if "%~1"=="" (
-echo tagui v6.72: use following options and this syntax to run - tagui flow_filename option^(s^)
+echo tagui v6.73: use following options and this syntax to run - tagui flow_filename option^(s^)
 echo.
 echo tagui live     launch TagUI live mode enabled with visual automation for interactive development
 echo tagui update   download and update to latest TagUI version ^(please backup your version beforehand^)
@@ -693,39 +693,6 @@ if "%arg8%"=="-test" (
 	set tagui_test_mode=true
 )
 if "%arg9%"=="-test" (
-	set arg9=
-	set tagui_test_mode=true
-)
-
-if "%arg2%"=="-t" (
-	set arg2=
-	set tagui_test_mode=true
-)
-if "%arg3%"=="-t" (
-	set arg3=
-	set tagui_test_mode=true
-)
-if "%arg4%"=="-t" (
-	set arg4=
-	set tagui_test_mode=true
-)
-if "%arg5%"=="-t" (
-	set arg5=
-	set tagui_test_mode=true
-)
-if "%arg6%"=="-t" (
-	set arg6=
-	set tagui_test_mode=true
-)
-if "%arg7%"=="-t" (
-	set arg7=
-	set tagui_test_mode=true
-)
-if "%arg8%"=="-t" (
-	set arg8=
-	set tagui_test_mode=true
-)
-if "%arg9%"=="-t" (
 	set arg9=
 	set tagui_test_mode=true
 )
