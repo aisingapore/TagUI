@@ -331,6 +331,28 @@ preg_match('/exist\(.*\.png.*\)/i',$script_content) or preg_match('/exist\(.*\.b
 {if (!touch('tagui.sikuli/tagui_sikuli.in')) die("ERROR - cannot initialise tagui_sikuli.in\n");
 if (!touch('tagui.sikuli/tagui_sikuli.out')) die("ERROR - cannot initialise tagui_sikuli.out\n");}
 
+// check turbo parameter to run automation at 10X normal human user speed
+if (getenv('tagui_turbo_mode') == 'false') {$script_content = file_get_contents($script . '.js');
+$script_content = str_replace("function sleep(ms) {ms *= 0.1; //","function sleep(ms) { //",$script_content);
+$script_content = str_replace("chrome_step('Input.insertText',{text: value});};","for (var character = 0, length = value.length; character < length; character++) {\nchrome_step('Input.dispatchKeyEvent',{type: 'char', text: value[character]});}};",$script_content);
+file_put_contents($script . '.js',$script_content);
+$chrome_php_content = file_get_contents('tagui_chrome.php');
+$chrome_php_content = str_replace("$scan_period = 10000;","$scan_period = 100000;",$chrome_php_content);
+file_put_contents('tagui_chrome.php',$chrome_php_content);
+$sikuli_py_content = file_get_contents('tagui.sikuli/tagui.py');
+$sikuli_py_content = str_replace("scan_period = 0.05\n\n# teleport mouse instead of moving to target\nSettings.MoveMouseDelay = 0","scan_period = 0.5",$sikuli_py_content);
+file_put_contents('tagui.sikuli/tagui.py',$sikuli_py_content);}
+else {$script_content = file_get_contents($script . '.js');
+$script_content = str_replace("function sleep(ms) { //","function sleep(ms) {ms *= 0.1; //",$script_content);
+$script_content = str_replace("for (var character = 0, length = value.length; character < length; character++) {\nchrome_step('Input.dispatchKeyEvent',{type: 'char', text: value[character]});}};","chrome_step('Input.insertText',{text: value});};",$script_content);
+file_put_contents($script . '.js',$script_content);
+$chrome_php_content = file_get_contents('tagui_chrome.php');
+$chrome_php_content = str_replace("$scan_period = 100000;","$scan_period = 10000;",$chrome_php_content);
+file_put_contents('tagui_chrome.php',$chrome_php_content);
+$sikuli_py_content = file_get_contents('tagui.sikuli/tagui.py');
+$sikuli_py_content = str_replace("scan_period = 0.5","scan_period = 0.05\n\n# teleport mouse instead of moving to target\nSettings.MoveMouseDelay = 0",$sikuli_py_content);
+file_put_contents('tagui.sikuli/tagui.py',$sikuli_py_content);}
+
 // check quiet parameter to run flow quietly by only showing explicit output
 if (getenv('tagui_quiet_mode') == 'true') {$script_content = file_get_contents($script . '.js'); // read generated script
 $script_content = str_replace("var quiet_mode = false;","var quiet_mode = true;",$script_content); // set quiet_mode

@@ -6,7 +6,7 @@ chrome_command="google-chrome"
 
 if [ -z "$1" ]
 then
-echo "tagui v6.71: use following options and this syntax to run - ./tagui flow_filename option(s)"
+echo "tagui v6.72: use following options and this syntax to run - ./tagui flow_filename option(s)"
 echo
 echo "tagui live     launch TagUI live mode enabled with visual automation for interactive development"
 echo "tagui update   download and update to latest TagUI version (please backup your version beforehand)"
@@ -16,6 +16,7 @@ echo "-deploy    -d  generate .command file which can be double-clicked to run w
 echo "-headless  -h  run on invisible Chrome web browser instead of visible as default (first install Chrome)"
 echo "-nobrowser -n  run without any web browser, for example to perform automation only with visual automation"
 echo "-report    -r  track run result in tagui/src/tagui_report.csv and save html log of automation execution"
+echo "-turbo     -t  run automation at 10X the speed of normal human user (read the caveats in usage guide!)"
 echo "-quiet     -q  run without output except for explicit output (echo, show, check steps and errors etc)"
 echo "-edge      -e  run TagUI using Microsoft Edge instead of Google Chrome (can be used with -headless)"
 echo
@@ -240,6 +241,17 @@ if [ "$6" = "-speed" ] || [ "$6" = "-s" ]; then set -- "${@:1:5}" "${@:7}"; tagu
 if [ "$7" = "-speed" ] || [ "$7" = "-s" ]; then set -- "${@:1:6}" "${@:8}"; tagui_speed_mode=true; fi
 if [ "$8" = "-speed" ] || [ "$8" = "-s" ]; then set -- "${@:1:7}" "${@:9}"; tagui_speed_mode=true; fi
 if [ "$9" = "-speed" ] || [ "$9" = "-s" ]; then set -- "${@:1:8}"; tagui_speed_mode=true; fi
+
+export tagui_turbo_mode=false
+# check turbo parameter to run automation at 10X the speed of normal human user
+if [ "$2" = "-turbo" ] || [ "$2" = "-t" ]; then set -- "$1" "${@:3}"; export tagui_turbo_mode=true; fi
+if [ "$3" = "-turbo" ] || [ "$3" = "-t" ]; then set -- "${@:1:2}" "${@:4}"; export tagui_turbo_mode=true; fi
+if [ "$4" = "-turbo" ] || [ "$4" = "-t" ]; then set -- "${@:1:3}" "${@:5}"; export tagui_turbo_mode=true; fi
+if [ "$5" = "-turbo" ] || [ "$5" = "-t" ]; then set -- "${@:1:4}" "${@:6}"; export tagui_turbo_mode=true; fi
+if [ "$6" = "-turbo" ] || [ "$6" = "-t" ]; then set -- "${@:1:5}" "${@:7}"; export tagui_turbo_mode=true; fi
+if [ "$7" = "-turbo" ] || [ "$7" = "-t" ]; then set -- "${@:1:6}" "${@:8}"; export tagui_turbo_mode=true; fi
+if [ "$8" = "-turbo" ] || [ "$8" = "-t" ]; then set -- "${@:1:7}" "${@:9}"; export tagui_turbo_mode=true; fi
+if [ "$9" = "-turbo" ] || [ "$9" = "-t" ]; then set -- "${@:1:8}"; export tagui_turbo_mode=true; fi
 
 # concatenate parameters in order to fix issue when calling casperjs test
 # $1 left out - filenames with spaces have issue when casperjs $params

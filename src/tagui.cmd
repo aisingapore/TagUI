@@ -14,7 +14,7 @@ rem enable windows for loop advanced flow control
 setlocal enableextensions enabledelayedexpansion
 
 if "%~1"=="" (
-echo tagui v6.71: use following options and this syntax to run - tagui flow_filename option^(s^)
+echo tagui v6.72: use following options and this syntax to run - tagui flow_filename option^(s^)
 echo.
 echo tagui live     launch TagUI live mode enabled with visual automation for interactive development
 echo tagui update   download and update to latest TagUI version ^(please backup your version beforehand^)
@@ -24,6 +24,7 @@ echo -deploy    -d  generate .cmd file which can be double-clicked to run workfl
 echo -headless  -h  run on invisible Chrome web browser instead of visible as default ^(first install Chrome^)
 echo -nobrowser -n  run without any web browser, for example to perform automation only with visual automation
 echo -report    -r  track run result in tagui\src\tagui_report.csv and save html log of automation execution
+echo -turbo     -t  run automation at 10X the speed of normal human user ^(read the caveats in usage guide!^)
 echo -quiet     -q  run without output except for explicit output ^(echo, show, check steps and errors etc^)
 echo -edge      -e  run TagUI using Microsoft Edge instead of Google Chrome ^(can be used with -headless^)
 echo.
@@ -931,6 +932,74 @@ if "%arg8%"=="-s" (
 if "%arg9%"=="-s" (
 	set arg9=
 	set tagui_speed_mode=true
+)
+
+set tagui_turbo_mode=false
+rem check turbo parameter to run automation at 10X the speed of normal human user
+if "%arg2%"=="-turbo" (
+	set arg2=
+	set tagui_turbo_mode=true
+)
+if "%arg3%"=="-turbo" (
+	set arg3=
+	set tagui_turbo_mode=true
+)
+if "%arg4%"=="-turbo" (
+	set arg4=
+	set tagui_turbo_mode=true
+)
+if "%arg5%"=="-turbo" (
+	set arg5=
+	set tagui_turbo_mode=true
+)
+if "%arg6%"=="-turbo" (
+	set arg6=
+	set tagui_turbo_mode=true
+)
+if "%arg7%"=="-turbo" (
+	set arg7=
+	set tagui_turbo_mode=true
+)
+if "%arg8%"=="-turbo" (
+	set arg8=
+	set tagui_turbo_mode=true
+)
+if "%arg9%"=="-turbo" (
+	set arg9=
+	set tagui_turbo_mode=true
+)
+
+if "%arg2%"=="-t" (
+	set arg2=
+	set tagui_turbo_mode=true
+)
+if "%arg3%"=="-t" (
+	set arg3=
+	set tagui_turbo_mode=true
+)
+if "%arg4%"=="-t" (
+	set arg4=
+	set tagui_turbo_mode=true
+)
+if "%arg5%"=="-t" (
+	set arg5=
+	set tagui_turbo_mode=true
+)
+if "%arg6%"=="-t" (
+	set arg6=
+	set tagui_turbo_mode=true
+)
+if "%arg7%"=="-t" (
+	set arg7=
+	set tagui_turbo_mode=true
+)
+if "%arg8%"=="-t" (
+	set arg8=
+	set tagui_turbo_mode=true
+)
+if "%arg9%"=="-t" (
+	set arg9=
+	set tagui_turbo_mode=true
 )
 
 rem concatenate parameters in order to fix issue when calling casperjs test
