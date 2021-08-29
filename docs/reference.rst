@@ -711,7 +711,7 @@ Tracks flow run result in ``tagui/src/tagui_report.csv`` and saves html logs of 
 
 -turbo or -t
 ********************
-Run automation at 10X the speed of normal human user. Read the caveats at Advanced concepts section!
+Run automation at 10X the speed of normal human user. Read caveats at Advanced concepts!
 
 -quiet or -q
 ********************
@@ -719,7 +719,7 @@ Runs without output to command prompt except for explicit output (echo, show, ch
 
 -edge or -e
 ********************
-Runs using Microsoft Edge web browser instead of Google Chrome (can be used with -headless option).
+Runs using Microsoft Edge browser instead of Chrome (can be used with -headless option).
 
 my_datatable.csv
 ********************
