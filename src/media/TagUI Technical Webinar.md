@@ -31,6 +31,7 @@ My team-mate Ruth is now working on free video courses for TagUI. For now, follo
 - Slide deck - https://drive.google.com/file/d/1pltAMzr0MZsttgg1w2ORH3ontR6Q51W9/view
 - Intro webinar -  https://www.youtube.com/watch?v=hKc4eNBhMws
 - Technical webinar - https://www.youtube.com/watch?v=C5itbB3sCq0
+- Podcast - https://botnirvana.org/podcast/tagui/
 - Usage guide -  https://tagui.readthedocs.io/en/latest/  
 - Simple examples -  https://github.com/kelaberetiv/TagUI/tree/master/flows/samples
 - Advance examples - https://github.com/aimakerspace/TagUI-Bricks
