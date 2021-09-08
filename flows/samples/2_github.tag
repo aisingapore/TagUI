@@ -3,9 +3,10 @@
 // Visit the webpage
 https://github.com/kelaberetiv/TagUI
 
-// Save the text from the element using XPath and calls it 'license_type',
-// then show it on the console
+// Save text from the element using XPath into variable license_type,
+// then show the variable value on the console using echo step
 // Learn XPath: https://www.w3schools.com/xml/xpath_intro.asp
+// XPath Cheatsheet: https://www.linkedin.com/posts/kensoh_xpath-rpa-tagui-activity-6829673864633704448-Iw-D
 read (//*[@class="mt-3"])[3] to license_type
 echo `license_type`
 
