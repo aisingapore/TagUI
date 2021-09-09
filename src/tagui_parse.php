@@ -515,6 +515,7 @@ case "r": return r_intent($script_line); break;
 case "py": return py_intent($script_line); break;	
 case "vision": return vision_intent($script_line); break;
 case "timeout": return timeout_intent($script_line); break;
+case "excel": return excel_intent($script_line); break;
 case "code": return code_intent($script_line); break;
 default: echo "ERROR - " . current_line() . " cannot understand step " . $script_line . "\n";}}
 
@@ -607,8 +608,14 @@ if ($lc_raw_intent=="py") return "py";
 if ($lc_raw_intent=="vision") return "vision";
 if ($lc_raw_intent=="timeout") return "timeout";
 
+// check using regex for excel assignment
+if (is_excel($raw_intent)) return "excel";
+
 // final check for recognized code before returning error 
 if (is_code($raw_intent)) return "code"; else return "error";}
+
+function is_excel($raw_intent) {if (strpos($raw_intent,"=") === false) return false;
+return preg_match('/\[.*\.(x.*|csv)\].*![A-Z0-9]*/i', $raw_intent);}
 
 function is_code($raw_intent) {
 // due to asynchronous waiting for element, if/for/while can work for parsing single step
@@ -1107,6 +1114,13 @@ $params = trim(substr($raw_intent." ",1+strpos($raw_intent." "," ")));
 if ($params == "") echo "ERROR - " . current_line() . " time in seconds missing for " . $raw_intent . "\n";
 else return "casper.then(function() {"."casper.options.waitTimeout = " . (floatval($params)*1000) . 
 "; sikuli_timeout(" . floatval($params) . ");" . end_fi()."});"."\n\n";}
+
+function excel_intent($raw_intent) {$excel_params = explode("=", $raw_intent);
+$left_param = trim($excel_params[0]); $right_param = trim($excel_params[1]);
+if (($left_param == "") or ($right_param == ""))
+echo "ERROR - " . current_line() . " parameter missing for " . $raw_intent . "\n";
+else return "casper.then(function() { // start of JS code\nexcel_step('" . 
+$left_param . "','" . $right_param . "');\n}); // end of JS code"."\n\n";}
 
 function code_intent($raw_intent) {
 $params = parse_condition($raw_intent);

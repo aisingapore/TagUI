@@ -116,6 +116,23 @@ else break;} // if searching for table cells (th and td) is not successful, mean
 if (row_data.substr(0,2) == '",') {row_data = row_data.substr(2); row_data += '"'; append_text(file_name,row_data);}
 else return true;}} // if '",' is not found, means end of table is reached as there is no cell found in row
 
+// for reading from excel target
+function read_excel(input_excel) {
+return 'excel data placeholder';}
+
+// for writing to excel target
+function write_excel(output_excel, output_data) {
+return 'write status placeholder';}
+
+// for running excel assignment statements
+function excel_step(left_param, right_param) {
+// first, retrieve data for variable on right side of = sign
+if (right_param.match(/\[.*\.(x.*|csv)\].*![A-Z0-9]*/i) == null)
+var right_variable = eval(right_param); else var right_variable = read_excel(right_param);
+// second, assign data from right side of = sign to the left
+if (left_param.match(/\[.*\.(x.*|csv)\].*![A-Z0-9]*/i) == null)
+eval(left_param + ' = right_variable'); else write_excel(left_param, right_variable);}
+
 // for translating multi-language flows (comments in translate.php)
 function translate(script_line,direction,language) {var start_keywords = '|click|rclick|dclick|tap|move|hover|'+
 'type|enter|select|choose|read|fetch|show|print|save|echo|dump|write|snap|ask|table|mouse|keyboard|wait|live|'+
@@ -823,6 +840,7 @@ case 'r': return r_intent(live_line); break;
 case 'py': return py_intent(live_line); break;
 case 'vision': return vision_intent(live_line); break;
 case 'timeout': return timeout_intent(live_line); break;
+case 'excel': return excel_intent(live_line); break;
 case 'code': return code_intent(live_line); break;
 default: return "this.echo('ERROR - cannot understand step " + live_line.replace(/'/g,'\\\'') + "')";}}
 
@@ -934,8 +952,14 @@ if (lc_raw_intent == 'py') return 'py';
 if (lc_raw_intent == 'vision') return 'vision';
 if (lc_raw_intent == 'timeout') return 'timeout';
 
+// check using regex for excel assignment
+if (is_excel(raw_intent)) return 'excel';
+
 // final check for recognized code before returning error
 if (is_code(raw_intent)) return 'code'; else return 'error';}
+
+function is_excel(raw_intent) {if (raw_intent.indexOf('=') == -1) return false;
+if (raw_intent.match(/\[.*\.(x.*|csv)\].*![A-Z0-9]*/i) == null) return false; else return true;}
 
 function is_code(raw_intent) {
 // due to asynchronous waiting for element, if/for/while can work for parsing single step
@@ -1325,6 +1349,11 @@ function timeout_intent(raw_intent) {raw_intent = eval("'" + escape_bs(raw_inten
 var params = ((raw_intent + ' ').substr(1+(raw_intent + ' ').indexOf(' '))).trim();
 if (params == '') return "this.echo('ERROR - time in seconds missing for " + raw_intent + "')";
 else return check_chrome_context("casper.options.waitTimeout = " + (parseFloat(params)*1000).toString() + "; sikuli_timeout(" + parseFloat(params).toString() + ");");}
+
+function excel_intent(raw_intent) {raw_intent = eval("'" + escape_bs(raw_intent) + "'"); // support dynamic variables
+var excel_params=raw_intent.split('='); var left_param=excel_params[0].trim(); var right_param=excel_params[1].trim();
+if ((left_param == '') || (right_param == '')) return "this.echo('ERROR - parameter missing for " + raw_intent + "')";
+else return "excel_step('" + left_param + "','" + right_param + "')";}
 
 function code_intent(raw_intent) { // code to support dynamic variables not applicable
 return check_chrome_context(raw_intent);}
