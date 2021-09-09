@@ -106,11 +106,15 @@ For many steps, you can end the step with ``using ocr`` or ``using OCR`` to tell
 
   click Submit using ocr
 
-  select Dress Color as Dark Blue using OCR
-  
   if exist('Special Offer using ocr')
     click Add To Cart using OCR
 
+  // various usage combinations for select step
+  select Dress Color using OCR as Dark Blue using OCR
+  select dress_color.png as Bright Pink using ocr
+  select Dress Color using OCR as dark_black.png
+  select dress_color.png as bright_white.png
+  
 If you make the background of a UI element in a ``.png`` file 100% transparent using an image editor, TagUI will be able to target the element regardless of its background. 
 
 Conversely, you can also remove the foreground content near some anchor element like a frame, to allow you to OCR varying content in the empty area using the **read** step.
