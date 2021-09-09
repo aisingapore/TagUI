@@ -259,14 +259,15 @@ def type_intent ( raw_intent ):
 
 # function for select / choose step
 def select_intent ( raw_intent ):
-	if using_ocr(raw_intent):
-		ocr_locator = True
-		raw_intent = raw_intent[:-9].strip()
-	else:
-		ocr_locator = False
 	params = (raw_intent + ' ')[1+(raw_intent + ' ').find(' '):].strip()
 	param1 = params[:params.find(' as ')].strip()
 	param2 = params[4+params.find(' as '):].strip()
+	if using_ocr(param2): param2 = param2[:-9].strip()
+	if using_ocr(param1):
+		ocr_locator = True
+		param1 = param1[:-9].strip()
+	else:
+		ocr_locator = False
 	print '[tagui] ACTION - click ' + param1
 	if ocr_locator:
 		if click(text_locator(param1)) == 0:
