@@ -416,6 +416,9 @@ if (substr($script_line,$char_counter,1) == "`")
 {if ($current_context == "string") $current_context = "code"; else $current_context = "string";}
 } return $script_line;}
 
+function esc_bs($script_line) { // helper to escape backslash to echo properly
+if ($script_line == "") return ""; return str_replace("\\","\\\\",$script_line);}
+
 function parse_backticks($script_line) {
 // check existence of objects or keywords by searching for `object or keyword name`, then expand from repository
 // check for even number of ` to reduce false-positive because backtick syntax is supposed to be matching pairs
@@ -895,9 +898,9 @@ $param1 = trim(substr($params,0,strrpos($params," to "))); $param2 = trim(substr
 if ($params == "") echo "ERROR - " . current_line() . " variable missing for " . $raw_intent . "\n";
 else if (strrpos($params," to ")!==false)
 return "casper.then(function() {".
-"{techo('".$safe_intent."');\nsave_text('".abs_file($param2)."','".add_concat($param1)."');}".end_fi()."});"."\n\n";
+"{techo('".esc_bs($safe_intent)."');\nsave_text('".abs_file($param2)."','".add_concat($param1)."');}".end_fi()."});"."\n\n";
 else return "casper.then(function() {".
-"{techo('".$safe_intent."');\nsave_text('','" . add_concat($params) . "');}".end_fi()."});"."\n\n";}
+"{techo('".esc_bs($safe_intent)."');\nsave_text('','" . add_concat($params) . "');}".end_fi()."});"."\n\n";}
 
 function write_intent($raw_intent) {
 $safe_intent = str_replace("'","\'",$raw_intent); // avoid breaking echo below when single quote is used
@@ -907,9 +910,9 @@ $param1 = trim(substr($params,0,strrpos($params," to "))); $param2 = trim(substr
 if ($params == "") echo "ERROR - " . current_line() . " variable missing for " . $raw_intent . "\n";
 else if (strrpos($params," to ")!==false)
 return "casper.then(function() {".
-"{techo('".$safe_intent."');\nappend_text('".abs_file($param2)."','".add_concat($param1)."');}".end_fi()."});"."\n\n";
+"{techo('".esc_bs($safe_intent)."');\nappend_text('".abs_file($param2)."','".add_concat($param1)."');}".end_fi()."});"."\n\n";
 else return "casper.then(function() {".
-"{techo('".$safe_intent."');\nappend_text('','" . add_concat($params) . "');}".end_fi()."});"."\n\n";}
+"{techo('".esc_bs($safe_intent)."');\nappend_text('','" . add_concat($params) . "');}".end_fi()."});"."\n\n";}
 
 function load_intent($raw_intent) {
 $safe_intent = str_replace("'","\'",$raw_intent); // avoid breaking echo below when single quote is used
@@ -918,9 +921,9 @@ $params = trim(substr($raw_intent." ",1+strpos($raw_intent." "," ")));
 $param1 = trim(substr($params,0,strrpos($params," to "))); $param2 = trim(substr($params,4+strrpos($params," to ")));
 if ($params == "") echo "ERROR - " . current_line() . " filename missing for " . $raw_intent . "\n";
 else if (strrpos($params," to ")!==false)
-return "casper.then(function() {"."{techo('".$safe_intent."');\nvar fs = require('fs'); ".$param2." = '';\n".
+return "casper.then(function() {"."{techo('".esc_bs($safe_intent)."');\nvar fs = require('fs'); ".$param2." = '';\n".
 	"if (fs.exists('".abs_file($param1)."'))\n".$param2." = fs.read('".abs_file($param1)."').trim();\n".
-	"else this.echo('ERROR - cannot find file ".$param1."').exit();}".end_fi()."});"."\n\n";
+	"else this.echo('ERROR - cannot find file ".esc_bs($param1)."').exit();}".end_fi()."});"."\n\n";
 else echo "ERROR - " . current_line() . " variable missing for " . $raw_intent . "\n";}
 
 function snap_intent($raw_intent) {$twb = $GLOBALS['tagui_web_browser'];

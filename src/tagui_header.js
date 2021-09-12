@@ -1024,6 +1024,9 @@ escaped_string = escaped_string.replace(/\t/g,'\\t').replace(/\f/g,'\\f').replac
 escaped_string = escaped_string.replace(/\[SINGLE_QUOTE_FOR_VARIABLE_HANDLING\]/g,'\'');
 return escaped_string.replace(/\[DOUBLE_QUOTE_FOR_VARIABLE_HANDLING\]/g,'\"');}
 
+function esc_bs(input_string) { // helper to escape backslash to echo properly
+if (!input_string) return ''; input_string = String(input_string); return input_string.replace(/\\/g,'\\\\');}
+
 function is_coordinates(input_params) { // helper function to check if string is (x,y) coordinates
 if ((input_params.length > 4) && (input_params.substr(0,1) == '(') && (input_params.substr(-1) == ')') 
 && (input_params.split(',').length == 2 || input_params.split(',').length == 3) 
@@ -1215,8 +1218,8 @@ var param1 = (params.substr(0,params.lastIndexOf(' to '))).trim();
 var param2 = (params.substr(4+params.lastIndexOf(' to '))).trim();
 if (params == '') return "this.echo('ERROR - filename missing for " + raw_intent + "')";
 else if (params.lastIndexOf(' to ') > -1)
-return "var fs = require('fs'); " + param2 + " = ''; if (fs.exists('" + abs_file(param1) + "')) " + param2 +  " = fs.read('" + abs_file(param1) + "').trim(); else this.echo('ERROR - cannot find file " + param1 + "')"; else
-return "this.echo('ERROR - variable missing for " + raw_intent + "')";}
+return "var fs = require('fs'); " + param2 + " = ''; if (fs.exists('" + abs_file(param1) + "')) " + param2 +  " = fs.read('" + abs_file(param1) + "').trim(); else this.echo('ERROR - cannot find file " + esc_bs(param1) + "')"; else
+return "this.echo('ERROR - variable missing for " + esc_bs(raw_intent) + "')";}
 
 function snap_intent(raw_intent) {raw_intent = eval("'" + escape_bs(raw_intent) + "'"); // support dynamic variables
 var params = ((raw_intent + ' ').substr(1+(raw_intent + ' ').indexOf(' '))).trim();
