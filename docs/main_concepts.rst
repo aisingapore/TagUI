@@ -309,7 +309,7 @@ In below example, we check if a variable row_count, which we assigned a value ea
 
 .. code-block:: none
 
-  if row_count equals 5
+  if row_count equals to 5
     some steps
 
 Here’s how we check if it is more than or less than 5:
