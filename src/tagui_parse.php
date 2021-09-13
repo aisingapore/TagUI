@@ -637,7 +637,7 @@ if (substr($raw_intent,0,7)=="chrome.") return true; // chrome object for chrome
 if (substr($raw_intent,0,10)=="clipboard(") return true; // for handling clipboard('text')
 if (substr($raw_intent,0,7)=="timer()") return true; // for handling timer() function
 if (substr($raw_intent,0,5)=="test.") {$GLOBALS['test_automation']++; return true;}
-if (substr($raw_intent,0,2)=="//") {$GLOBALS['real_line_number']--; return true;} 
+if (substr($raw_intent,0,2)=="//") {$GLOBALS['real_line_number'] = $GLOBALS['real_line_number'] - 0.5; return true;} 
 if (substr($raw_intent,-1)==";") return true; if (substr($raw_intent,0,9)=="function ") return true;
 // assume = is assignment statement, kinda acceptable as this is checked at the very end
 if (strpos($raw_intent,"=")!==false) return true; return false;}
