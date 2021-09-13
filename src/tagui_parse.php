@@ -898,9 +898,9 @@ $param1 = trim(substr($params,0,strrpos($params," to "))); $param2 = trim(substr
 if ($params == "") echo "ERROR - " . current_line() . " variable missing for " . $raw_intent . "\n";
 else if (strrpos($params," to ")!==false)
 return "casper.then(function() {".
-"{techo('".esc_bs($safe_intent)."');\nsave_text('".abs_file($param2)."','".add_concat($param1)."');}".end_fi()."});"."\n\n";
+"{techo('"."dump ".$param1." to ".esc_bs($param2)."');\nsave_text('".abs_file($param2)."','".add_concat($param1)."');}".end_fi()."});"."\n\n";
 else return "casper.then(function() {".
-"{techo('".esc_bs($safe_intent)."');\nsave_text('','" . add_concat($params) . "');}".end_fi()."});"."\n\n";}
+"{techo('".$safe_intent."');\nsave_text('','" . add_concat($params) . "');}".end_fi()."});"."\n\n";}
 
 function write_intent($raw_intent) {
 $safe_intent = str_replace("'","\'",$raw_intent); // avoid breaking echo below when single quote is used
@@ -910,9 +910,9 @@ $param1 = trim(substr($params,0,strrpos($params," to "))); $param2 = trim(substr
 if ($params == "") echo "ERROR - " . current_line() . " variable missing for " . $raw_intent . "\n";
 else if (strrpos($params," to ")!==false)
 return "casper.then(function() {".
-"{techo('".esc_bs($safe_intent)."');\nappend_text('".abs_file($param2)."','".add_concat($param1)."');}".end_fi()."});"."\n\n";
+"{techo('"."write ".$param1." to ".esc_bs($param2)."');\nappend_text('".abs_file($param2)."','".add_concat($param1)."');}".end_fi()."});"."\n\n";
 else return "casper.then(function() {".
-"{techo('".esc_bs($safe_intent)."');\nappend_text('','" . add_concat($params) . "');}".end_fi()."});"."\n\n";}
+"{techo('".$safe_intent."');\nappend_text('','" . add_concat($params) . "');}".end_fi()."});"."\n\n";}
 
 function load_intent($raw_intent) {
 $safe_intent = str_replace("'","\'",$raw_intent); // avoid breaking echo below when single quote is used
