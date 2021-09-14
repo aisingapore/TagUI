@@ -47,8 +47,18 @@ A datatable (``trade_data.csv``) could look like this:
 3 Trade EURUSD test_account  12345678 EURUSD 100000 BUY
 = ============ ============= ======== ====== ====== =========
 
-To use it, you run your flow with ``tagui my_flow.tag trade_data.csv``. TagUI will run ``my_flow.tag`` once for each row in the datatable (except the header). Within the flow, TagUI can use the variables ``trade``, ``username``, ``password``, etc as if they were in the :ref:`local object repository <object-repository>` and the values will be from that run's row. To know which iteration your flow is in you can use the ``iteration`` variable.
+To use it, you run your flow with ``tagui my_flow.tag trade_data.csv``. TagUI will run ``my_flow.tag`` once for each row in the datatable (except for the header).
 
+Within the flow, TagUI can use the variables ``trade``, ``username``, ``password``, etc as if they were in the :ref:`local object repository <object-repository>` and the values will be from that run's row.
+
+To know which iteration your flow is in you can use the ``iteration`` variable::
+
+  echo current iteration: `iteration`
+  if iteration equals to 1
+    // go to login URL and do the login steps
+    www.xero.com
+
+  // do rest of the steps for every iteration
 
 .. _object-repository:
 
