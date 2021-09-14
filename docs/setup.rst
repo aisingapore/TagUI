@@ -6,7 +6,7 @@ Windows
 
 You can use `TagUI Windows Installer <https://github.com/kelaberetiv/TagUI/releases/download/v6.46.0/TagUI_Windows.exe>`_ or the steps below. If you use TagUI Windows Installer, please specify an installation folder which you have write permission to, for example ``C:\RPA`` or a ``RPA`` folder on your Windows Deskop. After installation, you can continue from step 6.
 
-To install TagUI Microsoft Word Plug-in (a full-featured RPA studio to make RPA very accessible), download the `MS Word Plug-in installer <https://github.com/kelaberetiv/TagUI/releases/download/v6.64.0/TagUIWordAddInSetupv3.10.zip>`_, unzip the file and double-click Setup.exe. Download the `MS Excel Plug-in installer <https://github.com/kelaberetiv/TagUI/releases/download/v6.64.0/TagUIExcelAddInSetupv3.06.zip>`_ to configure RPA data and parameters in Excel and run TagUI from Excel.
+To install TagUI Microsoft Word Plug-in (a full-featured RPA studio to make RPA very accessible), download the `MS Word Plug-in installer <https://github.com/kelaberetiv/TagUI/releases/download/v6.64.0/TagUIWordAddInSetupv3.10.zip>`_, unzip the file and double-click Setup.exe. Download the `MS Excel Plug-in installer <https://github.com/kelaberetiv/TagUI/releases/download/v6.64.0/TagUIExcelAddInSetupv3.06.zip>`_ to define RPA data and parameters in Excel and run TagUI from Excel.
 
 1. `Download TagUI v6.46 for Windows <https://github.com/kelaberetiv/TagUI/releases/download/v6.46.0/TagUI_Windows.zip>`_
 
@@ -28,7 +28,7 @@ To install TagUI Microsoft Word Plug-in (a full-featured RPA studio to make RPA 
 
 8. :ref:`Having problems? Click here.<troubleshooting-windows>` You have run your first TagUI flow! 🎉
 
-9. Optionally run ``tagui update`` to get the `latest features and bug fixes <https://github.com/kelaberetiv/TagUI/issues?q=is%3Aissue+is%3Aopen+in%3Atitle+fixed+OR+done+>`_
+9. **Finally, be sure to run** ``tagui update`` to get the `latest features and bug fixes <https://github.com/kelaberetiv/TagUI/issues?q=is%3Aissue+is%3Aopen+in%3Atitle+fixed+OR+done+>`_
 
 macOS / Linux
 -----------------------------------
@@ -52,4 +52,4 @@ macOS / Linux
 
 7. :ref:`Having problems? Click here.<troubleshooting-macos-linux>` You have run your first TagUI flow! 🎉
 
-8. Optionally run ``tagui update`` to get the `latest features and bug fixes <https://github.com/kelaberetiv/TagUI/issues?q=is%3Aissue+is%3Aopen+in%3Atitle+fixed+OR+done+>`_
+8. **Finally, be sure to run** ``tagui update`` to get the `latest features and bug fixes <https://github.com/kelaberetiv/TagUI/issues?q=is%3Aissue+is%3Aopen+in%3Atitle+fixed+OR+done+>`_
