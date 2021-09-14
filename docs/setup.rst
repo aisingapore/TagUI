@@ -28,7 +28,7 @@ Windows
 
 9. **Make sure to run** ``tagui update`` to get the `latest features and bug fixes <https://github.com/kelaberetiv/TagUI/issues?q=is%3Aissue+is%3Aopen+in%3Atitle+fixed+OR+done+>`_
 
-10. To install TagUI Microsoft Word Plug-in (a full-featured RPA studio to make RPA very easy), download the `MS Word Plug-in installer <https://github.com/kelaberetiv/TagUI/releases/download/v6.64.0/TagUIWordAddInSetupv3.10.zip>`_, unzip the file and double-click Setup.exe. Download the `MS Excel Plug-in installer <https://github.com/kelaberetiv/TagUI/releases/download/v6.64.0/TagUIExcelAddInSetupv3.06.zip>`_ to define RPA data and parameters in Excel and run TagUI from Excel.
+10. To install TagUI Microsoft Word Plug-in (a full-featured RPA studio to make RPA very easy), download the `MS Word Plug-in installer <https://github.com/kelaberetiv/TagUI/releases/download/v6.64.0/TagUIWordAddInSetupv3.10.zip>`_, unzip the file and double-click Setup.exe. Download `MS Excel Plug-in installer <https://github.com/kelaberetiv/TagUI/releases/download/v6.64.0/TagUIExcelAddInSetupv3.06.zip>`_ to define RPA data parameters in Excel and run TagUI from Excel.
 
 macOS / Linux
 -----------------------------------
