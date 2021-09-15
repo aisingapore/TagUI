@@ -618,6 +618,7 @@ if (is_excel($raw_intent)) return "excel";
 if (is_code($raw_intent)) return "code"; else return "error";}
 
 function is_excel($raw_intent) {if (strpos($raw_intent,"=") === false) return false;
+if (strpos($raw_intent,"//") === 0) return false; // skip processing if commented out
 return preg_match('/\[.*\.(x.*|csv)\].*![A-Z0-9]*/i', $raw_intent);}
 
 function is_code($raw_intent) {
@@ -1121,9 +1122,9 @@ else return "casper.then(function() {"."casper.options.waitTimeout = " . (floatv
 function excel_intent($raw_intent) {$excel_params = explode("=", $raw_intent);
 $left_param = trim($excel_params[0]); $right_param = trim($excel_params[1]);
 if (($left_param == "") or ($right_param == ""))
-echo "ERROR - " . current_line() . " parameter missing for " . $raw_intent . "\n";
-else return "casper.then(function() { // start of JS code\nexcel_step('" . 
-$left_param . "','" . $right_param . "');\n}); // end of JS code"."\n\n";}
+echo "ERROR - " . current_line() . " parameter missing for " . $raw_intent . "\n"; else
+return "casper.then(function() { // start Excel step\nexcel_retrieve('".$right_param."');\n}); // end Excel step"."\n\n".
+"casper.then(function() { // start Excel step\nexcel_assign('".$left_param."');\n}); // end Excel step"."\n\n";}
 
 function code_intent($raw_intent) {
 $params = parse_condition($raw_intent);

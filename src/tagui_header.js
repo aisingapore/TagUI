@@ -60,6 +60,9 @@ var api_result = ''; var api_json = {}; var run_result = ''; var run_json = {};
 // variables for R and Python integration execution result
 var r_result = ''; var r_json = {}; var py_result = ''; var py_json = {};
 
+// variables for Excel integration execution result
+var excel_result = ''; var excel_json = {};
+
 // track begin-finish blocks for integrations eg - py, r, run, vision, js, dom
 var inside_py_block = 0; var inside_r_block = 0; var inside_run_block = 0;
 var inside_vision_block = 0; var inside_js_block = 0; var inside_dom_block = 0;
@@ -118,20 +121,37 @@ else return true;}} // if '",' is not found, means end of table is reached as th
 
 // for reading from excel target
 function read_excel(input_excel) {
-return 'excel data placeholder';}
+var workbook_file = input_excel.split(']')[0].slice(1).trim(); input_excel = input_excel.split(']')[1]; 
+var sheet_name = input_excel.split('!')[0].trim(); var cell_range = input_excel.split('!')[1].trim();
+var excel_steps = 'tell application "Microsoft Excel"\r\n\tselect worksheet "' + sheet_name + '"\r\n'
+excel_steps += '\tget value of range "' + cell_range +  '"\r\nend tell';
+save_text('excel_steps.scpt', excel_steps);
+casper.waitForExec('osascript excel_steps.scpt', null, function(response) {excel_result = '';
+excel_result = (response.data.stdout.trim() || response.data.stderr.trim());
+excel_json = response.data;}, function() {this.echo('ERROR - Excel automation exceeded '+(casper.options.waitTimeout/1000).toFixed(1)+'s timeout').exit();},casper.options.waitTimeout);}
 
 // for writing to excel target
-function write_excel(output_excel, output_data) {
-return 'write status placeholder';}
+function write_excel(output_excel) {
+var workbook_file = output_excel.split(']')[0].slice(1).trim(); output_excel = output_excel.split(']')[1];
+var sheet_name = output_excel.split('!')[0].trim(); var cell_range = output_excel.split('!')[1].trim();
+var excel_steps = 'tell application "Microsoft Excel"\r\n\tselect worksheet "' + sheet_name + '"\r\n'
+excel_steps += '\tset value of range "' + cell_range +  '" to "' + excel_result + '"\r\nend tell';
+save_text('excel_steps.scpt', excel_steps);
+casper.waitForExec('osascript excel_steps.scpt', null, function(response) {excel_result = '';
+excel_result = (response.data.stdout.trim() || response.data.stderr.trim());
+excel_json = response.data;}, function() {this.echo('ERROR - Excel automation exceeded '+(casper.options.waitTimeout/1000).toFixed(1)+'s timeout').exit();},casper.options.waitTimeout);}
 
-// for running excel assignment statements
-function excel_step(left_param, right_param) {
-// first, retrieve data for variable on right side of = sign
-if (right_param.match(/\[.*\.(x.*|csv)\].*![A-Z0-9]*/i) == null)
-var right_variable = eval(right_param); else var right_variable = read_excel(right_param);
-// second, assign data from right side of = sign to the left
-if (left_param.match(/\[.*\.(x.*|csv)\].*![A-Z0-9]*/i) == null)
-eval(left_param + ' = right_variable'); else write_excel(left_param, right_variable);}
+// for excel statements - retrieving data for variable on right side of = sign
+// broken into 2 functions for excel_result to be usable with CasperJS structure
+function excel_retrieve(right_param) {if (right_param.match(/\[.*\.(x.*|csv)\].*![A-Z0-9]*/i) == null)
+{excel_result = ''; excel_result = eval(right_param);}
+else if (excel_result == '[LIVE_MODE]') {excel_result = 'reading from Excel not supported in live mode'}
+else {excel_result = ''; read_excel(right_param);}}
+
+// for excel statements - assigning data to variable on left side of = sign
+// broken into 2 functions for excel_result to be usable with CasperJS structure
+function excel_assign(left_param) {if (left_param.match(/\[.*\.(x.*|csv)\].*![A-Z0-9]*/i) == null)
+eval(left_param + ' = excel_result'); else write_excel(left_param);}
 
 // for translating multi-language flows (comments in translate.php)
 function translate(script_line,direction,language) {var start_keywords = '|click|rclick|dclick|tap|move|hover|'+
@@ -959,6 +979,7 @@ if (is_excel(raw_intent)) return 'excel';
 if (is_code(raw_intent)) return 'code'; else return 'error';}
 
 function is_excel(raw_intent) {if (raw_intent.indexOf('=') == -1) return false;
+if (raw_intent.indexOf('//') == 0) return false; // skip processing if commented out 
 if (raw_intent.match(/\[.*\.(x.*|csv)\].*![A-Z0-9]*/i) == null) return false; else return true;}
 
 function is_code(raw_intent) {
@@ -1356,7 +1377,7 @@ else return check_chrome_context("casper.options.waitTimeout = " + (parseFloat(p
 function excel_intent(raw_intent) {raw_intent = eval("'" + escape_bs(raw_intent) + "'"); // support dynamic variables
 var excel_params=raw_intent.split('='); var left_param=excel_params[0].trim(); var right_param=excel_params[1].trim();
 if ((left_param == '') || (right_param == '')) return "this.echo('ERROR - parameter missing for " + raw_intent + "')";
-else return "excel_step('" + left_param + "','" + right_param + "')";}
+else return "excel_result = '[LIVE_MODE]'; excel_retrieve('" + right_param + "'); excel_assign('" + left_param + "')";}
 
 function code_intent(raw_intent) { // code to support dynamic variables not applicable
 return check_chrome_context(raw_intent);}
