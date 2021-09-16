@@ -78,6 +78,9 @@
 /src/tagui.sikuli/SikuliX*
 /src/tagui.sikuli/runsikulix*
 
+# exclude local files for excel integration
+/src/excel_steps.scpt
+
 # exclude local files for catboost integration
 /src/catboost/*
 

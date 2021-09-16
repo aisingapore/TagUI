@@ -1120,7 +1120,8 @@ else return "casper.then(function() {"."casper.options.waitTimeout = " . (floatv
 "; sikuli_timeout(" . floatval($params) . ");" . end_fi()."});"."\n\n";}
 
 function excel_intent($raw_intent) {$excel_params = explode("=", $raw_intent);
-$left_param = trim($excel_params[0]); $right_param = trim($excel_params[1]);
+$left_param = trim($excel_params[0]); $right_param = trim($excel_params[1]); if ($excel_params[2])
+$right_param .= '=' . trim($excel_params[2]); // to handle case of formula assignments eg "=A1"
 if (($left_param == "") or ($right_param == ""))
 echo "ERROR - " . current_line() . " parameter missing for " . $raw_intent . "\n"; else
 return "casper.then(function() { // start Excel step\nexcel_retrieve('".$right_param."');\n}); // end Excel step"."\n\n".
