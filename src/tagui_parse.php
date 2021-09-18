@@ -619,7 +619,7 @@ if (is_code($raw_intent)) return "code"; else return "error";}
 
 function is_excel($raw_intent) {if (strpos($raw_intent,"=") === false) return false;
 if (strpos($raw_intent,"//") === 0) return false; // skip processing if commented out
-return preg_match('/\[.*\.(x.*|csv)\].*![A-Z0-9]*/i', $raw_intent);}
+return preg_match('/\[.*\.(xl.|xl..|xml|csv)\].*![A-Z0-9]*/i', $raw_intent);}
 
 function is_code($raw_intent) {
 // due to asynchronous waiting for element, if/for/while can work for parsing single step
@@ -1122,9 +1122,12 @@ else return "casper.then(function() {"."casper.options.waitTimeout = " . (floatv
 function excel_intent($raw_intent) {$excel_params = explode("=", $raw_intent);
 $left_param = trim($excel_params[0]); $right_param = trim($excel_params[1]); if ($excel_params[2])
 $right_param .= '=' . trim($excel_params[2]); // to handle case of formula assignments eg "=A1"
+$left_param = esc_bs($left_param); $right_param = esc_bs($right_param); // to escape backslash \ in Windows folder paths
+$left_param = str_replace("\\\\'", "\\'", $left_param); $right_param = str_replace("\\\\'", "\\'", $right_param);
 if (($left_param == "") or ($right_param == ""))
 echo "ERROR - " . current_line() . " parameter missing for " . $raw_intent . "\n"; else
-return "casper.then(function() { // start Excel step\nexcel_retrieve('".$right_param."');\n}); // end Excel step"."\n\n".
+return "casper.then(function() { // start Excel step\ntecho('".$left_param." = ".$right_param."'); ".
+"excel_retrieve('".$right_param."');\n}); // end Excel step"."\n\n".
 "casper.then(function() { // start Excel step\nexcel_assign('".$left_param."');\n}); // end Excel step"."\n\n";}
 
 function code_intent($raw_intent) {

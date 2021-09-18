@@ -61,7 +61,7 @@ var api_result = ''; var api_json = {}; var run_result = ''; var run_json = {};
 var r_result = ''; var r_json = {}; var py_result = ''; var py_json = {};
 
 // variables for Excel integration execution result
-var excel_result = ''; var excel_json = {};
+var excel_result = ''; var excel_json = {}; var excel_files = [];
 
 // track begin-finish blocks for integrations eg - py, r, run, vision, js, dom
 var inside_py_block = 0; var inside_r_block = 0; var inside_run_block = 0;
@@ -136,11 +136,18 @@ var width = col_end_count - col_start_count + 1; return [width,height];}
 function read_excel(input_excel) { // for reading from excel target
 var workbook_file = input_excel.split(']')[0].slice(1).trim(); input_excel = input_excel.split(']')[1]; 
 var sheet_name = input_excel.split('!')[0].trim(); var cell_range = input_excel.split('!')[1].trim();
-var excel_steps = 'tell application "Microsoft Excel"\r\n\tselect worksheet "' + sheet_name + '"\r\n'
-excel_steps += '\tget value of range "' + cell_range +  '"\r\nend tell';
-save_text('excel_steps.scpt', excel_steps);
+workbook_file = abs_file(workbook_file); if (excel_files.indexOf(workbook_file) == -1) excel_files.push(workbook_file);
+var fs = require('fs'); if (!fs.exists(workbook_file))
+casper.echo('ERROR - cannot find Excel file ' + workbook_file).exit();
+var excel_steps = 'tell application "Microsoft Excel"\r\n\tactivate\r\n\t' +
+'open workbook workbook file name POSIX file "' + workbook_file + '"\r\n\t' +
+'if not exists sheet "' + sheet_name + '" then\r\n\t\t' +
+'do shell script "echo ERROR - cannot find Excel sheet ' + sheet_name + '"\r\n\telse\r\n\t\t' +
+'select worksheet "' + sheet_name + '"\r\n\t\t' + 'get value of range "' + cell_range + '"\r\n\t' +
+'end if\r\nend tell'; save_text('excel_steps.scpt', excel_steps);
 casper.waitForExec('osascript excel_steps.scpt', null, function(response) {excel_result = '';
 excel_result = (response.data.stdout.trim() || response.data.stderr.trim());
+if (excel_result.indexOf('ERROR - cannot find Excel sheet') !== -1) casper.echo(excel_result).exit();
 var range_size = excel_range_to_size(cell_range); if (range_size[0] > 1 || range_size[1] > 1)
 {excel_result += ' '; excel_result = excel_result.split(', '); var excel_array = [];
 for (row = 0; row < range_size[1]; row++) {excel_array.push(excel_result.splice(0, range_size[0]));}
@@ -149,28 +156,69 @@ if (excel_array[row][col] && !isNaN(excel_array[row][col])) excel_array[row][col
 excel_result = excel_array;} else if (excel_result && !isNaN(excel_result)) excel_result = Number(excel_result);
 excel_json = response.data;}, function() {this.echo('ERROR - Excel automation exceeded '+(casper.options.waitTimeout/1000).toFixed(1)+'s timeout').exit();},casper.options.waitTimeout);}
 
+function size_to_excel_range(cell, width, height) { // for converting array to range
+var row_start = parseInt(cell.match(/\d+/g)); var row_end = row_start + height - 1;
+var col_start = cell.match(/[a-zA-Z]+/g)[0].toUpperCase(); var col_end = col_start;
+var first_char = ''; var mid_char = ''; var last_char = '';
+if (col_end.length == 1) {first_char = '-'; mid_char = '-'; last_char = col_end;}
+else if (col_end.length == 2) {first_char = '-'; mid_char = col_end[0]; last_char = col_end[1];}
+else {first_char = col_end[0]; mid_char = col_end[1]; last_char = col_end[2];}
+for (count = 0; count < width - 1; count++) {
+last_char = String.fromCharCode(last_char.charCodeAt() + 1); if (last_char != '[') continue; else last_char = 'A';
+if (mid_char == '-') {mid_char = 'A'; continue;}
+else {mid_char = String.fromCharCode(mid_char.charCodeAt() + 1); if (mid_char != '[') continue; else mid_char = 'A';
+if (first_char == '-') {first_char = 'A'; continue;}
+else first_char = String.fromCharCode(first_char.charCodeAt() + 1);}}
+col_end = first_char + mid_char + last_char; col_end = col_end.replace(/-/g,'');
+return cell + ':' + col_end + row_end.toString();}
+
 function write_excel(output_excel) { // for writing to excel target
 var workbook_file = output_excel.split(']')[0].slice(1).trim(); output_excel = output_excel.split(']')[1];
 var sheet_name = output_excel.split('!')[0].trim(); var cell_range = output_excel.split('!')[1].trim();
-var excel_steps = 'tell application "Microsoft Excel"\r\n\tselect worksheet "' + sheet_name + '"\r\n'
-excel_steps += '\tset value of range "' + cell_range +  '" to ' + excel_result + '\r\nend tell';
-save_text('excel_steps.scpt', excel_steps);
+cell_range = cell_range.split(':')[0]; // truncate to get starting cell to write various data types
+excel_result = JSON.stringify(excel_result).replace(/\[/g,'{').replace(/\]/g,'}')
+if (excel_result.charAt(0) == '{' && excel_result.charAt(excel_result.length - 1) == '}')
+{var data = JSON.parse(excel_result.replace(/{/g,'[').replace(/}/g,']'));
+cell_range = size_to_excel_range(cell_range, data[0].length, data.length);}
+workbook_file = abs_file(workbook_file); if (excel_files.indexOf(workbook_file) == -1) excel_files.push(workbook_file); 
+var excel_steps = ''; var fs = require('fs'); if (!fs.exists(workbook_file))
+excel_steps = 'tell application "Microsoft Excel"\r\n\tactivate\r\n\t' + 'set myWorkbook to make new workbook\r\n\t' +
+'save workbook as myWorkbook filename POSIX file "' + workbook_file + '"\r\n\t' + 'end tell\r\n\r\n';
+excel_steps += 'tell application "Microsoft Excel"\r\n\tactivate\r\n\t' +
+'open workbook workbook file name POSIX file "' + workbook_file + '"\r\n\t' +
+'if not exists sheet "' + sheet_name + '" then\r\n\t\t' +
+'make new worksheet at end of active workbook with properties {name:"' + sheet_name + '"}\r\n\tend if\r\n\t' +
+'select worksheet "' + sheet_name + '"\r\n\t' + 'set value of range "' + cell_range + '" to ' + excel_result + '\r\n' +
+'end tell'; save_text('excel_steps.scpt', excel_steps);
 casper.waitForExec('osascript excel_steps.scpt', null, function(response) {excel_result = '';
 excel_result = (response.data.stdout.trim() || response.data.stderr.trim());
 excel_json = response.data;}, function() {this.echo('ERROR - Excel automation exceeded '+(casper.options.waitTimeout/1000).toFixed(1)+'s timeout').exit();},casper.options.waitTimeout);}
 
 // for excel statements - retrieving data for variable on right side of = sign
 // broken into 2 functions for excel_result to be usable with CasperJS structure
-function excel_retrieve(right_param) {if (right_param.match(/\[.*\.(x.*|csv)\].*![A-Z0-9]*/i) == null)
-{excel_result = ''; if (!Array.isArray(eval(right_param))) excel_result = '"' + eval(right_param) + '"';
-else excel_result = JSON.stringify(eval(right_param)).replace(/\[/g,'{').replace(/\]/g,'}');}
-else if (excel_result == '[LIVE_MODE]') {excel_result = 'reading from Excel not supported in live mode'}
+function excel_retrieve(right_param) { // check OS before starting Excel automation
+if (user_system != 'windows' && user_system != 'mac') {excel_result = '';
+casper.echo('ERROR - Excel automation for Windows and Mac only').exit();}
+if (right_param.match(/\[.*\.(xl.|xl..|xml|csv)\].*![A-Z0-9]*/i) == null)
+{excel_result = ''; excel_result = eval(right_param);}
+else if (excel_result == '[LIVE_MODE]') {excel_result = '';
+casper.echo('ERROR - reading from Excel not supported in live mode');}
 else {excel_result = ''; read_excel(right_param);}}
 
 // for excel statements - assigning data to variable on left side of = sign
 // broken into 2 functions for excel_result to be usable with CasperJS structure
-function excel_assign(left_param) {if (left_param.match(/\[.*\.(x.*|csv)\].*![A-Z0-9]*/i) == null)
+function excel_assign(left_param) {if (left_param.match(/\[.*\.(xl.|xl..|xml|csv)\].*![A-Z0-9]*/i) == null)
 eval(left_param + ' = excel_result'); else write_excel(left_param);}
+
+function excel_close() { // for closing excel files opened by TagUI
+var excel_steps = ''; excel_files.forEach(function(workbook_file) {
+excel_steps += 'tell application "Microsoft Excel"\r\n\tactivate\r\n\t' +
+'open workbook workbook file name POSIX file "' + workbook_file + '"\r\n\t' +
+'close active workbook with saving' + '\r\n' + 'end tell\r\n\r\n';});
+save_text('excel_steps.scpt', excel_steps);
+casper.waitForExec('osascript excel_steps.scpt', null, function(response) {excel_result = '';
+excel_result = (response.data.stdout.trim() || response.data.stderr.trim());
+excel_json = response.data;}, function() {this.echo('ERROR - Excel automation exceeded '+(casper.options.waitTimeout/1000).toFixed(1)+'s timeout').exit();},casper.options.waitTimeout);}
 
 // for translating multi-language flows (comments in translate.php)
 function translate(script_line,direction,language) {var start_keywords = '|click|rclick|dclick|tap|move|hover|'+
@@ -999,7 +1047,7 @@ if (is_code(raw_intent)) return 'code'; else return 'error';}
 
 function is_excel(raw_intent) {if (raw_intent.indexOf('=') == -1) return false;
 if (raw_intent.indexOf('//') == 0) return false; // skip processing if commented out 
-if (raw_intent.match(/\[.*\.(x.*|csv)\].*![A-Z0-9]*/i) == null) return false; else return true;}
+if (raw_intent.match(/\[.*\.(xl.|xl..|xml|csv)\].*![A-Z0-9]*/i) == null) return false; else return true;}
 
 function is_code(raw_intent) {
 // due to asynchronous waiting for element, if/for/while can work for parsing single step
@@ -1394,8 +1442,12 @@ if (params == '') return "this.echo('ERROR - time in seconds missing for " + raw
 else return check_chrome_context("casper.options.waitTimeout = " + (parseFloat(params)*1000).toString() + "; sikuli_timeout(" + parseFloat(params).toString() + ");");}
 
 function excel_intent(raw_intent) {raw_intent = eval("'" + escape_bs(raw_intent) + "'"); // support dynamic variables
+if (user_system != 'windows' && user_system != 'mac')
+{return "excel_result = ''; this.echo('ERROR - Excel automation for Windows and Mac only')";}
 var excel_params=raw_intent.split('='); var left_param=excel_params[0].trim(); var right_param=excel_params[1].trim();
 if (excel_params[2]) right_param += '=' + excel_params[2].trim(); // to handle case of formula assignments eg "=A1"
+left_param = esc_bs(left_param); right_param = esc_bs(right_param); // to escape backslash \ in Windows folder paths
+left_param = left_param.replace(/\\\\'/g, "\\'"); right_param = right_param.replace(/\\\\'/g, "\\'");
 if ((left_param == '') || (right_param == '')) return "this.echo('ERROR - parameter missing for " + raw_intent + "')";
 else return "excel_result = '[LIVE_MODE]'; excel_retrieve('" + right_param + "'); excel_assign('" + left_param + "')";}
 
