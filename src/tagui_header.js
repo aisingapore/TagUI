@@ -150,6 +150,7 @@ excel_result = (response.data.stdout.trim() || response.data.stderr.trim());
 if (excel_result.indexOf('ERROR - cannot find Excel sheet') !== -1) casper.echo(excel_result).exit();
 var range_size = excel_range_to_size(cell_range); if (range_size[0] > 1 || range_size[1] > 1)
 {excel_result += ' '; excel_result = excel_result.split(', '); var excel_array = [];
+excel_result[excel_result.length - 1] = excel_result[excel_result.length - 1].slice(0, -1);
 for (row = 0; row < range_size[1]; row++) {excel_array.push(excel_result.splice(0, range_size[0]));}
 for (row = 0; row < range_size[1]; row++) for (col = 0; col < range_size[0]; col++) {
 if (excel_array[row][col] && !isNaN(excel_array[row][col])) excel_array[row][col] = Number(excel_array[row][col]);}
