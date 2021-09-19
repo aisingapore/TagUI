@@ -317,6 +317,7 @@ namespace TagUIWordAddIn
         }
         private void buttonIf_Click(object sender, RibbonControlEventArgs e)
         {
+            Globals.ThisAddIn.Application.Selection.TypeText("\n");
             Range rng = Globals.ThisAddIn.Application.Selection.Range;
             rng.Delete();
             string text = Globals.ThisAddIn.Application.Selection.Paragraphs[1].Range.Text.ToString();
@@ -329,6 +330,7 @@ namespace TagUIWordAddIn
        // private Microsoft.Office.Tools.Word.RichTextContentControl richTextControl;
         private void buttonLoop_Click(object sender, RibbonControlEventArgs e)
         {
+            Globals.ThisAddIn.Application.Selection.TypeText("\n");
             Range rng = Globals.ThisAddIn.Application.Selection.Range;
             rng.Delete();
             string text = Globals.ThisAddIn.Application.Selection.Paragraphs[1].Range.Text.ToString();
@@ -816,7 +818,7 @@ namespace TagUIWordAddIn
                     }
                     Run newRun = paragraph.AppendChild(new Run());
                     string workingFolder = GetWorkingFolderPath(deploy);
-                    newRun.AppendChild(new Text("tagui " + workingFolder + "WorkFlow" + subFlowCount + ".tag"));
+                    newRun.AppendChild(new Text("tagui " + workingFolder + "WorkFlow" + subFlowTotal + ".tag"));
                     subFlowFilePaths.Add(subflowAbsFilePath);
 
 
