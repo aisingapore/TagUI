@@ -199,7 +199,7 @@ excel_json = response.data;}, function() {this.echo('ERROR - Excel automation ex
 // broken into 2 functions for excel_result to be usable with CasperJS structure
 function excel_retrieve(right_param) { // check OS before starting Excel automation
 if (user_system != 'windows' && user_system != 'mac') {excel_result = '';
-casper.echo('ERROR - Excel automation for Windows and Mac only').exit();}
+casper.echo('ERROR - Excel automation only for Windows and Mac').exit();}
 if (right_param.match(/\[.*\.(xl.|xl..|xml|csv)\].*![A-Z0-9]*/i) == null)
 {excel_result = ''; excel_result = eval(right_param);}
 else if (excel_result == '[LIVE_MODE]') {excel_result = '';
@@ -1444,7 +1444,7 @@ else return check_chrome_context("casper.options.waitTimeout = " + (parseFloat(p
 
 function excel_intent(raw_intent) {raw_intent = eval("'" + escape_bs(raw_intent) + "'"); // support dynamic variables
 if (user_system != 'windows' && user_system != 'mac')
-{return "excel_result = ''; this.echo('ERROR - Excel automation for Windows and Mac only')";}
+{return "excel_result = ''; this.echo('ERROR - Excel automation only for Windows and Mac')";}
 var excel_params=raw_intent.split('='); var left_param=excel_params[0].trim(); var right_param=excel_params[1].trim();
 if (excel_params[2]) right_param += '=' + excel_params[2].trim(); // to handle case of formula assignments eg "=A1"
 left_param = esc_bs(left_param); right_param = esc_bs(right_param); // to escape backslash \ in Windows folder paths
