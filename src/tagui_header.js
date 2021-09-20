@@ -155,7 +155,7 @@ for (row = 0; row < range_size[1]; row++) {excel_array.push(excel_result.splice(
 for (row = 0; row < range_size[1]; row++) for (col = 0; col < range_size[0]; col++) {
 if (excel_array[row][col] && !isNaN(excel_array[row][col])) excel_array[row][col] = Number(excel_array[row][col]);}
 excel_result = excel_array;} else if (excel_result && !isNaN(excel_result)) excel_result = Number(excel_result);
-excel_json = response.data;}, function() {this.echo('ERROR - Excel automation exceeded '+(casper.options.waitTimeout/1000).toFixed(1)+'s timeout').exit();},casper.options.waitTimeout);}
+excel_json = response.data;}, function() {this.echo('ERROR - Excel automation exceeded '+(3 * casper.options.waitTimeout/1000).toFixed(1)+'s timeout').exit();},(3 * casper.options.waitTimeout));}
 
 function size_to_excel_range(cell, width, height) { // for converting array to range
 var row_start = parseInt(cell.match(/\d+/g)); var row_end = row_start + height - 1;
@@ -193,7 +193,7 @@ excel_steps += 'tell application "Microsoft Excel"\r\n\tactivate\r\n\t' +
 'end tell'; save_text('excel_steps.scpt', excel_steps);
 casper.waitForExec('osascript excel_steps.scpt', null, function(response) {excel_result = '';
 excel_result = (response.data.stdout.trim() || response.data.stderr.trim());
-excel_json = response.data;}, function() {this.echo('ERROR - Excel automation exceeded '+(casper.options.waitTimeout/1000).toFixed(1)+'s timeout').exit();},casper.options.waitTimeout);}
+excel_json = response.data;}, function() {this.echo('ERROR - Excel automation exceeded '+(3 * casper.options.waitTimeout/1000).toFixed(1)+'s timeout').exit();},(3 * casper.options.waitTimeout));}
 
 // for excel statements - retrieving data for variable on right side of = sign
 // broken into 2 functions for excel_result to be usable with CasperJS structure
@@ -219,7 +219,7 @@ excel_steps += 'tell application "Microsoft Excel"\r\n\tactivate\r\n\t' +
 save_text('excel_steps.scpt', excel_steps);
 casper.waitForExec('osascript excel_steps.scpt', null, function(response) {excel_result = '';
 excel_result = (response.data.stdout.trim() || response.data.stderr.trim());
-excel_json = response.data;}, function() {this.echo('ERROR - Excel automation exceeded '+(casper.options.waitTimeout/1000).toFixed(1)+'s timeout').exit();},casper.options.waitTimeout);}
+excel_json = response.data;}, function() {this.echo('ERROR - Excel automation exceeded '+(3 * casper.options.waitTimeout/1000).toFixed(1)+'s timeout').exit();},(3 * casper.options.waitTimeout));}
 
 // for translating multi-language flows (comments in translate.php)
 function translate(script_line,direction,language) {var start_keywords = '|click|rclick|dclick|tap|move|hover|'+
