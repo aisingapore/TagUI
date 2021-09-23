@@ -853,7 +853,7 @@ $params = trim(substr($raw_intent." ",1+strpos($raw_intent." "," ")));
 if (substr($params,0,3) != "to ") $params = "to " . $params; // handle user missing out to separator
 $param1 = trim(substr($params,0,strpos($params,"to "))); $param2 = trim(substr($params,3+strpos($params,"to ")));
 if ($param2 == "") echo "ERROR - " . current_line() . " location missing for " . $raw_intent . "\n";
-else return "casper.then(function() {"."{techo('".$raw_intent."');\n".$twb.".download('".abs_file($param2)."');}".end_fi()."});"."\n\n";}
+else return "casper.then(function() {"."{techo('".esc_bs($raw_intent)."');\n".$twb.".download('".abs_file($param2)."');}".end_fi()."});"."\n\n";}
 
 function receive_intent($raw_intent) {$twb = $GLOBALS['tagui_web_browser'];
 $params = trim(substr($raw_intent." ",1+strpos($raw_intent." "," ")));
