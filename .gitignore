@@ -80,6 +80,7 @@
 
 # exclude local files for excel integration
 /src/excel_steps.scpt
+/src/excel_steps.vbs
 
 # exclude local files for catboost integration
 /src/catboost/*
