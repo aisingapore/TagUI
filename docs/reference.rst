@@ -271,28 +271,11 @@ If the response is in JSON, ``api_json`` will automatically be created.
 Excel
 ********************
 
-Perform read, write, copy, delete actions on Excel files. Works with both Windows and Mac Excel apps. See `this link <https://github.com/kelaberetiv/TagUI/issues/1081#issuecomment-902058917>`_ for notes of passed test cases and known limitations for this feature.
-
-write
-###################
-Write data to Excel files. Both relative and absolute file paths supported. If the specified file does not exist, a new file will be created. If the specified sheet does not exist, a new sheet will be created.
-
-.. code-block:: none
-
-  [workbook]sheet!cell = variable
-
-*Examples*
-
-.. code-block:: none
-
-  [Monthly Report.xlsx]August!E10 = 12345
-  [Monthly Report.xlsx]August!E11 = "Alan"
-  [Quarterly Metrics.xlsx]Main!B3 = data_array
-  [C:\Reports\June.xls]Sheet1!A1 = [[1, 2, 3], [4, 5, 6]]
+Perform read, write, copy, delete actions on Excel files. Works with both Windows and Mac Excel apps. `See this link <https://github.com/kelaberetiv/TagUI/issues/1081#issuecomment-902058917>`_ for notes of passed test cases and known limitations for this feature.
 
 read
 ###################
-Read data from Excel files. Both relative and absolute file paths supported. Error will be shown if the specified file or sheet does not exist.
+Read data from Excel files. Both relative and absolute file paths supported. Error will be shown if the specified file or sheet does not exist. ``range`` can be a cell or range in Excel.
 
 .. code-block:: none
 
@@ -307,9 +290,26 @@ Read data from Excel files. Both relative and absolute file paths supported. Err
   data_array = [Quarterly Metrics.xlsx]Main!B3:G100
   data_array = [C:\Reports\June.xls]Sheet1!A1:C2
 
+write
+###################
+Write data to Excel files. Both relative and absolute file paths supported. If the specified file does not exist, a new file will be created. If the sheet does not exist, a new sheet will be created.
+
+.. code-block:: none
+
+  [workbook]sheet!cell = variable
+
+*Examples*
+
+.. code-block:: none
+
+  [Monthly Report.xlsx]August!E10 = 12345
+  [Monthly Report.xlsx]August!E11 = "Alan"
+  [Quarterly Metrics.xlsx]Main!B3 = data_array
+  [C:\Reports\June.xls]Sheet1!A1 = [[1, 2, 3], [4, 5, 6]]
+
 copy
 ###################
-Copy data across Excel files. Both relative and absolute file paths supported. Error will be shown if the specified source file or sheet does not exist. If the specified destination file does not exist, a new file will be created. If the specified destination sheet does not exist, a new sheet will be created.
+Copy data across Excel files. Both relative and absolute file paths supported. Error will be shown if the specified source file or sheet does not exist. If the specified destination file does not exist, a new file will be created. If the destination sheet does not exist, a new sheet will be created.
 
 .. code-block:: none
 
@@ -398,8 +398,10 @@ Saves text to a new file.
   dump [text] to [filename]
   dump [`variable`] to [filename]
 
-See :ref:`dump <dump>` for examples.
+.. code-block:: none
 
+  // creates blank CSV file with header
+  dump First Name,Last Name to names.csv
 
 write
 #####################
