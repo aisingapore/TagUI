@@ -150,17 +150,6 @@ You can also use an image as the target, just like with the **click** step:
   type some-input.png as some-text
 
 
-assign
-**********
-You can assign values into variables. This makes them easier to reference and work with.
-
-This example uses the ``count()`` :ref:`helper function <helper-functions>`, counts the number of elements found with id/name/text with ‘row’ in them and assigns it to a variable ``row_count`` for later use:
-
-.. code-block:: none
-
-  row_count = count('row')
-
-
 read
 **********
 The **read** step allows you to save text from web elements or from the screen into a variable.
@@ -184,6 +173,18 @@ You can also use XPath to read some attribute values from web elements. This com
 .. code-block:: none
 
   read //some-element/@some-attribute to some-variable
+
+
+assign
+**********
+You can assign values into variables. This makes them easier to reference and work with.
+
+This example uses the ``count()`` :ref:`helper function <helper-functions>`, counts the number of elements found with id/name/text with ‘row’ in them and assigns it to a variable ``row_count`` for later use:
+
+.. code-block:: none
+
+  row_count = count('row')
+
 
 Identifiers
 ---------------

@@ -1,8 +1,8 @@
 Advanced concepts
 ===================
 
-Saving flow run results
--------------------------
+Saving run results of flow
+----------------------------
 You can save an html log of the run and the flow run results to ``tagui/src/tagui_report.csv`` with the ``-report`` option (shortcut ``-r``). ::
 
     tagui my_flow.tag -report
@@ -84,8 +84,8 @@ If ``user-email-textbox`` was the identifier for some web text input, then you c
   type `email` as my_email@email.com
 
 
-Running other flows within a flow
------------------------------------
+Running flows within a flow
+-----------------------------
 A flow can run another flow, like this::
 
   tagui login_crm.tag

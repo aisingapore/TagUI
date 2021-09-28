@@ -10,7 +10,7 @@ Steps
 The steps you can use in TagUI are listed here.
 
 
-Mouse and Keyboard
+Mouse and keyboard
 ********************
 
 .. _click:
@@ -268,7 +268,77 @@ If the response is in JSON, ``api_json`` will automatically be created.
   author = api_json[0].author.login
 
 
-Using Variables
+Excel
+********************
+
+Perform read, write, copy, delete actions on Excel files. Works with both Windows and Mac Excel apps. See `this link <https://github.com/kelaberetiv/TagUI/issues/1081#issuecomment-902058917>`_ for notes of passed test cases and known limitations for this feature.
+
+write
+###################
+Write data to Excel files. Both relative and absolute file paths supported. If the specified file does not exist, a new file will be created. If the specified sheet does not exist, a new sheet will be created.
+
+.. code-block:: none
+
+  [workbook]sheet!cell = variable
+
+*Examples*
+
+.. code-block:: none
+
+  [Monthly Report.xlsx]August!E10 = 12345
+  [Monthly Report.xlsx]August!E11 = "Alan"
+  [Quarterly Metrics.xlsx]Main!B3 = data_array
+  [C:\Reports\June.xls]Sheet1!A1 = [[1, 2, 3], [4, 5, 6]]
+
+read
+###################
+Read data from Excel files. Both relative and absolute file paths supported. Error will be shown if the specified file or sheet does not exist.
+
+.. code-block:: none
+
+  variable = [workbook]sheet!range
+
+*Examples*
+
+.. code-block:: none
+
+  top_profit = [Monthly Report.xlsx]August!E10
+  top_salesman = [Monthly Report.xlsx]August!E11
+  data_array = [Quarterly Metrics.xlsx]Main!B3:G100
+  data_array = [C:\Reports\June.xls]Sheet1!A1:C2
+
+copy
+###################
+Copy data across Excel files. Both relative and absolute file paths supported. Error will be shown if the specified source file or sheet does not exist. If the specified destination file does not exist, a new file will be created. If the specified destination sheet does not exist, a new sheet will be created.
+
+.. code-block:: none
+
+  [workbook]sheet!cell = [workbook]sheet!range 
+
+*Examples*
+
+.. code-block:: none
+
+  [Monthly Report.xlsx]August!A1 = [Jennifer Report.xlsx]August!A1
+  [Monthly Report.xlsx]August!A1 = [Jennifer Report.xlsx]August!A1:E200
+
+delete
+###################
+Delete data in Excel files. Both relative and absolute file paths supported. Error will be shown if the specified file or sheet does not exist.
+
+.. code-block:: none
+
+  [workbook]sheet!cell = ""
+
+*Examples*
+
+.. code-block:: none
+
+  [Monthly Report.xlsx]August!E10 = ""
+  [Quarterly Metrics.xlsx]Main!A1 = [["", "", ""], ["", "", ""]]
+
+
+Using variables
 ********************
 
 read
@@ -314,8 +384,22 @@ Saves text to a variable.
   fullname = firstname + lastname
 
 
-File Saving/Loading 
+File saving/loading 
 ***********************
+
+.. _dump:
+
+dump
+#####################
+Saves text to a new file.
+
+.. code-block:: none
+
+  dump [text] to [filename]
+  dump [`variable`] to [filename]
+
+See :ref:`dump <dump>` for examples.
+
 
 write
 #####################
@@ -332,19 +416,6 @@ Saves a new line of text to an existing file.
 
   write firstname,lastname to names.csv
   write `fullreport` to report.txt
-
-.. _dump:
-
-dump
-#####################
-Saves text to a new file.
-
-.. code-block:: none
-
-  dump [text] to [filename]
-  dump [`variable`] to [filename]
-
-See :ref:`dump <dump>` for examples.
 
 
 load
@@ -526,7 +597,7 @@ Runs Sikuli code.
 
 dom
 ####################
-Runs code in the browser dom and saves the stdout to the variable ``dom_result``.
+Runs code in the browser dom and saves returned value to the variable ``dom_result``.
 
 .. code-block:: none
 
@@ -540,7 +611,11 @@ Runs code in the browser dom and saves the stdout to the variable ``dom_result``
 
 .. code-block:: none
 
-  dom intro = document.getElementById("intro")
+  // goes back to previous page
+  dom window.history.back()
+
+  // returns text of an element
+  dom return document.querySelector('#some_id').textContent
 
 
 r
