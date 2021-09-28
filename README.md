@@ -14,7 +14,7 @@ Write flows in simple TagUI language and automate away repetitive time-consuming
 
 # Language designed for RPA
 
-In TagUI language, you use steps like `click` and `type` to interact with identifiers, which include web identifiers, image snapshots, screen coordinates, or even text using OCR. Below is an example to login to Xero accounting:
+In TagUI language, you use steps like `click` and `type` to interact with identifiers, which include web identifiers, image snapshots, screen coordinates, or [even text using OCR](https://tagui.readthedocs.io/en/latest/advanced.html#visual-automation-tricks). Below is an example to login to Xero accounting:
 
 ```
 https://login.xero.com/identity/user/login
@@ -25,27 +25,27 @@ click Log in
 ```
 ```
 // besides web identifiers, images of UI elements can be used
+
 type email_box.png as user@gmail.com
 type password_box.png as 12345678
 click login_button.png
 ```
-```
-// (x,y) coordinates of user-interface elements can also be used
-type (720,400) as user@gmail.com
-type (720,440) as 12345678
-click (720,500)
-```
 
-Grabbing data from a table on a website can be as easy as below (where n is the nth table on the webpage)
+Grabbing data from a table on a website can be [as easy as below](https://tagui.readthedocs.io/en/latest/reference.html#table) (where n is the nth table on the webpage)
 
 ```
 table n to forex_rates.csv
 ```
 
-Sending a Telegram notification is trivially easy (first message [@taguibot](https://t.me/taguibot) to authorise it to send messages)
+Moving data between TagUI and Excel is as easy as using [standard Excel formula](https://tagui.readthedocs.io/en/latest/reference.html#excel) that you are familiar with
+```
+top_salesman = [Monthly Report.xlsx]August!E11
+```
+
+Sending a Telegram notification is trivially easy ([first message @taguibot](https://t.me/taguibot) to authorise it to send messages)
 
 ```
-telegram id message
+telegram id Hello World. Olá Mundo. नमस्ते दुनिया. 안녕하세요 세계. 世界,你好。
 ```
 
 # Do RPA with Microsoft Word
