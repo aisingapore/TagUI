@@ -61,7 +61,7 @@ var api_result = ''; var api_json = {}; var run_result = ''; var run_json = {};
 var r_result = ''; var r_json = {}; var py_result = ''; var py_json = {};
 
 // variables for Excel integration execution result
-var excel_result = ''; var excel_json = {}; var excel_files = [];
+var excel_result = ''; var excel_json = {}; var excel_files = []; var excel_focus = false;
 
 // track begin-finish blocks for integrations eg - py, r, run, vision, js, dom
 var inside_py_block = 0; var inside_r_block = 0; var inside_run_block = 0;
@@ -178,7 +178,8 @@ var sheet_name = input_excel.split('!')[0].trim(); var cell_range = input_excel.
 workbook_file = abs_file(workbook_file); if (excel_files.indexOf(workbook_file) == -1) excel_files.push(workbook_file);
 var fs = require('fs'); if (!fs.exists(workbook_file))
 casper.echo('ERROR - cannot find Excel file ' + workbook_file).exit();
-var excel_steps = 'tell application "Microsoft Excel"\r\n\tactivate\r\n\t' +
+var excel_focus_code = ''; if (excel_focus) excel_focus_code = 'activate\r\n\t';
+var excel_steps = 'tell application "Microsoft Excel"\r\n\t' + excel_focus_code +
 'open workbook workbook file name POSIX file "' + workbook_file + '"\r\n\t' +
 'if not exists sheet "' + sheet_name + '" then\r\n\t\t' +
 'do shell script "echo ERROR - cannot find Excel sheet ' + sheet_name + '"\r\n\telse\r\n\t\t' +
@@ -255,10 +256,11 @@ if (excel_result.charAt(0) == '{' && excel_result.charAt(excel_result.length - 1
 {var data = JSON.parse(excel_result.replace(/{/g,'[').replace(/}/g,']'));
 cell_range = size_to_excel_range(cell_range, data[0].length, data.length);}
 workbook_file = abs_file(workbook_file); if (excel_files.indexOf(workbook_file) == -1) excel_files.push(workbook_file); 
+var excel_focus_code = ''; if (excel_focus) excel_focus_code = 'activate\r\n\t';
 var excel_steps = ''; var fs = require('fs'); if (!fs.exists(workbook_file))
-excel_steps = 'tell application "Microsoft Excel"\r\n\tactivate\r\n\t' + 'set myWorkbook to make new workbook\r\n\t' +
+excel_steps = 'tell application "Microsoft Excel"\r\n\t' + excel_focus_code + 'set myWorkbook to make new workbook\r\n\t' +
 'save workbook as myWorkbook filename POSIX file "' + workbook_file + '"\r\n\t' + 'end tell\r\n\r\n';
-excel_steps += 'tell application "Microsoft Excel"\r\n\tactivate\r\n\t' +
+excel_steps += 'tell application "Microsoft Excel"\r\n\t' + excel_focus_code +
 'open workbook workbook file name POSIX file "' + workbook_file + '"\r\n\t' +
 'if not exists sheet "' + sheet_name + '" then\r\n\t\t' +
 'make new worksheet at end of active workbook with properties {name:"' + sheet_name + '"}\r\n\tend if\r\n\t' +
@@ -299,8 +301,9 @@ casper.waitForExec('cscript excel_steps.vbs //NoLogo', null, function(response) 
 excel_result = (response.data.stdout.trim() || response.data.stderr.trim());
 excel_json = response.data;}, function() {this.echo('ERROR - Excel automation exceeded '+(3 * casper.options.waitTimeout/1000).toFixed(1)+'s timeout').exit();},(3 * casper.options.waitTimeout));}
 else if (user_system == 'mac') {
+var excel_focus_code = ''; if (excel_focus) excel_focus_code = 'activate\r\n\t';
 var excel_steps = ''; excel_files.forEach(function(workbook_file) {
-excel_steps += 'tell application "Microsoft Excel"\r\n\tactivate\r\n\t' +
+excel_steps += 'tell application "Microsoft Excel"\r\n\t' + excel_focus_code +
 'open workbook workbook file name POSIX file "' + workbook_file + '"\r\n\t' +
 'close active workbook with saving' + '\r\n' + 'end tell\r\n\r\n';});
 save_text('excel_steps.scpt', excel_steps);
