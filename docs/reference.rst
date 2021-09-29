@@ -273,6 +273,8 @@ Excel
 
 Perform read, write, copy, delete actions on Excel files. Works with both Windows and Mac Excel apps. `See this link <https://github.com/kelaberetiv/TagUI/issues/1081#issuecomment-902058917>`_ for notes of passed test cases and known limitations for this feature.
 
+By default, the Excel app will be opened and run in the background. If you want the automated actions on Excel to be in focus in foreground, you can set it with ``excel_focus = true`` in your workflow. Use ``excel_focus = false`` to set it off again in your workflow.
+
 read
 ###################
 Read data from Excel files. Both relative and absolute file paths supported. Error will be shown if the specified file or sheet does not exist. In below line, range can be a cell or range in Excel.
