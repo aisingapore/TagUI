@@ -324,7 +324,7 @@ Copy data across Excel files. Both relative and absolute file paths supported. E
 
 delete
 ###################
-Delete data in Excel files. Both relative and absolute file paths supported. Error will be shown if the specified file or sheet does not exist. You can delete a range of cells by assigning an empty array to it.
+Delete data in Excel files. Both relative and absolute file paths supported. Error will be shown if the specified file or sheet does not exist. Delete a range of cells by assigning an empty array to it.
 
 .. code-block:: none
 
