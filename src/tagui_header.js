@@ -144,6 +144,8 @@ var sheet_name = input_excel.split('!')[0].trim(); var cell_range = input_excel.
 workbook_file = abs_file(workbook_file); if (excel_files.indexOf(workbook_file) == -1) excel_files.push(workbook_file);
 var fs = require('fs'); if (!fs.exists(workbook_file))
 casper.echo('ERROR - cannot find Excel file ' + workbook_file).exit();
+var excel_focus_code = ''; if (excel_focus) excel_focus_code = '' +
+'CreateObject("WScript.Shell").AppActivate Left(objWorkbook.Name, InStr(objWorkbook.Name, ".") - 1) & " - Excel"\r\n\r\n';
 var excel_steps = 'Dim excelFilename, excelFileOpened, excelSheet\r\nexcelFilename = "' + windows_path(workbook_file) +
 '"\r\nexcelFileOpened = False\r\n\r\n' + 'On Error Resume Next\r\nSet objExcel = GetObject(, "Excel.Application")\r\n' +
 'If Err.Number <> 0 Then\r\n\tSet objExcel = CreateObject("Excel.Application")\r\n\tobjExcel.Visible = True\r\n' +
@@ -151,7 +153,7 @@ var excel_steps = 'Dim excelFilename, excelFileOpened, excelSheet\r\nexcelFilena
 'If excelFilename = objWorkbook.Path & "\\" & objWorkbook.Name Then\r\n\t\t' +
 'Set objWorkbook = GetObject(excelFilename)\r\n\t\texcelFileOpened = True\r\n\t\tExit For\r\n\tEnd If\r\nNext\r\n\r\n' +
 'If excelFileOpened = False Then\r\n\tSet objWorkbook = objExcel.Workbooks.Open(excelFilename)\r\n' + 'End If\r\n\r\n' +
-'CreateObject("WScript.Shell").AppActivate Left(objWorkbook.Name, InStr(objWorkbook.Name, ".") - 1) & " - Excel"\r\n\r\n' +
+excel_focus_code +
 'excelSheet = "' + sheet_name + '"\r\nOn Error Resume Next\r\nSet targetSheet = Nothing\r\n' +
 'Set targetSheet = objWorkbook.Sheets(excelSheet)\r\nOn Error GoTo 0\r\nIf targetSheet Is Nothing Then\r\n\t' +
 'WScript.Echo "ERROR - cannot find Excel sheet " & excelSheet\r\nElse\r\n\tobjWorkbook.Sheets(excelSheet).Activate\r\n\t' +
@@ -229,6 +231,8 @@ for (row = 0; row < range_size[1]; row++) {for (col = 0; col < range_size[0]; co
 array_result += 'objWorkbook.Sheets(excelSheet).Range("' + cell_range + '").Value = arrayData\r\n';
 excel_result = array_result;}
 workbook_file = abs_file(workbook_file); if (excel_files.indexOf(workbook_file) == -1) excel_files.push(workbook_file);
+var excel_focus_code = ''; if (excel_focus) excel_focus_code = '' +
+'CreateObject("WScript.Shell").AppActivate Left(objWorkbook.Name, InStr(objWorkbook.Name, ".") - 1) & " - Excel"\r\n\r\n';
 var excel_steps = ''; var excel_new_file = ''; var fs = require('fs'); if (!fs.exists(workbook_file))
 excel_new_file = 'Set objWorkbook = objExcel.Workbooks.Add\r\n\tobjWorkbook.SaveAs excelFilename\r\n\t';
 excel_steps = 'Dim excelFilename, excelFileOpened, excelSheet\r\nexcelFilename = "' + windows_path(workbook_file) +
@@ -239,7 +243,7 @@ excel_steps = 'Dim excelFilename, excelFileOpened, excelSheet\r\nexcelFilename =
 'Set objWorkbook = GetObject(excelFilename)\r\n\t\texcelFileOpened = True\r\n\t\tExit For\r\n\tEnd If\r\nNext\r\n\r\n' +
 'If excelFileOpened = False Then\r\n\t' + excel_new_file +
 'Set objWorkbook = objExcel.Workbooks.Open(excelFilename)\r\n' + 'End If\r\n\r\n' +
-'CreateObject("WScript.Shell").AppActivate Left(objWorkbook.Name, InStr(objWorkbook.Name, ".") - 1) & " - Excel"\r\n\r\n' +
+excel_focus_code +
 'excelSheet = "' + sheet_name + '"\r\nOn Error Resume Next\r\nSet targetSheet = Nothing\r\n' +
 'Set targetSheet = objWorkbook.Sheets(excelSheet)\r\nOn Error GoTo 0\r\nIf targetSheet Is Nothing Then\r\n\t' +
 'objWorkbook.Sheets.Add.Name = excelSheet\r\nEnd If\r\nobjWorkbook.Sheets(excelSheet).Activate\r\n\r\n' + excel_result;
@@ -289,12 +293,14 @@ eval(left_param + ' = excel_result'); else write_excel(left_param);}
 
 function excel_close() { // for closing excel files opened by TagUI
 if (user_system == 'windows') {
+var excel_focus_code = ''; if (excel_focus) excel_focus_code = '' +
+'CreateObject("WScript.Shell").AppActivate Left(objWorkbook.Name, InStr(objWorkbook.Name, ".") - 1) & " - Excel"\r\n';
 var excel_steps = 'Dim excelFilename\r\n'; excel_files.forEach(function(workbook_file) {
 excel_steps += 'excelFilename = "' + windows_path(workbook_file) + '"\r\n' + 'On Error Resume Next\r\n' +
 'Set objExcel = GetObject(, "Excel.Application")\r\nIf Err.Number = 0 Then\r\n\t' +
 'For Each objWorkbook In objExcel.Workbooks\r\n\t\t' +
 'If excelFilename = objWorkbook.Path & "\\" & objWorkbook.Name Then\r\n\t\t\t' +
-'Set objWorkbook = GetObject(excelFilename)\r\n\t\t\t' + 'objWorkbook.Close True\r\n\t\t\t' + 
+'Set objWorkbook = GetObject(excelFilename)\r\n\t\t\t' + excel_focus_code + '\t\t\tobjWorkbook.Close True\r\n\t\t\t' + 
 'Exit For\r\n\t\tEnd If\r\n\tNext\r\nEnd If\r\nOn Error Goto 0\r\n';});
 save_text('excel_steps.vbs', excel_steps);
 casper.waitForExec('cscript excel_steps.vbs //NoLogo', null, function(response) {excel_result = '';
