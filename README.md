@@ -42,7 +42,7 @@ Moving data between TagUI and Excel is as easy as using [standard Excel formula]
 top_salesman = [Monthly Report.xlsx]August!E11
 ```
 
-Sending a Telegram notification is trivially easy ([first message @taguibot](https://t.me/taguibot) to authorise it to send messages)
+Sending a Telegram notification is trivially easy ([first message @taguibot](https://tagui.readthedocs.io/en/latest/reference.html#telegram) to authorise it to send messages)
 
 ```
 telegram id Hello World. Olá Mundo. नमस्ते दुनिया. 안녕하세요 세계. 世界,你好。
