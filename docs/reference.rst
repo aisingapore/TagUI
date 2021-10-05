@@ -716,7 +716,7 @@ Runs another TagUI flow. Checks the flow's folder.
 
 comment
 ###################
-Adds a comment.
+Adds a comment. If you are inside a code block, for example an if condition or for loop, be sure to indent your comment accordingly to let TagUI run correctly after it converts into JavaScript code.
 
 .. code-block:: none
 
