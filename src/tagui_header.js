@@ -128,6 +128,9 @@ if (!input_range || input_range == '') return [0,0]; else if (input_range.indexO
 var range_start = input_range.split(':')[0].trim(); var range_end = input_range.split(':')[1].trim();
 var row_start = range_start.match(/\d+/g); var row_end = range_end.match(/\d+/g);
 var col_start = range_start.match(/[a-zA-Z]+/g); var col_end = range_end.match(/[a-zA-Z]+/g); 
+// use special number 1234567 to mark column and row selection, since excel max rows is 1048576 and max cols is 16384
+if (row_start == null && row_end == null) return [1,1234567];
+else if (col_start == null && col_end == null) return [1234567,1];
 var height = parseInt(row_end) - parseInt(row_start) + 1;
 col_start = col_start.toString().toUpperCase(); var col_start_count = 0; var col_start_len = col_start.length;
 for (cs_pos = 0; cs_pos < col_start_len; cs_pos++) {
@@ -157,11 +160,13 @@ excel_focus_code +
 'excelSheet = "' + sheet_name + '"\r\nOn Error Resume Next\r\nSet targetSheet = Nothing\r\n' +
 'Set targetSheet = objWorkbook.Sheets(excelSheet)\r\nOn Error GoTo 0\r\nIf targetSheet Is Nothing Then\r\n\t' +
 'WScript.Echo "ERROR - cannot find Excel sheet " & excelSheet\r\nElse\r\n\tobjWorkbook.Sheets(excelSheet).Activate\r\n\t' +
-'Dim arrayData, arrayString\r\n\tarrayData = objWorkbook.Sheets(excelSheet).Range("' + cell_range + '").Value\r\n\t' +
+'Dim arrayData, arrayString\r\n\tarrayData = objWorkbook.Sheets(excelSheet).Range("' +
+cell_range + ' " & objWorkbook.Sheets(excelSheet).UsedRange.Address).Value\r\n\t' +
 'arrayString = ""\r\n\tIf IsArray(arrayData) Then\r\n\t\t' +
 'Dim arrayRow, arrayCol\r\n\t\tFor arrayRow = 1 To UBound(arrayData, 1)\r\n\t\t\t' +
 'For arrayCol = 1 to UBound(arrayData, 2)\r\n\t\t\t\tarrayString = arrayString & arrayData(arrayRow, arrayCol) & ", "' +
-'\r\n\t\t\tNext\r\n\t\tNext\r\n\tElse\r\n\t\tarrayString = arrayData\r\n\tEnd If\r\n\t' +
+'\r\n\t\t\tNext\r\n\t\tNext\r\n\t\tarrayString = Left(arrayString, Len(arrayString) - 2)' +
+'\r\n\tElse\r\n\t\tarrayString = arrayData\r\n\tEnd If\r\n\t' +
 'WScript.Echo arrayString\r\nEnd If\r\n'; save_text('excel_steps.vbs', excel_steps);
 casper.waitForExec('cscript excel_steps.vbs //NoLogo', null, function(response) {excel_result = '';
 excel_result = (response.data.stdout.trim() || response.data.stderr.trim());
@@ -169,6 +174,9 @@ if (excel_result.indexOf('ERROR - cannot find Excel sheet') !== -1) casper.echo(
 var range_size = excel_range_to_size(cell_range); if (range_size[0] > 1 || range_size[1] > 1)
 {excel_result += ' '; excel_result = excel_result.split(', '); var excel_array = [];
 excel_result[excel_result.length - 1] = excel_result[excel_result.length - 1].slice(0, -1);
+// special handling with number 1234567 for column and row selection
+if (range_size[0] == 1234567) range_size[0] = excel_result.length;
+else if (range_size[1] == 1234567) range_size[1] = excel_result.length;
 for (row = 0; row < range_size[1]; row++) {excel_array.push(excel_result.splice(0, range_size[0]));}
 for (row = 0; row < range_size[1]; row++) for (col = 0; col < range_size[0]; col++) {
 if (excel_array[row][col] && !isNaN(excel_array[row][col])) excel_array[row][col] = Number(excel_array[row][col]);}
@@ -185,7 +193,8 @@ var excel_steps = 'tell application "Microsoft Excel"\r\n\t' + excel_focus_code 
 'open workbook workbook file name POSIX file "' + workbook_file + '"\r\n\t' +
 'if not exists sheet "' + sheet_name + '" then\r\n\t\t' +
 'do shell script "echo ERROR - cannot find Excel sheet ' + sheet_name + '"\r\n\telse\r\n\t\t' +
-'select worksheet "' + sheet_name + '"\r\n\t\t' + 'get value of range "' + cell_range + '"\r\n\t' +
+'select worksheet "' + sheet_name + '"\r\n\t\t' +
+'get value of range ("' + cell_range + ' " & get address of used range of active sheet)\r\n\t' +
 'end if\r\nend tell'; save_text('excel_steps.scpt', excel_steps);
 casper.waitForExec('osascript excel_steps.scpt', null, function(response) {excel_result = '';
 excel_result = (response.data.stdout.trim() || response.data.stderr.trim());
@@ -193,6 +202,9 @@ if (excel_result.indexOf('ERROR - cannot find Excel sheet') !== -1) casper.echo(
 var range_size = excel_range_to_size(cell_range); if (range_size[0] > 1 || range_size[1] > 1)
 {excel_result += ' '; excel_result = excel_result.split(', '); var excel_array = [];
 excel_result[excel_result.length - 1] = excel_result[excel_result.length - 1].slice(0, -1);
+// special handling with number 1234567 for column and row selection
+if (range_size[0] == 1234567) range_size[0] = excel_result.length;
+else if (range_size[1] == 1234567) range_size[1] = excel_result.length;
 for (row = 0; row < range_size[1]; row++) {excel_array.push(excel_result.splice(0, range_size[0]));}
 for (row = 0; row < range_size[1]; row++) for (col = 0; col < range_size[0]; col++) {
 if (excel_array[row][col] && !isNaN(excel_array[row][col])) excel_array[row][col] = Number(excel_array[row][col]);}
