@@ -586,6 +586,7 @@ Runs Python code and saves the stdout to the variable ``py_result`` as a string.
   py finish
   echo `py_result`
 
+:ref:`See this link <python>` for more examples and usage patterns on running Python code.
 
 run
 ####################

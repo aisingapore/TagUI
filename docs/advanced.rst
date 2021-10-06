@@ -129,6 +129,7 @@ If you make the background of a UI element in a ``.png`` file 100% transparent u
 
 Conversely, you can also remove the foreground content near some anchor element like a frame, to allow you to OCR varying content in the empty area using the **read** step.
 
+.. _python:
 
 Writing Python within flows
 --------------------------------
@@ -161,6 +162,12 @@ You can pass a variable to Python like this::
   py print(phone)
   echo `py_result`
 
+  name = 'Donald'
+  py_step('name = "' + name + '"')
+  py print(name)
+  echo `py_result`
+
+To pass and return more complex data, for example multiple variables, you can use JavaScript and Python JSON libraries to send and receive back JSON strings. `See an example here <https://github.com/kelaberetiv/TagUI/issues/898#issuecomment-752833953>`_ of passing 2 variables, doing some processing, and returning 2 variables.
 
 Create log files for debugging
 ---------------------------------
