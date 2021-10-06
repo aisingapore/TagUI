@@ -337,7 +337,7 @@ $script_content = str_replace("function sleep(ms) {ms *= 0.1; //","function slee
 $script_content = str_replace("chrome_step('Input.insertText',{text: value});};","for (var character = 0, length = value.length; character < length; character++) {\nchrome_step('Input.dispatchKeyEvent',{type: 'char', text: value[character]});}};",$script_content);
 file_put_contents($script . '.js',$script_content);
 $chrome_php_content = file_get_contents('tagui_chrome.php');
-$chrome_php_content = str_replace("$scan_period = 10000;","$scan_period = 100000;",$chrome_php_content);
+$chrome_php_content = str_replace('$scan_period = 10000;','$scan_period = 100000;',$chrome_php_content);
 file_put_contents('tagui_chrome.php',$chrome_php_content);
 $sikuli_py_content = file_get_contents('tagui.sikuli/tagui.py');
 $sikuli_py_content = str_replace("scan_period = 0.05\n\n# teleport mouse instead of moving to target\nSettings.MoveMouseDelay = 0","scan_period = 0.5",$sikuli_py_content);
@@ -347,7 +347,7 @@ $script_content = str_replace("function sleep(ms) { //","function sleep(ms) {ms 
 $script_content = str_replace("for (var character = 0, length = value.length; character < length; character++) {\nchrome_step('Input.dispatchKeyEvent',{type: 'char', text: value[character]});}};","chrome_step('Input.insertText',{text: value});};",$script_content);
 file_put_contents($script . '.js',$script_content);
 $chrome_php_content = file_get_contents('tagui_chrome.php');
-$chrome_php_content = str_replace("$scan_period = 100000;","$scan_period = 10000;",$chrome_php_content);
+$chrome_php_content = str_replace('$scan_period = 100000;','$scan_period = 10000;',$chrome_php_content);
 file_put_contents('tagui_chrome.php',$chrome_php_content);
 $sikuli_py_content = file_get_contents('tagui.sikuli/tagui.py');
 $sikuli_py_content = str_replace("scan_period = 0.5","scan_period = 0.05\n\n# teleport mouse instead of moving to target\nSettings.MoveMouseDelay = 0",$sikuli_py_content);
