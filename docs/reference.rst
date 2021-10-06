@@ -271,7 +271,7 @@ If the response is in JSON, ``api_json`` will automatically be created.
 Excel
 ********************
 
-Perform read, write, copy, delete actions on Excel files using standard Excel formula like this ``[workbook]sheet!range``. This feature works with both Windows and Mac Excel apps. `See this link <https://github.com/kelaberetiv/TagUI/issues/1081#issuecomment-902058917>`_ for notes of passed test cases and known limitations for this feature.
+Perform read, write, copy, delete actions on Excel files using standard Excel formula like this one ``[workbook]sheet!range``. This feature works with both Windows and Mac Excel apps. `See this link <https://github.com/kelaberetiv/TagUI/issues/1081#issuecomment-902058917>`_ for notes of passed test cases and known limitations for this feature.
 
 By default, the Excel app will be opened and run in the background. If you want the automated actions on Excel to be in focus in foreground, you can set it with ``excel_focus = true`` in your workflow. Use ``excel_focus = false`` to set it off again in your workflow.
 
@@ -283,6 +283,8 @@ Read data from Excel files. Both relative and absolute file paths supported. Err
 
   variable = [workbook]sheet!range
 
+Reading columns and rows can be done using standard Excel formula for range, for example A:A (column A), B:D (columns B to D), 2:2 (row 2), 3:5 (rows 3 to 5). There is no standard Excel formula for selecting the entire range of a sheet, so you will have to specify some dummy huge range (A1:Z1000) or provide the actual range that your automation scenario requires.
+
 *Examples*
 
 .. code-block:: none
@@ -291,6 +293,11 @@ Read data from Excel files. Both relative and absolute file paths supported. Err
   top_salesman = [Monthly Report.xlsx]August!E11
   data_array = [Quarterly Metrics.xlsx]Main!B3:G100
   data_array = [C:\Reports\June.xls]Sheet1!A1:C2
+
+  data_array = [C:\Reports\June.xls]Sheet1!A:A
+  data_array = [C:\Reports\June.xls]Sheet1!B:D
+  data_array = [C:\Reports\June.xls]Sheet1!2:2  
+  data_array = [C:\Reports\June.xls]Sheet1!3:5
 
 write
 ###################
