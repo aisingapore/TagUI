@@ -283,7 +283,7 @@ Read data from Excel files. Both relative and absolute file paths supported. Err
 
   variable = [workbook]sheet!range
 
-Reading columns and rows can be done using standard Excel formula for range, for example A:A (column A), B:D (columns B to D), 2:2 (row 2), 3:5 (rows 3 to 5). There is no standard Excel formula for selecting the entire range of a sheet, so you will have to specify some dummy huge range (A1:Z1000) or provide the actual range that your automation scenario requires.
+Reading columns and rows can be done using standard Excel formula for range, for example A:A (column A), B:D (columns B to D), 2:2 (row 2), 3:5 (rows 3 to 5). There is no standard Excel formula for selecting the entire range of a sheet, so you will have to provide the actual range required.
 
 *Examples*
 
@@ -298,6 +298,15 @@ Reading columns and rows can be done using standard Excel formula for range, for
   data_array = [C:\Reports\June.xls]Sheet1!B:D
   data_array = [C:\Reports\June.xls]Sheet1!2:2  
   data_array = [C:\Reports\June.xls]Sheet1!3:5
+
+TagUI's backend language is JavaScript, thus data_array can be used just like a JavaScript array.
+
+.. code-block:: none
+
+  // to work on data in data_array cell by cell
+  for row from 0 to data_array.length-1
+    for col from 0 to data_array[row].length-1
+      echo `data_array[row][col]` 
 
 write
 ###################
@@ -314,6 +323,12 @@ Write data to Excel files. Both relative and absolute file paths supported. If t
   [Monthly Report.xlsx]August!E10 = 12345
   [Monthly Report.xlsx]August!E11 = "Alan"
   [Quarterly Metrics.xlsx]Main!B3 = data_array
+
+TagUI's backend language is JavaScript, thus range data can be created just like a JavaScript array.
+
+.. code-block:: none
+
+  // to assign a set of range data with 2 rows of 3 columns
   [C:\Reports\June.xls]Sheet1!A1 = [[1, 2, 3], [4, 5, 6]]
 
 copy
