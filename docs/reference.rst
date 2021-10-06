@@ -324,7 +324,7 @@ Write data to Excel files. Both relative and absolute file paths supported. If t
   [Monthly Report.xlsx]August!E11 = "Alan"
   [Quarterly Metrics.xlsx]Main!B3 = data_array
 
-TagUI's backend language is JavaScript, thus range data can be created just like a JavaScript array.
+TagUI's backend language is JavaScript, thus range data can be defined just like a JavaScript array.
 
 .. code-block:: none
 
