@@ -817,7 +817,7 @@ Run automation at 10X the speed of normal human user. Read caveats at Advanced c
 
 -quiet or -q
 ********************
-Runs without output to command prompt except for explicit output (echo, show, check steps and errors etc).
+Runs without output to command prompt except for explicit output (echo, show, check steps and errors etc). To have fine-grained control on showing and hiding output during execution (eg hiding password from showing up), use ``quiet_mode = true`` and ``quiet_mode = false`` in your flow.
 
 -edge or -e
 ********************
