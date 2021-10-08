@@ -285,6 +285,8 @@ Read data from Excel files. Both relative and absolute file paths supported. Err
 
 Reading columns and rows can be done using standard Excel formula for range, for example A:A (column A), B:D (columns B to D), 2:2 (row 2), 3:5 (rows 3 to 5). There is no standard Excel formula for selecting the entire range of a sheet, so you will have to provide the actual range required.
 
+Note - There is a limitation on reading multiple rows and columns, for eg B:D and 3:5 (data array returned will be a 1 x N array instead of M x N array). A search for a reliable way to represent multiple rows and columns selection is underway, and will be implemented as soon as a good solution is found that works for both Windows and Mac Excel apps. In the meantime, you can do such selection by providing the actual range to be selected, for eg B1:D30 and A3:G5 ranges.
+
 *Examples*
 
 .. code-block:: none
