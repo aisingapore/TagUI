@@ -308,7 +308,7 @@ TagUI's backend language is JavaScript, thus data_array can be used just like a 
     for col from 0 to data_array[row].length-1
       echo `data_array[row][col]` 
 
-Note - There is a limitation on reading multiple rows and columns, for eg B:D and 3:5 (data array returned will be a 1 x N array instead of M x N array). A search for a reliable way to represent multiple rows and columns selection is underway, and will be implemented as soon as a good solution is found that works for both Windows and Mac Excel apps. In the meantime, you can do such selection by providing the actual range to be selected, for eg B1:D30 and A3:G5 ranges.
+Note - There was a limitation on reading multiple rows and columns, for eg B:D and 3:5 (data array returned will be a 1 x N array instead of the correct row x column array). This is now fixed in v6.87. Get your copy with ``tagui update`` command or from MS Word Plug-in ``Update TagUI`` button.
 
 write
 ###################
