@@ -595,6 +595,10 @@ function del_chars(source_text, characters) {
             source_text = source_text.replace(/\\/g,'');}
     return source_text;}
 
+// return value of environment variable from operating system
+function get_env(name_of_variable) { // if missing or blank name, or invalid variable, '' will be returned
+if (!name_of_variable || name_of_variable == '') return ''; return require('system').env[name_of_variable];}
+
 // for initialising integration with sikuli visual automation
 function sikuli_handshake() { // techo('[connecting to sikuli process]');
 var ds; if (flow_path.indexOf('/') !== -1) ds = '/'; else ds = '\\'; clear_sikuli_text();
