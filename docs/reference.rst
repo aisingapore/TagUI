@@ -275,6 +275,8 @@ Perform read, write, copy, delete actions on Excel files using standard Excel fo
 
 By default, the Excel app will be opened and run in the background. If you want the automated actions on Excel to be in focus in foreground, you can set it with ``excel_focus = true`` in your workflow. Use ``excel_focus = false`` to set it off again in your workflow.
 
+To use variables in your Excel formula, you can use ``[\`workbook\`.xlsx]\`sheet\`!\`range\```. Various Excel file formats are supported, just be sure to put .extension as part of the formula so that TagUI can recognise that the instruction is an Excel step instead of some JavaScript code. 
+
 read
 ###################
 Read data from Excel files. Both relative and absolute file paths supported. Error will be shown if the specified file or sheet does not exist. In below line, range can be a cell or range in Excel.
@@ -324,6 +326,7 @@ Write data to Excel files. Both relative and absolute file paths supported. If t
 
   [Monthly Report.xlsx]August!E10 = 12345
   [Monthly Report.xlsx]August!E11 = "Alan"
+  [Monthly Report.xlsx]August!E12 = variable
   [Quarterly Metrics.xlsx]Main!B3 = data_array
 
 TagUI's backend language is JavaScript, thus range data can be defined just like a JavaScript array.
@@ -332,6 +335,7 @@ TagUI's backend language is JavaScript, thus range data can be defined just like
 
   // to assign a set of range data with 2 rows of 3 columns
   [C:\Reports\June.xls]Sheet1!A1 = [[1, 2, 3], [4, 5, 6]]
+  [C:\Reports\June.xls]Sheet1!A1 = [[variable_1, variable_2, variable_3], [4, 5, 6]]
 
 copy
 ###################
