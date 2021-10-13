@@ -277,10 +277,10 @@ By default, the Excel app will be opened and run in the background. If you want 
 
 To use variables in your Excel formula, refer to the two examples below. Various Excel file formats are supported, just be sure to put the file's .extension as part of the formula so that TagUI can recognise that the instruction is an Excel step instead of some JavaScript code. 
 
-```
-[`workbook`.xlsx]`sheet`!`range` = 123
-data = [`workbook`.xlsx]`sheet`!`range`
-```
+.. code-block:: none
+
+  [`workbook`.xlsx]`sheet`!`range` = 123
+  data = [`workbook`.xlsx]`sheet`!`range`
 
 read
 ###################
