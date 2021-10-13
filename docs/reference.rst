@@ -1046,3 +1046,20 @@ Cleans data by removing provided character(s) from given text and returning the 
 
   pdf_text = 'Name: John\n State: Texas\t City: Plano\n Contact: ...'
   echo `del_chars(pdf_text, '\n\t:')`
+
+
+get_env()
+********************
+Returns the value of given environment variable from the operating system.
+
+*Examples*
+
+.. code-block:: none
+
+  // getting %USERPROFILE% variable for Windows
+  echo `get_env('USERPROFILE')`
+  home_dir = get_env('USERPROFILE')
+
+  // getting $HOME variable for Mac or Linux
+  echo `get_env('HOME')`
+  home_dir = get_env('HOME')

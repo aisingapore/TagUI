@@ -624,7 +624,9 @@ function del_chars(source_text, characters) {
 
 // return value of environment variable from operating system
 function get_env(name_of_variable) { // if missing or blank name, or invalid variable, '' will be returned
-if (!name_of_variable || name_of_variable == '') return ''; return require('system').env[name_of_variable];}
+if (!name_of_variable || name_of_variable == '') return '';
+var value_of_variable = require('system').env[name_of_variable];
+if (value_of_variable == null) return ''; else return value_of_variable;}
 
 // for initialising integration with sikuli visual automation
 function sikuli_handshake() { // techo('[connecting to sikuli process]');
