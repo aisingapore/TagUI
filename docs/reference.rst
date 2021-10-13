@@ -275,7 +275,12 @@ Perform read, write, copy, delete actions on Excel files using standard Excel fo
 
 By default, the Excel app will be opened and run in the background. If you want the automated actions on Excel to be in focus in foreground, you can set it with ``excel_focus = true`` in your workflow. Use ``excel_focus = false`` to set it off again in your workflow.
 
-To use variables in your Excel formula, you can use `` [`workbook`.xlsx]`sheet`!`range` ``. Various Excel file formats are supported, just be sure to put .extension as part of the formula so that TagUI can recognise that the instruction is an Excel step instead of some JavaScript code. 
+To use variables in your Excel formula, refer to the two examples below. Various Excel file formats are supported, just be sure to put the file's .extension as part of the formula so that TagUI can recognise that the instruction is an Excel step instead of some JavaScript code. 
+
+```
+[`workbook`.xlsx]`sheet`!`range` = 123
+data = [`workbook`.xlsx]`sheet`!`range`
+```
 
 read
 ###################
