@@ -678,14 +678,18 @@ data = [t1.xlsx]fakesheet!A1 = 'A B C'
 data = [t1.csv]Sheet1!A1
 echo `data`
 
-[t7.xlsx]Sheet1!A1 = [[1,2,3],[4,5,6]]
+[t7.xlsx]Sheet1!A1 = [[1,2,3],[4,5,'']]
 data = [t7.xlsx]Sheet1!A:A
+echo `data.length` x `data[0].length`
 echo `data`
-data = [t7.xlsx]Sheet1!A:B
+data = [t7.xlsx]Sheet1!B:C
+echo `data.length` x `data[0].length`
 echo `data`
 data = [t7.xlsx]Sheet1!1:1
+echo `data.length` x `data[0].length`
 echo `data`
 data = [t7.xlsx]Sheet1!1:2
+echo `data.length` x `data[0].length`
 echo `data`
 
 // end of excel integration usage test cases

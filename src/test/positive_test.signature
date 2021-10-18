@@ -3976,7 +3976,7 @@ excel_assign('data');
 casper.then(function() {this.echo(''+data+'');});
 
 casper.then(function() { // start Excel step
-techo('[t7.xlsx]Sheet1!A1 = [[1,2,3],[4,5,6]]'); excel_retrieve('[[1,2,3],[4,5,6]]');
+techo('[t7.xlsx]Sheet1!A1 = [[1,2,3],[4,5,\'\']]'); excel_retrieve('[[1,2,3],[4,5,\'\']]');
 }); // end Excel step
 
 casper.then(function() { // start Excel step
@@ -3991,15 +3991,19 @@ casper.then(function() { // start Excel step
 excel_assign('data');
 }); // end Excel step
 
+casper.then(function() {this.echo(''+data.length+' x '+data[0].length+'');});
+
 casper.then(function() {this.echo(''+data+'');});
 
 casper.then(function() { // start Excel step
-techo('data = [t7.xlsx]Sheet1!A:B'); excel_retrieve('[t7.xlsx]Sheet1!A:B');
+techo('data = [t7.xlsx]Sheet1!B:C'); excel_retrieve('[t7.xlsx]Sheet1!B:C');
 }); // end Excel step
 
 casper.then(function() { // start Excel step
 excel_assign('data');
 }); // end Excel step
+
+casper.then(function() {this.echo(''+data.length+' x '+data[0].length+'');});
 
 casper.then(function() {this.echo(''+data+'');});
 
@@ -4011,6 +4015,8 @@ casper.then(function() { // start Excel step
 excel_assign('data');
 }); // end Excel step
 
+casper.then(function() {this.echo(''+data.length+' x '+data[0].length+'');});
+
 casper.then(function() {this.echo(''+data+'');});
 
 casper.then(function() { // start Excel step
@@ -4020,6 +4026,8 @@ techo('data = [t7.xlsx]Sheet1!1:2'); excel_retrieve('[t7.xlsx]Sheet1!1:2');
 casper.then(function() { // start Excel step
 excel_assign('data');
 }); // end Excel step
+
+casper.then(function() {this.echo(''+data.length+' x '+data[0].length+'');});
 
 casper.then(function() {this.echo(''+data+'');});
 
