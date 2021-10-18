@@ -1020,7 +1020,7 @@ Gets the y coordinate of the current mouse position as a number, eg 200.
 
 get_files()
 ********************
-Returns an array of the list of files and folders in a given folder. Both relative and absolute paths supported.
+Returns an array of files and folders in a given folder. Both relative and absolute paths supported.
 
 *Examples*
 
