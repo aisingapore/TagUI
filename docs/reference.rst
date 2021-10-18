@@ -1018,6 +1018,33 @@ Gets the y coordinate of the current mouse position as a number, eg 200.
   y = mouse_y()
   click (`x`,`y`)
 
+get_files()
+********************
+Returns an array of the list of files and folders in a given folder. Both relative and absolute paths supported.
+
+*Examples*
+
+.. code-block:: none
+
+  // list of files in the same folder as the flow file
+  list = get_files('.')
+
+  // list of files in the Desktop folder of user Alan
+  // note double backslash because of JavaScript string
+  list = get_files('C:\\Users\\Alan\\Desktop')
+
+  // alternatively, use single forward slash instead
+  list = get_files('C:/Users/Alan/Desktop')
+
+  // showing the list of files after retrieving it
+  // JavaScript array start from 0 for 1st element
+  for n from 0 to list.length-1
+    echo `list[n]`
+
+  // checking to process a specific file extension
+  for n from 0 to list.length-1
+    if list[n] contains '.XLSX'
+      echo `list[n]`
 
 get_text()
 ********************

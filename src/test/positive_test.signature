@@ -628,6 +628,12 @@ if (!name_of_variable || name_of_variable == '') return '';
 var value_of_variable = require('system').env[name_of_variable];
 if (value_of_variable == null) return ''; else return value_of_variable;}
 
+// return array of all the files in the given folder
+function get_files(folder_path) {if (!folder_path || folder_path == '') return [];
+if (!require('fs').isDirectory(abs_file(folder_path))) return [];
+var files_array = require('fs').list(abs_file(folder_path));
+return files_array.splice(2, files_array.length - 2);}
+
 // for initialising integration with sikuli visual automation
 function sikuli_handshake() { // techo('[connecting to sikuli process]');
 var ds; if (flow_path.indexOf('/') !== -1) ds = '/'; else ds = '\\'; clear_sikuli_text();
