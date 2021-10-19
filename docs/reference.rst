@@ -273,10 +273,18 @@ Excel
 
 Perform read, write, copy, delete actions on Excel files using standard Excel formula like this one ``[workbook]sheet!range``. This feature works with both Windows and Mac Excel apps. `See this link <https://github.com/kelaberetiv/TagUI/issues/1081#issuecomment-902058917>`_ for notes of passed test cases and known limitations for this feature.
 
+visibility
+###################
 By default, the Excel app will be opened and run in the background. If you want the automated actions on Excel to be in focus in foreground, you can set it with ``excel_focus = true`` in your workflow. Use ``excel_focus = false`` to set it off again in your workflow.
 
 For some usage scenarios, you might not even want the Excel app to be visible in the background. In that case, you can set ``excel_visible = false`` in your workflow to run Excel invisibly. Use ``excel_visible = true`` to make Excel visible again in your RPA workflow.
 
+password
+###################
+For accessing a password-protected Excel file, provide the password with ``excel_password = 'password'``.
+
+variables
+###################
 To use variables in your Excel formula, refer to the two examples below. Various Excel file formats are supported, just be sure to put the file's .extension as part of the formula so that TagUI can recognise that the instruction is an Excel step instead of some JavaScript code. 
 
 .. code-block:: none

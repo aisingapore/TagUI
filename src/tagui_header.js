@@ -149,14 +149,16 @@ var sheet_name = input_excel.split('!')[0].trim(); var cell_range = input_excel.
 workbook_file = abs_file(workbook_file); if (excel_files.indexOf(workbook_file) == -1) excel_files.push(workbook_file);
 var fs = require('fs'); if (!fs.exists(workbook_file))
 casper.echo('ERROR - cannot find Excel file ' + workbook_file).exit();
+var excel_password_code = ''; if (excel_password != '')
+excel_password_code = ',,,,"' + excel_password.replace(/\"/g, '\\"') + '"';
 var excel_visible_code = 'objExcel.Visible = True'; if (!excel_visible) excel_visible_code = 'objExcel.Visible = False';
 var excel_focus_code = ''; if (excel_focus) excel_focus_code = '' +
 'CreateObject("WScript.Shell").AppActivate Left(objWorkbook.Name, InStr(objWorkbook.Name, ".") - 1) & " - Excel"\r\n\r\n';
 var excel_steps = 'Dim excelFilename, excelSheet\r\nexcelFilename = "' + windows_path(workbook_file) +
 '"\r\n\r\n' + 'On Error Resume Next\r\nSet objExcel = GetObject(, "Excel.Application")\r\n' +
 'If Err.Number <> 0 Then\r\n\tSet objExcel = CreateObject("Excel.Application")\r\n' +
-'End If\r\nOn Error Goto 0\r\n\r\n' + 'Set objWorkbook = objExcel.Workbooks.Open(excelFilename)\r\n' +
-excel_visible_code + '\r\n\r\n' + excel_focus_code +
+'End If\r\nOn Error Goto 0\r\n\r\n' + 'Set objWorkbook = objExcel.Workbooks.Open(excelFilename' +
+excel_password_code + ')\r\n' + excel_visible_code + '\r\n\r\n' + excel_focus_code +
 'excelSheet = "' + sheet_name + '"\r\nOn Error Resume Next\r\nSet targetSheet = Nothing\r\n' +
 'Set targetSheet = objWorkbook.Sheets(excelSheet)\r\nOn Error GoTo 0\r\nIf targetSheet Is Nothing Then\r\n\t' +
 'WScript.Echo "ERROR - cannot find Excel sheet " & excelSheet\r\nElse\r\n\tobjWorkbook.Sheets(excelSheet).Activate\r\n\t' +
@@ -260,6 +262,8 @@ for (row = 0; row < range_size[1]; row++) {for (col = 0; col < range_size[0]; co
 array_result += 'objWorkbook.Sheets(excelSheet).Range("' + cell_range + '").Value = arrayData\r\n';
 excel_result = array_result;}
 workbook_file = abs_file(workbook_file); if (excel_files.indexOf(workbook_file) == -1) excel_files.push(workbook_file);
+var excel_password_code = ''; if (excel_password != '')
+excel_password_code = ',,,,"' + excel_password.replace(/\"/g, '\\"') + '"';
 var excel_visible_code = 'objExcel.Visible = True'; if (!excel_visible) excel_visible_code = 'objExcel.Visible = False';
 var excel_focus_code = ''; if (excel_focus) excel_focus_code = '' +
 'CreateObject("WScript.Shell").AppActivate Left(objWorkbook.Name, InStr(objWorkbook.Name, ".") - 1) & " - Excel"\r\n\r\n';
@@ -269,8 +273,8 @@ excel_steps = 'Dim excelFilename, excelSheet\r\nexcelFilename = "' + windows_pat
 '"\r\n\r\n' + 'On Error Resume Next\r\nSet objExcel = GetObject(, "Excel.Application")\r\n' +
 'If Err.Number <> 0 Then\r\n\tSet objExcel = CreateObject("Excel.Application")\r\n' +
 'End If\r\nOn Error Goto 0\r\n\r\n' + excel_new_file +
-'Set objWorkbook = objExcel.Workbooks.Open(excelFilename)\r\n' + excel_visible_code + '\r\n\r\n' +
-excel_focus_code +
+'Set objWorkbook = objExcel.Workbooks.Open(excelFilename' +
+excel_password_code + ')\r\n' + excel_visible_code + '\r\n\r\n' + excel_focus_code +
 'excelSheet = "' + sheet_name + '"\r\nOn Error Resume Next\r\nSet targetSheet = Nothing\r\n' +
 'Set targetSheet = objWorkbook.Sheets(excelSheet)\r\nOn Error GoTo 0\r\nIf targetSheet Is Nothing Then\r\n\t' +
 'objWorkbook.Sheets.Add.Name = excelSheet\r\nEnd If\r\nobjWorkbook.Sheets(excelSheet).Activate\r\n\r\n' + excel_result;
