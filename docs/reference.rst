@@ -271,11 +271,7 @@ If the response is in JSON, ``api_json`` will automatically be created.
 Excel
 ********************
 
-Perform read, write, copy, delete actions on Excel files using standard Excel formula like this one ``[workbook]sheet!range``. This feature works with both Windows and Mac Excel apps. `See this link <https://github.com/kelaberetiv/TagUI/issues/1081#issuecomment-902058917>`_ for notes of passed test cases and known limitations for this feature.
-
-password
-###################
-To access a password-protected Excel file, use ``excel_password = 'password'``.
+Perform read, write, copy, delete actions on Excel files using standard Excel formula like this one ``[workbook]sheet!range``. This feature works with both Windows and Mac Excel apps. `See this link <https://github.com/kelaberetiv/TagUI/issues/1081#issuecomment-902058917>`_ for notes of passed test cases and known limitations for this feature. To access a password-protected Excel file, use ``excel_password = 'password'``.
 
 variables
 ###################
@@ -351,6 +347,16 @@ TagUI's backend language is JavaScript, thus range data can be defined just like
   // to assign a set of range data with 2 rows of 3 columns
   [C:\Reports\June.xls]Sheet1!A1 = [[1, 2, 3], [4, 5, 6]]
   [C:\Reports\June.xls]Sheet1!A1 = [[variable_1, variable_2, variable_3], [4, 5, 6]]
+
+  // example spreadsheet data with #, name and country
+  [Participants.xlsx]Sheet1!A1 = [['1', 'John', 'USA'], [2, 'Jenny', 'Russia'], [3, 'Javier', 'Serbia']]
+
+  // get the next row count for the example spreadsheet
+  column_A = [Participants.xlsx]Sheet1!A:A
+  next_row = column_A.length + 1
+
+  // write a new row accordingly to example spreadsheet
+  [Participants.xlsx]Sheet1!A`next_row` = [[next_row, 'Janice', 'Brazil']]
 
 copy
 ###################
