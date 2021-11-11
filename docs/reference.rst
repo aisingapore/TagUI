@@ -854,11 +854,11 @@ input(s)
 ********************
 Add your own parameter(s) to be used in your automation flow as variables p1 to p8.
 
-For example, from the command prompt, below line runs ``register_class_attendence.tag`` workflow using Microsoft Edge browser and with various student names as inputs. ::
+For example, from the command prompt, below line runs ``register_attendence.tag`` workflow using Microsoft Edge browser and with various student names as inputs. ::
 
-    tagui register_class_attendence.tag -edge Jenny Jason John Joanne
+    tagui register_attendence.tag -edge Jenny Jason John Joanne
 
-Inside the workflow, the variables ``p1``, ``p2``, ``p3``, ``p4`` become available for use as part of the automation, for example filling up the student names into a web form to record their attendence. The following lines in the workflow will output the various student names given as inputs. ::
+Inside the workflow, the variables ``p1``, ``p2``, ``p3``, ``p4`` will be available for use as part of the automation, for example to fill up student names into a web form for recording attendence. The following lines in the workflow will output various student names given as inputs. ::
 
     echo `p1`
     echo `p2`
