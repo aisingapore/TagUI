@@ -818,17 +818,21 @@ For example, the command below runs ``my_flow.tag`` without showing the web brow
     
     tagui my_flow.tag -headless -report
 
+
 -deploy or -d
 ********************
 Deploys a flow, creating a shortcut which can be double-clicked to run the flow. If the flow file is moved, a new shortcut must be created. The flow will be run with all the options used when creating the shortcut.
+
 
 -headless or -h
 ********************
 Runs the flow with an invisible Chrome web browser (does not work for visual automation).
 
+
 -nobrowser or -n
 ********************
 Runs without any web browser, for example to perform automation only with visual automation.
+
 
 -report or -r
 ********************
@@ -850,20 +854,11 @@ my_datatable.csv
 ********************
 Uses the specified csv file as the datatable for batch automation. See :ref:`datatables <datatables>`.
 
+
 input(s)
 ********************
 Add your own parameter(s) to be used in your automation flow as variables p1 to p8.
 
-For example, from the command prompt, below line runs ``register_attendence.tag`` workflow using Microsoft Edge browser and with various student names as inputs. ::
-
-    tagui register_attendence.tag -edge Jenny Jason John Joanne
-
-Inside the workflow, the variables ``p1``, ``p2``, ``p3``, ``p4`` will be available for use as part of the automation, for example to fill up student names into a web form for recording attendence. The following lines in the workflow will output various student names given as inputs. ::
-
-    echo `p1`
-    echo `p2`
-    echo `p3`
-    echo `p4`
 
 See :doc:`other deprecated options </dep_options>`.
 
