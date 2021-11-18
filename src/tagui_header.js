@@ -211,8 +211,8 @@ var excel_steps = 'tell application "Microsoft Excel"\r\n\t' + excel_focus_code 
 'select worksheet "' + sheet_name + '"\r\n\t\t' +
 'set row_count to count of rows of range ("' + cell_range + ' " & get address of used range of active sheet)\r\n\t\t' +
 'set col_count to count of columns of range ("' + cell_range + ' " & get address of used range of active sheet)\r\n\t\t' +
-'get value of range ("' + cell_range + ' " & get address of used range of active sheet) & row_count & col_count\r\n\t' +
-'end if\r\nend tell'; save_text('excel_steps.scpt', excel_steps);
+'get {} & string value of range ("' + cell_range + ' " & get address of used range of active sheet) ' +
+'& row_count & col_count\r\n\tend if\r\nend tell'; save_text('excel_steps.scpt', excel_steps);
 casper.waitForExec('osascript excel_steps.scpt', null, function(response) {excel_result = '';
 excel_result = (response.data.stdout.trim() || response.data.stderr.trim());
 if (excel_result.indexOf('ERROR - cannot find Excel sheet') !== -1) casper.echo(excel_result).exit();
