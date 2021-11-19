@@ -198,15 +198,15 @@ cell_range + ' " & objWorkbook.Sheets(excelSheet).UsedRange.Address).Columns.Cou
 cell_range + ' " & objWorkbook.Sheets(excelSheet).UsedRange.Address).Value\r\n\t' +
 'arrayString = ""\r\n\tIf IsArray(arrayData) Then\r\n\t\t' +
 'Dim arrayRow, arrayCol\r\n\t\tFor arrayRow = 1 To UBound(arrayData, 1)\r\n\t\t\t' +
-'For arrayCol = 1 to UBound(arrayData, 2)\r\n\t\t\t\tarrayString = arrayString & arrayData(arrayRow, arrayCol) & ", "' +
-'\r\n\t\t\tNext\r\n\t\tNext\r\n\t\tarrayString = arrayString & rowCount & ", " & colCount' +
-'\r\n\tElse\r\n\t\tarrayString = arrayData & ", 1, 1"\r\n\tEnd If\r\n\t' +
+'For arrayCol = 1 to UBound(arrayData, 2)\r\n\t\t\t\tarrayString = arrayString & arrayData(arrayRow, arrayCol) & "[EXCEL_DELIMITER]"' +
+'\r\n\t\t\tNext\r\n\t\tNext\r\n\t\tarrayString = arrayString & rowCount & "[EXCEL_DELIMITER]" & colCount' +
+'\r\n\tElse\r\n\t\tarrayString = arrayData & "[EXCEL_DELIMITER]1[EXCEL_DELIMITER]1"\r\n\tEnd If\r\n\t' +
 'WScript.Echo arrayString\r\nEnd If\r\n'; save_text('excel_steps.vbs', excel_steps);
 casper.waitForExec('cscript excel_steps.vbs //NoLogo', null, function(response) {excel_result = '';
 excel_result = (response.data.stdout.trim() || response.data.stderr.trim());
 if (excel_result.indexOf('ERROR - cannot find Excel sheet') !== -1) casper.echo(excel_result).exit();
 var range_size = excel_range_to_size(cell_range); if (range_size[0] > 1 || range_size[1] > 1)
-{excel_result += ' '; excel_result = excel_result.split(', '); var excel_array = [];
+{excel_result += ' '; excel_result = excel_result.split('[EXCEL_DELIMITER]'); var excel_array = [];
 excel_result[excel_result.length - 1] = excel_result[excel_result.length - 1].slice(0, -1);
 // special handling with number 1234567 for column and row selection
 if (range_size[0] == 1234567) {range_size[0] = excel_result.pop(); range_size[1] = excel_result.pop();}
@@ -215,7 +215,7 @@ else {excel_result.pop(); excel_result.pop();} // remove row and column count da
 for (row = 0; row < range_size[1]; row++) {excel_array.push(excel_result.splice(0, range_size[0]));}
 for (row = 0; row < range_size[1]; row++) for (col = 0; col < range_size[0]; col++) {
 if (excel_array[row][col] && !isNaN(excel_array[row][col])) excel_array[row][col] = Number(excel_array[row][col]);}
-excel_result = excel_array;} else {excel_result = excel_result.split(', ')[0];
+excel_result = excel_array;} else {excel_result = excel_result.split('[EXCEL_DELIMITER]')[0];
 if (excel_result && !isNaN(excel_result)) excel_result = Number(excel_result);}
 excel_json = response.data;}, function() {this.echo('ERROR - Excel automation exceeded '+(3 * casper.options.waitTimeout/1000).toFixed(1)+'s timeout').exit();},(3 * casper.options.waitTimeout));}
 else if (user_system == 'mac') {
@@ -238,13 +238,14 @@ var excel_steps = 'tell application "Microsoft Excel"\r\n\t' + excel_focus_code 
 'select worksheet "' + sheet_name + '"\r\n\t\t' +
 'set row_count to count of rows of range ("' + cell_range + ' " & get address of used range of active sheet)\r\n\t\t' +
 'set col_count to count of columns of range ("' + cell_range + ' " & get address of used range of active sheet)\r\n\t\t' +
-'get value of range ("' + cell_range + ' " & get address of used range of active sheet) & row_count & col_count\r\n\t' +
-'end if\r\nend tell'; save_text('excel_steps.scpt', excel_steps);
+'set list_data to {} & string value of range ("' + cell_range + ' " & get address of used range of active sheet) ' +
+'& row_count & col_count\r\n\tend if\r\nend tell\r\n' + 'set text item delimiters to "[EXCEL_DELIMITER]"\r\n' + 
+'get list_data as text'; save_text('excel_steps.scpt', excel_steps);
 casper.waitForExec('osascript excel_steps.scpt', null, function(response) {excel_result = '';
 excel_result = (response.data.stdout.trim() || response.data.stderr.trim());
 if (excel_result.indexOf('ERROR - cannot find Excel sheet') !== -1) casper.echo(excel_result).exit();
 var range_size = excel_range_to_size(cell_range); if (range_size[0] > 1 || range_size[1] > 1)
-{excel_result += ' '; excel_result = excel_result.split(', '); var excel_array = [];
+{excel_result += ' '; excel_result = excel_result.split('[EXCEL_DELIMITER]'); var excel_array = [];
 excel_result[excel_result.length - 1] = excel_result[excel_result.length - 1].slice(0, -1);
 // special handling with number 1234567 for column and row selection
 if (range_size[0] == 1234567) {range_size[0] = excel_result.pop(); range_size[1] = excel_result.pop();}
@@ -253,7 +254,7 @@ else {excel_result.pop(); excel_result.pop();} // remove row and column count da
 for (row = 0; row < range_size[1]; row++) {excel_array.push(excel_result.splice(0, range_size[0]));}
 for (row = 0; row < range_size[1]; row++) for (col = 0; col < range_size[0]; col++) {
 if (excel_array[row][col] && !isNaN(excel_array[row][col])) excel_array[row][col] = Number(excel_array[row][col]);}
-excel_result = excel_array;} else {excel_result = excel_result.split(', ')[0];
+excel_result = excel_array;} else {excel_result = excel_result.split('[EXCEL_DELIMITER]')[0];
 if (excel_result && !isNaN(excel_result)) excel_result = Number(excel_result);}
 excel_json = response.data;}, function() {this.echo('ERROR - Excel automation exceeded '+(3 * casper.options.waitTimeout/1000).toFixed(1)+'s timeout').exit();},(3 * casper.options.waitTimeout));}
 else casper.echo('ERROR - unknown operating system ' + user_system).exit();}
