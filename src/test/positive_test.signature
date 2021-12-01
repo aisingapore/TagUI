@@ -387,7 +387,19 @@ excel_json = response.data;}, function() {this.echo('ERROR - Excel automation ex
 else casper.echo('ERROR - unknown operating system ' + user_system).exit();}
 
 function read_pdf(input_pdf) { // for reading from pdf target
-if (user_system == 'windows') {pdf_result = "";}
+if (user_system == 'windows') {
+var pdf_file = input_pdf.split(']')[0].slice(1).trim();
+pdf_file = abs_file(pdf_file); var fs = require('fs'); if (!fs.exists(pdf_file))
+casper.echo('ERROR - cannot find PDF file ' + pdf_file).exit();
+var pdf_steps = 'Set WshShell = WScript.CreateObject("WScript.Shell")\r\n';
+pdf_steps += 'WshShell.Run """' + windows_path(pdf_file) + '"""\r\nWScript.Sleep 5000\r\n';
+pdf_steps += 'WshShell.SendKeys "^a"\r\nWScript.Sleep 1000\r\n';
+pdf_steps += 'WshShell.SendKeys "^c"\r\nWScript.Sleep 1000\r\n';
+pdf_steps += 'WshShell.SendKeys "^w"\r\nSet objHTML = CreateObject("htmlfile")\r\n';
+pdf_steps += 'WScript.Echo objHTML.ParentWindow.ClipboardData.GetData("text")'; save_text('pdf_steps.vbs', pdf_steps);
+casper.waitForExec('cscript pdf_steps.vbs //NoLogo', null, function(response) {pdf_result = '';
+pdf_result = (response.data.stdout.trim() || response.data.stderr.trim());
+pdf_json = response.data;}, function() {this.echo('ERROR - PDF automation exceeded '+(3 * casper.options.waitTimeout/1000).toFixed(1)+'s timeout').exit();},(3 * casper.options.waitTimeout));}
 else if (user_system == 'mac') {
 var pdf_file = input_pdf.split(']')[0].slice(1).trim();
 pdf_file = abs_file(pdf_file); var fs = require('fs'); if (!fs.exists(pdf_file))

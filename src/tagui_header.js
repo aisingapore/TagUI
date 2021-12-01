@@ -365,7 +365,7 @@ var pdf_file = input_pdf.split(']')[0].slice(1).trim();
 pdf_file = abs_file(pdf_file); var fs = require('fs'); if (!fs.exists(pdf_file))
 casper.echo('ERROR - cannot find PDF file ' + pdf_file).exit();
 var pdf_steps = 'Set WshShell = WScript.CreateObject("WScript.Shell")\r\n';
-pdf_steps += 'WshShell.Run "' + windows_path(pdf_file) + '"\r\nWScript.Sleep 5000\r\n';
+pdf_steps += 'WshShell.Run """' + windows_path(pdf_file) + '"""\r\nWScript.Sleep 5000\r\n';
 pdf_steps += 'WshShell.SendKeys "^a"\r\nWScript.Sleep 1000\r\n';
 pdf_steps += 'WshShell.SendKeys "^c"\r\nWScript.Sleep 1000\r\n';
 pdf_steps += 'WshShell.SendKeys "^w"\r\nSet objHTML = CreateObject("htmlfile")\r\n';
