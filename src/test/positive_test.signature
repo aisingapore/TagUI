@@ -395,7 +395,7 @@ var pdf_steps = 'Set WshShell = WScript.CreateObject("WScript.Shell")\r\n';
 pdf_steps += 'WshShell.Run """' + windows_path(pdf_file) + '"""\r\nWScript.Sleep 5000\r\n';
 pdf_steps += 'WshShell.SendKeys "^a"\r\nWScript.Sleep 1000\r\n';
 pdf_steps += 'WshShell.SendKeys "^c"\r\nWScript.Sleep 1000\r\n';
-pdf_steps += 'WshShell.SendKeys "^w"\r\nSet objHTML = CreateObject("htmlfile")\r\n';
+pdf_steps += 'WshShell.SendKeys "^q"\r\nSet objHTML = CreateObject("htmlfile")\r\n';
 pdf_steps += 'WScript.Echo objHTML.ParentWindow.ClipboardData.GetData("text")'; save_text('pdf_steps.vbs', pdf_steps);
 casper.waitForExec('cscript pdf_steps.vbs //NoLogo', null, function(response) {pdf_result = '';
 pdf_result = (response.data.stdout.trim() || response.data.stderr.trim());
@@ -408,7 +408,7 @@ var pdf_steps = 'tell application "Finder" to open POSIX file "' + pdf_file + '"
 pdf_steps += 'delay 5\r\ntell application "System Events"\r\n\t';
 pdf_steps += 'keystroke "a" using {command down}\r\n\tdelay 1\r\n\t';
 pdf_steps += 'keystroke "c" using {command down}\r\n\tdelay 1\r\n\t';
-pdf_steps += 'keystroke "w" using {command down}\r\nend tell\r\n';
+pdf_steps += 'keystroke "q" using {command down}\r\nend tell\r\n';
 pdf_steps += 'do shell script "pbpaste"'; save_text('pdf_steps.scpt', pdf_steps);
 casper.waitForExec('osascript pdf_steps.scpt', null, function(response) {pdf_result = '';
 pdf_result = (response.data.stdout.trim() || response.data.stderr.trim());
