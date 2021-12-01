@@ -369,7 +369,7 @@ pdf_steps += 'WshShell.Run "' + windows_path(pdf_file) + '"\r\nWScript.Sleep 500
 pdf_steps += 'WshShell.SendKeys "^a"\r\nWScript.Sleep 1000\r\n';
 pdf_steps += 'WshShell.SendKeys "^c"\r\nWScript.Sleep 1000\r\n';
 pdf_steps += 'WshShell.SendKeys "^w"\r\nSet objHTML = CreateObject("htmlfile")\r\n';
-pdf_steps += 'WScript.Echo objHTML.ParentWindow.ClipboardData.GetData("text")'; save_text('pdf_steps.scpt', pdf_steps);
+pdf_steps += 'WScript.Echo objHTML.ParentWindow.ClipboardData.GetData("text")'; save_text('pdf_steps.vbs', pdf_steps);
 casper.waitForExec('cscript pdf_steps.vbs //NoLogo', null, function(response) {pdf_result = '';
 pdf_result = (response.data.stdout.trim() || response.data.stderr.trim());
 pdf_json = response.data;}, function() {this.echo('ERROR - PDF automation exceeded '+(3 * casper.options.waitTimeout/1000).toFixed(1)+'s timeout').exit();},(3 * casper.options.waitTimeout));}
