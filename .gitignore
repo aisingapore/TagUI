@@ -84,6 +84,7 @@
 
 # exclude local files for pdf integration
 /src/pdf_steps.scpt
+/src/pdf_steps.vbs
 
 # exclude local files for catboost integration
 /src/catboost/*
