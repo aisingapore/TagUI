@@ -393,9 +393,10 @@ PDF
 
 You can read the text contents of a PDF file simply by assigning its filename to a variable as follows. TagUI will automate the PDF viewer app to copy out the text contents and assign to the variable. On Windows, you will need the free `Adobe Acrobat Reader <https://get.adobe.com/reader/>`_ and set it as your default PDF viewer. On Mac, TagUI will use the default Preview app that can already view PDF files.
 
+*Examples for Windows*
+
 .. code-block:: none
 
-  // examples for Windows
   pdf_text = [Research Report.pdf]
   pdf_text = [C:\Users\Jennifer\Desktop\Report.pdf]
   pdf_text = [FY2021 Reports\Research Report.pdf]
@@ -405,7 +406,10 @@ You can read the text contents of a PDF file simply by assigning its filename to
   filename = 'Research Report'
   pdf_text = [`filename`.pdf]
 
-  // examples for Mac
+*Examples for Mac*
+
+.. code-block:: none
+
   pdf_text = [Research Report.pdf]
   pdf_text = [/Users/jennifer/Desktop/Report.pdf]
   pdf_text = [FY2021 Reports/Research Report.pdf]
@@ -415,7 +419,7 @@ You can read the text contents of a PDF file simply by assigning its filename to
   filename = 'Research Report'
   pdf_text = [`filename`.pdf]
 
-After reading the text content into a variable, you can process it using TagUI's helper functions such as get_text() and del_chars() to retrieve specific information required for your RPA scenario. Standard JavaScript functions can also be used to do string processing, google `javascript how to xxxx` for more info. After reading the text content from a PDF file, TagUI will close the PDF viewer and continue with the rest of the automation steps.
+After reading the text content into a variable, you can process it using TagUI's helper functions such as get_text() and del_chars() to retrieve specific information required for your RPA scenario. Standard JavaScript functions can also be used to do string processing, google ``javascript how to xxxx`` for more information. After reading the text content from a PDF file, TagUI will close the PDF viewer and continue with the rest of the automation steps.
 
 Using variables
 ********************
