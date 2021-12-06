@@ -65,6 +65,9 @@ var excel_result = ''; var excel_json = {}; var excel_files = [];
 var excel_focus = false; var excel_visible = true;
 var excel_password = '';
 
+// variables for Word integraton execution result
+var word_result = ''; var word_json = {};
+
 // variables for PDF integraton execution result
 var pdf_result = ''; var pdf_json = {};
 
@@ -359,6 +362,55 @@ excel_result = (response.data.stdout.trim() || response.data.stderr.trim());
 excel_json = response.data;}, function() {this.echo('ERROR - Excel automation exceeded '+(3 * casper.options.waitTimeout/1000).toFixed(1)+'s timeout').exit();},(3 * casper.options.waitTimeout));}
 else casper.echo('ERROR - unknown operating system ' + user_system).exit();}
 
+function read_word(input_word) { // for reading from word target
+if (user_system == 'windows') {
+var word_file = input_word.split(']')[0].slice(1).trim();
+word_file = abs_file(word_file); var fs = require('fs'); if (!fs.exists(word_file))
+casper.echo('ERROR - cannot find Word file ' + word_file).exit();
+var word_steps = 'Set WshShell = WScript.CreateObject("WScript.Shell")\r\n';
+word_steps += 'WshShell.Run """' + windows_path(word_file) + '"""\r\nWScript.Sleep 5000\r\n';
+word_steps += 'WshShell.SendKeys "^a"\r\nWScript.Sleep 1000\r\n';
+word_steps += 'WshShell.SendKeys "^c"\r\nWScript.Sleep 1000\r\n';
+word_steps += 'WshShell.SendKeys "%{F4}"\r\nSet objHTML = CreateObject("htmlfile")\r\n';
+word_steps += 'WScript.Echo objHTML.ParentWindow.ClipboardData.GetData("text")'; save_text('word_steps.vbs', word_steps);
+save_text('word_steps.cmd', '@echo off\r\ncscript word_steps.vbs //NoLogo > word_steps.out 2>&1');
+casper.waitForExec('word_steps.cmd', null, function(response) {
+word_result = ''; word_result = require('fs').read('word_steps.out').trim();
+}, function() {this.echo('ERROR - Word automation exceeded '+(3 * casper.options.waitTimeout/1000).toFixed(1)+'s timeout').exit();},(3 * casper.options.waitTimeout));}
+else if (user_system == 'mac') {
+var word_file = input_word.split(']')[0].slice(1).trim();
+word_file = abs_file(word_file); var fs = require('fs'); if (!fs.exists(word_file))
+casper.echo('ERROR - cannot find Word file ' + word_file).exit();
+var word_steps = 'tell application "Finder" to open POSIX file "' + word_file + '"\r\n';
+word_steps += 'delay 5\r\ntell application "System Events"\r\n\t';
+word_steps += 'keystroke "a" using {command down}\r\n\tdelay 1\r\n\t';
+word_steps += 'keystroke "c" using {command down}\r\n\tdelay 1\r\n\t';
+word_steps += 'keystroke "q" using {command down}\r\nend tell\r\n';
+word_steps += 'do shell script "pbpaste > word_steps.out 2>&1"'; save_text('word_steps.scpt', word_steps);
+casper.waitForExec('osascript word_steps.scpt', null, function(response) {
+word_result = ''; word_result = require('fs').read('word_steps.out').trim();
+}, function() {this.echo('ERROR - Word automation exceeded '+(3 * casper.options.waitTimeout/1000).toFixed(1)+'s timeout').exit();},(3 * casper.options.waitTimeout));}
+else casper.echo('ERROR - unknown operating system ' + user_system).exit();}
+
+function write_word(output_word) { // for writing to word target
+casper.echo('ERROR - writing to Word file not supported').exit();}
+
+// for word statements - retrieving data for variable on right side of = sign
+// broken into 2 functions for word_result to be usable with CasperJS structure
+function word_retrieve(right_param) { // check OS before starting Word automation
+if (user_system != 'windows' && user_system != 'mac') {word_result = '';
+casper.echo('ERROR - Word automation only for Windows and Mac').exit();}
+if (right_param.match(/\[.*\.(doc|docx|docm|dot|dotx)\]/i) == null)
+{word_result = ''; word_result = eval(right_param);}
+else if (word_result == '[LIVE_MODE]') {word_result = '';
+casper.echo('ERROR - reading from Word not supported in live mode');}
+else {word_result = ''; read_word(right_param);}}
+
+// for word statements - assigning data to variable on left side of = sign
+// broken into 2 functions for word_result to be usable with CasperJS structure
+function word_assign(left_param) {if (left_param.match(/\[.*\.(doc|docx|docm|dot|dotx)\]/i) == null)
+eval(left_param + ' = word_result'); else write_word(left_param);}
+
 function read_pdf(input_pdf) { // for reading from pdf target
 if (user_system == 'windows') {
 var pdf_file = input_pdf.split(']')[0].slice(1).trim();
@@ -370,9 +422,10 @@ pdf_steps += 'WshShell.SendKeys "^a"\r\nWScript.Sleep 1000\r\n';
 pdf_steps += 'WshShell.SendKeys "^c"\r\nWScript.Sleep 1000\r\n';
 pdf_steps += 'WshShell.SendKeys "^q"\r\nSet objHTML = CreateObject("htmlfile")\r\n';
 pdf_steps += 'WScript.Echo objHTML.ParentWindow.ClipboardData.GetData("text")'; save_text('pdf_steps.vbs', pdf_steps);
-casper.waitForExec('cscript pdf_steps.vbs //NoLogo', null, function(response) {pdf_result = '';
-pdf_result = (response.data.stdout.trim() || response.data.stderr.trim());
-pdf_json = response.data;}, function() {this.echo('ERROR - PDF automation exceeded '+(3 * casper.options.waitTimeout/1000).toFixed(1)+'s timeout').exit();},(3 * casper.options.waitTimeout));}
+save_text('pdf_steps.cmd', '@echo off\r\ncscript pdf_steps.vbs //NoLogo > pdf_steps.out 2>&1');
+casper.waitForExec('pdf_steps.cmd', null, function(response) {
+pdf_result = ''; pdf_result = require('fs').read('pdf_steps.out').trim();
+}, function() {this.echo('ERROR - PDF automation exceeded '+(3 * casper.options.waitTimeout/1000).toFixed(1)+'s timeout').exit();},(3 * casper.options.waitTimeout));}
 else if (user_system == 'mac') {
 var pdf_file = input_pdf.split(']')[0].slice(1).trim();
 pdf_file = abs_file(pdf_file); var fs = require('fs'); if (!fs.exists(pdf_file))
@@ -382,10 +435,10 @@ pdf_steps += 'delay 5\r\ntell application "System Events"\r\n\t';
 pdf_steps += 'keystroke "a" using {command down}\r\n\tdelay 1\r\n\t';
 pdf_steps += 'keystroke "c" using {command down}\r\n\tdelay 1\r\n\t';
 pdf_steps += 'keystroke "q" using {command down}\r\nend tell\r\n';
-pdf_steps += 'do shell script "pbpaste"'; save_text('pdf_steps.scpt', pdf_steps);
-casper.waitForExec('osascript pdf_steps.scpt', null, function(response) {pdf_result = '';
-pdf_result = (response.data.stdout.trim() || response.data.stderr.trim());
-pdf_json = response.data;}, function() {this.echo('ERROR - PDF automation exceeded '+(3 * casper.options.waitTimeout/1000).toFixed(1)+'s timeout').exit();},(3 * casper.options.waitTimeout));}
+pdf_steps += 'do shell script "pbpaste > pdf_steps.out 2>&1"'; save_text('pdf_steps.scpt', pdf_steps);
+casper.waitForExec('osascript pdf_steps.scpt', null, function(response) {
+pdf_result = ''; pdf_result = require('fs').read('pdf_steps.out').trim();
+}, function() {this.echo('ERROR - PDF automation exceeded '+(3 * casper.options.waitTimeout/1000).toFixed(1)+'s timeout').exit();},(3 * casper.options.waitTimeout));}
 else casper.echo('ERROR - unknown operating system ' + user_system).exit();}
 
 function write_pdf(output_pdf) { // for writing to pdf target
@@ -1127,6 +1180,7 @@ case 'py': return py_intent(live_line); break;
 case 'vision': return vision_intent(live_line); break;
 case 'timeout': return timeout_intent(live_line); break;
 case 'excel': return excel_intent(live_line); break;
+case 'word': return word_intent(live_line); break;
 case 'pdf': return pdf_intent(live_line); break;
 case 'code': return code_intent(live_line); break;
 default: return "this.echo('ERROR - cannot understand step " + live_line.replace(/'/g,'\\\'') + "')";}}
@@ -1242,6 +1296,9 @@ if (lc_raw_intent == 'timeout') return 'timeout';
 // check using regex for excel assignment
 if (is_excel(raw_intent)) return 'excel';
 
+// check using regex for word assignment
+if (is_word(raw_intent)) return 'word';
+
 // check using regex for pdf assignment
 if (is_pdf(raw_intent)) return 'pdf';
 
@@ -1251,6 +1308,10 @@ if (is_code(raw_intent)) return 'code'; else return 'error';}
 function is_excel(raw_intent) {if (raw_intent.indexOf('=') == -1) return false;
 if (raw_intent.indexOf('//') == 0) return false; // skip processing if commented out 
 if (raw_intent.match(/\[.*\.(xl.|xl..|xml|csv)\].*![A-Z0-9]*/i) == null) return false; else return true;}
+
+function is_word(raw_intent) {if (raw_intent.indexOf('=') == -1) return false;
+if (raw_intent.indexOf('//') == 0) return false; // skip processing if commented out
+if (raw_intent.match(/\[.*\.(doc|docx|docm|dot|dotx)\]/i) == null) return false; else return true;}
 
 function is_pdf(raw_intent) {if (raw_intent.indexOf('=') == -1) return false;
 if (raw_intent.indexOf('//') == 0) return false; // skip processing if commented out
@@ -1657,6 +1718,15 @@ left_param = esc_bs(left_param); right_param = esc_bs(right_param); // to escape
 left_param = left_param.replace(/\\\\'/g, "\\'"); right_param = right_param.replace(/\\\\'/g, "\\'");
 if ((left_param == '') || (right_param == '')) return "this.echo('ERROR - parameter missing for " + raw_intent + "')";
 else return "excel_result = '[LIVE_MODE]'; excel_retrieve('" + right_param + "'); excel_assign('" + left_param + "')";}
+
+function word_intent(raw_intent) {raw_intent = eval("'" + escape_bs(raw_intent) + "'"); // support dynamic variables
+if (user_system != 'windows' && user_system != 'mac')
+{return "word_result = ''; this.echo('ERROR - Word automation only for Windows and Mac')";}
+var word_params = raw_intent.split('='); var left_param = word_params[0].trim(); var right_param = word_params[1].trim();
+left_param = esc_bs(left_param); right_param = esc_bs(right_param); // to escape backslash \ in Windows folder paths
+left_param = left_param.replace(/\\\\'/g, "\\'"); right_param = right_param.replace(/\\\\'/g, "\\'");
+if ((left_param == '') || (right_param == '')) return "this.echo('ERROR - parameter missing for " + raw_intent + "')";
+else return "word_result = '[LIVE_MODE]'; word_retrieve('" + right_param + "'); word_assign('" + left_param + "')";}
 
 function pdf_intent(raw_intent) {raw_intent = eval("'" + escape_bs(raw_intent) + "'"); // support dynamic variables
 if (user_system != 'windows' && user_system != 'mac')

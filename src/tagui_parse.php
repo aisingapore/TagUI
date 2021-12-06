@@ -519,6 +519,7 @@ case "py": return py_intent($script_line); break;
 case "vision": return vision_intent($script_line); break;
 case "timeout": return timeout_intent($script_line); break;
 case "excel": return excel_intent($script_line); break;
+case "word": return word_intent($script_line); break;
 case "pdf": return pdf_intent($script_line); break;
 case "code": return code_intent($script_line); break;
 default: echo "ERROR - " . current_line() . " cannot understand step " . $script_line . "\n";}}
@@ -616,6 +617,9 @@ if ($lc_raw_intent=="timeout") return "timeout";
 if (is_excel($raw_intent)) return "excel";
 
 // check using regex for pdf assignment
+if (is_word($raw_intent)) return "word";
+
+// check using regex for pdf assignment
 if (is_pdf($raw_intent)) return "pdf";
 
 // final check for recognized code before returning error 
@@ -624,6 +628,10 @@ if (is_code($raw_intent)) return "code"; else return "error";}
 function is_excel($raw_intent) {if (strpos($raw_intent,"=") === false) return false;
 if (strpos($raw_intent,"//") === 0) return false; // skip processing if commented out
 return preg_match('/\[.*\.(xl.|xl..|xml|csv)\].*![A-Z0-9]*/i', $raw_intent);}
+
+function is_word($raw_intent) {if (strpos($raw_intent,"=") === false) return false;
+if (strpos($raw_intent,"//") === 0) return false; // skip processing if commented out
+return preg_match('/\[.*\.(doc|docx|docm|dot|dotx)\]/i', $raw_intent);}
 
 function is_pdf($raw_intent) {if (strpos($raw_intent,"=") === false) return false;
 if (strpos($raw_intent,"//") === 0) return false; // skip processing if commented out
@@ -1137,6 +1145,16 @@ echo "ERROR - " . current_line() . " parameter missing for " . $raw_intent . "\n
 return "casper.then(function() { // start Excel step\ntecho('".$left_param." = ".$right_param."'); ".
 "excel_retrieve('".$right_param."');\n}); // end Excel step"."\n\n".
 "casper.then(function() { // start Excel step\nexcel_assign('".$left_param."');\n}); // end Excel step"."\n\n";}
+
+function word_intent($raw_intent) {$word_params = explode("=", $raw_intent);
+$left_param = trim($word_params[0]); $right_param = trim($word_params[1]);
+$left_param = esc_bs($left_param); $right_param = esc_bs($right_param); // to escape backslash \ in Windows folder paths
+$left_param = str_replace("\\\\'", "\\'", $left_param); $right_param = str_replace("\\\\'", "\\'", $right_param);
+if (($left_param == "") or ($right_param == ""))
+echo "ERROR - " . current_line() . " parameter missing for " . $raw_intent . "\n"; else
+return "casper.then(function() { // start Word step\ntecho('".$left_param." = ".$right_param."'); ".
+"word_retrieve('".$right_param."');\n}); // end Word step"."\n\n".
+"casper.then(function() { // start Word step\nword_assign('".$left_param."');\n}); // end Word step"."\n\n";}
 
 function pdf_intent($raw_intent) {$pdf_params = explode("=", $raw_intent);
 $left_param = trim($pdf_params[0]); $right_param = trim($pdf_params[1]);

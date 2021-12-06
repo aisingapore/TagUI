@@ -419,7 +419,7 @@ You can read the text contents of a PDF file simply by assigning its filename to
   filename = 'Research Report'
   pdf_text = [`filename`.pdf]
 
-After reading the text content into a variable, you can process it using TagUI's helper functions such as get_text() and del_chars() to retrieve specific information required for your RPA scenario. Standard JavaScript functions can also be used to do string processing, google ``javascript how to xxxx`` for more information. After reading the text content from a PDF file, TagUI will close the PDF viewer and continue with the rest of the automation steps.
+After reading the text content into a variable, you can process it using TagUI's helper functions such as get_text() and del_chars() to retrieve specific information required for your RPA scenario. Standard JavaScript functions can also be used to do string processing, for more information google ``javascript how to xxxx``. After reading the text content from a PDF file, TagUI will close the PDF viewer and continue with the rest of the automation steps.
 
 Using variables
 ********************
