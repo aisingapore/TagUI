@@ -388,6 +388,39 @@ Delete data in Excel files. Both relative and absolute file paths supported. Err
   [Monthly Report.xlsx]August!E10 = ""
   [Quarterly Metrics.xlsx]Main!A1 = [["", "", ""], ["", "", ""]]
 
+Word
+********************
+
+You can read the text contents of a Microsoft Word document simply by assigning its filename to a variable as follows. TagUI will automate Microsoft Word to copy out the text contents and assign to the variable. Note that you need to have Microsoft Word installed on your computer. This feature works for both Windows and Mac.
+
+*Examples for Windows*
+
+.. code-block:: none
+
+  word_text = [Research Report.docx]
+  word_text = [C:\Users\Jennifer\Desktop\Report.docx]
+  word_text = [FY2021 Reports\Research Report.docx]
+
+  filename = 'C:\\Users\\Jennifer\\Desktop\\Report'
+  word_text = [`filename`.docx]
+  filename = 'Research Report'
+  word_text = [`filename`.docx]
+
+*Examples for Mac*
+
+.. code-block:: none
+
+  word_text = [Research Report.docx]
+  word_text = [/Users/jennifer/Desktop/Report.docx]
+  word_text = [FY2021 Reports/Research Report.docx]
+
+  filename = '/Users/jennifer/Desktop/Report'
+  word_text = [`filename`.docx]
+  filename = 'Research Report'
+  word_text = [`filename`.docx]
+
+After reading the text content into a variable, you can process it using TagUI's helper functions such as get_text() and del_chars() to retrieve specific information required for your RPA scenario. Standard JavaScript functions can also be used to do string processing, for more information google ``javascript how to xxxx``. After reading the text content from a Word document, TagUI will close Microsoft Word and continue with the rest of the automation steps.
+
 PDF
 ********************
 
