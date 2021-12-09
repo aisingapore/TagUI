@@ -1136,7 +1136,7 @@ else return "casper.then(function() {"."casper.options.waitTimeout = " . (floatv
 "; sikuli_timeout(" . floatval($params) . ");" . end_fi()."});"."\n\n";}
 
 function excel_intent($raw_intent) {$excel_params = explode("=", $raw_intent);
-$left_param = trim($excel_params[0]); $right_param = trim($excel_params[1]); if ($excel_params[2])
+$left_param = trim($excel_params[0]); $right_param = trim($excel_params[1]); if (@count($excel_params) > 2)
 $right_param .= '=' . trim($excel_params[2]); // to handle case of formula assignments eg "=A1"
 $left_param = esc_bs($left_param); $right_param = esc_bs($right_param); // to escape backslash \ in Windows folder paths
 $left_param = str_replace("\\\\'", "\\'", $left_param); $right_param = str_replace("\\\\'", "\\'", $right_param);
