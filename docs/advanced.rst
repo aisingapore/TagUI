@@ -99,7 +99,7 @@ Flows can also be stored in subfolders::
   // Windows example
   tagui CRM\login.tag
 
-  // Mac / Linux example
+  // Mac/Linux example
   tagui CRM/login.tag
 
 Variables in the parent flow are accessible in the child flow and vice versa::
@@ -132,7 +132,7 @@ You can even combine multiple sequences of steps into one subflow as follows. By
     do some more steps
 
   else
-    echo ERROR - action not found
+    echo ERROR - action undefined
 
 Turbo mode to run 10X faster
 -------------------------------
