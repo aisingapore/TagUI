@@ -86,11 +86,51 @@ If ``user-email-textbox`` was the identifier for some web text input, then you c
 
 Running flows within a flow
 -----------------------------
+You can modularise your RPA workflows by breaking a large workflow file into many subflow files. Some common reasons for doing that include the convenience of reusing the same subflow in other flows, doing something specific which is easier to organise by keeping the sequence of steps in a subflow, or storing your Python or JavaScript code and functions in separate subflows (using py begin and py finish code blocks for example). For more complex RPA scenarios, you can even let a subflow run other subflows. 
+
 A flow can run another flow, like this::
 
   tagui login_crm.tag
 
-Variables in the parent flow are accessible in the child flow and vice versa. 
+Flows can also be stored in subfolders::
+
+  // Windows example
+  tagui CRM\login.tag
+
+  // Mac and Linux
+  tagui CRM/login.tag
+
+Variables in the parent flow are accessible in the child flow and vice versa::
+
+  // in this case, username and password variables are available in login.tag
+  username = 'jennifer'; password = '12345678';
+  tagui login.tag
+
+  // you can define the variables on separate lines instead of all in 1 line
+  username = 'jennifer'
+  password = '12345678'
+  tagui login.tag
+
+  // in login.tag you can define and return variables for its parent to use
+  echo `login_result`
+
+You can even combine multiple sequences of steps into one subflow as follows. By designing a subflow this way, you can assign the variable ``action = 'login'`` in the parent flow to determine what sequence of steps gets executed when the subflow is called with ``tagui`` step::
+
+  // crm_steps.tag
+  if action equals to 'login'
+    do some steps
+    do some more steps
+
+  else if action equals to 'report'
+    do some steps
+    do some more steps
+
+  else if action equals to 'logout'
+    do some steps
+    do some more steps
+
+  else
+    echo ERROR - no such action in crm_steps.tag
 
 Turbo mode to run 10X faster
 -------------------------------
