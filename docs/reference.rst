@@ -267,6 +267,7 @@ If the response is in JSON, ``api_json`` will automatically be created.
   echo `api_result`
   author = api_json[0].author.login
 
+For an advanced example of using api step, setting POST/GET method, header and body, `see this example from aito.ai <https://aito.document360.io/docs/tagui>`_ - a web-based machine learning solution for no-coders and RPA developers. In the example, ``api`` step is used to make a machine-learning inference to generate the account code of an invoice item, based on its description and price. aito.ai's free tier comes with 2000 API calls/month and it works perfectly with TagUI.
 
 Excel
 ********************
