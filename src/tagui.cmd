@@ -14,7 +14,7 @@ rem enable windows for loop advanced flow control
 setlocal enableextensions enabledelayedexpansion
 
 if "%~1"=="" (
-echo tagui v6.101: use following options and this syntax to run - tagui flow_filename option^(s^)
+echo tagui v6.102: use following options and this syntax to run - tagui flow_filename option^(s^)
 echo.
 echo tagui live     launch TagUI live mode enabled with visual automation for interactive development
 echo tagui update   download and update to latest TagUI version ^(please backup your version beforehand^)
@@ -1120,6 +1120,10 @@ if exist "tagui_chrome.in" (
 	set headless_switch=
 	if "%tagui_web_browser%"=="headless" set headless_switch=--headless --disable-gpu
 
+	rem check for tagui_no_sandbox for running chrome as root or in docker
+	set no_sandbox_switch=
+	if exist "tagui_no_sandbox" set no_sandbox_switch=--no-sandbox
+
 	rem skip restarting chrome in speed mode and resuse 1st websocket url	
 	set or_result=F
 	if !tagui_data_set! equ 1 set or_result=T
@@ -1148,7 +1152,7 @@ if exist "tagui_chrome.in" (
 		for /f "tokens=* usebackq" %%p in (`wmic process where "caption like '%%chrome.exe%%' and commandline like '%%tagui_user_profile_ --remote-debugging-port=9222%%' and not commandline like '%%--type=renderer%%'" get processid 2^>nul ^| cut -d" " -f 1 ^| sort -nur ^| head -n 1`) do set chrome_process_id=%%p	
 	)
 	if not "!chrome_process_id!"=="" taskkill /PID !chrome_process_id! /T /F > nul 2>&1
-	start "" "!chrome_command!" --user-data-dir="%~dp0chrome\tagui_user_profile" !chrome_switches! !window_size! !headless_switch!
+	start "" "!chrome_command!" --user-data-dir="%~dp0chrome\tagui_user_profile" !chrome_switches! !window_size! !headless_switch! !no_sandbox_switch!
 
 	:scan_ws_again
 	rem wait until chrome is ready with websocket url for php thread
