@@ -40,6 +40,10 @@ var p1 = casper.cli.raw.get(0); var p2 = casper.cli.raw.get(1); var p3 = casper.
 var p4 = casper.cli.raw.get(3); var p5 = casper.cli.raw.get(4); var p6 = casper.cli.raw.get(5);
 var p7 = casper.cli.raw.get(6); var p8 = casper.cli.raw.get(7); // p9 (${10}) is less portable
 
+// default p1-p8 to blank instead of undefined
+if (!p1) p1 = ''; if (!p2) p2 = ''; if (!p3) p3 = ''; if (!p4) p4 = '';
+if (!p5) p5 = ''; if (!p6) p6 = ''; if (!p7) p7 = ''; if (!p8) p8 = '';
+
 // save start time to measure execution time
 var automation_start_time = Date.now(); casper.echo('\nSTART - automation started - ' + Date().toLocaleString());
 
