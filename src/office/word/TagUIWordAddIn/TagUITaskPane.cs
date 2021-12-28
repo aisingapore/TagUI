@@ -136,9 +136,12 @@ namespace TagUIWordAddIn
                 comboBox.DisplayMember = "Text";
                 comboBox.ValueMember = "Value";
             }
-            catch
+            catch (Exception ex)
             {
-                MessageBox.Show("Ensure that workbook is closed before selecting");
+                string errorMessage = "";
+                if (ex.Message == "File contains corrupted data.") errorMessage = "Unable to read from workbook. Workbook may be password protected, or contains corrupted data.";
+                ErrorDialog f1 = new ErrorDialog();
+                f1.Show("Error", errorMessage, ex.ToString());
             }
         }
 
@@ -188,5 +191,6 @@ namespace TagUIWordAddIn
             textBoxOutput.Width = this.Size.Width - 14;
             textBoxOutput.Height = this.Size.Height - 500;
         }
+
     }
 }

@@ -20,6 +20,8 @@ using DocumentFormat.OpenXml;
 using Microsoft.Office.Interop.Word;
 using Microsoft.Office.Tools.Word;
 using Microsoft.Office.Core;
+using System.Text;
+using System.Globalization;
 
 namespace TagUIWordAddIn
 {
@@ -29,28 +31,7 @@ namespace TagUIWordAddIn
         public int subFlowCount = 0;
         public int subFlowTotal = 0;
         public int imageCount = 1;
-        private void Ribbon1_Load(object sender, RibbonUIEventArgs e)
-        { 
-        }
-
-        
-
-        private void toggleButton1_Click(object sender, RibbonControlEventArgs e)
-        {
-            try {
-                DocumentProperties prps;
-                prps = (DocumentProperties)Globals.ThisAddIn.Application.ActiveDocument.CustomDocumentProperties;
-                Globals.ThisAddIn.CustomTaskPanes.Where(x => x.Control.Name == prps["customTaskPaneName"].Value.ToString()).FirstOrDefault().Visible = ((RibbonToggleButton)sender).Checked;
-            }
-            catch { }
-        }
-
-        private void button1_Click(object sender, RibbonControlEventArgs e)
-        {
-            SnapshotBar snapshotBar = new SnapshotBar();
-            snapshotBar.Show();
-        }
-
+ 
         private void buttonRun_Click(object sender, RibbonControlEventArgs e)
         {
             subFlowFilePaths = new List<string>();
@@ -102,12 +83,13 @@ namespace TagUIWordAddIn
                     string runOptions = AddRunOption(deploy, dataTableCsv);
                     RunCommand(tagFilePath, runOptions, deploy);
                 }
-                catch
+                catch (Exception ex)
                 {
                     xlApp.System.Cursor = WdCursorType.wdCursorNormal;
                     buttonRun.Image = Properties.Resources.Run;
                     buttonRun.Label = "Run";
-                    MessageBox.Show("Related workflow files must be closed before running/deploying");
+                    ErrorDialog f1 =  new ErrorDialog();
+                    f1.Show("Error", ex.Message, ex.ToString());
                 }
             }
             else
@@ -163,7 +145,11 @@ namespace TagUIWordAddIn
                     string tagFilePath = GetTagFilePath(0, deploy);
                     string runOptions = AddRunOption(deploy, dataTableCsv);
                     RunCommand(tagFilePath, runOptions, deploy);
-                } catch { MessageBox.Show("Related workflow files must be closed before running/deploying"); }
+                } catch (Exception ex) 
+                {
+                    ErrorDialog f1 = new ErrorDialog();
+                    f1.Show("Error", ex.Message, ex.ToString());
+                }
             }
             else
             {
@@ -187,6 +173,28 @@ namespace TagUIWordAddIn
             return finalPath;
         }
         /////////////////////////////////////////////RIBBON HELPER STEPS//////////////////////////////////////////////////
+        private void toggleButtonShowTaskPane_Click(object sender, RibbonControlEventArgs e)
+        {
+            try
+            {
+                DocumentProperties prps;
+                prps = (DocumentProperties)Globals.ThisAddIn.Application.ActiveDocument.CustomDocumentProperties;
+                Globals.ThisAddIn.CustomTaskPanes.Where(x => x.Control.Name == prps["customTaskPaneName"].Value.ToString()).FirstOrDefault().Visible = ((RibbonToggleButton)sender).Checked;
+            }
+            catch { }
+        }
+
+        private void buttonSnapshot_Click(object sender, RibbonControlEventArgs e)
+        {
+            FormSnapshot snapshotBar = new FormSnapshot();
+            snapshotBar.Show();
+        }
+
+        private void buttonLive_Click(object sender, RibbonControlEventArgs e)
+        {
+            FormLive f1 = new FormLive();
+            f1.Show();
+        }
         private void buttonClick_Click(object sender, RibbonControlEventArgs e)
         {
             richTextControls = new List<RichTextContentControl>();
@@ -327,7 +335,6 @@ namespace TagUIWordAddIn
             AddRichTextContentControl("some condition", "");
             Globals.ThisAddIn.Application.Selection.TypeText("\n" + tabSpace + "\t// some steps");
         }
-       // private Microsoft.Office.Tools.Word.RichTextContentControl richTextControl;
         private void buttonLoop_Click(object sender, RibbonControlEventArgs e)
         {
             Globals.ThisAddIn.Application.Selection.TypeText("\n");
@@ -345,7 +352,30 @@ namespace TagUIWordAddIn
             Globals.ThisAddIn.Application.Selection.TypeText("\n" + tabSpace + "\t// some steps");
         }
 
+        private void buttonBreak_Click(object sender, RibbonControlEventArgs e)
+        {
+            richTextControls = new List<RichTextContentControl>();
+            Globals.ThisAddIn.Application.Selection.TypeText("break\n");
+        }
+        private void buttonLiveStep_Click(object sender, RibbonControlEventArgs e)
+        {
+            richTextControls = new List<RichTextContentControl>();
+            Globals.ThisAddIn.Application.Selection.TypeText("live\n");
+        }
 
+        private void buttonExcel_Click(object sender, RibbonControlEventArgs e)
+        {
+            Process.Start("https://tagui.readthedocs.io/en/latest/reference.html#excel");
+        }
+
+        private void buttonTelegram_Click(object sender, RibbonControlEventArgs e)
+        {
+            richTextControls = new List<RichTextContentControl>();
+            Globals.ThisAddIn.Application.Selection.TypeText("telegram ");
+            AddRichTextContentControl("id", " Message @taguibot to get your id");
+            Globals.ThisAddIn.Application.Selection.TypeText(" ");
+            AddRichTextContentControl("message", "");
+        }
         private void buttonKeyboard_Click(object sender, RibbonControlEventArgs e)
         {
             richTextControls = new List<RichTextContentControl>();
@@ -368,7 +398,7 @@ namespace TagUIWordAddIn
             {
                 error.NoProofing = 1;
             }
-            AddRichTextContentControl("flow file", " .docx or .tag");
+            AddRichTextContentControl("flow file", " .docx");
         }
 
         private void buttonWait_Click(object sender, RibbonControlEventArgs e)
@@ -389,7 +419,7 @@ namespace TagUIWordAddIn
         {
             richTextControls = new List<RichTextContentControl>();
             Globals.ThisAddIn.Application.Selection.TypeText("table ");
-            AddRichTextContentControl("XPath", "");
+            AddRichTextContentControl("table number or XPath", "");
             Globals.ThisAddIn.Application.Selection.TypeText(" to ");
             AddRichTextContentControl("filename", " .csv");
         }
@@ -580,6 +610,45 @@ namespace TagUIWordAddIn
             Globals.ThisAddIn.Application.Selection.TypeText("text()");
         }
 
+        private void buttonDelChars_Click(object sender, RibbonControlEventArgs e)
+        {
+            richTextControls = new List<RichTextContentControl>();
+            Globals.ThisAddIn.Application.Selection.TypeText("del_chars(");
+            AddRichTextContentControl("text_variable", "");
+            Globals.ThisAddIn.Application.Selection.TypeText(", '");
+            AddRichTextContentControl("character(s) to delete", "");
+            Globals.ThisAddIn.Application.Selection.TypeText("')");
+        }
+
+        private void buttonGetText_Click(object sender, RibbonControlEventArgs e)
+        {
+            richTextControls = new List<RichTextContentControl>();
+            Globals.ThisAddIn.Application.Selection.TypeText("get_text(");
+            AddRichTextContentControl("text_variable", "");
+            Globals.ThisAddIn.Application.Selection.TypeText(", '");
+            AddRichTextContentControl("1st anchor", "");
+            Globals.ThisAddIn.Application.Selection.TypeText("', '");
+            AddRichTextContentControl("2nd anchor", "");
+            Globals.ThisAddIn.Application.Selection.TypeText("')");
+        }
+
+        private void buttonGetEnv_Click(object sender, RibbonControlEventArgs e)
+        {
+            richTextControls = new List<RichTextContentControl>();
+            Globals.ThisAddIn.Application.Selection.TypeText("get_env('");
+            AddRichTextContentControl("environment variable", "");
+            Globals.ThisAddIn.Application.Selection.TypeText("')");
+        }
+        private void buttonSettings_Click(object sender, RibbonControlEventArgs e)
+        {
+            FormSettings f1 = new FormSettings();
+            f1.Show();
+        }
+        private void buttonUpdate_Click(object sender, RibbonControlEventArgs e)
+        {
+            FormUpdate f1 = new FormUpdate();
+            f1.Show();
+        }
         private void buttonUsageGuide_Click(object sender, RibbonControlEventArgs e)
         {
             Process.Start("https://tagui.readthedocs.io/en/latest/index.html");
@@ -677,13 +746,17 @@ namespace TagUIWordAddIn
 
             CheckBox checkBoxNoBrowser = ctp.Control.Controls["checkBoxNoBrowser"] as CheckBox;
             CheckBox checkBoxReport = ctp.Control.Controls["checkBoxReport"] as CheckBox;
+            CheckBox checkBoxTurbo = ctp.Control.Controls["checkBoxTurbo"] as CheckBox;
             CheckBox checkBoxQuiet = ctp.Control.Controls["checkBoxQuiet"] as CheckBox;
+            CheckBox checkBoxMSEdge = ctp.Control.Controls["checkBoxMSEdge"] as CheckBox;
             CheckBox checkBoxDatatableCSV = ctp.Control.Controls["checkBoxDatatableCSV"] as CheckBox;
             CheckBox checkBoxInputs = ctp.Control.Controls["checkBoxInputs"] as CheckBox;
             TextBox textBoxParam = ctp.Control.Controls["textBoxParam"] as TextBox;
             if (checkBoxNoBrowser.Checked) runOptions += " -n";
             if (checkBoxReport.Checked) runOptions += " -r";
+            if (checkBoxTurbo.Checked) runOptions += " -t";
             if (checkBoxQuiet.Checked) runOptions += " -q";
+            if (checkBoxMSEdge.Checked) runOptions += " -e";
             if (checkBoxDatatableCSV.Checked) runOptions += " " + dataTableCsv;
             if (checkBoxInputs.Checked) runOptions += " " + textBoxParam.Text;
             if (deploy) runOptions += " -d";
@@ -710,7 +783,14 @@ namespace TagUIWordAddIn
                 p?.Dispose();
             };
         }
-
+        Process process;
+        public static StreamWriter myStreamWriter;
+        public static Form FormLiveInline;
+        public static TextBox textBox2;
+        public static TextBox textBox1;
+        public static String finalString = "";
+        public static FormLiveInline fl;
+        public static bool live = false;
         private void RunCommand(string tagFilePath, string runOptions, bool deploy)
         {
 
@@ -721,30 +801,71 @@ namespace TagUIWordAddIn
             TextBox textBoxOutput = ctp.Control.Controls["textBoxOutput"] as TextBox;
             textBoxOutput.Clear();
             string workingFolder = GetWorkingFolderPath(deploy);
-            string cmdCommand = "/C end_processes & cd \"" + workingFolder + "\" & tagui \"" + tagFilePath + "\"" + runOptions;
+            string appDataFolder = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
+            string taguiSrcPathTempString = appDataFolder + @"\TagUI\textBoxTaguiSrcPath.txt";
+            string setTaguiPath = "";
+            if (File.Exists(taguiSrcPathTempString))
+            {
+                string taguiSrcPath = File.ReadAllText(taguiSrcPathTempString);
+                setTaguiPath = "set path=" + taguiSrcPath + ";%path% & ";
+            }
+            string cmdCommand = @"/C " + setTaguiPath + "end_processes & cd \"" + workingFolder + "\" & tagui \"" + tagFilePath + "\"" + runOptions;
             try
             {
-                var process = new Process
+                process = new Process
                 {
                     StartInfo = new ProcessStartInfo
                     {
                         FileName = "cmd.exe",
                         Arguments = cmdCommand,
                         UseShellExecute = false,
+                        RedirectStandardInput = true,
                         RedirectStandardOutput = true,
-                        CreateNoWindow = true
+                        RedirectStandardError = true,
+                        CreateNoWindow = true,
                     }
                 };
                 process.SynchronizingObject = textBoxOutput;
                 process.EnableRaisingEvents = true;
                 process.Start();
+                myStreamWriter = process.StandardInput;
                 process.BeginOutputReadLine();
+                process.BeginErrorReadLine();
                 process.OutputDataReceived += new DataReceivedEventHandler((_sender, _e) =>
                 {
+                    if (!String.IsNullOrEmpty(_e.Data) && live == false)
+                    {
+                        textBoxOutput.AppendText("» " + _e.Data.TrimStart() + Environment.NewLine);
+                        if (_e.Data == "LIVE MODE - type done to quit")
+                        {
+                            fl = new FormLiveInline();
+                            fl.Show();
+                            live = true;
+                            finalString = "";
+                            TextBox textBox1 = fl.Controls["textBoxLiveInlineOutput"] as TextBox;
+                            textBox1.Text = "";
+                            TextBox textBox2 = fl.Controls["textBoxLiveInlineInput"] as TextBox;
+                            textBox2.Text = "";
+                        }
+                    }
+                    if (!String.IsNullOrEmpty(_e.Data) && live == true)
+                    {
+                        TextBox textBox1 = fl.Controls["textBoxLiveInlineOutput"] as TextBox;
+                        textBox1.AppendText("» " + _e.Data.ToString().TrimStart() + Environment.NewLine);
+                        if (_e.Data != "LIVE MODE - type done to quit")
+                        {
+                            textBoxOutput.AppendText("» " + _e.Data.ToString() + Environment.NewLine);
+                            finalString += "// " + _e.Data.ToString().TrimStart() + "\n";
+                        }
+                    }
+                });
+                string errorMessage = "";
+                process.ErrorDataReceived += new DataReceivedEventHandler((_sender, _e) =>
+                {
+
                     if (!String.IsNullOrEmpty(_e.Data))
                     {
-                        textBoxOutput.AppendText("» " + _e.Data);
-                        textBoxOutput.AppendText(Environment.NewLine);
+                        errorMessage += _e.Data + "\n";
                     }
                 });
                 process.Exited += (s, evt) =>
@@ -760,6 +881,15 @@ namespace TagUIWordAddIn
                         buttonRun.Image = Properties.Resources.Run;
                         buttonRun.Label = "Run";
                     }
+                    if (errorMessage != "")
+                    {
+                        string displayErrorMessage = "";
+                        string[] errorArr = errorMessage.Split('\n');
+                        string firstTwoErrorMessages = errorArr[0] + errorArr[1];
+                        if (firstTwoErrorMessages == "'tagui' is not recognized as an internal or external command,operable program or batch file.") displayErrorMessage = "Incomplete TagUI installation. Go to Settings in ribbon to set your TagUI SRC Path.";
+                        else if (errorArr.Length > 2) displayErrorMessage = errorMessage;
+                        textBoxOutput.AppendText(displayErrorMessage + Environment.NewLine);
+                    }
                 };
             }
             catch (Exception e)
@@ -767,8 +897,36 @@ namespace TagUIWordAddIn
                 textBoxOutput.AppendText(e.Message);
             }
         }
-
-       
+        public static void OnButtonSendClick(object sender, EventArgs e)
+        {
+            TextBox textBox2 = fl.Controls["textboxLiveInlineInput"] as TextBox;
+            string inputText = textBox2.Text;
+            myStreamWriter.WriteLine(inputText);
+            
+            TextBox textBox1 = fl.Controls["textBoxLiveInlineOutput"] as TextBox;
+            textBox1.AppendText(inputText + Environment.NewLine);
+            finalString += inputText + "\n";
+            if (inputText.ToLower() == "done")
+            {
+                live = false;
+                fl.Close();
+            }
+            else textBox2.Text = "";
+        }
+        public static void OnButtonCopySelectedClick(object sender, EventArgs e)
+        {
+            TextBox textBox1 = fl.Controls["textBoxLiveInlineOutput"] as TextBox;
+            try
+            {
+                Clipboard.SetText(textBox1.SelectedText);
+            }
+            catch { }
+        }
+        public static void OnButtonAllClick(object sender, EventArgs e)
+        {
+            Clipboard.SetText(finalString);
+            fl.Close();
+        }
         private void ProcessAllWordFiles(bool deploy)
         {
             int index = 0;
@@ -793,13 +951,17 @@ namespace TagUIWordAddIn
             }
         }
         //replaces all relative subflow file paths with absolute subflow file path
+
+        public int indentCount = 0;
+        public float firstIndent = 0;
         private void ProcessSubFlows(string originalDocFilePath, string duplicateDocFilePath, bool deploy)
         {
             WordprocessingDocument duplicateDoc = WordprocessingDocument.Open(duplicateDocFilePath, true);
             var paragraphs = duplicateDoc.MainDocumentPart.RootElement.Descendants<DocumentFormat.OpenXml.Wordprocessing.Paragraph>();
             foreach (DocumentFormat.OpenXml.Wordprocessing.Paragraph paragraph in paragraphs)
             {
-                if (paragraph.InnerText.ToLower().TrimStart().Split(' ')[0] == "tagui")
+                string firstWord = paragraph.InnerText.ToLower().TrimStart().Split(' ')[0];
+                if (firstWord == "tagui")
                 {
                     subFlowCount++;
                     subFlowTotal++;
@@ -809,7 +971,6 @@ namespace TagUIWordAddIn
                     {
                         subflowFilePath += arr[i] + " ";
                     }
-
                     string subflowAbsFilePath = subflowFilePath;
                     if (!subflowFilePath.Contains(":")) { subflowAbsFilePath = GetFlowFolderPath(originalDocFilePath) + subflowFilePath; }
                     foreach (Run run in paragraph.Descendants<Run>())
@@ -820,24 +981,52 @@ namespace TagUIWordAddIn
                     string workingFolder = GetWorkingFolderPath(deploy);
                     newRun.AppendChild(new Text("tagui " + workingFolder + "WorkFlow" + subFlowTotal + ".tag"));
                     subFlowFilePaths.Add(subflowAbsFilePath);
-
-
-                    /*
-                    subFlowCount++;
-                    subFlowTotal++;
-                    string subflowFilePath = paragraph.InnerText.ToLower().Trim().Split(' ')[1];
-                    string subflowAbsFilePath = subflowFilePath;
-                    if (!subflowFilePath.Contains(":")) { subflowAbsFilePath = GetFlowFolderPath(originalDocFilePath) + subflowFilePath; }
+                }
+                if (firstWord == "if" || firstWord == "for" || firstWord == "break" || firstWord == "continue" || firstWord == "break;" || firstWord == "continue;")
+                {
+                    string sentence = paragraph.InnerText.TrimStart();
+                    
+                    string finalSentence = firstWord.ToLower() + " " + string.Join(" ", sentence.Split(' ').Skip(1));
+                    
                     foreach (Run run in paragraph.Descendants<Run>())
                     {
                         run.RemoveAllChildren<Text>();
                     }
                     Run newRun = paragraph.AppendChild(new Run());
-                    string workingFolder = GetWorkingFolderPath(deploy);
-                    newRun.AppendChild(new Text("tagui " + workingFolder + "WorkFlow" + subFlowCount + ".tag"));
-                    subFlowFilePaths.Add(subflowAbsFilePath);
-                    */
+                    newRun.AppendChild(new Text(finalSentence));
                 }
+                try
+                {
+                    if (paragraph.ParagraphProperties.Indentation is object)
+                    {
+                        indentCount++;
+                        int paraIndentCount = 0;
+                        float indentValue = float.Parse(paragraph.ParagraphProperties.Indentation.FirstLine);
+                        if (indentCount == 1)
+                        {
+                            firstIndent = indentValue;
+                        }
+                        paraIndentCount = (int)Math.Round(indentValue / firstIndent);
+
+                        paragraph.ParagraphProperties.Indentation.Remove();
+                        string paraText = paragraph.InnerText;
+                        foreach (var e in paragraph.Descendants<Text>().First().ElementsBefore())
+                        {
+                            if (e.LocalName == "tab") paraIndentCount++;
+                        }
+                        foreach (Run run in paragraph.Descendants<Run>())
+                        {
+                            run.RemoveAllChildren();
+                        }
+                        Run newRun = paragraph.AppendChild(new Run());
+                        for (int i = 0; i < paraIndentCount; i++)
+                        {
+                            newRun.AppendChild(new TabChar());
+                        }
+                        newRun.AppendChild(new Text(paraText));
+                    }
+                }
+                catch { }
             }
             duplicateDoc.Close();
         }
@@ -857,6 +1046,7 @@ namespace TagUIWordAddIn
             }
             fs.Flush();
             fs.Close();
+            fs.Dispose();
         }
         
         private List<string> ExtractImages(Body content, MainDocumentPart wDoc, string imageFolderPath)
@@ -905,12 +1095,7 @@ namespace TagUIWordAddIn
         }
         private void CreateSubFlowWordCopy(string originalDocFilePath, string duplicateDocFilePath)
         {
-            using (WordprocessingDocument originalDoc = WordprocessingDocument.Open(originalDocFilePath, false))
-            using (WordprocessingDocument duplicateDoc = WordprocessingDocument.Create(duplicateDocFilePath, WordprocessingDocumentType.Document))
-            {
-                foreach (var part in originalDoc.Parts)
-                    duplicateDoc.AddPart(part.OpenXmlPart, part.RelationshipId);
-            }
+            File.Copy(originalDocFilePath, duplicateDocFilePath, true);
         }
         private string GetFlowFolderPath(string flowFilePath)
         {
@@ -945,6 +1130,7 @@ namespace TagUIWordAddIn
                     Type.Missing, Type.Missing, Type.Missing,
                     Type.Missing, Type.Missing);
             newDoc.Close();
+            wordApp.Quit();
         }
         private string GetImageFolderPath(bool deploy)
         {
@@ -1031,15 +1217,17 @@ namespace TagUIWordAddIn
                             catch (Exception ex)
                             {
                                 workbook.Close(false);
-                                MessageBox.Show("Input a valid datatable range.");
-                                return false;
+                                ErrorDialog f1 = new ErrorDialog();
+                                f1.Show("Error", ex.Message, ex.ToString());
+                            return false;
                             }
                             workbook.Close(false);
                     }
-                        catch
+                        catch (Exception ex)
                         {
                             excelApp.Quit();
-                            MessageBox.Show("Select a valid " + type + " worksheet and ensure that workbook is closed before running deploying");
+                            ErrorDialog f1 = new ErrorDialog();
+                            f1.Show("Error", ex.Message, ex.ToString());
                             return false;
                         }
                     excelApp.Quit();
@@ -1053,17 +1241,19 @@ namespace TagUIWordAddIn
                             //
                         }
                     }
-                    catch
+                    catch (Exception ex)
                     {
-                        MessageBox.Show("Select a valid " + type + " CSV file and ensure that file is closed before running deploying");
+                        ErrorDialog f1 = new ErrorDialog();
+                        f1.Show("Error", ex.Message, ex.ToString());
                         return false;
                     }
                 }
                 isValidated = true;
             }
-            catch
+            catch (Exception ex)
             {
-                MessageBox.Show("Select a valid " + type + " file");
+                ErrorDialog f1 = new ErrorDialog();
+                f1.Show("Error", ex.Message, ex.ToString());
                 return false;
             }
             return isValidated;
@@ -1186,12 +1376,6 @@ namespace TagUIWordAddIn
             }
             else fileType = "csv";
             return fileType;
-        }
-
-        private void buttonUpdate_Click(object sender, RibbonControlEventArgs e)
-        {
-            FormUpdate f1 = new FormUpdate();
-            f1.Show();
         }
     }
 }

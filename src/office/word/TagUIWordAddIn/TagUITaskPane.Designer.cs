@@ -49,6 +49,8 @@ namespace TagUIWordAddIn
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.pictureBox2 = new System.Windows.Forms.PictureBox();
             this.textBoxRange = new System.Windows.Forms.TextBox();
+            this.checkBoxTurbo = new System.Windows.Forms.CheckBox();
+            this.checkBoxMSEdge = new System.Windows.Forms.CheckBox();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).BeginInit();
             this.SuspendLayout();
@@ -66,7 +68,7 @@ namespace TagUIWordAddIn
             // checkBoxNoBrowser
             // 
             this.checkBoxNoBrowser.AutoSize = true;
-            this.checkBoxNoBrowser.Location = new System.Drawing.Point(6, 22);
+            this.checkBoxNoBrowser.Location = new System.Drawing.Point(6, 24);
             this.checkBoxNoBrowser.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.checkBoxNoBrowser.Name = "checkBoxNoBrowser";
             this.checkBoxNoBrowser.Size = new System.Drawing.Size(103, 21);
@@ -77,7 +79,7 @@ namespace TagUIWordAddIn
             // checkBoxReport
             // 
             this.checkBoxReport.AutoSize = true;
-            this.checkBoxReport.Location = new System.Drawing.Point(6, 53);
+            this.checkBoxReport.Location = new System.Drawing.Point(6, 54);
             this.checkBoxReport.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.checkBoxReport.Name = "checkBoxReport";
             this.checkBoxReport.Size = new System.Drawing.Size(109, 21);
@@ -88,7 +90,7 @@ namespace TagUIWordAddIn
             // checkBoxQuiet
             // 
             this.checkBoxQuiet.AutoSize = true;
-            this.checkBoxQuiet.Location = new System.Drawing.Point(6, 83);
+            this.checkBoxQuiet.Location = new System.Drawing.Point(6, 114);
             this.checkBoxQuiet.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.checkBoxQuiet.Name = "checkBoxQuiet";
             this.checkBoxQuiet.Size = new System.Drawing.Size(103, 21);
@@ -99,7 +101,7 @@ namespace TagUIWordAddIn
             // checkBoxDatatableCSV
             // 
             this.checkBoxDatatableCSV.AutoSize = true;
-            this.checkBoxDatatableCSV.Location = new System.Drawing.Point(6, 114);
+            this.checkBoxDatatableCSV.Location = new System.Drawing.Point(6, 174);
             this.checkBoxDatatableCSV.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.checkBoxDatatableCSV.Name = "checkBoxDatatableCSV";
             this.checkBoxDatatableCSV.Size = new System.Drawing.Size(121, 21);
@@ -111,7 +113,7 @@ namespace TagUIWordAddIn
             // checkBoxInputs
             // 
             this.checkBoxInputs.AutoSize = true;
-            this.checkBoxInputs.Location = new System.Drawing.Point(6, 307);
+            this.checkBoxInputs.Location = new System.Drawing.Point(6, 368);
             this.checkBoxInputs.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.checkBoxInputs.Name = "checkBoxInputs";
             this.checkBoxInputs.Size = new System.Drawing.Size(168, 21);
@@ -122,7 +124,7 @@ namespace TagUIWordAddIn
             // 
             // textBoxDatatableCSV
             // 
-            this.textBoxDatatableCSV.Location = new System.Drawing.Point(31, 138);
+            this.textBoxDatatableCSV.Location = new System.Drawing.Point(31, 200);
             this.textBoxDatatableCSV.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.textBoxDatatableCSV.Name = "textBoxDatatableCSV";
             this.textBoxDatatableCSV.ReadOnly = true;
@@ -132,7 +134,7 @@ namespace TagUIWordAddIn
             // textBoxParam
             // 
             this.textBoxParam.Enabled = false;
-            this.textBoxParam.Location = new System.Drawing.Point(31, 331);
+            this.textBoxParam.Location = new System.Drawing.Point(31, 394);
             this.textBoxParam.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.textBoxParam.Name = "textBoxParam";
             this.textBoxParam.Size = new System.Drawing.Size(155, 22);
@@ -142,7 +144,7 @@ namespace TagUIWordAddIn
             // 
             this.labelOutput.AutoSize = true;
             this.labelOutput.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.labelOutput.Location = new System.Drawing.Point(3, 367);
+            this.labelOutput.Location = new System.Drawing.Point(3, 427);
             this.labelOutput.Name = "labelOutput";
             this.labelOutput.Size = new System.Drawing.Size(57, 17);
             this.labelOutput.TabIndex = 25;
@@ -151,7 +153,7 @@ namespace TagUIWordAddIn
             // buttonBrowse
             // 
             this.buttonBrowse.Enabled = false;
-            this.buttonBrowse.Location = new System.Drawing.Point(189, 138);
+            this.buttonBrowse.Location = new System.Drawing.Point(189, 200);
             this.buttonBrowse.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.buttonBrowse.Name = "buttonBrowse";
             this.buttonBrowse.Size = new System.Drawing.Size(64, 21);
@@ -162,7 +164,7 @@ namespace TagUIWordAddIn
             // 
             // textBoxOutput
             // 
-            this.textBoxOutput.Location = new System.Drawing.Point(6, 387);
+            this.textBoxOutput.Location = new System.Drawing.Point(6, 447);
             this.textBoxOutput.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.textBoxOutput.Multiline = true;
             this.textBoxOutput.Name = "textBoxOutput";
@@ -177,7 +179,7 @@ namespace TagUIWordAddIn
             this.comboBoxDatatableWs.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.comboBoxDatatableWs.Enabled = false;
             this.comboBoxDatatableWs.FormattingEnabled = true;
-            this.comboBoxDatatableWs.Location = new System.Drawing.Point(31, 166);
+            this.comboBoxDatatableWs.Location = new System.Drawing.Point(31, 226);
             this.comboBoxDatatableWs.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.comboBoxDatatableWs.Name = "comboBoxDatatableWs";
             this.comboBoxDatatableWs.Size = new System.Drawing.Size(155, 24);
@@ -189,7 +191,7 @@ namespace TagUIWordAddIn
             this.comboBoxObjRepo.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.comboBoxObjRepo.Enabled = false;
             this.comboBoxObjRepo.FormattingEnabled = true;
-            this.comboBoxObjRepo.Location = new System.Drawing.Point(31, 276);
+            this.comboBoxObjRepo.Location = new System.Drawing.Point(31, 336);
             this.comboBoxObjRepo.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.comboBoxObjRepo.Name = "comboBoxObjRepo";
             this.comboBoxObjRepo.Size = new System.Drawing.Size(155, 24);
@@ -199,7 +201,7 @@ namespace TagUIWordAddIn
             // buttonObjRepo
             // 
             this.buttonObjRepo.Enabled = false;
-            this.buttonObjRepo.Location = new System.Drawing.Point(189, 248);
+            this.buttonObjRepo.Location = new System.Drawing.Point(189, 310);
             this.buttonObjRepo.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.buttonObjRepo.Name = "buttonObjRepo";
             this.buttonObjRepo.Size = new System.Drawing.Size(64, 21);
@@ -210,7 +212,7 @@ namespace TagUIWordAddIn
             // 
             // textBoxObjRepo
             // 
-            this.textBoxObjRepo.Location = new System.Drawing.Point(31, 248);
+            this.textBoxObjRepo.Location = new System.Drawing.Point(31, 310);
             this.textBoxObjRepo.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.textBoxObjRepo.Name = "textBoxObjRepo";
             this.textBoxObjRepo.ReadOnly = true;
@@ -220,7 +222,7 @@ namespace TagUIWordAddIn
             // checkBoxObjRepo
             // 
             this.checkBoxObjRepo.AutoSize = true;
-            this.checkBoxObjRepo.Location = new System.Drawing.Point(6, 224);
+            this.checkBoxObjRepo.Location = new System.Drawing.Point(6, 284);
             this.checkBoxObjRepo.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.checkBoxObjRepo.Name = "checkBoxObjRepo";
             this.checkBoxObjRepo.Size = new System.Drawing.Size(147, 21);
@@ -233,7 +235,7 @@ namespace TagUIWordAddIn
             // 
             this.pictureBox1.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("pictureBox1.BackgroundImage")));
             this.pictureBox1.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.pictureBox1.Location = new System.Drawing.Point(125, 116);
+            this.pictureBox1.Location = new System.Drawing.Point(125, 178);
             this.pictureBox1.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.pictureBox1.Name = "pictureBox1";
             this.pictureBox1.Size = new System.Drawing.Size(13, 12);
@@ -244,7 +246,7 @@ namespace TagUIWordAddIn
             // 
             this.pictureBox2.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("pictureBox2.BackgroundImage")));
             this.pictureBox2.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.pictureBox2.Location = new System.Drawing.Point(149, 226);
+            this.pictureBox2.Location = new System.Drawing.Point(149, 288);
             this.pictureBox2.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.pictureBox2.Name = "pictureBox2";
             this.pictureBox2.Size = new System.Drawing.Size(13, 12);
@@ -256,13 +258,35 @@ namespace TagUIWordAddIn
             this.textBoxRange.Enabled = false;
             this.textBoxRange.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.textBoxRange.ForeColor = System.Drawing.SystemColors.Desktop;
-            this.textBoxRange.Location = new System.Drawing.Point(31, 195);
+            this.textBoxRange.Location = new System.Drawing.Point(31, 254);
             this.textBoxRange.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.textBoxRange.Name = "textBoxRange";
             this.textBoxRange.Size = new System.Drawing.Size(155, 23);
             this.textBoxRange.TabIndex = 39;
             this.textBoxRange.Text = "Optional range";
             this.textBoxRange.Enter += new System.EventHandler(this.textBoxRange_Enter);
+            // 
+            // checkBoxTurbo
+            // 
+            this.checkBoxTurbo.AutoSize = true;
+            this.checkBoxTurbo.Location = new System.Drawing.Point(6, 84);
+            this.checkBoxTurbo.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.checkBoxTurbo.Name = "checkBoxTurbo";
+            this.checkBoxTurbo.Size = new System.Drawing.Size(107, 21);
+            this.checkBoxTurbo.TabIndex = 40;
+            this.checkBoxTurbo.Text = "Turbo Mode";
+            this.checkBoxTurbo.UseVisualStyleBackColor = true;
+            // 
+            // checkBoxMSEdge
+            // 
+            this.checkBoxMSEdge.AutoSize = true;
+            this.checkBoxMSEdge.Location = new System.Drawing.Point(6, 144);
+            this.checkBoxMSEdge.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.checkBoxMSEdge.Name = "checkBoxMSEdge";
+            this.checkBoxMSEdge.Size = new System.Drawing.Size(142, 21);
+            this.checkBoxMSEdge.TabIndex = 41;
+            this.checkBoxMSEdge.Text = "MS Edge Browser";
+            this.checkBoxMSEdge.UseVisualStyleBackColor = true;
             // 
             // TagUITaskPane
             // 
@@ -271,6 +295,8 @@ namespace TagUIWordAddIn
             this.AutoSize = true;
             this.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.BackColor = System.Drawing.SystemColors.ControlLightLight;
+            this.Controls.Add(this.checkBoxMSEdge);
+            this.Controls.Add(this.checkBoxTurbo);
             this.Controls.Add(this.textBoxRange);
             this.Controls.Add(this.pictureBox2);
             this.Controls.Add(this.pictureBox1);
@@ -292,7 +318,7 @@ namespace TagUIWordAddIn
             this.Controls.Add(this.labelRunOptions);
             this.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.Name = "TagUITaskPane";
-            this.Size = new System.Drawing.Size(256, 541);
+            this.Size = new System.Drawing.Size(256, 601);
             this.SizeChanged += new System.EventHandler(this.TagUITaskPane_SizeChanged);
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).EndInit();
@@ -321,5 +347,7 @@ namespace TagUIWordAddIn
         private System.Windows.Forms.PictureBox pictureBox1;
         private System.Windows.Forms.PictureBox pictureBox2;
         private System.Windows.Forms.TextBox textBoxRange;
+        private System.Windows.Forms.CheckBox checkBoxTurbo;
+        private System.Windows.Forms.CheckBox checkBoxMSEdge;
     }
 }

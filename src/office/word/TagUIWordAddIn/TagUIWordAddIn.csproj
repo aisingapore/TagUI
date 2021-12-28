@@ -33,7 +33,7 @@
     <PublishUrl>C:\Users\ruthtxh\Desktop\officepoc\word-test-deployment\</PublishUrl>
     <InstallUrl />
     <TargetCulture>en</TargetCulture>
-    <ApplicationVersion>1.0.0.0</ApplicationVersion>
+    <ApplicationVersion>1.0.0.1</ApplicationVersion>
     <AutoIncrementApplicationRevision>true</AutoIncrementApplicationRevision>
     <UpdateEnabled>true</UpdateEnabled>
     <UpdateInterval>7</UpdateInterval>
@@ -186,17 +186,41 @@
     can be found.
   -->
   <ItemGroup>
-    <Compile Include="Form1.cs">
+    <Compile Include="ErrorDialog.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Form1.Designer.cs">
-      <DependentUpon>Form1.cs</DependentUpon>
+    <Compile Include="ErrorDialog.Designer.cs">
+      <DependentUpon>ErrorDialog.cs</DependentUpon>
     </Compile>
-    <Compile Include="Form2.cs">
+    <Compile Include="FormLive.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Form2.Designer.cs">
-      <DependentUpon>Form2.cs</DependentUpon>
+    <Compile Include="FormLive.Designer.cs">
+      <DependentUpon>FormLive.cs</DependentUpon>
+    </Compile>
+    <Compile Include="FormLiveInline.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FormLiveInline.Designer.cs">
+      <DependentUpon>FormLiveInline.cs</DependentUpon>
+    </Compile>
+    <Compile Include="FormSnapshotOverlay1.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FormSnapshotOverlay1.Designer.cs">
+      <DependentUpon>FormSnapshotOverlay1.cs</DependentUpon>
+    </Compile>
+    <Compile Include="FormSnapshotOverlay2.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FormSnapshotOverlay2.Designer.cs">
+      <DependentUpon>FormSnapshotOverlay2.cs</DependentUpon>
+    </Compile>
+    <Compile Include="FormSettings.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FormSettings.Designer.cs">
+      <DependentUpon>FormSettings.cs</DependentUpon>
     </Compile>
     <Compile Include="FormUpdate.cs">
       <SubType>Form</SubType>
@@ -207,19 +231,31 @@
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Properties\Resources.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Resources.resx</DependentUpon>
-    </Compile>
-    <EmbeddedResource Include="Form1.resx">
-      <DependentUpon>Form1.cs</DependentUpon>
+    <EmbeddedResource Include="ErrorDialog.resx">
+      <DependentUpon>ErrorDialog.cs</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="Form2.resx">
-      <DependentUpon>Form2.cs</DependentUpon>
+    <EmbeddedResource Include="FormLive.resx">
+      <DependentUpon>FormLive.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FormLiveInline.resx">
+      <DependentUpon>FormLiveInline.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FormSnapshotOverlay1.resx">
+      <DependentUpon>FormSnapshotOverlay1.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FormSnapshotOverlay2.resx">
+      <DependentUpon>FormSnapshotOverlay2.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FormSettings.resx">
+      <DependentUpon>FormSettings.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="FormUpdate.resx">
       <DependentUpon>FormUpdate.cs</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
@@ -229,8 +265,8 @@
     <EmbeddedResource Include="Ribbon1.resx">
       <DependentUpon>Ribbon1.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="SnapshotBar.resx">
-      <DependentUpon>SnapshotBar.cs</DependentUpon>
+    <EmbeddedResource Include="FormSnapshot.resx">
+      <DependentUpon>FormSnapshot.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="TagUITaskPane.resx">
       <DependentUpon>TagUITaskPane.cs</DependentUpon>
@@ -240,6 +276,11 @@
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </None>
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
     <Compile Include="Properties\Settings.Designer.cs">
       <AutoGen>True</AutoGen>
       <DependentUpon>Settings.settings</DependentUpon>
@@ -250,11 +291,11 @@
     <Compile Include="Ribbon1.Designer.cs">
       <DependentUpon>Ribbon1.cs</DependentUpon>
     </Compile>
-    <Compile Include="SnapshotBar.cs">
+    <Compile Include="FormSnapshot.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="SnapshotBar.Designer.cs">
-      <DependentUpon>SnapshotBar.cs</DependentUpon>
+    <Compile Include="FormSnapshot.Designer.cs">
+      <DependentUpon>FormSnapshot.cs</DependentUpon>
     </Compile>
     <Compile Include="TagUITaskPane.cs">
       <SubType>UserControl</SubType>
@@ -265,8 +306,6 @@
     <Compile Include="ThisAddIn.cs">
       <SubType>Code</SubType>
     </Compile>
-    <None Include="TagUIWordAddInv3.07_TemporaryKey.snk" />
-    <None Include="TagUIWordAddIn_TemporaryKey.pfx" />
     <None Include="ThisAddIn.Designer.xml">
       <DependentUpon>ThisAddIn.cs</DependentUpon>
     </None>
@@ -279,22 +318,28 @@
     <None Include="Resources\Snapshot.png" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\Taskpane.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\UsageGuide.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\Update.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\Stop.png" />
+    <None Include="Resources\Deploy.png" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\Run.png" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\Deploy.png" />
+    <None Include="Resources\Taskpane.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Live.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Settings.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Update.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\UsageGuide.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Stop.png" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
@@ -313,7 +358,8 @@
     <SignAssembly>true</SignAssembly>
   </PropertyGroup>
   <PropertyGroup>
-    <AssemblyOriginatorKeyFile>TagUIWordAddInv3.07_TemporaryKey.snk</AssemblyOriginatorKeyFile>
+    <AssemblyOriginatorKeyFile>
+    </AssemblyOriginatorKeyFile>
   </PropertyGroup>
   <!-- Include the build rules for a C# project. -->
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
@@ -324,8 +370,8 @@
     <VisualStudio>
       <FlavorProperties GUID="{BAA0C2D2-18E2-41B9-852F-F413020CAA33}">
         <ProjectProperties HostName="Word" HostPackage="{29A7B9D7-A7F1-4328-8EF0-6B2D1A56B2C1}" OfficeVersion="15.0" VstxVersion="4.0" ApplicationType="Word" Language="cs" TemplatesPath="" DebugInfoExeName="#Software\Microsoft\Office\16.0\Word\InstallRoot\Path#WINWORD.EXE" DebugInfoCommandLine="/x" AddItemTemplatesGuid="{51063C3A-E220-4D12-8922-BDA915ACD783}" />
-        <Host Name="Word" GeneratedCodeNamespace="TagUIWordAddIn" IconIndex="0">
-          <HostItem Name="ThisAddIn" Code="ThisAddIn.cs" CanonicalName="AddIn" CanActivate="false" IconIndex="1" Blueprint="ThisAddIn.Designer.xml" GeneratedCode="ThisAddIn.Designer.cs" />
+        <Host Name="Word" GeneratedCodeNamespace="TagUIWordAddIn" PublishedHash="69C324AB27932AA2FBF2B7EA72250886FF164DE6" IconIndex="0">
+          <HostItem Name="ThisAddIn" Code="ThisAddIn.cs" CanonicalName="AddIn" CanActivate="false" IconIndex="1" Blueprint="ThisAddIn.Designer.xml" GeneratedCode="ThisAddIn.Designer.cs" PublishedHash="CA8AD247DF196B378E27B98FF328851FB2F21BB7" />
         </Host>
       </FlavorProperties>
     </VisualStudio>

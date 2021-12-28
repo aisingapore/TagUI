@@ -41,9 +41,10 @@ namespace TagUIWordAddIn
             this.buttonRun = this.Factory.CreateRibbonButton();
             this.buttonDeploy = this.Factory.CreateRibbonButton();
             this.group4 = this.Factory.CreateRibbonGroup();
-            this.toggleButton1 = this.Factory.CreateRibbonToggleButton();
+            this.toggleButtonShowTaskPane = this.Factory.CreateRibbonToggleButton();
             this.group3 = this.Factory.CreateRibbonGroup();
-            this.button1 = this.Factory.CreateRibbonButton();
+            this.buttonSnapshot = this.Factory.CreateRibbonButton();
+            this.buttonLive = this.Factory.CreateRibbonButton();
             this.group2 = this.Factory.CreateRibbonGroup();
             this.buttonClick = this.Factory.CreateRibbonButton();
             this.buttonRclick = this.Factory.CreateRibbonButton();
@@ -63,7 +64,11 @@ namespace TagUIWordAddIn
             this.group6 = this.Factory.CreateRibbonGroup();
             this.buttonIf = this.Factory.CreateRibbonButton();
             this.buttonLoop = this.Factory.CreateRibbonButton();
+            this.buttonBreak = this.Factory.CreateRibbonButton();
             this.group5 = this.Factory.CreateRibbonGroup();
+            this.buttonLiveStep = this.Factory.CreateRibbonButton();
+            this.buttonExcel = this.Factory.CreateRibbonButton();
+            this.buttonTelegram = this.Factory.CreateRibbonButton();
             this.buttonKeyboard = this.Factory.CreateRibbonButton();
             this.buttonMouse = this.Factory.CreateRibbonButton();
             this.buttonTagui = this.Factory.CreateRibbonButton();
@@ -89,7 +94,11 @@ namespace TagUIWordAddIn
             this.buttonUrl = this.Factory.CreateRibbonButton();
             this.buttonTitle = this.Factory.CreateRibbonButton();
             this.buttonText = this.Factory.CreateRibbonButton();
+            this.buttonDelChars = this.Factory.CreateRibbonButton();
+            this.buttonGetText = this.Factory.CreateRibbonButton();
+            this.buttonGetEnv = this.Factory.CreateRibbonButton();
             this.group8 = this.Factory.CreateRibbonGroup();
+            this.buttonSettings = this.Factory.CreateRibbonButton();
             this.buttonUpdate = this.Factory.CreateRibbonButton();
             this.buttonUsageGuide = this.Factory.CreateRibbonButton();
             this.tab1.SuspendLayout();
@@ -135,7 +144,7 @@ namespace TagUIWordAddIn
             // buttonDeploy
             // 
             this.buttonDeploy.ControlSize = Microsoft.Office.Core.RibbonControlSize.RibbonControlSizeLarge;
-            this.buttonDeploy.Image = global::TagUIWordAddIn.Properties.Resources.Deploy;
+            this.buttonDeploy.Image = ((System.Drawing.Image)(resources.GetObject("buttonDeploy.Image")));
             this.buttonDeploy.Label = "Deploy";
             this.buttonDeploy.Name = "buttonDeploy";
             this.buttonDeploy.ShowImage = true;
@@ -143,33 +152,43 @@ namespace TagUIWordAddIn
             // 
             // group4
             // 
-            this.group4.Items.Add(this.toggleButton1);
+            this.group4.Items.Add(this.toggleButtonShowTaskPane);
             this.group4.Label = "Options / Output";
             this.group4.Name = "group4";
             // 
-            // toggleButton1
+            // toggleButtonShowTaskPane
             // 
-            this.toggleButton1.ControlSize = Microsoft.Office.Core.RibbonControlSize.RibbonControlSizeLarge;
-            this.toggleButton1.Image = global::TagUIWordAddIn.Properties.Resources.Taskpane;
-            this.toggleButton1.Label = "Show Task Pane";
-            this.toggleButton1.Name = "toggleButton1";
-            this.toggleButton1.ShowImage = true;
-            this.toggleButton1.Click += new Microsoft.Office.Tools.Ribbon.RibbonControlEventHandler(this.toggleButton1_Click);
+            this.toggleButtonShowTaskPane.ControlSize = Microsoft.Office.Core.RibbonControlSize.RibbonControlSizeLarge;
+            this.toggleButtonShowTaskPane.Image = ((System.Drawing.Image)(resources.GetObject("toggleButtonShowTaskPane.Image")));
+            this.toggleButtonShowTaskPane.Label = "Show Task Pane";
+            this.toggleButtonShowTaskPane.Name = "toggleButtonShowTaskPane";
+            this.toggleButtonShowTaskPane.ShowImage = true;
+            this.toggleButtonShowTaskPane.Click += new Microsoft.Office.Tools.Ribbon.RibbonControlEventHandler(this.toggleButtonShowTaskPane_Click);
             // 
             // group3
             // 
-            this.group3.Items.Add(this.button1);
+            this.group3.Items.Add(this.buttonSnapshot);
+            this.group3.Items.Add(this.buttonLive);
             this.group3.Label = "Helper Tools";
             this.group3.Name = "group3";
             // 
-            // button1
+            // buttonSnapshot
             // 
-            this.button1.ControlSize = Microsoft.Office.Core.RibbonControlSize.RibbonControlSizeLarge;
-            this.button1.Image = global::TagUIWordAddIn.Properties.Resources.Snapshot;
-            this.button1.Label = "Snapshot";
-            this.button1.Name = "button1";
-            this.button1.ShowImage = true;
-            this.button1.Click += new Microsoft.Office.Tools.Ribbon.RibbonControlEventHandler(this.button1_Click);
+            this.buttonSnapshot.ControlSize = Microsoft.Office.Core.RibbonControlSize.RibbonControlSizeLarge;
+            this.buttonSnapshot.Image = ((System.Drawing.Image)(resources.GetObject("buttonSnapshot.Image")));
+            this.buttonSnapshot.Label = "Snapshot";
+            this.buttonSnapshot.Name = "buttonSnapshot";
+            this.buttonSnapshot.ShowImage = true;
+            this.buttonSnapshot.Click += new Microsoft.Office.Tools.Ribbon.RibbonControlEventHandler(this.buttonSnapshot_Click);
+            // 
+            // buttonLive
+            // 
+            this.buttonLive.ControlSize = Microsoft.Office.Core.RibbonControlSize.RibbonControlSizeLarge;
+            this.buttonLive.Image = ((System.Drawing.Image)(resources.GetObject("buttonLive.Image")));
+            this.buttonLive.Label = "Live Mode";
+            this.buttonLive.Name = "buttonLive";
+            this.buttonLive.ShowImage = true;
+            this.buttonLive.Click += new Microsoft.Office.Tools.Ribbon.RibbonControlEventHandler(this.buttonLive_Click);
             // 
             // group2
             // 
@@ -315,6 +334,7 @@ namespace TagUIWordAddIn
             // 
             this.group6.Items.Add(this.buttonIf);
             this.group6.Items.Add(this.buttonLoop);
+            this.group6.Items.Add(this.buttonBreak);
             this.group6.Label = "Conditions";
             this.group6.Name = "group6";
             // 
@@ -335,8 +355,17 @@ namespace TagUIWordAddIn
             this.buttonLoop.SuperTip = "loop steps n times";
             this.buttonLoop.Click += new Microsoft.Office.Tools.Ribbon.RibbonControlEventHandler(this.buttonLoop_Click);
             // 
+            // buttonBreak
+            // 
+            this.buttonBreak.Label = "break";
+            this.buttonBreak.Name = "buttonBreak";
+            this.buttonBreak.Click += new Microsoft.Office.Tools.Ribbon.RibbonControlEventHandler(this.buttonBreak_Click);
+            // 
             // group5
             // 
+            this.group5.Items.Add(this.buttonLiveStep);
+            this.group5.Items.Add(this.buttonExcel);
+            this.group5.Items.Add(this.buttonTelegram);
             this.group5.Items.Add(this.buttonKeyboard);
             this.group5.Items.Add(this.buttonMouse);
             this.group5.Items.Add(this.buttonTagui);
@@ -354,6 +383,32 @@ namespace TagUIWordAddIn
             this.group5.Items.Add(this.buttonR);
             this.group5.Label = "Pro Steps";
             this.group5.Name = "group5";
+            // 
+            // buttonLiveStep
+            // 
+            this.buttonLiveStep.Label = "live";
+            this.buttonLiveStep.Name = "buttonLiveStep";
+            this.buttonLiveStep.ScreenTip = "live";
+            this.buttonLiveStep.SuperTip = "run steps interactively and immediately see the output";
+            this.buttonLiveStep.Click += new Microsoft.Office.Tools.Ribbon.RibbonControlEventHandler(this.buttonLiveStep_Click);
+            // 
+            // buttonExcel
+            // 
+            this.buttonExcel.Label = "excel";
+            this.buttonExcel.Name = "buttonExcel";
+            this.buttonExcel.ScreenTip = "excel";
+            this.buttonExcel.SuperTip = "perform read, write, copy, delete actions on Excel files using standard Excel for" +
+    "mula like this one [workbook]sheet!range";
+            this.buttonExcel.Click += new Microsoft.Office.Tools.Ribbon.RibbonControlEventHandler(this.buttonExcel_Click);
+            // 
+            // buttonTelegram
+            // 
+            this.buttonTelegram.Label = "telegram";
+            this.buttonTelegram.Name = "buttonTelegram";
+            this.buttonTelegram.ScreenTip = "telegram";
+            this.buttonTelegram.SuperTip = "send a Telegram notification, for example, to update on automation completion or " +
+    "exception";
+            this.buttonTelegram.Click += new Microsoft.Office.Tools.Ribbon.RibbonControlEventHandler(this.buttonTelegram_Click);
             // 
             // buttonKeyboard
             // 
@@ -486,6 +541,9 @@ namespace TagUIWordAddIn
             this.group7.Items.Add(this.buttonUrl);
             this.group7.Items.Add(this.buttonTitle);
             this.group7.Items.Add(this.buttonText);
+            this.group7.Items.Add(this.buttonDelChars);
+            this.group7.Items.Add(this.buttonGetText);
+            this.group7.Items.Add(this.buttonGetEnv);
             this.group7.Label = "Helper Functions";
             this.group7.Name = "group7";
             // 
@@ -563,17 +621,54 @@ namespace TagUIWordAddIn
             this.buttonText.SuperTip = "return text of current web page";
             this.buttonText.Click += new Microsoft.Office.Tools.Ribbon.RibbonControlEventHandler(this.buttonText_Click);
             // 
+            // buttonDelChars
+            // 
+            this.buttonDelChars.Label = "del_chars()";
+            this.buttonDelChars.Name = "buttonDelChars";
+            this.buttonDelChars.ScreenTip = "del_chars()";
+            this.buttonDelChars.SuperTip = "clean data by removing provided character(s) from given text and returning the re" +
+    "sult";
+            this.buttonDelChars.Click += new Microsoft.Office.Tools.Ribbon.RibbonControlEventHandler(this.buttonDelChars_Click);
+            // 
+            // buttonGetText
+            // 
+            this.buttonGetText.Label = "get_text()";
+            this.buttonGetText.Name = "buttonGetText";
+            this.buttonGetText.ScreenTip = "get_text()";
+            this.buttonGetText.SuperTip = "extract text between 2 provided anchors from given text. Optional 4th parameter f" +
+    "or occurrence during multiple matches (for example 3 to tell the function to ret" +
+    "urn the 3rd match found)";
+            this.buttonGetText.Click += new Microsoft.Office.Tools.Ribbon.RibbonControlEventHandler(this.buttonGetText_Click);
+            // 
+            // buttonGetEnv
+            // 
+            this.buttonGetEnv.Label = "get_env()";
+            this.buttonGetEnv.Name = "buttonGetEnv";
+            this.buttonGetEnv.ScreenTip = "get_env()";
+            this.buttonGetEnv.SuperTip = "return the value of given environment variable from the operating system";
+            this.buttonGetEnv.Click += new Microsoft.Office.Tools.Ribbon.RibbonControlEventHandler(this.buttonGetEnv_Click);
+            // 
             // group8
             // 
+            this.group8.Items.Add(this.buttonSettings);
             this.group8.Items.Add(this.buttonUpdate);
             this.group8.Items.Add(this.buttonUsageGuide);
             this.group8.Label = "Help";
             this.group8.Name = "group8";
             // 
+            // buttonSettings
+            // 
+            this.buttonSettings.ControlSize = Microsoft.Office.Core.RibbonControlSize.RibbonControlSizeLarge;
+            this.buttonSettings.Image = ((System.Drawing.Image)(resources.GetObject("buttonSettings.Image")));
+            this.buttonSettings.Label = "Settings";
+            this.buttonSettings.Name = "buttonSettings";
+            this.buttonSettings.ShowImage = true;
+            this.buttonSettings.Click += new Microsoft.Office.Tools.Ribbon.RibbonControlEventHandler(this.buttonSettings_Click);
+            // 
             // buttonUpdate
             // 
             this.buttonUpdate.ControlSize = Microsoft.Office.Core.RibbonControlSize.RibbonControlSizeLarge;
-            this.buttonUpdate.Image = global::TagUIWordAddIn.Properties.Resources.Update;
+            this.buttonUpdate.Image = ((System.Drawing.Image)(resources.GetObject("buttonUpdate.Image")));
             this.buttonUpdate.Label = "Update TagUI";
             this.buttonUpdate.Name = "buttonUpdate";
             this.buttonUpdate.ShowImage = true;
@@ -582,7 +677,7 @@ namespace TagUIWordAddIn
             // buttonUsageGuide
             // 
             this.buttonUsageGuide.ControlSize = Microsoft.Office.Core.RibbonControlSize.RibbonControlSizeLarge;
-            this.buttonUsageGuide.Image = global::TagUIWordAddIn.Properties.Resources.UsageGuide;
+            this.buttonUsageGuide.Image = ((System.Drawing.Image)(resources.GetObject("buttonUsageGuide.Image")));
             this.buttonUsageGuide.Label = "Usage Guide";
             this.buttonUsageGuide.Name = "buttonUsageGuide";
             this.buttonUsageGuide.ShowImage = true;
@@ -593,7 +688,6 @@ namespace TagUIWordAddIn
             this.Name = "Ribbon1";
             this.RibbonType = "Microsoft.Word.Document";
             this.Tabs.Add(this.tab1);
-            this.Load += new Microsoft.Office.Tools.Ribbon.RibbonUIEventHandler(this.Ribbon1_Load);
             this.tab1.ResumeLayout(false);
             this.tab1.PerformLayout();
             this.group1.ResumeLayout(false);
@@ -619,8 +713,8 @@ namespace TagUIWordAddIn
         #endregion
 
         internal Microsoft.Office.Tools.Ribbon.RibbonTab tab1;
-        internal Microsoft.Office.Tools.Ribbon.RibbonToggleButton toggleButton1;
-        internal Microsoft.Office.Tools.Ribbon.RibbonButton button1;
+        internal Microsoft.Office.Tools.Ribbon.RibbonToggleButton toggleButtonShowTaskPane;
+        internal Microsoft.Office.Tools.Ribbon.RibbonButton buttonSnapshot;
         internal Microsoft.Office.Tools.Ribbon.RibbonGroup group3;
         internal Microsoft.Office.Tools.Ribbon.RibbonGroup group4;
         internal Microsoft.Office.Tools.Ribbon.RibbonGroup group1;
@@ -674,6 +768,15 @@ namespace TagUIWordAddIn
         internal Microsoft.Office.Tools.Ribbon.RibbonGroup group8;
         internal Microsoft.Office.Tools.Ribbon.RibbonButton buttonUsageGuide;
         internal Microsoft.Office.Tools.Ribbon.RibbonButton buttonUpdate;
+        internal Microsoft.Office.Tools.Ribbon.RibbonButton buttonSettings;
+        internal Microsoft.Office.Tools.Ribbon.RibbonButton buttonLive;
+        internal Microsoft.Office.Tools.Ribbon.RibbonButton buttonBreak;
+        internal Microsoft.Office.Tools.Ribbon.RibbonButton buttonDelChars;
+        internal Microsoft.Office.Tools.Ribbon.RibbonButton buttonGetText;
+        internal Microsoft.Office.Tools.Ribbon.RibbonButton buttonGetEnv;
+        internal Microsoft.Office.Tools.Ribbon.RibbonButton buttonLiveStep;
+        internal Microsoft.Office.Tools.Ribbon.RibbonButton buttonExcel;
+        internal Microsoft.Office.Tools.Ribbon.RibbonButton buttonTelegram;
     }
 
     partial class ThisRibbonCollection

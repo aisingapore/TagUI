@@ -97,14 +97,23 @@ namespace TagUIWordAddIn
             taskPaneValue = this.CustomTaskPanes.Add(taskPaneControl1, " ", Doc.ActiveWindow);
 
             DocumentProperties prps;
-            prps = (DocumentProperties)Globals.ThisAddIn.Application.ActiveDocument.CustomDocumentProperties;
-            if (ReadDocumentProperty("customTaskPaneName") != null)
-            {
-                prps["customTaskPaneName"].Delete();
-            }
-            prps.Add("customTaskPaneName", false, MsoDocProperties.msoPropertyTypeString, taskPaneControl1.Name);
 
-            taskPaneValue.VisibleChanged += new EventHandler(taskPaneValue_VisibleChanged);
+            try
+            {
+                prps = (DocumentProperties)Globals.ThisAddIn.Application.ActiveDocument.CustomDocumentProperties;
+                if (ReadDocumentProperty("customTaskPaneName") != null)
+                {
+                    prps["customTaskPaneName"].Delete();
+                }
+                prps.Add("customTaskPaneName", false, MsoDocProperties.msoPropertyTypeString, taskPaneControl1.Name);
+
+                taskPaneValue.VisibleChanged += new EventHandler(taskPaneValue_VisibleChanged);
+
+            }
+            catch
+            { }
+
+                       
         }
         private void RemoveOrphanedTaskPanes()
         {
@@ -140,8 +149,12 @@ namespace TagUIWordAddIn
         #endregion
         private void taskPaneValue_VisibleChanged(object sender, System.EventArgs e)
         {
-            Globals.Ribbons.Ribbon1.toggleButton1.Checked =
-                  taskPaneValue.Visible;
+            try
+            {
+                Globals.Ribbons.Ribbon1.toggleButtonShowTaskPane.Checked =
+                      taskPaneValue.Visible;
+            }
+            catch { }
         }
         public CustomTaskPane TaskPane
         {
