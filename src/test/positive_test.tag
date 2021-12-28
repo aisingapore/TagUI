@@ -627,3 +627,69 @@ for n from 30 to 35
 
 for k from 20 to 25
     echo `k`
+
+// test excel integration usage test cases
+
+[t1.xlsx]Sheet1!A1 = [[1,2,3],["A A",'b b',"C C"]]
+
+data = [t1.xlsx]Sheet1!A1:C2
+echo `data`
+
+data = [[1,2,3],["A A",'b b',"C C"]]
+[t1.xlsx]Sheet1!A1 = data
+
+filename = 't2'
+sheet = 'Sheet1'
+cell = 'A4'
+[`filename`.xlsx]`sheet`!`cell` = [t1.xlsx]Sheet1!A1:C2
+
+[t3.xlsx]Sheet1!A1 = 'ABC'
+[t3.xlsx]Sheet1!B1 = 123
+[t3.xlsx]Sheet1!C1 = [[1,2],["A","B"]]
+
+data_string = [t3.xlsx]Sheet1!A1
+echo `(data_string+123)` 
+data_number = [t3.xlsx]Sheet1!B1
+echo `(data_number+123)`
+data_array = [t3.xlsx]Sheet1!C1:D2
+echo `data_array` - `(data_array[0][0]+1)`, `(data_array[0][1]+1)`, `(data_array[1][0]+1)`, `(data_array[1][1]+1)`
+
+[t3.xlsx]Sheet1!A1 = '= B1'
+[t3.xlsx]Sheet1!C2 = "=D2"
+
+data = [Excel/t3.xlsx]Sheet1!A1
+echo `data`
+data = ''
+data = [/Users/username/Desktop/Excel/t3.xlsx]Sheet1!A1
+echo `data`
+
+[t 3.xlsx]S h e e t 1!A1 = 123
+
+[t1.xlsx]Sheet1!A1 = 'A B C'
+[t1.xlsx]Sheet1!A2 = "D E F"
+
+data = [fakefile.xlsx]Sheet1!A1 = 'A B C'
+data = [t1.xlsx]fakesheet!A1 = 'A B C'
+
+[t5.xlsx]Sheet1!A1:B2 = [[1,2,3],[4,5,6]]
+[t5.xlsx]Sheet1!A9:B10 = 1
+
+[t1.csv]Sheet1!A1 = 'A B C'
+data = [t1.csv]Sheet1!A1
+echo `data`
+
+[t7.xlsx]Sheet1!A1 = [[1,2,3],[4,5,'']]
+data = [t7.xlsx]Sheet1!A:A
+echo `data.length` x `data[0].length`
+echo `data`
+data = [t7.xlsx]Sheet1!B:C
+echo `data.length` x `data[0].length`
+echo `data`
+data = [t7.xlsx]Sheet1!1:1
+echo `data.length` x `data[0].length`
+echo `data`
+data = [t7.xlsx]Sheet1!1:2
+echo `data.length` x `data[0].length`
+echo `data`
+
+// end of excel integration usage test cases

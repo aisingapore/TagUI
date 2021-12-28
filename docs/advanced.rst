@@ -1,8 +1,8 @@
 Advanced concepts
 ===================
 
-Saving flow run results
--------------------------
+Saving run results of flow
+----------------------------
 You can save an html log of the run and the flow run results to ``tagui/src/tagui_report.csv`` with the ``-report`` option (shortcut ``-r``). ::
 
     tagui my_flow.tag -report
@@ -84,13 +84,55 @@ If ``user-email-textbox`` was the identifier for some web text input, then you c
   type `email` as my_email@email.com
 
 
-Running other flows within a flow
------------------------------------
+Running flows within a flow
+-----------------------------
+You can modularise your RPA workflows by breaking a large workflow file into many subflow files. For more complex RPA scenarios, you can even let a subflow run other subflows.
+
+Some common reasons for doing that include the convenience of reusing the same subflow in other flows, doing something specific which is easier to organise by keeping the sequence of steps in a subflow, or storing your Python or JavaScript code and functions in separate subflows (using py begin and py finish code blocks for example). 
+
 A flow can run another flow, like this::
 
   tagui login_crm.tag
 
-Variables in the parent flow are accessible in the child flow and vice versa. 
+Flows can also be stored in subfolders::
+
+  // Windows example
+  tagui CRM\login.tag
+
+  // Mac/Linux example
+  tagui CRM/login.tag
+
+Variables in the parent flow are accessible in the child flow and vice versa::
+
+  // in this case, username and password variables are available in login.tag
+  username = 'jennifer'; password = '12345678';
+  tagui login.tag
+
+  // you can also define variables on separate lines instead of all in 1 line
+  username = 'jennifer'
+  password = '12345678'
+  tagui login.tag
+
+  // in login.tag you can define and return variables for its parent to use
+  echo `login_result`
+
+You can even combine multiple sequences of steps into one subflow as follows. By designing a subflow this way, you can assign the variable ``action = 'login'`` in the parent flow to determine which sequence of steps gets executed when the subflow is called with ``tagui`` step::
+
+  // crm_steps.tag
+  if action equals to 'login'
+    do some steps
+    do some more steps
+
+  else if action equals to 'report'
+    do some steps
+    do some more steps
+
+  else if action equals to 'logout'
+    do some steps
+    do some more steps
+
+  else
+    echo ERROR - action undefined
 
 Turbo mode to run 10X faster
 -------------------------------
@@ -129,6 +171,7 @@ If you make the background of a UI element in a ``.png`` file 100% transparent u
 
 Conversely, you can also remove the foreground content near some anchor element like a frame, to allow you to OCR varying content in the empty area using the **read** step.
 
+.. _python:
 
 Writing Python within flows
 --------------------------------
@@ -161,6 +204,12 @@ You can pass a variable to Python like this::
   py print(phone)
   echo `py_result`
 
+  name = 'Donald'
+  py_step('name = "' + name + '"')
+  py print(name)
+  echo `py_result`
+
+To pass and return more complex data, for example multiple variables, you can use JavaScript and Python JSON libraries to send and receive back JSON strings. `See an example here <https://github.com/kelaberetiv/TagUI/issues/898#issuecomment-752833953>`_ of passing 2 variables, doing some processing, and returning 2 variables.
 
 Create log files for debugging
 ---------------------------------

@@ -10,7 +10,7 @@ Steps
 The steps you can use in TagUI are listed here.
 
 
-Mouse and Keyboard
+Mouse and keyboard
 ********************
 
 .. _click:
@@ -267,8 +267,195 @@ If the response is in JSON, ``api_json`` will automatically be created.
   echo `api_result`
   author = api_json[0].author.login
 
+For an advanced example of using api step, setting POST/GET method, header and body, `see this example from aito.ai <https://aito.document360.io/docs/tagui>`_ - a web-based machine learning solution for no-coders and RPA developers. In the example, ``api`` step is used to make a machine-learning inference to generate the account code of an invoice item, based on its description and price. aito.ai's free tier comes with 2000 API calls/month and it works perfectly with TagUI.
 
-Using Variables
+Excel
+********************
+
+Perform read, write, copy, delete actions on Excel files using standard Excel formula like this one ``[workbook]sheet!range``. This feature works with both Windows and Mac Excel apps. `See this link <https://github.com/kelaberetiv/TagUI/issues/1081#issuecomment-902058917>`_ for notes of passed test cases and known limitations for this feature. To access a password-protected Excel file, use ``excel_password = 'password'``.
+
+variables
+###################
+You can use variables in your Excel formula, for eg ``range`` or ``sheet``. Various Excel file formats are supported, be sure to put the file's .extension as part of the formula so that TagUI can recognise that the instruction is an Excel step instead of some JavaScript code.
+
+.. code-block:: none
+
+  [`workbook`.xlsx]`sheet`!`range` = 123
+  data = [`workbook`.xlsx]`sheet`!`range`
+
+visibility
+###################
+By default, the Excel app will be opened and run in the background. If you want the automated actions on Excel to be in focus in foreground, you can set it with ``excel_focus = true`` in your workflow. Use ``excel_focus = false`` to set it off again in your workflow.
+
+For some usage scenarios, you might not even want the Excel app to be visible in the background. In that case, you can set ``excel_visible = false`` in your workflow to run Excel invisibly. Use ``excel_visible = true`` to make Excel visible again in your RPA workflow.
+
+read
+###################
+Read data from Excel files. Both relative and absolute file paths supported. Error will be shown if the specified file or sheet does not exist. In below line, range can be a cell or range in Excel.
+
+.. code-block:: none
+
+  variable = [workbook]sheet!range
+
+Reading columns and rows can be done using standard Excel formula for range, for example A:A (column A), B:D (columns B to D), 2:2 (row 2), 3:5 (rows 3 to 5). There is no standard Excel formula for selecting the entire range of a sheet, so you will have to provide the actual range required.
+
+*Examples*
+
+.. code-block:: none
+
+  top_profit = [Monthly Report.xlsx]August!E10
+  top_salesman = [Monthly Report.xlsx]August!E11
+  data_array = [Quarterly Metrics.xlsx]Main!B3:G100
+  data_array = [C:\Reports\June.xls]Sheet1!A1:C2
+
+  data_array = [C:\Reports\June.xls]Sheet1!A:A
+  data_array = [C:\Reports\June.xls]Sheet1!B:D
+  data_array = [C:\Reports\June.xls]Sheet1!2:2  
+  data_array = [C:\Reports\June.xls]Sheet1!3:5
+
+TagUI's backend language is JavaScript, thus data_array can be used just like a JavaScript array.
+
+.. code-block:: none
+
+  // to work on data in data_array cell by cell
+  for row from 0 to data_array.length-1
+    for col from 0 to data_array[row].length-1
+      echo `data_array[row][col]` 
+
+Note - There was a limitation on reading multiple rows and columns, for eg B:D and 3:5 (data array returned will be a 1 x N array instead of the correct row x column array). This is now fixed in v6.87. Get your copy with ``tagui update`` command or from MS Word Plug-in ``Update TagUI`` button.
+
+write
+###################
+Write data to Excel files. Both relative and absolute file paths supported. If the specified file does not exist, a new file will be created. If the sheet does not exist, a new sheet will be created. If the data is an array, the given cell will be used as the top-left cell to write the range of cells.
+
+.. code-block:: none
+
+  [workbook]sheet!cell = variable
+
+*Examples*
+
+.. code-block:: none
+
+  [Monthly Report.xlsx]August!E10 = 12345
+  [Monthly Report.xlsx]August!E11 = "Alan"
+  [Monthly Report.xlsx]August!E12 = variable
+  [Quarterly Metrics.xlsx]Main!B3 = data_array
+
+TagUI's backend language is JavaScript, thus range data can be defined just like a JavaScript array.
+
+.. code-block:: none
+
+  // to assign a set of range data with 2 rows of 3 columns
+  [C:\Reports\June.xls]Sheet1!A1 = [[1, 2, 3], [4, 5, 6]]
+  [C:\Reports\June.xls]Sheet1!A1 = [[variable_1, variable_2, variable_3], [4, 5, 6]]
+
+  // example spreadsheet data with #, name and country
+  [Participants.xlsx]Sheet1!A1 = [['1', 'John', 'USA'], [2, 'Jenny', 'Russia'], [3, 'Javier', 'Serbia']]
+
+  // get the next row count for the example spreadsheet
+  column_A = [Participants.xlsx]Sheet1!A:A
+  next_row = column_A.length + 1
+
+  // write a new row accordingly to example spreadsheet
+  [Participants.xlsx]Sheet1!A`next_row` = [[next_row, 'Janice', 'Brazil']]
+
+copy
+###################
+Copy data across Excel files. Both relative and absolute file paths supported. Error will be shown if the specified source file or sheet does not exist. If the specified destination file does not exist, a new file will be created. If the destination sheet does not exist, a new sheet will be created. If the data is an array, the given cell will be used as the top-left cell to write the range of cells.
+
+.. code-block:: none
+
+  [workbook]sheet!cell = [workbook]sheet!range 
+
+*Examples*
+
+.. code-block:: none
+
+  [Monthly Report.xlsx]August!A1 = [Jennifer Report.xlsx]August!A1
+  [Monthly Report.xlsx]August!A1 = [Jennifer Report.xlsx]August!A1:E200
+
+delete
+###################
+Delete data in Excel files. Both relative and absolute file paths supported. Error will be shown if the specified file or sheet does not exist. Delete a range of cells by assigning an empty array to it.
+
+.. code-block:: none
+
+  [workbook]sheet!cell = ""
+
+*Examples*
+
+.. code-block:: none
+
+  [Monthly Report.xlsx]August!E10 = ""
+  [Quarterly Metrics.xlsx]Main!A1 = [["", "", ""], ["", "", ""]]
+
+Word
+********************
+
+You can read the text contents of a Microsoft Word document simply by assigning its filename to a variable as follows. TagUI will automate Microsoft Word to copy out the text contents and assign to the variable. Note that you need to have Microsoft Word installed on your computer. This feature works for both Windows and Mac.
+
+*Examples for Windows*
+
+.. code-block:: none
+
+  word_text = [Research Report.docx]
+  word_text = [C:\Users\Jennifer\Desktop\Report.docx]
+  word_text = [FY2021 Reports\Research Report.docx]
+
+  filename = 'C:\\Users\\Jennifer\\Desktop\\Report'
+  word_text = [`filename`.docx]
+  filename = 'Research Report'
+  word_text = [`filename`.docx]
+
+*Examples for Mac*
+
+.. code-block:: none
+
+  word_text = [Research Report.docx]
+  word_text = [/Users/jennifer/Desktop/Report.docx]
+  word_text = [FY2021 Reports/Research Report.docx]
+
+  filename = '/Users/jennifer/Desktop/Report'
+  word_text = [`filename`.docx]
+  filename = 'Research Report'
+  word_text = [`filename`.docx]
+
+After reading the text content into a variable, you can process it using TagUI's helper functions such as get_text() and del_chars() to retrieve specific information required for your RPA scenario. Standard JavaScript functions can also be used to do string processing, for more information google ``javascript how to xxxx``. After reading the text content from a Word document, TagUI will close Microsoft Word and continue with the rest of the automation steps.
+
+PDF
+********************
+
+You can read the text contents of a PDF file simply by assigning its filename to a variable as follows. TagUI will automate the PDF viewer app to copy out the text contents and assign to the variable. On Windows, you will need the free `Adobe Acrobat Reader <https://get.adobe.com/reader/>`_ and set it as your default PDF viewer. On Mac, TagUI will use the default Preview app that can already view PDF files.
+
+*Examples for Windows*
+
+.. code-block:: none
+
+  pdf_text = [Research Report.pdf]
+  pdf_text = [C:\Users\Jennifer\Desktop\Report.pdf]
+  pdf_text = [FY2021 Reports\Research Report.pdf]
+
+  filename = 'C:\\Users\\Jennifer\\Desktop\\Report'
+  pdf_text = [`filename`.pdf]
+  filename = 'Research Report'
+  pdf_text = [`filename`.pdf]
+
+*Examples for Mac*
+
+.. code-block:: none
+
+  pdf_text = [Research Report.pdf]
+  pdf_text = [/Users/jennifer/Desktop/Report.pdf]
+  pdf_text = [FY2021 Reports/Research Report.pdf]
+
+  filename = '/Users/jennifer/Desktop/Report'
+  pdf_text = [`filename`.pdf]
+  filename = 'Research Report'
+  pdf_text = [`filename`.pdf]
+
+After reading the text content into a variable, you can process it using TagUI's helper functions such as get_text() and del_chars() to retrieve specific information required for your RPA scenario. Standard JavaScript functions can also be used to do string processing, for more information google ``javascript how to xxxx``. After reading the text content from a PDF file, TagUI will close the PDF viewer and continue with the rest of the automation steps.
+
+Using variables
 ********************
 
 read
@@ -314,8 +501,24 @@ Saves text to a variable.
   fullname = firstname + lastname
 
 
-File Saving/Loading 
+File saving/loading 
 ***********************
+
+.. _dump:
+
+dump
+#####################
+Saves text to a new file.
+
+.. code-block:: none
+
+  dump [text] to [filename]
+  dump [`variable`] to [filename]
+
+.. code-block:: none
+
+  // creates blank CSV file with header
+  dump First Name,Last Name to names.csv
 
 write
 #####################
@@ -332,19 +535,6 @@ Saves a new line of text to an existing file.
 
   write firstname,lastname to names.csv
   write `fullreport` to report.txt
-
-.. _dump:
-
-dump
-#####################
-Saves text to a new file.
-
-.. code-block:: none
-
-  dump [text] to [filename]
-  dump [`variable`] to [filename]
-
-See :ref:`dump <dump>` for examples.
 
 
 load
@@ -489,6 +679,7 @@ Runs Python code and saves the stdout to the variable ``py_result`` as a string.
   py finish
   echo `py_result`
 
+:ref:`See this link <python>` for more examples and usage patterns on running Python code.
 
 run
 ####################
@@ -526,7 +717,7 @@ Runs Sikuli code.
 
 dom
 ####################
-Runs code in the browser dom and saves the stdout to the variable ``dom_result``.
+Runs code in the browser dom and saves returned value to the variable ``dom_result``.
 
 .. code-block:: none
 
@@ -540,7 +731,11 @@ Runs code in the browser dom and saves the stdout to the variable ``dom_result``
 
 .. code-block:: none
 
-  dom intro = document.getElementById("intro")
+  // goes back to previous page
+  dom window.history.back()
+
+  // returns text of an element
+  dom return document.querySelector('#some_id').textContent
 
 
 r
@@ -637,7 +832,7 @@ Runs another TagUI flow. Checks the flow's folder.
 
 comment
 ###################
-Adds a comment.
+Adds a comment. If you are inside a code block, for example an if condition or for loop, be sure to indent your comment accordingly to let TagUI run correctly after it converts into JavaScript code.
 
 .. code-block:: none
 
@@ -689,21 +884,17 @@ For example, the command below runs ``my_flow.tag`` without showing the web brow
     
     tagui my_flow.tag -headless -report
 
-
 -deploy or -d
 ********************
 Deploys a flow, creating a shortcut which can be double-clicked to run the flow. If the flow file is moved, a new shortcut must be created. The flow will be run with all the options used when creating the shortcut.
-
 
 -headless or -h
 ********************
 Runs the flow with an invisible Chrome web browser (does not work for visual automation).
 
-
 -nobrowser or -n
 ********************
 Runs without any web browser, for example to perform automation only with visual automation.
-
 
 -report or -r
 ********************
@@ -715,7 +906,7 @@ Run automation at 10X the speed of normal human user. Read caveats at Advanced c
 
 -quiet or -q
 ********************
-Runs without output to command prompt except for explicit output (echo, show, check steps and errors etc).
+Runs without output to command prompt except for explicit output (echo, show, check steps and errors etc). To have fine-grained control on showing and hiding output during execution (eg hiding password from showing up), use ``quiet_mode = true`` and ``quiet_mode = false`` in your flow.
 
 -edge or -e
 ********************
@@ -725,11 +916,20 @@ my_datatable.csv
 ********************
 Uses the specified csv file as the datatable for batch automation. See :ref:`datatables <datatables>`.
 
-
 input(s)
 ********************
 Add your own parameter(s) to be used in your automation flow as variables p1 to p8.
 
+For example, from the command prompt, below line runs ``register_attendence.tag`` workflow using Microsoft Edge browser and with various student names as inputs. ::
+
+    tagui register_attendence.tag -edge Jenny Jason John Joanne
+
+Inside the workflow, the variables ``p1``, ``p2``, ``p3``, ``p4`` will be available for use as part of the automation, for example to fill up student names into a web form for recording attendence. The following lines in the workflow will output various student names given as inputs. ::
+
+    echo `p1`
+    echo `p2`
+    echo `p3`
+    echo `p4`
 
 See :doc:`other deprecated options </dep_options>`.
 
@@ -903,6 +1103,33 @@ Gets the y coordinate of the current mouse position as a number, eg 200.
   y = mouse_y()
   click (`x`,`y`)
 
+get_files()
+********************
+Returns an array of files and folders in a given folder. Both relative and absolute paths supported.
+
+*Examples*
+
+.. code-block:: none
+
+  // list of files in the same folder as the flow file
+  list = get_files('.')
+
+  // list of files in the Desktop folder of user Alan
+  // note double backslash because of JavaScript string
+  list = get_files('C:\\Users\\Alan\\Desktop')
+
+  // alternatively, use single forward slash instead
+  list = get_files('C:/Users/Alan/Desktop')
+
+  // showing the list of files after retrieving it
+  // JavaScript array start from 0 for 1st element
+  for n from 0 to list.length-1
+    echo `list[n]`
+
+  // checking to process a specific file extension
+  for n from 0 to list.length-1
+    if list[n] contains '.XLSX'
+      echo `list[n]`
 
 get_text()
 ********************
@@ -931,3 +1158,20 @@ Cleans data by removing provided character(s) from given text and returning the 
 
   pdf_text = 'Name: John\n State: Texas\t City: Plano\n Contact: ...'
   echo `del_chars(pdf_text, '\n\t:')`
+
+
+get_env()
+********************
+Returns the value of given environment variable from the operating system.
+
+*Examples*
+
+.. code-block:: none
+
+  // getting %USERPROFILE% variable for Windows
+  echo `get_env('USERPROFILE')`
+  home_dir = get_env('USERPROFILE')
+
+  // getting $HOME variable for Mac or Linux
+  echo `get_env('HOME')`
+  home_dir = get_env('HOME')

@@ -13,6 +13,10 @@ var p1 = casper.cli.raw.get(0); var p2 = casper.cli.raw.get(1); var p3 = casper.
 var p4 = casper.cli.raw.get(3); var p5 = casper.cli.raw.get(4); var p6 = casper.cli.raw.get(5);
 var p7 = casper.cli.raw.get(6); var p8 = casper.cli.raw.get(7); // p9 (${10}) is less portable
 
+// default p1-p8 to blank instead of undefined
+if (!p1) p1 = ''; if (!p2) p2 = ''; if (!p3) p3 = ''; if (!p4) p4 = '';
+if (!p5) p5 = ''; if (!p6) p6 = ''; if (!p7) p7 = ''; if (!p8) p8 = '';
+
 // save start time to measure execution time
 var automation_start_time = Date.now(); casper.echo('\nSTART - automation started - ' + Date().toLocaleString());
 
@@ -62,6 +66,14 @@ var r_result = ''; var r_json = {}; var py_result = ''; var py_json = {};
 
 // variables for Excel integration execution result
 var excel_result = ''; var excel_json = {}; var excel_files = [];
+var excel_focus = false; var excel_visible = true;
+var excel_password = '';
+
+// variables for Word integraton execution result
+var word_result = ''; var word_json = {};
+
+// variables for PDF integraton execution result
+var pdf_result = ''; var pdf_json = {};
 
 // track begin-finish blocks for integrations eg - py, r, run, vision, js, dom
 var inside_py_block = 0; var inside_r_block = 0; var inside_run_block = 0;
@@ -119,11 +131,18 @@ else break;} // if searching for table cells (th and td) is not successful, mean
 if (row_data.substr(0,2) == '",') {row_data = row_data.substr(2); row_data += '"'; append_text(file_name,row_data);}
 else return true;}} // if '",' is not found, means end of table is reached as there is no cell found in row
 
+function windows_path(input_path) { // for converting file path to windows standard for excel integration
+if (!input_path || input_path == '') return ''; // replace / and \\ characters to be \ character
+input_path = input_path.replace(/\//g,'\\'); return input_path.replace(/\\\\/,'\\');}
+
 function excel_range_to_size(input_range) { // for converting excel range to array size
 if (!input_range || input_range == '') return [0,0]; else if (input_range.indexOf(':') == -1) return [1,1];
 var range_start = input_range.split(':')[0].trim(); var range_end = input_range.split(':')[1].trim();
 var row_start = range_start.match(/\d+/g); var row_end = range_end.match(/\d+/g);
 var col_start = range_start.match(/[a-zA-Z]+/g); var col_end = range_end.match(/[a-zA-Z]+/g); 
+// use special number 1234567 to mark column and row selection, since excel max rows is 1048576 and max cols is 16384
+if (row_start == null && row_end == null) return [1,1234567];
+else if (col_start == null && col_end == null) return [1234567,1];
 var height = parseInt(row_end) - parseInt(row_start) + 1;
 col_start = col_start.toString().toUpperCase(); var col_start_count = 0; var col_start_len = col_start.length;
 for (cs_pos = 0; cs_pos < col_start_len; cs_pos++) {
@@ -134,28 +153,94 @@ col_end_count += (col_end.charCodeAt(ce_pos) - 64) * Math.pow(26, col_end_len - 
 var width = col_end_count - col_start_count + 1; return [width,height];}
 
 function read_excel(input_excel) { // for reading from excel target
+if (user_system == 'windows') {
+var workbook_file = input_excel.split(']')[0].slice(1).trim(); input_excel = input_excel.split(']')[1];
+var sheet_name = input_excel.split('!')[0].trim(); var cell_range = input_excel.split('!')[1].trim();
+workbook_file = abs_file(workbook_file); if (excel_files.indexOf(workbook_file) == -1) excel_files.push(workbook_file);
+var fs = require('fs'); if (!fs.exists(workbook_file))
+casper.echo('ERROR - cannot find Excel file ' + workbook_file).exit();
+var excel_password_code = ''; if (excel_password != '')
+excel_password_code = ',,,,"' + excel_password.replace(/\"/g, '\\"') + '"';
+var excel_visible_code = 'objExcel.Visible = True'; if (!excel_visible) excel_visible_code = 'objExcel.Visible = False';
+var excel_focus_code = ''; if (excel_focus) excel_focus_code = '' +
+'CreateObject("WScript.Shell").AppActivate Left(objWorkbook.Name, InStr(objWorkbook.Name, ".") - 1) & " - Excel"\r\n\r\n';
+var excel_steps = 'Dim excelFilename, excelSheet\r\nexcelFilename = "' + windows_path(workbook_file) +
+'"\r\n\r\n' + 'On Error Resume Next\r\nSet objExcel = GetObject(, "Excel.Application")\r\n' +
+'If Err.Number <> 0 Then\r\n\tSet objExcel = CreateObject("Excel.Application")\r\n' +
+'End If\r\nOn Error Goto 0\r\n\r\n' + 'Set objWorkbook = objExcel.Workbooks.Open(excelFilename' +
+excel_password_code + ')\r\n' + excel_visible_code + '\r\n\r\n' + excel_focus_code +
+'excelSheet = "' + sheet_name + '"\r\nOn Error Resume Next\r\nSet targetSheet = Nothing\r\n' +
+'Set targetSheet = objWorkbook.Sheets(excelSheet)\r\nOn Error GoTo 0\r\nIf targetSheet Is Nothing Then\r\n\t' +
+'WScript.Echo "ERROR - cannot find Excel sheet " & excelSheet\r\nElse\r\n\tobjWorkbook.Sheets(excelSheet).Activate\r\n\t' +
+'Dim arrayData, arrayString, rowCount, colCount\r\n\t' + 
+'rowCount = objWorkbook.Sheets(excelSheet).Range("' +
+cell_range + ' " & objWorkbook.Sheets(excelSheet).UsedRange.Address).Rows.Count\r\n\t' +
+'colCount = objWorkbook.Sheets(excelSheet).Range("' +
+cell_range + ' " & objWorkbook.Sheets(excelSheet).UsedRange.Address).Columns.Count\r\n\t' +
+'arrayData = objWorkbook.Sheets(excelSheet).Range("' +
+cell_range + ' " & objWorkbook.Sheets(excelSheet).UsedRange.Address).Value\r\n\t' +
+'arrayString = ""\r\n\tIf IsArray(arrayData) Then\r\n\t\t' +
+'Dim arrayRow, arrayCol\r\n\t\tFor arrayRow = 1 To UBound(arrayData, 1)\r\n\t\t\t' +
+'For arrayCol = 1 to UBound(arrayData, 2)\r\n\t\t\t\tarrayString = arrayString & arrayData(arrayRow, arrayCol) & "[EXCEL_DELIMITER]"' +
+'\r\n\t\t\tNext\r\n\t\tNext\r\n\t\tarrayString = arrayString & rowCount & "[EXCEL_DELIMITER]" & colCount' +
+'\r\n\tElse\r\n\t\tarrayString = arrayData & "[EXCEL_DELIMITER]1[EXCEL_DELIMITER]1"\r\n\tEnd If\r\n\t' +
+'WScript.Echo arrayString\r\nEnd If\r\n'; save_text('excel_steps.vbs', excel_steps);
+casper.waitForExec('cscript excel_steps.vbs //NoLogo', null, function(response) {excel_result = '';
+excel_result = (response.data.stdout.trim() || response.data.stderr.trim());
+if (excel_result.indexOf('ERROR - cannot find Excel sheet') !== -1) casper.echo(excel_result).exit();
+var range_size = excel_range_to_size(cell_range); if (range_size[0] > 1 || range_size[1] > 1)
+{excel_result += ' '; excel_result = excel_result.split('[EXCEL_DELIMITER]'); var excel_array = [];
+excel_result[excel_result.length - 1] = excel_result[excel_result.length - 1].slice(0, -1);
+// special handling with number 1234567 for column and row selection
+if (range_size[0] == 1234567) {range_size[0] = excel_result.pop(); range_size[1] = excel_result.pop();}
+else if (range_size[1] == 1234567) {range_size[0] = excel_result.pop(); range_size[1] = excel_result.pop();}
+else {excel_result.pop(); excel_result.pop();} // remove row and column count data from excel_result
+for (row = 0; row < range_size[1]; row++) {excel_array.push(excel_result.splice(0, range_size[0]));}
+for (row = 0; row < range_size[1]; row++) for (col = 0; col < range_size[0]; col++) {
+if (excel_array[row][col] && !isNaN(excel_array[row][col])) excel_array[row][col] = Number(excel_array[row][col]);}
+excel_result = excel_array;} else {excel_result = excel_result.split('[EXCEL_DELIMITER]')[0];
+if (excel_result && !isNaN(excel_result)) excel_result = Number(excel_result);}
+excel_json = response.data;}, function() {this.echo('ERROR - Excel automation exceeded '+(3 * casper.options.waitTimeout/1000).toFixed(1)+'s timeout').exit();},(3 * casper.options.waitTimeout));}
+else if (user_system == 'mac') {
 var workbook_file = input_excel.split(']')[0].slice(1).trim(); input_excel = input_excel.split(']')[1]; 
 var sheet_name = input_excel.split('!')[0].trim(); var cell_range = input_excel.split('!')[1].trim();
 workbook_file = abs_file(workbook_file); if (excel_files.indexOf(workbook_file) == -1) excel_files.push(workbook_file);
 var fs = require('fs'); if (!fs.exists(workbook_file))
 casper.echo('ERROR - cannot find Excel file ' + workbook_file).exit();
-var excel_steps = 'tell application "Microsoft Excel"\r\n\tactivate\r\n\t' +
-'open workbook workbook file name POSIX file "' + workbook_file + '"\r\n\t' +
+var excel_password_code = ''; if (excel_password != '')
+excel_password_code = ' password "' + excel_password.replace(/\"/g, '\\"') + '"';
+var excel_visible_code = 'tell application "System Events"\r\n\t\t' +
+'set excel_process to first process whose name is "Microsoft Excel"\r\n\t\t' +
+'set visible of excel_process to ' + excel_visible.toString() + '\r\n\tend tell\r\n\t';
+var excel_focus_code = ''; if (excel_focus) excel_focus_code = 'activate\r\n\t';
+var excel_steps = 'tell application "Microsoft Excel"\r\n\t' + excel_focus_code +
+'open workbook workbook file name POSIX file "' + workbook_file +
+'"' + excel_password_code + '\r\n\t' + excel_visible_code + 
 'if not exists sheet "' + sheet_name + '" then\r\n\t\t' +
 'do shell script "echo ERROR - cannot find Excel sheet ' + sheet_name + '"\r\n\telse\r\n\t\t' +
-'select worksheet "' + sheet_name + '"\r\n\t\t' + 'get value of range "' + cell_range + '"\r\n\t' +
-'end if\r\nend tell'; save_text('excel_steps.scpt', excel_steps);
+'select worksheet "' + sheet_name + '"\r\n\t\t' +
+'set row_count to count of rows of range ("' + cell_range + ' " & get address of used range of active sheet)\r\n\t\t' +
+'set col_count to count of columns of range ("' + cell_range + ' " & get address of used range of active sheet)\r\n\t\t' +
+'set list_data to {} & string value of range ("' + cell_range + ' " & get address of used range of active sheet) ' +
+'& row_count & col_count\r\n\tend if\r\nend tell\r\n' + 'set text item delimiters to "[EXCEL_DELIMITER]"\r\n' + 
+'get list_data as text'; save_text('excel_steps.scpt', excel_steps);
 casper.waitForExec('osascript excel_steps.scpt', null, function(response) {excel_result = '';
 excel_result = (response.data.stdout.trim() || response.data.stderr.trim());
 if (excel_result.indexOf('ERROR - cannot find Excel sheet') !== -1) casper.echo(excel_result).exit();
 var range_size = excel_range_to_size(cell_range); if (range_size[0] > 1 || range_size[1] > 1)
-{excel_result += ' '; excel_result = excel_result.split(', '); var excel_array = [];
+{excel_result += ' '; excel_result = excel_result.split('[EXCEL_DELIMITER]'); var excel_array = [];
 excel_result[excel_result.length - 1] = excel_result[excel_result.length - 1].slice(0, -1);
+// special handling with number 1234567 for column and row selection
+if (range_size[0] == 1234567) {range_size[0] = excel_result.pop(); range_size[1] = excel_result.pop();}
+else if (range_size[1] == 1234567) {range_size[0] = excel_result.pop(); range_size[1] = excel_result.pop();}
+else {excel_result.pop(); excel_result.pop();} // remove row and column count data from excel_result
 for (row = 0; row < range_size[1]; row++) {excel_array.push(excel_result.splice(0, range_size[0]));}
 for (row = 0; row < range_size[1]; row++) for (col = 0; col < range_size[0]; col++) {
 if (excel_array[row][col] && !isNaN(excel_array[row][col])) excel_array[row][col] = Number(excel_array[row][col]);}
-excel_result = excel_array;} else if (excel_result && !isNaN(excel_result)) excel_result = Number(excel_result);
-excel_json = response.data;}, function() {this.echo('ERROR - Excel automation exceeded '+(casper.options.waitTimeout/1000).toFixed(1)+'s timeout').exit();},casper.options.waitTimeout);}
+excel_result = excel_array;} else {excel_result = excel_result.split('[EXCEL_DELIMITER]')[0];
+if (excel_result && !isNaN(excel_result)) excel_result = Number(excel_result);}
+excel_json = response.data;}, function() {this.echo('ERROR - Excel automation exceeded '+(3 * casper.options.waitTimeout/1000).toFixed(1)+'s timeout').exit();},(3 * casper.options.waitTimeout));}
+else casper.echo('ERROR - unknown operating system ' + user_system).exit();}
 
 function size_to_excel_range(cell, width, height) { // for converting array to range
 var row_start = parseInt(cell.match(/\d+/g)); var row_end = row_start + height - 1;
@@ -174,6 +259,41 @@ col_end = first_char + mid_char + last_char; col_end = col_end.replace(/-/g,'');
 return cell + ':' + col_end + row_end.toString();}
 
 function write_excel(output_excel) { // for writing to excel target
+if (user_system == 'windows') {
+var workbook_file = output_excel.split(']')[0].slice(1).trim(); output_excel = output_excel.split(']')[1];
+var sheet_name = output_excel.split('!')[0].trim(); var cell_range = output_excel.split('!')[1].trim();
+cell_range = cell_range.split(':')[0]; // truncate to get starting cell to write various data types
+if (!Array.isArray(excel_result)) {
+excel_result = 'objWorkbook.Sheets(excelSheet).Range("' + cell_range + '").Value = "' + excel_result  + '"\r\n';}
+else {var range_size = [excel_result[0].length, excel_result.length];
+cell_range = size_to_excel_range(cell_range, range_size[0], range_size[1]);
+var array_result = 'Dim arrayData(' + (range_size[1] - 1).toString() + ', ' + (range_size[0] - 1).toString() + ')\r\n';
+for (row = 0; row < range_size[1]; row++) {for (col = 0; col < range_size[0]; col++) {array_result = array_result +
+'arrayData(' + row.toString() + ', ' + col.toString() + ') = "' + excel_result[row][col].toString() + '"\r\n';}}
+array_result += 'objWorkbook.Sheets(excelSheet).Range("' + cell_range + '").Value = arrayData\r\n';
+excel_result = array_result;}
+workbook_file = abs_file(workbook_file); if (excel_files.indexOf(workbook_file) == -1) excel_files.push(workbook_file);
+var excel_password_code = ''; if (excel_password != '')
+excel_password_code = ',,,,"' + excel_password.replace(/\"/g, '\\"') + '"';
+var excel_visible_code = 'objExcel.Visible = True'; if (!excel_visible) excel_visible_code = 'objExcel.Visible = False';
+var excel_focus_code = ''; if (excel_focus) excel_focus_code = '' +
+'CreateObject("WScript.Shell").AppActivate Left(objWorkbook.Name, InStr(objWorkbook.Name, ".") - 1) & " - Excel"\r\n\r\n';
+var excel_steps = ''; var excel_new_file = ''; var fs = require('fs'); if (!fs.exists(workbook_file))
+excel_new_file = 'Set objWorkbook = objExcel.Workbooks.Add\r\nobjWorkbook.SaveAs excelFilename\r\n';
+excel_steps = 'Dim excelFilename, excelSheet\r\nexcelFilename = "' + windows_path(workbook_file) +
+'"\r\n\r\n' + 'On Error Resume Next\r\nSet objExcel = GetObject(, "Excel.Application")\r\n' +
+'If Err.Number <> 0 Then\r\n\tSet objExcel = CreateObject("Excel.Application")\r\n' +
+'End If\r\nOn Error Goto 0\r\n\r\n' + excel_new_file +
+'Set objWorkbook = objExcel.Workbooks.Open(excelFilename' +
+excel_password_code + ')\r\n' + excel_visible_code + '\r\n\r\n' + excel_focus_code +
+'excelSheet = "' + sheet_name + '"\r\nOn Error Resume Next\r\nSet targetSheet = Nothing\r\n' +
+'Set targetSheet = objWorkbook.Sheets(excelSheet)\r\nOn Error GoTo 0\r\nIf targetSheet Is Nothing Then\r\n\t' +
+'objWorkbook.Sheets.Add.Name = excelSheet\r\nEnd If\r\nobjWorkbook.Sheets(excelSheet).Activate\r\n\r\n' + excel_result;
+save_text('excel_steps.vbs', excel_steps);
+casper.waitForExec('cscript excel_steps.vbs //NoLogo', null, function(response) {excel_result = '';
+excel_result = (response.data.stdout.trim() || response.data.stderr.trim());
+excel_json = response.data;}, function() {this.echo('ERROR - Excel automation exceeded '+(3 * casper.options.waitTimeout/1000).toFixed(1)+'s timeout').exit();},(3 * casper.options.waitTimeout));}
+else if (user_system == 'mac') {
 var workbook_file = output_excel.split(']')[0].slice(1).trim(); output_excel = output_excel.split(']')[1];
 var sheet_name = output_excel.split('!')[0].trim(); var cell_range = output_excel.split('!')[1].trim();
 cell_range = cell_range.split(':')[0]; // truncate to get starting cell to write various data types
@@ -182,18 +302,26 @@ if (excel_result.charAt(0) == '{' && excel_result.charAt(excel_result.length - 1
 {var data = JSON.parse(excel_result.replace(/{/g,'[').replace(/}/g,']'));
 cell_range = size_to_excel_range(cell_range, data[0].length, data.length);}
 workbook_file = abs_file(workbook_file); if (excel_files.indexOf(workbook_file) == -1) excel_files.push(workbook_file); 
+var excel_password_code = ''; if (excel_password != '')
+excel_password_code = ' password "' + excel_password.replace(/\"/g, '\\"') + '"';
+var excel_visible_code = 'tell application "System Events"\r\n\t\t' +
+'set excel_process to first process whose name is "Microsoft Excel"\r\n\t\t' +
+'set visible of excel_process to ' + excel_visible.toString() + '\r\n\tend tell\r\n\t';
+var excel_focus_code = ''; if (excel_focus) excel_focus_code = 'activate\r\n\t';
 var excel_steps = ''; var fs = require('fs'); if (!fs.exists(workbook_file))
-excel_steps = 'tell application "Microsoft Excel"\r\n\tactivate\r\n\t' + 'set myWorkbook to make new workbook\r\n\t' +
+excel_steps = 'tell application "Microsoft Excel"\r\n\t' + excel_focus_code + 'set myWorkbook to make new workbook\r\n\t' +
 'save workbook as myWorkbook filename POSIX file "' + workbook_file + '"\r\n\t' + 'end tell\r\n\r\n';
-excel_steps += 'tell application "Microsoft Excel"\r\n\tactivate\r\n\t' +
-'open workbook workbook file name POSIX file "' + workbook_file + '"\r\n\t' +
+excel_steps += 'tell application "Microsoft Excel"\r\n\t' + excel_focus_code +
+'open workbook workbook file name POSIX file "' + workbook_file +
+'"' + excel_password_code + '\r\n\t' + excel_visible_code +
 'if not exists sheet "' + sheet_name + '" then\r\n\t\t' +
 'make new worksheet at end of active workbook with properties {name:"' + sheet_name + '"}\r\n\tend if\r\n\t' +
 'select worksheet "' + sheet_name + '"\r\n\t' + 'set value of range "' + cell_range + '" to ' + excel_result + '\r\n' +
 'end tell'; save_text('excel_steps.scpt', excel_steps);
 casper.waitForExec('osascript excel_steps.scpt', null, function(response) {excel_result = '';
 excel_result = (response.data.stdout.trim() || response.data.stderr.trim());
-excel_json = response.data;}, function() {this.echo('ERROR - Excel automation exceeded '+(casper.options.waitTimeout/1000).toFixed(1)+'s timeout').exit();},casper.options.waitTimeout);}
+excel_json = response.data;}, function() {this.echo('ERROR - Excel automation exceeded '+(3 * casper.options.waitTimeout/1000).toFixed(1)+'s timeout').exit();},(3 * casper.options.waitTimeout));}
+else casper.echo('ERROR - unknown operating system ' + user_system).exit();}
 
 // for excel statements - retrieving data for variable on right side of = sign
 // broken into 2 functions for excel_result to be usable with CasperJS structure
@@ -212,14 +340,129 @@ function excel_assign(left_param) {if (left_param.match(/\[.*\.(xl.|xl..|xml|csv
 eval(left_param + ' = excel_result'); else write_excel(left_param);}
 
 function excel_close() { // for closing excel files opened by TagUI
+if (user_system == 'windows') {
+var excel_focus_code = ''; if (excel_focus) excel_focus_code = '' +
+'CreateObject("WScript.Shell").AppActivate Left(objWorkbook.Name, InStr(objWorkbook.Name, ".") - 1) & " - Excel"\r\n\t\t\t';
+var excel_steps = 'Dim excelFilename\r\n'; excel_files.forEach(function(workbook_file) {
+excel_steps += 'excelFilename = "' + windows_path(workbook_file) + '"\r\n' + 'On Error Resume Next\r\n' +
+'Set objExcel = GetObject(, "Excel.Application")\r\nIf Err.Number = 0 Then\r\n\t' +
+'For Each objWorkbook In objExcel.Workbooks\r\n\t\t' +
+'If excelFilename = objWorkbook.Path & "\\" & objWorkbook.Name Then\r\n\t\t\t' +
+'Set objWorkbook = GetObject(excelFilename)\r\n\t\t\t' + excel_focus_code + 'objWorkbook.Close True\r\n\t\t\t' + 
+'Exit For\r\n\t\tEnd If\r\n\tNext\r\nEnd If\r\nOn Error Goto 0\r\n';});
+save_text('excel_steps.vbs', excel_steps);
+casper.waitForExec('cscript excel_steps.vbs //NoLogo', null, function(response) {excel_result = '';
+excel_result = (response.data.stdout.trim() || response.data.stderr.trim());
+excel_json = response.data;}, function() {this.echo('ERROR - Excel automation exceeded '+(3 * casper.options.waitTimeout/1000).toFixed(1)+'s timeout').exit();},(3 * casper.options.waitTimeout));}
+else if (user_system == 'mac') {
+var excel_focus_code = ''; if (excel_focus) excel_focus_code = 'activate\r\n\t';
 var excel_steps = ''; excel_files.forEach(function(workbook_file) {
-excel_steps += 'tell application "Microsoft Excel"\r\n\tactivate\r\n\t' +
+excel_steps += 'tell application "Microsoft Excel"\r\n\t' + excel_focus_code +
 'open workbook workbook file name POSIX file "' + workbook_file + '"\r\n\t' +
 'close active workbook with saving' + '\r\n' + 'end tell\r\n\r\n';});
 save_text('excel_steps.scpt', excel_steps);
 casper.waitForExec('osascript excel_steps.scpt', null, function(response) {excel_result = '';
 excel_result = (response.data.stdout.trim() || response.data.stderr.trim());
-excel_json = response.data;}, function() {this.echo('ERROR - Excel automation exceeded '+(casper.options.waitTimeout/1000).toFixed(1)+'s timeout').exit();},casper.options.waitTimeout);}
+excel_json = response.data;}, function() {this.echo('ERROR - Excel automation exceeded '+(3 * casper.options.waitTimeout/1000).toFixed(1)+'s timeout').exit();},(3 * casper.options.waitTimeout));}
+else casper.echo('ERROR - unknown operating system ' + user_system).exit();}
+
+function read_word(input_word) { // for reading from word target
+if (user_system == 'windows') {
+var word_file = input_word.split(']')[0].slice(1).trim();
+word_file = abs_file(word_file); var fs = require('fs'); if (!fs.exists(word_file))
+casper.echo('ERROR - cannot find Word file ' + word_file).exit();
+var word_steps = 'Set WshShell = WScript.CreateObject("WScript.Shell")\r\n';
+word_steps += 'WshShell.Run """' + windows_path(word_file) + '"""\r\nWScript.Sleep 5000\r\n';
+word_steps += 'WshShell.SendKeys "^a"\r\nWScript.Sleep 1000\r\n';
+word_steps += 'WshShell.SendKeys "^c"\r\nWScript.Sleep 1000\r\n';
+word_steps += 'WshShell.SendKeys "%{F4}"\r\nSet objHTML = CreateObject("htmlfile")\r\n';
+word_steps += 'WScript.Echo objHTML.ParentWindow.ClipboardData.GetData("text")'; save_text('word_steps.vbs', word_steps);
+save_text('word_steps.cmd', '@echo off\r\ncscript word_steps.vbs //NoLogo > word_steps.out 2>&1');
+casper.waitForExec('word_steps.cmd', null, function(response) {
+word_result = ''; word_result = require('fs').read('word_steps.out').trim();
+}, function() {this.echo('ERROR - Word automation exceeded '+(3 * casper.options.waitTimeout/1000).toFixed(1)+'s timeout').exit();},(3 * casper.options.waitTimeout));}
+else if (user_system == 'mac') {
+var word_file = input_word.split(']')[0].slice(1).trim();
+word_file = abs_file(word_file); var fs = require('fs'); if (!fs.exists(word_file))
+casper.echo('ERROR - cannot find Word file ' + word_file).exit();
+var word_steps = 'tell application "Finder" to open POSIX file "' + word_file + '"\r\n';
+word_steps += 'delay 5\r\ntell application "System Events"\r\n\t';
+word_steps += 'keystroke "a" using {command down}\r\n\tdelay 1\r\n\t';
+word_steps += 'keystroke "c" using {command down}\r\n\tdelay 1\r\n\t';
+word_steps += 'keystroke "q" using {command down}\r\nend tell\r\n';
+word_steps += 'do shell script "pbpaste > word_steps.out 2>&1"'; save_text('word_steps.scpt', word_steps);
+casper.waitForExec('osascript word_steps.scpt', null, function(response) {
+word_result = ''; word_result = require('fs').read('word_steps.out').trim();
+}, function() {this.echo('ERROR - Word automation exceeded '+(3 * casper.options.waitTimeout/1000).toFixed(1)+'s timeout').exit();},(3 * casper.options.waitTimeout));}
+else casper.echo('ERROR - unknown operating system ' + user_system).exit();}
+
+function write_word(output_word) { // for writing to word target
+casper.echo('ERROR - writing to Word file not supported').exit();}
+
+// for word statements - retrieving data for variable on right side of = sign
+// broken into 2 functions for word_result to be usable with CasperJS structure
+function word_retrieve(right_param) { // check OS before starting Word automation
+if (user_system != 'windows' && user_system != 'mac') {word_result = '';
+casper.echo('ERROR - Word automation only for Windows and Mac').exit();}
+if (right_param.match(/\[.*\.(doc|docx|docm|dot|dotx)\]/i) == null)
+{word_result = ''; word_result = eval(right_param);}
+else if (word_result == '[LIVE_MODE]') {word_result = '';
+casper.echo('ERROR - reading from Word not supported in live mode');}
+else {word_result = ''; read_word(right_param);}}
+
+// for word statements - assigning data to variable on left side of = sign
+// broken into 2 functions for word_result to be usable with CasperJS structure
+function word_assign(left_param) {if (left_param.match(/\[.*\.(doc|docx|docm|dot|dotx)\]/i) == null)
+eval(left_param + ' = word_result'); else write_word(left_param);}
+
+function read_pdf(input_pdf) { // for reading from pdf target
+if (user_system == 'windows') {
+var pdf_file = input_pdf.split(']')[0].slice(1).trim();
+pdf_file = abs_file(pdf_file); var fs = require('fs'); if (!fs.exists(pdf_file))
+casper.echo('ERROR - cannot find PDF file ' + pdf_file).exit();
+var pdf_steps = 'Set WshShell = WScript.CreateObject("WScript.Shell")\r\n';
+pdf_steps += 'WshShell.Run """' + windows_path(pdf_file) + '"""\r\nWScript.Sleep 5000\r\n';
+pdf_steps += 'WshShell.SendKeys "^a"\r\nWScript.Sleep 1000\r\n';
+pdf_steps += 'WshShell.SendKeys "^c"\r\nWScript.Sleep 1000\r\n';
+pdf_steps += 'WshShell.SendKeys "^q"\r\nSet objHTML = CreateObject("htmlfile")\r\n';
+pdf_steps += 'WScript.Echo objHTML.ParentWindow.ClipboardData.GetData("text")'; save_text('pdf_steps.vbs', pdf_steps);
+save_text('pdf_steps.cmd', '@echo off\r\ncscript pdf_steps.vbs //NoLogo > pdf_steps.out 2>&1');
+casper.waitForExec('pdf_steps.cmd', null, function(response) {
+pdf_result = ''; pdf_result = require('fs').read('pdf_steps.out').trim();
+}, function() {this.echo('ERROR - PDF automation exceeded '+(3 * casper.options.waitTimeout/1000).toFixed(1)+'s timeout').exit();},(3 * casper.options.waitTimeout));}
+else if (user_system == 'mac') {
+var pdf_file = input_pdf.split(']')[0].slice(1).trim();
+pdf_file = abs_file(pdf_file); var fs = require('fs'); if (!fs.exists(pdf_file))
+casper.echo('ERROR - cannot find PDF file ' + pdf_file).exit();
+var pdf_steps = 'tell application "Finder" to open POSIX file "' + pdf_file + '"\r\n';
+pdf_steps += 'delay 5\r\ntell application "System Events"\r\n\t';
+pdf_steps += 'keystroke "a" using {command down}\r\n\tdelay 1\r\n\t';
+pdf_steps += 'keystroke "c" using {command down}\r\n\tdelay 1\r\n\t';
+pdf_steps += 'keystroke "q" using {command down}\r\nend tell\r\n';
+pdf_steps += 'do shell script "pbpaste > pdf_steps.out 2>&1"'; save_text('pdf_steps.scpt', pdf_steps);
+casper.waitForExec('osascript pdf_steps.scpt', null, function(response) {
+pdf_result = ''; pdf_result = require('fs').read('pdf_steps.out').trim();
+}, function() {this.echo('ERROR - PDF automation exceeded '+(3 * casper.options.waitTimeout/1000).toFixed(1)+'s timeout').exit();},(3 * casper.options.waitTimeout));}
+else casper.echo('ERROR - unknown operating system ' + user_system).exit();}
+
+function write_pdf(output_pdf) { // for writing to pdf target
+casper.echo('ERROR - writing to PDF file not supported').exit();}
+
+// for pdf statements - retrieving data for variable on right side of = sign
+// broken into 2 functions for pdf_result to be usable with CasperJS structure
+function pdf_retrieve(right_param) { // check OS before starting PDF automation
+if (user_system != 'windows' && user_system != 'mac') {pdf_result = '';
+casper.echo('ERROR - PDF automation only for Windows and Mac').exit();}
+if (right_param.match(/\[.*\.pdf\]/i) == null)
+{pdf_result = ''; pdf_result = eval(right_param);}
+else if (pdf_result == '[LIVE_MODE]') {pdf_result = '';
+casper.echo('ERROR - reading from PDF not supported in live mode');}
+else {pdf_result = ''; read_pdf(right_param);}}
+
+// for pdf statements - assigning data to variable on left side of = sign
+// broken into 2 functions for pdf_result to be usable with CasperJS structure
+function pdf_assign(left_param) {if (left_param.match(/\[.*\.pdf\]/i) == null)
+eval(left_param + ' = pdf_result'); else write_pdf(left_param);}
 
 // for translating multi-language flows (comments in translate.php)
 function translate(script_line,direction,language) {var start_keywords = '|click|rclick|dclick|tap|move|hover|'+
@@ -472,6 +715,18 @@ function del_chars(source_text, characters) {
         else
             source_text = source_text.replace(/\\/g,'');}
     return source_text;}
+
+// return value of environment variable from operating system
+function get_env(name_of_variable) { // if missing or blank name, or invalid variable, '' will be returned
+if (!name_of_variable || name_of_variable == '') return '';
+var value_of_variable = require('system').env[name_of_variable];
+if (value_of_variable == null) return ''; else return value_of_variable;}
+
+// return array of all the files in the given folder
+function get_files(folder_path) {if (!folder_path || folder_path == '') return [];
+if (!require('fs').isDirectory(abs_file(folder_path))) return [];
+var files_array = require('fs').list(abs_file(folder_path));
+return files_array.splice(2, files_array.length - 2);}
 
 // for initialising integration with sikuli visual automation
 function sikuli_handshake() { // techo('[connecting to sikuli process]');
@@ -929,6 +1184,8 @@ case 'py': return py_intent(live_line); break;
 case 'vision': return vision_intent(live_line); break;
 case 'timeout': return timeout_intent(live_line); break;
 case 'excel': return excel_intent(live_line); break;
+case 'word': return word_intent(live_line); break;
+case 'pdf': return pdf_intent(live_line); break;
 case 'code': return code_intent(live_line); break;
 default: return "this.echo('ERROR - cannot understand step " + live_line.replace(/'/g,'\\\'') + "')";}}
 
@@ -1043,12 +1300,26 @@ if (lc_raw_intent == 'timeout') return 'timeout';
 // check using regex for excel assignment
 if (is_excel(raw_intent)) return 'excel';
 
+// check using regex for word assignment
+if (is_word(raw_intent)) return 'word';
+
+// check using regex for pdf assignment
+if (is_pdf(raw_intent)) return 'pdf';
+
 // final check for recognized code before returning error
 if (is_code(raw_intent)) return 'code'; else return 'error';}
 
 function is_excel(raw_intent) {if (raw_intent.indexOf('=') == -1) return false;
 if (raw_intent.indexOf('//') == 0) return false; // skip processing if commented out 
 if (raw_intent.match(/\[.*\.(xl.|xl..|xml|csv)\].*![A-Z0-9]*/i) == null) return false; else return true;}
+
+function is_word(raw_intent) {if (raw_intent.indexOf('=') == -1) return false;
+if (raw_intent.indexOf('//') == 0) return false; // skip processing if commented out
+if (raw_intent.match(/\[.*\.(doc|docx|docm|dot|dotx)\]/i) == null) return false; else return true;}
+
+function is_pdf(raw_intent) {if (raw_intent.indexOf('=') == -1) return false;
+if (raw_intent.indexOf('//') == 0) return false; // skip processing if commented out
+if (raw_intent.match(/\[.*\.pdf\]/i) == null) return false; else return true;}
 
 function is_code(raw_intent) {
 // due to asynchronous waiting for element, if/for/while can work for parsing single step
@@ -1451,6 +1722,24 @@ left_param = esc_bs(left_param); right_param = esc_bs(right_param); // to escape
 left_param = left_param.replace(/\\\\'/g, "\\'"); right_param = right_param.replace(/\\\\'/g, "\\'");
 if ((left_param == '') || (right_param == '')) return "this.echo('ERROR - parameter missing for " + raw_intent + "')";
 else return "excel_result = '[LIVE_MODE]'; excel_retrieve('" + right_param + "'); excel_assign('" + left_param + "')";}
+
+function word_intent(raw_intent) {raw_intent = eval("'" + escape_bs(raw_intent) + "'"); // support dynamic variables
+if (user_system != 'windows' && user_system != 'mac')
+{return "word_result = ''; this.echo('ERROR - Word automation only for Windows and Mac')";}
+var word_params = raw_intent.split('='); var left_param = word_params[0].trim(); var right_param = word_params[1].trim();
+left_param = esc_bs(left_param); right_param = esc_bs(right_param); // to escape backslash \ in Windows folder paths
+left_param = left_param.replace(/\\\\'/g, "\\'"); right_param = right_param.replace(/\\\\'/g, "\\'");
+if ((left_param == '') || (right_param == '')) return "this.echo('ERROR - parameter missing for " + raw_intent + "')";
+else return "word_result = '[LIVE_MODE]'; word_retrieve('" + right_param + "'); word_assign('" + left_param + "')";}
+
+function pdf_intent(raw_intent) {raw_intent = eval("'" + escape_bs(raw_intent) + "'"); // support dynamic variables
+if (user_system != 'windows' && user_system != 'mac')
+{return "pdf_result = ''; this.echo('ERROR - PDF automation only for Windows and Mac')";}
+var pdf_params = raw_intent.split('='); var left_param = pdf_params[0].trim(); var right_param = pdf_params[1].trim();
+left_param = esc_bs(left_param); right_param = esc_bs(right_param); // to escape backslash \ in Windows folder paths
+left_param = left_param.replace(/\\\\'/g, "\\'"); right_param = right_param.replace(/\\\\'/g, "\\'");
+if ((left_param == '') || (right_param == '')) return "this.echo('ERROR - parameter missing for " + raw_intent + "')";
+else return "pdf_result = '[LIVE_MODE]'; pdf_retrieve('" + right_param + "'); pdf_assign('" + left_param + "')";}
 
 function code_intent(raw_intent) { // code to support dynamic variables not applicable
 return check_chrome_context(raw_intent);}

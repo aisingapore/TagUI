@@ -2,23 +2,24 @@
 
 # TagUI
 
-**Free RPA tool by [AI Singapore](https://aisingapore.org), a government-funded programme to accelerate AI. To start, click the download link below. Join the community or ask any questions at [our Telegram](https://t.me/rpa_chat).**
+**Free RPA tool by [AI Singapore](https://aisingapore.org), a government-funded programme to accelerate AI. To start, click the download link below. Take the [free course](https://learn.aisingapore.org/courses/learn-rpa-with-tagui-beginners-course/). Ask any questions at [our Telegram](https://t.me/rpa_chat).**
 
-**[Download v6.46](https://tagui.readthedocs.io/en/latest/setup.html)&ensp;|&ensp;[Usage Guide](https://tagui.readthedocs.io/en/latest/index.html)&ensp;|&ensp;[Demos](https://github.com/aimakerspace/TagUI-Bricks)&ensp;|&ensp;[Samples](https://github.com/kelaberetiv/TagUI/tree/master/flows/samples)&ensp;|&ensp;[Slides](https://drive.google.com/file/d/1pltAMzr0MZsttgg1w2ORH3ontR6Q51W9/view?usp=sharing)&ensp;|&ensp;[Podcast](https://botnirvana.org/podcast/tagui/)&ensp;|&ensp;[Video](https://www.youtube.com/watch?v=C5itbB3sCq0)&ensp;|&ensp;[Forum](https://community.aisingapore.org/groups/tagui-rpa/forum/)&ensp;|&ensp;[Zoom Q&A](https://github.com/kelaberetiv/TagUI/issues/914)**
+**[Download v6.103](https://tagui.readthedocs.io/en/latest/setup.html)&ensp;|&ensp;[Usage Guide](https://tagui.readthedocs.io/en/latest/index.html)&ensp;|&ensp;[Demos](https://github.com/aimakerspace/TagUI-Bricks)&ensp;|&ensp;[Samples](https://github.com/kelaberetiv/TagUI/tree/master/flows/samples)&ensp;|&ensp;[Slides](https://docs.google.com/presentation/d/1pltAMzr0MZsttgg1w2ORH3ontR6Q51W9/edit?usp=sharing&ouid=115132044557947023533&rtpof=true&sd=true)&ensp;|&ensp;[Podcast](https://botnirvana.org/podcast/tagui/)&ensp;|&ensp;[Video](https://www.youtube.com/watch?v=C5itbB3sCq0)&ensp;|&ensp;[Forum](https://community.aisingapore.org/groups/tagui-rpa/forum/)&ensp;|&ensp;[Zoom](https://github.com/kelaberetiv/TagUI/issues/914)**
 
 ---
 
 ![TagUI Users](https://raw.githubusercontent.com/kelaberetiv/TagUI/master/src/media/tagui_users.png)
 
-Write flows in simple TagUI language and automate away repetitive time-consuming tasks on your computer. Tasks include those on websites (native support for Chrome and Edge), desktop apps, or the command line. The TagUI project is [open-source and free forever](https://www.linkedin.com/posts/kensoh_sneak-preview-of-tagui-ms-word-plug-in-v3-activity-6796860165338595328-02wD). It's easy to setup and use, and works on Windows, macOS and Linux. Besides English, flows can be written in [22 other languages](https://github.com/kelaberetiv/TagUI/tree/master/src/languages), so you can do RPA using your [native language](https://github.com/kelaberetiv/TagUI/blob/master/flows/samples/8_chineseflow.tag). With the [new TagUI turbo mode](https://www.linkedin.com/posts/kensoh_introducing-tagui-rpa-turbo-mode-with-this-activity-6837578351302070272-6INX), you can even run your automation at 10X faster than normal human speed!
+Write flows in simple TagUI language and automate away repetitive time-consuming tasks on your computer. Tasks include those on websites (native support for Chrome and Edge), desktop apps, or the command line. The TagUI project is [open-source and free forever](https://www.linkedin.com/posts/kensoh_sneak-preview-of-tagui-ms-word-plug-in-v3-activity-6796860165338595328-02wD). It's easy to setup and use, and works on Windows, macOS and Linux.
+
+Besides English, flows can be written in [22 other languages](https://github.com/kelaberetiv/TagUI/tree/master/src/languages), so you can do RPA using your [native language](https://github.com/kelaberetiv/TagUI/blob/master/flows/samples/8_chineseflow.tag). Check out this [demo video automating data collection](https://www.youtube.com/watch?v=o2WMUt0298U) in 4 different languages. With the [new TagUI turbo mode](https://www.linkedin.com/posts/kensoh_introducing-tagui-rpa-turbo-mode-with-this-activity-6837578351302070272-6INX), you can even run your automation 10X faster than normal human speed!
 
 # Language designed for RPA
 
-In TagUI language, you use steps like `click` and `type` to interact with identifiers, which include web identifiers, image snapshots, screen coordinates, or even text using OCR. Below is an example to login to Xero accounting:
+In TagUI language, you use steps like `click` and `type` to interact with identifiers, which include web identifiers, image snapshots, screen coordinates, or [even text using OCR](https://tagui.readthedocs.io/en/latest/advanced.html#visual-automation-tricks). Below is an example to login to Xero accounting:
 
 ```
 https://login.xero.com/identity/user/login
-
 type email as user@gmail.com
 type password as 12345678
 click Log in
@@ -29,23 +30,22 @@ type email_box.png as user@gmail.com
 type password_box.png as 12345678
 click login_button.png
 ```
-```
-// (x,y) coordinates of user-interface elements can also be used
-type (720,400) as user@gmail.com
-type (720,440) as 12345678
-click (720,500)
-```
 
-Grabbing data from a table on a website can be as easy as below (where n is the nth table on the webpage)
+Grabbing data from a table on a website can be [as easy as below](https://tagui.readthedocs.io/en/latest/reference.html#table) (where n is the nth table on the webpage)
 
 ```
 table n to forex_rates.csv
 ```
 
-Sending a Telegram notification is trivially easy (first message [@taguibot](https://t.me/taguibot) to authorise it to send messages)
+Moving data between TagUI and Excel is as easy as using [standard Excel formula](https://tagui.readthedocs.io/en/latest/reference.html#excel) that you are familiar with
+```
+top_salesman = [Monthly Report.xlsx]August!E11
+```
+
+Sending a Telegram notification is trivially easy ([first message @taguibot](https://tagui.readthedocs.io/en/latest/reference.html#telegram) to authorise it to send messages)
 
 ```
-telegram id message
+telegram id Hello World. Olá Mundo. नमस्ते दुनिया. 안녕하세요 세계. 世界,你好。
 ```
 
 # Do RPA with Microsoft Word
@@ -81,7 +81,7 @@ More Information
 
 # How to get started
 
-Join the community and ask any questions at our [Telegram chat group](https://t.me/rpa_chat) or our [Zoom Q&A every Thursday](https://github.com/kelaberetiv/TagUI/issues/914)
+Join the community and ask any questions at our [Telegram chat group](https://t.me/rpa_chat) or our [Zoom Q&A every Thursday](https://github.com/kelaberetiv/TagUI/issues/914). Take [TagUI free course](https://learn.aisingapore.org/courses/learn-rpa-with-tagui-beginners-course/) over one morning or afternoon, and start using the most popular open-source RPA software.
 
 # TagUI v5.11
 For technical details of TagUI, such as architecture diagram and codebase structure, [see old homepage](https://github.com/kelaberetiv/TagUI/tree/pre_v6) 
@@ -103,4 +103,3 @@ Open-source project|Maintainer|From|How does this contribute to TagUI project
 
 # Sponsor
 This project  is supported by the [National Research Foundation](https://www.nrf.gov.sg), Singapore under its AI Singapore Programme (AISG-RP-2019-050). Any opinions, findings and conclusions or recommendations expressed in this material are those of the author(s) and do not reflect the views of National Research Foundation, Singapore.
-

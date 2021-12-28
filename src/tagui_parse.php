@@ -337,7 +337,7 @@ $script_content = str_replace("function sleep(ms) {ms *= 0.1; //","function slee
 $script_content = str_replace("chrome_step('Input.insertText',{text: value});};","for (var character = 0, length = value.length; character < length; character++) {\nchrome_step('Input.dispatchKeyEvent',{type: 'char', text: value[character]});}};",$script_content);
 file_put_contents($script . '.js',$script_content);
 $chrome_php_content = file_get_contents('tagui_chrome.php');
-$chrome_php_content = str_replace("$scan_period = 10000;","$scan_period = 100000;",$chrome_php_content);
+$chrome_php_content = str_replace('$scan_period = 10000;','$scan_period = 100000;',$chrome_php_content);
 file_put_contents('tagui_chrome.php',$chrome_php_content);
 $sikuli_py_content = file_get_contents('tagui.sikuli/tagui.py');
 $sikuli_py_content = str_replace("scan_period = 0.05\n\n# teleport mouse instead of moving to target\nSettings.MoveMouseDelay = 0","scan_period = 0.5",$sikuli_py_content);
@@ -347,7 +347,7 @@ $script_content = str_replace("function sleep(ms) { //","function sleep(ms) {ms 
 $script_content = str_replace("for (var character = 0, length = value.length; character < length; character++) {\nchrome_step('Input.dispatchKeyEvent',{type: 'char', text: value[character]});}};","chrome_step('Input.insertText',{text: value});};",$script_content);
 file_put_contents($script . '.js',$script_content);
 $chrome_php_content = file_get_contents('tagui_chrome.php');
-$chrome_php_content = str_replace("$scan_period = 100000;","$scan_period = 10000;",$chrome_php_content);
+$chrome_php_content = str_replace('$scan_period = 100000;','$scan_period = 10000;',$chrome_php_content);
 file_put_contents('tagui_chrome.php',$chrome_php_content);
 $sikuli_py_content = file_get_contents('tagui.sikuli/tagui.py');
 $sikuli_py_content = str_replace("scan_period = 0.5","scan_period = 0.05\n\n# teleport mouse instead of moving to target\nSettings.MoveMouseDelay = 0",$sikuli_py_content);
@@ -519,6 +519,8 @@ case "py": return py_intent($script_line); break;
 case "vision": return vision_intent($script_line); break;
 case "timeout": return timeout_intent($script_line); break;
 case "excel": return excel_intent($script_line); break;
+case "word": return word_intent($script_line); break;
+case "pdf": return pdf_intent($script_line); break;
 case "code": return code_intent($script_line); break;
 default: echo "ERROR - " . current_line() . " cannot understand step " . $script_line . "\n";}}
 
@@ -614,12 +616,26 @@ if ($lc_raw_intent=="timeout") return "timeout";
 // check using regex for excel assignment
 if (is_excel($raw_intent)) return "excel";
 
+// check using regex for pdf assignment
+if (is_word($raw_intent)) return "word";
+
+// check using regex for pdf assignment
+if (is_pdf($raw_intent)) return "pdf";
+
 // final check for recognized code before returning error 
 if (is_code($raw_intent)) return "code"; else return "error";}
 
 function is_excel($raw_intent) {if (strpos($raw_intent,"=") === false) return false;
 if (strpos($raw_intent,"//") === 0) return false; // skip processing if commented out
 return preg_match('/\[.*\.(xl.|xl..|xml|csv)\].*![A-Z0-9]*/i', $raw_intent);}
+
+function is_word($raw_intent) {if (strpos($raw_intent,"=") === false) return false;
+if (strpos($raw_intent,"//") === 0) return false; // skip processing if commented out
+return preg_match('/\[.*\.(doc|docx|docm|dot|dotx)\]/i', $raw_intent);}
+
+function is_pdf($raw_intent) {if (strpos($raw_intent,"=") === false) return false;
+if (strpos($raw_intent,"//") === 0) return false; // skip processing if commented out
+return preg_match('/\[.*\.pdf\]/i', $raw_intent);}
 
 function is_code($raw_intent) {
 // due to asynchronous waiting for element, if/for/while can work for parsing single step
@@ -853,7 +869,7 @@ $params = trim(substr($raw_intent." ",1+strpos($raw_intent." "," ")));
 if (substr($params,0,3) != "to ") $params = "to " . $params; // handle user missing out to separator
 $param1 = trim(substr($params,0,strpos($params,"to "))); $param2 = trim(substr($params,3+strpos($params,"to ")));
 if ($param2 == "") echo "ERROR - " . current_line() . " location missing for " . $raw_intent . "\n";
-else return "casper.then(function() {"."{techo('".$raw_intent."');\n".$twb.".download('".abs_file($param2)."');}".end_fi()."});"."\n\n";}
+else return "casper.then(function() {"."{techo('".esc_bs($raw_intent)."');\n".$twb.".download('".abs_file($param2)."');}".end_fi()."});"."\n\n";}
 
 function receive_intent($raw_intent) {$twb = $GLOBALS['tagui_web_browser'];
 $params = trim(substr($raw_intent." ",1+strpos($raw_intent." "," ")));
@@ -1120,7 +1136,7 @@ else return "casper.then(function() {"."casper.options.waitTimeout = " . (floatv
 "; sikuli_timeout(" . floatval($params) . ");" . end_fi()."});"."\n\n";}
 
 function excel_intent($raw_intent) {$excel_params = explode("=", $raw_intent);
-$left_param = trim($excel_params[0]); $right_param = trim($excel_params[1]); if ($excel_params[2])
+$left_param = trim($excel_params[0]); $right_param = trim($excel_params[1]); if (@count($excel_params) > 2)
 $right_param .= '=' . trim($excel_params[2]); // to handle case of formula assignments eg "=A1"
 $left_param = esc_bs($left_param); $right_param = esc_bs($right_param); // to escape backslash \ in Windows folder paths
 $left_param = str_replace("\\\\'", "\\'", $left_param); $right_param = str_replace("\\\\'", "\\'", $right_param);
@@ -1129,6 +1145,26 @@ echo "ERROR - " . current_line() . " parameter missing for " . $raw_intent . "\n
 return "casper.then(function() { // start Excel step\ntecho('".$left_param." = ".$right_param."'); ".
 "excel_retrieve('".$right_param."');\n}); // end Excel step"."\n\n".
 "casper.then(function() { // start Excel step\nexcel_assign('".$left_param."');\n}); // end Excel step"."\n\n";}
+
+function word_intent($raw_intent) {$word_params = explode("=", $raw_intent);
+$left_param = trim($word_params[0]); $right_param = trim($word_params[1]);
+$left_param = esc_bs($left_param); $right_param = esc_bs($right_param); // to escape backslash \ in Windows folder paths
+$left_param = str_replace("\\\\'", "\\'", $left_param); $right_param = str_replace("\\\\'", "\\'", $right_param);
+if (($left_param == "") or ($right_param == ""))
+echo "ERROR - " . current_line() . " parameter missing for " . $raw_intent . "\n"; else
+return "casper.then(function() { // start Word step\ntecho('".$left_param." = ".$right_param."'); ".
+"word_retrieve('".$right_param."');\n}); // end Word step"."\n\n".
+"casper.then(function() { // start Word step\nword_assign('".$left_param."');\n}); // end Word step"."\n\n";}
+
+function pdf_intent($raw_intent) {$pdf_params = explode("=", $raw_intent);
+$left_param = trim($pdf_params[0]); $right_param = trim($pdf_params[1]);
+$left_param = esc_bs($left_param); $right_param = esc_bs($right_param); // to escape backslash \ in Windows folder paths
+$left_param = str_replace("\\\\'", "\\'", $left_param); $right_param = str_replace("\\\\'", "\\'", $right_param);
+if (($left_param == "") or ($right_param == ""))
+echo "ERROR - " . current_line() . " parameter missing for " . $raw_intent . "\n"; else
+return "casper.then(function() { // start PDF step\ntecho('".$left_param." = ".$right_param."'); ".
+"pdf_retrieve('".$right_param."');\n}); // end PDF step"."\n\n".
+"casper.then(function() { // start PDF step\npdf_assign('".$left_param."');\n}); // end PDF step"."\n\n";}
 
 function code_intent($raw_intent) {
 $params = parse_condition($raw_intent);

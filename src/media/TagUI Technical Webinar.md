@@ -28,7 +28,7 @@ TagUI is a free and open-source RPA tool by [AI Singapore](https://aisingapore.o
 My team-mate Ruth is now working on free video courses for TagUI. For now, following are useful resources to get started. The Telegram group chat and weekly Zoom meeting are especially useful resources if you have any questions to ask. Folks from community will also share their experiences. The community forum is a great place to share your RPA workflows.
 
 ### Useful references
-- Slide deck - https://drive.google.com/file/d/1pltAMzr0MZsttgg1w2ORH3ontR6Q51W9/view
+- Slide deck - https://docs.google.com/presentation/d/1pltAMzr0MZsttgg1w2ORH3ontR6Q51W9/edit?usp=sharing&ouid=115132044557947023533&rtpof=true&sd=true
 - Intro webinar -  https://www.youtube.com/watch?v=hKc4eNBhMws
 - Technical webinar - https://www.youtube.com/watch?v=C5itbB3sCq0
 - Podcast - https://botnirvana.org/podcast/tagui/
