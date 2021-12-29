@@ -221,4 +221,6 @@ To do advanced debugging, you can create log files when running flows by creatin
 
 Running TagUI on the cloud
 -----------------------------
-For cloud lovers, you can run TagUI on your web browser or phone using `free Google Cloud <https://github.com/kelaberetiv/TagUI/issues/913>`_. For more control running on the cloud, you can run this `Docker image <https://hub.docker.com/r/openiap/nodered-tagui>`_ on your preferred cloud vendor, or run on `free Node-RED instance on OpenFlow <https://www.linkedin.com/posts/kensoh_see-how-you-can-run-tagui-free-rpa-on-the-activity-6881841265084915712-mBeO>`_.
+For cloud lovers, you can run TagUI on your web browser or phone using `free Google Cloud <https://github.com/kelaberetiv/TagUI/issues/913>`_.
+
+For more control running on the cloud, you can run this `Docker image <https://hub.docker.com/r/openiap/nodered-tagui>`_ on your preferred cloud vendor, or run on `free Node-RED instance on OpenFlow <https://www.linkedin.com/posts/kensoh_see-how-you-can-run-tagui-free-rpa-on-the-activity-6881841265084915712-mBeO>`_, sponsored by `Allan Zimmermann <https://www.linkedin.com/in/skadefro/>`_
