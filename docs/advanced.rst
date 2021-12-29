@@ -33,8 +33,8 @@ The third way is **global error handling**. Configuration can be done for TagUI 
 
 .. _datatables:
 
-Datatables
-------------
+Datatables for batch automation
+-------------------------------
 Datatables are :ref:`csv files <what-are-csv-files>` which can be used to run your flows multiple times with different inputs.
 
 A datatable (``trade_data.csv``) could look like this:
@@ -62,8 +62,8 @@ To know which iteration your flow is in you can use the ``iteration`` variable::
 
 .. _object-repository:
 
-Object repositories
-------------------------
+Object repositories for reusability
+-----------------------------------
 Object repositories are optional :ref:`csv files <what-are-csv-files>` which can store variables for use in flows. They help to separate your flows from your personal data (like login information for web flows), and allow you to share common information between multiple flows for easy updating.
 
 Each flow has a **local object repository** and all flows share the **global object repository**. The local object repository is the ``tagui_local.csv`` in the same folder as the flow. The global object repository is the ``tagui_global.csv`` in the ``tagui/src/`` folder.
@@ -218,3 +218,7 @@ To do advanced debugging, you can create log files when running flows by creatin
 - ``my_flow.log`` stores step-by-step output of the execution. 
 - ``my_flow.js`` is the generated JavaScript file that was run.
 - ``my_flow.raw`` is the expanded flow after parsing modules.
+
+Running TagUI on the cloud
+-----------------------------
+For cloud lovers, you can run TagUI on your web browser or phone using `free Google Cloud <https://github.com/kelaberetiv/TagUI/issues/913>`_. For more control running on the cloud, you can run this `Docker image <https://hub.docker.com/r/openiap/nodered-tagui>`_ on your preferred cloud vendor, or run on `free Node-RED instance on OpenFlow <https://www.linkedin.com/posts/kensoh_see-how-you-can-run-tagui-free-rpa-on-the-activity-6881841265084915712-mBeO>`_.
