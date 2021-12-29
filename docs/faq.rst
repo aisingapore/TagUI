@@ -83,8 +83,8 @@ Why doesn't TagUI work on zoom levels other than 100%?
 TagUI mimics the user mouse-clicks at the (x,y) coordinates of web elements, so using a different zoom level for your web browser will cause clicks to be triggered at wrong coordinates. Make sure TagUI's Chrome/Edge browser is set to 100% zoom for best results. 
 
 
-Is TagUI safe to use?
------------------------------
+Is TagUI safe and secure to use?
+--------------------------------
 As TagUI and the foundation it's built on is open-source software, it means users can read the source code of TagUI and all its dependencies to check if there is a security flaw or malicious code. This is an advantage compared to using commercial software that is closed-source, as users cannot see what is the code behind the software.
 
 Following are links to the source code for TagUI and its open-source dependencies. You can dig through the source code for the other open-source dependencies below, or make the fair assumption that security issues would have been spotted by users and fixed, as these projects are mature and have large user bases.
@@ -98,6 +98,7 @@ Following are links to the source code for TagUI and its open-source dependencie
 - R - https://github.com/wch/r-source
 - PHP - https://github.com/php/php-src
 
+See this section on why TagUI has enterprise security by design - https://github.com/kelaberetiv/TagUI#enterprise-security-by-design
 
 Does TagUI track what I automate?
 ---------------------------------------
