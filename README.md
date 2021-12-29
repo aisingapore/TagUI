@@ -48,17 +48,19 @@ Sending a Telegram notification is trivially easy ([first message @taguibot](htt
 telegram id Hello World. Olá Mundo. नमस्ते दुनिया. 안녕하세요 세계. 世界,你好。
 ```
 
-# Do RPA with Microsoft Word
+# Do RPA Anyway You Want
 
-You can use TagUI [MS Office Plug-ins](https://github.com/kelaberetiv/TagUI/blob/master/src/office/README.md) ([demo video](https://www.linkedin.com/posts/kensoh_botgames-rpaugust-activity-6832933047835475968-khcd), [sample doc](https://github.com/kelaberetiv/TagUI/files/7031942/Week.3.docx)) to easily create and deploy Word doc as RPA robots, and set up RPA data parameters using Excel. Enjoy a full-featured RPA IDE with toolbar of TagUI steps and tooltips, snapshot tool to automate using computer vision, task pane for settings and run output. You can also run TagUI on your phone using [free Google Cloud](https://github.com/kelaberetiv/TagUI/issues/913). For VS Code users, you can install this [language extension](https://www.linkedin.com/posts/kensoh_hi-vs-code-folks-who-love-rpa-now-you-can-activity-6805445134034042880--PWT).
+You can use TagUI [MS Office Plug-ins](https://github.com/kelaberetiv/TagUI/blob/master/src/office/README.md) ([demo video](https://www.linkedin.com/posts/kensoh_botgames-rpaugust-activity-6832933047835475968-khcd), [sample doc](https://github.com/kelaberetiv/TagUI/files/7031942/Week.3.docx)) to easily create and deploy Word doc as RPA robots, and set up RPA data parameters using Excel. Enjoy a full-featured RPA IDE with toolbar of TagUI steps and tooltips, snapshot tool to automate using computer vision, task pane for settings and run output. 
+
+You can also create and edit your RPA robots using commonly used text editors like Notepad, Notepad++, VS Code, Sublime, TextEdit, Vim, etc. For VS Code users, you can install [TagUI language extension](https://www.linkedin.com/posts/kensoh_hi-vs-code-folks-who-love-rpa-now-you-can-activity-6805445134034042880--PWT). For cloud lovers, you can run TagUI on your web browser or phone using [free Google Cloud](https://github.com/kelaberetiv/TagUI/issues/913). For more control running on the cloud, you can run this [Docker image](https://hub.docker.com/r/openiap/nodered-tagui) on your preferred cloud vendor, or run on [free Node-RED instance on OpenFlow](https://www.linkedin.com/posts/kensoh_see-how-you-can-run-tagui-free-rpa-on-the-activity-6881841265084915712-mBeO).
 
 ![Word Plug-in v3](https://raw.githubusercontent.com/kelaberetiv/TagUI/master/src/office/word/word_addin_v3.png)
 
 # Ecosystem and Communities
 
-TagUI has a bustling user community, and extended community champions create new RPA tools for their own communities, based on TagUI. Python users can [pip install rpa](https://github.com/tebelorg/RPA-Python) for the #1 Python RPA package. TagUI for [C# .NET](https://www.nuget.org/packages/tagui) and [Go](https://www.linkedin.com/posts/kensoh_hi-fans-of-go-programming-language-would-activity-6804658389772324864-_OgH) programming languages are being built. For event-driven RPA with thousands of connectors, check out this [TagUI module for Node-RED](https://flows.nodered.org/node/node-red-contrib-tagui), a popular free and open-source workflow automation tool.
+TagUI has a bustling user community, and extended community champions create new RPA tools for their own communities, based on TagUI. Python users can [pip install rpa](https://github.com/tebelorg/RPA-Python) to use the #1 Python RPA package. Already there is [TagUI for C# .NET](https://www.nuget.org/packages/tagui), and [TagUI for Go](https://www.linkedin.com/posts/kensoh_hi-fans-of-go-programming-language-would-activity-6804658389772324864-_OgH) is being built. For event-driven RPA with thousands of connectors, check out [TagUI module for Node-RED](https://flows.nodered.org/node/node-red-contrib-tagui), a popular free and open-source workflow automation tool.
 
-For Microsoft [Power Automate Desktop](https://flow.microsoft.com/en-us/desktop/) users, you'll be happy to know that there's [2-way integration](https://www.linkedin.com/posts/kensoh_tagui-activity-6773236538596831232-1aFu) with TagUI out of the box (for business continuity if you switch between the 2 apps). Do also check out other leading open-source RPA tools, to see if they meet your needs better - [OpenRPA](https://github.com/open-rpa/openrpa) & [OpenFlow](https://github.com/open-rpa/openflow), [OpenBots](https://www.linkedin.com/posts/openbots_openbots-studio-demo-support-for-tag-ui-activity-6788174021964943361-RrUD), [Robocorp](https://youtu.be/HAfQpNZVbKI). All of them support enterprise-grade orchestrating and running TagUI robots from their orchestrator.
+For Microsoft [Power Automate Desktop](https://flow.microsoft.com/en-us/desktop/) users, you'll be happy to know that there's [2-way integration](https://www.linkedin.com/posts/kensoh_tagui-activity-6773236538596831232-1aFu) with TagUI out of the box (for business continuity if you switch between the 2 apps). Also, do check out other leading open-source RPA tools, to see if they meet your needs better - [OpenRPA](https://github.com/open-rpa/openrpa) & [OpenFlow](https://github.com/open-rpa/openflow), [OpenBots](https://www.linkedin.com/posts/openbots_openbots-studio-demo-support-for-tag-ui-activity-6788174021964943361-RrUD), [Robocorp](https://youtu.be/HAfQpNZVbKI). All of them support enterprise-grade orchestrating and running TagUI robots from their orchestrator.
 
 ![TagUI Roadmap](https://raw.githubusercontent.com/kelaberetiv/TagUI/master/src/media/roadmap.png)
 
@@ -84,7 +86,7 @@ More Information
 Join the community and ask any questions at our [Telegram chat group](https://t.me/rpa_chat) or our [Zoom Q&A every Thursday](https://github.com/kelaberetiv/TagUI/issues/914). Take [TagUI free course](https://learn.aisingapore.org/courses/learn-rpa-with-tagui-beginners-course/) over one morning or afternoon, and start using the most popular open-source RPA software.
 
 # TagUI v5.11
-For technical details of TagUI, such as architecture diagram and codebase structure, [see old homepage](https://github.com/kelaberetiv/TagUI/tree/pre_v6) 
+For technical details of TagUI, such as architecture diagram and codebase structure, [see the old homepage](https://github.com/kelaberetiv/TagUI/tree/pre_v6) 
 
 # Credits
 
