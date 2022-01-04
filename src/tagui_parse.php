@@ -1319,3 +1319,5 @@ $logic = "casper.bypass(teleport_distance('[CONTINUE_SIGNAL][".$teleport_marker.
 
 // return code after all the parsing and special handling
 return $logic;}
+
+?>
