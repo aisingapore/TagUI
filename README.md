@@ -48,7 +48,7 @@ Sending a Telegram notification is trivially easy ([first message @taguibot](htt
 telegram id Hello World. Olá Mundo. नमस्ते दुनिया. 안녕하세요 세계. 世界,你好。
 ```
 
-# Do RPA Anyway You Want
+# Do RPA Any Way You Want
 
 You can use TagUI [MS Office Plug-ins](https://github.com/kelaberetiv/TagUI/blob/master/src/office/README.md) ([demo video](https://www.linkedin.com/posts/kensoh_botgames-rpaugust-activity-6832933047835475968-khcd), [sample doc](https://github.com/kelaberetiv/TagUI/files/7031942/Week.3.docx)) to easily create and deploy Word doc as RPA robots, and set up RPA data parameters using Excel. Enjoy a full-featured RPA IDE with toolbar of TagUI steps and tooltips, snapshot tool to automate using computer vision, task pane for settings and run output. 
 
