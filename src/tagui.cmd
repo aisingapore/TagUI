@@ -14,7 +14,7 @@ rem enable windows for loop advanced flow control
 setlocal enableextensions enabledelayedexpansion
 
 if "%~1"=="" (
-echo tagui v6.107: use following options and this syntax to run - tagui flow_filename option^(s^)
+echo tagui v6.108: use following options and this syntax to run - tagui flow_filename option^(s^)
 echo.
 echo tagui live     launch TagUI live mode enabled with visual automation for interactive development
 echo tagui update   download and update to latest TagUI version ^(please backup your version beforehand^)
@@ -1087,12 +1087,12 @@ if exist "%flow_file%.js" (
 
 rem start R process if integration file is created during parsing
 if exist "tagui_r\tagui_r.in" (
-        start "R Engine" /b /min cmd /c Rscript tagui_r\tagui_r.R 2^>^&1 ^| tee -a tagui_r\tagui_r.log
+        start "R Engine" /min cmd /c Rscript tagui_r\tagui_r.R 2^>^&1 ^| tee -a tagui_r\tagui_r.log
 )
 
 rem start python process if integration file is created during parsing
 if exist "tagui_py\tagui_py.in" (
-        start "Python Engine" /b /min cmd /c python -u tagui_py\tagui_py.py 2^>^&1 ^| tee -a tagui_py\tagui_py.log
+        start "Python Engine" /min cmd /c python -u tagui_py\tagui_py.py 2^>^&1 ^| tee -a tagui_py\tagui_py.log
 )
 
 rem start sikuli process if integration file is created during parsing
@@ -1102,7 +1102,7 @@ if exist "tagui.sikuli\tagui_sikuli.in" (
 		java -jar sikulix\sikulix.jar -h > nul 2>&1
 	)
 	rem echo [starting sikuli process] | tee -a "%flow_file%.log"
-	start "SikuliX Engine" /b /min cmd /c java -jar sikulix\sikulix.jar -r tagui.sikuli -d 3 2^>^&1 ^| tee -a tagui.sikuli\tagui.log
+	start "SikuliX Engine" /min cmd /c java -jar sikulix\sikulix.jar -r tagui.sikuli -d 3 2^>^&1 ^| tee -a tagui.sikuli\tagui.log
 )
 
 rem start chrome processes if integration file is created during parsing
@@ -1163,7 +1163,7 @@ if exist "tagui_chrome.in" (
 	)
 
 	rem launch php process to manage chrome websocket communications
-	start "%tagui_custom_browser% Engine" /b /min cmd /c php -q tagui_chrome.php !ws_url! ^| tee -a tagui_chrome.log
+	start "%tagui_custom_browser% Engine" /min cmd /c php -q tagui_chrome.php !ws_url! ^| tee -a tagui_chrome.log
 
 rem end of if block to start chrome processes
 )
