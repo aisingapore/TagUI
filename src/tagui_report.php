@@ -39,7 +39,7 @@ $user_id = str_replace('"', '""', $user_id);
 
 $audit_output_header = '"#","WORKFLOW","START TIME","TIME TAKEN","ERROR STATUS","LOG FILE","USER ID"';
 if (!file_exists('tagui_report.csv')) file_put_contents('tagui_report.csv', $audit_output_header . "\r\n");
-$audit_output_count = @count(file('tagui_report.csv')) - 1 + 1; // to track and increment entry # in audit file
+$audit_output_count = @count((array)file('tagui_report.csv')) - 1 + 1; // to track and increment entry # in audit file
 $html_log_file = $escaped_script . '_' . $audit_output_count . '.html'; // to allow log persistence without overwriting
 $audit_output_line = '"' . $audit_output_count . '","' . $escaped_script . '","' . $start_timestamp . '","'; 
 $audit_output_line .= $finish_timestamp . '","' . $error_status . '","' . $html_log_file . '","' .$user_id . '"' . "\r\n";

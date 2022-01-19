@@ -11,7 +11,7 @@ while (!feof($source_file)) {
   if (is_array($csv_line) && $csv_line[0] !== null) {
     $csv_data[] = $csv_line;
   }
-} fclose($source_file); $csv_count = @count($csv_data);
+} fclose($source_file); $csv_count = @count((array)$csv_data);
 
 // do some prep, transpose datatable and output csv file
 $csv_result = array(); $target_csv = str_replace("_transpose.csv",".csv",$source_csv);
