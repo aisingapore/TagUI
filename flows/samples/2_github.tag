@@ -7,7 +7,7 @@ https://github.com/kelaberetiv/TagUI
 // then show the variable value on the console using echo step
 // Learn XPath: https://www.w3schools.com/xml/xpath_intro.asp
 // XPath Cheatsheet: https://www.linkedin.com/posts/kensoh_xpath-rpa-tagui-activity-6829673864633704448-Iw-D
-read (//*[@class="mt-3"])[3] to license_type
+read (//*[@class="Link--muted"])[3] to license_type
 echo `license_type`
 
 // Look for a web element with provided XPath, CSS or attributes
