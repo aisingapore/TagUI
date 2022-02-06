@@ -52,7 +52,7 @@ telegram id Hello World. Olá Mundo. नमस्ते दुनिया. 안�
 
 You can use TagUI [MS Office Plug-ins](https://github.com/kelaberetiv/TagUI/blob/master/src/office/README.md) ([demo video](https://www.linkedin.com/posts/kensoh_botgames-rpaugust-activity-6832933047835475968-khcd), [sample doc](https://github.com/kelaberetiv/TagUI/files/7031942/Week.3.docx)) to easily create and deploy Word doc as RPA robots, and set up RPA data parameters using Excel. Enjoy a full-featured RPA IDE with toolbar of TagUI steps and tooltips, snapshot tool to automate using computer vision, task pane for settings and run output. 
 
-You can also create and edit your RPA robots using commonly used text editors like Notepad, Notepad++, VS Code, Sublime, TextEdit, Vim, etc. For VS Code users, you can install [TagUI language extension](https://www.linkedin.com/posts/kensoh_hi-vs-code-folks-who-love-rpa-now-you-can-activity-6805445134034042880--PWT). 
+You can also create and edit your RPA robots using commonly used text editors like Notepad, Notepad++, VS Code, Sublime, TextEdit, Vim, etc. For VS Code users, you can install [TagUI language extension](https://www.linkedin.com/posts/kensoh_hi-vs-code-folks-who-love-rpa-now-you-can-activity-6805445134034042880--PWT). For Notepad++ users, you can download [TagUI plug-ins here](https://github.com/tilyanPristka/TagUI-Snippets-for-NotepadPP) for syntax highlighting, shortcuts and snippets.
 
 For cloud lovers, you can run TagUI on your web browser or phone using [free Google Cloud](https://github.com/kelaberetiv/TagUI/issues/913), up to 5 concurrent sessions. For more control running on the cloud, you can run this [Docker image](https://hub.docker.com/r/openiap/nodered-tagui) (use edge tag) or [Docker file](https://github.com/open-rpa/openflow/blob/master/OpenFlowNodeRED/Dockerfiletagui) on your preferred vendor. See TagUI Docker [video tutorial](https://www.linkedin.com/posts/kensoh_hi-fans-of-docker-and-rpa-heres-a-tutorial-activity-6884411868061007872-da8s). Or run on [free Node-RED instance](https://www.linkedin.com/posts/kensoh_see-how-you-can-run-tagui-free-rpa-on-the-activity-6881841265084915712-mBeO) on OpenFlow.
 
@@ -94,6 +94,7 @@ For technical details of TagUI, such as architecture diagram and codebase struct
 
 Open-source project|Maintainer|From|How does this contribute to TagUI project
 :------------------|:---------|:---|:----------------------------------------
+[TagUI for Notepad++](https://github.com/tilyanPristka/TagUI-Snippets-for-NotepadPP)|[Md Ardyansyah](https://www.linkedin.com/in/muhammad-ardyansyah/)|Indonesia|various TagUI plug-ins for Notepad++
 [TagUI for VS Code](https://www.linkedin.com/posts/kensoh_hi-vs-code-folks-who-love-rpa-now-you-can-activity-6805445134034042880--PWT)|[Subhas Malik](https://www.linkedin.com/in/subhasmalik/)|India|language extension for Visual Studio Code
 [TagUI for Robocorp](https://youtu.be/HAfQpNZVbKI)|[Nived N](https://www.linkedin.com/in/nived-n-776470139/)|India|run TagUI in Robocorp or Robot Framework
 [TagUI for Node-RED](https://flows.nodered.org/node/node-red-contrib-tagui)|[Allan Zimmermann](https://www.linkedin.com/in/skadefro/)|Denmark|low-code event-driven workflow automation
