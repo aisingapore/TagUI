@@ -650,7 +650,13 @@ Runs JavaScript code explicitly. TagUI has direct access to the JavaScript varia
   randomInteger = Math.floor(Math.random() * Math.floor(5)) + 1
   js finish
   dump `obj` to result.json
-
+  
+  // declare and initilise variable to use it inside/outside js code block
+  a = ""
+  js begin
+  a = "some string"
+  js finish
+  echo `a`
 
 py
 ####################
