@@ -522,7 +522,7 @@ case "excel": return excel_intent($script_line); break;
 case "word": return word_intent($script_line); break;
 case "pdf": return pdf_intent($script_line); break;
 case "code": return code_intent($script_line); break;
-default: echo "ERROR - " . current_line() . " cannot understand step " . $script_line . "\n";}}
+default: echo "ERROR - " . current_line() . " cannot understand step " . $script_line . "\n"; return "";}}
 
 function get_intent($raw_intent) {$lc_raw_intent = strtolower($raw_intent); 
 //check for a finish command and return, so we don't accidentally count it as a block intent
