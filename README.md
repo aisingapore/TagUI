@@ -106,7 +106,7 @@ Open-source project|Maintainer|From|How does this contribute to TagUI project
 [TagUI v3.0](https://github.com/kensoh/TagUI/tree/before_aisg)|[Ken Soh](https://github.com/kensoh)|Singapore|personal project before AI Singapore
 [SikuliX](http://sikulix.com)|[Raimund Hocke](https://github.com/RaiMan/)|Germany|computer vision, OCR, input hardware
 [CasperJS](http://casperjs.org)|[Nicolas Perriault](https://github.com/n1k0)|France|high-level JavaScript execution engine
-[PhantomJS](https://github.com/ariya/phantomjs)|[Ariya Hidayat](https://www.linkedin.com/in/ariyahidayat/)|Indonesia|foundation JavaScript execution engine
+[PhantomJS](https://github.com/ariya/phantomjs)|[Ariya Hidayat](https://github.com/ariya)|Indonesia|foundation JavaScript execution engine
 [SlimerJS](https://slimerjs.org)|[Laurent Jouanneau](https://github.com/laurentj)|France|browser automation for FireFox <= v59
 
 # Sponsor
