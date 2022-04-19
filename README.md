@@ -102,8 +102,8 @@ Open-source project|Maintainer|From|How does this contribute to TagUI project
 [TagUI for Node-RED](https://flows.nodered.org/node/node-red-contrib-tagui)|[Allan Zimmermann](https://www.linkedin.com/in/skadefro/)|Denmark|low-code event-driven workflow automation
 [TagUI for C# .NET](https://www.nuget.org/packages/tagui)|[Allan Zimmermann](https://www.linkedin.com/in/skadefro/)|Denmark|C# version of TagUI (Install-Package tagui)
 [TagUI for Docker](https://hub.docker.com/r/openiap/nodered-tagui)|[Allan Zimmermann](https://www.linkedin.com/in/skadefro/)|Denmark|replicable RPA environment for everyone
-[RPA for Python](https://github.com/tebelorg/RPA-Python)|[Ken Soh](https://www.linkedin.com/in/kensoh/)|Singapore|Python version of TagUI (pip install rpa)
-[TagUI v3.0](https://github.com/kensoh/TagUI/tree/before_aisg)|[Ken Soh](https://www.linkedin.com/in/kensoh/)|Singapore|personal project before AI Singapore
+[RPA for Python](https://github.com/tebelorg/RPA-Python)|[Ken Soh](https://github.com/kensoh)|Singapore|Python version of TagUI (pip install rpa)
+[TagUI v3.0](https://github.com/kensoh/TagUI/tree/before_aisg)|[Ken Soh](https://github.com/kensoh)|Singapore|personal project before AI Singapore
 [SikuliX](http://sikulix.com)|[Raimund Hocke](https://github.com/RaiMan/)|Germany|computer vision, OCR, input hardware
 [CasperJS](http://casperjs.org)|[Nicolas Perriault](https://github.com/n1k0)|France|high-level JavaScript execution engine
 [PhantomJS](https://github.com/ariya/phantomjs)|[Ariya Hidayat](https://www.linkedin.com/in/ariyahidayat/)|Indonesia|foundation JavaScript execution engine
