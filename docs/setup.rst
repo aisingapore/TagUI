@@ -24,7 +24,11 @@ Windows
 
     tagui c:\tagui\flows\samples\1_google.tag
 
-8. Finally, run ``tagui update`` to pull the `latest features and bug fixes <https://github.com/kelaberetiv/TagUI/issues?q=is%3Aissue+is%3Aopen+in%3Atitle+fixed+OR+done+>`_
+8. Finally, run this command to pull the `latest features and bug fixes <https://github.com/kelaberetiv/TagUI/issues?q=is%3Aissue+is%3Aopen+in%3Atitle+fixed+OR+done+>`_
+
+.. code-block:: bat
+
+    tagui update
 
 9. :ref:`Having problems? Click here.<troubleshooting-windows>` You have run your first TagUI flow! 🎉
 
@@ -50,6 +54,9 @@ macOS / Linux
 
     tagui /your_tagui_path/tagui/flows/samples/1_google.tag
 
-7. Finally, run ``tagui update`` to pull the `latest features and bug fixes <https://github.com/kelaberetiv/TagUI/issues?q=is%3Aissue+is%3Aopen+in%3Atitle+fixed+OR+done+>`_
+7. Finally, run this command to pull the `latest features and bug fixes <https://github.com/kelaberetiv/TagUI/issues?q=is%3Aissue+is%3Aopen+in%3Atitle+fixed+OR+done+>`_
+.. code-block:: bash
+
+    tagui update
 
 8. :ref:`Having problems? Click here.<troubleshooting-macos-linux>` You have run your first TagUI flow! 🎉
