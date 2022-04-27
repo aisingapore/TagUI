@@ -4,7 +4,7 @@
 
 **Free RPA tool by [AI Singapore](https://aisingapore.org), a government-funded programme to accelerate AI. To start, click the download link below. Take the [free course](https://learn.aisingapore.org/courses/learn-rpa-with-tagui-beginners-course/). Ask any questions at [our Telegram](https://t.me/rpa_chat).**
 
-**[Download v6.108](https://tagui.readthedocs.io/en/latest/setup.html)&ensp;|&ensp;[Usage Guide](https://tagui.readthedocs.io/en/latest/index.html)&ensp;|&ensp;[Demos](https://github.com/aimakerspace/TagUI-Bricks)&ensp;|&ensp;[Samples](https://github.com/kelaberetiv/TagUI/tree/master/flows/samples)&ensp;|&ensp;[Slides](https://docs.google.com/presentation/d/1pltAMzr0MZsttgg1w2ORH3ontR6Q51W9/edit?usp=sharing&ouid=115132044557947023533&rtpof=true&sd=true)&ensp;|&ensp;[Podcast](https://botnirvana.org/podcast/tagui/)&ensp;|&ensp;[Video](https://www.youtube.com/watch?v=C5itbB3sCq0)&ensp;|&ensp;[Forum](https://community.aisingapore.org/groups/tagui-rpa/forum/)&ensp;|&ensp;[Zoom](https://github.com/kelaberetiv/TagUI/issues/914)**
+**[Download v6.109](https://tagui.readthedocs.io/en/latest/setup.html)&ensp;|&ensp;[Usage Guide](https://tagui.readthedocs.io/en/latest/index.html)&ensp;|&ensp;[Demos](https://github.com/aimakerspace/TagUI-Bricks)&ensp;|&ensp;[Samples](https://github.com/kelaberetiv/TagUI/tree/master/flows/samples)&ensp;|&ensp;[Slides](https://docs.google.com/presentation/d/1pltAMzr0MZsttgg1w2ORH3ontR6Q51W9/edit?usp=sharing&ouid=115132044557947023533&rtpof=true&sd=true)&ensp;|&ensp;[Podcast](https://botnirvana.org/podcast/tagui/)&ensp;|&ensp;[Video](https://www.youtube.com/watch?v=C5itbB3sCq0)&ensp;|&ensp;[Forum](https://community.aisingapore.org/groups/tagui-rpa/forum/)&ensp;|&ensp;[Zoom](https://github.com/kelaberetiv/TagUI/issues/914)**
 
 ---
 
@@ -102,11 +102,11 @@ Open-source project|Maintainer|From|How does this contribute to TagUI project
 [TagUI for Node-RED](https://flows.nodered.org/node/node-red-contrib-tagui)|[Allan Zimmermann](https://www.linkedin.com/in/skadefro/)|Denmark|low-code event-driven workflow automation
 [TagUI for C# .NET](https://www.nuget.org/packages/tagui)|[Allan Zimmermann](https://www.linkedin.com/in/skadefro/)|Denmark|C# version of TagUI (Install-Package tagui)
 [TagUI for Docker](https://hub.docker.com/r/openiap/nodered-tagui)|[Allan Zimmermann](https://www.linkedin.com/in/skadefro/)|Denmark|replicable RPA environment for everyone
-[RPA for Python](https://github.com/tebelorg/RPA-Python)|[Ken Soh](https://www.linkedin.com/in/kensoh/)|Singapore|Python version of TagUI (pip install rpa)
-[TagUI v3.0](https://github.com/kensoh/TagUI/tree/before_aisg)|[Ken Soh](https://www.linkedin.com/in/kensoh/)|Singapore|personal project before AI Singapore
+[RPA for Python](https://github.com/tebelorg/RPA-Python)|[Ken Soh](https://github.com/kensoh)|Singapore|Python version of TagUI (pip install rpa)
+[TagUI v3.0](https://github.com/kensoh/TagUI/tree/before_aisg)|[Ken Soh](https://github.com/kensoh)|Singapore|personal project before AI Singapore
 [SikuliX](http://sikulix.com)|[Raimund Hocke](https://github.com/RaiMan/)|Germany|computer vision, OCR, input hardware
 [CasperJS](http://casperjs.org)|[Nicolas Perriault](https://github.com/n1k0)|France|high-level JavaScript execution engine
-[PhantomJS](https://github.com/ariya/phantomjs)|[Ariya Hidayat](https://www.linkedin.com/in/ariyahidayat/)|Indonesia|foundation JavaScript execution engine
+[PhantomJS](https://github.com/ariya/phantomjs)|[Ariya Hidayat](https://github.com/ariya)|Indonesia|foundation JavaScript execution engine
 [SlimerJS](https://slimerjs.org)|[Laurent Jouanneau](https://github.com/laurentj)|France|browser automation for FireFox <= v59
 
 # Sponsor
