@@ -96,6 +96,7 @@ For technical details of TagUI, such as architecture diagram and codebase struct
 
 Open-source project|Maintainer|From|How does this contribute to TagUI project
 :------------------|:---------|:---|:----------------------------------------
+[TagUI for China](http://www.tagui.com.cn)|[报表哥](https://www.zhihu.com/people/baobiaoge)|China|usage guide and repository in Chinese
 [TagUI for Notepad++](https://github.com/tilyanPristka/TagUI-Snippets-for-NotepadPP)|[Md Ardyansyah](https://www.linkedin.com/in/muhammad-ardyansyah/)|Indonesia|various TagUI plug-ins for Notepad++
 [TagUI for VS Code](https://marketplace.visualstudio.com/items?itemName=TagUisupport.tagui-support)|[Subhas Malik](https://www.linkedin.com/in/subhasmalik/)|India|language extension for Visual Studio Code
 [TagUI for Robocorp](https://youtu.be/HAfQpNZVbKI)|[Nived N](https://www.linkedin.com/in/nived-n-776470139/)|India|run TagUI in Robocorp or Robot Framework
