@@ -570,6 +570,8 @@ If you use ``page`` as the identifier, it takes a screenshot of the whole webpag
   snap logo to logo.png
 
   snap page to webpage.png
+  
+  snap (0,0)-(100,100) to a.png
 
 
 Showing output
