@@ -571,7 +571,7 @@ If you use ``page`` as the identifier, it takes a screenshot of the whole webpag
 
   snap page to webpage.png
   
-  snap (0,0)-(100,100) to a.png
+  snap (0,0)-(100,100) to image.png
 
 
 Showing output
