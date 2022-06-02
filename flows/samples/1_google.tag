@@ -14,7 +14,7 @@ type //*[@name="q"] as latest movies[enter]
 // Click first result using XPath, an identification method
 // Learn XPath: https://www.w3schools.com/xml/xpath_intro.asp
 // XPath Cheatsheet: https://www.linkedin.com/posts/kensoh_xpath-rpa-tagui-activity-6829673864633704448-Iw-D
-click (//*[@class="g"])[1]//a
+click (//*[@class="yuRUbf"])[1]//a
 
 // Wait for 3 seconds so the page can load (wait 3 seconds works as well)
 wait 3
