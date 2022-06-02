@@ -490,7 +490,7 @@ Saves text to a variable.
 
   [variable] = [value]
 
-| When using text in the value, surround the text in quotes, like "some text". This is actually treated by TagUI as JavaScript, so you can assign numbers to variables or use other JavaScript functions. The variable name needs to be a single word and cannot start with a number.
+| When using text in the value, surround the text in quotes, like "some text". This is actually treated by TagUI as JavaScript, so you can assign numbers to variables or use other JavaScript functions. The variable name needs to be a single word and cannot start with a number, and it is case sensitive.
 
 *Examples*
 
@@ -499,6 +499,61 @@ Saves text to a variable.
   count = 5
   username = "johncleese"
   fullname = firstname + lastname
+
+
+access
+###################
+
+| To access the value of a variable in most steps, surround the variable in backticks, like `my_variable`. The following is an example of accessing a variable in the echo step.
+
+*Examples*
+
+.. code-block:: none
+
+  my_variable = "hello world"
+  echo `my_variable`
+  // output: hello world
+
+  
+| However, in certain steps like `if conditions <https://tagui.readthedocs.io/en/latest/main_concepts.html#if-conditions>`_, `for loops <https://tagui.readthedocs.io/en/latest/main_concepts.html#for-loops>`_ and `helper functions <https://tagui.readthedocs.io/en/latest/main_concepts.html#helper-functions>`_, the variable can be accessed directly without backticks. For more information, see docs for the relevant step.
+
+*Examples*
+
+.. code-block:: none 
+  
+  a = "hello"
+  b = "world" 
+  if a equals to b
+    echo same
+    // output:
+	
+  my_variable = 3
+  for n from 1 to my_variable
+    echo `n`
+	// output: 1
+	// 2
+	// 3
+
+  my_variable = "some text to copy"
+  clipboard(my_variable)
+
+
+concatenation
+###################
+| To concatenate variables, the syntax varies depending on whether you are doing so within a step. The following examples show the difference between concatenating variables within and outside the echo step.
+
+*Examples*
+
+.. code-block:: none
+  
+  echo `a` `b`
+  // output: hello world
+  
+  a = "hello"
+  b = "world"
+  c = a + " " + b
+  echo `c`
+  // output: hello world
 
 
 File saving/loading 
