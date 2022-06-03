@@ -504,7 +504,7 @@ Saves text to a variable.
 access
 ###################
 
-| To access the value of a variable in most steps, surround the variable in backticks, like ```my_variable```. The following is an example of accessing a variable in the echo step.
+| To access the value of a variable in most steps, surround the variable in backticks, like `` `my_variable` ``. The following is an example of accessing a variable in the echo step.
 
 *Examples*
 
