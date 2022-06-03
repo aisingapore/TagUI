@@ -504,7 +504,7 @@ Saves text to a variable.
 access
 ###################
 
-| To access the value of a variable in most steps, surround the variable in backticks, like `my_variable`. The following is an example of accessing a variable in the echo step.
+| To access the value of a variable in most steps, surround the variable in backticks, like ``my_variable``. The following is an example of accessing a variable in the echo step.
 
 *Examples*
 
@@ -530,9 +530,9 @@ access
   my_variable = 3
   for n from 1 to my_variable
     echo `n`
-	// output: 1
-	// 2
-	// 3
+    // output: 1
+    // 2
+    // 3
 
   my_variable = "some text to copy"
   clipboard(my_variable)
