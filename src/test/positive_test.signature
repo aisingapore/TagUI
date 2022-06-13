@@ -236,6 +236,7 @@ var fs = require('fs'); if (!fs.exists(workbook_file))
 casper.echo('ERROR - cannot find Excel file ' + workbook_file).exit();
 var excel_password_code = ''; if (excel_password != '')
 excel_password_code = ' password "' + excel_password.replace(/\"/g, '\\"') + '"';
+var column_range = cell_range; if (column_range.indexOf(':') == -1) column_range = cell_range + ':' + cell_range;
 var excel_visible_code = 'tell application "System Events"\r\n\t\t' +
 'set excel_process to first process whose name is "Microsoft Excel"\r\n\t\t' +
 'set visible of excel_process to ' + excel_visible.toString() + '\r\n\tend tell\r\n\t';
@@ -246,6 +247,11 @@ var excel_steps = 'tell application "Microsoft Excel"\r\n\t' + excel_focus_code 
 'if not exists sheet "' + sheet_name + '" then\r\n\t\t' +
 'do shell script "echo ERROR - cannot find Excel sheet ' + sheet_name + '"\r\n\telse\r\n\t\t' +
 'select worksheet "' + sheet_name + '"\r\n\t\t' +
+'tell range "' + column_range + '" of active sheet\r\n\t\t\t' +
+'repeat with i from 1 to (count columns)\r\n\t\t\t\t' +
+'autofit column i\r\n\t\t\t' +
+'end repeat\r\n\t\t' +
+'end tell\r\n\t\t' +
 'set row_count to count of rows of range ("' + cell_range + ' " & get address of used range of active sheet)\r\n\t\t' +
 'set col_count to count of columns of range ("' + cell_range + ' " & get address of used range of active sheet)\r\n\t\t' +
 'set list_data to {} & string value of range ("' + cell_range + ' " & get address of used range of active sheet) ' +
