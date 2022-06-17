@@ -8,8 +8,6 @@
 
 ---
 
-![TagUI Users](https://raw.githubusercontent.com/kelaberetiv/TagUI/master/src/media/tagui_users.png)
-
 Write flows in simple TagUI language and automate away repetitive time-consuming tasks on your computer. Tasks include those on websites (native support for Chrome and Edge), desktop apps, or the command line. The TagUI project is open-source and free forever. It's easy to setup and use, and works on Windows, macOS and Linux.
 
 Besides English, flows can be written in [22 other languages](https://github.com/kelaberetiv/TagUI/tree/master/src/languages), so you can do RPA using your [native language](https://github.com/kelaberetiv/TagUI/blob/master/flows/samples/8_chineseflow.tag). Check out this [demo video automating data collection](https://www.youtube.com/watch?v=o2WMUt0298U) in 4 different languages. With the new TagUI turbo mode, you can even run your automation 10X faster than normal human speed!
@@ -65,8 +63,6 @@ TagUI has a bustling user community, and extended community champions create new
 For Microsoft [Power Automate Desktop](https://flow.microsoft.com/en-us/desktop/) users, you'll be happy to know that there's 2-way integration with TagUI out of the box (for business continuity if you switch between the 2 apps). Also, do check out other leading open-source RPA tools, to see if they meet your needs better - [OpenRPA](https://github.com/open-rpa/openrpa) & [OpenFlow](https://github.com/open-rpa/openflow), [OpenBots](https://www.linkedin.com/posts/openbots_openbots-studio-demo-support-for-tag-ui-activity-6788174021964943361-RrUD), [Robocorp](https://youtu.be/HAfQpNZVbKI). All of them support enterprise-grade orchestrating and running TagUI robots from their orchestrator.
 
 There is also a Chinese [usage guide](http://www.tagui.com.cn) and [TagUI repository](https://gitee.com/TagUIcn). We welcome more languages with open arms.
-
-![TagUI Roadmap](https://raw.githubusercontent.com/kelaberetiv/TagUI/master/src/media/roadmap.png)
 
 # Enterprise Security by design
 
