@@ -25,7 +25,7 @@ copyright = '2021, AI Singapore'
 author = 'Ken Soh, Siow Yi Sheng'
 
 # The full version, including alpha/beta/rc tags
-release = '6.46.0'
+release = '6.110.0'
 
 # -- General configuration ---------------------------------------------------
 

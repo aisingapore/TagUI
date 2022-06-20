@@ -43,4 +43,4 @@ A free, open-source, cross-platform RPA tool that helps you automate your deskto
    Tools <tools>
    FAQ <faq>
    
-:doc:`Download TagUI v6.46 here </setup>`.
+:doc:`Download TagUI v6.110 here </setup>`.
