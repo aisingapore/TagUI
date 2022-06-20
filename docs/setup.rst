@@ -4,9 +4,7 @@ Installation
 Windows
 -------------------------------
 
-**You are recommended to download** `TagUI Windows Installer <https://github.com/kelaberetiv/TagUI/releases/download/v6.46.0/TagUI_Windows.exe>`_, instead of the advanced steps below. If you use the installer, specify an installation folder which you have write permission, for example ``C:\RPA`` or a ``RPA`` folder on your Windows Deskop. After your installation, continue from step 6.
-
-1. Read the above, or download zip file `TagUI v6.46 for Windows <https://github.com/kelaberetiv/TagUI/releases/download/v6.46.0/TagUI_Windows.zip>`_
+1. Read the above, or download zip file `TagUI v6.110 for Windows <https://github.com/kelaberetiv/TagUI/releases/download/v6.110.0/TagUI_Windows.zip>`_
 
 2. Unzip the contents to ``C:\``
 
@@ -36,7 +34,7 @@ Windows
 
 macOS / Linux
 -----------------------------------
-1. Download TagUI v6.46 for `macOS <https://github.com/kelaberetiv/TagUI/releases/download/v6.46.0/TagUI_macOS.zip>`_ or `Linux <https://github.com/kelaberetiv/TagUI/releases/download/v6.46.0/TagUI_Linux.zip>`_
+1. Download TagUI v6.110 for `macOS <https://github.com/kelaberetiv/TagUI/releases/download/v6.110.0/TagUI_macOS.zip>`_ or `Linux <https://github.com/kelaberetiv/TagUI/releases/download/v6.110.0/TagUI_Linux.zip>`_
 
 2. Unzip the contents to your desktop on macOS, or ``/home/your_userid`` on Linux
 
