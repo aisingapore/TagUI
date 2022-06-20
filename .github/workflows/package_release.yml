@@ -1,0 +1,115 @@
+name: Package Release
+on:
+  push:
+    tags:
+      - "v*"
+jobs:
+  code_check:
+    uses: kelaberetiv/TagUI/.github/workflows/code_check.yml@master
+    
+  create_release:
+    needs: code_check
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+        
+      - name: Add SikuliX, CasperJS, SlimerJS and SikuliX-Linux dependency files
+        run: |
+          cd "${{github.workspace}}/src"
+          
+          # Add SikuliX dependency files
+          curl -L 'https://storage.googleapis.com/tagui-dependencies/sikulix.zip' > sikulixzip.zip
+          unzip sikulixzip.zip
+          rm sikulixzip.zip
+          
+          # Add CasperJS dependency files
+          curl -L 'https://github.com/casperjs/casperjs/archive/refs/tags/1.1.4-1.zip' > casperjs.zip
+          unzip casperjs.zip
+          rm casperjs.zip
+          mv casperjs-1.1.4-1 casperjs
+          
+          # Add SlimerJS dependency files
+          curl -L 'https://github.com/laurentj/slimerjs/releases/download/1.0.0/slimerjs-1.0.0.zip' > slimerjs.zip
+          unzip slimerjs.zip
+          rm slimerjs.zip
+          mv slimerjs-1.0.0 slimerjs
+          
+          # Add PhantomJS dependency files
+          curl -L 'https://bitbucket.org/ariya/phantomjs/downloads/phantomjs-2.1.1-linux-x86_64.tar.bz2' > phantomjs.tar.bz2
+          tar -xf phantomjs.tar.bz2
+          rm phantomjs.tar.bz2
+          mv phantomjs-2.1.1-linux-x86_64 phantomjs
+        
+          cd "${{github.workspace}}"
+          mkdir tagui
+          rm -r .git
+          shopt -s extglob dotglob
+          mv !(tagui) tagui
+          shopt -u dotglob
+          
+          sudo chmod -R 755 "${{github.workspace}}/tagui"
+      
+      - name: Zip Linux Folder
+        run: |  
+          cd "${{github.workspace}}"
+          zip -r TagUI_Linux.zip tagui
+          
+      - name: Add PhantomJS-macOS dependency files (macOS)
+        run: |          
+          cd "${{github.workspace}}/tagui/src"
+          
+          # Add PhantomJS dependency files
+          rm -r phantomjs
+          
+          # Add PhantomJS dependency files
+          curl -L 'https://bitbucket.org/ariya/phantomjs/downloads/phantomjs-2.1.1-macosx.zip' > phantomjs.zip
+          unzip phantomjs.zip
+          rm phantomjs.zip
+          mv phantomjs-2.1.1-macosx phantomjs
+          sudo chmod -R 755 "${{github.workspace}}/tagui"
+                    
+      - name: Zip macOS Folder
+        run: |  
+          cd "${{github.workspace}}"
+          zip -r TagUI_macOS.zip tagui
+          
+      - name: Add Unx, PHP, PhantomJS-Windows dependency files (Windows)
+        run: |          
+          cd "${{github.workspace}}/tagui/src"
+          
+          # Add unx dependencies          
+          curl -L 'https://storage.googleapis.com/tagui-dependencies/unx.zip' > unxzip.zip
+          unzip unxzip.zip
+          rm unxzip.zip
+                             
+          # Add PHP dependency files
+          curl -L 'https://windows.php.net/downloads/releases/archives/php-5.6.30-Win32-VC11-x86.zip' > phpzip.zip
+          mkdir php
+          unzip phpzip.zip -d ./php
+          rm phpzip.zip
+          
+          # Add PhantomJS dependency files
+          rm -r phantomjs
+          
+          # Add PhantomJS dependency files
+          curl -L 'https://bitbucket.org/ariya/phantomjs/downloads/phantomjs-2.1.1-windows.zip' > phantomjs.zip
+          unzip phantomjs.zip
+          rm phantomjs.zip
+          mv phantomjs-2.1.1-windows phantomjs
+          
+          sudo chmod -R 755 "${{github.workspace}}/tagui"
+          
+      - name: Zip Windows Folder
+        run: |  
+          cd "${{github.workspace}}"
+          zip -r TagUI_Windows.zip tagui
+          
+      - name: Create Release
+        uses: softprops/action-gh-release@v1
+        if: startsWith(github.ref, 'refs/tags/')
+        with:
+          files: |
+            TagUI_Windows.zip
+            TagUI_macOS.zip
+            TagUI_Linux.zip
