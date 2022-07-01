@@ -1110,9 +1110,9 @@ set chrome_started=
 if exist "tagui_chrome.in" (
 	rem echo [starting chrome websocket] | tee -a "%flow_file%.log"
 
-	rem get window size from tagui_config.txt to set for chrome, estimating into account the height of chrome title bar
-	for /f "tokens=* usebackq" %%w in (`grep width tagui_config.txt ^| cut -d" " -f 2`) do set width=%%w
-	for /f "tokens=* usebackq" %%h in (`grep height tagui_config.txt ^| cut -d" " -f 2`) do set height=%%h
+	rem get window size from config.txt to set for chrome, estimating into account the height of chrome title bar
+	for /f "tokens=* usebackq" %%w in (`grep width ../config.txt ^| cut -d" " -f 2`) do set width=%%w
+	for /f "tokens=* usebackq" %%h in (`grep height ../config.txt ^| cut -d" " -f 2`) do set height=%%h
 	if "%tagui_web_browser%"=="chrome" set /a height=!height!+74
 	set window_size=--window-size=!width!!height!
 

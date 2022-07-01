@@ -16,7 +16,7 @@ if (strtolower(pathinfo($script, PATHINFO_EXTENSION))!="tag") die("ERROR - use .
 if (!file_exists($script)) die("ERROR - cannot find " . $script . "\n");
 $input_file = fopen($script,'r') or die("ERROR - cannot open " . $script . "\n");
 $output_file = fopen($script . '.js','w') or die("ERROR - cannot open " . $script . '.js' . "\n");
-$config_file = fopen('tagui_config.txt','r') or die("ERROR - cannot open tagui_config.txt" . "\n");
+$config_file = fopen('../config.txt','r') or die("ERROR - cannot open config.txt" . "\n");
 $header_file = fopen('tagui_header.js','r') or die("ERROR - cannot open tagui_header.js" . "\n");
 $footer_file = fopen('tagui_footer.js','r') or die("ERROR - cannot open tagui_footer.js" . "\n");
 
@@ -111,11 +111,11 @@ while(!feof($input_file)) {fwrite($temp_output_file,expand_intent(fgets($input_f
 fclose($temp_output_file); // generate temp output file of expanded intents (if any) before reopening as input
 $input_file = fopen($script . '.raw','r') or die("ERROR - cannot open " . $script . '.raw' . "\n");
 
-if (strpos(strtolower(file_get_contents('tagui_config.txt')),"var tagui_language = 'english';")==false)
+if (strpos(strtolower(file_get_contents('../config.txt')),"var tagui_language = 'english';")==false)
 { // section which includes translation engine for handling flows in other languages
 $temp_argv1 = $argv[1]; $temp_argv2 = $argv[2]; $temp_argv3 = $argv[3];
 $argv[1] = 'tagui_parse.php'; $argv[2] = 'from';
-$temp_tagui_config = strtolower(file_get_contents('tagui_config.txt'));
+$temp_tagui_config = strtolower(file_get_contents('../config.txt'));
 $temp_tagui_config_start = strpos($temp_tagui_config,'var tagui_language');
 $temp_tagui_config_end = strpos($temp_tagui_config,"\n",$temp_tagui_config_start);
 $temp_tagui_config = substr($temp_tagui_config,$temp_tagui_config_start,$temp_tagui_config_end-$temp_tagui_config_start);

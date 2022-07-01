@@ -354,8 +354,8 @@ chrome_started=""
 if [ -f "tagui_chrome.in" ]; then
 # echo "[starting chrome websocket]" | tee -a "$1".log
 
-# get window size from tagui_config.txt to set for chrome, estimating into account the height of chrome title bar
-width="$(grep width tagui_config.txt | cut -d' ' -f 2)"; height="$(grep height tagui_config.txt | cut -d' ' -f 2)"
+# get window size from config.txt to set for chrome, estimating into account the height of chrome title bar
+width="$(grep width ../config.txt | cut -d' ' -f 2)"; height="$(grep height ../config.txt | cut -d' ' -f 2)"
 if [ "$tagui_web_browser" == "chrome" ]; then height="$(($height + 74))"; fi; window_size="--window-size=$width$height"
 
 # setting to run chrome in headless mode if headless option is used
