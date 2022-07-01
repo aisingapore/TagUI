@@ -3,7 +3,7 @@
 Troubleshooting Windows
 ================================
 
-- If you see ``MSVCR110.dll is missing`` error, install :download:`Visual C++ Redistributable <./_static/vcredist_x86.exe>`
+- If you see ``MSVCR110.dll is missing`` error, install :download:`Visual C++ Redistributable <https://storage.googleapis.com/tagui-dependencies/readthedocs/vcredist_x86.exe>`
 
 - If you cannot unzip to ``C:\`` folder, unzip to your Windows Desktop instead
 
