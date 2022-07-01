@@ -73,8 +73,8 @@ while(!feof($config_file)) {fwrite($output_file,fgets($config_file));} fclose($c
 while(!feof($header_file)) {fwrite($output_file,fgets($header_file));} fclose($header_file);
 
 // append global functions file created by user if the file exists
-if (file_exists('tagui_global.js')) {
-$global_functions_file = fopen('tagui_global.js','r') or die("ERROR - cannot open tagui_global.js" . "\n");
+if (file_exists('../user_defined_functions/global.js')) {
+$global_functions_file = fopen('../user_defined_functions/global.js','r') or die("ERROR - cannot open user_defined_functions/global.js" . "\n");
 while(!feof($global_functions_file)) {fwrite($output_file,fgets($global_functions_file));}
 fwrite($output_file,"\n"); fclose($global_functions_file);}
 
