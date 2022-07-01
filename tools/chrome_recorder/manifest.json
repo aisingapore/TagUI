@@ -1,0 +1,33 @@
+{
+    "manifest_version": 2,
+    "name": "TagUI RPA Web Recorder", "short_name": "TagUI RPA", "version": "5.11.0",
+    "description": "Create TagUI automation flows by recording your actions",
+    "homepage_url": "https://github.com/kelaberetiv/TagUI",
+    "browser_action": {
+        "default_title": "TagUI RPA Web Recorder",
+        "default_popup": "control.html",
+        "default_icon": {
+            "16": "tagui_icon_16.png"
+        }
+    },
+    "icons": {
+        "16": "tagui_icon_16.png",
+        "48": "tagui_icon_48.png",
+        "128": "tagui_icon_128.png"
+    },
+    "permissions": [
+        "tabs",
+        "background",
+        "http://*/*",
+        "https://*/*"
+    ],
+    "background": {
+        "scripts": ["background.js"]
+    },
+    "content_scripts": [{
+        "matches": ["http://*/*", "https://*/*"],
+        "js": ["recorder.js"]
+    }],
+    "offline_enabled": false,
+    "content_security_policy": "script-src 'self' 'unsafe-eval'; object-src 'self'"
+}

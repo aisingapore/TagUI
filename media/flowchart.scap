@@ -1,0 +1,305 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ScappleDocument Version="1.1" ID="678FCC46-7C7E-49FB-9DC3-3C38BC6C43AB">
+    <Notes>
+        <Note ID="12" FontSize="9.0" Position="228.0,72.0" Width="101.0">
+            <Appearance>
+                <Alignment>Center</Alignment>
+                <Border Style="Square"></Border>
+            </Appearance>
+            <String>instantly convert flow from different native natural languages into working JavaScript
+UI automation code
+(with live mode to test steps or JS code)</String>
+        </Note>
+        <Note ID="25" FontSize="9.0" Position="267.0,260.0" Width="128.0">
+            <Appearance>
+                <Alignment>Center</Alignment>
+                <Border Style="Square"></Border>
+            </Appearance>
+            <String>visual automation and OCR of web browser and desktop</String>
+        </Note>
+        <Note ID="20" FontSize="9.0" Position="533.0,54.0" Width="114.0">
+            <Appearance>
+                <Alignment>Center</Alignment>
+                <Border Style="Square"></Border>
+            </Appearance>
+            <String>saved screenshots, text files, pdf, csv, execution logs, outgoing API calls or command line calls, and other outcomes resulting from automated actions (option to auto-upload results to hastebin.com)</String>
+        </Note>
+        <Note ID="14" FontSize="9.0" Position="408.0,139.0" Width="67.0">
+            <Appearance>
+                <Alignment>Center</Alignment>
+                <Border Style="Square"></Border>
+            </Appearance>
+            <String>navigation and testing tool for PhantomJS 
+&amp; SlimerJS</String>
+        </Note>
+        <Note ID="9" FontSize="9.0" Position="21.0,260.0" Width="119.0">
+            <Appearance>
+                <Alignment>Center</Alignment>
+                <Border Style="Square"></Border>
+            </Appearance>
+            <String>create automation flows by recording user actions</String>
+        </Note>
+        <Note ID="10" FontSize="9.0" Position="12.0,20.0" Width="158.0">
+            <Appearance>
+                <Alignment>Center</Alignment>
+                <Border Style="Square"></Border>
+            </Appearance>
+            <String>write manually in different native natural languages or edit from chrome extension recording (flow can be a local file or URL to an online file)</String>
+        </Note>
+        <Note ID="11" FontSize="9.0" Position="16.0,139.0" Width="137.0">
+            <Appearance>
+                <Alignment>Center</Alignment>
+                <Border Style="Square"></Border>
+            </Appearance>
+            <String>trigger flow from command line, scheduling, URL, API, email etc, using optional repositories and datatables as inputs</String>
+        </Note>
+        <Note ID="0" FontSize="12.0" Position="155.0,154.0" Width="85.0">
+            <Appearance>
+                <Alignment>Center</Alignment>
+                <TextColor>0.117647 0.509804 0.788235</TextColor>
+                <Border Weight="1" Style="Square"></Border>
+                <Fill>1.0 1.0 1.0</Fill>
+            </Appearance>
+            <String>TagUI</String>
+            <ConnectedNoteIDs>1, 6-7, 24, 27, 30</ConnectedNoteIDs>
+            <PointsToNoteIDs>1, 24, 27, 30</PointsToNoteIDs>
+            <Formatting>
+                <FormatRange Bold="Yes">0,5</FormatRange>
+            </Formatting>
+        </Note>
+        <Note ID="1" FontSize="12.0" Position="316.0,154.0" Width="87.0">
+            <Appearance>
+                <Alignment>Center</Alignment>
+                <TextColor>0.117647 0.509804 0.788235</TextColor>
+                <Border Weight="1" Style="Square"></Border>
+                <Fill>1.0 1.0 1.0</Fill>
+            </Appearance>
+            <String>CasperJS</String>
+            <ConnectedNoteIDs>0, 2-3</ConnectedNoteIDs>
+            <PointsToNoteIDs>0, 2-3</PointsToNoteIDs>
+            <Formatting>
+                <FormatRange Bold="Yes">0,8</FormatRange>
+            </Formatting>
+        </Note>
+        <Note ID="2" FontSize="12.0" Position="425.0,79.0" Width="87.0">
+            <Appearance>
+                <Alignment>Center</Alignment>
+                <TextColor>1.0 0.999974 0.999991</TextColor>
+                <Border Style="Square"></Border>
+                <Fill>0.5 0.0 0.5</Fill>
+            </Appearance>
+            <String>PhantomJS</String>
+            <ConnectedNoteIDs>1, 19</ConnectedNoteIDs>
+            <PointsToNoteIDs>1, 19</PointsToNoteIDs>
+            <Formatting>
+                <FormatRange Bold="Yes">0,9</FormatRange>
+            </Formatting>
+        </Note>
+        <Note ID="3" FontSize="12.0" Position="419.0,235.0" Width="87.0">
+            <Appearance>
+                <Alignment>Center</Alignment>
+                <TextColor>0.117647 0.509804 0.788235</TextColor>
+                <Border Weight="1" Style="Square"></Border>
+                <Fill>1.0 1.0 1.0</Fill>
+            </Appearance>
+            <String>SlimerJS</String>
+            <ConnectedNoteIDs>1, 4</ConnectedNoteIDs>
+            <PointsToNoteIDs>1, 4</PointsToNoteIDs>
+            <Formatting>
+                <FormatRange Bold="Yes">0,8</FormatRange>
+            </Formatting>
+        </Note>
+        <Note ID="4" FontSize="12.0" Position="541.0,235.0" Width="87.0">
+            <Appearance>
+                <Alignment>Center</Alignment>
+                <TextColor>1.0 0.999974 0.999991</TextColor>
+                <Border Style="Square"></Border>
+                <Fill>0.5 0.0 0.5</Fill>
+            </Appearance>
+            <String>Firefox</String>
+            <ConnectedNoteIDs>3, 19</ConnectedNoteIDs>
+            <PointsToNoteIDs>3, 19</PointsToNoteIDs>
+            <Formatting>
+                <FormatRange Bold="Yes">0,7</FormatRange>
+            </Formatting>
+        </Note>
+        <Note ID="6" FontSize="12.0" Position="23.0,235.0" Width="115.0">
+            <Appearance>
+                <Alignment>Center</Alignment>
+                <TextColor>1.0 0.999974 0.999991</TextColor>
+                <Border Style="Square"></Border>
+                <Fill>0.117647 0.509804 0.788235</Fill>
+            </Appearance>
+            <String>Chrome Extension</String>
+            <ConnectedNoteIDs>0</ConnectedNoteIDs>
+            <PointsToNoteIDs>0</PointsToNoteIDs>
+            <Formatting>
+                <FormatRange Bold="Yes">0,16</FormatRange>
+            </Formatting>
+        </Note>
+        <Note ID="7" FontSize="12.0" Position="52.0,79.0" Width="115.0">
+            <Appearance>
+                <Alignment>Center</Alignment>
+                <TextColor>1.0 0.999974 0.999991</TextColor>
+                <Border Style="Square"></Border>
+                <Fill>0.117647 0.509804 0.788235</Fill>
+            </Appearance>
+            <String>Automation Flow</String>
+            <ConnectedNoteIDs>0</ConnectedNoteIDs>
+            <PointsToNoteIDs>0</PointsToNoteIDs>
+            <Formatting>
+                <FormatRange Bold="Yes">0,15</FormatRange>
+            </Formatting>
+        </Note>
+        <Note ID="15" FontSize="9.0" Position="409.0,31.0" Width="118.0">
+            <Appearance>
+                <Alignment>Center</Alignment>
+                <Border Style="Square"></Border>
+            </Appearance>
+            <String>scriptable headless (invisible) web browser similar to Safari &amp; Chrome</String>
+        </Note>
+        <Note ID="16" FontSize="9.0" Position="406.0,261.0" Width="113.0">
+            <Appearance>
+                <Alignment>Center</Alignment>
+                <Border Style="Square"></Border>
+            </Appearance>
+            <String>scriptable web browser executed on top of Firefox</String>
+        </Note>
+        <Note ID="17" FontSize="9.0" Position="528.0,261.0" Width="113.0">
+            <Appearance>
+                <Alignment>Center</Alignment>
+                <Border Style="Square"></Border>
+            </Appearance>
+            <String>work with SlimerJS for visible web automation</String>
+        </Note>
+        <Note ID="19" FontSize="12.0" Position="504.0,154.0" Width="87.0">
+            <Appearance>
+                <Alignment>Center</Alignment>
+                <TextColor>1.0 0.999974 0.999991</TextColor>
+                <Border Style="Square"></Border>
+                <Fill>0.5 0.0 0.5</Fill>
+            </Appearance>
+            <String>Results</String>
+            <ConnectedNoteIDs>2, 4</ConnectedNoteIDs>
+            <Formatting>
+                <FormatRange Bold="Yes">0,7</FormatRange>
+            </Formatting>
+        </Note>
+        <Note ID="24" FontSize="12.0" Position="287.0,235.0" Width="85.0">
+            <Appearance>
+                <Alignment>Center</Alignment>
+                <TextColor>0.117647 0.509804 0.788235</TextColor>
+                <Border Weight="1" Style="Square"></Border>
+                <Fill>1.0 1.0 1.0</Fill>
+            </Appearance>
+            <String>Sikuli</String>
+            <ConnectedNoteIDs>0</ConnectedNoteIDs>
+            <PointsToNoteIDs>0</PointsToNoteIDs>
+            <Formatting>
+                <FormatRange Bold="Yes">0,6</FormatRange>
+            </Formatting>
+        </Note>
+        <Note ID="21" FontSize="9.0" Position="232.5,170.0" Width="36.0">
+            <Appearance>
+                <Alignment>Center</Alignment>
+                <TextColor>1.0 1.0 1.0</TextColor>
+                <Fill>0.314662 0.314653 0.314658</Fill>
+            </Appearance>
+            <String>v5.11  </String>
+            <Formatting>
+                <FormatRange Bold="Yes">0,7</FormatRange>
+            </Formatting>
+        </Note>
+        <Note ID="27" FontSize="12.0" Position="186.0,30.0" Width="87.0">
+            <Appearance>
+                <Alignment>Center</Alignment>
+                <TextColor>1.0 0.999974 0.999991</TextColor>
+                <Border Style="Square"></Border>
+                <Fill>0.5 0.0 0.5</Fill>
+            </Appearance>
+            <String>Chrome</String>
+            <ConnectedNoteIDs>0</ConnectedNoteIDs>
+            <PointsToNoteIDs>0</PointsToNoteIDs>
+            <Formatting>
+                <FormatRange Bold="Yes">0,6</FormatRange>
+            </Formatting>
+        </Note>
+        <Note ID="28" FontSize="9.0" Position="277.0,14.0" Width="125.0">
+            <Appearance>
+                <Alignment>Center</Alignment>
+                <Border Style="Square"></Border>
+            </Appearance>
+            <String>built-in direct integration with Chrome visible and headless mode for similar results as Firefox or PhantomJS</String>
+        </Note>
+        <Note ID="29" FontSize="9.0" Position="142.0,260.0" Width="128.0">
+            <Appearance>
+                <Alignment>Center</Alignment>
+                <Border Style="Square"></Border>
+            </Appearance>
+            <String>built-in integration for big data &amp; machine learning abilities</String>
+        </Note>
+        <Note ID="30" FontSize="12.0" Position="165.0,235.0" Width="87.0">
+            <Appearance>
+                <Alignment>Center</Alignment>
+                <TextColor>0.117647 0.509804 0.788235</TextColor>
+                <Border Weight="1" Style="Square"></Border>
+                <Fill>1.0 1.0 1.0</Fill>
+            </Appearance>
+            <String>R &amp; Python</String>
+            <ConnectedNoteIDs>0</ConnectedNoteIDs>
+            <PointsToNoteIDs>0</PointsToNoteIDs>
+            <Formatting>
+                <FormatRange Bold="Yes">0,10</FormatRange>
+            </Formatting>
+        </Note>
+    </Notes>
+    <BackgroundShapes></BackgroundShapes>
+    <AutoFit>6, 21</AutoFit>
+    <NoteStyles>
+        <Style Name="Blue Bubble" ID="81F1053A-DB2B-48F7-942D-47FF0AAD50D7" AffectFontStyle="No" AffectAlignment="No" AffectTextColor="No" AffectNoteBody="Yes" AffectFade="No">
+            <BorderThickness>1</BorderThickness>
+            <BorderColor>0.477193 0.557066 0.76433</BorderColor>
+            <FillColor>0.840969 0.866828 0.925903</FillColor>
+        </Style>
+        <Style Name="Brown Bubble" ID="70B87C0B-1CA5-4366-B254-A124CFFC48B5" AffectFontStyle="No" AffectAlignment="No" AffectTextColor="No" AffectNoteBody="Yes" AffectFade="No">
+            <BorderThickness>1</BorderThickness>
+            <BorderColor>0.290055 0.1523 0.182215</BorderColor>
+            <FillColor>0.940019 0.892907 0.779716</FillColor>
+        </Style>
+        <Style Name="Default Mapping" ID="CB04F4EB-CECC-4977-82F8-B0EE83CEE697" AffectFontStyle="Yes" AffectAlignment="Yes" AffectTextColor="Yes" AffectNoteBody="Yes" AffectSize="Yes" AffectFade="Yes" AffectSticky="Yes">
+            <FontSize>12.0</FontSize>
+            <Alignment>Center</Alignment>
+            <BorderThickness>1</BorderThickness>
+            <Size>166.0,150.0</Size>
+            <IsBold>Yes</IsBold>
+        </Style>
+        <Style Name="Green Bubble" ID="F93B4F3C-A7C8-4F0E-ADB0-6344A901336D" AffectFontStyle="No" AffectAlignment="No" AffectTextColor="No" AffectNoteBody="Yes" AffectFade="No">
+            <BorderThickness>1</BorderThickness>
+            <BorderColor>0.331867 0.609932 0.356197</BorderColor>
+            <FillColor>0.790123 0.882328 0.80198</FillColor>
+        </Style>
+        <Style Name="Pink Bubble" ID="5D8837B8-AD97-42C7-AE33-448186F9BD1F" AffectFontStyle="No" AffectAlignment="No" AffectTextColor="No" AffectNoteBody="Yes" AffectFade="No">
+            <BorderThickness>1</BorderThickness>
+            <BorderColor>0.747881 0.366532 0.542813</BorderColor>
+            <FillColor>0.918452 0.807302 0.863467</FillColor>
+        </Style>
+        <Style Name="Red Text" ID="F7FBFD55-4812-4771-87C2-0E6972D092E5" AffectFontStyle="No" AffectAlignment="No" AffectTextColor="Yes" AffectNoteBody="No" AffectFade="No">
+            <TextColor>1.0 0.0 0.0</TextColor>
+        </Style>
+        <Style Name="Title Text" ID="307AB4DE-F969-438B-99D8-58A91E0A7858" AffectFontStyle="Yes" AffectAlignment="Yes" AffectTextColor="No" AffectNoteBody="No" AffectFade="No">
+            <FontSize>28.0</FontSize>
+            <IsBold>Yes</IsBold>
+        </Style>
+        <Style Name="Yellow Bubble" ID="27F5D3D2-2835-4DA0-B799-C91B274F7C5F" AffectFontStyle="No" AffectAlignment="No" AffectTextColor="No" AffectNoteBody="Yes" AffectFade="No">
+            <BorderThickness>1</BorderThickness>
+            <BorderColor>0.756763 0.785592 0.373258</BorderColor>
+            <FillColor>0.906773 0.910625 0.634363</FillColor>
+        </Style>
+    </NoteStyles>
+    <UISettings>
+        <BackgroundColor>0.999737 0.986332 0.931298</BackgroundColor>
+        <DefaultFont>Helvetica</DefaultFont>
+        <DefaultTextColor>0.0 0.0 0.0</DefaultTextColor>
+    </UISettings>
+    <PrintSettings PaperSize="595.200012,841.799988" LeftMargin="72.0" RightMargin="72.0" TopMargin="90.0" BottomMargin="90.0" PaperType="iso-a4" Orientation="Portrait" HorizontalPagination="Clip" VerticalPagination="Auto" ScaleFactor="1.0" HorizontallyCentered="Yes" VerticallyCentered="Yes" Collates="Yes" PagesAcross="1" PagesDown="1"></PrintSettings>
+</ScappleDocument>

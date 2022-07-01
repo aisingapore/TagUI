@@ -1,0 +1,5 @@
+﻿<hostitem:hostItem hostitem:baseType="Microsoft.Office.Tools.AddInBase" hostitem:namespace="TagUIWordAddIn" hostitem:className="ThisAddIn" hostitem:identifier="ThisAddIn" hostitem:primaryCookie="AddIn" hostitem:master="true" hostitem:factoryType="Microsoft.Office.Tools.Word.ApplicationFactory" hostitem:startupIndex="0" xmlns:hostitem="http://schemas.microsoft.com/2004/VisualStudio/Tools/Applications/HostItem.xsd">
+  <hostitem:hostObject hostitem:name="Application" hostitem:identifier="Application" hostitem:type="Microsoft.Office.Interop.Word.Application" hostitem:cookie="Application" hostitem:modifier="Internal" />
+  <hostitem:hostControl hostitem:name="CustomTaskPanes" hostitem:identifier="CustomTaskPanes" hostitem:type="Microsoft.Office.Tools.CustomTaskPaneCollection" hostitem:primaryCookie="CustomTaskPanes" hostitem:modifier="Internal" />
+  <hostitem:hostControl hostitem:name="VstoSmartTags" hostitem:identifier="VstoSmartTags" hostitem:type="Microsoft.Office.Tools.SmartTagCollection" hostitem:primaryCookie="VstoSmartTags" hostitem:modifier="Internal" />
+</hostitem:hostItem>
