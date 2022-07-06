@@ -197,9 +197,9 @@ else if (range_size[1] == 1234567) {range_size[0] = excel_result.pop(); range_si
 else {excel_result.pop(); excel_result.pop();} // remove row and column count data from excel_result
 for (row = 0; row < range_size[1]; row++) {excel_array.push(excel_result.splice(0, range_size[0]));}
 for (row = 0; row < range_size[1]; row++) for (col = 0; col < range_size[0]; col++) {
-if (excel_array[row][col] && !isNaN(excel_array[row][col])) excel_array[row][col] = Number(excel_array[row][col]);}
+if (excel_array[row][col] && !isNaN(excel_array[row][col]) && (Number(excel_array[row][col]).toString() == excel_array[row][col])) excel_array[row][col] = Number(excel_array[row][col]);}
 excel_result = excel_array;} else {excel_result = excel_result.split('[EXCEL_DELIMITER]')[0];
-if (excel_result && !isNaN(excel_result)) excel_result = Number(excel_result);}
+if (excel_result && !isNaN(excel_result) && (Number(excel_result).toString() == excel_result)) excel_result = Number(excel_result);}
 excel_json = response.data;}, function() {this.echo('ERROR - Excel automation exceeded '+(3 * casper.options.waitTimeout/1000).toFixed(1)+'s timeout').exit();},(3 * casper.options.waitTimeout));}
 else if (user_system == 'mac') {
 var workbook_file = input_excel.split(']')[0].slice(1).trim(); input_excel = input_excel.split(']')[1]; 
@@ -242,9 +242,9 @@ else if (range_size[1] == 1234567) {range_size[0] = excel_result.pop(); range_si
 else {excel_result.pop(); excel_result.pop();} // remove row and column count data from excel_result
 for (row = 0; row < range_size[1]; row++) {excel_array.push(excel_result.splice(0, range_size[0]));}
 for (row = 0; row < range_size[1]; row++) for (col = 0; col < range_size[0]; col++) {
-if (excel_array[row][col] && !isNaN(excel_array[row][col])) excel_array[row][col] = Number(excel_array[row][col]);}
+if (excel_array[row][col] && !isNaN(excel_array[row][col]) && (Number(excel_array[row][col]).toString() == excel_array[row][col])) excel_array[row][col] = Number(excel_array[row][col]);}
 excel_result = excel_array;} else {excel_result = excel_result.split('[EXCEL_DELIMITER]')[0];
-if (excel_result && !isNaN(excel_result)) excel_result = Number(excel_result);}
+if (excel_result && !isNaN(excel_result) && (Number(excel_result).toString() == excel_result)) excel_result = Number(excel_result);}
 excel_json = response.data;}, function() {this.echo('ERROR - Excel automation exceeded '+(3 * casper.options.waitTimeout/1000).toFixed(1)+'s timeout').exit();},(3 * casper.options.waitTimeout));}
 else casper.echo('ERROR - unsupported operating system ' + user_system).exit();}
 
