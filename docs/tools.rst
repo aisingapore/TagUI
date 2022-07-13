@@ -5,7 +5,7 @@ These are separate apps which help you in writing TagUI flows.
 
 TagUI Chrome Extension
 --------------------------
-The TagUI Chrome extension (`download <https://chrome.google.com/webstore/detail/tagui-web-automation/egdllmehgfgjebhlkjmcnhiocfcidnjk/>`_) helps you write web flows.
+The TagUI Chrome extension (`download <https://chrome.google.com/webstore/detail/tagui-rpa-web-recorder/gjdajlcpkkjgjjokkekiniengajiamnk/>`_) helps you write web flows.
 
 It records steps such as page navigation, clicking of web elements and entering information. It then displays the steps for you to paste into your flow.
 
