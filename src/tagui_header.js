@@ -274,8 +274,11 @@ excel_result = 'objWorkbook.Sheets(excelSheet).Range("' + cell_range + '").Value
 else {var range_size = [excel_result[0].length, excel_result.length];
 cell_range = size_to_excel_range(cell_range, range_size[0], range_size[1]);
 var array_result = 'Dim arrayData(' + (range_size[1] - 1).toString() + ', ' + (range_size[0] - 1).toString() + ')\r\n';
-for (row = 0; row < range_size[1]; row++) {for (col = 0; col < range_size[0]; col++) {array_result = array_result +
-'arrayData(' + row.toString() + ', ' + col.toString() + ') = "' + excel_result[row][col].toString() + '"\r\n';}}
+for (row = 0; row < range_size[1]; row++) {for (col = 0; col < range_size[0]; col++) {
+    var value = "";
+    if (typeof excel_result[row][col] !== 'undefined') value = excel_result[row][col].toString();
+    array_result = array_result +
+'arrayData(' + row.toString() + ', ' + col.toString() + ') = "' + value + '"\r\n';}}
 array_result += 'objWorkbook.Sheets(excelSheet).Range("' + cell_range + '").Value = arrayData\r\n';
 excel_result = array_result;}
 workbook_file = abs_file(workbook_file); if (excel_files.indexOf(workbook_file) == -1) excel_files.push(workbook_file);
