@@ -338,7 +338,8 @@ function excel_retrieve(right_param) { // check OS before starting Excel automat
 if (user_system != 'windows' && user_system != 'mac') {excel_result = '';
 casper.echo('ERROR - Excel automation only for Windows and Mac').exit();}
 if (right_param.match(/\[.*\.(xl.|xl..|xml|csv)\].*![A-Z0-9]*/i) == null)
-{excel_result = ''; excel_result = eval(right_param);}
+{excel_result = ''; if (isNaN(right_param)) excel_result = eval(right_param);
+        else excel_result = right_param;}
 else if (excel_result == '[LIVE_MODE]') {excel_result = '';
 casper.echo('ERROR - reading from Excel not supported in live mode');}
 else {excel_result = ''; read_excel(right_param);}}
