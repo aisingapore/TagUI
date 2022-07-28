@@ -110,9 +110,9 @@ if [ -f "$(pwd)/../../phantomjs-prebuilt/bin/phantomjs" ]; then export PHANTOMJS
 if [ -f "$(pwd)/../../slimerjs/src/slimerjs" ]; then export SLIMERJS_EXECUTABLE="$(pwd)/../../slimerjs/src/slimerjs"; fi
 
 # finally set to packaged dependencies if they exist (for packaged installation)
-if [ -f "$(pwd)/casperjs/bin/casperjs" ]; then CASPERJS_EXECUTABLE="$(pwd)/casperjs/bin/casperjs"; fi
-if [ -f "$(pwd)/phantomjs/bin/phantomjs" ]; then export PHANTOMJS_EXECUTABLE="$(pwd)/phantomjs/bin/phantomjs"; fi
-if [ -f "$(pwd)/slimerjs/slimerjs" ]; then export SLIMERJS_EXECUTABLE="$(pwd)/slimerjs/slimerjs"; fi
+if [ -f "$(pwd)/../ext/casperjs/bin/casperjs" ]; then CASPERJS_EXECUTABLE="$(pwd)/../ext/casperjs/bin/casperjs"; fi
+if [ -f "$(pwd)/../ext/phantomjs/bin/phantomjs" ]; then export PHANTOMJS_EXECUTABLE="$(pwd)/../ext/phantomjs/bin/phantomjs"; fi
+if [ -f "$(pwd)/../ext/slimerjs/slimerjs" ]; then export SLIMERJS_EXECUTABLE="$(pwd)/../ext/slimerjs/slimerjs"; fi
 
 tagui_deploy_workflow=false
 # check deploy parameter to generate an executable file to run workflow
@@ -343,10 +343,10 @@ fi
 # start sikuli process if integration file is created during parsing
 if [ -f "tagui.sikuli/tagui_sikuli.in" ]; then
 # start dummy first run to let sikulix integrate jython
-if [ -f "sikulix/jython-standalone-2.7.1.jar" ]; then
-java -jar sikulix/sikulix.jar -h > /dev/null 2>&1 
+if [ -f "../ext/sikulix/jython-standalone-2.7.1.jar" ]; then
+java -jar ../ext/sikulix/sikulix.jar -h > /dev/null 2>&1 
 fi
-java -jar sikulix/sikulix.jar -r tagui.sikuli -d 3 >> tagui.sikuli/tagui.log 2>&1 &
+java -jar ../ext/sikulix/sikulix.jar -r tagui.sikuli -d 3 >> tagui.sikuli/tagui.log 2>&1 &
 fi
 
 # start chrome processes if integration file is created during parsing

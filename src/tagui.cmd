@@ -34,7 +34,7 @@ exit /b 1
 rem download file if first parameter is online resource
 set arg1=%~1
 if "%arg1:~0,4%"=="http" (
-	if exist "%~dp0unx\curl.exe" set "path=%~dp0unx;%path%"
+	if exist "%~dp0..\ext\unx\curl.exe" set "path=%~dp0..\ext\unx;%path%"
 	set arg1=%arg1:/= %
 	for %%a in (!arg1!) do set "online_flowname=%%a"
 	curl -k -s -o !online_flowname! "%~1"
@@ -69,10 +69,10 @@ if "%~1"=="update" (
 	if exist "%TAGUI_PARENT_DIR%\TagUI-master.zip" del "%TAGUI_PARENT_DIR%\TagUI-master.zip"
 	if exist "%TAGUI_PARENT_DIR%\src\tagui_master.cmd" del "%TAGUI_PARENT_DIR%\src\tagui_master.cmd"
 
-	if exist "%~dp0unx\curl.exe" (
-		set "path=%~dp0unx;%path%"
+	if exist "%~dp0..\ext\unx\curl.exe" (
+		set "path=%~dp0..\ext\unx;%path%"
 	) else (
-		echo ERROR - cannot find curl command tagui\src\unx\curl.exe needed to update TagUI
+		echo ERROR - cannot find curl command tagui\ext\unx\curl.exe needed to update TagUI
 		exit /b 1
 	)
 	curl -k -s -o "%TAGUI_PARENT_DIR%\src\tagui_master.cmd" "https://raw.githubusercontent.com/kelaberetiv/TagUI/master/src/tagui.cmd"
@@ -227,11 +227,11 @@ if exist "%~dp0..\..\phantomjs-prebuilt\lib\phantom\bin\phantomjs.exe" set "path
 if exist "%~dp0..\..\slimerjs\src\slimerjs.bat" set "SLIMERJS_EXECUTABLE=%~dp0..\..\slimerjs\src\slimerjs.bat"
 
 rem finally set to packaged dependencies if they exist (for packaged installation)
-if exist "%~dp0casperjs\bin\casperjs" set "path=%~dp0casperjs\bin;%path%"
-if exist "%~dp0phantomjs\bin\phantomjs.exe" set "path=%~dp0phantomjs\bin;%path%"
-if exist "%~dp0slimerjs\slimerjs.bat" set "SLIMERJS_EXECUTABLE=%~dp0slimerjs\slimerjs.bat"
-if exist "%~dp0php\php.exe" set "path=%~dp0php;%path%"
-if exist "%~dp0unx\gawk.exe" set "path=%~dp0unx;%path%"
+if exist "%~dp0..\ext\casperjs\bin\casperjs" set "path=%~dp0..\ext\casperjs\bin;%path%"
+if exist "%~dp0..\ext\phantomjs\bin\phantomjs.exe" set "path=%~dp0..\ext\phantomjs\bin;%path%"
+if exist "%~dp0..\ext\slimerjs\slimerjs.bat" set "SLIMERJS_EXECUTABLE=%~dp0..\ext\slimerjs\slimerjs.bat"
+if exist "%~dp0..\ext\php\php.exe" set "path=%~dp0..\ext\php;%path%"
+if exist "%~dp0..\ext\unx\gawk.exe" set "path=%~dp0..\ext\unx;%path%"
 
 set tagui_deploy_workflow=false
 rem check deploy parameter to generate an executable file to run workflow
@@ -1098,11 +1098,11 @@ if exist "tagui_py\tagui_py.in" (
 rem start sikuli process if integration file is created during parsing
 if exist "tagui.sikuli\tagui_sikuli.in" (
 	rem start dummy first run to let sikulix integrate jython
-	if exist "sikulix\jython-standalone-2.7.1.jar" (
-		java -jar sikulix\sikulix.jar -h > nul 2>&1
+	if exist "..\ext\sikulix\jython-standalone-2.7.1.jar" (
+		java -jar ..\ext\sikulix\sikulix.jar -h > nul 2>&1
 	)
 	rem echo [starting sikuli process] | tee -a "%flow_file%.log"
-	start "SikuliX Engine" /min cmd /c java -jar sikulix\sikulix.jar -r tagui.sikuli -d 3 2^>^&1 ^| tee -a tagui.sikuli\tagui.log
+	start "SikuliX Engine" /min cmd /c java -jar ..\ext\sikulix\sikulix.jar -r tagui.sikuli -d 3 2^>^&1 ^| tee -a tagui.sikuli\tagui.log
 )
 
 rem start chrome processes if integration file is created during parsing

@@ -5,7 +5,7 @@ rem aggressive failsafe for tagui and friends that have not exited gracefully
 rem works by scanning processes for tagui keywords and killing them one by one
 
 rem set path to unix utilities for windows command prompt
-if exist "%~dp0unx\gawk.exe" set "path=%~dp0unx;%path%"
+if exist "%~dp0..\ext\unx\gawk.exe" set "path=%~dp0..\ext\unx;%path%"
 
 :repeat_kill_php
 for /f "tokens=* usebackq" %%p in (`wmic process where "caption like '%%php.exe%%' and commandline like '%%tagui_chrome.php%%'" get processid 2^>nul ^| cut -d" " -f 1 ^| sort -nur ^| head -n 1`) do set php_process_id=%%p

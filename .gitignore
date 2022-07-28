@@ -2,12 +2,12 @@
 /docs/_build/*
 
 # exclude folders for packaged installation
-/src/casperjs/*
-/src/phantomjs/*
-/src/sikulix/*
-/src/slimerjs/*
-/src/php/*
-/src/unx/*
+/ext/casperjs/*
+/ext/phantomjs/*
+/ext/sikulix/*
+/ext/slimerjs/*
+/ext/php/*
+/ext/unx/*
 
 # exclude custom global functions file
 /src/tagui_global.js

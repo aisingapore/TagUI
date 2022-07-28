@@ -14,7 +14,7 @@ rem delete helper file if it exists to prevent running an old call
 if exist "tagui_helper.cmd" del "tagui_helper.cmd"
 
 rem call php helper to interpret parameters passed in to cli helper
-if exist "%~dp0php\php.exe" set "path=%~dp0php;%path%"
+if exist "%~dp0..\ext\php\php.exe" set "path=%~dp0..\ext\php;%path%"
 php -q tagui_helper.php %1 %2 %3 %4 %5 %6 %7 %8 %9
 
 rem run generated output from php helper to call automation flow
