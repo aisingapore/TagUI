@@ -946,9 +946,9 @@ function sikuli_timeout(time_in_seconds) {
 // for initialising integration with R
 function r_handshake() { // techo('[connecting to R process]');
     var ds; if (flow_path.indexOf('/') !== -1) ds = '/'; else ds = '\\'; clear_r_text();
-    var fs = require('fs'); fs.write('tagui_r' + ds + 'tagui_r.in', '', 'w'); var r_handshake = '';
-    if (!fs.exists('tagui_r' + ds + 'tagui_r.out')) fs.write('tagui_r' + ds + 'tagui_r.out', '', 'w');
-    do { sleep(100); r_handshake = fs.read('tagui_r' + ds + 'tagui_r.out').trim(); }
+    var fs = require('fs'); fs.write('integrations' + ds + 'programming_languages' + ds + 'tagui_r' + ds + 'tagui_r.in', '', 'w'); var r_handshake = '';
+    if (!fs.exists('integrations' + ds + 'programming_languages' + ds + 'tagui_r' + ds + 'tagui_r.out')) fs.write('integrations' + ds + 'programming_languages' + ds + 'tagui_r' + ds + 'tagui_r.out', '', 'w');
+    do { sleep(100); r_handshake = fs.read('integrations' + ds + 'programming_languages' + ds + 'tagui_r' + ds + 'tagui_r.out').trim(); }
     while (r_handshake !== '[0] START'); // techo('[connected to R process]');
 }
 
@@ -957,8 +957,8 @@ function r_step(r_intent) {
     if (r_intent.indexOf('r ') !== 0) r_intent = 'r ' + r_intent; r_count++;
     if (r_count == 1) r_handshake(); // handshake on first call
     var ds; if (flow_path.indexOf('/') !== -1) ds = '/'; else ds = '\\';
-    var fs = require('fs'); fs.write('tagui_r' + ds + 'tagui_r.in', '[' + r_count.toString() + '] ' + r_intent, 'w');
-    var r_step_result = ''; do { sleep(100); r_step_result = fs.read('tagui_r' + ds + 'tagui_r.out').trim(); }
+    var fs = require('fs'); fs.write('integrations' + ds + 'programming_languages' + ds + 'tagui_r' + ds + 'tagui_r.in', '[' + r_count.toString() + '] ' + r_intent, 'w');
+    var r_step_result = ''; do { sleep(100); r_step_result = fs.read('integrations' + ds + 'programming_languages' + ds + 'tagui_r' + ds + 'tagui_r.out').trim(); }
     while (r_step_result.indexOf('[' + r_count.toString() + '] ') == -1);
     if (r_step_result.indexOf('SUCCESS') !== -1) return true; else return false;
 }
@@ -966,22 +966,22 @@ function r_step(r_intent) {
 // for fetching text from R integration execution result
 function fetch_r_text() {
     var ds; if (flow_path.indexOf('/') !== -1) ds = '/'; else ds = '\\';
-    var fs = require('fs'); if (fs.exists('tagui_r' + ds + 'tagui_r.txt'))
-        return fs.read('tagui_r' + ds + 'tagui_r.txt').trim(); else return '';
+    var fs = require('fs'); if (fs.exists('integrations' + ds + 'programming_languages' + ds + 'tagui_r' + ds + 'tagui_r.txt'))
+        return fs.read('integrations' + ds + 'programming_languages' + ds + 'tagui_r' + ds + 'tagui_r.txt').trim(); else return '';
 }
 
 // for clearing text from R integration execution result
 function clear_r_text() {
     var ds; if (flow_path.indexOf('/') !== -1) ds = '/'; else ds = '\\';
-    var fs = require('fs'); fs.write('tagui_r' + ds + 'tagui_r.txt', '', 'w');
+    var fs = require('fs'); fs.write('integrations' + ds + 'programming_languages' + ds + 'tagui_r' + ds + 'tagui_r.txt', '', 'w');
 }
 
 // for initialising integration with Python
 function py_handshake() { // techo('[connecting to Python process]');
     var ds; if (flow_path.indexOf('/') !== -1) ds = '/'; else ds = '\\'; clear_py_text();
-    var fs = require('fs'); fs.write('tagui_py' + ds + 'tagui_py.in', '', 'w'); var py_handshake = '';
-    if (!fs.exists('tagui_py' + ds + 'tagui_py.out')) fs.write('tagui_py' + ds + 'tagui_py.out', '', 'w');
-    do { sleep(100); py_handshake = fs.read('tagui_py' + ds + 'tagui_py.out').trim(); }
+    var fs = require('fs'); fs.write('integrations' + ds + 'programming_languages'+ ds + 'tagui_py' + ds + 'tagui_py.in', '', 'w'); var py_handshake = '';
+    if (!fs.exists('integrations' + ds + 'programming_languages'+ ds + 'tagui_py' + ds + 'tagui_py.out')) fs.write('tagui_py' + ds + 'tagui_py.out', '', 'w');
+    do { sleep(100); py_handshake = fs.read('integrations' + ds + 'programming_languages'+ ds + 'tagui_py' + ds + 'tagui_py.out').trim(); }
     while (py_handshake !== '[0] START'); // techo('[connected to Python process]');
 }
 
@@ -990,8 +990,8 @@ function py_step(py_intent) {
     if (py_intent.indexOf('py ') !== 0) py_intent = 'py ' + py_intent; py_count++;
     if (py_count == 1) py_handshake(); // handshake on first call
     var ds; if (flow_path.indexOf('/') !== -1) ds = '/'; else ds = '\\';
-    var fs = require('fs'); fs.write('tagui_py' + ds + 'tagui_py.in', '[' + py_count.toString() + '] ' + py_intent, 'w');
-    var py_step_result = ''; do { sleep(100); py_step_result = fs.read('tagui_py' + ds + 'tagui_py.out').trim(); }
+    var fs = require('fs'); fs.write('integrations' + ds + 'programming_languages'+ ds +'tagui_py' + ds + 'tagui_py.in', '[' + py_count.toString() + '] ' + py_intent, 'w');
+    var py_step_result = ''; do { sleep(100); py_step_result = fs.read('integrations' + ds + 'programming_languages'+ ds + 'tagui_py' + ds + 'tagui_py.out').trim(); }
     while (py_step_result.indexOf('[' + py_count.toString() + '] ') == -1);
     if (py_step_result.indexOf('SUCCESS') !== -1) return true; else return false;
 }
@@ -999,14 +999,14 @@ function py_step(py_intent) {
 // for fetching text from Python integration execution result
 function fetch_py_text() {
     var ds; if (flow_path.indexOf('/') !== -1) ds = '/'; else ds = '\\';
-    var fs = require('fs'); if (fs.exists('tagui_py' + ds + 'tagui_py.txt'))
-        return fs.read('tagui_py' + ds + 'tagui_py.txt').trim(); else return '';
+    var fs = require('fs'); if (fs.exists('integrations' + ds + 'programming_languages'+ ds + 'tagui_py' + ds + 'tagui_py.txt'))
+        return fs.read('integrations' + ds + 'programming_languages'+ ds + 'tagui_py' + ds + 'tagui_py.txt').trim(); else return '';
 }
 
 // for clearing text from Python integration execution result
 function clear_py_text() {
     var ds; if (flow_path.indexOf('/') !== -1) ds = '/'; else ds = '\\';
-    var fs = require('fs'); fs.write('tagui_py' + ds + 'tagui_py.txt', '', 'w');
+    var fs = require('fs'); fs.write('integrations' + ds + 'programming_languages'+ ds + 'tagui_py' + ds + 'tagui_py.txt', '', 'w');
 }
 
 if (chrome_id > 0) { // super large if block to load chrome related functions if chrome or headless option is used
@@ -1731,17 +1731,17 @@ function call_sikuli(input_intent, input_params, other_actions) { // helper func
 
 function call_r(input_intent) { // helper function to use R integration for data analytics and machine learning
     var fs = require('fs'); // use phantomjs fs file system module to access files and directories
-    fs.write('tagui_r/tagui_r.in', '', 'w'); fs.write('tagui_r/tagui_r.out', '', 'w');
-    if (!fs.exists('tagui_r/tagui_r.in')) return "this.echo('ERROR - cannot initialise tagui_r.in')";
-    if (!fs.exists('tagui_r/tagui_r.out')) return "this.echo('ERROR - cannot initialise tagui_r.out')";
+    fs.write('integrations/programming_languages/tagui_r/tagui_r.in', '', 'w'); fs.write('integrations/programming_languages/tagui_r/tagui_r.out', '', 'w');
+    if (!fs.exists('integrations/programming_languages/tagui_r/tagui_r.in')) return "this.echo('ERROR - cannot initialise integrations/programming_languages/tagui_r.in')";
+    if (!fs.exists('integrations/programming_languages/tagui_r/tagui_r.out')) return "this.echo('ERROR - cannot initialise integrations/programming_languages/tagui_r.out')";
     return "r_result = ''; if (!r_step('" + input_intent + "')) this.echo('ERROR - cannot execute R command(s)'); else {r_result = fetch_r_text(); clear_r_text(); try {r_json = JSON.parse(r_result);} catch(e) {r_json = JSON.parse('null');}}";
 }
 
 function call_py(input_intent) { // helper function to use Python integration for data analytics and machine learning
     var fs = require('fs'); // use phantomjs fs file system module to access files and directories
-    fs.write('tagui_py/tagui_py.in', '', 'w'); fs.write('tagui_py/tagui_py.out', '', 'w');
-    if (!fs.exists('tagui_py/tagui_py.in')) return "this.echo('ERROR - cannot initialise tagui_py.in')";
-    if (!fs.exists('tagui_py/tagui_py.out')) return "this.echo('ERROR - cannot initialise tagui_py.out')";
+    fs.write('integrations/programming_languages/tagui_py/tagui_py.in', '', 'w'); fs.write('integrations/programming_languages/tagui_py/tagui_py.out', '', 'w');
+    if (!fs.exists('integrations/programming_languages/tagui_py/tagui_py.in')) return "this.echo('ERROR - cannot initialise integrations/programming_languages/tagui_py.in')";
+    if (!fs.exists('integrations/programming_languages/tagui_py/tagui_py.out')) return "this.echo('ERROR - cannot initialise integrations/programming_languages/tagui_py.out')";
     return "py_result = ''; if (!py_step('" + input_intent + "')) this.echo('ERROR - cannot execute Python command(s)'); else {py_result = fetch_py_text(); clear_py_text(); try {py_json = JSON.parse(py_result);} catch(e) {py_json = JSON.parse('null');}}";
 }
 

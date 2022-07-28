@@ -976,21 +976,21 @@ set params=%arg2% %arg3% %arg4% %arg5% %arg6% %arg7% %arg8% %arg9%
 rem initialise log file and set permissions to protect user data
 rem skip permissions setting for windows, only done for macos and linux
 type nul > "%flow_file%.log"
-type nul > "tagui_r\tagui_r.log"
-type nul > "tagui_r\tagui_r_windows.log"
-type nul > "tagui_py\tagui_py.log"
-type nul > "tagui_py\tagui_py_windows.log"
+type nul > "integrations\programming_languages\tagui_r\tagui_r.log"
+type nul > "integrations\programming_languages\tagui_r\tagui_r_windows.log"
+type nul > "integrations\programming_languages\tagui_py\tagui_py.log"
+type nul > "integrations\programming_languages\tagui_py\tagui_py_windows.log"
 type nul > "tagui.sikuli\tagui.log"
 type nul > "tagui.sikuli\tagui_windows.log"
 type nul > "tagui_chrome.log"
 
 rem delete R integration files if they exist
-if exist "tagui_r\tagui_r.in" del "tagui_r\tagui_r.in"
-if exist "tagui_r\tagui_r.out" del "tagui_r\tagui_r.out"
+if exist "integrations\programming_languages\tagui_r\tagui_r.in" del "integrations\programming_languages\tagui_r\tagui_r.in"
+if exist "integrations\programming_languages\tagui_r\tagui_r.out" del "integrations\programming_languages\tagui_r\tagui_r.out"
 
 rem delete python integration files if they exist
-if exist "tagui_py\tagui_py.in" del "tagui_py\tagui_py.in"
-if exist "tagui_py\tagui_py.out" del "tagui_py\tagui_py.out"
+if exist "integrations\programming_languages\tagui_py\tagui_py.in" del "integrations\programming_languages\tagui_py\tagui_py.in"
+if exist "integrations\programming_languages\tagui_py\tagui_py.out" del "integrations\programming_languages\tagui_py\tagui_py.out"
 
 rem delete sikuli visual automation integration files if they exist
 if exist "tagui.sikuli\tagui_sikuli.in" del "tagui.sikuli\tagui_sikuli.in" 
@@ -1086,13 +1086,13 @@ if exist "%flow_file%.js" (
 )
 
 rem start R process if integration file is created during parsing
-if exist "tagui_r\tagui_r.in" (
-        start "R Engine" /min cmd /c Rscript tagui_r\tagui_r.R 2^>^&1 ^| tee -a tagui_r\tagui_r.log
+if exist "integrations\programming_languages\tagui_r\tagui_r.in" (
+        start "R Engine" /min cmd /c Rscript integrations\programming_languages\tagui_r\tagui_r.R 2^>^&1 ^| tee -a integrations\programming_languages\tagui_r\tagui_r.log
 )
 
 rem start python process if integration file is created during parsing
-if exist "tagui_py\tagui_py.in" (
-        start "Python Engine" /min cmd /c python -u tagui_py\tagui_py.py 2^>^&1 ^| tee -a tagui_py\tagui_py.log
+if exist "integrations\programming_languages\tagui_py\tagui_py.in" (
+        start "Python Engine" /min cmd /c python -u integrations\programming_languages\tagui_py\tagui_py.py 2^>^&1 ^| tee -a integrations\programming_languages\tagui_py\tagui_py.log
 )
 
 rem start sikuli process if integration file is created during parsing
@@ -1175,8 +1175,8 @@ if %tagui_test_mode%==false (
 	casperjs test "%flow_file%.js" !api! --xunit="%flow_file%.xml" | tee -a "%flow_file%.log"
 )
 rem checking for existence of files is important, otherwise in loops integrations will run even without enabling
-if exist "tagui_r\tagui_r.in" echo finish > tagui_r\tagui_r.in
-if exist "tagui_py\tagui_py.in" echo finish > tagui_py\tagui_py.in
+if exist "integrations\programming_languages\tagui_r\tagui_r.in" echo finish > integrations\programming_languages\tagui_r\tagui_r.in
+if exist "integrations\programming_languages\tagui_py\tagui_py.in" echo finish > integrations\programming_languages\tagui_py\tagui_py.in
 if exist "tagui.sikuli\tagui_sikuli.in" echo finish > tagui.sikuli\tagui_sikuli.in
 if exist "tagui_chrome.in" echo finish > tagui_chrome.in
 
@@ -1221,11 +1221,11 @@ if exist "tagui_chrome.log" (
 )
 rem keep non-windows logs to help debug integrations when needed
 rem and prevent file-still-locked issues while processes are exiting
-if exist "tagui_r\tagui_r.log" (
-	gawk "sub(\"$\", \"\")" "tagui_r\tagui_r.log" > "tagui_r\tagui_r_windows.log"
+if exist "integrations\programming_languages\tagui_r\tagui_r.log" (
+	gawk "sub(\"$\", \"\")" "integrations\programming_languages\tagui_r\tagui_r.log" > "integrations\programming_languages\tagui_r\tagui_r_windows.log"
 )
-if exist "tagui_py\tagui_py.log" (
-	gawk "sub(\"$\", \"\")" "tagui_py\tagui_py.log" > "tagui_py\tagui_py_windows.log"
+if exist "integrations\programming_languages\tagui_py\tagui_py.log" (
+	gawk "sub(\"$\", \"\")" "integrations\programming_languages\tagui_py\tagui_py.log" > "integrations\programming_languages\tagui_py\tagui_py_windows.log"
 )
 if exist "tagui.sikuli\tagui.log" (
 	gawk "sub(\"$\", \"\")" "tagui.sikuli\tagui.log" > "tagui.sikuli\tagui_windows.log"

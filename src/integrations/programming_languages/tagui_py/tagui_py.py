@@ -16,24 +16,24 @@ except ImportError:
 tagui_count = '0'
 
 # initialise and set integration interface file
-tagui_output = open('tagui_py/tagui_py.txt','w')
+tagui_output = open('integrations/programming_languages/tagui_py/tagui_py.txt','w')
 tagui_output.write('')
 tagui_output.close()
 
 # write to interface out-file to signal ready for inputs
-tagui_output = open('tagui_py/tagui_py.out','w')
+tagui_output = open('integrations/programming_languages/tagui_py/tagui_py.out','w')
 tagui_output.write('[0] START')
 tagui_output.close()
 
 # initialise interface in-file before starting main loop
-tagui_input = open('tagui_py/tagui_py.in','w')
+tagui_input = open('integrations/programming_languages/tagui_py/tagui_py.in','w')
 tagui_input.write('')
 tagui_input.close()
 
 def py_intent ( raw_intent ):
 	params = (raw_intent + ' ')[1+(raw_intent + ' ').find(' '):].strip()
 	print('[tagui] ACTION - ' + params)
-	tagui_output = open('tagui_py/tagui_py.txt','w')
+	tagui_output = open('integrations/programming_languages/tagui_py/tagui_py.txt','w')
 	tagui_output.write('')
 	tagui_output.close()
 
@@ -58,7 +58,7 @@ def py_intent ( raw_intent ):
 
 	if temp_result != '':
 		print(temp_result)
-	tagui_output = open('tagui_py/tagui_py.txt','w')
+	tagui_output = open('integrations/programming_languages/tagui_py/tagui_py.txt','w')
 	tagui_output.write(temp_result)
 	tagui_output.close()
 	return 1
@@ -80,9 +80,9 @@ print('[tagui] START  - listening for inputs'); print('')
 while True:
 	# scan input from run-time interface in-file
 	try:
-		tagui_input = open('tagui_py/tagui_py.in','r')
+		tagui_input = open('integrations/programming_languages/tagui_py/tagui_py.in','r')
 	except (IOError, OSError):
-		print('[tagui] ERROR  - cannot open tagui_py/tagui_py.in'); print('')
+		print('[tagui] ERROR  - cannot open integrations/programming_languages/tagui_py/tagui_py.in'); print('')
 		break
 	tagui_intent = tagui_input.read().strip()
 	tagui_input.close()
@@ -92,7 +92,7 @@ while True:
 		break
 	elif not tagui_intent:
 		tagui_count = '0'
-		tagui_output = open('tagui_py/tagui_py.out','w')
+		tagui_output = open('integrations/programming_languages/tagui_py/tagui_py.out','w')
 		tagui_output.write('[0] START')
 		tagui_output.close()
 		time.sleep(scan_period)
@@ -117,13 +117,13 @@ while True:
 
 	# save intent_result to interface out-file
 	print('[tagui] OUTPUT - ' + '[' + tagui_count + '] ' + intent_result_string); print('')
-	tagui_output = open('tagui_py/tagui_py.out','w')
+	tagui_output = open('integrations/programming_languages/tagui_py/tagui_py.out','w')
 	tagui_output.write('[' + tagui_count + '] ' + intent_result_string)
 	tagui_output.close()
 	time.sleep(scan_period)
 
 # write to interface out-file to signal finish listening
 print('[tagui] FINISH - stopped listening')
-tagui_output = open('tagui_py/tagui_py.out','w')
+tagui_output = open('integrations/programming_languages/tagui_py/tagui_py.out','w')
 tagui_output.write('[0] FINISH')
 tagui_output.close()

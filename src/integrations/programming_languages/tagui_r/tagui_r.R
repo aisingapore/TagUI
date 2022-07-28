@@ -7,22 +7,22 @@ scan_period = 0.1
 tagui_count = '0'
 
 # initialise and set integration interface file
-cat('',file='tagui_r/tagui_r.txt',append=FALSE)
-sink('tagui_r/tagui_r.txt',split=TRUE,append=FALSE)
+cat('',file='integrations/programming_languages/tagui_r/tagui_r.txt',append=FALSE)
+sink('integrations/programming_languages/tagui_r/tagui_r.txt',split=TRUE,append=FALSE)
 
 # write to interface out-file to signal ready for inputs
-cat('[0] START',file='tagui_r/tagui_r.out',append=FALSE)
+cat('[0] START',file='integrations/programming_languages/tagui_r/tagui_r.out',append=FALSE)
 
 # initialise interface in-file before starting main loop
-cat('',file='tagui_r/tagui_r.in',append=FALSE)
+cat('',file='integrations/programming_languages/tagui_r/tagui_r.in',append=FALSE)
 
 r_intent = function(raw_intent) {
 	params = trimws(substr(paste(raw_intent,' ',sep=''),1+regexpr(' ',paste(raw_intent,' ',sep='')),nchar(raw_intent)))
 	message(paste('[tagui] ACTION - ',params,sep=''))
-	cat('',file='tagui_r/tagui_r.txt',append=FALSE)
+	cat('',file='integrations/programming_languages/tagui_r/tagui_r.txt',append=FALSE)
 	eval(parse(text = params),envir=.GlobalEnv)
-	eval_output = trimws(readLines('tagui_r/tagui_r.txt',skipNul=TRUE,warn=FALSE))
-	cat(eval_output,file='tagui_r/tagui_r.txt',append=FALSE)
+	eval_output = trimws(readLines('integrations/programming_languages/tagui_r/tagui_r.txt',skipNul=TRUE,warn=FALSE))
+	cat(eval_output,file='integrations/programming_languages/tagui_r/tagui_r.txt',append=FALSE)
 	if (grepl('cat\\(',params)) message()
 	return(1)
 }
@@ -46,10 +46,10 @@ message('[tagui] START  - listening for inputs'); message()
 while (TRUE) {
 	# scan input from run-time interface in-file
 	tryCatch({
-		tagui_intent = trimws(readLines('tagui_r/tagui_r.in',skipNul=TRUE,warn=FALSE))
+		tagui_intent = trimws(readLines('integrations/programming_languages/tagui_r/tagui_r.in',skipNul=TRUE,warn=FALSE))
 		if (length(tagui_intent) == 0) tagui_intent = ''
 	}, error = function(e) {
-		message('[tagui] ERROR  - cannot open tagui_r/tagui_r.in'); message(); break
+		message('[tagui] ERROR  - cannot open integrations/programming_languages/tagui_r/tagui_r.in'); message(); break
 	})
 
 	# quit if finish signal received, initialise and repeat loop if blank
@@ -57,7 +57,7 @@ while (TRUE) {
 		break
 	} else if (tagui_intent == '') {
 		tagui_count = '0'
-		cat('[0] START',file='tagui_r/tagui_r.out',append=FALSE)
+		cat('[0] START',file='integrations/programming_languages/tagui_r/tagui_r.out',append=FALSE)
 		Sys.sleep(scan_period)
 		next
 	}
@@ -83,10 +83,10 @@ while (TRUE) {
 
 	# save intent_result to interface out-file
 	message(paste('[tagui] OUTPUT - [',tagui_count,'] ',intent_result_string,sep='')); message()
-	cat(paste('[',tagui_count,'] ',intent_result_string,sep=''),file='tagui_r/tagui_r.out',append=FALSE)
+	cat(paste('[',tagui_count,'] ',intent_result_string,sep=''),file='integrations/programming_languages/tagui_r/tagui_r.out',append=FALSE)
 	Sys.sleep(scan_period)
 }
 
 # write to interface out-file to signal finish listening
 message('[tagui] FINISH - stopped listening')
-cat('[0] FINISH',file='tagui_r/tagui_r.out',append=FALSE)
+cat('[0] FINISH',file='integrations/programming_languages/tagui_r/tagui_r.out',append=FALSE)

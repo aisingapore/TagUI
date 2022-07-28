@@ -55,18 +55,18 @@
 /src/tagui_chrome.log
 
 # exclude local files for R integration
-/src/tagui_r/tagui_r.in
-/src/tagui_r/tagui_r.out
-/src/tagui_r/tagui_r.txt
-/src/tagui_r/tagui_r.log
-/src/tagui_r/tagui_r_windows.log
+/src/integrations/programming_languages/tagui_r/tagui_r.in
+/src/integrations/programming_languages/tagui_r/tagui_r.out
+/src/integrations/programming_languages/tagui_r/tagui_r.txt
+/src/integrations/programming_languages/tagui_r/tagui_r.log
+/src/integrations/programming_languages/tagui_r/tagui_r_windows.log
 
 # exclude local files for python integration
-/src/tagui_py/tagui_py.in
-/src/tagui_py/tagui_py.out
-/src/tagui_py/tagui_py.txt
-/src/tagui_py/tagui_py.log
-/src/tagui_py/tagui_py_windows.log
+/src/integrations/programming_languages/tagui_py/tagui_py.in
+/src/integrations/programming_languages/tagui_py/tagui_py.out
+/src/integrations/programming_languages/tagui_py/tagui_py.txt
+/src/integrations/programming_languages/tagui_py/tagui_py.log
+/src/integrations/programming_languages/tagui_py/tagui_py_windows.log
 
 # exclude local files for sikuli integration 
 /src/tagui.sikuli/tagui_sikuli.in
