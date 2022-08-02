@@ -6,7 +6,7 @@ Windows
 
 1. Read the above, or download zip file `TagUI v6.110 for Windows <https://github.com/kelaberetiv/TagUI/releases/download/v6.110.0/TagUI_Windows.zip>`_
 
-2. Unzip the contents to ``C:\``
+2. Unzip the contents to ``C:\rpa\``
 
 3. `Install OpenJDK for Windows <https://corretto.aws/downloads/latest/amazon-corretto-8-x64-windows-jdk.msi>`_
 
