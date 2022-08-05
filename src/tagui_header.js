@@ -897,9 +897,9 @@ function get_files(folder_path) {
 // for initialising integration with sikuli visual automation
 function sikuli_handshake() { // techo('[connecting to sikuli process]');
     var ds; if (flow_path.indexOf('/') !== -1) ds = '/'; else ds = '\\'; clear_sikuli_text();
-    var fs = require('fs'); fs.write('tagui.sikuli' + ds + 'tagui_sikuli.in', '', 'w'); var sikuli_handshake = '';
-    if (!fs.exists('tagui.sikuli' + ds + 'tagui_sikuli.out')) fs.write('tagui.sikuli' + ds + 'tagui_sikuli.out', '', 'w');
-    do { sleep(500); sikuli_handshake = fs.read('tagui.sikuli' + ds + 'tagui_sikuli.out').trim(); }
+    var fs = require('fs'); fs.write('softwares' + ds + 'tagui.sikuli' + ds + 'tagui_sikuli.in', '', 'w'); var sikuli_handshake = '';
+    if (!fs.exists('softwares' + ds + 'tagui.sikuli' + ds + 'tagui_sikuli.out')) fs.write('softwares' + ds + 'tagui.sikuli' + ds + 'tagui_sikuli.out', '', 'w');
+    do { sleep(500); sikuli_handshake = fs.read('softwares' + ds + 'tagui.sikuli' + ds + 'tagui_sikuli.out').trim(); }
     while (sikuli_handshake !== '[0] START'); // techo('[connected to sikuli process]');
 }
 
@@ -915,8 +915,8 @@ function sikuli_step(sikuli_intent) {
     if (sikuli_count == 1) sikuli_handshake(); // handshake on first call
     if (sikuli_intent.indexOf('snap_image()') > -1) { sikuli_intent = sikuli_intent.replace('snap_image()', snap_image()); }
     var ds; if (flow_path.indexOf('/') !== -1) ds = '/'; else ds = '\\';
-    var fs = require('fs'); fs.write('tagui.sikuli' + ds + 'tagui_sikuli.in', '[' + sikuli_count.toString() + '] ' + sikuli_intent, 'w');
-    var sikuli_result = ''; do { sleep(500); sikuli_result = fs.read('tagui.sikuli' + ds + 'tagui_sikuli.out').trim(); }
+    var fs = require('fs'); fs.write('softwares' + ds + 'tagui.sikuli' + ds + 'tagui_sikuli.in', '[' + sikuli_count.toString() + '] ' + sikuli_intent, 'w');
+    var sikuli_result = ''; do { sleep(500); sikuli_result = fs.read('softwares' + ds + 'tagui.sikuli' + ds + 'tagui_sikuli.out').trim(); }
     while (sikuli_result.indexOf('[' + sikuli_count.toString() + '] ') == -1);
     if (sikuli_result.indexOf('SUCCESS') !== -1) return true; else return false;
 }
@@ -924,20 +924,20 @@ function sikuli_step(sikuli_intent) {
 // for fetching text from sikuli optical character recognition 
 function fetch_sikuli_text() {
     var ds; if (flow_path.indexOf('/') !== -1) ds = '/'; else ds = '\\';
-    var fs = require('fs'); if (fs.exists('tagui.sikuli' + ds + 'tagui_sikuli.txt'))
-        return fs.read('tagui.sikuli' + ds + 'tagui_sikuli.txt').trim(); else return '';
+    var fs = require('fs'); if (fs.exists('softwares' + ds + 'tagui.sikuli' + ds + 'tagui_sikuli.txt'))
+        return fs.read('softwares' + ds + 'tagui.sikuli' + ds + 'tagui_sikuli.txt').trim(); else return '';
 }
 
 // for clearing text from sikuli optical character recognition
 function clear_sikuli_text() {
     var ds; if (flow_path.indexOf('/') !== -1) ds = '/'; else ds = '\\';
-    var fs = require('fs'); fs.write('tagui.sikuli' + ds + 'tagui_sikuli.txt', '', 'w');
+    var fs = require('fs'); fs.write('softwares' + ds + 'tagui.sikuli' + ds + 'tagui_sikuli.txt', '', 'w');
 }
 
 // for setting timeout in sikuli when looking for ui element
 function sikuli_timeout(time_in_seconds) {
     var ds; if (flow_path.indexOf('/') !== -1) ds = '/'; else ds = '\\';
-    var fs = require('fs'); if (fs.exists('tagui.sikuli' + ds + 'tagui_sikuli.in')) {
+    var fs = require('fs'); if (fs.exists('softwares' + ds + 'tagui.sikuli' + ds + 'tagui_sikuli.in')) {
         sikuli_step('vision setAutoWaitTimeout(' + time_in_seconds.toString() + ')');
         sikuli_step('vision wait_timeout = ' + time_in_seconds.toString());
     }
@@ -1720,9 +1720,9 @@ function call_sikuli(input_intent, input_params, other_actions) { // helper func
     if (input_intent.length > 9 && input_intent.substr(-9).toLowerCase() == 'using ocr')
         var use_ocr = 'true'; else var use_ocr = 'false';  // to track if it is a text locator using OCR
     var fs = require('fs'); // use phantomjs fs file system module to access files and directories
-    fs.write('tagui.sikuli/tagui_sikuli.in', '', 'w'); fs.write('tagui.sikuli/tagui_sikuli.out', '', 'w');
-    if (!fs.exists('tagui.sikuli/tagui_sikuli.in')) return "this.echo('ERROR - cannot initialise tagui_sikuli.in')";
-    if (!fs.exists('tagui.sikuli/tagui_sikuli.out')) return "this.echo('ERROR - cannot initialise tagui_sikuli.out')";
+    fs.write('softwares/tagui.sikuli/tagui_sikuli.in', '', 'w'); fs.write('softwares/tagui.sikuli/tagui_sikuli.out', '', 'w');
+    if (!fs.exists('softwares/tagui.sikuli/tagui_sikuli.in')) return "this.echo('ERROR - cannot initialise softwares/tagui.sikuli/tagui_sikuli.in')";
+    if (!fs.exists('softwares/tagui.sikuli/tagui_sikuli.out')) return "this.echo('ERROR - cannot initialise softwares/tagui.sikuli/tagui_sikuli.out')";
     if (!other_actions) other_actions = ''; // to handle most cases where other_actions is not passed in during call
     return "var fs = require('fs'); if (!sikuli_step('" + input_intent + "')) if (!fs.exists('" + input_params + "') && !" +
         use_ocr + ") " + "this.echo('ERROR - cannot find image file " + input_params + "'); " +

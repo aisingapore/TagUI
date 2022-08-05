@@ -130,7 +130,7 @@ def keyboard_map ( input_keys ):
 # function to output sikuli text to tagui
 def output_sikuli_text ( output_text ):
 	import codecs
-	tagui_text = codecs.open('tagui.sikuli/tagui_sikuli.txt','w',encoding='utf8')
+	tagui_text = codecs.open('softwares/tagui.sikuli/tagui_sikuli.txt','w',encoding='utf8')
 	tagui_text.write(output_text)
 	tagui_text.close()
 
@@ -539,12 +539,12 @@ def parse_intent ( script_line ):
 		return 0 
 
 # write to interface out-file to signal ready for inputs
-tagui_output = open('tagui.sikuli/tagui_sikuli.out','w')
+tagui_output = open('softwares/tagui.sikuli/tagui_sikuli.out','w')
 tagui_output.write('[0] START')
 tagui_output.close()
 
 # initialise interface in-file before starting main loop
-tagui_input = open('tagui.sikuli/tagui_sikuli.in','w')
+tagui_input = open('softwares/tagui.sikuli/tagui_sikuli.in','w')
 tagui_input.write('')
 tagui_input.close()
 
@@ -553,9 +553,9 @@ print '[tagui] START  - listening for inputs'; print
 while True:
 	# scan input from run-time interface in-file
 	try:
-		tagui_input = open('tagui.sikuli/tagui_sikuli.in','r')
+		tagui_input = open('softwares/tagui.sikuli/tagui_sikuli.in','r')
 	except IOError, OSError:
-		print '[tagui] ERROR  - cannot open tagui.sikuli/tagui_sikuli.in'; print
+		print '[tagui] ERROR  - cannot open softwares/tagui.sikuli/tagui_sikuli.in'; print
 		break
 	tagui_intent = tagui_input.read().strip()
 	tagui_input.close()
@@ -565,7 +565,7 @@ while True:
 		break
 	elif not tagui_intent:
 		tagui_count = '0'
-		tagui_output = open('tagui.sikuli/tagui_sikuli.out','w')
+		tagui_output = open('softwares/tagui.sikuli/tagui_sikuli.out','w')
 		tagui_output.write('[0] START')
 		tagui_output.close()
 		wait(scan_period)
@@ -590,13 +590,13 @@ while True:
 
 	# save intent_result to interface out-file
 	print '[tagui] OUTPUT - ' + '[' + tagui_count + '] ' + intent_result_string; print
-	tagui_output = open('tagui.sikuli/tagui_sikuli.out','w')
+	tagui_output = open('softwares/tagui.sikuli/tagui_sikuli.out','w')
 	tagui_output.write('[' + tagui_count + '] ' + intent_result_string)
 	tagui_output.close()
 	wait(scan_period)
 
 # write to interface out-file to signal finish listening
 print '[tagui] FINISH - stopped listening'
-tagui_output = open('tagui.sikuli/tagui_sikuli.out','w')
+tagui_output = open('softwares/tagui.sikuli/tagui_sikuli.out','w')
 tagui_output.write('[0] FINISH')
 tagui_output.close()

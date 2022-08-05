@@ -328,8 +328,8 @@ if ((strpos($script_content,'clipboard(')!==false) or (strpos($script_content,'m
 preg_match('/present\(.*\.png.*\)/i',$script_content) or preg_match('/present\(.*\.bmp.*\)/i',$script_content) or
 preg_match('/visible\(.*\.png.*\)/i',$script_content) or preg_match('/visible\(.*\.bmp.*\)/i',$script_content) or
 preg_match('/exist\(.*\.png.*\)/i',$script_content) or preg_match('/exist\(.*\.bmp.*\)/i',$script_content))
-{if (!touch('tagui.sikuli/tagui_sikuli.in')) die("ERROR - cannot initialise tagui_sikuli.in\n");
-if (!touch('tagui.sikuli/tagui_sikuli.out')) die("ERROR - cannot initialise tagui_sikuli.out\n");}
+{if (!touch('softwares/tagui.sikuli/tagui_sikuli.in')) die("ERROR - cannot initialise softwares/tagui.sikuli/tagui_sikuli.in\n");
+if (!touch('softwares/tagui.sikuli/tagui_sikuli.out')) die("ERROR - cannot initialise softwares/tagui.sikuli/tagui_sikuli.out\n");}
 
 // check turbo parameter to run automation at 10X normal human user speed
 if (getenv('tagui_turbo_mode') == 'false') {$script_content = file_get_contents($script . '.js');
@@ -339,9 +339,9 @@ file_put_contents($script . '.js',$script_content);
 $chrome_php_content = file_get_contents('tagui_chrome.php');
 $chrome_php_content = str_replace('$scan_period = 10000;','$scan_period = 100000;',$chrome_php_content);
 file_put_contents('tagui_chrome.php',$chrome_php_content);
-$sikuli_py_content = file_get_contents('tagui.sikuli/tagui.py');
+$sikuli_py_content = file_get_contents('softwares/tagui.sikuli/tagui.py');
 $sikuli_py_content = str_replace("scan_period = 0.05\n\n# teleport mouse instead of moving to target\nSettings.MoveMouseDelay = 0","scan_period = 0.5",$sikuli_py_content);
-file_put_contents('tagui.sikuli/tagui.py',$sikuli_py_content);}
+file_put_contents('softwares/tagui.sikuli/tagui.py',$sikuli_py_content);}
 else {$script_content = file_get_contents($script . '.js');
 $script_content = str_replace("function sleep(ms) { //","function sleep(ms) {ms *= 0.1; //",$script_content);
 $script_content = str_replace("for (var character = 0, length = value.length; character < length; character++) {\nchrome_step('Input.dispatchKeyEvent',{type: 'char', text: value[character]});}};","chrome_step('Input.insertText',{text: value});};",$script_content);
@@ -349,9 +349,9 @@ file_put_contents($script . '.js',$script_content);
 $chrome_php_content = file_get_contents('tagui_chrome.php');
 $chrome_php_content = str_replace('$scan_period = 100000;','$scan_period = 10000;',$chrome_php_content);
 file_put_contents('tagui_chrome.php',$chrome_php_content);
-$sikuli_py_content = file_get_contents('tagui.sikuli/tagui.py');
+$sikuli_py_content = file_get_contents('softwares/tagui.sikuli/tagui.py');
 $sikuli_py_content = str_replace("scan_period = 0.5","scan_period = 0.05\n\n# teleport mouse instead of moving to target\nSettings.MoveMouseDelay = 0",$sikuli_py_content);
-file_put_contents('tagui.sikuli/tagui.py',$sikuli_py_content);}
+file_put_contents('softwares/tagui.sikuli/tagui.py',$sikuli_py_content);}
 
 // check quiet parameter to run flow quietly by only showing explicit output
 if (getenv('tagui_quiet_mode') == 'true') {$script_content = file_get_contents($script . '.js'); // read generated script
@@ -722,8 +722,8 @@ else if (is_coordinates($input_params)) return true; else return false;}
 function call_sikuli($input_intent,$input_params,$other_actions = '') { // helper function to use sikuli visual automation
 if (strlen($input_intent)>9 and strtolower(substr($input_intent,-9))=='using ocr')
 $use_ocr = "true"; else $use_ocr = "false"; // to track if it is a text locator using OCR
-if (!touch('tagui.sikuli/tagui_sikuli.in')) die("ERROR - cannot initialise tagui_sikuli.in\n");
-if (!touch('tagui.sikuli/tagui_sikuli.out')) die("ERROR - cannot initialise tagui_sikuli.out\n");
+if (!touch('softwares/tagui.sikuli/tagui_sikuli.in')) die("ERROR - cannot initialise tagui_sikuli.in\n");
+if (!touch('softwares/tagui.sikuli/tagui_sikuli.out')) die("ERROR - cannot initialise tagui_sikuli.out\n");
 if ($other_actions != '') $other_actions = "\n" . $other_actions;
 return "{techo('".str_replace(' to snap_image()','',$input_intent)."'); var fs = require('fs');\n" .
 "if (!sikuli_step('".$input_intent."')) if (!fs.exists('".$input_params."') && !".$use_ocr.")\n" .
@@ -733,8 +733,8 @@ return "{techo('".str_replace(' to snap_image()','',$input_intent)."'); var fs =
 end_fi()."});\n\n";}
 
 function call_r($input_intent) { // helper function to use R integration for data analytics and machine learning
-if (!touch('tagui_r/tagui_r.in')) die("ERROR - cannot initialise tagui_r.in\n");
-if (!touch('tagui_r/tagui_r.out')) die("ERROR - cannot initialise tagui_r.out\n");
+if (!touch('integrations/programming_languages/tagui_r/tagui_r.in')) die("ERROR - cannot initialise integrations/programming_languages/tagui_r.in\n");
+if (!touch('integrations/programming_languages/tagui_r/tagui_r.out')) die("ERROR - cannot initialise integrations/programming_languages/tagui_r.out\n");
 return "{techo('".$input_intent."');\n" . "r_result = ''; if (!r_step('".$input_intent."'))\n" .
 "this.echo('ERROR - cannot execute R command(s)').exit(); this.wait(0);\n" .
 "r_result = fetch_r_text(); clear_r_text();\n" .
@@ -742,8 +742,8 @@ return "{techo('".$input_intent."');\n" . "r_result = ''; if (!r_step('".$input_
 end_fi()."});\n\n";}
 
 function call_py($input_intent) { // helper function to use Python integration for data analytics and machine learning
-if (!touch('tagui_py/tagui_py.in')) die("ERROR - cannot initialise tagui_py.in\n");
-if (!touch('tagui_py/tagui_py.out')) die("ERROR - cannot initialise tagui_py.out\n");
+if (!touch('integrations/programming_languages/tagui_py/tagui_py.in')) die("ERROR - cannot initialise integrations/programming_languages/tagui_py.in\n");
+if (!touch('integrations/programming_languages/tagui_py/tagui_py.out')) die("ERROR - cannot initialise integrations/programming_languages/tagui_py.out\n");
 return "{techo('".$input_intent."');\n" . "py_result = ''; if (!py_step('".$input_intent."'))\n" .
 "this.echo('ERROR - cannot execute Python command(s)').exit(); this.wait(0);\n" .
 "py_result = fetch_py_text(); clear_py_text();\n" .

@@ -9,8 +9,8 @@
 // https://github.com/Textalk/websocket-php
 
 // manually include project files instead of composer dependency (php package manager)
-require('ws/Base.php'); require('ws/Client.php'); require('ws/Exception.php'); require('ws/BadOpcodeException.php');
-require('ws/BadUriException.php'); require('ws/ConnectionException.php'); use WebSocket\Client; // project namespace
+require('softwares/ws/Base.php'); require('softwares/ws/Client.php'); require('softwares/ws/Exception.php'); require('softwares/ws/BadOpcodeException.php');
+require('softwares/ws/BadUriException.php'); require('softwares/ws/ConnectionException.php'); use WebSocket\Client; // project namespace
 
 // delay in microseconds between scanning for inputs
 $scan_period = 100000;

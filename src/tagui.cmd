@@ -980,8 +980,8 @@ type nul > "integrations\programming_languages\tagui_r\tagui_r.log"
 type nul > "integrations\programming_languages\tagui_r\tagui_r_windows.log"
 type nul > "integrations\programming_languages\tagui_py\tagui_py.log"
 type nul > "integrations\programming_languages\tagui_py\tagui_py_windows.log"
-type nul > "tagui.sikuli\tagui.log"
-type nul > "tagui.sikuli\tagui_windows.log"
+type nul > "softwares\tagui.sikuli\tagui.log"
+type nul > "softwares\tagui.sikuli\tagui_windows.log"
 type nul > "tagui_chrome.log"
 
 rem delete R integration files if they exist
@@ -993,8 +993,8 @@ if exist "integrations\programming_languages\tagui_py\tagui_py.in" del "integrat
 if exist "integrations\programming_languages\tagui_py\tagui_py.out" del "integrations\programming_languages\tagui_py\tagui_py.out"
 
 rem delete sikuli visual automation integration files if they exist
-if exist "tagui.sikuli\tagui_sikuli.in" del "tagui.sikuli\tagui_sikuli.in" 
-if exist "tagui.sikuli\tagui_sikuli.out" del "tagui.sikuli\tagui_sikuli.out"
+if exist "softwares\tagui.sikuli\tagui_sikuli.in" del "softwares\tagui.sikuli\tagui_sikuli.in" 
+if exist "softwares\tagui.sikuli\tagui_sikuli.out" del "softwares\tagui.sikuli\tagui_sikuli.out"
 
 rem delete chrome / headless chrome integration files if they exist 
 if exist "tagui_chrome.in" del "tagui_chrome.in"
@@ -1096,13 +1096,13 @@ if exist "integrations\programming_languages\tagui_py\tagui_py.in" (
 )
 
 rem start sikuli process if integration file is created during parsing
-if exist "tagui.sikuli\tagui_sikuli.in" (
+if exist "softwares\tagui.sikuli\tagui_sikuli.in" (
 	rem start dummy first run to let sikulix integrate jython
 	if exist "..\ext\sikulix\jython-standalone-2.7.1.jar" (
 		java -jar ..\ext\sikulix\sikulix.jar -h > nul 2>&1
 	)
 	rem echo [starting sikuli process] | tee -a "%flow_file%.log"
-	start "SikuliX Engine" /min cmd /c java -jar ..\ext\sikulix\sikulix.jar -r tagui.sikuli -d 3 2^>^&1 ^| tee -a tagui.sikuli\tagui.log
+	start "SikuliX Engine" /min cmd /c java -jar ..\ext\sikulix\sikulix.jar -r softwares\tagui.sikuli -d 3 2^>^&1 ^| tee -a softwares\tagui.sikuli\tagui.log
 )
 
 rem start chrome processes if integration file is created during parsing
@@ -1152,7 +1152,7 @@ if exist "tagui_chrome.in" (
 		for /f "tokens=* usebackq" %%p in (`wmic process where "caption like '%%chrome.exe%%' and commandline like '%%tagui_user_profile_ --remote-debugging-port=9222%%' and not commandline like '%%--type=renderer%%'" get processid 2^>nul ^| cut -d" " -f 1 ^| sort -nur ^| head -n 1`) do set chrome_process_id=%%p	
 	)
 	if not "!chrome_process_id!"=="" taskkill /PID !chrome_process_id! /T /F > nul 2>&1
-	start "" "!chrome_command!" --user-data-dir="%~dp0chrome\tagui_user_profile" !chrome_switches! !window_size! !headless_switch! !no_sandbox_switch!
+	start "" "!chrome_command!" --user-data-dir="%~dp0softwares\tagui_chrome\tagui_user_profile" !chrome_switches! !window_size! !headless_switch! !no_sandbox_switch!
 
 	:scan_ws_again
 	rem wait until chrome is ready with websocket url for php thread
@@ -1177,7 +1177,7 @@ if %tagui_test_mode%==false (
 rem checking for existence of files is important, otherwise in loops integrations will run even without enabling
 if exist "integrations\programming_languages\tagui_r\tagui_r.in" echo finish > integrations\programming_languages\tagui_r\tagui_r.in
 if exist "integrations\programming_languages\tagui_py\tagui_py.in" echo finish > integrations\programming_languages\tagui_py\tagui_py.in
-if exist "tagui.sikuli\tagui_sikuli.in" echo finish > tagui.sikuli\tagui_sikuli.in
+if exist "softwares\tagui.sikuli\tagui_sikuli.in" echo finish > softwares\tagui.sikuli\tagui_sikuli.in
 if exist "tagui_chrome.in" echo finish > tagui_chrome.in
 
 rem add delay between repetitions to pace out iterations
@@ -1227,8 +1227,8 @@ if exist "integrations\programming_languages\tagui_r\tagui_r.log" (
 if exist "integrations\programming_languages\tagui_py\tagui_py.log" (
 	gawk "sub(\"$\", \"\")" "integrations\programming_languages\tagui_py\tagui_py.log" > "integrations\programming_languages\tagui_py\tagui_py_windows.log"
 )
-if exist "tagui.sikuli\tagui.log" (
-	gawk "sub(\"$\", \"\")" "tagui.sikuli\tagui.log" > "tagui.sikuli\tagui_windows.log"
+if exist "softwares\tagui.sikuli\tagui.log" (
+	gawk "sub(\"$\", \"\")" "softwares\tagui.sikuli\tagui.log" > "softwares\tagui.sikuli\tagui_windows.log"
 )
 
 rem check report option to generate html automation log
@@ -1265,7 +1265,7 @@ if not exist "tagui_logging" (
 )
 
 rem hack chrome to prevent ended unexpectedly message
-set "chrome_pref=chrome\tagui_user_profile\Default\Preferences"
+set "chrome_pref=softwares\tagui_chrome\tagui_user_profile\Default\Preferences"
 if exist "%chrome_pref%" (
 	php -q -r "file_put_contents('%chrome_pref%',str_replace('\"exited_cleanly\":false','\"exited_cleanly\":true',file_get_contents('%chrome_pref%')));" > nul 2>&1
 	php -q -r "file_put_contents('%chrome_pref%',str_replace('\"exit_type\":\"Crashed\"','\"exit_type\":\"Normal\"',file_get_contents('%chrome_pref%')));" > nul 2>&1

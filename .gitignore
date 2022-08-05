@@ -49,7 +49,7 @@
 /src/tagui_service.done
 
 # exclude local files for chrome integration
-/src/chrome/tagui_user_profile
+/src/softwares/tagui_chrome/tagui_user_profile
 /src/tagui_chrome.in
 /src/tagui_chrome.out
 /src/tagui_chrome.log
@@ -69,14 +69,14 @@
 /src/integrations/programming_languages/tagui_py/tagui_py_windows.log
 
 # exclude local files for sikuli integration 
-/src/tagui.sikuli/tagui_sikuli.in
-/src/tagui.sikuli/tagui_sikuli.out
-/src/tagui.sikuli/tagui_sikuli.txt
-/src/tagui.sikuli/tagui.log
-/src/tagui.sikuli/tagui_windows.log
-/src/tagui.sikuli/sikulix*
-/src/tagui.sikuli/SikuliX*
-/src/tagui.sikuli/runsikulix*
+/src/softwares/tagui.sikuli/tagui_sikuli.in
+/src/softwares/tagui.sikuli/tagui_sikuli.out
+/src/softwares/tagui.sikuli/tagui_sikuli.txt
+/src/softwares/tagui.sikuli/tagui.log
+/src/softwares/tagui.sikuli/tagui_windows.log
+/src/softwares/tagui.sikuli/sikulix*
+/src/softwares/tagui.sikuli/SikuliX*
+/src/softwares/tagui.sikuli/runsikulix*
 
 # exclude local files for excel integration
 /src/excel_steps.scpt
