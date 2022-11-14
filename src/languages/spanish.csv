@@ -1,33 +1,33 @@
 EN,ES
 click,hacer clic
-tap,grifo
-move,movimiento
+tap,tocar
+move,mover
 hover,flotar
-type,tipo
-enter,entrar
+type,teclear
+enter,intro
 select,seleccionar
-choose,escoger
+choose,elegir
 read,leer
-fetch,ha podido recuperar
-show,espectáculo
-print,impresión
-save,salvar
+fetch,recuperar
+show,mostrar
+print,imprimir
+save,guardar
 echo,eco
-dump,tugurio
+dump,volcado
 write,escribir
-snap,chasquido
-table,mesa
+snap,acoplar
+table,tabla
 mouse,ratón
 keyboard,teclado
-live,vivir
+live,directo
 download,descargar
 upload,subir
 load,carga
 receive,recibir
 frame,marco
-popup,surgir
-wait,espere
-timeout,se acabó el tiempo
+popup,emergente
+wait,esperar
+timeout,fin de tiempo
 seconds,segundos
 second,segundo
 api,api
@@ -73,7 +73,7 @@ as,como
 title(),título()
 url(),url()
 text(),texto()
-timer(),minutero()
+timer(),temporizador()
 count(),contar()
 present(),presente()
 visible(),visible()
