@@ -30,7 +30,7 @@ Windows
 
 9. :ref:`Having problems? Click here.<troubleshooting-windows>` You have run your first TagUI flow! 🎉
 
-**To install TagUI Microsoft Word Plug-in (a full-featured app to make RPA very easy)**, download the `MS Word Plug-in installer <https://github.com/kelaberetiv/TagUI/releases/download/v6.64.0/TagUIWordAddInSetupV3.15.zip>`_, unzip the file and double-click Setup.exe. See this `video by RPA Learners <https://www.youtube.com/watch?v=mtiuzU6e4XE>`_ on installing and running your first MS Word RPA bot. Download `MS Excel Plug-in installer <https://github.com/kelaberetiv/TagUI/releases/download/v6.64.0/TagUIExcelAddInSetupv3.06.zip>`_ to define RPA data parameters in Excel and run TagUI from Excel. See this `video by RPA Learners <https://www.youtube.com/watch?v=YsA9hpveROs>`_ on installing and creating visualisations with the Excel plug-in.
+**To install TagUI Microsoft Word Plug-in (a full-featured app to make RPA very easy)**, download the `MS Word Plug-in installer <https://storage.googleapis.com/tagui-dependencies/TagUI%20WordAddIn/TagUIWordAddInSetupV3.17.zip>`_, unzip the file and double-click Setup.exe. See this `video by RPA Learners <https://www.youtube.com/watch?v=mtiuzU6e4XE>`_ on installing and running your first MS Word RPA bot. Download `MS Excel Plug-in installer <https://github.com/kelaberetiv/TagUI/releases/download/v6.64.0/TagUIExcelAddInSetupv3.06.zip>`_ to define RPA data parameters in Excel and run TagUI from Excel. See this `video by RPA Learners <https://www.youtube.com/watch?v=YsA9hpveROs>`_ on installing and creating visualisations with the Excel plug-in.
 
 macOS / Linux
 -----------------------------------
