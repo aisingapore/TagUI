@@ -719,14 +719,14 @@ namespace TagUIWordAddIn
             application.Visible = false;
             application.DisplayAlerts = WdAlertLevel.wdAlertsNone;
             Word.Document document = application.Documents.Open(wordFilePath);
-            application.ActiveDocument.SaveAs(tagFilePath, WdSaveFormat.wdFormatText, Type.Missing, Type.Missing, false,
-                    Type.Missing, Type.Missing, Type.Missing,
-                    Type.Missing, Type.Missing, Type.Missing,
-                    Type.Missing, Type.Missing, Type.Missing,
-                    Type.Missing, Type.Missing);
-            ((_Application)application).Quit();
+            FileStream stream = new FileStream(tagFilePath, FileMode.Create);
+            using (StreamWriter writer = new StreamWriter(stream, new UTF8Encoding(false)))
+            {
+                writer.Write(application.ActiveDocument.Content.Text.Replace("\r\n", "\n").Replace("\r", "\n").Replace("\n", "\r\n").Replace('\u2018', '\'').Replace('\u2019', '\'').Replace('\u201c', '\"').Replace('\u201d', '\"'));
+            }
+            document.Close(false);
+            application.Quit();
         }
-
         private string GetSubFlowFileType(string subflowFilePath)
         {
             string fileType = "";
