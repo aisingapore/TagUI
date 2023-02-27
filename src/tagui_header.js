@@ -572,7 +572,7 @@ return xps666('/html');}
 
 // for checking if given locator is found
 function check_tx(locator) {if (is_xpath_selector(locator))
-{if (casper.exists(xps666(locator.replace(/'/g,'"')))) return true; else return false;}
+{if (casper.exists(xps666(locator.replace(/'/g,'"').replace(/\) \&\& \(/g,' and ').replace(/\) \|\| \(/g,' or ')))) return true; else return false;}
 if (casper.exists(locator)) return true; // check for css locator
 // first check for exact match then check for containing string
 if (casper.exists(xps666('//*[@id="'+locator+'"]'))) return true;
