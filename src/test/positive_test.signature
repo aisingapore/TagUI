@@ -599,7 +599,8 @@ return xps666('/html');}
 
 // for checking if given locator is found
 function check_tx(locator) {if (is_xpath_selector(locator))
-{if (casper.exists(xps666(locator.replace(/'/g,'"')))) return true; else return false;}
+{
+	if (casper.exists(xps666(locator.replace(/'/g,'"').replace(/\) \&\& \(/g,' and ').replace(/\) \|\| \(/g,' or ')))) return true; else return false}
 if (casper.exists(locator)) return true; // check for css locator
 // first check for exact match then check for containing string
 if (casper.exists(xps666('//*[@id="'+locator+'"]'))) return true;
@@ -618,12 +619,14 @@ if (casper.exists(xps666('//*[@href="'+locator+'"]'))) return true;
 if (casper.exists(xps666('//*[contains(@href,"'+locator+'")]'))) return true;
 return false;}
 
+
 /**
  * Extra TagUI helper methods
  */
 
 // friendlier name to use check_tx() in if condition in flow
-function present(element_locator) {if (!element_locator) return false; 
+function present(element_locator) {
+    if (!element_locator) return false; 
 if (is_sikuli(element_locator)) {var abs_param = abs_file(element_locator); var fs = require('fs');
 if (sikuli_step("present " + abs_param)) return true; else return false;}
 else return check_tx(element_locator);}
