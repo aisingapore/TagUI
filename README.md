@@ -1,6 +1,7 @@
 <img src="https://raw.githubusercontent.com/kelaberetiv/TagUI/master/src/media/tagui_logo.png" height="111" align="right">
 
 # TagUI
+**NOTICE: The AISG team is discontinuing the maintenance and support of TagUI. As of Q4 2023, we will no longer provide updates or support. Meanwhile, do expect delayed response from our team. Feel free to ask your questions to our supportive community in Telegram. We appreciate the tremendous support and feedback from the community. Thank you for contributing to the success of TagUI. We encourage you to continue building and collaborating with open source tools.**
 
 **Free RPA tool by [AI Singapore](https://aisingapore.org), a government-funded programme to accelerate AI. To start, click the download link below. Take the [free course](https://learn.aisingapore.org/courses/learn-rpa-with-tagui-beginners-course/). Ask any questions at [our Telegram](https://t.me/rpa_chat).**
 
