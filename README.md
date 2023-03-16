@@ -1,11 +1,13 @@
 <img src="https://raw.githubusercontent.com/kelaberetiv/TagUI/master/src/media/tagui_logo.png" height="111" align="right">
 
 # TagUI
-**NOTICE: The AISG team is discontinuing the maintenance and support of TagUI. As of Q4 2023, we will no longer provide updates or support. Meanwhile, do expect delayed response from our team. Feel free to ask your questions to our supportive community in Telegram. We appreciate the tremendous support and feedback from the community. Thank you for contributing to the success of TagUI. We encourage you to continue building and collaborating with open source tools.**
+>**NOTICE: The AISG team is discontinuing the maintenance and support of TagUI. As of Q4 2023, we will no longer provide updates or support. Meanwhile, do expect delayed response from our team. Feel free to ask your questions to our supportive community in Telegram. We appreciate the tremendous support and feedback from the community. Thank you for contributing to the success of TagUI. We encourage you to continue building and collaborating with open source tools.**
 
-**Free RPA tool by [AI Singapore](https://aisingapore.org), a government-funded programme to accelerate AI. To start, click the download link below. Take the [free course](https://learn.aisingapore.org/courses/learn-rpa-with-tagui-beginners-course/). Ask any questions at [our Telegram](https://t.me/rpa_chat).**
+>**UPDATE: [See this announcement](https://www.linkedin.com/posts/kensoh_last-week-ai-singapore-announced-that-they-activity-7041389446780329984-I4TC) of the new TagUI team taking over its maintenance and development**
 
-**[Download v6.114](https://tagui.readthedocs.io/en/latest/setup.html)&ensp;|&ensp;[Usage Guide](https://tagui.readthedocs.io/en/latest/index.html)&ensp;|&ensp;[Demos](https://github.com/aimakerspace/TagUI-Bricks)&ensp;|&ensp;[Samples](https://github.com/kelaberetiv/TagUI/tree/master/flows/samples)&ensp;|&ensp;[Slides](https://docs.google.com/presentation/d/1pltAMzr0MZsttgg1w2ORH3ontR6Q51W9/edit?usp=sharing&ouid=115132044557947023533&rtpof=true&sd=true)&ensp;|&ensp;[Podcast](https://botnirvana.org/podcast/tagui/)&ensp;|&ensp;[Video](https://www.youtube.com/watch?v=C5itbB3sCq0)&ensp;|&ensp;[Forum](https://community.aisingapore.org/groups/tagui-rpa/forum/)&ensp;|&ensp;[中文](http://www.tagui.com.cn)**
+**To start, click the download link below. Take the [free course](https://learn.aisingapore.org/courses/learn-rpa-with-tagui-beginners-course/). Ask any questions at [our Telegram](https://t.me/rpa_chat).**
+
+**[Download v6.114](https://tagui.readthedocs.io/en/latest/setup.html)&ensp;|&ensp;[Usage Guide](https://tagui.readthedocs.io/en/latest/index.html)&ensp;|&ensp;[Demos](https://github.com/aimakerspace/TagUI-Bricks)&ensp;|&ensp;[Samples](https://github.com/kelaberetiv/TagUI/tree/master/flows/samples)&ensp;|&ensp;[Slides](https://docs.google.com/presentation/d/1pltAMzr0MZsttgg1w2ORH3ontR6Q51W9/edit?usp=sharing&ouid=115132044557947023533&rtpof=true&sd=true)&ensp;|&ensp;[Podcast](https://botnirvana.org/podcast/tagui/)&ensp;|&ensp;[Video](https://www.youtube.com/watch?v=C5itbB3sCq0)&ensp;|&ensp;[中文](http://www.tagui.com.cn)**
 
 ---
 
@@ -53,7 +55,7 @@ You can use TagUI [MS Office Plug-ins](https://github.com/kelaberetiv/TagUI/blob
 
 You can also create and edit your RPA robots using commonly used text editors like Notepad, Notepad++, VS Code, Sublime, TextEdit, Vim, etc. For VS Code users, you can install [TagUI language extension](https://marketplace.visualstudio.com/items?itemName=TagUisupport.tagui-support). For Notepad++ users, you can download [TagUI plug-ins here](https://github.com/tilyanPristka/TagUI-Snippets-for-NotepadPP) for syntax highlighting, shortcuts and snippets.
 
-For cloud lovers, you can run TagUI on your web browser or phone using [free Google Cloud](https://github.com/kelaberetiv/TagUI/issues/913), up to 5 concurrent sessions. For more control running on the cloud, you can run this [Docker image](https://hub.docker.com/r/openiap/nodered-tagui) (use edge tag) or [Docker file](https://github.com/open-rpa/openflow/blob/master/OpenFlowNodeRED/Dockerfiletagui) on your preferred vendor. Or run on [free Node-RED instance](https://app.openiap.io/) on OpenFlow.
+For cloud lovers, you can run TagUI on your web browser or phone using [free Google Cloud](https://github.com/kelaberetiv/TagUI/issues/913), up to 5 concurrent sessions. For more control running on the cloud, you can run this [Docker image](https://hub.docker.com/r/openiap/nodered-tagui) (use edge tag) on your preferred vendor. Or run on [free Node-RED instance](https://app.openiap.io/) on OpenFlow.
 
 ![Word Plug-in v3](https://raw.githubusercontent.com/kelaberetiv/TagUI/master/src/office/word/word_addin_v3.png)
 
@@ -84,7 +86,7 @@ More Information
 
 # How to get started
 
-Join the community and ask any questions at our [Telegram chat group](https://t.me/rpa_chat) or our [AISG community site](https://community.aisingapore.org/groups/tagui-rpa/). Take [TagUI free course](https://learn.aisingapore.org/courses/learn-rpa-with-tagui-beginners-course/) over one morning or afternoon, and start using the most popular open-source RPA software. Share this [TagUI slide deck](https://docs.google.com/presentation/d/1pltAMzr0MZsttgg1w2ORH3ontR6Q51W9/edit?usp=sharing&ouid=115132044557947023533&rtpof=true&sd=true) with your team or customers to win their buy-in to use TagUI.
+Join the community and ask any questions at our [Telegram chat group](https://t.me/rpa_chat). Take [TagUI free course](https://learn.aisingapore.org/courses/learn-rpa-with-tagui-beginners-course/) over one morning or afternoon, and start using the most popular open-source RPA software. Share this [TagUI slide deck](https://docs.google.com/presentation/d/1pltAMzr0MZsttgg1w2ORH3ontR6Q51W9/edit?usp=sharing&ouid=115132044557947023533&rtpof=true&sd=true) with your team or customers to win their buy-in to use TagUI.
 
 If you are maintaining your own fork of TagUI (for eg tech leads, RPA consultants, individual developers), see this [maintainer training video series](https://www.youtube.com/watch?v=oq8HlJujraE) to understand how TagUI works behind the scenes, and for you to modify all aspects of TagUI and extend the software to your customers' exact needs, made-to-measure.
 
