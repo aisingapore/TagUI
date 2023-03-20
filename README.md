@@ -3,8 +3,6 @@
 # TagUI
 >**NOTICE: The AISG team is discontinuing the maintenance and support of TagUI. As of Q4 2023, we will no longer provide updates or support. Meanwhile, do expect delayed response from our team. Feel free to ask your questions to our supportive community in Telegram. We appreciate the tremendous support and feedback from the community. Thank you for contributing to the success of TagUI. We encourage you to continue building and collaborating with open source tools.**
 
----
-
 **To start, click the download link below. Take the [free course](https://learn.aisingapore.org/courses/learn-rpa-with-tagui-beginners-course/). Ask any questions at [our Telegram](https://t.me/rpa_chat).**
 
 **[Download v6.114](https://tagui.readthedocs.io/en/latest/setup.html)&ensp;|&ensp;[Usage Guide](https://tagui.readthedocs.io/en/latest/index.html)&ensp;|&ensp;[Demos](https://github.com/aimakerspace/TagUI-Bricks)&ensp;|&ensp;[Samples](https://github.com/kelaberetiv/TagUI/tree/master/flows/samples)&ensp;|&ensp;[Slides](https://docs.google.com/presentation/d/1pltAMzr0MZsttgg1w2ORH3ontR6Q51W9/edit?usp=sharing&ouid=115132044557947023533&rtpof=true&sd=true)&ensp;|&ensp;[Podcast](https://botnirvana.org/podcast/tagui/)&ensp;|&ensp;[Video](https://www.youtube.com/watch?v=C5itbB3sCq0)&ensp;|&ensp;[中文](http://www.tagui.com.cn)**
