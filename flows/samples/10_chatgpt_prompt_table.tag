@@ -1,9 +1,14 @@
+// The aim of this tagfile is to help you save you prompt and answer to a excel table
+
 // Put the url of your chatgpt  windows you just chat
-// It can help you save you prompt and answer to a excel table
 https://chat.openai.com/c/4c7df66f-251a-4a10-985e-98f7e68ff0a0
+//First time the use of the file,u need to login your account.So need to wait 100s.
+//After u login in,just remove the wait line
+//wait 100
 
 csv_header='"no","Prompt","Answer"'
-dump `csv_header` to prompt_answer_table.csv
+//prompt_answer_table.csv is the name of your prompt table
+dump `csv_header` to prompt_answer_table_chatgpt.csv
 // If you want to save more than 100 records, you can change the number 100 to a bigger number
 // If you don't need to see the prompt and answer, you can delete the two lines of echo below
 for (n=2; n<=100; n=n+2)
