@@ -358,6 +358,10 @@ TagUI's backend language is JavaScript, thus range data can be defined just like
 
   // write a new row accordingly to example spreadsheet
   [Participants.xlsx]Sheet1!A`next_row` = [[next_row, 'Janice', 'Brazil']]
+  
+  // example of copying from csv to xlsx, the logic is assign csv to variable data, and then assign to xlsx
+  data = [csvtest.csv]Sheet1!A1:D7
+  [exceltest.xlsx]Sheet2!A1 = data
 
 copy
 ###################
