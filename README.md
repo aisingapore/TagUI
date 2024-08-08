@@ -1,7 +1,7 @@
 <img src="https://raw.githubusercontent.com/kelaberetiv/TagUI/master/src/media/tagui_logo.png" height="111" align="right">
 
 # TagUI
->**NOTICE: The AISG team is discontinuing the maintenance and support of TagUI. As of Q4 2023, we will no longer provide updates or support. Meanwhile, do expect delayed response from our team. It is easy to migrate TagUI .tag workflow files to Python rpa package .py scripts. [See this link](https://github.com/tebelorg/RPA-Python/issues/484).**
+>**NOTICE: The AISG team has discontinued the maintenance and support of TagUI. It is easy to migrate TagUI .tag workflow files to Python rpa package .py scripts. [See this link](https://github.com/tebelorg/RPA-Python/issues/484).**
 
 **To start, click the download link below. Take the [free course](https://learn.aisingapore.org/courses/learn-rpa-with-tagui-beginners-course/). Ask any questions at [our Telegram](https://t.me/rpa_chat).**
 
