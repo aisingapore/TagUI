@@ -1,7 +1,7 @@
 <img src="https://raw.githubusercontent.com/kelaberetiv/TagUI/master/src/media/tagui_logo.png" height="111" align="right">
 
 # TagUI
->**NOTICE: AI Singapore has discontinued the maintenance and support of TagUI, but the project continues to be supported by various open-source contributors and the community.**
+>**NOTICE: AI Singapore has discontinued maintenance and support of TagUI, but the project continues to be supported by various open-source contributors and the community.**
 
 **Check out this [YouTube learning series](https://www.youtube.com/playlist?list=PL2gs9_mNDDvZSCPsJu4APZR6AaDzUY7R6). Take the [free course](https://learn.aisingapore.org/courses/learn-rpa-with-tagui-beginners-course/). Ask any questions at [our Telegram](https://t.me/rpa_chat).**
 
@@ -59,11 +59,11 @@ For cloud lovers, you can run TagUI on your web browser or phone using [free Goo
 
 # Ecosystem and Communities
 
-TagUI has a bustling user community, and extended community champions create new RPA tools for their own communities, based on TagUI. Python users can [pip install rpa](https://github.com/tebelorg/RPA-Python) to use the #1 Python RPA package. Already there is [TagUI for C# .NET](https://www.nuget.org/packages/tagui), and TagUI for Go is being built. For event-driven RPA with thousands of connectors, check out [TagUI module for Node-RED](https://flows.nodered.org/node/node-red-contrib-tagui), a popular free and open-source workflow automation tool.
+TagUI has a bustling user community, and extended community champions create new RPA tools for their own communities, based on TagUI. Python users can [pip install rpa](https://github.com/tebelorg/RPA-Python) to use the #1 Python RPA package. There is also [TagUI for C# .NET](https://www.nuget.org/packages/tagui). For event-driven RPA with thousands of connectors, check out [TagUI module for Node-RED](https://flows.nodered.org/node/node-red-contrib-tagui), a popular free and open-source workflow automation tool.
 
-For Microsoft [Power Automate Desktop](https://flow.microsoft.com/en-us/desktop/) users, you'll be happy to know that there's 2-way integration with TagUI out of the box (for business continuity if you switch between the 2 apps). Also, do check out other leading open-source RPA tools, to see if they meet your needs better - [OpenRPA](https://github.com/open-rpa/openrpa) & [OpenFlow](https://github.com/open-rpa/openflow), [OpenBots](https://www.linkedin.com/posts/openbots_openbots-studio-demo-support-for-tag-ui-activity-6788174021964943361-RrUD), [Robocorp](https://youtu.be/HAfQpNZVbKI). All of them support enterprise-grade orchestrating and running TagUI robots from their orchestrator.
+For Microsoft [Power Automate Desktop](https://flow.microsoft.com/en-us/desktop/) users, you'll be happy to know that there's 2-way integration with TagUI out of the box (for business continuity if you switch between the 2 apps). Also, do check out other leading open-source RPA tools, to see if they meet your needs better - [OpenRPA](https://github.com/open-rpa/openrpa) & [OpenFlow](https://github.com/open-rpa/openflow), [Robocorp](https://youtu.be/HAfQpNZVbKI). All of them support enterprise-grade orchestrating and running TagUI robots from their orchestrator.
 
-There is also a Chinese [usage guide](http://www.tagui.com.cn) and [TagUI repository](https://gitee.com/TagUIcn). We welcome more languages with open arms.
+There is also a Chinese [usage guide](http://www.tagui.com.cn) and [TagUI repository](https://gitee.com/TagUIcn).
 
 # Enterprise Security by design
 
@@ -84,7 +84,7 @@ More Information
 
 # How to get started
 
-Join the community and ask any questions at our [Telegram chat group](https://t.me/rpa_chat). Take [TagUI free course](https://learn.aisingapore.org/courses/learn-rpa-with-tagui-beginners-course/) over one morning or afternoon, and start using the most popular open-source RPA software. Share this [TagUI slide deck](https://docs.google.com/presentation/d/1pltAMzr0MZsttgg1w2ORH3ontR6Q51W9/edit?usp=sharing&ouid=115132044557947023533&rtpof=true&sd=true) with your team or customers to win their buy-in to use TagUI.
+Join the community and ask any questions at our [Telegram chat group](https://t.me/rpa_chat). Watch this [YouTube learning series](https://www.youtube.com/playlist?list=PL2gs9_mNDDvZSCPsJu4APZR6AaDzUY7R6). Take [TagUI free course](https://learn.aisingapore.org/courses/learn-rpa-with-tagui-beginners-course/) over one morning or afternoon, and start using the most popular open-source RPA software. Share this [TagUI slide deck](https://docs.google.com/presentation/d/1pltAMzr0MZsttgg1w2ORH3ontR6Q51W9/edit?usp=sharing&ouid=115132044557947023533&rtpof=true&sd=true) with your team or customers to win their buy-in to use TagUI.
 
 If you are maintaining your own fork of TagUI (for eg tech leads, RPA consultants, individual developers), see this [maintainer training video series](https://www.youtube.com/watch?v=oq8HlJujraE) to understand how TagUI works behind the scenes, and for you to modify all aspects of TagUI and extend the software to your customers' exact needs, made-to-measure.
 
