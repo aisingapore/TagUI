@@ -1,7 +1,7 @@
 <img src="https://raw.githubusercontent.com/kelaberetiv/TagUI/master/src/media/tagui_logo.png" height="111" align="right">
 
 # TagUI
->**NOTICE: AI Singapore has discontinued maintenance and support of TagUI, but the project continues to be supported by various open-source contributors and the community.**
+>**NOTICE: AI Singapore has discontinued maintenance and support of TagUI, but the project continues to be supported by open-source contributors and the community.**
 
 **Check out this [YouTube learning series](https://www.youtube.com/playlist?list=PL2gs9_mNDDvZSCPsJu4APZR6AaDzUY7R6). Take the [free course](https://learn.aisingapore.org/courses/learn-rpa-with-tagui-beginners-course/). Ask any questions at [our Telegram](https://t.me/rpa_chat).**
 
@@ -53,17 +53,13 @@ You can use TagUI [MS Office Plug-ins](https://github.com/kelaberetiv/TagUI/blob
 
 You can also create and edit your RPA robots using commonly used text editors like Notepad, Notepad++, VS Code, Sublime, TextEdit, Vim, etc. For VS Code users, you can install [TagUI language extension](https://marketplace.visualstudio.com/items?itemName=TagUisupport.tagui-support). For Notepad++ users, you can download [TagUI plug-ins here](https://github.com/tilyanPristka/TagUI-Snippets-for-NotepadPP) for syntax highlighting, shortcuts and snippets.
 
-For cloud lovers, you can run TagUI on your web browser or phone using [free Google Cloud](https://github.com/kelaberetiv/TagUI/issues/913), up to 5 concurrent sessions. For more control running on the cloud, you can run this [Docker image](https://hub.docker.com/r/openiap/nodered-tagui) (use edge tag) on your preferred vendor. Or run on [free Node-RED instance](https://app.openiap.io/) on OpenFlow.
-
 ![Word Plug-in v3](https://raw.githubusercontent.com/kelaberetiv/TagUI/master/src/office/word/word_addin_v3.png)
 
 # Ecosystem and Communities
 
-TagUI has a bustling user community, and extended community champions create new RPA tools for their own communities, based on TagUI. Python users can [pip install rpa](https://github.com/tebelorg/RPA-Python) to use the #1 Python RPA package. There is also [TagUI for C# .NET](https://www.nuget.org/packages/tagui). For event-driven RPA with thousands of connectors, check out [TagUI module for Node-RED](https://flows.nodered.org/node/node-red-contrib-tagui), a popular free and open-source workflow automation tool.
+TagUI has a bustling user community, and extended community champions create new RPA tools for their own communities, based on TagUI. Python users can [pip install rpa](https://github.com/tebelorg/RPA-Python) to use the #1 Python RPA package. There is also [TagUI for C# .NET](https://www.nuget.org/packages/tagui). For event-driven RPA with thousands of connectors, do check out [TagUI module for Node-RED](https://flows.nodered.org/node/node-red-contrib-tagui), a popular free and open-source workflow automation tool.
 
 For Microsoft [Power Automate Desktop](https://flow.microsoft.com/en-us/desktop/) users, you'll be happy to know that there's 2-way integration with TagUI out of the box (for business continuity if you switch between the 2 apps). Also, do check out other leading open-source RPA tools, to see if they meet your needs better - [OpenRPA](https://github.com/open-rpa/openrpa) & [OpenFlow](https://github.com/open-rpa/openflow), [Robocorp](https://youtu.be/HAfQpNZVbKI). All of them support enterprise-grade orchestrating and running TagUI robots from their orchestrator.
-
-There is also a Chinese [usage guide](http://www.tagui.com.cn) and [TagUI repository](https://gitee.com/TagUIcn).
 
 # Enterprise Security by design
 
@@ -110,4 +106,4 @@ Open-source project|Maintainer|From|How does this contribute to TagUI project
 [SlimerJS](https://slimerjs.org)|[Laurent Jouanneau](https://github.com/laurentj)|France|browser automation for FireFox <= v59
 
 # Sponsor
-This project  is supported by the [National Research Foundation](https://www.nrf.gov.sg), Singapore under its AI Singapore Programme (AISG-RP-2019-050). Any opinions, findings and conclusions or recommendations expressed in this material are those of the author(s) and do not reflect the views of National Research Foundation, Singapore.
+This project was previously supported by the [National Research Foundation](https://www.nrf.gov.sg), Singapore under its AI Singapore Programme (AISG-RP-2019-050). Any opinions, findings and conclusions or recommendations expressed in this material are those of the author(s) and do not reflect the views of National Research Foundation, Singapore.
