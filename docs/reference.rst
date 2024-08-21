@@ -1250,5 +1250,3 @@ Returns the type of the operating system.
   os = require('system').os.name
   echo `os`
   // expected output is mac for MacOS
-	 
- 
