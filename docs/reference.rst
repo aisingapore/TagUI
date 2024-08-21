@@ -1239,15 +1239,16 @@ Returns the value of given environment variable from the operating system.
   echo `get_env('HOME')`
   home_dir = get_env('HOME')
   
- os = require('system').os.name
- ********************
- Returns the value of the operating system.
- 
- *Examples*
- 
- .. code-block:: none
- 	 os = require('system').os.name
-	 echo `os`
-	 expected output is mac for MacOS
+os.name
+********************
+Returns the type of the operating system.
+
+*Examples*
+
+.. code-block:: none
+
+  os = require('system').os.name
+  echo `os`
+  // expected output is mac for MacOS
 	 
  
