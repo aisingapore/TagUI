@@ -53,6 +53,8 @@ You can use TagUI [MS Office Plug-ins](https://github.com/kelaberetiv/TagUI/blob
 
 You can also create and edit your RPA robots using commonly used text editors like Notepad, Notepad++, VS Code, Sublime, TextEdit, Vim, etc. For VS Code users, you can install [TagUI language extension](https://marketplace.visualstudio.com/items?itemName=TagUisupport.tagui-support). For Notepad++ users, you can download [TagUI plug-ins here](https://github.com/tilyanPristka/TagUI-Snippets-for-NotepadPP) for syntax highlighting, shortcuts and snippets.
 
+Some users might find it interesting or useful to use AI and machine learning (in particular LLM large language models), to help generate a template script, then they make the fine-tuning accordingly. [See this issue](https://github.com/aisingapore/TagUI/issues/1388) on some questions that I asked Anthropic's Claude 3.5 Sonnet and its responses.
+
 ![Word Plug-in v3](https://raw.githubusercontent.com/kelaberetiv/TagUI/master/src/office/word/word_addin_v3.png)
 
 # Ecosystem and Communities
