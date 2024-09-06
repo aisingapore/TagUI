@@ -247,6 +247,7 @@ upload
 .. code-block:: none
   
   upload #element_id as report.csv
+  upload input[type="file"] as filename.docx
 
 
 api
