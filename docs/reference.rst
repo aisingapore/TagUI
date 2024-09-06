@@ -241,12 +241,15 @@ upload
 .. code-block:: none
 
   upload [DOM of upload element] as [filename]
+  
+
 
 *Examples*
 
 .. code-block:: none
   
   upload #element_id as report.csv
+  upload input[type="file"] as filename.docx
 
 
 api
