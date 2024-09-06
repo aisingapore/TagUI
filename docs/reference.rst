@@ -241,8 +241,6 @@ upload
 .. code-block:: none
 
   upload [DOM of upload element] as [filename]
-  
-
 
 *Examples*
 
