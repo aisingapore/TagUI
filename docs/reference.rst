@@ -915,7 +915,7 @@ Adds a comment. If you are inside a code block, for example an if condition or f
 
 telegram
 ###################
-*Deprecated* - please note that this step is deprecated and will no longer after 15th March 2025.
+*Deprecated* - telegram step is deprecated and will no longer work after 15th March 2025.
 
 Sends a Telegram notification, for example, to update on automation completion or exception.
 
