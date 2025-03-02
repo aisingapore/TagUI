@@ -41,12 +41,6 @@ Moving data between TagUI and Excel is as easy as using [standard Excel formula]
 top_salesman = [Monthly Report.xlsx]August!E11
 ```
 
-Sending a Telegram notification is trivially easy ([first message @taguibot](https://tagui.readthedocs.io/en/latest/reference.html#telegram) to authorise it to send messages)
-
-```
-telegram id Hello World. Olá Mundo. नमस्ते दुनिया. 안녕하세요 세계. 世界,你好。
-```
-
 # Do RPA Any Way You Want
 
 You can use TagUI [MS Office Plug-ins](https://github.com/kelaberetiv/TagUI/blob/master/src/office/README.md) ([sample doc](https://github.com/kelaberetiv/TagUI/files/7031942/Week.3.docx)) to easily create and deploy Word doc as RPA robots, and set up RPA data parameters using Excel. Enjoy a full-featured RPA IDE with toolbar of TagUI steps and tooltips, snapshot tool to automate using computer vision, task pane for settings and run output. 
