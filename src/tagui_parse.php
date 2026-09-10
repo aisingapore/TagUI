@@ -22,7 +22,7 @@ $footer_file = fopen('tagui_footer.js','r') or die("ERROR - cannot open tagui_fo
 
 $repo_count = 0; if (file_exists(getenv('custom_csv_file'))) { // load datatable or legacy datatable / repository
 $repo_file = fopen(getenv('custom_csv_file'),'r') or die("ERROR - cannot open " . getenv('custom_csv_file') . "\n");
-while (!feof($repo_file)) {$repo_data[$repo_count] = fgetcsv($repo_file);
+while (!feof($repo_file)) {$repo_data[$repo_count] = fgetcsv($repo_file, 0, ",", "\"", "\\");
 if (@count((array)$repo_data[$repo_count]) == 0) die("ERROR - empty row found in " . getenv('custom_csv_file') . "\n");
 $repo_count++;} fclose($repo_file); $repo_count-=1; //-1 for header, for EOF need to check flexibly using below line
 if (@count((array)$repo_data[$repo_count]) == 1) $repo_count-=1;} //-1 for EOF (Windows files don't end with newline character)
@@ -30,8 +30,8 @@ if (@count((array)$repo_data[$repo_count]) == 1) $repo_count-=1;} //-1 for EOF (
 $local_repo_location = str_replace("\\","/",dirname($script)) . '/tagui_local.csv';
 if (file_exists($local_repo_location)) { // load local repository file if it exists for objects and keywords
 $local_repo_file = fopen($local_repo_location,'r') or die("ERROR - cannot open " . 'tagui_local.csv' . "\n");
-if ($repo_count != 0) {$repo_count++; fgetcsv($local_repo_file);} // +1 if array has data, discard header record
-while (!feof($local_repo_file)) {$repo_data[$repo_count] = fgetcsv($local_repo_file);
+if ($repo_count != 0) {$repo_count++; fgetcsv($local_repo_file, 0, ",", "\"", "\\");} // +1 if array has data, discard header record
+while (!feof($local_repo_file)) {$repo_data[$repo_count] = fgetcsv($local_repo_file, 0, ",", "\"", "\\");
 if (@count((array)$repo_data[$repo_count]) == 0) die("ERROR - empty row found in " . 'tagui_local.csv' . "\n");
 if (@count((array)$repo_data[$repo_count]) != 1) // pad the empty columns when local repository is used with datatable
 {$repo_data[$repo_count] = array_pad($repo_data[$repo_count], @count((array)$repo_data[0]), $repo_data[$repo_count][1]);}
@@ -39,8 +39,8 @@ $repo_count++;} fclose($local_repo_file); $repo_count-=1; if (@count((array)$rep
 
 if (file_exists('tagui_global.csv')) { // load global repository file if it exists for objects and keywords
 $global_repo_file = fopen('tagui_global.csv','r') or die("ERROR - cannot open " . 'tagui_global.csv' . "\n");
-if ($repo_count != 0) {$repo_count++; fgetcsv($global_repo_file);} // +1 if array has data, discard header record
-while (!feof($global_repo_file)) {$repo_data[$repo_count] = fgetcsv($global_repo_file);
+if ($repo_count != 0) {$repo_count++; fgetcsv($global_repo_file, 0, ",", "\"", "\\");} // +1 if array has data, discard header record
+while (!feof($global_repo_file)) {$repo_data[$repo_count] = fgetcsv($global_repo_file, 0, ",", "\"", "\\");
 if (@count((array)$repo_data[$repo_count]) == 0) die("ERROR - empty row found in " . 'tagui_global.csv' . "\n");
 if (@count((array)$repo_data[$repo_count]) != 1) // pad the empty columns when global repository is used with datatable
 {$repo_data[$repo_count] = array_pad($repo_data[$repo_count], @count((array)$repo_data[0]), $repo_data[$repo_count][1]);}
