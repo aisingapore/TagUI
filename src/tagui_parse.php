@@ -113,7 +113,7 @@ $input_file = fopen($script . '.raw','r') or die("ERROR - cannot open " . $scrip
 
 if (strpos(strtolower(file_get_contents('tagui_config.txt')),"var tagui_language = 'english';")==false)
 { // section which includes translation engine for handling flows in other languages
-$temp_argv1 = $argv[1]; $temp_argv2 = $argv[2]; $temp_argv3 = $argv[3];
+$temp_argv1 = $argv[1]; $temp_argv2 = @$argv[2]; $temp_argv3 = @$argv[3];
 $argv[1] = 'tagui_parse.php'; $argv[2] = 'from';
 $temp_tagui_config = strtolower(file_get_contents('tagui_config.txt'));
 $temp_tagui_config_start = strpos($temp_tagui_config,'var tagui_language');

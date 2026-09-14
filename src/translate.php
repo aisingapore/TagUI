@@ -47,10 +47,10 @@ if ($direction == 'from') {$column_from = 1; $column_to = 0;} else {$column_from
 // load desired language definition file into array for use in translation
 $language = strtolower($language); $language_count = 0; if (file_exists('languages/' . $language . '.csv')) {
 $language_file = fopen('languages/' . $language . '.csv','r') or die("ERROR - cannot open " . $language . '.csv' . "\n");
-while (!feof($language_file)) {$language_data[$language_count] = fgetcsv($language_file);
+while (!feof($language_file)) {$language_data[$language_count] = fgetcsv($language_file, 0, ",", "\"", "\\");
 if (@count((array)$language_data[$language_count]) == 0) die("ERROR - empty row found in " . $language . '.csv' . "\n");
 $language_count++;} fclose($language_file); $language_count-=1; // -1 for header
-if ($language_data[$language_count][0] == '') $language_count-=1;} // -1 for EOF
+if (@$language_data[$language_count][0] == '') $language_count-=1;} // -1 for EOF
 else die("ERROR - missing language file " . $language . '.csv' . "\n");
 
 if ($source_flow != 'tagui_parse.php') { // skip processing if internal call
