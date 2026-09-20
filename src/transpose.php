@@ -7,7 +7,7 @@ $source_csv = $argv[1]; if ($source_csv=="") die("ERROR - specify csv filename a
 if (strpos($source_csv,"_transpose.csv")==false) die("ERROR - csv filename must end with '_transpose.csv'\n");
 $source_file = fopen($source_csv,'r') or die("ERROR - cannot open " . $source_csv . "\n"); $csv_count = 0;
 while (!feof($source_file)) {
-  $csv_line = fgetcsv($source_file);
+  $csv_line = fgetcsv($source_file, 0, ",", "\"", "\\");
   if (is_array($csv_line) && $csv_line[0] !== null) {
     $csv_data[] = $csv_line;
   }
@@ -28,6 +28,6 @@ foreach ($csv_data as $row => $columns) {
     }
   }
 }
-foreach ($csv_result as $csv_line) {fputcsv($target_file,$csv_line);} fclose($target_file);
+foreach ($csv_result as $csv_line) {fputcsv($target_file,$csv_line, ",", "\"", "\\");} fclose($target_file);
 
 ?>
