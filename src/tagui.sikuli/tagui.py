@@ -1,5 +1,47 @@
 # SIKULI INTERFACE FOR TAGUI FRAMEWORK ~ TEBEL.ORG #
 
+import codecs
+import sys
+
+# Jython 2 print encodes with the stdout codec. OCR of window chrome includes
+# characters such as an em dash or a registered sign, and the default codec is
+# ASCII, so UnicodeEncodeError kills the process. -Dfile.encoding does not
+# change this stream. Flush each write so the log sees the line.
+class _Utf8Stream:
+	def __init__(self, stream):
+		self.stream = codecs.getwriter('utf-8')(stream)
+	def write(self, data):
+		self.stream.write(data)
+		self.stream.flush()
+	def flush(self):
+		self.stream.flush()
+	def writelines(self, lines):
+		for line in lines:
+			self.write(line)
+
+if not isinstance(sys.stdout, _Utf8Stream):
+	sys.stdout = _Utf8Stream(sys.stdout)
+	sys.stdout.flush()
+if not isinstance(sys.stderr, _Utf8Stream):
+	sys.stderr = _Utf8Stream(sys.stderr)
+	sys.stderr.flush()
+
+def to_unicode(text):
+	if isinstance(text, unicode):
+		return text
+	if text is None:
+		return u''
+	try:
+		return unicode(text)
+	except:
+		return unicode(str(text), 'utf-8', 'replace')
+
+def write_utf8(path, text):
+	handle = codecs.open(path, 'w', encoding='utf-8')
+	handle.write(to_unicode(text))
+	handle.flush()
+	handle.close()
+
 # timeout in seconds for finding an element
 wait_timeout = 10
 setAutoWaitTimeout(wait_timeout)
@@ -129,10 +171,7 @@ def keyboard_map ( input_keys ):
 
 # function to output sikuli text to tagui
 def output_sikuli_text ( output_text ):
-	import codecs
-	tagui_text = codecs.open('tagui.sikuli/tagui_sikuli.txt','w',encoding='utf8')
-	tagui_text.write(output_text)
-	tagui_text.close()
+	write_utf8('tagui.sikuli/tagui_sikuli.txt', output_text)
 
 # function for tap / click step
 def tap_intent ( raw_intent ):
@@ -539,9 +578,7 @@ def parse_intent ( script_line ):
 		return 0 
 
 # write to interface out-file to signal ready for inputs
-tagui_output = open('tagui.sikuli/tagui_sikuli.out','w')
-tagui_output.write('[0] START')
-tagui_output.close()
+write_utf8('tagui.sikuli/tagui_sikuli.out', '[0] START')
 
 # initialise interface in-file before starting main loop
 tagui_input = open('tagui.sikuli/tagui_sikuli.in','w')
@@ -565,9 +602,7 @@ while True:
 		break
 	elif not tagui_intent:
 		tagui_count = '0'
-		tagui_output = open('tagui.sikuli/tagui_sikuli.out','w')
-		tagui_output.write('[0] START')
-		tagui_output.close()
+		write_utf8('tagui.sikuli/tagui_sikuli.out', '[0] START')
 		wait(scan_period)
 		continue
 
@@ -590,13 +625,9 @@ while True:
 
 	# save intent_result to interface out-file
 	print '[tagui] OUTPUT - ' + '[' + tagui_count + '] ' + intent_result_string; print
-	tagui_output = open('tagui.sikuli/tagui_sikuli.out','w')
-	tagui_output.write('[' + tagui_count + '] ' + intent_result_string)
-	tagui_output.close()
+	write_utf8('tagui.sikuli/tagui_sikuli.out', '[' + tagui_count + '] ' + intent_result_string)
 	wait(scan_period)
 
 # write to interface out-file to signal finish listening
 print '[tagui] FINISH - stopped listening'
-tagui_output = open('tagui.sikuli/tagui_sikuli.out','w')
-tagui_output.write('[0] FINISH')
-tagui_output.close()
+write_utf8('tagui.sikuli/tagui_sikuli.out', '[0] FINISH')
