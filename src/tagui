@@ -4,6 +4,38 @@
 # configure command to launch chrome for Linux (configuration for macOS not required as path is fixed)
 chrome_command="google-chrome"
 
+# Ubuntu's chromium command is often a shell wrapper. Chrome flags such as
+# --remote-debugging-port are only accepted by the ELF binary. google-chrome
+# and an already-ELF chromium are returned unchanged.
+# tagui_unwrap_chromium
+tagui_unwrap_chromium() {
+local cmd="$1"
+local resolved base dir candidate magic
+resolved="$(command -v "$cmd" 2>/dev/null || true)"
+if [ -z "$resolved" ]; then printf '%s\n' "$cmd"; return; fi
+base="$(basename "$resolved")"
+case "$base" in
+chromium|chromium-browser) ;;
+*) printf '%s\n' "$cmd"; return ;;
+esac
+magic="$(od -An -t x1 -N 4 "$resolved" 2>/dev/null | tr -d ' \n')"
+if [ -x "$resolved" ] && [ "$magic" = "7f454c46" ]; then printf '%s\n' "$cmd"; return; fi
+dir="$(dirname "$resolved")"
+for candidate in \
+"$dir/../lib/chromium/chromium" \
+"$dir/../lib/chromium-browser/chromium-browser" \
+/usr/lib/chromium/chromium \
+/usr/lib/chromium-browser/chromium-browser
+do
+if [ -x "$candidate" ]; then
+magic="$(od -An -t x1 -N 4 "$candidate" 2>/dev/null | tr -d ' \n')"
+if [ "$magic" = "7f454c46" ]; then printf '%s\n' "$(readlink -f "$candidate")"; return; fi
+fi
+done
+printf '%s\n' "$cmd"
+}
+# end tagui_unwrap_chromium
+
 if [ -z "$1" ]
 then
 echo "tagui v6.114: use following options and this syntax to run - ./tagui flow_filename option(s)"
@@ -387,9 +419,10 @@ fi
 if ! type "$chrome_command" > /dev/null; then
 echo "ERROR - cannot find \"$chrome_command\" command on your Linux to launch web browser"
 echo "update chrome_command setting in tagui/src/tagui and make sure symlink is created"; exit 1; fi
+chrome_command="$(tagui_unwrap_chromium "$chrome_command")"
 chrome_process_id="$(ps x | grep remote-debugging-port=9222 | grep tagui_user_profile | grep window-size | sed -e 's/^[ ]*//' | cut -d' ' -f 1 | sort -nur | head -n 1)"
 if [ -n "$chrome_process_id" ]; then kill $chrome_process_id; fi
-$chrome_command --user-data-dir="$TAGUI_DIR/chrome/tagui_user_profile" $chrome_switches $window_size $headless_switch $no_sandbox_switch > /dev/null 2>&1 &
+"$chrome_command" --user-data-dir="$TAGUI_DIR/chrome/tagui_user_profile" $chrome_switches $window_size $headless_switch $no_sandbox_switch > /dev/null 2>&1 &
 fi
 
 # wait until chrome is ready with websocket url for php thread

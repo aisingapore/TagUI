@@ -1,0 +1,15 @@
+name: general-fixes
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  shell:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Shell syntax and Chromium wrapper
+        run: |
+          bash -n src/tagui
+          bash src/test/test_chromium_binary.sh
