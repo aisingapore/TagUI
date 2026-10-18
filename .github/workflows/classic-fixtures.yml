@@ -1,0 +1,42 @@
+name: classic-fixtures
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  classic:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: "8.3"
+      - name: Install Chrome, CasperJS, and PhantomJS
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y python-is-python3
+          wget -q -O /tmp/chrome.deb https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
+          sudo apt-get install -y /tmp/chrome.deb
+          google-chrome --version
+          npm install --no-save --prefix "$RUNNER_TEMP/casper" phantomjs-prebuilt casperjs
+          ln -sfn "$RUNNER_TEMP/casper/node_modules/casperjs" src/casperjs
+          ln -sfn "$RUNNER_TEMP/casper/node_modules/phantomjs-prebuilt" src/phantomjs
+          test -x src/casperjs/bin/casperjs
+          test -x src/phantomjs/bin/phantomjs
+      - name: Classic language-conversion run
+        env:
+          OPENSSL_CONF: /dev/null
+        run: |
+          # positive_test.signature already disagrees with tagui_header.js on master
+          # (check_tx and present formatting). This branch does not refresh it.
+          git diff --exit-code -- src/tagui_parse.php src/tagui_header.js src/tagui_footer.js src/test/positive_test.tag src/test/positive_test.signature
+          touch src/tagui_logging src/tagui_no_sandbox
+          src/tagui "$GITHUB_WORKSPACE/src/test/positive_test.tag" -n
+          test -s src/test/positive_test.js
+          rm -f src/tagui_logging src/tagui_no_sandbox src/test/positive_test.js src/test/positive_test.log
+      - name: Classic suite against local fixtures
+        env:
+          OPENSSL_CONF: /dev/null
+        run: php src/test/test_classic_fixtures.php
