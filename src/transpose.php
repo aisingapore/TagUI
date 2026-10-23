@@ -4,7 +4,8 @@
 
 // load input csv file after doing some due diligence
 $source_csv = $argv[1]; if ($source_csv=="") die("ERROR - specify csv filename as first parameter\n");
-if (strpos($source_csv,"_transpose.csv")==false) die("ERROR - csv filename must end with '_transpose.csv'\n");
+$suffix = "_transpose.csv";
+if (substr($source_csv, -strlen($suffix)) !== $suffix) die("ERROR - csv filename must end with '_transpose.csv'\n");
 $source_file = fopen($source_csv,'r') or die("ERROR - cannot open " . $source_csv . "\n"); $csv_count = 0;
 while (!feof($source_file)) {
   $csv_line = fgetcsv($source_file, 0, ",", "\"", "\\");
@@ -14,7 +15,7 @@ while (!feof($source_file)) {
 } fclose($source_file); $csv_count = @count((array)$csv_data);
 
 // do some prep, transpose datatable and output csv file
-$csv_result = array(); $target_csv = str_replace("_transpose.csv",".csv",$source_csv);
+$csv_result = array(); $target_csv = substr($source_csv, 0, -strlen($suffix)) . ".csv";
 $target_file = fopen($target_csv,'w') or die("ERROR - cannot open " . $target_csv . " to save\n");
 // populate the dummy headers
 for($i=0; $i<$csv_count; $i++) {
