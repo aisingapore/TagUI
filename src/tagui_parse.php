@@ -8,9 +8,10 @@
 // Q2. Is there a beautified version for easier viewing or editing?
 // Use this - https://loilo.github.io/prettier-php-playground
 
-// check flow filename for .tag file extension
+// check flow filename for .tag file extension (.tagui is the MCP flow extension)
 $script = $argv[1]; if ($script=="") die("ERROR - specify flow filename as first parameter\n");
-if (strtolower(pathinfo($script, PATHINFO_EXTENSION))!="tag") die("ERROR - use .tag extension for flow filename\n");
+$tagui_flow_extension = strtolower(pathinfo($script, PATHINFO_EXTENSION));
+if ($tagui_flow_extension!="tag" && $tagui_flow_extension!="tagui") die("ERROR - use .tag or .tagui extension for flow filename\n");
 
 // make sure required files are available and can be opened
 if (!file_exists($script)) die("ERROR - cannot find " . $script . "\n");
