@@ -42,6 +42,75 @@ def write_utf8(path, text):
 	handle.flush()
 	handle.close()
 
+# PHP and CasperJS write tagui_sikuli.in as UTF-8 bytes. Jython 2 open()
+# without an encoding decodes those bytes with the default codec (often
+# Latin-1), so 测试 becomes mojibake before type_intent or tap_intent runs.
+def read_utf8(path):
+	handle = codecs.open(path, 'r', encoding='utf-8')
+	try:
+		return handle.read()
+	finally:
+		handle.close()
+
+def intent_text(line):
+	line = to_unicode(line).strip()
+	mark = line.find(u'] ')
+	if mark < 0:
+		return line
+	return line[mark + 2:].strip()
+
+# Sikuli type() sends key codes. ASCII and the private-use special keys from
+# keyboard_map stay on type(). A real non-ASCII character (for example 测试)
+# is not an ASCII key, so it is pasted instead. Modifier chords stay on type().
+def text_needs_paste(text):
+	text = to_unicode(text)
+	for ch in text:
+		code = ord(ch)
+		if code > 127 and not (code >= 0xE000 and code <= 0xF8FF):
+			return True
+	return False
+
+def deliver_typed_text(target, text, modifier_keys):
+	text = to_unicode(text)
+	if modifier_keys != 0 or not text_needs_paste(text):
+		if target is None:
+			if modifier_keys == 0:
+				return type(text)
+			else:
+				return type(text, modifier_keys)
+		if modifier_keys == 0:
+			return type(target, text)
+		else:
+			return type(target, text, modifier_keys)
+	if target is not None:
+		if click(target) == 0:
+			return 0
+	result = 1
+	pasting = u''
+	typing = u''
+	for ch in text:
+		code = ord(ch)
+		if code > 127 and not (code >= 0xE000 and code <= 0xF8FF):
+			if typing:
+				if type(typing) == 0:
+					result = 0
+				typing = u''
+			pasting = pasting + ch
+		else:
+			if pasting:
+				if paste(pasting) == 0:
+					result = 0
+				pasting = u''
+			typing = typing + ch
+	if pasting:
+		if paste(pasting) == 0:
+			result = 0
+	if typing:
+		if type(typing) == 0:
+			result = 0
+	return result
+
+# sikuli runtime below uses Sikuli's Jython globals
 # timeout in seconds for finding an element
 wait_timeout = 10
 setAutoWaitTimeout(wait_timeout)
@@ -271,26 +340,14 @@ def type_intent ( raw_intent ):
 	modifier_keys = modifiers_map(param2)
 	param2 = keyboard_map(param2)
 	if param1.endswith('page.png') or param1.endswith('page.bmp'):
-		if modifier_keys == 0:
-			return type(param2)
-		else:
-			return type(param2,modifier_keys)
+		return deliver_typed_text(None, param2, modifier_keys)
 	elif ocr_locator:
-		if modifier_keys == 0:
-			return type(text_locator(param1),param2)
-		else:
-			return type(text_locator(param1),param2,modifier_keys)
+		return deliver_typed_text(text_locator(param1), param2, modifier_keys)
 	elif is_coordinates(param1):
-		if modifier_keys == 0:
-			return type(Location(x_coordinate(param1),y_coordinate(param1)),param2)
-		else:
-			return type(Location(x_coordinate(param1),y_coordinate(param1)),param2,modifier_keys)
+		return deliver_typed_text(Location(x_coordinate(param1),y_coordinate(param1)), param2, modifier_keys)
 	elif file_exists(param1):
 		if exists(param1):
-			if modifier_keys == 0:
-				return type(param1,param2)
-			else:
-				return type(param1,param2,modifier_keys)
+			return deliver_typed_text(param1, param2, modifier_keys)
 		else:
 			return 0
 	else:
@@ -590,12 +647,10 @@ print '[tagui] START  - listening for inputs'; print
 while True:
 	# scan input from run-time interface in-file
 	try:
-		tagui_input = open('tagui.sikuli/tagui_sikuli.in','r')
-	except IOError, OSError:
+		tagui_intent = read_utf8('tagui.sikuli/tagui_sikuli.in').strip()
+	except (IOError, OSError):
 		print '[tagui] ERROR  - cannot open tagui.sikuli/tagui_sikuli.in'; print
 		break
-	tagui_intent = tagui_input.read().strip()
-	tagui_input.close()
 
 	# quit if finish signal received, initialise and repeat loop if blank
 	if tagui_intent == 'finish':
@@ -608,7 +663,7 @@ while True:
 
 	# get count and repeat loop if same count as last iteration
 	temp_count = tagui_intent[1:tagui_intent.find('] ')].strip()
-	tagui_intent = tagui_intent[2+tagui_intent.find('] '):].strip()
+	tagui_intent = intent_text(tagui_intent)
 	if tagui_count == temp_count:
 		wait(scan_period)
 		continue
