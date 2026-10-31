@@ -68,7 +68,7 @@ jobs:
           Remove-Item unxzip.zip
                              
           # Add PHP dependency files
-          Invoke-WebRequest 'https://windows.php.net/downloads/releases/archives/php-5.6.30-Win32-VC11-x86.zip' -OutFile php.zip
+          Invoke-WebRequest 'https://windows.php.net/downloads/releases/archives/php-5.6.40-Win32-VC11-x86.zip' -OutFile php.zip
           Expand-Archive -LiteralPath php.zip
           Remove-Item php.zip
         
@@ -139,6 +139,14 @@ jobs:
           rm phantomjs.tar.bz2
           mv phantomjs-2.1.1-linux-x86_64 phantomjs
           
+      - name: Run offline transpose regression tests (Windows)
+        if: (matrix.os == 'windows-latest')
+        run: node "${{github.workspace}}\src\test\transpose_test.js" "${{github.workspace}}\src\php\php.exe"
+
+      - name: Run offline transpose regression tests (macOS / Linux)
+        if: (matrix.os != 'windows-latest')
+        run: node "${{github.workspace}}/src/test/transpose_test.js" php
+
       - name: Run visual automation flow for first time to install jython standalone jar - expected to fail (Windows)
         if: (matrix.os == 'windows-latest')
         timeout-minutes: 2
