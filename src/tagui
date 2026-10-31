@@ -19,7 +19,7 @@ echo "-report    -r  track run result in tagui/src/tagui_report.csv and save htm
 echo "-turbo     -t  run automation at 10X the speed of normal human user (read the caveats in usage guide!)"
 echo "-quiet     -q  run without output except for explicit output (echo, show, check steps and errors etc)"
 echo "-edge      -e  run TagUI using Microsoft Edge instead of Google Chrome (can be used with -headless)"
-echo "modern         run on Chrome through the DevTools Protocol, without CasperJS (CasperJS stays the default)"
+echo "-modern    -m  run on opt-in Chrome DevTools engine instead of CasperJS (headless unless -chrome is given)"
 echo
 exit 1
 fi
@@ -258,14 +258,14 @@ if [ "$9" = "-turbo" ] || [ "$9" = "-t" ]; then set -- "${@:1:8}"; export tagui_
 
 # opt-in Chrome DevTools engine. CasperJS remains the default when this flag is absent.
 tagui_modern_mode=false
-if [ "$2" = "modern" ] || [ "$2" = "-modern" ]; then set -- "$1" "${@:3}"; tagui_modern_mode=true; fi
-if [ "$3" = "modern" ] || [ "$3" = "-modern" ]; then set -- "${@:1:2}" "${@:4}"; tagui_modern_mode=true; fi
-if [ "$4" = "modern" ] || [ "$4" = "-modern" ]; then set -- "${@:1:3}" "${@:5}"; tagui_modern_mode=true; fi
-if [ "$5" = "modern" ] || [ "$5" = "-modern" ]; then set -- "${@:1:4}" "${@:6}"; tagui_modern_mode=true; fi
-if [ "$6" = "modern" ] || [ "$6" = "-modern" ]; then set -- "${@:1:5}" "${@:7}"; tagui_modern_mode=true; fi
-if [ "$7" = "modern" ] || [ "$7" = "-modern" ]; then set -- "${@:1:6}" "${@:8}"; tagui_modern_mode=true; fi
-if [ "$8" = "modern" ] || [ "$8" = "-modern" ]; then set -- "${@:1:7}" "${@:9}"; tagui_modern_mode=true; fi
-if [ "$9" = "modern" ] || [ "$9" = "-modern" ]; then set -- "${@:1:8}"; tagui_modern_mode=true; fi
+if [ "$2" = "-modern" ] || [ "$2" = "-m" ]; then set -- "$1" "${@:3}"; tagui_modern_mode=true; fi
+if [ "$3" = "-modern" ] || [ "$3" = "-m" ]; then set -- "${@:1:2}" "${@:4}"; tagui_modern_mode=true; fi
+if [ "$4" = "-modern" ] || [ "$4" = "-m" ]; then set -- "${@:1:3}" "${@:5}"; tagui_modern_mode=true; fi
+if [ "$5" = "-modern" ] || [ "$5" = "-m" ]; then set -- "${@:1:4}" "${@:6}"; tagui_modern_mode=true; fi
+if [ "$6" = "-modern" ] || [ "$6" = "-m" ]; then set -- "${@:1:5}" "${@:7}"; tagui_modern_mode=true; fi
+if [ "$7" = "-modern" ] || [ "$7" = "-m" ]; then set -- "${@:1:6}" "${@:8}"; tagui_modern_mode=true; fi
+if [ "$8" = "-modern" ] || [ "$8" = "-m" ]; then set -- "${@:1:7}" "${@:9}"; tagui_modern_mode=true; fi
+if [ "$9" = "-modern" ] || [ "$9" = "-m" ]; then set -- "${@:1:8}"; tagui_modern_mode=true; fi
 
 # concatenate parameters in order to fix issue when calling casperjs test
 # $1 left out - filenames with spaces have issue when casperjs $params

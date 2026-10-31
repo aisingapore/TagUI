@@ -28,17 +28,17 @@ run_hook() {
 	bash "$repo/src/tagui" "$@"
 }
 
-run_hook "$work/plain.txt" "$flow" modern alpha
+run_hook "$work/plain.txt" "$flow" -modern alpha
 grep -qx '^-q tagui_modern.php .*/flow.tag alpha$' "$work/plain.txt"
 grep -qx 'browser=headless' "$work/plain.txt"
 grep -qx 'speed=false' "$work/plain.txt"
 grep -qx "log=$flow.log" "$work/plain.txt"
 
-run_hook "$work/chrome.txt" "$flow" -chrome modern beta
+run_hook "$work/chrome.txt" "$flow" -chrome -m beta
 grep -qx 'browser=chrome' "$work/chrome.txt"
 grep -q 'beta$' "$work/chrome.txt"
 
-run_hook "$work/speed.txt" "$flow" modern -speed
+run_hook "$work/speed.txt" "$flow" -m -speed
 grep -qx 'speed=true' "$work/speed.txt"
 
 run_hook "$work/quiet.txt" "$flow" -quiet -modern
@@ -46,20 +46,22 @@ grep -qx 'quiet=true' "$work/quiet.txt"
 grep -qx 'browser=headless' "$work/quiet.txt"
 
 set +e
-firefox_out=$(bash "$repo/src/tagui" "$flow" -firefox modern 2>&1)
+firefox_out=$(bash "$repo/src/tagui" "$flow" -firefox -m 2>&1)
 firefox_code=$?
 set -e
 test "$firefox_code" -ne 0
 printf '%s\n' "$firefox_out" | grep -q 'modern engine does not support firefox'
 
 help_out=$(bash "$repo/src/tagui" || true)
-printf '%s\n' "$help_out" | grep -q 'modern         run on Chrome through the DevTools Protocol'
+printf '%s\n' "$help_out" | grep -q -- '-modern    -m  run on opt-in Chrome DevTools engine'
 
-# CasperJS stays the default: without modern, the DevTools entry point is not called.
+# CasperJS stays the default: without -modern or -m, the DevTools entry point is not called.
+# A bare word such as modern is a flow input (p1), as with every other option.
+# -nobrowser keeps this check from starting Chrome, since Chrome is the default browser.
 export TAGUI_HOOK_REPORT="$work/classic.txt"
 rm -f "$work/classic.txt"
 set +e
-timeout 20 bash "$repo/src/tagui" "$flow" alpha >"$work/classic.out" 2>&1
+timeout 20 bash "$repo/src/tagui" "$flow" -nobrowser modern >"$work/classic.out" 2>&1
 classic_code=$?
 set -e
 if [ -f "$work/classic.txt" ]; then

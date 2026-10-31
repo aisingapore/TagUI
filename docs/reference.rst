@@ -982,6 +982,10 @@ Runs without output to command prompt except for explicit output (echo, show, ch
 ********************
 Runs using Microsoft Edge browser instead of Chrome (can be used with -headless option).
 
+-modern or -m
+********************
+Opt-in. Runs the flow on Chrome through the DevTools Protocol with ``src/tagui_modern.php`` instead of CasperJS. The browser is headless unless ``-chrome`` is also given. Without this option TagUI runs on CasperJS as before. Currently available in the macOS / Linux ``tagui`` launcher. See ``docs/modern-engine.md``.
+
 my_datatable.csv
 ********************
 Uses the specified csv file as the datatable for batch automation. See :ref:`datatables <datatables>`.
