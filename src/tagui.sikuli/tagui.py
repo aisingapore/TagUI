@@ -1,5 +1,116 @@
 # SIKULI INTERFACE FOR TAGUI FRAMEWORK ~ TEBEL.ORG #
 
+import codecs
+import sys
+
+# Jython 2 print encodes with the stdout codec. OCR of window chrome includes
+# characters such as an em dash or a registered sign, and the default codec is
+# ASCII, so UnicodeEncodeError kills the process. -Dfile.encoding does not
+# change this stream. Flush each write so the log sees the line.
+class _Utf8Stream:
+	def __init__(self, stream):
+		self.stream = codecs.getwriter('utf-8')(stream)
+	def write(self, data):
+		self.stream.write(data)
+		self.stream.flush()
+	def flush(self):
+		self.stream.flush()
+	def writelines(self, lines):
+		for line in lines:
+			self.write(line)
+
+if not isinstance(sys.stdout, _Utf8Stream):
+	sys.stdout = _Utf8Stream(sys.stdout)
+	sys.stdout.flush()
+if not isinstance(sys.stderr, _Utf8Stream):
+	sys.stderr = _Utf8Stream(sys.stderr)
+	sys.stderr.flush()
+
+def to_unicode(text):
+	if isinstance(text, unicode):
+		return text
+	if text is None:
+		return u''
+	try:
+		return unicode(text)
+	except:
+		return unicode(str(text), 'utf-8', 'replace')
+
+def write_utf8(path, text):
+	handle = codecs.open(path, 'w', encoding='utf-8')
+	handle.write(to_unicode(text))
+	handle.flush()
+	handle.close()
+
+# PHP and CasperJS write tagui_sikuli.in as UTF-8 bytes. Jython 2 open()
+# without an encoding decodes those bytes with the default codec (often
+# Latin-1), so 测试 becomes mojibake before type_intent or tap_intent runs.
+def read_utf8(path):
+	handle = codecs.open(path, 'r', encoding='utf-8')
+	try:
+		return handle.read()
+	finally:
+		handle.close()
+
+def intent_text(line):
+	line = to_unicode(line).strip()
+	mark = line.find(u'] ')
+	if mark < 0:
+		return line
+	return line[mark + 2:].strip()
+
+# Sikuli type() sends key codes. ASCII and the private-use special keys from
+# keyboard_map stay on type(). A real non-ASCII character (for example 测试)
+# is not an ASCII key, so it is pasted instead. Modifier chords stay on type().
+def text_needs_paste(text):
+	text = to_unicode(text)
+	for ch in text:
+		code = ord(ch)
+		if code > 127 and not (code >= 0xE000 and code <= 0xF8FF):
+			return True
+	return False
+
+def deliver_typed_text(target, text, modifier_keys):
+	text = to_unicode(text)
+	if modifier_keys != 0 or not text_needs_paste(text):
+		if target is None:
+			if modifier_keys == 0:
+				return type(text)
+			else:
+				return type(text, modifier_keys)
+		if modifier_keys == 0:
+			return type(target, text)
+		else:
+			return type(target, text, modifier_keys)
+	if target is not None:
+		if click(target) == 0:
+			return 0
+	result = 1
+	pasting = u''
+	typing = u''
+	for ch in text:
+		code = ord(ch)
+		if code > 127 and not (code >= 0xE000 and code <= 0xF8FF):
+			if typing:
+				if type(typing) == 0:
+					result = 0
+				typing = u''
+			pasting = pasting + ch
+		else:
+			if pasting:
+				if paste(pasting) == 0:
+					result = 0
+				pasting = u''
+			typing = typing + ch
+	if pasting:
+		if paste(pasting) == 0:
+			result = 0
+	if typing:
+		if type(typing) == 0:
+			result = 0
+	return result
+
+# sikuli runtime below uses Sikuli's Jython globals
 # timeout in seconds for finding an element
 wait_timeout = 10
 setAutoWaitTimeout(wait_timeout)
@@ -129,10 +240,7 @@ def keyboard_map ( input_keys ):
 
 # function to output sikuli text to tagui
 def output_sikuli_text ( output_text ):
-	import codecs
-	tagui_text = codecs.open('tagui.sikuli/tagui_sikuli.txt','w',encoding='utf8')
-	tagui_text.write(output_text)
-	tagui_text.close()
+	write_utf8('tagui.sikuli/tagui_sikuli.txt', output_text)
 
 # function for tap / click step
 def tap_intent ( raw_intent ):
@@ -232,26 +340,14 @@ def type_intent ( raw_intent ):
 	modifier_keys = modifiers_map(param2)
 	param2 = keyboard_map(param2)
 	if param1.endswith('page.png') or param1.endswith('page.bmp'):
-		if modifier_keys == 0:
-			return type(param2)
-		else:
-			return type(param2,modifier_keys)
+		return deliver_typed_text(None, param2, modifier_keys)
 	elif ocr_locator:
-		if modifier_keys == 0:
-			return type(text_locator(param1),param2)
-		else:
-			return type(text_locator(param1),param2,modifier_keys)
+		return deliver_typed_text(text_locator(param1), param2, modifier_keys)
 	elif is_coordinates(param1):
-		if modifier_keys == 0:
-			return type(Location(x_coordinate(param1),y_coordinate(param1)),param2)
-		else:
-			return type(Location(x_coordinate(param1),y_coordinate(param1)),param2,modifier_keys)
+		return deliver_typed_text(Location(x_coordinate(param1),y_coordinate(param1)), param2, modifier_keys)
 	elif file_exists(param1):
 		if exists(param1):
-			if modifier_keys == 0:
-				return type(param1,param2)
-			else:
-				return type(param1,param2,modifier_keys)
+			return deliver_typed_text(param1, param2, modifier_keys)
 		else:
 			return 0
 	else:
@@ -539,9 +635,7 @@ def parse_intent ( script_line ):
 		return 0 
 
 # write to interface out-file to signal ready for inputs
-tagui_output = open('tagui.sikuli/tagui_sikuli.out','w')
-tagui_output.write('[0] START')
-tagui_output.close()
+write_utf8('tagui.sikuli/tagui_sikuli.out', '[0] START')
 
 # initialise interface in-file before starting main loop
 tagui_input = open('tagui.sikuli/tagui_sikuli.in','w')
@@ -553,27 +647,23 @@ print '[tagui] START  - listening for inputs'; print
 while True:
 	# scan input from run-time interface in-file
 	try:
-		tagui_input = open('tagui.sikuli/tagui_sikuli.in','r')
-	except IOError, OSError:
+		tagui_intent = read_utf8('tagui.sikuli/tagui_sikuli.in').strip()
+	except (IOError, OSError):
 		print '[tagui] ERROR  - cannot open tagui.sikuli/tagui_sikuli.in'; print
 		break
-	tagui_intent = tagui_input.read().strip()
-	tagui_input.close()
 
 	# quit if finish signal received, initialise and repeat loop if blank
 	if tagui_intent == 'finish':
 		break
 	elif not tagui_intent:
 		tagui_count = '0'
-		tagui_output = open('tagui.sikuli/tagui_sikuli.out','w')
-		tagui_output.write('[0] START')
-		tagui_output.close()
+		write_utf8('tagui.sikuli/tagui_sikuli.out', '[0] START')
 		wait(scan_period)
 		continue
 
 	# get count and repeat loop if same count as last iteration
 	temp_count = tagui_intent[1:tagui_intent.find('] ')].strip()
-	tagui_intent = tagui_intent[2+tagui_intent.find('] '):].strip()
+	tagui_intent = intent_text(tagui_intent)
 	if tagui_count == temp_count:
 		wait(scan_period)
 		continue
@@ -590,13 +680,9 @@ while True:
 
 	# save intent_result to interface out-file
 	print '[tagui] OUTPUT - ' + '[' + tagui_count + '] ' + intent_result_string; print
-	tagui_output = open('tagui.sikuli/tagui_sikuli.out','w')
-	tagui_output.write('[' + tagui_count + '] ' + intent_result_string)
-	tagui_output.close()
+	write_utf8('tagui.sikuli/tagui_sikuli.out', '[' + tagui_count + '] ' + intent_result_string)
 	wait(scan_period)
 
 # write to interface out-file to signal finish listening
 print '[tagui] FINISH - stopped listening'
-tagui_output = open('tagui.sikuli/tagui_sikuli.out','w')
-tagui_output.write('[0] FINISH')
-tagui_output.close()
+write_utf8('tagui.sikuli/tagui_sikuli.out', '[0] FINISH')
