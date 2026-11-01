@@ -64,10 +64,11 @@ def run_flow(
     """Run a TagUI flow file and return its output as JSON.
 
     flow_file is a local path. TagUI accepts no extension, or .txt, .js, .tag, or .tagui.
-    options are CLI flags: chrome, headless, firefox, quiet, report, speed, debug,
-    test, baseline, upload, modern. Omit options to run in quiet mode on TagUI's
-    default PhantomJS browser. Pass ["headless"] or ["chrome"] to use Chrome.
-    Add "modern" to drive Chrome through the DevTools engine instead of CasperJS.
+    options are TagUI 6 run options: -headless, -chrome, -nobrowser, -firefox, -edge,
+    -quiet, -report, -speed, -turbo, -baseline, -modern. Short aliases (-h, -q, -m, ...)
+    and names without the dash are accepted and sent dashed. Omit options to run with
+    -quiet on TagUI's default visible Chrome. Pass ["-headless"] for invisible Chrome.
+    Add "-modern" to drive Chrome through the DevTools engine instead of CasperJS.
     A failing run still reports failing_line, failing_step, and screenshots.
     inputs become flow variables p1, p2, ... and cannot contain whitespace.
     options, inputs, and an optional datatable csv share TagUI's limit of 8 extra arguments.
@@ -116,7 +117,7 @@ def browser_start(mode: str = "headless", startup_timeout: float = 90, engine: s
     """Start a live TagUI Chrome session for later browser tools.
 
     mode is "headless" (default) or "chrome" (visible window). engine is "casper"
-    (default, CasperJS plus PhantomJS) or "modern" (Chrome DevTools, no CasperJS).
+    (default, CasperJS) or "modern" (Chrome DevTools, no CasperJS).
     An empty engine follows TAGUI_ENGINE, then casper. The session keeps one
     browser open so later steps share page state.
     """

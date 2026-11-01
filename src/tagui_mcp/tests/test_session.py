@@ -12,10 +12,10 @@ FAKE = Path(__file__).parent / "fake_tagui.py"
 
 def test_live_command_selects_the_engine() -> None:
     classic = live_command("/tmp/tagui", "/tmp/flow", "headless")
-    assert classic == ["/tmp/tagui", "/tmp/flow", "headless", "quiet"]
+    assert classic == ["/tmp/tagui", "/tmp/flow", "-headless", "-quiet"]
     modern = live_command("/tmp/tagui", "/tmp/flow", "chrome", "modern")
-    assert modern[-1] == "modern"
-    assert "headless" not in modern
+    assert modern == ["/tmp/tagui", "/tmp/flow", "-chrome", "-quiet", "-modern"]
+    assert "-headless" not in modern
 
 
 def test_check_live_step_accepts_blocks_and_rejects_done() -> None:

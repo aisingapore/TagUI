@@ -43,9 +43,9 @@ def _never(value: NoReturn) -> NoReturn:
 
 def browser_flag(mode: BrowserMode) -> str:
     if mode == "headless":
-        return "headless"
+        return "-headless"
     if mode == "chrome":
-        return "chrome"
+        return "-chrome"
     _never(mode)
 
 
@@ -61,9 +61,9 @@ def normalize_engine(engine: str | None) -> str:
 
 def live_command(executable: str | Path, flow: str | Path, mode: BrowserMode, engine: str | None = None) -> list[str]:
     """Command line for a live session. modern appends the opt-in DevTools engine flag."""
-    command = [str(executable), str(flow), browser_flag(mode), "quiet"]
+    command = [str(executable), str(flow), browser_flag(mode), "-quiet"]
     if normalize_engine(engine) == "modern":
-        command.append("modern")
+        command.append("-modern")
     return command
 
 

@@ -298,7 +298,7 @@ class TaguiService:
         self.session.stop()
         result = run_steps(
             steps,
-            options=[mode, "quiet"],
+            options=["-" + mode, "-quiet"],
             timeout_seconds=max(timeout_seconds, 90),
             tagui_bin=self.tagui_bin,
         )

@@ -14,10 +14,10 @@ The MCP package does not vendor TagUI's engines. A packaged TagUI install (or a 
 
 - The `tagui` script, normally `src/tagui` in this repository
 - PHP CLI (`php`), used to translate a flow
-- CasperJS and PhantomJS, used to execute the translated script
-- Google Chrome or Edge for `headless` or `chrome` runs and for every live browser tool
+- CasperJS, used to execute the translated script (PhantomJS only for `-nobrowser`)
+- Google Chrome (or Edge with `-edge`) for runs and for every live browser tool
 
-`run_flow` / `run_steps` with no browser flag use TagUI's default PhantomJS browser. `browser_*` tools always start live mode with Chrome, because live-mode navigation only works there. Pass `"engine": "modern"` to `browser_start`, or `modern` in `options` for `run_flow` / `run_steps`, to use the DevTools engine in `src/tagui_modern.php` instead of CasperJS and PhantomJS. `TAGUI_ENGINE=modern` does the same for `browser_start` when `engine` is omitted. See `docs/modern-engine.md`.
+`run_flow` / `run_steps` with no browser option use TagUI 6's default, visible Chrome; pass `-headless` for invisible Chrome. Options use TagUI 6's dashed form (`-quiet`, `-headless`, `-modern` or `-m`, ...); names without the dash are accepted and sent dashed. `browser_*` tools always start live mode with Chrome, because live-mode navigation only works there. Pass `"engine": "modern"` to `browser_start`, or `-modern` in `options` for `run_flow` / `run_steps`, to use the DevTools engine in `src/tagui_modern.php` instead of CasperJS and PhantomJS. `TAGUI_ENGINE=modern` does the same for `browser_start` when `engine` is omitted. See `docs/modern-engine.md`.
 
 ## Install
 
@@ -140,7 +140,7 @@ The repair loop is `create_flow` or `save_flow`, `validate_flow`, `run_workspace
 | `edit_flow` | `replace`, `insert_before`, `delete`, or `append`. `line` is 1-based. `text` may contain newlines |
 | `validate_flow` | Run `tagui_parse.php` only. Reports unbalanced `{ }`, bad `for` loops, and quote errors. Does not open a browser |
 | `run_workspace_flow` | Run a workspace flow. Same result shape as `run_flow` |
-| `run_flow` | Run any flow file. Optional `options` (`quiet`, `headless`, `chrome`, `firefox`, `report`, `speed`, `debug`, `test`, `baseline`, `upload`), `inputs` (p1–p16), `datatable` (a csv), `timeout_seconds` |
+| `run_flow` | Run any flow file. Optional `options` (`-quiet`, `-headless`, `-chrome`, `-nobrowser`, `-firefox`, `-edge`, `-report`, `-speed`, `-turbo`, `-baseline`, `-modern`), `inputs` (p1–p16), `datatable` (a csv), `timeout_seconds` |
 | `run_steps` | Write ad-hoc TagUI lines to a flow and run them. Returns `work_directory`, which is kept |
 | `save_session` | Write the live transcript to a workspace flow. `only_successful` drops steps that returned `ERROR` |
 | `browser_start` | Start live mode on headless Chrome (`mode`: `headless` or `chrome`). `engine`: `casper` (default) or `modern` |
@@ -152,7 +152,7 @@ The repair loop is `create_flow` or `save_flow`, `validate_flow`, `run_workspace
 | `page_state` | URL, title, and visible text (text is truncated to 4000 characters) |
 | `browser_step` | One or more TagUI lines. `wait N` and `run` stay in the live browser. `check`, `frame`, `popup`, `if`, `for`, `while`, and `{` `}` replay the transcript as a real flow and then close the browser |
 
-Omitting `options` on `run_flow` / `run_steps` is quiet mode and TagUI's default PhantomJS browser. Example:
+Omitting `options` on `run_flow` / `run_steps` runs with `-quiet` on TagUI's default visible Chrome. Example:
 
 ```json
 { "flow_file": "/absolute/path/to/TagUI/src/tagui_mcp/examples/hello.tagui" }
@@ -161,7 +161,7 @@ Omitting `options` on `run_flow` / `run_steps` is quiet mode and TagUI's default
 ```json
 {
   "steps": ["https://example.com", "echo title()", "snap page to page.png"],
-  "options": ["headless", "quiet"]
+  "options": ["-headless", "-quiet"]
 }
 ```
 
@@ -200,7 +200,7 @@ These come from closed TagUI issues and from how the parser actually behaves:
 - Identifiers are tried in order: xpath, css, id, name, class, title, aria-label, visible text, href. `click h1` often fails; visible text or an xpath works. For a sibling, an xpath such as `//span[text()="350,90"]/ancestor::tr//input[contains(@class,"ico-salvar")]` is the usual shape.
 - `if !exist(button.png)` is the visual-automation condition. `click button.png` uses the image. OCR of a whole region can crash Sikuli's Tesseract process; that abort is a dead process, not an `ERROR -` line.
 - `snap` captures the viewport. A table taller than the window is clipped. Headless `snap page to file.pdf` has produced unreadable PDFs; use `.png` for failure shots.
-- PhantomJS and Chrome do not share one JavaScript regex engine. Page scripts that must match a browser should run with `headless` or `chrome`, or in a `dom` step.
+- PhantomJS and Chrome do not share one JavaScript regex engine. Page scripts that must match a browser should not run with `-nobrowser`, or should use a `dom` step.
 - Visual automation from cron needs a display. This server runs in the user's session, same as a terminal `tagui` run.
 
 ## Try it
@@ -232,7 +232,7 @@ Run that from a shell where `PYTHONPATH` includes `src/tagui_mcp`, or use the in
 ## Limitations
 
 - **Same privileges as the user.** A flow can run shell commands (`run`) and Python (`py`). This is a local automation driver, not a sandbox. The `upload` option sends the run log to hastebin.com.
-- **One TagUI Chrome at a time.** Live mode and `headless` / `chrome` flows use debugging port 9222 and `src/chrome/tagui_user_profile`. Those two values are hardcoded in `src/tagui`, `tagui_chrome.php`, and `end_processes`. A second concurrent browser needs a port and a profile threaded through that whole path, so the server still refuses `run_flow` / `run_steps` while a browser session is open. If a session is stuck, run `src/end_processes`.
+- **One TagUI Chrome at a time.** Live mode and Chrome flows use debugging port 9222 and `src/chrome/tagui_user_profile`. Those two values are hardcoded in `src/tagui`, `tagui_chrome.php`, and `end_processes`. A second concurrent browser needs a port and a profile threaded through that whole path, so the server still refuses `run_flow` / `run_steps` while a browser session is open. If a session is stuck, run `src/end_processes`.
 - **Live mode still cannot compile blocks.** `wait N` and a single-line `run` now run inside the live browser: the live loop is one CasperJS step per line, so `casper.wait` and `casper.waitForExec` finish before the next line is read. `check`, `frame`, `popup`, `if`, `for`, `while`, and `{` `}` are generated by the PHP parser as blocks around the following steps. Reimplementing that compiler inside the live interpreter would fork the language. `browser_step` detects those lines, closes the live browser, and runs the transcript through the normal flow runner instead. `browser_go` still polls the URL because navigation returns before the load event.
 - **A newline is a new step.** The live prompt reads one line at a time. `browser_step` accepts several lines. A value typed into a field cannot contain a newline; use `[enter]`. Single quotes in `click` and `type` are escaped. A step that mixes `'` and `"` is still rejected by TagUI's string handling.
 - **`py begin` / `run begin` and the matching `finish` must be one `browser_step`.** The sync marker is an `echo` line. If it lands inside the block, TagUI treats it as part of the block.
