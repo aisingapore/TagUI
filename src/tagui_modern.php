@@ -1968,12 +1968,14 @@ $engine->set_cli_params($params);
 try {$datasets = tagui_datatable_rows($flow, $csv_arg);}
 catch (Exception $e) {tagui_write_output('ERROR - ' . $e->getMessage() . "\n"); return 1;}
 $chrome_started = false;
-pcntl_async_signals(true);
 $stop = function () use ($chrome, &$chrome_started) {
 TaguiHelpers::shutdown();
 if ($chrome_started) {$chrome->stop(); $chrome_started = false;}};
+// pcntl is not available on Windows. The shutdown function below still stops Chrome there.
+if (function_exists('pcntl_async_signals')) {
+pcntl_async_signals(true);
 pcntl_signal(SIGTERM, function () use ($stop) {$stop(); exit(0);});
-pcntl_signal(SIGINT, function () use ($stop) {$stop(); exit(130);});
+pcntl_signal(SIGINT, function () use ($stop) {$stop(); exit(130);});}
 register_shutdown_function($stop);
 try {
 $chrome->start($browser !== 'chrome');
