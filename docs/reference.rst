@@ -984,7 +984,7 @@ Runs using Microsoft Edge browser instead of Chrome (can be used with -headless 
 
 -modern or -m
 ********************
-Opt-in. Runs the flow on Chrome through the DevTools Protocol with ``src/tagui_modern.php`` instead of CasperJS. The browser is headless unless ``-chrome`` is also given. Without this option TagUI runs on CasperJS as before. Currently available in the macOS / Linux ``tagui`` launcher. See ``docs/modern-engine.md``.
+Opt-in. Runs the flow on Chrome through the DevTools Protocol with ``src/tagui_modern.php`` instead of CasperJS. Chrome is visible by default, as with CasperJS; add ``-headless`` for headless Chrome (``-nobrowser`` also runs headless). Without this option TagUI runs on CasperJS as before. Currently available in the macOS / Linux ``tagui`` launcher. See ``docs/modern-engine.md``.
 
 my_datatable.csv
 ********************

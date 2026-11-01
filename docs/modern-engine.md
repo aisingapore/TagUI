@@ -237,7 +237,7 @@ php -q tagui_modern.php <flow> <remaining args>
 
 The modern path does not pipe through `tee`. `tagui_write_output()` writes each line to stdout, flushes it, and appends the same bytes to `TAGUI_LOG` (`flow.log`). GNU `tee` and Windows `tee` block-buffer when stdout is a pipe, which hid the short live-mode banner from RPA-Python. The CasperJS path still uses `tee`. `src/tagui.cmd` is not changed here, so on Windows `-modern` is not routed to the engine yet.
 
-`phantomjs` (`-nobrowser`) is treated as `headless` under `-modern`. `firefox` is rejected. `chrome` is a visible window. Any other browser value, including the default, is headless Chrome, so `tagui flow.tag -m` runs headless and `tagui flow.tag -chrome -m` opens a visible window.
+Like the CasperJS path, `-modern` opens a visible Chrome window by default. `-headless` runs headless Chrome, and `phantomjs` (`-nobrowser`) is also treated as `headless`. `-chrome` is accepted and keeps the visible window. `firefox` is rejected. So `tagui flow.tag -m` and `tagui flow.tag -chrome -m` open a window, and `tagui flow.tag -headless -m` does not. When `tagui_modern.php` is run directly without `tagui_web_browser` set, it starts headless Chrome.
 
 ### Browser process
 
