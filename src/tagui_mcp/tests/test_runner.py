@@ -4,7 +4,19 @@ import os
 import time
 from pathlib import Path
 
-from tagui_mcp.runner import _screenshots, diagnose_run, resolve_tagui_executable, run_flow, run_steps
+import pytest
+
+from tagui_mcp.runner import (
+    OPTION_ALIASES,
+    TaguiFailure,
+    _screenshots,
+    diagnose_run,
+    resolve_tagui_executable,
+    run_flow,
+    run_steps,
+    validate_inputs,
+    validate_options,
+)
 
 FAKE = Path(__file__).parent / "fake_tagui.py"
 
@@ -33,7 +45,7 @@ def test_run_flow_echo(tmp_path: Path) -> None:
     assert result["exit_code"] == 0
     command = result["command"]
     assert isinstance(command, list)
-    assert command[2:] == ["quiet"]
+    assert command[2:] == ["-quiet"]
 
 
 def test_run_flow_forwards_options_inputs_and_datatable(tmp_path: Path) -> None:
@@ -51,7 +63,7 @@ def test_run_flow_forwards_options_inputs_and_datatable(tmp_path: Path) -> None:
     assert result["ok"] is True
     command = result["command"]
     assert isinstance(command, list)
-    assert command[2:] == ["headless", "quiet", str(table.resolve()), "june"]
+    assert command[2:] == ["-headless", "-quiet", str(table.resolve()), "june"]
 
 
 def test_run_flow_marks_error_lines(tmp_path: Path) -> None:
@@ -102,7 +114,7 @@ def test_run_flow_rejects_bad_usage(tmp_path: Path) -> None:
     assert option["ok"] is False
     modern = run_flow(str(flow), options=["headless", "modern", "quiet"], tagui_bin=FAKE)
     assert modern["ok"] is True
-    assert "modern" in modern["command"]
+    assert "-modern" in modern["command"]
     unknown = run_flow(str(flow), options=["sudo"], tagui_bin=FAKE)
     assert unknown["ok"] is False
     spaced = run_flow(str(flow), inputs=["has space"], tagui_bin=FAKE)
@@ -111,13 +123,13 @@ def test_run_flow_rejects_bad_usage(tmp_path: Path) -> None:
     assert "has space" not in spaced["command"]
     too_many = run_flow(
         str(flow),
-        options=["quiet", "report", "speed", "debug"],
+        options=["quiet", "report", "speed", "turbo"],
         inputs=["a", "b", "c", "d", "e"],
         tagui_bin=FAKE,
     )
     assert too_many["ok"] is True
     assert too_many["parameter_source"] == "environment"
-    assert too_many["command"][2:] == ["quiet", "report", "speed", "debug"]
+    assert too_many["command"][2:] == ["-quiet", "-report", "-speed", "-turbo"]
 
 
 def test_run_flow_reports_failing_line(tmp_path: Path) -> None:
@@ -278,3 +290,38 @@ def test_reaper_stops_a_chrome_on_the_configured_profile_only(monkeypatch, tmp_p
     runner.reap_tagui_chrome(tmp_path / "missing" / "tagui")
 
     assert set(killed) == {301}
+
+
+def test_options_use_tagui6_dashed_form() -> None:
+    assert validate_options(None) == ["-quiet"]
+    assert validate_options(["headless", "quiet", "modern"]) == ["-headless", "-quiet", "-modern"]
+    assert validate_options(["-h", "-q", "-m"]) == ["-headless", "-quiet", "-modern"]
+    assert validate_options(["-chrome", "-report", "-speed", "-turbo", "-baseline"]) == [
+        "-chrome",
+        "-report",
+        "-speed",
+        "-turbo",
+        "-baseline",
+    ]
+    assert validate_options(["-nobrowser", "edge"]) == ["-nobrowser", "-edge"]
+    assert validate_options(["-headless", "-edge"]) == ["-headless", "-edge"]
+    for unsupported in ["debug", "test", "upload", "-deploy", "--quiet", "sudo"]:
+        with pytest.raises(TaguiFailure):
+            validate_options([unsupported])
+    with pytest.raises(TaguiFailure):
+        validate_options(["quiet", "-q"])
+    with pytest.raises(TaguiFailure):
+        validate_options(["-nobrowser", "-headless"])
+
+
+def test_every_option_is_one_src_tagui_accepts() -> None:
+    script = (Path(__file__).resolve().parents[2] / "tagui").read_text(encoding="utf-8")
+    for name, alias in OPTION_ALIASES.items():
+        assert f'[ "$2" = "{name}" ] || [ "$2" = "{alias}" ]' in script, name
+
+
+def test_inputs_reject_dashed_option_names() -> None:
+    assert validate_inputs(["quiet", "june"]) == ["quiet", "june"]
+    for value in ["-quiet", "-q", "-m", "-headless"]:
+        with pytest.raises(TaguiFailure):
+            validate_inputs([value])

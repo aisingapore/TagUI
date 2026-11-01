@@ -17,22 +17,28 @@ import tempfile
 import time
 from pathlib import Path
 
-ALLOWED_OPTIONS = frozenset(
-    {
-        "chrome",
-        "headless",
-        "firefox",
-        "report",
-        "upload",
-        "speed",
-        "quiet",
-        "debug",
-        "test",
-        "baseline",
-        "modern",
-    }
-)
-BROWSER_OPTIONS = frozenset({"chrome", "headless", "firefox"})
+# TagUI 6 run options as src/tagui reads them: long dashed name and short alias.
+# A bare word such as "quiet" is a flow input (p1-p8) to TagUI 6, not an option.
+OPTION_ALIASES = {
+    "-baseline": "-b",
+    "-chrome": "-c",
+    "-edge": "-e",
+    "-firefox": "-f",
+    "-headless": "-h",
+    "-modern": "-m",
+    "-nobrowser": "-n",
+    "-quiet": "-q",
+    "-report": "-r",
+    "-speed": "-s",
+    "-turbo": "-t",
+}
+ALLOWED_OPTIONS = frozenset(OPTION_ALIASES)
+BROWSER_OPTIONS = frozenset({"-chrome", "-headless", "-firefox", "-nobrowser"})
+_OPTION_LOOKUP = {
+    **{name: name for name in OPTION_ALIASES},
+    **{name[1:]: name for name in OPTION_ALIASES},
+    **{alias: name for name, alias in OPTION_ALIASES.items()},
+}
 ALLOWED_EXTENSIONS = frozenset({"", "txt", "js", "tagui", "tag", "gui"})
 MAX_FORWARDED_ARGS = 8
 MAX_INPUTS = 16
@@ -80,21 +86,28 @@ def resolve_tagui_executable(explicit: str | Path | None = None) -> Path:
     )
 
 
+def normalize_option(option: str) -> str:
+    """Map "quiet", "-quiet", or "-q" to the dashed TagUI 6 option "-quiet"."""
+    name = _OPTION_LOOKUP.get(option) if isinstance(option, str) else None
+    if name is None:
+        allowed = ", ".join(sorted(ALLOWED_OPTIONS))
+        raise TaguiFailure(f"unsupported option {option!r}. Allowed: {allowed}")
+    return name
+
+
 def validate_options(options: list[str] | None) -> list[str]:
-    """Return the CLI flags to pass through. None means quiet mode only."""
+    """Return the dashed CLI options to pass through. None means -quiet only."""
     if options is None:
-        return ["quiet"]
+        return ["-quiet"]
     chosen: list[str] = []
     for option in options:
-        if option not in ALLOWED_OPTIONS:
-            allowed = ", ".join(sorted(ALLOWED_OPTIONS))
-            raise TaguiFailure(f"unsupported option {option!r}. Allowed: {allowed}")
-        if option in chosen:
+        name = normalize_option(option)
+        if name in chosen:
             raise TaguiFailure(f"duplicate option {option!r}")
-        chosen.append(option)
+        chosen.append(name)
     browsers = [item for item in chosen if item in BROWSER_OPTIONS]
     if len(browsers) > 1:
-        raise TaguiFailure("choose only one of chrome, headless, firefox")
+        raise TaguiFailure("choose only one of -chrome, -headless, -firefox, -nobrowser")
     return chosen
 
 
@@ -109,7 +122,7 @@ def validate_inputs(inputs: list[str] | None) -> list[str]:
             raise TaguiFailure("inputs must be non-empty strings")
         if "\x00" in value or "\n" in value or "\r" in value:
             raise TaguiFailure("an input cannot contain newlines or NUL characters")
-        if value in ALLOWED_OPTIONS:
+        if value in ALLOWED_OPTIONS or value in OPTION_ALIASES.values():
             raise TaguiFailure(
                 f"input {value!r} is a TagUI option name and would be consumed as a flag"
             )
