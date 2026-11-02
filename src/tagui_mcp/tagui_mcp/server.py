@@ -31,7 +31,10 @@ INSTRUCTIONS = (
     "A URL stored in a variable is a line that is just `url`. "
     "Datatable row number is [iteration]. Variables are visible to flows included with tagui. "
     "echo run_result prints a run step. echo p1 prints an input. "
-    "api headers are an array of 'Name: value' strings."
+    "api headers are an array of 'Name: value' strings. "
+    "To hand a local file (such as a downloaded PDF) to a remote client, use list_files to "
+    "find it, file_info, then read_file_chunk for index 0 through chunk_count-1; join the "
+    "decoded parts in order and check the result against sha256."
 )
 
 mcp = MCPServer(
@@ -269,6 +272,41 @@ def save_session(name: str, only_successful: bool = False) -> str:
     browser_stop; stopping deletes the live work directory, not this flow file.
     """
     return _json(get_service().save_session(name, only_successful=only_successful))
+
+
+@mcp.tool()
+def list_files(directory: str = "", pattern: str = "*", limit: int = 50) -> str:
+    """List files (not recursive) in an allowed directory, newest first.
+
+    Each entry has name, path, size, modified (ISO 8601), and mime. With no directory
+    it returns the allowed roots: TAGUI_MCP_FILE_ROOTS, or the workspace and ~/Downloads.
+    pattern is a glob on the file name. Use it to find the most recent download.
+    """
+    return _json(get_service().list_files(directory, pattern, limit))
+
+
+@mcp.tool()
+def file_info(path: str, chunk_size: int = 32768) -> str:
+    """Describe a file inside the allowed roots so it can be fetched in parts.
+
+    Returns name, path, mime, size, sha256 of the whole file, modified, chunk_size
+    (1024 to 1048576), and chunk_count. Files above TAGUI_MCP_FILE_MAX_BYTES
+    (default 50 MiB) are refused. Read-only.
+    """
+    return _json(get_service().file_info(path, chunk_size))
+
+
+@mcp.tool()
+def read_file_chunk(path: str, index: int = 0, chunk_size: int = 32768) -> str:
+    """Return one base64 slice of a file inside the allowed roots.
+
+    index is 0-based and runs to chunk_count-1. Use the same chunk_size for every
+    call. The result has offset, length, chunk_sha256, is_last, data (base64 of this
+    slice only), and size and sha256 of the whole file. Join the decoded parts in
+    order and compare with sha256. If sha256 differs between parts, the file changed
+    while it was being read; start over.
+    """
+    return _json(get_service().read_file_chunk(path, index, chunk_size))
 
 
 def main() -> None:

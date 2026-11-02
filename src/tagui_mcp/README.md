@@ -143,6 +143,9 @@ The repair loop is `create_flow` or `save_flow`, `validate_flow`, `run_workspace
 | `run_flow` | Run any flow file. Optional `options` (`-quiet`, `-headless`, `-chrome`, `-nobrowser`, `-firefox`, `-edge`, `-report`, `-speed`, `-turbo`, `-baseline`, `-modern`), `inputs` (p1–p16), `datatable` (a csv), `timeout_seconds` |
 | `run_steps` | Write ad-hoc TagUI lines to a flow and run them. Returns `work_directory`, which is kept |
 | `save_session` | Write the live transcript to a workspace flow. `only_successful` drops steps that returned `ERROR` |
+| `list_files` | `directory`, `pattern` (glob), `limit` (default 50). Non-recursive, newest first, with `name`, `path`, `size`, `modified`, `mime`. No `directory` returns the allowed roots |
+| `file_info` | `path`, `chunk_size` (1024–1048576, default 32768). Returns `mime`, `size`, whole-file `sha256`, `modified`, `chunk_count` |
+| `read_file_chunk` | `path`, `index` (0-based), `chunk_size`. Returns `data` (base64 of that slice), `offset`, `length`, `chunk_sha256`, `chunk_count`, `is_last`, and the whole-file `size` and `sha256` |
 | `browser_start` | Start live mode on headless Chrome (`mode`: `headless` or `chrome`). `engine`: `casper` (default) or `modern` |
 | `browser_stop` | Send `done`, stop TagUI, and close TagUI's Chrome |
 | `browser_go` | Open an `http` or `https` URL and poll until the page location changes |
@@ -185,6 +188,22 @@ A flow run also returns:
 When a click or type times out, TagUI captures the page with `casper.capture(snap_image())` before exiting. That file shows up in `screenshots`. A failed live step also returns `url`, `title`, `text`, and `screenshot` while the browser is still open.
 
 The workspace is `TAGUI_WORKSPACE`, or `src/tagui_mcp/workspace` when that variable is unset. Flow names are a single file name. `.tagui` is added when the name has no extension.
+
+## Delivering a file to a remote agent
+
+A remote client cannot read the local disk, and a PDF does not fit in one tool result. Call `list_files` to find the file (for example the newest download), `file_info` for its `sha256` and `chunk_count`, then `read_file_chunk` for `index` 0 through `chunk_count - 1` with the same `chunk_size`. Base64-decode each `data`, join the parts in order, and check the result against `sha256`.
+
+Every part repeats the whole-file `sha256`. If it differs between parts, the file changed during the transfer; start over. Each part also carries `chunk_sha256` for that slice.
+
+These tools are read-only and never write, delete, or move a file. Access rules:
+
+- **Roots.** Only regular files under the allowed roots are served. `TAGUI_MCP_FILE_ROOTS` lists them separated by `os.pathsep` (`:` on Linux and macOS, `;` on Windows). When it is unset or empty, the roots are the workspace (`TAGUI_WORKSPACE`, or `src/tagui_mcp/workspace`) and `~/Downloads` of the user running the server. Call `list_files` with no `directory` to see the roots in effect.
+- **System paths.** A root that is a filesystem root (`/`, `C:\`), one of `/etc`, `/proc`, `/sys`, `/dev`, `/boot`, `/bin`, `/sbin`, `/lib`, `/lib64`, the Windows directory, or a folder under one of them is refused, and every file tool returns an error until the setting is fixed.
+- **Traversal.** Any path containing `..` is refused. Paths are resolved with symlinks followed, so a symlink inside a root that points outside it is refused (and skipped by `list_files`). A relative path is looked up under each root in order.
+- **Size.** `TAGUI_MCP_FILE_MAX_BYTES` caps the file size (default 52428800 bytes, 50 MiB). Larger files are refused.
+- **Parts.** `chunk_size` must be 1024 to 1048576 bytes (default 32768). An out-of-range `index` is an error. Each call hashes the whole file, which is fine at the size limit but not free.
+
+Anyone who can call the server can read every file under the roots, so over HTTP the bearer token also grants that. Point `TAGUI_MCP_FILE_ROOTS` at a dedicated folder when `~/Downloads` holds files a client should not see.
 
 ## Authoring notes
 
@@ -239,7 +258,7 @@ Run that from a shell where `PYTHONPATH` includes `src/tagui_mcp`, or use the in
 - **Files from the live session** are written under the `work_directory` returned by `browser_start`. `browser_stop` deletes that directory. `save_session` writes the transcript into the workspace, which is kept. `run_steps` leaves its `work_directory` in place.
 - **Shell argument list.** On macOS and Linux, `src/tagui` forwards every remaining argument, including values with spaces. `tagui.cmd` still forwards only eight arguments and splits on spaces. The MCP server sends overflow inputs and inputs that contain spaces as `TAGUI_PARAM_1` … `TAGUI_PARAM_16`, which `tagui_header.js` copies into `p1` … `p16` when the CLI slot is empty. Options plus a datatable still share eight slots. Inputs cannot contain newlines.
 - **Engines are not bundled.** Missing `php`, CasperJS, PhantomJS, or Chrome shows up as a failed tool call (`stderr` often says `command not found`). Packaged TagUI builds already include those binaries. CasperJS 1.1's launcher asks for `python` on `PATH` (`python3` is not enough unless you symlink it). PhantomJS 2.1.1 on a system OpenSSL 3 fails unless the client env sets `OPENSSL_CONF` to `/dev/null` or another config that does not load the OpenSSL 3 `providers` module. On PHP 8, `count(false)` from `fgetcsv` used to abort the parser; `csv_row_count()` reports an empty datatable row instead.
-- **stdio by default.** Desktop clients launch the server over stdio. HTTP is opt-in (`--transport http`) and always needs a bearer token. There is no TLS and no per-user identity: one shared token grants every tool, and the tools run flows with the server user's privileges.
+- **stdio by default.** Desktop clients launch the server over stdio. HTTP is opt-in (`--transport http`) and always needs a bearer token. There is no TLS and no per-user identity: one shared token grants every tool, including reading files under the file roots, and the tools run flows with the server user's privileges.
 - **Windows.** The executable name switches to `tagui.cmd`. Browser tools were exercised on Linux. Live mode reads CasperJS stdout a line at a time; that matches TagUI for Python, which depends on CasperJS flushing each `echo`.
 
 ## Layout
@@ -248,6 +267,7 @@ Run that from a shell where `PYTHONPATH` includes `src/tagui_mcp`, or use the in
 src/tagui_mcp/
   tagui_mcp/server.py     MCP tools (stdio)
   tagui_mcp/http_transport.py  Streamable HTTP behind a bearer token
+  tagui_mcp/files.py      read-only chunked file delivery
   tagui_mcp/service.py    one-at-a-time flow runs and the live session
   tagui_mcp/runner.py     tagui CLI wrapper
   tagui_mcp/session.py    live-mode stdin/stdout protocol
