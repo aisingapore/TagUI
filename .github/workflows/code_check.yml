@@ -14,7 +14,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        os: [windows-latest, macOS-latest, ubuntu-latest]
+        os: [windows-latest, macos-15-intel, ubuntu-latest]
     runs-on: ${{ matrix.os }}
     env:
       # PhantomJS 2.1.1 cannot parse the OpenSSL 3 config on current runners
@@ -119,7 +119,7 @@ jobs:
           mv slimerjs-1.0.0 slimerjs
                   
       - name: Add PhantomJS dependency files (macOS)
-        if: (matrix.os == 'macOS-latest')
+        if: (matrix.os == 'macos-15-intel')
         run: |
           cd "${{github.workspace}}/src"
           curl -L 'https://bitbucket.org/ariya/phantomjs/downloads/phantomjs-2.1.1-macosx.zip' > phantomjs.zip
