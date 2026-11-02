@@ -27,6 +27,7 @@ echo -report    -r  track run result in tagui\src\tagui_report.csv and save html
 echo -turbo     -t  run automation at 10X the speed of normal human user ^(read the caveats in usage guide!^)
 echo -quiet     -q  run without output except for explicit output ^(echo, show, check steps and errors etc^)
 echo -edge      -e  run TagUI using Microsoft Edge instead of Google Chrome ^(can be used with -headless^)
+echo -modern    -m  run on opt-in Chrome DevTools engine instead of CasperJS ^(needs PHP 7.4 or newer^)
 echo.
 exit /b 1
 )
@@ -834,71 +835,88 @@ if "%arg9%"=="-r" (
 )
 
 set tagui_speed_mode=true
+set tagui_speed_requested=false
 rem check speed parameter to skip delay and chrome restart between iterations
 if "%arg2%"=="-speed" (
 	set arg2=
 	set tagui_speed_mode=true
+	set tagui_speed_requested=true
 )
 if "%arg3%"=="-speed" (
 	set arg3=
 	set tagui_speed_mode=true
+	set tagui_speed_requested=true
 )
 if "%arg4%"=="-speed" (
 	set arg4=
 	set tagui_speed_mode=true
+	set tagui_speed_requested=true
 )
 if "%arg5%"=="-speed" (
 	set arg5=
 	set tagui_speed_mode=true
+	set tagui_speed_requested=true
 )
 if "%arg6%"=="-speed" (
 	set arg6=
 	set tagui_speed_mode=true
+	set tagui_speed_requested=true
 )
 if "%arg7%"=="-speed" (
 	set arg7=
 	set tagui_speed_mode=true
+	set tagui_speed_requested=true
 )
 if "%arg8%"=="-speed" (
 	set arg8=
 	set tagui_speed_mode=true
+	set tagui_speed_requested=true
 )
 if "%arg9%"=="-speed" (
 	set arg9=
 	set tagui_speed_mode=true
+	set tagui_speed_requested=true
 )
 
 if "%arg2%"=="-s" (
 	set arg2=
 	set tagui_speed_mode=true
+	set tagui_speed_requested=true
 )
 if "%arg3%"=="-s" (
 	set arg3=
 	set tagui_speed_mode=true
+	set tagui_speed_requested=true
 )
 if "%arg4%"=="-s" (
 	set arg4=
 	set tagui_speed_mode=true
+	set tagui_speed_requested=true
 )
 if "%arg5%"=="-s" (
 	set arg5=
 	set tagui_speed_mode=true
+	set tagui_speed_requested=true
 )
 if "%arg6%"=="-s" (
 	set arg6=
 	set tagui_speed_mode=true
+	set tagui_speed_requested=true
 )
 if "%arg7%"=="-s" (
 	set arg7=
 	set tagui_speed_mode=true
+	set tagui_speed_requested=true
 )
 if "%arg8%"=="-s" (
 	set arg8=
 	set tagui_speed_mode=true
+	set tagui_speed_requested=true
 )
 if "%arg9%"=="-s" (
 	set arg9=
 	set tagui_speed_mode=true
+	set tagui_speed_requested=true
 )
 
 set tagui_turbo_mode=false
@@ -969,6 +987,74 @@ if "%arg9%"=="-t" (
 	set tagui_turbo_mode=true
 )
 
+rem opt-in Chrome DevTools engine. CasperJS remains the default when this flag is absent.
+set tagui_modern_mode=false
+if "%arg2%"=="-modern" (
+	set arg2=
+	set tagui_modern_mode=true
+)
+if "%arg3%"=="-modern" (
+	set arg3=
+	set tagui_modern_mode=true
+)
+if "%arg4%"=="-modern" (
+	set arg4=
+	set tagui_modern_mode=true
+)
+if "%arg5%"=="-modern" (
+	set arg5=
+	set tagui_modern_mode=true
+)
+if "%arg6%"=="-modern" (
+	set arg6=
+	set tagui_modern_mode=true
+)
+if "%arg7%"=="-modern" (
+	set arg7=
+	set tagui_modern_mode=true
+)
+if "%arg8%"=="-modern" (
+	set arg8=
+	set tagui_modern_mode=true
+)
+if "%arg9%"=="-modern" (
+	set arg9=
+	set tagui_modern_mode=true
+)
+
+if "%arg2%"=="-m" (
+	set arg2=
+	set tagui_modern_mode=true
+)
+if "%arg3%"=="-m" (
+	set arg3=
+	set tagui_modern_mode=true
+)
+if "%arg4%"=="-m" (
+	set arg4=
+	set tagui_modern_mode=true
+)
+if "%arg5%"=="-m" (
+	set arg5=
+	set tagui_modern_mode=true
+)
+if "%arg6%"=="-m" (
+	set arg6=
+	set tagui_modern_mode=true
+)
+if "%arg7%"=="-m" (
+	set arg7=
+	set tagui_modern_mode=true
+)
+if "%arg8%"=="-m" (
+	set arg8=
+	set tagui_modern_mode=true
+)
+if "%arg9%"=="-m" (
+	set arg9=
+	set tagui_modern_mode=true
+)
+
 rem concatenate parameters in order to fix issue when calling casperjs test
 rem $1 left out - filenames with spaces have issue when casperjs $params
 set params=%arg2% %arg3% %arg4% %arg5% %arg6% %arg7% %arg8% %arg9%
@@ -1002,6 +1088,26 @@ if exist "tagui_chrome.out" del "tagui_chrome.out"
 
 rem default exit code 0 to mean no error parsing automation flow file
 set tagui_error_code=0
+
+rem modern engine owns Chrome itself and does not call CasperJS or PhantomJS
+if not %tagui_modern_mode%==true goto modern_mode_skip
+if "%tagui_web_browser%"=="firefox" (
+	echo ERROR - modern engine does not support firefox | tee -a "%flow_file%.log"
+	exit /b 1
+)
+php -q -r "exit(version_compare(PHP_VERSION, '7.4.0', '<') ? 1 : 0);"
+if errorlevel 1 (
+	echo ERROR - modern engine needs PHP 7.4 or newer, tagui\src\php is used first, then php on PATH | tee -a "%flow_file%.log"
+	exit /b 1
+)
+if "%tagui_web_browser%"=="phantomjs" set tagui_web_browser=headless
+set tagui_speed_mode=%tagui_speed_requested%
+set "TAGUI_LOG=%flow_file%.log"
+php -q tagui_modern.php "%flow_file%" %arg2% %arg3% %arg4% %arg5% %arg6% %arg7% %arg8% %arg9%
+set tagui_error_code=%errorlevel%
+cd /d "%initial_dir%"
+exit /b %tagui_error_code%
+:modern_mode_skip
 
 rem transpose datatable csv file if file to be transposed exists
 if exist "%flow_file%_transpose.csv" php -q transpose.php "%flow_file%_transpose.csv" | tee -a "%flow_file%.log"
