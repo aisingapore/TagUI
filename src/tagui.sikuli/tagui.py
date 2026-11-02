@@ -110,6 +110,33 @@ def deliver_typed_text(target, text, modifier_keys):
 			result = 0
 	return result
 
+# note added to the out-file when an image step misses
+tagui_result_note = ''
+
+# exists() with the default similarity, as before. On a miss, scan once more at a
+# very low similarity so the log shows how close the best match was. A HiDPI or
+# Retina snap saved at the wrong scale shows up as a low score.
+def image_found(target):
+	global tagui_result_note
+	tagui_result_note = ''
+	if exists(target):
+		return True
+	score = None
+	try:
+		setAutoWaitTimeout(0.4)
+		match = find(Pattern(target).similar(0.01))
+		if match:
+			score = float(match.getScore())
+	except:
+		score = None
+	setAutoWaitTimeout(wait_timeout)
+	if score is None:
+		tagui_result_note = 'not on screen'
+	else:
+		tagui_result_note = 'not on screen, best similarity ' + ('%.2f' % score)
+	print('[tagui] NOTFOUND - ' + target + ' ' + tagui_result_note)
+	return False
+
 # sikuli runtime below uses Sikuli's Jython globals
 # timeout in seconds for finding an element
 wait_timeout = 10
@@ -256,7 +283,7 @@ def tap_intent ( raw_intent ):
 	elif is_coordinates(params):
 		return click(Location(x_coordinate(params),y_coordinate(params)))
 	elif file_exists(params):
-		if exists(params):
+		if image_found(params):
 			return click(params)
 		else:
 			return 0
@@ -277,7 +304,7 @@ def rtap_intent ( raw_intent ):
 	elif is_coordinates(params):
 		return rightClick(Location(x_coordinate(params),y_coordinate(params)))
 	elif file_exists(params):
-		if exists(params):
+		if image_found(params):
 			return rightClick(params)
 		else:
 			return 0
@@ -298,7 +325,7 @@ def dtap_intent ( raw_intent ):
 	elif is_coordinates(params):
 		return doubleClick(Location(x_coordinate(params),y_coordinate(params)))
 	elif file_exists(params):
-		if exists(params):
+		if image_found(params):
 			return doubleClick(params)
 		else:
 			return 0
@@ -319,7 +346,7 @@ def hover_intent ( raw_intent ):
 	elif is_coordinates(params):
 		return hover(Location(x_coordinate(params),y_coordinate(params)))
 	elif file_exists(params):
-		if exists(params):
+		if image_found(params):
 			return hover(params)
 		else:
 			return 0
@@ -346,7 +373,7 @@ def type_intent ( raw_intent ):
 	elif is_coordinates(param1):
 		return deliver_typed_text(Location(x_coordinate(param1),y_coordinate(param1)), param2, modifier_keys)
 	elif file_exists(param1):
-		if exists(param1):
+		if image_found(param1):
 			return deliver_typed_text(param1, param2, modifier_keys)
 		else:
 			return 0
@@ -373,7 +400,7 @@ def select_intent ( raw_intent ):
 			if is_coordinates(param2):
 				return click(Location(x_coordinate(param2),y_coordinate(param2)))
 			elif file_exists(param2):
-				if exists(param2):
+				if image_found(param2):
 					return click(param2)
 				else:
 					return 0
@@ -387,7 +414,7 @@ def select_intent ( raw_intent ):
 			if is_coordinates(param2):
 				return click(Location(x_coordinate(param2),y_coordinate(param2)))
 			elif file_exists(param2):
-				if exists(param2):
+				if image_found(param2):
 					return click(param2)
 				else:
 					return 0
@@ -395,7 +422,7 @@ def select_intent ( raw_intent ):
 				return click(text_locator(param2))
  
 	elif file_exists(param1):
-		if exists(param1):
+		if image_found(param1):
 			if click(param1) == 0:
 				return 0
 			else:
@@ -403,7 +430,7 @@ def select_intent ( raw_intent ):
 				if is_coordinates(param2):
 					return click(Location(x_coordinate(param2),y_coordinate(param2)))
 				elif file_exists(param2):
-					if exists(param2):
+					if image_found(param2):
 						return click(param2)
 					else:
 						return 0
@@ -457,7 +484,7 @@ def text_read ( raw_intent ):
 		output_sikuli_text(temp_text)
 		return 1
 	elif file_exists(param1):
-		if exists(param1):
+		if image_found(param1):
 			matched_element = find(param1)
 			temp_text = matched_element.text()
 			output_sikuli_text(temp_text)
@@ -502,7 +529,7 @@ def snap_intent ( raw_intent ):
 		shutil.copy(temp_snap_file,param2)
 		return 1
 	elif file_exists(param1):
-		if exists(param1):
+		if image_found(param1):
 			fullscreen_layer = Screen()
 			matched_element = find(param1)
 			temp_snap_file = fullscreen_layer.capture(matched_element).getFile()
@@ -677,6 +704,9 @@ while True:
 		intent_result_string = 'SUCCESS'
 	else:
 		intent_result_string = 'ERROR'
+		if tagui_result_note:
+			intent_result_string = intent_result_string + ' ' + tagui_result_note
+	tagui_result_note = ''
 
 	# save intent_result to interface out-file
 	print '[tagui] OUTPUT - ' + '[' + tagui_count + '] ' + intent_result_string; print
