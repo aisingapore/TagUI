@@ -33,6 +33,9 @@ EXPECTED_TOOLS = {
     "validate_flow",
     "run_workspace_flow",
     "save_session",
+    "list_files",
+    "file_info",
+    "read_file_chunk",
 }
 
 

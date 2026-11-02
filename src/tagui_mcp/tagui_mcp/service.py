@@ -12,6 +12,7 @@ import time
 from collections.abc import Callable
 from pathlib import Path
 
+from tagui_mcp import files
 from tagui_mcp.flows import (
     create_flow,
     edit_flow,
@@ -137,6 +138,28 @@ class TaguiService:
     def list_flows(self) -> dict[str, object]:
         with self._lock:
             return self._guard(lambda: list_flows(self._workspace()))
+
+    # File delivery is read-only and never touches the browser, so it skips the lock.
+    def list_files(
+        self, directory: str = "", pattern: str = "*", limit: int = 50
+    ) -> dict[str, object]:
+        return self._guard(
+            lambda: files.list_files(files.file_roots(self.workspace), directory, pattern, limit)
+        )
+
+    def file_info(
+        self, path: str, chunk_size: int = files.DEFAULT_CHUNK_SIZE
+    ) -> dict[str, object]:
+        return self._guard(
+            lambda: files.file_info(files.file_roots(self.workspace), path, chunk_size)
+        )
+
+    def read_file_chunk(
+        self, path: str, index: int = 0, chunk_size: int = files.DEFAULT_CHUNK_SIZE
+    ) -> dict[str, object]:
+        return self._guard(
+            lambda: files.read_file_chunk(files.file_roots(self.workspace), path, index, chunk_size)
+        )
 
     def read_flow(self, name: str) -> dict[str, object]:
         with self._lock:
