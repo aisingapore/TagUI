@@ -3,7 +3,8 @@
 /* MODERN CHROME ENGINE FOR TAGUI ~ proof of concept
    Drives Chrome or Edge directly with the DevTools Protocol.
    No CasperJS and no PhantomJS. The casperjs engine stays the default.
-   Invoked by `tagui flow modern` (headless Chrome unless `chrome` is also set). */
+   Invoked by `tagui flow.tag -modern` (visible Chrome unless `-headless` is also given).
+   Run directly without tagui_web_browser set, it starts headless Chrome. */
 
 if (!function_exists('str_starts_with')) {
 function str_starts_with($haystack, $needle) {

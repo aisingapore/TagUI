@@ -239,7 +239,7 @@ The modern path does not pipe through `tee`. `tagui_write_output()` writes each 
 
 On Windows, `src/tagui.cmd` sets the same environment (`tagui_web_browser`, `tagui_quiet_mode`, `tagui_speed_mode`, `TAGUI_LOG`) and passes the remaining `arg2` to `arg9` to `php -q tagui_modern.php`. The engine needs PHP 7.4 or newer. `tagui.cmd` puts `tagui\src\php` first on `PATH`, and the Windows zip ships PHP 5.6 there, so `-modern` stops with `ERROR - modern engine needs PHP 7.4 or newer` until that folder holds PHP 7.4+ (or is absent and a newer `php` is on `PATH`). `pcntl` does not exist on Windows. The engine skips the signal handlers there and still stops Chrome from its shutdown function. `tagui.cmd` defaults to visible Chrome, so on Windows `-m` opens a visible window and `-headless -m` runs headless.
 
-`phantomjs` (`-nobrowser`) is treated as `headless` under `-modern`. `firefox` is rejected. `chrome` is a visible window. Any other browser value, including the default, is headless Chrome, so `tagui flow.tag -m` runs headless and `tagui flow.tag -chrome -m` opens a visible window.
+Like the CasperJS path, `-modern` opens a visible Chrome window by default. `-headless` runs headless Chrome, and `phantomjs` (`-nobrowser`) is also treated as `headless`. `-chrome` is accepted and keeps the visible window. `firefox` is rejected. So `tagui flow.tag -m` and `tagui flow.tag -chrome -m` open a window, and `tagui flow.tag -headless -m` does not. When `tagui_modern.php` is run directly without `tagui_web_browser` set, it starts headless Chrome.
 
 ### Browser process
 

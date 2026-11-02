@@ -30,7 +30,7 @@ run_hook() {
 
 run_hook "$work/plain.txt" "$flow" -modern alpha
 grep -qx '^-q tagui_modern.php .*/flow.tag alpha$' "$work/plain.txt"
-grep -qx 'browser=headless' "$work/plain.txt"
+grep -qx 'browser=chrome' "$work/plain.txt"
 grep -qx 'speed=false' "$work/plain.txt"
 grep -qx "log=$flow.log" "$work/plain.txt"
 
@@ -43,7 +43,14 @@ grep -qx 'speed=true' "$work/speed.txt"
 
 run_hook "$work/quiet.txt" "$flow" -quiet -modern
 grep -qx 'quiet=true' "$work/quiet.txt"
-grep -qx 'browser=headless' "$work/quiet.txt"
+grep -qx 'browser=chrome' "$work/quiet.txt"
+
+run_hook "$work/headless.txt" "$flow" -m -headless gamma
+grep -qx 'browser=headless' "$work/headless.txt"
+grep -q 'gamma$' "$work/headless.txt"
+
+run_hook "$work/nobrowser.txt" "$flow" -nobrowser -modern
+grep -qx 'browser=headless' "$work/nobrowser.txt"
 
 set +e
 firefox_out=$(bash "$repo/src/tagui" "$flow" -firefox -m 2>&1)
