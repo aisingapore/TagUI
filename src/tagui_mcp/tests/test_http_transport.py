@@ -281,14 +281,14 @@ def test_build_transport_security_defaults_and_overrides(monkeypatch: pytest.Mon
     assert disabled.enable_dns_rebinding_protection is False
 
     # Specific hosts get wildcard ports and origins
-    sec = _build_transport_security("127.0.0.1", allowed_hosts=["cloud.cidadejardim.com"])
+    sec = _build_transport_security("127.0.0.1", allowed_hosts=["mcp.example.com"])
     assert sec is not None
     assert sec.enable_dns_rebinding_protection is True
-    assert "cloud.cidadejardim.com" in sec.allowed_hosts
-    assert "cloud.cidadejardim.com:*" in sec.allowed_hosts
+    assert "mcp.example.com" in sec.allowed_hosts
+    assert "mcp.example.com:*" in sec.allowed_hosts
     assert "127.0.0.1:*" in sec.allowed_hosts
-    assert "https://cloud.cidadejardim.com" in sec.allowed_origins
-    assert "https://cloud.cidadejardim.com:*" in sec.allowed_origins
+    assert "https://mcp.example.com" in sec.allowed_origins
+    assert "https://mcp.example.com:*" in sec.allowed_origins
 
     # From env vars
     monkeypatch.setenv(ALLOWED_HOSTS_ENV, "myhost.local, other.local")
@@ -312,7 +312,7 @@ def test_http_server_allowed_hosts_and_dns_rebinding(tmp_path: Path) -> None:
             "--port",
             str(port),
             "--allowed-hosts",
-            "cloud.cidadejardim.com",
+            "mcp.example.com",
         ],
         env=_env(tmp_path, TAGUI_MCP_TOKEN=TOKEN),
         stdout=subprocess.PIPE,
@@ -333,9 +333,9 @@ def test_http_server_allowed_hosts_and_dns_rebinding(tmp_path: Path) -> None:
         # Disallowed host -> 421 Invalid Host header
         assert _post(url, TOKEN, host_header="evil.com") == 421
         # Allowed host -> 200
-        assert _post(url, TOKEN, host_header="cloud.cidadejardim.com") == 200
+        assert _post(url, TOKEN, host_header="mcp.example.com") == 200
         # Port-suffixed allowed host -> 200
-        assert _post(url, TOKEN, host_header="cloud.cidadejardim.com:443") == 200
+        assert _post(url, TOKEN, host_header="mcp.example.com:443") == 200
     finally:
         process.terminate()
         try:

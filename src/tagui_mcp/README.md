@@ -106,7 +106,7 @@ tagui-mcp --transport http --host 127.0.0.1 --port 8765
 - Every HTTP request must send `Authorization: Bearer <token>`. A missing or wrong token gets `401`, and the request never reaches the MCP app. The comparison is constant time.
 - The token comes from `TAGUI_MCP_TOKEN` or from the file named by `TAGUI_MCP_TOKEN_FILE`, never from a command-line argument. The server refuses to start without one, with a token shorter than 32 characters, or when the token file is readable by group or others. It does not log the token.
 - It binds to `127.0.0.1` and refuses any other address unless `--allow-remote` is given. The connection is plain HTTP. To reach it across a network, put a TLS reverse proxy in front and keep the server on loopback.
-- When placed behind a reverse proxy that preserves the client's `Host` header (such as `cloud.cidadejardim.com`), configure `TAGUI_MCP_ALLOWED_HOSTS="cloud.cidadejardim.com,localhost,127.0.0.1"` (or pass `--allowed-hosts`) so the MCP SDK's DNS-rebinding protection accepts the request. Pass `*` to disable DNS rebinding protection entirely behind a trusted proxy.
+- When placed behind a reverse proxy that preserves the client's `Host` header (such as `mcp.example.com`), configure `TAGUI_MCP_ALLOWED_HOSTS="mcp.example.com,localhost,127.0.0.1"` (or pass `--allowed-hosts`) so the MCP SDK's DNS-rebinding protection accepts the request. Pass `*` to disable DNS rebinding protection entirely behind a trusted proxy.
 - The default endpoint is `/mcp` (configurable via `TAGUI_MCP_PATH` or `--path`). Generate a token with `python3 -c "import secrets; print(secrets.token_urlsafe(48))"`.
 
 An MCP client that supports HTTP headers connects with:
