@@ -12,9 +12,13 @@ on:
 jobs:
   code_check:
     strategy:
+      fail-fast: false
       matrix:
         os: [windows-latest, macOS-latest, ubuntu-latest]
     runs-on: ${{ matrix.os }}
+    env:
+      # PhantomJS 2.1.1 cannot parse the OpenSSL 3 config on current runners
+      OPENSSL_CONF: ${{ matrix.os != 'windows-latest' && '/dev/null' || '' }}
     outputs:
       output1: ${{ steps.compare_output_windows.outputs.diff }}
       output2: ${{ steps.compare_output_macos_linux.outputs.diff }}
