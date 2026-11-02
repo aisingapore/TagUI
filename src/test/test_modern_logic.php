@@ -436,11 +436,11 @@ expect('for variable bound', $varfor, array('var' => 'i', 'from' => 0, 'to' => '
 $words = new TaguiModern(null, true, '/tmp');
 $words->capture = true;
 $words->execute_range(array(
-'echo Retorno anexado no ClickUp',
+'echo Report attached to the ticket',
 'timeout 60  // keep the session',
-'wait //*[@id="podio"]',
+'wait //*[@id="status"]',
 'echo "after-wait"'), 0, 3, true);
-expect('echo literal', $words->captured[0], 'Retorno anexado no ClickUp');
+expect('echo literal', $words->captured[0], 'Report attached to the ticket');
 expect('timeout comment', $words->timeout, 60.0);
 expect('wait xpath', $words->stopped, false);
 expect('after wait', $words->captured[1], 'after-wait');
@@ -455,9 +455,9 @@ expect('download no url', $dl->stopped, false);
 
 $repo = new TaguiModern(null, true, '/tmp');
 $repo->capture = true;
-$repo->repo = array('usuario_erp' => base64_encode('alice'), 'create account' => 'btn-green');
+$repo->repo = array('app_user' => base64_encode('alice'), 'create account' => 'btn-green');
 $repo->sync_repo_vars();
-$repo->execute_range(array('js user = atob(usuario_erp)', 'echo user', 'echo create_account'), 0, 2, true);
+$repo->execute_range(array('js user = atob(app_user)', 'echo user', 'echo create_account'), 0, 2, true);
 expect('repo js', $repo->captured, array('alice', 'btn-green'));
 expect('repo stopped', $repo->stopped, false);
 expect('repo name', tagui_repo_identifier('create account'), 'create_account');
@@ -591,16 +591,16 @@ expect('skip false branch', $skip->captured, array(
 'taken'));
 expect('skip not failure', $skip->stopped, false);
 
-$vis = new TaguiModern(null, true, '/flows/podio');
-expect('visual abs', $vis->visual_command('click visao/login.png'), 'click /flows/podio/visao/login.png');
-expect('type image keeps text', $vis->visual_command('type visao/box.png as report.png'), 'type /flows/podio/visao/box.png as report.png');
+$vis = new TaguiModern(null, true, '/flows/demo');
+expect('visual abs', $vis->visual_command('click images/login.png'), 'click /flows/demo/images/login.png');
+expect('type image keeps text', $vis->visual_command('type images/box.png as report.png'), 'type /flows/demo/images/box.png as report.png');
 expect('visual coords', $vis->visual_command('click (12,34)'), 'click (12,34)');
 expect('visual kept', $vis->visual_command('rclick /abs/mark.png'), 'rclick /abs/mark.png');
 expect('chrome page snap', $vis->is_page_snap('page'), true);
 expect('page.png not chrome', $vis->is_page_snap('page.png'), false);
 expect('desktop page.png', $vis->is_desktop_snap('page.png'), true);
 expect('desktop page.bmp', $vis->is_desktop_snap('page.bmp'), true);
-expect('desktop nested', $vis->is_desktop_snap('visao/page.png'), true);
+expect('desktop nested', $vis->is_desktop_snap('images/page.png'), true);
 expect('page not desktop', $vis->is_desktop_snap('page'), false);
 
 class CountingSikuli extends TaguiModern {
@@ -610,18 +610,18 @@ function image_present($command) {
 $this->image_calls++;
 $this->image_command = $command;
 return $this->image_calls >= 3;}}
-$poll = new CountingSikuli(null, true, '/flows/podio');
+$poll = new CountingSikuli(null, true, '/flows/demo');
 $poll->timeout = 5;
-expect('exist polls', $poll->exists_arg(array('visao/login.png')), true);
+expect('exist polls', $poll->exists_arg(array('images/login.png')), true);
 expect('exist calls', $poll->image_calls, 3);
-expect('exist abs', $poll->image_command, 'present /flows/podio/visao/login.png');
+expect('exist abs', $poll->image_command, 'present /flows/demo/images/login.png');
 class MissingImage extends TaguiModern {
 public $image_calls = 0;
 function image_present($command) {$this->image_calls++; return false;}}
-$miss = new MissingImage(null, true, '/flows/podio');
+$miss = new MissingImage(null, true, '/flows/demo');
 $miss->timeout = 0.35;
 $miss_started = microtime(true);
-expect('exist timeout', $miss->exists_arg(array('visao/nope.png')), false);
+expect('exist timeout', $miss->exists_arg(array('images/nope.png')), false);
 expect('exist waited', $miss->image_calls >= 2 && (microtime(true) - $miss_started) < 2, true);
 class OnceImage extends TaguiModern {
 public $image_calls = 0;
@@ -630,18 +630,18 @@ function image_present($command) {
 $this->image_calls++;
 $this->image_command = $command;
 return false;}}
-$once = new OnceImage(null, true, '/flows/podio');
+$once = new OnceImage(null, true, '/flows/demo');
 $once->timeout = 30;
 $once_started = microtime(true);
-expect('present once', $once->present_arg(array('visao/licenca2.png')), false);
+expect('present once', $once->present_arg(array('images/license2.png')), false);
 expect('present calls', $once->image_calls, 1);
 expect('present fast', (microtime(true) - $once_started) < 1, true);
-expect('present command', $once->image_command, 'present /flows/podio/visao/licenca2.png');
-$seen_once = new OnceImage(null, true, '/flows/podio');
+expect('present command', $once->image_command, 'present /flows/demo/images/license2.png');
+$seen_once = new OnceImage(null, true, '/flows/demo');
 $seen_once->timeout = 30;
-expect('visible once', $seen_once->visible_arg(array('visao/licenca2.png')), false);
+expect('visible once', $seen_once->visible_arg(array('images/license2.png')), false);
 expect('visible calls', $seen_once->image_calls, 1);
-expect('visible command', $seen_once->image_command, 'visible /flows/podio/visao/licenca2.png');
+expect('visible command', $seen_once->image_command, 'visible /flows/demo/images/license2.png');
 class CountingFind {
 public $calls = 0;
 public $lives = array();
@@ -685,7 +685,7 @@ expect('expect missing', $missing->stopped && str_contains($missing->captured[0]
 expect('expect stops', in_array('no', $missing->captured, true), false);
 $wait_time = new TaguiModern(new MissingChrome(), true, '/tmp');
 $wait_time->capture = true;
-$wait_time->execute_range(array('wait //*[@id="podio"]', 'echo "after-wait"'), 0, 1, true);
+$wait_time->execute_range(array('wait //*[@id="status"]', 'echo "after-wait"'), 0, 1, true);
 expect('wait xpath still zero', $wait_time->stopped, false);
 expect('wait xpath continues', $wait_time->captured, array('after-wait'));
 $wait_for = new TaguiModern(new MissingChrome(), true, '/tmp');
@@ -702,8 +702,8 @@ putenv('TAGUI_MODERN_WAIT_ELEMENT=1');
 $wait_env = new TaguiModern(new MissingChrome(), true, '/tmp');
 $wait_env->capture = true;
 $wait_env->timeout = 0.2;
-$wait_env->execute_range(array('wait //*[@id="podio"]', 'echo "nope"'), 0, 1, true);
-expect('wait env element', $wait_env->stopped && str_contains($wait_env->captured[0], 'cannot find //*[@id="podio"]'), true);
+$wait_env->execute_range(array('wait //*[@id="status"]', 'echo "nope"'), 0, 1, true);
+expect('wait env element', $wait_env->stopped && str_contains($wait_env->captured[0], 'cannot find //*[@id="status"]'), true);
 $wait_number = new TaguiModern(new MissingChrome(), true, '/tmp');
 $wait_number->capture = true;
 $wait_number->execute_range(array('wait 0', 'echo "timed"'), 0, 1, true);
