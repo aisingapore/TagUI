@@ -36,6 +36,10 @@ jobs:
           src/tagui "$GITHUB_WORKSPACE/src/test/positive_test.tag" -n
           test -s src/test/positive_test.js
           rm -f src/tagui_logging src/tagui_no_sandbox src/test/positive_test.js src/test/positive_test.log
+      - name: Classic flow inputs
+        env:
+          OPENSSL_CONF: /dev/null
+        run: bash src/test/test_classic_inputs.sh
       - name: Classic suite against local fixtures
         env:
           OPENSSL_CONF: /dev/null

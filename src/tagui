@@ -298,9 +298,9 @@ if [ "$7" = "-modern" ] || [ "$7" = "-m" ]; then set -- "${@:1:6}" "${@:8}"; tag
 if [ "$8" = "-modern" ] || [ "$8" = "-m" ]; then set -- "${@:1:7}" "${@:9}"; tagui_modern_mode=true; fi
 if [ "$9" = "-modern" ] || [ "$9" = "-m" ]; then set -- "${@:1:8}"; tagui_modern_mode=true; fi
 
-# concatenate parameters in order to fix issue when calling casperjs test
-# $1 left out - filenames with spaces have issue when casperjs $params
-params="$2"" ""$3"" ""$4"" ""$5"" ""$6"" ""$7"" ""$8"" ""$9"
+# keep the remaining arguments as an array so that flow inputs containing spaces
+# or past $9 reach casperjs intact, $1 left out as it is passed separately
+tagui_cli_args=("${@:2}")
 
 # initialise log files and set permissions to protect user data
 echo -n "" > "$1".log; chmod 600 "$1".log
@@ -350,14 +350,9 @@ if [ -f "$1_transpose".csv ]; then php -q transpose.php "$1_transpose".csv | tee
 
 custom_csv_file=NO_CUSTOM_CSV_FILE
 # check if custom csv file is provided to be used as datatable
-if [[ "$2" == *".csv" ]]; then custom_csv_file=$(cd "$(dirname "$1")"; cd "$(dirname "$2")"; pwd)/$(basename "$2"); fi
-if [[ "$3" == *".csv" ]]; then custom_csv_file=$(cd "$(dirname "$1")"; cd "$(dirname "$3")"; pwd)/$(basename "$3"); fi
-if [[ "$4" == *".csv" ]]; then custom_csv_file=$(cd "$(dirname "$1")"; cd "$(dirname "$4")"; pwd)/$(basename "$4"); fi
-if [[ "$5" == *".csv" ]]; then custom_csv_file=$(cd "$(dirname "$1")"; cd "$(dirname "$5")"; pwd)/$(basename "$5"); fi
-if [[ "$6" == *".csv" ]]; then custom_csv_file=$(cd "$(dirname "$1")"; cd "$(dirname "$6")"; pwd)/$(basename "$6"); fi
-if [[ "$7" == *".csv" ]]; then custom_csv_file=$(cd "$(dirname "$1")"; cd "$(dirname "$7")"; pwd)/$(basename "$7"); fi
-if [[ "$8" == *".csv" ]]; then custom_csv_file=$(cd "$(dirname "$1")"; cd "$(dirname "$8")"; pwd)/$(basename "$8"); fi
-if [[ "$9" == *".csv" ]]; then custom_csv_file=$(cd "$(dirname "$1")"; cd "$(dirname "$9")"; pwd)/$(basename "$9"); fi
+for tagui_cli_arg in "${tagui_cli_args[@]}"; do
+if [[ "$tagui_cli_arg" == *".csv" ]]; then custom_csv_file=$(cd "$(dirname "$1")"; cd "$(dirname "$tagui_cli_arg")"; pwd)/$(basename "$tagui_cli_arg"); fi
+done
 if [ "NO_CUSTOM_CSV_FILE" != "$custom_csv_file" ]; then
 if ! [ -f "$custom_csv_file" ]; then echo "ERROR - cannot find $custom_csv_file"; exit 1; fi
 cp "$custom_csv_file" "tagui_datatable_transpose.csv"
@@ -480,7 +475,7 @@ php -q tagui_chrome.php $ws_url >> tagui_chrome.log &
 fi
 
 # check if test mode is enabled and run casperjs accordingly, before sending finish signal if integrations are active
-if [ "$tagui_test_mode" == false ]; then "$CASPERJS_EXECUTABLE" "$1".js $params$api | tee -a "$1".log
+if [ "$tagui_test_mode" == false ]; then "$CASPERJS_EXECUTABLE" "$1".js "${tagui_cli_args[@]}" $api | tee -a "$1".log
 else export tagui_test_mode=true; "$CASPERJS_EXECUTABLE" test "$1".js $api --xunit="$1".xml | tee -a "$1".log; fi
 # checking for existence of files is important, otherwise in loops integrations will run even without enabling
 if [ -f "tagui_r/tagui_r.in" ]; then echo "finish" > tagui_r/tagui_r.in; fi

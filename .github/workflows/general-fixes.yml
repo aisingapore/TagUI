@@ -13,3 +13,4 @@ jobs:
         run: |
           bash -n src/tagui
           bash src/test/test_chromium_binary.sh
+          bash src/test/test_classic_inputs.sh
