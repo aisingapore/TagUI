@@ -22,20 +22,14 @@ jobs:
     steps:
     
       # Checks-out repository under $GITHUB_WORKSPACE, so job can access it
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       
       # Setup Amazon Coretto OpenJDK
-      - uses: actions/setup-java@v3
+      - uses: actions/setup-java@v4
         with:
           distribution: 'corretto'
           java-version: '8'
           
-      - name: Install Microsoft Visual C++ Redistributable using chocolatey (Windows)
-        if: (matrix.os == 'windows-latest')
-        uses: crazy-max/ghaction-chocolatey@v1
-        with:
-          args: install vcredist2012
-      
       - name: Install TagUI (Windows)
         if: (matrix.os == 'windows-latest')
         run: |  
@@ -61,22 +55,19 @@ jobs:
           
           cd "${{github.workspace}}\src"
           
-          # Add unx dependencies
-          Invoke-WebRequest -Uri 'https://storage.googleapis.com/tagui-dependencies/unx.zip' -OutFile unxzip.zip
-          Expand-Archive -LiteralPath unxzip.zip
-          MOVE-ITEM -Path  "${{github.workspace}}\src\unxzip\*" -Destination "${{github.workspace}}\src"
-          Remove-Item unxzip.zip
+          # Add unx and SikuliX dependency files from the v6.110.0 release
+          Invoke-WebRequest -Uri 'https://github.com/aisingapore/TagUI/releases/download/v6.110.0/TagUI_Windows.zip' -OutFile previous.zip
+          tar -xf previous.zip tagui/src/unx tagui/src/sikulix
+          MOVE-ITEM -Path "${{github.workspace}}\src\tagui\src\unx" -Destination "${{github.workspace}}\src\unx"
+          MOVE-ITEM -Path "${{github.workspace}}\src\tagui\src\sikulix" -Destination "${{github.workspace}}\src\sikulix"
+          Remove-Item -Recurse tagui
+          Remove-Item previous.zip
                              
           # Add PHP dependency files
-          Invoke-WebRequest 'https://windows.php.net/downloads/releases/archives/php-5.6.40-Win32-VC11-x86.zip' -OutFile php.zip
+          Invoke-WebRequest 'https://windows.php.net/downloads/releases/archives/php-8.3.14-nts-Win32-vs16-x64.zip' -OutFile php.zip
           Expand-Archive -LiteralPath php.zip
           Remove-Item php.zip
         
-          # Add SikuliX dependency files
-          Invoke-WebRequest -Uri 'https://storage.googleapis.com/tagui-dependencies/sikulix.zip' -OutFile sikulixzip.zip
-          Expand-Archive -LiteralPath sikulixzip.zip
-          MOVE-ITEM -Path  "${{github.workspace}}\src\sikulixzip\*" -Destination "${{github.workspace}}\src"
-          Remove-Item sikulixzip.zip
                
           # Add CasperJS dependency files
           Invoke-WebRequest 'https://github.com/casperjs/casperjs/archive/refs/tags/1.1.4-1.zip' -OutFile casperjszip.zip
@@ -104,10 +95,11 @@ jobs:
         run: |
           cd "${{github.workspace}}/src"
           
-          # Add SikuliX dependency files
-          curl -L 'https://storage.googleapis.com/tagui-dependencies/sikulix.zip' > sikulixzip.zip
-          unzip sikulixzip.zip
-          rm sikulixzip.zip
+          # Add SikuliX dependency files from the v6.110.0 release
+          curl -L 'https://github.com/aisingapore/TagUI/releases/download/v6.110.0/TagUI_Linux.zip' > previous.zip
+          unzip -q previous.zip 'tagui/src/sikulix/*' -d previous
+          mv previous/tagui/src/sikulix sikulix
+          rm -r previous previous.zip
           
           # Add CasperJS dependency files
           curl -L 'https://github.com/casperjs/casperjs/archive/refs/tags/1.1.4-1.zip' > casperjs.zip
