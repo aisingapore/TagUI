@@ -61,10 +61,11 @@ jobs:
           
           # Add unx and SikuliX dependency files from the v6.110.0 release
           Invoke-WebRequest -Uri 'https://github.com/aisingapore/TagUI/releases/download/v6.110.0/TagUI_Windows.zip' -OutFile previous.zip
-          tar -xf previous.zip tagui/src/unx tagui/src/sikulix
-          MOVE-ITEM -Path "${{github.workspace}}\src\tagui\src\unx" -Destination "${{github.workspace}}\src\unx"
-          MOVE-ITEM -Path "${{github.workspace}}\src\tagui\src\sikulix" -Destination "${{github.workspace}}\src\sikulix"
-          Remove-Item -Recurse tagui
+          New-Item -ItemType Directory -Path previous
+          tar -xf previous.zip -C previous tagui/src/unx tagui/src/sikulix
+          MOVE-ITEM -Path "${{github.workspace}}\src\previous\tagui\src\unx" -Destination "${{github.workspace}}\src\unx"
+          MOVE-ITEM -Path "${{github.workspace}}\src\previous\tagui\src\sikulix" -Destination "${{github.workspace}}\src\sikulix"
+          Remove-Item -Recurse previous
           Remove-Item previous.zip
                              
           # Add PHP dependency files
@@ -171,10 +172,13 @@ jobs:
         if: (matrix.os == 'windows-latest')
         id: compare_output_windows
         run: |
-           Compare-Object (Get-Content '${{github.workspace}}\src\test\positive_test.js') (Get-Content '${{github.workspace}}\src\test\positive_test.signature') -PassThru | Set-Content '${{github.workspace}}\src\test\output.txt'
-           if(Test-Path -Path '${{github.workspace}}\src\test\output.txt' -PathType Leaf) {exit 1}
+           $flow_dir = '${{github.workspace}}\src\test'
+           $generated = (Get-Content '${{github.workspace}}\src\test\positive_test.js') | ForEach-Object { $_.Replace($flow_dir + '\', '/full_path/').Replace($flow_dir, '/full_path') }
+           $differences = Compare-Object $generated (Get-Content '${{github.workspace}}\src\test\positive_test.signature')
+           if ($differences) { $differences | Select-Object -First 40 | Format-Table -AutoSize -Wrap | Out-String -Width 300; exit 1 }
       - name: Compare output of positive_test.js and positive_test.signature (macOS / Linux)
         if: (matrix.os != 'windows-latest')
         id: compare_output_macos_linux
-        run: 
-           if ! diff "${{github.workspace}}/src/test/positive_test.js" "${{github.workspace}}/src/test/positive_test.signature" >/dev/null; then exit 1; fi
+        run: |
+           sed "s#${{github.workspace}}/src/test#/full_path#g" "${{github.workspace}}/src/test/positive_test.js" > "${{github.workspace}}/src/test/positive_test.normalized"
+           diff "${{github.workspace}}/src/test/positive_test.normalized" "${{github.workspace}}/src/test/positive_test.signature"
