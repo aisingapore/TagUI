@@ -5,23 +5,26 @@ on:
       - "v*"
 jobs:
   code_check:
-    uses: kelaberetiv/TagUI/.github/workflows/code_check.yml@master
+    uses: ./.github/workflows/code_check.yml
     
   create_release:
     needs: code_check
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
     steps:
       - name: Checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
         
       - name: Add SikuliX, CasperJS, SlimerJS and SikuliX-Linux dependency files
         run: |
           cd "${{github.workspace}}/src"
           
-          # Add SikuliX dependency files
-          curl -L 'https://storage.googleapis.com/tagui-dependencies/sikulix.zip' > sikulixzip.zip
-          unzip sikulixzip.zip
-          rm sikulixzip.zip
+          # Add SikuliX and unx dependency files from the v6.110.0 release
+          curl -L 'https://github.com/aisingapore/TagUI/releases/download/v6.110.0/TagUI_Windows.zip' > previous.zip
+          unzip -q previous.zip 'tagui/src/sikulix/*' 'tagui/src/unx/*' -d previous
+          rm previous.zip
+          mv previous/tagui/src/sikulix sikulix
           
           # Add CasperJS dependency files
           curl -L 'https://github.com/casperjs/casperjs/archive/refs/tags/1.1.4-1.zip' > casperjs.zip
@@ -78,16 +81,21 @@ jobs:
         run: |          
           cd "${{github.workspace}}/tagui/src"
           
-          # Add unx dependencies          
-          curl -L 'https://storage.googleapis.com/tagui-dependencies/unx.zip' > unxzip.zip
-          unzip unxzip.zip
-          rm unxzip.zip
+          # Add unx dependencies
+          mv previous/tagui/src/unx unx
+          rm -r previous
                              
           # Add PHP dependency files
-          curl -L 'https://windows.php.net/downloads/releases/archives/php-5.6.30-Win32-VC11-x86.zip' > phpzip.zip
+          curl -L 'https://windows.php.net/downloads/releases/archives/php-8.3.14-nts-Win32-vs16-x64.zip' > phpzip.zip
           mkdir php
           unzip phpzip.zip -d ./php
           rm phpzip.zip
+          sed -e 's/^;extension_dir = "ext"/extension_dir = "ext"/' \
+              -e 's/^;extension=curl/extension=curl/' \
+              -e 's/^;extension=mbstring/extension=mbstring/' \
+              -e 's/^;extension=openssl/extension=openssl/' \
+              -e 's/^;extension=sockets/extension=sockets/' \
+              php/php.ini-production > php/php.ini
           
           # Add PhantomJS dependency files
           rm -r phantomjs
@@ -106,7 +114,7 @@ jobs:
           zip -r TagUI_Windows.zip tagui
           
       - name: Create Release
-        uses: softprops/action-gh-release@v1
+        uses: softprops/action-gh-release@v2
         if: startsWith(github.ref, 'refs/tags/')
         with:
           files: |
