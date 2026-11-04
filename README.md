@@ -118,6 +118,7 @@ Open-source project|Maintainer|From|How does this contribute to TagUI project
 [RPA for Python](https://github.com/tebelorg/RPA-Python)|[Ken Soh](https://github.com/kensoh)|Singapore|Python version of TagUI (pip install rpa)
 [TagUI v3.0](https://github.com/kensoh/TagUI/tree/before_aisg)|[Ken Soh](https://github.com/kensoh)|Singapore|personal project before AI Singapore
 [SikuliX](http://sikulix.com)|[Raimund Hocke](https://github.com/RaiMan/)|Germany|computer vision, OCR, input hardware
+[OculiX](https://github.com/oculix-org/Oculix)|[Raimund Hocke](https://github.com/RaiMan/), [Julien Mer](https://github.com/julienmerconsulting)|Germany, France|continuation of SikuliX: computer vision, OCR, input
 [CasperJS](http://casperjs.org)|[Nicolas Perriault](https://github.com/n1k0)|France|high-level JavaScript execution engine
 [PhantomJS](https://github.com/ariya/phantomjs)|[Ariya Hidayat](https://github.com/ariya)|Indonesia|foundation JavaScript execution engine
 [SlimerJS](https://slimerjs.org)|[Laurent Jouanneau](https://github.com/laurentj)|France|browser automation for FireFox <= v59
