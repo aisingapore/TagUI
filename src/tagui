@@ -38,7 +38,7 @@ printf '%s\n' "$cmd"
 
 if [ -z "$1" ]
 then
-echo "tagui v6.114: use following options and this syntax to run - ./tagui flow_filename option(s)"
+echo "tagui v7.0: use following options and this syntax to run - ./tagui flow_filename option(s)"
 echo
 echo "tagui live     launch TagUI live mode enabled with visual automation for interactive development"
 echo "tagui update   download and update to latest TagUI version (please backup your version beforehand)"
