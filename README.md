@@ -5,7 +5,7 @@
 
 **Check out this [YouTube learning series](https://www.youtube.com/playlist?list=PL2gs9_mNDDvZSCPsJu4APZR6AaDzUY7R6). Take the [free course](https://learn.aisingapore.org/courses/learn-rpa-with-tagui-beginners-course/). Ask any questions at [our Telegram](https://t.me/rpa_chat).**
 
-**[Download v6.114](https://tagui.readthedocs.io/en/latest/setup.html)&ensp;|&ensp;[Usage Guide](https://tagui.readthedocs.io/en/latest/index.html)&ensp;|&ensp;[Demos](https://github.com/aimakerspace/TagUI-Bricks)&ensp;|&ensp;[Samples](https://github.com/kelaberetiv/TagUI/tree/master/flows/samples)&ensp;|&ensp;[Slides](https://docs.google.com/presentation/d/1pltAMzr0MZsttgg1w2ORH3ontR6Q51W9/edit?usp=sharing&ouid=115132044557947023533&rtpof=true&sd=true)&ensp;|&ensp;[Podcast](https://botnirvana.org/podcast/tagui/)&ensp;|&ensp;[Video](https://www.youtube.com/watch?v=C5itbB3sCq0)&ensp;|&ensp;[中文](http://www.tagui.com.cn)**
+**[Download v7.0](https://tagui.readthedocs.io/en/latest/setup.html)&ensp;|&ensp;[Usage Guide](https://tagui.readthedocs.io/en/latest/index.html)&ensp;|&ensp;[Demos](https://github.com/aimakerspace/TagUI-Bricks)&ensp;|&ensp;[Samples](https://github.com/kelaberetiv/TagUI/tree/master/flows/samples)&ensp;|&ensp;[Slides](https://docs.google.com/presentation/d/1pltAMzr0MZsttgg1w2ORH3ontR6Q51W9/edit?usp=sharing&ouid=115132044557947023533&rtpof=true&sd=true)&ensp;|&ensp;[Podcast](https://botnirvana.org/podcast/tagui/)&ensp;|&ensp;[Video](https://www.youtube.com/watch?v=C5itbB3sCq0)&ensp;|&ensp;[中文](http://www.tagui.com.cn)**
 
 ---
 
@@ -32,7 +32,7 @@ Until the next release, you can get these changes from master:
 3. Copy the contents of `TagUI-master/src` into your `tagui/src` folder and replace the existing files. Do not delete `tagui/src` first: it contains folders that are only in the release zip, such as `php`, `casperjs`, `phantomjs` and `sikulix`.
 4. On macOS / Linux, make sure the launcher is executable: `chmod +x tagui/src/tagui`.
 
-`tagui update` also downloads master and copies it over your install, but only when your local version number differs from master. If running `tagui` with no options shows v6.114, the update will report that you already have the latest version, so use the steps above.
+`tagui update` also downloads master and copies it over your install, but only when your local version number differs from master. If running `tagui` with no options shows v7.0, the update will report that you already have the latest version, so use the steps above.
 
 # Language designed for RPA
 
