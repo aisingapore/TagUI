@@ -13,6 +13,27 @@ Write flows in simple TagUI language and automate away repetitive time-consuming
 
 Besides English, flows can be written in [22 other languages](https://github.com/kelaberetiv/TagUI/tree/master/src/languages), so you can do RPA using your [native language](https://github.com/kelaberetiv/TagUI/blob/master/flows/samples/8_chineseflow.tag). Check out this [demo video automating data collection](https://www.youtube.com/watch?v=o2WMUt0298U) in 4 different languages. With the new TagUI turbo mode, you can even run your automation 10X faster than normal human speed!
 
+# What's new on master
+
+These changes are merged on master and are not in a release zip yet. The new engine and OculiX are opt-in; without those options, flows run on CasperJS and SikuliX as before.
+
+- **Modern Chrome engine (opt-in).** Add `-modern` or `-m` to run a flow on Chrome through the DevTools Protocol instead of CasperJS and PhantomJS. Chrome is visible by default; add `-headless` to hide it. Firefox is not supported in this mode. On Windows it needs PHP 7.4 or newer; the current Windows zip ships PHP 5.6 in `tagui\src\php`, and will bundle PHP 8.3 once [#1461](https://github.com/aisingapore/TagUI/pull/1461) is released. See [docs/modern-engine.md](https://github.com/aisingapore/TagUI/blob/master/docs/modern-engine.md).
+- **TagUI MCP server.** `src/tagui_mcp` lets an MCP client such as an AI assistant write, check and run TagUI flows and use live mode, over stdio or HTTP. File tools let a client collect files that a flow produced, such as downloads, from allowed folders only. See [src/tagui_mcp/README.md](https://github.com/aisingapore/TagUI/blob/master/src/tagui_mcp/README.md).
+- **OculiX (opt-in).** Visual automation can run on OculiX, the maintained successor of SikuliX, with Java 17 or newer. Set `TAGUI_SIKULI_JAR` to the OculiX jar, and `TAGUI_JAVA` to a Java 17 binary if needed (macOS / Linux launcher and the modern engine). The bundled SikuliX stays the default.
+- **Visual automation.** Sikuli steps read and write UTF-8, so non-English text and image names are passed correctly. When an image is not found, the log shows the best similarity seen, for example `best similarity 0.62`.
+- **Fixes.** On macOS / Linux, a flow input with spaces or `*` now reaches the flow as one input, and a datatable `.csv` is found in any position. Datatable transpose file names are handled correctly. Ubuntu's `chromium` wrapper script is handled. PHP 8.4 and newer no longer abort flows with deprecation warnings.
+
+### Using the latest version from master
+
+Until the next release, you can get these changes from master:
+
+1. Back up your `tagui` folder, including any changes you made to `tagui/src/tagui_config.txt`.
+2. Download [master.zip](https://github.com/aisingapore/TagUI/archive/refs/heads/master.zip) and unzip it. It creates a `TagUI-master` folder.
+3. Copy the contents of `TagUI-master/src` into your `tagui/src` folder and replace the existing files. Do not delete `tagui/src` first: it contains folders that are only in the release zip, such as `php`, `casperjs`, `phantomjs` and `sikulix`.
+4. On macOS / Linux, make sure the launcher is executable: `chmod +x tagui/src/tagui`.
+
+`tagui update` also downloads master and copies it over your install, but only when your local version number differs from master. If running `tagui` with no options shows v6.114, the update will report that you already have the latest version, so use the steps above.
+
 # Language designed for RPA
 
 In TagUI language, you use steps like `click` and `type` to interact with identifiers, which include web identifiers, image snapshots, screen coordinates, or [even text using OCR](https://tagui.readthedocs.io/en/latest/advanced.html#visual-automation-tricks). Below is an example to login to Xero accounting:
@@ -97,6 +118,7 @@ Open-source project|Maintainer|From|How does this contribute to TagUI project
 [RPA for Python](https://github.com/tebelorg/RPA-Python)|[Ken Soh](https://github.com/kensoh)|Singapore|Python version of TagUI (pip install rpa)
 [TagUI v3.0](https://github.com/kensoh/TagUI/tree/before_aisg)|[Ken Soh](https://github.com/kensoh)|Singapore|personal project before AI Singapore
 [SikuliX](http://sikulix.com)|[Raimund Hocke](https://github.com/RaiMan/)|Germany|computer vision, OCR, input hardware
+[OculiX](https://github.com/oculix-org/Oculix)|[Raimund Hocke](https://github.com/RaiMan/), [Julien Mer](https://github.com/julienmerconsulting)|Germany, France|continuation of SikuliX: computer vision, OCR, input
 [CasperJS](http://casperjs.org)|[Nicolas Perriault](https://github.com/n1k0)|France|high-level JavaScript execution engine
 [PhantomJS](https://github.com/ariya/phantomjs)|[Ariya Hidayat](https://github.com/ariya)|Indonesia|foundation JavaScript execution engine
 [SlimerJS](https://slimerjs.org)|[Laurent Jouanneau](https://github.com/laurentj)|France|browser automation for FireFox <= v59
